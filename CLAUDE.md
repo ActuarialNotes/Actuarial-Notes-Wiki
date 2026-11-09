@@ -1797,6 +1797,12 @@ compile — don't "clean up" the flagged code as dead.
   and Statistics Canada's price indexes, the Treasury's par yield curves, each file's URL, sha256
   and date read recorded with the licence. Downloads cached outside the repo (`--cache`,
   `--offline`); openpyxl for NCHS's `.xlsx`. Tests: `scripts/test_datasets.py`.
+- `osfi_extract.py` — OSFI's insurer filings from the **Open Government Portal's API**
+  (`datastore_search`, OGL-Canada) → `.osfi/<dataset>/<period>/`: one quarter of PC1–PC4 (or the
+  Life returns) paged, cached outside the repo, hashed, labelled with OSFI's own bilingual labels,
+  and checked (each filed MCT ratio recomputed, balance-sheet identities), findings never
+  corrections. Manifests, institutions and checks are committed; labels and values are rebuilt by
+  re-running it. Stdlib. Tests: `scripts/test_osfi_extract.py`. See `docs/osfi-pc-data.md`.
 - `tool_fixtures.py` — published worked examples → **Actuarial Tools** fixtures
   (`quiz/src/lib/tools/fixtures/*.json`): Friedland's and Werner & Modlin's exhibits read off
   the CAS's PDFs, each checked by sha256, with no model retyping a number. PyMuPDF, imported

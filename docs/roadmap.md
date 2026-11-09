@@ -533,6 +533,22 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   migration and extraction, then breadth. Five decisions (D-AB1–D-AB5). *(Proposed 2026-11-08;
   the maintainer settled all five and asked for Phase 0 the same day. Its status is row A9 in §4.5.)*
 
+- **A11: OSFI's insurer filings as data for Tools, the connector and Cowork.**
+  `docs/osfi-pc-data.md`. OSFI's filings moved from Beyond 20/20 (retired 2026-06-10) to the Open
+  Government Portal: CSVs and a filterable `datastore_search` API, 1996 to Q3 2026, under the Open
+  Government Licence – Canada, with OSFI's labels on every cell. The maintainer also holds the
+  Beyond 20/20 archive, 2000 to 2025 Q3, P&C and Life. A cell-by-cell check of one insurer's
+  quarter found the portal identical to the archive for PC2 and PC4. It is **missing PC1's IFRS
+  17 roll-forwards (20.12–20.18)**, which only the archive has. Proposed, in order: an extract
+  (API pager, CSV backfill, archive reader, full parity diff) into dated, hashed snapshots, kept
+  current by a weekly job that opens a PR; an **Insurer Return** Data Source; MCT Ratio proven
+  against every filed ratio; IFRS 17 roll-forward and KPI, market-share and peer tools; the same
+  over MCP plus `find_insurer`; filings as Cowork documents with tables filled from the extract;
+  the IFRS 4 history; then Life. Seven decisions (D-OSFI-1–7); the licence is settled.
+  *(Proposed 2026-11-08.)* **Phase 0 started 2026-11-09:** `scripts/osfi_extract.py` pages the
+  API into hashed quarterly snapshots (Q1 2023 – Q2 2026 extracted), and every filed MCT ratio
+  reproduces from its own lines.
+
 - ~~**C20: answerability as a content check, then a gate.**~~ Ranked 2026-10-25 and built as G8:
   see C20 in §4.3 and D29. The proposal as written: `simulations/check-answerable`
   (`docs/simulated-learner.md`, *Answerability*) asks of every served question whether its
@@ -1025,6 +1041,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/ins-actbench.md` | Proposal: evaluating the connector, tools and skill (INS-ActBench) | A8 (§3.4) | Proposed | 2026-10-30 |
 | `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phases 0–1 built | 2026-11-08 |
 | `docs/tool-template-v2.md` | Build spec: the tool page's second template (navigation, connection, published figures in place) | A10 (§3.4) | Proposed; mock-ups in `tool-template-v2-mockups.html` | 2026-11-09 |
+| `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A11 (§3.4) | Proposed; Phase 0 started | 2026-11-09 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phases 1–2 built, phase 3 open | 2026-11-09 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |

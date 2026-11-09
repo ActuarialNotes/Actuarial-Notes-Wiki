@@ -1,0 +1,2279 @@
+[
+ {
+  "id": "27938",
+  "name": {
+   "en": "Accelerant Insurance Company of Canada",
+   "fr": "Accelerant Compagnie d’Assurance du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28089",
+  "name": {
+   "en": "Affiliated FM Insurance Company",
+   "fr": "Affiliated FM Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27822",
+  "name": {
+   "en": "AIG Insurance Company of Canada",
+   "fr": "Compagnie d’Assurance AIG du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28091",
+  "name": {
+   "en": "Allianz Global Risks US Insurance Company",
+   "fr": "Allianz Global Risks US Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28284",
+  "name": {
+   "en": "Allied World Specialty Insurance Company",
+   "fr": "Allied World Specialty Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27826",
+  "name": {
+   "en": "Allstate Insurance Company of Canada",
+   "fr": "Allstate du Canada, Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28086",
+  "name": {
+   "en": "American Agricultural Insurance Company",
+   "fr": "American Agricultural Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28095",
+  "name": {
+   "en": "American Bankers Insurance Company of Florida",
+   "fr": "American Bankers Insurance Company of Florida"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28103",
+  "name": {
+   "en": "American Road Insurance Company (The)",
+   "fr": "American Road Insurance Company (The)"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27829",
+  "name": {
+   "en": "Antigonish Farmers' Mutual Insurance Company",
+   "fr": "Antigonish Farmers' Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27831",
+  "name": {
+   "en": "Arch Insurance Canada Ltd.",
+   "fr": "Arch assurances Canada Ltée"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "111940",
+  "name": {
+   "en": "Arch Reinsurance Company",
+   "fr": "Arch Reinsurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "145263",
+  "name": {
+   "en": "Arundo Re",
+   "fr": "Arundo Re"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28108",
+  "name": {
+   "en": "Aspen Insurance UK Limited",
+   "fr": "Aspen Insurance UK Limited"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28112",
+  "name": {
+   "en": "Associated Electric & Gas Insurance Services Limited",
+   "fr": "Associated Electric & Gas Insurance Services Limited"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "146097",
+  "name": {
+   "en": "Atradius Crédito y Caución S.A. de Seguros y Reaseguros",
+   "fr": "Atradius Crédito y Caución S.A. de Seguros y Reaseguros"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27897",
+  "name": {
+   "en": "Aviva General Insurance Company",
+   "fr": "Aviva, Compagnie d'Assurance Générale"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27896",
+  "name": {
+   "en": "Aviva Insurance Company of Canada",
+   "fr": "Aviva, Compagnie d'Assurance du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28117",
+  "name": {
+   "en": "AXIS Reinsurance Company",
+   "fr": "AXIS Compagnie de Réassurance"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28120",
+  "name": {
+   "en": "Berkley Insurance Company",
+   "fr": "Berkley Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27848",
+  "name": {
+   "en": "Canadian Northern Shield Insurance Company",
+   "fr": "Le Bouclier du Nord Canadien, Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27889",
+  "name": {
+   "en": "Canadian Premier General Insurance Company",
+   "fr": "Compagnie d’assurance Générale Première du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28229",
+  "name": {
+   "en": "Catalina General Insurance Ltd.",
+   "fr": "Catalina General Insurance Ltd."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27857",
+  "name": {
+   "en": "Certas Direct Insurance Company",
+   "fr": "Certas direct, compagnie d'assurances"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27859",
+  "name": {
+   "en": "Certas Home and Auto Insurance Company",
+   "fr": "Certas, compagnie d'assurances auto et habitation"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28128",
+  "name": {
+   "en": "Cherokee Insurance Company",
+   "fr": "Cherokee Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28129",
+  "name": {
+   "en": "Chicago Title Insurance Company",
+   "fr": "Chicago Title Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27861",
+  "name": {
+   "en": "Chubb Insurance Company of Canada",
+   "fr": "Chubb du Canada Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27863",
+  "name": {
+   "en": "Clare Mutual Insurance Company",
+   "fr": "Clare Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27874",
+  "name": {
+   "en": "Co-operators General Insurance Company",
+   "fr": "La Compagnie d'Assurance Générale Co-operators"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28152",
+  "name": {
+   "en": "Compagnie Française d'Assurance pour le Commerce Extérieur",
+   "fr": "Compagnie Française d'Assurance pour le Commerce Extérieur"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28135",
+  "name": {
+   "en": "Continental Casualty Company",
+   "fr": "Continental Casualty Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27877",
+  "name": {
+   "en": "CUMIS General Insurance Company",
+   "fr": "La Compagnie d'Assurance Générale CUMIS"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27882",
+  "name": {
+   "en": "Definity Insurance Company",
+   "fr": "Compagnie d’assurance Definity"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28029",
+  "name": {
+   "en": "Ecclesiastical Insurance Office Public Limited Company",
+   "fr": "Ecclesiastical Insurance Office Public Limited Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27915",
+  "name": {
+   "en": "Echelon Insurance",
+   "fr": "Échelon Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28141",
+  "name": {
+   "en": "Employers Insurance Company of Wausau",
+   "fr": "Employers Insurance Company of Wausau"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "236770",
+  "name": {
+   "en": "Endurance Specialty Insurance Ltd.",
+   "fr": "Assurances spécialisées Endurance ltée"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28096",
+  "name": {
+   "en": "Euler Hermes North America Insurance Company",
+   "fr": "Euler Hermes North America Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "220818",
+  "name": {
+   "en": "Europ Assistance S.A.",
+   "fr": "Europ Assistance S.A."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27937",
+  "name": {
+   "en": "Everest Insurance Company of Canada",
+   "fr": "Compagnie d'Assurance Everest du Canada (La)"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28225",
+  "name": {
+   "en": "Everest Reinsurance Company",
+   "fr": "Everest Reinsurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28090",
+  "name": {
+   "en": "Factory Mutual Insurance Company",
+   "fr": "Factory Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27885",
+  "name": {
+   "en": "FCT Insurance Company Ltd.",
+   "fr": "Compagnie d'assurances FCT Ltée"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28144",
+  "name": {
+   "en": "Federal Insurance Company",
+   "fr": "Federal Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27886",
+  "name": {
+   "en": "Federated Insurance Company of Canada",
+   "fr": "La Federated, Compagnie d'Assurance du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28147",
+  "name": {
+   "en": "First American Title Insurance Company",
+   "fr": "First American Title Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27891",
+  "name": {
+   "en": "First North American Insurance Company",
+   "fr": "La Nord-américaine, première compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28156",
+  "name": {
+   "en": "General Reinsurance Corporation",
+   "fr": "General Reinsurance Corporation"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "215830",
+  "name": {
+   "en": "GPIC Insurance Company",
+   "fr": "Compagnie d’assurance GPIC"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28158",
+  "name": {
+   "en": "Great American Insurance Company",
+   "fr": "Great American Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28160",
+  "name": {
+   "en": "Hannover Rück SE",
+   "fr": "Hannover Rück SE"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28162",
+  "name": {
+   "en": "Hartford Fire Insurance Company",
+   "fr": "Hartford Fire Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28164",
+  "name": {
+   "en": "HDI Global SE",
+   "fr": "HDI Global SE"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28171",
+  "name": {
+   "en": "HDI Global Specialty SE",
+   "fr": "HDI Global Assurance Spécialités SE"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27934",
+  "name": {
+   "en": "Heartland Farm Mutual Inc.",
+   "fr": "Heartland Farm Mutual Inc."
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "184441",
+  "name": {
+   "en": "Hudson Insurance Company",
+   "fr": "Hudson Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "242620",
+  "name": {
+   "en": "Indemnity National Insurance Company (D421)",
+   "fr": "Société d’assurance indemnité nationale (D421)"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27906",
+  "name": {
+   "en": "Intact Insurance Company",
+   "fr": "Intact Compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27914",
+  "name": {
+   "en": "Jevco Insurance Company",
+   "fr": "La Compagnie d'Assurances Jevco"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28174",
+  "name": {
+   "en": "Jewelers Mutual Insurance Company, SI",
+   "fr": "Jewelers, Compagnie d'Assurance Mutuelle par action"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28180",
+  "name": {
+   "en": "Liberty Mutual Insurance Company",
+   "fr": "Liberty Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28033",
+  "name": {
+   "en": "Lloyd's Underwriters",
+   "fr": "Lloyd's Underwriters"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28183",
+  "name": {
+   "en": "Mapfre Re Compania de Reaseguros, S.A.",
+   "fr": "Mapfre Re Compania de Reaseguros, S.A."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "230241",
+  "name": {
+   "en": "Markel International Insurance Company Limited",
+   "fr": "Markel compagnie d’assurance internationale limitée"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28250",
+  "name": {
+   "en": "Mitsui Sumitomo Insurance Company, Limited",
+   "fr": "Mitsui Sumitomo Insurance Company, Limited"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28190",
+  "name": {
+   "en": "Motors Insurance Corporation",
+   "fr": "Motors Insurance Corporation"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28101",
+  "name": {
+   "en": "Munich Reinsurance America, Inc.",
+   "fr": "Munich Reinsurance America, Inc."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27930",
+  "name": {
+   "en": "Munich Reinsurance Company of Canada",
+   "fr": "La Munich, du Canada, Compagnie de Réassurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "219440",
+  "name": {
+   "en": "N.V. Hagelunie",
+   "fr": "N.V. Hagelunie"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28193",
+  "name": {
+   "en": "National Liability & Fire Insurance Company",
+   "fr": "National Liability & Fire Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28195",
+  "name": {
+   "en": "Nationwide Mutual Insurance Company",
+   "fr": "Nationwide Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27869",
+  "name": {
+   "en": "Northbridge General Insurance Corporation",
+   "fr": "Société d'assurance générale Northbridge"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27845",
+  "name": {
+   "en": "Novex Insurance Company",
+   "fr": "Novex Compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28261",
+  "name": {
+   "en": "Odyssey Reinsurance Company",
+   "fr": "Odyssey Reinsurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27936",
+  "name": {
+   "en": "Old Republic Insurance Company of Canada",
+   "fr": "L'Ancienne République, Compagnie d'Assurance du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "242352",
+  "name": {
+   "en": "PACICC-SIMA General Insurance Company",
+   "fr": "Compagnie D’Assurance Générale PACICC-SIMA"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1"
+  ]
+ },
+ {
+  "id": "27939",
+  "name": {
+   "en": "Pafco Insurance Company",
+   "fr": "Pafco, compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28212",
+  "name": {
+   "en": "Partner Reinsurance Company of the U.S.",
+   "fr": "Partner Reinsurance Company of the U.S."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27942",
+  "name": {
+   "en": "Pembridge Insurance Company",
+   "fr": "Pembridge, compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27963",
+  "name": {
+   "en": "Petline Insurance Company",
+   "fr": "Compagnie d'assurance Petline"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27839",
+  "name": {
+   "en": "Primmum Insurance Company",
+   "fr": "Primmum compagnie d'assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "208442",
+  "name": {
+   "en": "Privilege Underwriters Reciprocal Exchange",
+   "fr": "Privilege Underwriters Reciprocal Exchange"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28223",
+  "name": {
+   "en": "Protective Insurance Company",
+   "fr": "Protective Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27988",
+  "name": {
+   "en": "RBC Insurance Company of Canada",
+   "fr": "Compagnie d'assurance RBC du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28139",
+  "name": {
+   "en": "RiverStone International Insurance, Inc.",
+   "fr": "RiverStone International Assurance, inc."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27977",
+  "name": {
+   "en": "S&Y Insurance Company",
+   "fr": "S&Y Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27960",
+  "name": {
+   "en": "Sandbox Mutual Insurance Company",
+   "fr": "Sandbox Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27961",
+  "name": {
+   "en": "SCOR Canada Reinsurance Company",
+   "fr": "SCOR Canada Compagnie de Réassurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "131886",
+  "name": {
+   "en": "SCOR UK Company Limited",
+   "fr": "SCOR UK Company Limited"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27965",
+  "name": {
+   "en": "Scottish & York Insurance Co. Limited",
+   "fr": "Compagnie d'Assurance Scottish & York Limitée"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27968",
+  "name": {
+   "en": "Security National Insurance Company",
+   "fr": "Sécurité Nationale Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28237",
+  "name": {
+   "en": "Sentry Insurance Company",
+   "fr": "Compagnie d’assurance Sentry"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "179039",
+  "name": {
+   "en": "Shelter Mutual Insurance Company",
+   "fr": "Compagnie Mutuelle d’Assurance Shelter"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28150",
+  "name": {
+   "en": "SiriusPoint America Insurance Company",
+   "fr": "SiriusPoint America Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28282",
+  "name": {
+   "en": "Sompo Japan Insurance Inc.",
+   "fr": "Assurances Sompo du Japon Inc."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27887",
+  "name": {
+   "en": "Sonnet Insurance Company",
+   "fr": "Compagnie d’assurance Sonnet"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28233",
+  "name": {
+   "en": "St. Paul Fire and Marine Insurance Company",
+   "fr": "St. Paul Fire and Marine Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28243",
+  "name": {
+   "en": "Starr Insurance & Reinsurance Limited",
+   "fr": "Starr Insurance & Reinsurance Limited"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28247",
+  "name": {
+   "en": "Stewart Title Guaranty Company",
+   "fr": "Stewart Title Guaranty Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27916",
+  "name": {
+   "en": "Suecia Reinsurance Company",
+   "fr": "Compagnie de réassurance Suecia"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "204317",
+  "name": {
+   "en": "Swiss Re Corporate Solutions America Insurance Corporation",
+   "fr": "Swiss Re Corporate Solutions America Insurance Corporation"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28252",
+  "name": {
+   "en": "Swiss Reinsurance Company Ltd",
+   "fr": "Swiss Reinsurance Company Ltd"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27935",
+  "name": {
+   "en": "TD Direct Insurance Inc.",
+   "fr": "TD assurance directe inc."
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27833",
+  "name": {
+   "en": "TD General Insurance Company",
+   "fr": "Compagnie d'assurance générales TD"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27955",
+  "name": {
+   "en": "TD Home and Auto Insurance Company",
+   "fr": "Compagnie d'assurance habitation et auto TD"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "112068",
+  "name": {
+   "en": "Technology Insurance Company, Inc.",
+   "fr": "Technology Insurance Company, Inc."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27902",
+  "name": {
+   "en": "Temple Insurance Company",
+   "fr": "Compagnie d'assurance Temple (La)"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27834",
+  "name": {
+   "en": "The Boiler Inspection and Insurance Company of Canada",
+   "fr": "La Compagnie d'Inspection et d'Assurance Chaudières et machinerie"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27880",
+  "name": {
+   "en": "The Dominion of Canada General Insurance Company",
+   "fr": "Compagnie d'assurance générale Dominion du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27905",
+  "name": {
+   "en": "The Nordic Insurance Company of Canada",
+   "fr": "La Nordique compagnie d'assurance du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27943",
+  "name": {
+   "en": "The Personal Insurance Company",
+   "fr": "La Personnelle, compagnie d'assurances"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27951",
+  "name": {
+   "en": "The Portage la Prairie Mutual Insurance Company",
+   "fr": "The Portage la Prairie Mutual Insurance Company"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27970",
+  "name": {
+   "en": "The Sovereign General Insurance Company",
+   "fr": "La Souveraine, Compagnie d'Assurance Générale"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27990",
+  "name": {
+   "en": "The Wawanesa Mutual Insurance Company",
+   "fr": "La Compagnie Mutuelle d'Assurance Wawanesa"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28262",
+  "name": {
+   "en": "Toa Reinsurance Company of America (The)",
+   "fr": "Toa Reinsurance Company of America (The)"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28257",
+  "name": {
+   "en": "Tokio Marine & Nichido Fire Insurance Co., Ltd.",
+   "fr": "Tokio Marine & Nichido Fire Insurance Co., Ltd."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "194403",
+  "name": {
+   "en": "Tokio Marine Canada Ltd.",
+   "fr": "Tokio Maritime Canada ltée"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27980",
+  "name": {
+   "en": "Trafalgar Insurance Company of Canada",
+   "fr": "Compagnie d'Assurance Trafalgar du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28263",
+  "name": {
+   "en": "Transatlantic Reinsurance Company",
+   "fr": "Transatlantic Reinsurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27924",
+  "name": {
+   "en": "Travelers Insurance Company of Canada",
+   "fr": "La Compagnie d'Assurance Travelers du Canada"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27984",
+  "name": {
+   "en": "Trisura Guarantee Insurance Company",
+   "fr": "Compagnie d'Assurance Trisura Garantie"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28268",
+  "name": {
+   "en": "Triton Insurance Company",
+   "fr": "Compagnie d'assurance Triton"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27985",
+  "name": {
+   "en": "Unifund Assurance Company",
+   "fr": "Unifund, Compagnie d'Assurance"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "161710",
+  "name": {
+   "en": "United States Liability Insurance Company",
+   "fr": "United States Liability Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27872",
+  "name": {
+   "en": "Verassure Insurance Company",
+   "fr": "Compagnie d’assurance Verassure"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27994",
+  "name": {
+   "en": "Western Surety Company",
+   "fr": "La Compagnie de Sûreté de l'Ouest"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27900",
+  "name": {
+   "en": "Wynward Insurance Group",
+   "fr": "Groupe d’assurance Wynward"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28204",
+  "name": {
+   "en": "XL Reinsurance America Inc.",
+   "fr": "XL Reinsurance America Inc."
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "112049",
+  "name": {
+   "en": "XL Specialty Insurance Company",
+   "fr": "XL Specialty Insurance Company"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "27995",
+  "name": {
+   "en": "Zenith Insurance Company",
+   "fr": "Compagnie d'assurance Zénith"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "28283",
+  "name": {
+   "en": "Zurich Insurance Company Ltd",
+   "fr": "Zurich Insurance Company Ltd"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": false,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "1000012",
+  "name": {
+   "en": "Total Canadian Property & Casualty",
+   "fr": "Total sociétés d’assurances multirisques canadiennes"
+  },
+  "group": {
+   "en": "Canadian Property & Casualty",
+   "fr": "Assurances multirisques canadiennes"
+  },
+  "inactive": null,
+  "aggregate": true,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ },
+ {
+  "id": "1000013",
+  "name": {
+   "en": "Total Foreign Property & Casualty",
+   "fr": "Total sociétés d’assurance multirisques étrangères"
+  },
+  "group": {
+   "en": "Foreign Property & Casualty",
+   "fr": "Assurances multirisques étrangères"
+  },
+  "inactive": null,
+  "aggregate": true,
+  "returns": [
+   "PC1",
+   "PC4"
+  ]
+ }
+]

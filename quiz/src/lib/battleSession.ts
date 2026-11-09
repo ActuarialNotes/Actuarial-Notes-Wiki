@@ -50,23 +50,22 @@ import {
   type RoomStage,
 } from './battleRoom'
 import {
-  COIN_MS,
-  DEAL_MS,
   HAND_SIZE,
   STRIKE_MS,
   TOPIC_PICK_MS,
   autoStrike,
   cleanHand,
   cleanLevel,
-  dealPairs,
+  dealDraft,
   emptyDraft,
-  keptHand,
   redactDraft,
-  roundPairs,
+  settleCoinRound,
   shiftDraftClock,
   topUpHand,
+  withCount,
+  withHand,
+  withStrike,
   type BattleDraft,
-  type DraftRound,
   type ReadPair,
   type RoundBasis,
 } from './battleDraft'
@@ -162,32 +161,6 @@ export interface SessionSnapshot {
   draft: BattleDraft | null
   /** This player's hand while they are still drawing — not yet locked in. */
   topicChoice: string[]
-}
-
-/** A draft with `seat`'s hand locked in. */
-function withHand(draft: BattleDraft, seat: Seat, hand: string[], levels: number[]): BattleDraft {
-  const hands: BattleDraft['hands'] = [...draft.hands]
-  const levelPair: BattleDraft['levels'] = [...draft.levels]
-  const counts: BattleDraft['counts'] = [...draft.counts]
-  hands[seat] = hand
-  levelPair[seat] = levels
-  counts[seat] = hand.length
-  return { ...draft, hands, levels: levelPair, counts }
-}
-
-/** A draft with `seat`'s count of cards drawn so far. */
-function withCount(draft: BattleDraft, seat: Seat, count: number): BattleDraft {
-  if (draft.counts[seat] === count) return draft
-  const counts: BattleDraft['counts'] = [...draft.counts]
-  counts[seat] = count
-  return { ...draft, counts }
-}
-
-/** A draft with `seat`'s strike made. */
-function withStrike(draft: BattleDraft, seat: Seat, topic: string): BattleDraft {
-  const strikes: BattleDraft['strikes'] = [...draft.strikes]
-  strikes[seat] = topic
-  return { ...draft, strikes }
 }
 
 type Listener = () => void
@@ -513,45 +486,23 @@ export class HostSession extends Session {
       draft = withStrike(draft, seat, autoStrike(draft.hands[target] ?? [], draft.levels[target], this.random))
     }
     const config: BattleConfig = { ...this.snapshot.config, rules: 'simultaneous' }
-    const rows = keptHand(draft, 0)
-    const cols = keptHand(draft, 1)
-    const { grid, pairs } = dealPairs(rows, cols, this.topicSource.pair(config.exam), this.random)
-    const used = new Set<string>()
-    const keys: BattleQuestionKey[] = []
-    const rounds: DraftRound[] = []
-    const plan = roundPairs(pairs.length, config.rounds)
-    // Paired rounds first, so no coin round's stand-in can take their question.
-    const paired = new Map<number, { key: BattleQuestionKey; basis: RoundBasis; topic: string | null }>()
-    plan.forEach((p, i) => {
-      if (pairs[p].shared === 0) return
-      const drawn = this.topicSource!.draw(config, pairs[p].cards, 'both', used)
-      if (!drawn) return
-      used.add(drawn.key.id)
-      paired.set(i, drawn)
+    const source = this.topicSource
+    const dealt = dealDraft(draft, {
+      rounds: config.rounds,
+      read: source.pair(config.exam),
+      draw: (cards, on, used) => source.draw(config, cards, on, used),
+      random: this.random,
+      now: this.clock.now(),
     })
-    for (let i = 0; i < plan.length; i++) {
-      const pair = pairs[plan[i]]
-      const drawn = paired.get(i)
-      if (drawn) {
-        keys.push(drawn.key)
-        rounds.push({ pair: plan[i], paired: true, coin: null, basis: drawn.basis, topic: drawn.topic })
-        continue
-      }
-      // A coin round: a stand-in from the pool until the coin is tossed.
-      const standIn = this.topicSource.draw(config, pair.cards, pair.cards[0], new Set())
-      if (!standIn) break
-      keys.push(standIn.key)
-      rounds.push({ pair: plan[i], paired: false, coin: null, basis: null, topic: null })
-    }
-    if (keys.length === 0) {
+    if (!dealt) {
       // Nothing to play on — the bank has no battle questions for this exam.
       this.draft = null
       this.roomStage = 'lobby'
       this.publish()
       return
     }
-    this.drawnKeys = keys
-    this.draft = { ...draft, phase: 'deal', deadline: this.clock.now() + DEAL_MS, rows, cols, grid, pairs, rounds }
+    this.drawnKeys = dealt.keys
+    this.draft = dealt.draft
     this.publish()
   }
 
@@ -561,25 +512,13 @@ export class HostSession extends Session {
    * count-in back long enough for the toss to be watched.
    */
   private settleCoin(index: number): void {
-    const draft = this.draft
-    const battle = this.battle
-    const round = draft?.rounds[index]
-    if (!draft || !battle || !round || round.paired || round.coin !== null || !this.topicSource) return
-    const pair = draft.pairs[round.pair]
-    const coin: Seat = this.random() < 0.5 ? 0 : 1
-    // Every question already played, and every paired round's still to come.
-    const used = new Set(battle.questions.filter((_, i) => i < index || draft.rounds[i]?.paired).map(q => q.id))
-    const drawn = this.topicSource.draw({ ...battle.config }, pair.cards, pair.cards[coin], used)
-    const key = drawn?.key ?? battle.questions[index]
-    const questions = battle.questions.map((q, i) => (i === index ? key : q))
-    const live = battle.rounds[index]
-    const rounds = battle.rounds.map((r, i) =>
-      i === index ? { ...r, questionId: key.id, opensAt: live.opensAt + COIN_MS, deadline: live.deadline + COIN_MS } : r,
-    )
-    this.battle = { ...battle, questions, rounds }
-    this.drawnKeys = questions
-    const settled: DraftRound = { ...round, coin, basis: drawn?.basis ?? 'any', topic: drawn ? drawn.topic : null }
-    this.draft = { ...draft, rounds: draft.rounds.map((r, i) => (i === index ? settled : r)) }
+    const source = this.topicSource
+    if (!this.draft || !this.battle || !source) return
+    const settled = settleCoinRound(this.battle, this.draft, index, (config, cards, on, used) => source.draw(config, cards, on, used), this.random)
+    if (!settled) return
+    this.battle = settled.battle
+    this.draft = settled.draft
+    this.drawnKeys = settled.battle.questions
   }
 
   private tickDraft(now: number): void {

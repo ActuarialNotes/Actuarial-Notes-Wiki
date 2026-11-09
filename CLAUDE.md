@@ -488,7 +488,7 @@ before touching that area**:
   final; a pair no question covers is settled by a **coin** the host tosses when its round
   comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
   — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
-  most rounds (measured, `docs/quiz-battle-redesign.md` §4); same-screen battles have no draft. **Random opponent** is a matchmaking
+  most rounds (measured, `docs/quiz-battle-redesign.md` §4); a same-screen battle drafts with the phone passed between turns (`LocalDraft` in `DeckLocal.tsx`). **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
   offer → accept → go handshake seals each match, so nobody ends up in two rooms; a matched

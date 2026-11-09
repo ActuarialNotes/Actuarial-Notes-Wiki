@@ -748,52 +748,197 @@ function bondPriceAt(t, j) {
 }
 
 // src/lib/tools/finance/bondPrice.ts
+var SOLVE = {
+  kind: "choice",
+  key: "solve",
+  label: "Solve for",
+  description: "Which quantity is the answer: the price (the default), the yield, the coupon rate or the term. The field for the chosen quantity is not read; every other one is.",
+  options: [
+    { value: "price", label: "Price" },
+    { value: "yield", label: "Yield" },
+    { value: "coupon", label: "Coupon" },
+    { value: "term", label: "Term" }
+  ],
+  default: "price"
+};
+var unless = (u) => ({ field: "solve", in: ["price", "yield", "coupon", "term"].filter((x) => x !== u) });
+var PRICE = {
+  kind: "number",
+  key: "price",
+  label: "Price",
+  symbol: "P",
+  unit: "money",
+  min: 0.01,
+  max: 1e12,
+  sliderMax: 2e3,
+  step: 1,
+  default: 1050,
+  description: "The price paid, on a coupon date. Read only when solving for the yield, the coupon rate or the term.",
+  showWhen: unless("price")
+};
+function termsOf(input, N) {
+  const F2 = Number(input.face);
+  const r = Number(input.coupon);
+  const m = Number(input.m);
+  return { F: F2, r, C: Number(input.redemption), m, N, coupon: F2 * r / m };
+}
+function wholeCoupons(input) {
+  const m = Number(input.m);
+  const years = Number(input.years);
+  const N = Math.round(years * m);
+  if (Math.abs(years * m - N) > 1e-9 || N < 1) {
+    throw new ToolInputError("years", `${years} years at ${m} coupon${m === 1 ? "" : "s"} a year isn't a whole number of coupons.`);
+  }
+  return N;
+}
+function yieldFor(t, P2) {
+  const f = (j) => bondPriceAt(t, j) - P2;
+  if (f(-0.99) < 0) throw new ToolInputError("price", `No yield gives a price of ${formatValue(P2, "money")}: it's more than the coupons and the redemption would be worth even at \u221299%.`);
+  let hi = 1;
+  while (f(hi) > 0 && hi < 1e6) hi *= 2;
+  if (f(hi) > 0) throw new ToolInputError("price", "The price is too low for any yield to give it.");
+  return bisect(f, -0.99, hi);
+}
+var annuity2 = (j, N) => j === 0 ? N : (1 - (1 + j) ** -N) / j;
 var bondPrice = {
   id: "finance.bond_price",
-  version: "1.0.0",
+  version: "1.1.0",
   name: "Bond Price",
   area: "finance",
   answers: "What's this bond worth at this yield?",
-  aka: ["bond", "price"],
-  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
-  notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A,  at j = i\u207D\u1D50\u207E/m",
+  aka: ["bond", "price", "coupon rate", "term", "solve"],
+  fields: [
+    SOLVE,
+    FACE,
+    { ...COUPON, showWhen: unless("coupon") },
+    REDEMPTION,
+    { ...YEARS, showWhen: unless("term") },
+    FREQUENCY,
+    { ...YIELD, showWhen: unless("yield") },
+    PRICE
+  ],
+  solveFor: "solve",
+  notation: (input) => {
+    switch (String(input.solve ?? "price")) {
+      case "yield":
+        return "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for j = i\u207D\u1D50\u207E/m";
+      case "coupon":
+        return "r = m \xB7 (P \u2212 C \xB7 v\u1D3A) / (F \xB7 a\u2309N),  at j = i\u207D\u1D50\u207E/m";
+      case "term":
+        return "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for N = T \xB7 m";
+      default:
+        return "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A,  at j = i\u207D\u1D50\u207E/m";
+    }
+  },
   view: "none",
   compute: (input) => {
-    const t = bondTerms(input);
-    const j = Number(input.yield) / t.m;
-    const P2 = bondPriceAt(t, j);
-    const premium = P2 - t.C;
-    const pvCoupons = P2 - t.C * (1 + j) ** -t.N;
+    const solve = String(input.solve ?? "price");
+    const m = Number(input.m);
+    const F2 = Number(input.face);
+    const C = Number(input.redemption);
+    let N;
+    let j;
+    let P2;
+    let r = Number(input.coupon);
+    const warnings = [];
+    const steps = [];
+    if (solve === "term") {
+      j = Number(input.yield) / m;
+      P2 = Number(input.price);
+      const c = F2 * r / m;
+      if (Math.abs(c - C * j) < 1e-12) throw new ToolInputError("price", "The coupon equals the yield on the redemption value, so the price is C for every term: no one term gives it.");
+      const a = (P2 - C) / (c - C * j);
+      const vN = j === 0 ? NaN : 1 - j * a;
+      N = j === 0 ? a : -Math.log(vN) / Math.log(1 + j);
+      if (!Number.isFinite(N) || N <= 0) throw new ToolInputError("price", `No term gives a price of ${formatValue(P2, "money")} at this coupon and yield.`);
+      if (Math.abs(N - Math.round(N)) > 1e-6) warnings.push(`The term works out to ${N.toFixed(4)} coupons, not a whole number: a bond paying whole coupons can't have exactly this price.`);
+      steps.push({ label: "Coupons to maturity", formula: `N = \u2212ln(1 \u2212 j \xB7 (P \u2212 C)/(Fr/m \u2212 Cj)) / ln(1 + j)`, result: N, unit: "count" });
+    } else {
+      N = wholeCoupons(input);
+      if (solve === "yield") {
+        P2 = Number(input.price);
+        j = yieldFor(termsOf(input, N), P2);
+        steps.push({ label: "Yield per coupon period", formula: `the j where the price is ${formatValue(P2, "money")}, by bisection`, result: j, unit: "percent" });
+      } else if (solve === "coupon") {
+        P2 = Number(input.price);
+        j = Number(input.yield) / m;
+        const c = (P2 - C * (1 + j) ** -N) / annuity2(j, N);
+        if (c < 0) throw new ToolInputError("price", `A price of ${formatValue(P2, "money")} is below the redemption value alone at this yield, so no coupon gives it.`);
+        r = c * m / F2;
+        steps.push({ label: "Coupon", formula: `(P \u2212 C \xB7 v^${N}) / a\u2309${N}`, result: c, unit: "money" });
+      } else {
+        j = Number(input.yield) / m;
+        P2 = bondPriceAt(termsOf(input, N), j);
+      }
+    }
+    const t = termsOf({ ...input, coupon: r }, N);
+    const premium = P2 - C;
+    const nominal = j * m;
+    const effective = (1 + j) ** m - 1;
+    const years = N / m;
+    const premiumTile = { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium" : "Discount", value: Math.abs(premium), unit: "money" };
+    const tiles = solve === "yield" ? [
+      { symbol: "i\u207D\u1D50\u207E", label: "Nominal yield", value: nominal, unit: "percent" },
+      { symbol: "i", label: "Effective yield", value: effective, unit: "percent" },
+      { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
+    ] : solve === "coupon" ? [
+      { symbol: "r", label: "Coupon rate", value: r, unit: "percent" },
+      { symbol: "Fr/m", label: "Coupon", value: t.coupon, unit: "money" },
+      premiumTile
+    ] : solve === "term" ? [
+      { symbol: "T", label: "Years to maturity", value: years, unit: "years" },
+      { symbol: "N", label: "Coupons", value: N, unit: "count" },
+      premiumTile
+    ] : [
+      { symbol: "P", label: "Price", value: P2, unit: "money" },
+      premiumTile,
+      { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
+    ];
+    const pvCoupons = t.coupon * annuity2(j, N);
     return {
-      tiles: [
-        { symbol: "P", label: "Price", value: P2, unit: "money" },
-        { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium" : "Discount", value: Math.abs(premium), unit: "money" },
-        { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
-      ],
+      tiles,
       trace: [
-        { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
-        { label: "Yield per coupon period", formula: `j = ${Number(input.yield)} / ${t.m}`, result: j, unit: "percent" },
-        { label: "Present value of the coupons", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} at j`, result: pvCoupons, unit: "money" },
-        { label: "Present value of the redemption", formula: `${t.C} \xD7 v^${t.N}`, result: t.C * (1 + j) ** -t.N, unit: "money" },
+        { label: "Coupon", formula: `${F2} \xD7 ${formatValue(r, "percent")} / ${m}`, result: t.coupon, unit: "money" },
+        ...solve === "yield" ? [] : [{ label: "Yield per coupon period", formula: `j = ${formatValue(nominal, "percent")} / ${m}`, result: j, unit: "percent" }],
+        ...steps,
+        { label: "Present value of the coupons", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${Number(N.toFixed(4))} at j`, result: pvCoupons, unit: "money" },
+        { label: "Present value of the redemption", formula: `${C} \xD7 v^${Number(N.toFixed(4))}`, result: C * (1 + j) ** -N, unit: "money" },
         { label: "Price", formula: "sum of the two", result: P2, unit: "money" }
       ],
-      warnings: [],
-      values: { price: P2, premium, coupon: t.coupon, periods: t.N, yield_per_period: j, effective_yield: (1 + j) ** t.m - 1 },
-      summary: `Price ${formatValue(P2, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
+      warnings,
+      values: {
+        solve,
+        price: P2,
+        premium,
+        coupon: t.coupon,
+        coupon_rate: r,
+        periods: N,
+        years,
+        yield_per_period: j,
+        nominal_yield: nominal,
+        effective_yield: effective
+      },
+      summary: solve === "yield" ? `Yield ${formatValue(nominal, "percent")} convertible ${m === 1 ? "annually" : `${m} times a year`} (${formatValue(effective, "percent")} effective) for a price of ${formatValue(P2, "money")}.` : solve === "coupon" ? `A coupon rate of ${formatValue(r, "percent")} (${formatValue(t.coupon, "money")} a coupon) prices the bond at ${formatValue(P2, "money")} at ${formatValue(j, "percent")} per coupon period.` : solve === "term" ? `A term of ${Number(years.toFixed(4))} years (${Number(N.toFixed(4))} coupons) prices the bond at ${formatValue(P2, "money")} at ${formatValue(j, "percent")} per coupon period.` : `Price ${formatValue(P2, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
     };
   },
   method: { concepts: ["Bond Price", "Bonds"], readings: [] },
   next: [
-    { tool: "finance.bond_amortization", label: "Bond Amortization", build: (input) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: input.yield }) },
+    {
+      tool: "finance.bond_amortization",
+      label: "Bond Amortization",
+      build: (input, output) => ({ face: input.face, coupon: output.values.coupon_rate, redemption: input.redemption, years: output.values.years, m: input.m, yield: output.values.nominal_yield })
+    },
     {
       tool: "finance.duration_convexity",
       label: "Duration & Convexity",
-      build: (input) => {
-        const t = bondTerms(input);
-        const j = Number(input.yield) / t.m;
+      build: (input, output) => {
+        const m = Number(input.m);
+        const N = Math.round(Number(output.values.periods));
+        const coupon = Number(output.values.coupon);
+        const C = Number(input.redemption);
         return {
-          i: (1 + j) ** t.m - 1,
-          flows: Array.from({ length: t.N }, (_, k) => ({ time: (k + 1) / t.m, amount: t.coupon + (k === t.N - 1 ? t.C : 0) }))
+          i: Number(output.values.effective_yield),
+          flows: Array.from({ length: N }, (_, k) => ({ time: (k + 1) / m, amount: coupon + (k === N - 1 ? C : 0) }))
         };
       }
     }
@@ -801,7 +946,7 @@ var bondPrice = {
 };
 
 // src/lib/tools/finance/bondYield.ts
-var PRICE = { kind: "number", key: "price", label: "Price", symbol: "P", unit: "money", min: 0.01, max: 1e12, sliderMax: 2e3, step: 1, default: 950, description: "The price paid for the bond, on a coupon date." };
+var PRICE2 = { kind: "number", key: "price", label: "Price", symbol: "P", unit: "money", min: 0.01, max: 1e12, sliderMax: 2e3, step: 1, default: 950, description: "The price paid for the bond, on a coupon date." };
 var bondYield = {
   id: "finance.bond_yield",
   version: "1.0.0",
@@ -809,7 +954,7 @@ var bondYield = {
   area: "finance",
   answers: "What yield does this price give?",
   aka: ["YTM", "yield to maturity"],
-  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE],
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE2],
   notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for j",
   view: "none",
   compute: (input) => {
@@ -4331,6 +4476,7 @@ var insurerReturn = {
   fields: [insurer, quarter, line],
   notation: () => "OSFI PC4, page 10.00: the line as filed",
   view: "table",
+  resultLabel: "This return, as filed",
   compute: (input) => {
     const file = filingsInstalled();
     if (!file) throw new ToolInputError("insurer", NOT_LOADED);
@@ -4364,10 +4510,12 @@ var insurerReturn = {
         columns: [
           { key: "line", label: "Line", kind: "text" },
           { key: "label", label: "OSFI's label", kind: "text" },
-          { key: "value", label: "As filed", kind: "number", unit: "plain", computed: true },
+          { key: "value", label: "As filed", kind: "number", unit: "money", computed: true },
           { key: "unit", label: "Unit", kind: "text" }
         ],
-        rows
+        rows,
+        // The line asked about, marked in the table.
+        highlight: rows.findIndex((r) => r.line === l.line)
       },
       trace: [
         { label: `Read off: ${file.return_title}, page ${l.page}, line ${l.line} (${address})`, formula: `${name}, ${periodLabel(period)}: "${l.en}"`, result: read(address), unit: "plain" }
@@ -4384,6 +4532,10 @@ var insurerReturn = {
         label: l.en,
         label_fr: l.fr,
         test,
+        // What line 140 is made of, for the card that sets one against the other.
+        capital_available: read(branch ? MCT_LINES.netAssets : MCT_LINES.capital),
+        capital_line: branch ? "25" : "10",
+        minimum_required: read(MCT_LINES.minimum),
         history_periods: history.map((h) => h.period),
         history: history.map((h) => h.value),
         handoff: {
@@ -10067,7 +10219,7 @@ var QUESTION_CHECKS = [
     quotes: ["deposit of 9550", "for five years", "20-year annuity-due", "level annual payments of 756.97", "annual effective interest rate of 4%"],
     steps: [
       { tool: "finance.annuity", input: () => ({ timing: "due", payment: 756.97, n: 20, i: 0.04 }) },
-      { tool: "finance.internal_rate_of_return", input: ([annuity2]) => ({ flows: [{ time: 0, amount: -9550 }, { time: 5, amount: annuity2.values.present_value }] }) }
+      { tool: "finance.internal_rate_of_return", input: ([annuity3]) => ({ flows: [{ time: 0, amount: -9550 }, { time: 5, amount: annuity3.values.present_value }] }) }
     ],
     tolerance: 5e-4,
     value: val("irr")

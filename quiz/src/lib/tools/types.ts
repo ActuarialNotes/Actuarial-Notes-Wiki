@@ -133,6 +133,8 @@ export interface ResultTable {
   rows: TableRow[]
   /** A last row set apart (a total, the averages). */
   footer?: TableRow
+  /** The row the run is about (the line an insurer was asked for), marked where the table is drawn. */
+  highlight?: number
 }
 
 export interface TraceStep {
@@ -186,6 +188,12 @@ export interface ToolSpec {
    */
   aka?: string[]
   fields: ToolField[]
+  /**
+   * The choice field that picks which quantity is the answer (Bond Price's
+   * `solve`: price, yield, coupon or term). The template draws it on the
+   * answer card as a "Solve for" strip, not as an input (docs/tool-template-v3.md §3).
+   */
+  solveFor?: string
   /** The formula with live values, under the title. */
   notation: (input: ToolInput) => string
   compute: (input: ToolInput) => ToolOutput

@@ -13,17 +13,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import type { Back } from '@/hooks/useBack'
-import { BookMarked, Calculator, Database, Sigma, Landmark, Scale, ShieldCheck, TrendingUp, type LucideIcon } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { BookMarked } from 'lucide-react'
 import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
-import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
+import { AREAS, TOOLS, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { ToolsSearchBar, type Crumb } from '@/components/tools/ToolsSearchBar'
-import { ToolFigure } from '@/components/tools/ToolFigure'
-import { figureFor, type FigureSpec } from '@/lib/toolFigures'
-import { runTool } from '@/lib/tools'
 import { useBack, usePageLabel } from '@/hooks/useBack'
-import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
@@ -31,21 +28,15 @@ import { FROM_PARAM } from '@/lib/toolTemplate'
 import { examForConcepts } from '@/lib/toolExam'
 import { examAccentStyle } from '@/lib/examColors'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { readRecent, type RecentTool } from '@/lib/toolRecent'
+import { inkChip } from '@/components/ui/ink'
+import { cn } from '@/lib/utils'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
 import { installWikiBundle } from '@/lib/wikiBundle'
 import { TOOLS_HEAD, toolHead } from '@/lib/seo'
-
-const AREA_ICON: Record<PracticeArea, LucideIcon> = {
-  data: Database,
-  reserving: Landmark,
-  ratemaking: TrendingUp,
-  distributions: Sigma,
-  credibility: Scale,
-  finance: Calculator,
-  capital: ShieldCheck,
-}
 
 /**
  * Open a tool's method — its concept pages — in the concept popup. The wiki
@@ -99,6 +90,7 @@ function Catalogue() {
     setParams(next, { replace: true })
   }
   const results = useMemo(() => searchTools(query, area), [query, area])
+  const { syllabi } = useWikiSyllabus()
   const searching = query.trim().length > 0
   // An area with no query (a breadcrumb's "Ratemaking") shows that area alone.
   const shownAreas = !searching && area ? AREAS.filter(a => a.id === area) : AREAS
@@ -107,24 +99,31 @@ function Catalogue() {
     <>
       <ToolsSearchBar kind="catalogue" query={query} area={area} onQuery={q => setParam('q', q)} onArea={a => setParam('area', a)} />
       <div className="container mx-auto max-w-3xl space-y-6 px-4 py-6">
-        <header>
+        <header className="space-y-3">
           <h1 className="text-2xl font-bold tracking-tight">Tools</h1>
+          {/* The areas, always on screen: a reader jumps to Credibility without scrolling (v3 §5). */}
+          {!searching && (
+            <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(90deg,#000_85%,transparent)]" role="group" aria-label="Area" data-testid="tool-areas">
+              <button type="button" onClick={() => setParam('area', null)} className={cn(inkChip(area === null), 'shrink-0')} aria-pressed={area === null}>All</button>
+              {AREAS.map(a => (
+                <button key={a.id} type="button" onClick={() => setParam('area', a.id)} className={cn(inkChip(area === a.id), 'shrink-0')} aria-pressed={area === a.id}>
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          )}
         </header>
+        {!searching && !area && <RecentTools syllabi={syllabi} />}
         {searching ? (
           results.length ? (
             <ListPanel>
-              {results.map(t => <ToolRow key={t.id} spec={t} query={query} />)}
+              {results.map(t => <ToolRow key={t.id} spec={t} query={query} syllabi={syllabi} />)}
             </ListPanel>
           ) : (
             <p className="px-1 text-sm text-muted-foreground" data-testid="tool-no-results">No tools match “{query.trim()}”.</p>
           )
         ) : (
           <>
-            {area && (
-              <button type="button" onClick={() => setParam('area', null)} className="px-1 text-sm font-medium underline underline-offset-2 hover:no-underline" data-testid="tool-all-areas">
-                All tools
-              </button>
-            )}
             {shownAreas.map(a => {
               const tools = TOOLS.filter(t => t.area === a.id)
               if (!tools.length) return null
@@ -132,10 +131,10 @@ function Catalogue() {
                 <section key={a.id} className="space-y-2" aria-labelledby={`area-${a.id}`}>
                   <h2 id={`area-${a.id}`} className="px-1 text-sm font-semibold text-muted-foreground">{a.label}</h2>
                   <ListPanel>
-                    {tools.map(t => <ToolRow key={t.id} spec={t} />)}
-                    {/* Beside the published tables, the published figures (D-AB2). */}
-                    {a.id === 'data' && <AssumptionsRow />}
+                    {tools.map(t => <ToolRow key={t.id} spec={t} syllabi={syllabi} />)}
                   </ListPanel>
+                  {/* Beside the published tables, the published figures (D-AB2): a shelf, not a tool, so a card of its own. */}
+                  {a.id === 'data' && <ListPanel><AssumptionsRow /></ListPanel>}
                 </section>
               )
             })}
@@ -147,38 +146,62 @@ function Catalogue() {
 }
 
 /**
- * A tool's figure in miniature, drawn from its own first example (§6.7): the
- * catalogue's tiles tell eight reserving tools apart by what they draw rather
- * than by eight copies of one icon. Computed once per tool per visit.
+ * The tool's colour: the exam that first teaches its method (`lib/toolExam.ts`),
+ * as a dot. The question it answers says what it is; the colour says where on
+ * the ladder it is taught.
  */
-const MINIATURES = new Map<string, FigureSpec | null>()
-function miniature(spec: ToolSpec): FigureSpec | null {
-  if (!MINIATURES.has(spec.id)) {
-    let fig: FigureSpec | null = null
-    try { fig = figureFor(runTool(spec, {})) } catch { fig = null }
-    MINIATURES.set(spec.id, fig)
-  }
-  return MINIATURES.get(spec.id) ?? null
+function ExamDot({ spec, syllabi }: { spec: ToolSpec; syllabi: readonly WikiExamSyllabus[] }) {
+  const exam = examForConcepts(spec.method.concepts, syllabi)
+  return (
+    <span
+      style={exam ? examAccentStyle(exam) : undefined}
+      className="ml-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--exam-accent-vivid,hsl(var(--muted-foreground)/0.5))]"
+      aria-hidden
+      data-testid="tool-exam-dot"
+    />
+  )
 }
 
-/** One tool in the catalogue: its figure, name and the question it answers, with the tested mark. */
-function ToolRow({ spec, query = '' }: { spec: ToolSpec; query?: string }) {
-  const Icon = AREA_ICON[spec.area]
-  const fig = miniature(spec)
+/** One tool in the catalogue: its exam's dot, its name and the question it answers. */
+function ToolRow({ spec, query = '', syllabi }: { spec: ToolSpec; query?: string; syllabi: readonly WikiExamSyllabus[] }) {
   return (
     <ListRow
       to={`/tools/${toolSlug(spec)}`}
-      leading={
-        <LogoTile size="lg" className="bg-muted text-foreground">
-          {fig ? <ToolFigure figure={fig} compact className="h-12 w-12" /> : <Icon className="h-6 w-6" aria-hidden />}
-        </LogoTile>
-      }
+      leading={<ExamDot spec={spec} syllabi={syllabi} />}
       title={highlightMatch(spec.name, query)}
       subtitle={highlightMatch(spec.answers, query)}
       subtitleLines={2}
-      trailing={checksFor(spec.id).length > 0 ? <CheckMark className="h-4 w-4" label="Tested against a published worked example" /> : undefined}
       data-testid="tool-row"
     />
+  )
+}
+
+/** "Pick up where you left off": the tools used last on this device, each with the answer it showed. */
+function RecentTools({ syllabi }: { syllabi: readonly WikiExamSyllabus[] }) {
+  const [recent] = useState<RecentTool[]>(() => readRecent())
+  const shown = recent.map(r => ({ r, spec: toolBySlug(r.slug) })).filter((x): x is { r: RecentTool; spec: ToolSpec } => !!x.spec).slice(0, 3)
+  if (!shown.length) return null
+  return (
+    <section className="space-y-2" aria-labelledby="tools-recent">
+      <h2 id="tools-recent" className="px-1 text-sm font-semibold text-muted-foreground">Pick up where you left off</h2>
+      <div className="-mx-4 flex gap-2.5 overflow-x-auto px-4 pb-1">
+        {shown.map(({ r, spec }) => {
+          const exam = examForConcepts(spec.method.concepts, syllabi)
+          return (
+            <Link
+              key={r.slug}
+              to={`/tools/${r.slug}`}
+              style={exam ? examAccentStyle(exam) : undefined}
+              className="w-40 shrink-0 rounded-2xl bg-[var(--exam-accent-soft,hsl(var(--card)))] px-3.5 py-3 transition-colors hover:brightness-110"
+              data-testid="tool-recent"
+            >
+              <span className="block truncate text-xs text-muted-foreground">{spec.name}</span>
+              <span className="mt-1 block truncate text-xl font-bold tabular-nums">{r.value}</span>
+            </Link>
+          )
+        })}
+      </div>
+    </section>
   )
 }
 
@@ -193,7 +216,7 @@ function AssumptionsRow() {
         </LogoTile>
       }
       title="Assumptions Bank"
-      subtitle="Figures transcribed from published documents, each with where to find it"
+      subtitle="Figures from published documents, each with its page"
       subtitleLines={2}
       data-testid="assumptions-row"
     />

@@ -8,7 +8,7 @@
 
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { formatValue, runTool, toolSlug, type NumberField, type ToolInput } from '@/lib/tools'
 import { carried, type Neighbour } from '@/lib/toolTemplate'
 import { fieldQuantities, figureFor, quantityStep, stepBackground } from '@/lib/toolFigures'
@@ -36,8 +36,8 @@ export function TakesFrom({ neighbours, linked }: {
       <Link to={`/tools/${toolSlug(t)}`} className={cn(LINE, 'transition-colors hover:bg-muted/60')} data-testid="tool-takes-from">
         <span className="text-muted-foreground">Takes from</span>
         <b className="min-w-0 flex-1 truncate font-semibold">{t.name}</b>
-        <ChevronLeft className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
         <span className="text-muted-foreground">open</span>
+        <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       </Link>
     )
   }
@@ -106,7 +106,8 @@ export function GivesTo({ neighbours, build, onSend }: {
   build: (n: Neighbour) => Partial<ToolInput> | null
   onSend: (n: Neighbour) => void
 }) {
-  const [open, setOpen] = useState(false)
+  // A few tools are listed open, each with what it would receive (v3 §2.8); more fold away.
+  const [open, setOpen] = useState(neighbours.length <= 3)
   const rows = useMemo(() => new Map(neighbours.map(n => [n.tool.id, open ? carriedRows(n, build(n)) : []])), [neighbours, build, open])
   if (!neighbours.length) return null
   if (neighbours.length === 1) {

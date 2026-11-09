@@ -380,10 +380,15 @@ export function FieldError({ message }: { message: string }) {
  * (a border, not an overline, which a clamped label's box clips away).
  */
 export function Sym({ children, className }: { children: string; className?: string }) {
-  const parts = children.split(/(.[\u0304\u0305])/u).filter(Boolean)
+  // "D_mod", "E[Y_L]", "t_pp": an underscore starts a subscript, never printed raw.
+  const runs = children.split(/_([A-Za-z0-9]+)/)
+  const barred = (text: string, at: number) =>
+    text.split(/(.[\u0304\u0305])/u).filter(Boolean).map((p, k) =>
+      /[\u0304\u0305]$/u.test(p) ? <span key={`${at}-${k}`} className="inline-block border-t-[1.5px] border-current pt-px leading-none">{p.slice(0, -1)}</span> : p,
+    )
   return (
     <span className={className}>
-      {parts.map((p, k) => (/[\u0304\u0305]$/u.test(p) ? <span key={k} className="inline-block border-t-[1.5px] border-current pt-px leading-none">{p.slice(0, -1)}</span> : p))}
+      {runs.map((run, k) => (k % 2 ? <sub key={k} className="text-[0.75em]">{run}</sub> : barred(run, k)))}
     </span>
   )
 }

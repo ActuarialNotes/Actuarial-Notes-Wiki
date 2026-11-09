@@ -58,9 +58,7 @@ import {
   publishedLabel,
   readingLabel,
   scalarSource,
-  sharedDefaultLabel,
   fieldText,
-  slidersInline,
   tilesInOrder,
   type Neighbour,
   type ScalarField,
@@ -69,6 +67,7 @@ import {
 import { fieldQuantities, quantityStep, stepBackground, type QuantityStep } from '@/lib/toolFigures'
 import { pendingFiguresFor } from '@/lib/toolBank'
 import { lastRun } from '@/lib/toolRuns'
+import { recordRecent } from '@/lib/toolRecent'
 import { EXAM_BANNER, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { cn } from '@/lib/utils'
@@ -82,6 +81,7 @@ import { ToolMenu } from './ToolMenu'
 import { MenuHeader, Sym } from './ToolCard'
 import { SourceTag } from './SourceTag'
 import { GivesTo, TakesFrom } from './ToolNeighbours'
+import { CapitalCard, ChainStrip, DataSourceLine } from './LedgerParts'
 import { ChoiceSheet, NumberSheet, Symbol } from './ValueSheet'
 import { useToolCard, type ToolCardModel } from './useToolCard'
 
@@ -139,8 +139,11 @@ export function ToolTemplate({
   // Past three inputs, the one row whose slider is open in place.
   const [sliding, setSliding] = useState<string | null>(null)
   const toggle = (key: string, kind: NonNullable<Note>['kind']) => setNote(n => (n?.key === key && n.kind === kind ? null : { key, kind }))
-  const inline = slidersInline(m.scalars)
-  const { judgments, inputs } = inputGroups(m.scalars)
+  // A "Solve for" choice is drawn on the answer card, not among the inputs (v3 §3).
+  const solveField = spec.solveFor ? m.scalars.find((f): f is ChoiceField => f.key === spec.solveFor && f.kind === 'choice') : undefined
+  const { choices, inputs } = inputGroups(m.scalars.filter(f => f.key !== spec.solveFor))
+  // A Data Source's inputs are the question it is asked, so they come before its answer (v3 §2.5).
+  const queryFirst = spec.area === 'data'
   const grids = m.triangles.length + m.tables.length + (m.grid ? 1 : 0) > 0
   const tiles = m.result ? tilesInOrder(spec.id, m.result.tiles) : []
   const lead = tiles[0]
@@ -164,6 +167,11 @@ export function ToolTemplate({
     io.observe(el)
     return () => io.disconnect()
   }, [])
+  // A tool page remembers its answer for the catalogue's "Pick up where you left off".
+  const leadText = lead && !m.stale ? formatValue(lead.value, lead.unit) : null
+  useEffect(() => {
+    if (persist && leadText) recordRecent(toolSlug(spec), leadText)
+  }, [persist, leadText, spec])
   const pinned = answerHidden && lead ? `${lead.symbol}\u0000${formatValue(lead.value, lead.unit)}` : null
   useEffect(() => {
     if (!onPinAnswer) return
@@ -196,7 +204,6 @@ export function ToolTemplate({
       key={f.key}
       model={m}
       field={f}
-      inline={inline}
       open={sliding === f.key}
       onSlide={() => setSliding(k => (k === f.key ? null : f.key))}
       source={sourceOf(f)}
@@ -207,38 +214,34 @@ export function ToolTemplate({
       onOpenTool={openTool}
     />
   )
-  const group = (fields: ScalarField[], label?: string) => {
-    const shared = sharedDefaultLabel(fields.map(f => ({ judgment: f.judgment, source: sourceOf(f) })))
-    return (
+  const group = (fields: ScalarField[], label?: string) =>
+    fields.length ? (
       <Group label={label}>
         {fields.map(rowFor)}
-        {shared && <SharedDefault label={shared} />}
+        {fields.some(f => f.judgment) && (
+          <p className="px-3.5 py-2 text-xs text-muted-foreground" data-testid="judgment-legend">◆ marks a judgment: yours to choose.</p>
+        )}
       </Group>
-    )
-  }
+    ) : null
   const editField = editing ? m.scalars.find(f => f.key === editing) : undefined
   const area = AREAS.find(a => a.id === spec.area)?.label
   const reading = readingLabel(spec.method.readings)
   const tested = checksFor(spec.id).length
   const notation = m.result ? spec.notation(m.result.input) : null
 
-  /** A grid column's chip: only for a column not at its default; the rest share the line under the grid. */
+  /** A grid column's chip: only for a column not at its default (provenance by exception). */
   const columnChip = (rows: DraftRow[] | undefined, defaults: DraftRow[], tableKey: string, key: string) => {
     const source = columnSource(rows, defaults, key, m.origins[`${tableKey}.${key}`])
     return source.kind === 'default' ? null : <SourceTag className="max-w-[7rem]" source={source} />
   }
-  const sharedColumns = (field: { key: string; columns: { key: string; kind: string }[]; default: DraftRow[] }) => {
-    const cols = field.columns.filter(c => c.kind === 'number')
-    const defaults = cols.filter(c => columnSource(m.draft[field.key] as DraftRow[] | undefined, field.default, c.key, m.origins[`${field.key}.${c.key}`]).kind === 'default')
-    if (!defaults.length) return null
-    return <SharedDefault label={defaults.length === cols.length ? 'All' : 'The rest'} bare />
-  }
-
   return (
     <div className="space-y-3" style={accent} data-testid="tool-card" data-template>
       {/* One tool in front is named above the card; several are alternatives for one
           value, so they are offered on the input they fill instead (TakeFrom). */}
       {(m.neighbours.before.length === 1 || m.linkedTool) && <TakesFrom neighbours={m.neighbours.before} linked={m.linkedTool} />}
+      <ChainStrip toolId={spec.id} />
+      {queryFirst && <DataSourceLine toolId={spec.id} />}
+      {queryFirst && group([...choices, ...inputs])}
 
       <section className={cn('overflow-hidden rounded-2xl', examKey ? EXAM_BANNER : NEUTRAL_BANNER)} data-testid="tool-answer">
         <header className="flex items-start gap-3 px-3.5 pt-3.5">
@@ -289,6 +292,20 @@ export function ToolTemplate({
           </div>
         </header>
 
+        {solveField && (
+          <div className="px-3.5 pt-3" data-testid="tool-solve-for">
+            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-foreground/75">Solve for</p>
+            <SegmentedControl
+              size="sm"
+              label="Solve for"
+              value={String(m.valueOf(solveField))}
+              onChange={v => m.set(solveField.key, v)}
+              options={solveField.options.map(o => ({ value: o.value, label: o.label }))}
+              className="w-full"
+            />
+          </div>
+        )}
+
         {m.result && lead && (
           <div ref={answerRef} className={cn('px-3.5 pb-1 pt-3', m.stale && 'opacity-50')}>
             {leadLabel(spec.name, lead) && (
@@ -300,16 +317,10 @@ export function ToolTemplate({
               <p className="text-[34px] font-bold leading-tight tracking-tight tabular-nums" data-testid="tool-tile">{formatValue(lead.value, lead.unit)}</p>
               {/* A span's length is drawn by the figure under it; it isn't said twice. */}
               {tiles.slice(1).filter(t => !(t.unit === 'years' && m.figure?.kind === 'span')).map(t => (
-                <p key={t.symbol + t.label} className="text-sm text-foreground/75" title={`${t.symbol} ${t.label}`}>
-                  {t.unit === 'years' ? (
-                    // A span says how long it is in words, not by a symbol.
-                    <>over <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b> years</>
-                  ) : (
-                    <>
-                      <Sym>{t.symbol}</Sym>{' '}
-                      <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b>
-                    </>
-                  )}
+                // Each figure beside the answer says what it is: its symbol and its words (v3 §2.6).
+                <p key={t.symbol + t.label} className="text-sm text-foreground/75">
+                  <Sym className="font-semibold text-foreground/90">{t.symbol}</Sym> {t.label}{' '}
+                  <b className="font-semibold tabular-nums text-foreground" data-testid="tool-tile">{formatValue(t.value, t.unit)}</b>
                 </p>
               ))}
             </div>
@@ -318,7 +329,7 @@ export function ToolTemplate({
         {m.result && !m.stale && <FiledAnswerLine result={m.result} />}
         {m.figure ? (
           <div className={cn('px-2.5 pb-3 pt-1', m.stale && 'opacity-50')}>
-            <ToolFigure figure={m.figure} onDrag={m.dragTo} height={inline ? 96 : 72} />
+            <ToolFigure figure={m.figure} onDrag={m.dragTo} height={96} />
           </div>
         ) : (
           <div className="h-3" />
@@ -340,7 +351,9 @@ export function ToolTemplate({
         <p key={w} className="px-1 text-sm text-amber-700 dark:text-amber-400">{w}</p>
       ))}
 
-      {judgments.length > 0 && group(judgments, 'Your judgments')}
+      {m.result && !m.stale && <CapitalCard result={m.result} />}
+      {/* Choices first: one can change which inputs, and what the grid means (Claims: reported or paid). */}
+      {!queryFirst && grids && group(choices)}
 
       {m.triangles.map(t => (
         <section key={t.key} className="space-y-1.5" aria-label={t.label} data-field={t.key}>
@@ -352,7 +365,7 @@ export function ToolTemplate({
               title={m.labelled ? <span className="text-sm font-semibold">{t.label}</span> : null}
             />
           </div>
-          <SourceTag source={m.touched(t) ? { kind: 'yours' } : { kind: 'default' }} />
+          {m.touched(t) && <SourceTag source={{ kind: 'yours' }} />}
           {m.errorAt(t.key) && <p role="alert" className="text-sm text-destructive">{m.errorAt(t.key)}</p>}
         </section>
       ))}
@@ -365,7 +378,6 @@ export function ToolTemplate({
             onChange={rows => m.set(t.key, rows)}
             headerNote={key => columnChip(m.draft[t.key] as DraftRow[] | undefined, t.default, t.key, key)}
           />
-          {sharedColumns(t)}
           {m.errorAt(t.key) && <p role="alert" className="text-sm text-destructive">{m.errorAt(t.key)}</p>}
         </section>
       ))}
@@ -384,14 +396,13 @@ export function ToolTemplate({
               headerNote={key => columnChip(m.draft[m.grid!.key] as DraftRow[] | undefined, m.grid!.default, m.grid!.key, key)}
             />
           </div>
-          {sharedColumns(m.grid)}
           {m.errorAt(m.grid.key) && <p role="alert" className="text-sm text-destructive">{m.errorAt(m.grid.key)}</p>}
         </section>
       )}
       {!m.grid && spec.view === 'table' && m.result?.table && (
         <section className={cn('space-y-1.5', m.stale && 'opacity-50')} aria-label={spec.resultLabel ?? 'Result'}>
           <GroupLabel>{spec.resultLabel ?? 'Result'}</GroupLabel>
-          <ResultTableView table={m.result.table} />
+          <ResultTableView table={m.result.table} fold />
         </section>
       )}
       {m.selecting && m.result && !m.stale && (
@@ -404,7 +415,7 @@ export function ToolTemplate({
         />
       )}
 
-      {inputs.length > 0 && group(inputs, judgments.length || grids ? 'Inputs' : undefined)}
+      {!queryFirst && (grids ? group(inputs, 'Inputs') : group([...choices, ...inputs], 'Inputs'))}
 
       <GivesTo neighbours={m.neighbours.after} build={n => m.buildFor(n.handoff)} onSend={m.sendTo} />
 
@@ -483,15 +494,6 @@ function Group({ label, children }: { label?: string; children: ReactNode }) {
   )
 }
 
-/** The one line the rows still at their default share, under their group: "All ● Default". */
-function SharedDefault({ label, bare = false }: { label: string; bare?: boolean }) {
-  return (
-    <p className={cn('flex items-center gap-2 text-xs text-muted-foreground', bare ? 'px-1' : 'px-3.5 py-2')} data-testid="shared-default">
-      {label} <SourceTag source={{ kind: 'default' }} />
-    </p>
-  )
-}
-
 function ActionRow({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: ReactNode }) {
   return (
     <button
@@ -553,11 +555,10 @@ function Judged({ on }: { on?: boolean }) {
   return on ? <span className="ml-1 text-muted-foreground" title="A judgment: yours to choose" aria-label="a judgment">◆</span> : null
 }
 
-function InputRow({ model: m, field: f, inline, open, onSlide, source, step, note, onToggle, onEdit, onOpenTool }: {
+function InputRow({ model: m, field: f, open, onSlide, source, step, note, onToggle, onEdit, onOpenTool }: {
   model: ToolCardModel
   field: ScalarField
-  inline: boolean
-  /** Past three inputs: whether this row's slider is open in place. */
+  /** Whether this row's slider is open in place (every number row is one line until tapped). */
   open: boolean
   onSlide: () => void
   source: ValueSource
@@ -590,8 +591,9 @@ function InputRow({ model: m, field: f, inline, open, onSlide, source, step, not
     return (
       <div data-field={f.key}>
         <button type="button" onClick={onEdit} className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted/60" aria-label={`${f.label}: ${label}`}>
-          <span className="min-w-0 flex-1 text-sm font-semibold">{f.label}<Judged on={f.judgment} /></span>
-          <span className="truncate text-sm font-semibold">{label}</span>
+          {/* The label keeps its width; a long value (an insurer's name) wraps beside it, never under it. */}
+          <span className="shrink-0 text-sm font-semibold">{f.label}<Judged on={f.judgment} /></span>
+          <span className="line-clamp-2 min-w-0 flex-1 text-right text-sm font-semibold">{label}</span>
           <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
         </button>
         <div className="px-3.5 pb-1 empty:hidden">{chips}</div>
@@ -602,10 +604,10 @@ function InputRow({ model: m, field: f, inline, open, onSlide, source, step, not
   const value = m.numberOf(f)
   const shown = f.zeroLabel && value === 0 ? f.zeroLabel : fieldText(value, f)
   const linked = source.kind === 'linked'
-  // Three inputs or fewer keep the slider open; past that a row opens its own
-  // slider in place when tapped. Tapping a row also lists the tools that can
-  // supply its value. The number opens the keypad, nothing else does.
-  const showSlider = (inline || open) && !linked
+  // Every number row is one line; tapping it opens its slider in place, at any
+  // input count (v3 §2.2), and lists the tools that can supply its value. The
+  // number opens the keypad, nothing else does.
+  const showSlider = open && !linked
   const sliderMax = Math.max(f.sliderMax ?? f.max, Math.min(value, f.max))
   const sliderMin = Math.min(f.sliderMin ?? f.min, Math.max(value, f.min))
   const head = (
@@ -710,7 +712,7 @@ function ChipLine({ model: m, field: f, source, note, onToggle, onEdit, onOpenTo
 }) {
   const drawn: BankFigure | null = f.kind === 'number' ? m.drawnFigure(f) : null
   const others = f.kind === 'number' ? figuresFor(f).filter(x => x.id !== drawn?.id) : []
-  const own = ownChip(f.judgment, source)
+  const own = ownChip(source)
   if (!own && !others.length) return null
   const chipClick =
     source.kind === 'published' ? () => onToggle('figure')

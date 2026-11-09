@@ -52,7 +52,8 @@ describe('the registry holds every tool to one job (R9)', () => {
     // made, counting a field only while its `showWhen` draws it — and at most
     // three headline results.
     for (const setting of choiceSettings(spec)) {
-      const shown = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
+      // A "Solve for" choice is drawn on the answer card, not among the inputs.
+      const shown = spec.fields.filter(f => f.key !== spec.solveFor && (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
       expect(shown.length, JSON.stringify(setting)).toBeLessThanOrEqual(6)
     }
     const result = runTool(spec, {})

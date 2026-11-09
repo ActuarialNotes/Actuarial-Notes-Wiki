@@ -446,7 +446,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   values overlapping their label, headline numbers losing their labels or misread as spans, MCT
   Ratio's example opening on a false warning, published expense figures offered to the wrong
   field, controls placed after long results, 25 tools with no hand-off), lists per-tool notes and
-  current limitations, and proposes redesign rounds 0–5 with four questions for the maintainer.
+  current limitations, and proposes redesign rounds 0–5 with four questions for the maintainer. The maintainer
+  chose direction A, *Ledger*; its build spec is `docs/tool-template-v3.md`, **built 2026-11-09 on
+  Bond Price (solve for any unknown), Bornhuetter-Ferguson, Insurer Return and the catalogue**, its
+  shared rules on every tool page.
 
 - **L2: show a reader they're improving (from a reader's review, built 2026-10-31).** An FM
   candidate wrote that they *estimated* their hit rate climbing from 20% to 70%, only learned a
@@ -1055,6 +1058,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/assumptions-bank.md` | Subplan: the Assumptions Bank, published figures and facts as data for the tools, Cowork and the connector | A9 | Active. Phases 0–1 built | 2026-11-08 |
 | `docs/tool-template-v2.md` | Build spec: the tool page's second template (navigation, connection, published figures in place) | A10 (§3.4) | Built; §8 records the build; mock-ups in `tool-template-v2-mockups.html` | 2026-11-09 |
 | `docs/tools-ux-review.md` | Review: every tool page, the catalogue and the Assumptions Bank on a phone, with redesign rounds | A12 (§3.4) | Proposed; nothing changed yet | 2026-11-09 |
+| `docs/tool-template-v3.md` | Build spec: the Ledger template (one-line rows, solve for any unknown, provenance by exception, chains) | A12 (§3.4) | First four pages built; §7 records the build | 2026-11-09 |
 | `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A11 (§3.4) | Proposed; Phase 0 started | 2026-11-09 |
 | `docs/osfi-tools-design.md` | Three designs for Insurer Return and MCT Ratio, and what was built | A11 (§3.4) | Design C step 1 built | 2026-11-09 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |

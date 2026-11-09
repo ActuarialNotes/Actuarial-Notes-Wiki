@@ -21,25 +21,21 @@ export function tilesInOrder<T extends { symbol: string }>(toolId: string, tiles
   return k <= 0 ? [...tiles] : [tiles[k], ...tiles.slice(0, k), ...tiles.slice(k + 1)]
 }
 
-/** A tool with this many scalar inputs or fewer keeps a slider on each row; past it, a row opens the edit sheet. */
-export const INLINE_SLIDER_LIMIT = 3
-
 export type ScalarField = NumberField | ChoiceField | DateField
 
 export const isScalar = (f: ToolField): f is ScalarField => f.kind === 'number' || f.kind === 'choice' || f.kind === 'date'
 
 /**
- * The scalar inputs on screen, in the order the formula takes them (the
- * spec's). Past `INLINE_SLIDER_LIMIT` inputs the reader's **judgments** (R3:
- * the choices a run must report as made or left at their default) lead in a
- * group of their own; at or under it they stay in the formula's order, marked
- * ◆ (docs/tool-template-v2.md §3.2).
+ * The scalar inputs on screen, in one group whatever their number (the Ledger
+ * template, docs/tool-template-v3.md §2.3): the **choices** first, since a
+ * choice can change which other inputs exist, then the numbers and dates in
+ * the order the formula takes them (the spec's). Judgments stay among them,
+ * marked ◆, so the card doesn't re-lay itself when a choice adds an input.
  */
-export function inputGroups(fields: readonly ScalarField[]): { judgments: ScalarField[]; inputs: ScalarField[] } {
-  if (fields.length <= INLINE_SLIDER_LIMIT) return { judgments: [], inputs: [...fields] }
+export function inputGroups(fields: readonly ScalarField[]): { choices: ScalarField[]; inputs: ScalarField[] } {
   return {
-    judgments: fields.filter(f => f.judgment),
-    inputs: fields.filter(f => !f.judgment),
+    choices: fields.filter(f => f.kind === 'choice'),
+    inputs: fields.filter(f => f.kind !== 'choice'),
   }
 }
 
@@ -50,8 +46,6 @@ export function fieldText(value: number, f: Pick<NumberField, 'unit' | 'integer'
   return formatValue(value, f.unit)
 }
 
-/** Whether a tool's number rows carry their own slider (the count is of the inputs on screen). */
-export const slidersInline = (scalars: readonly ScalarField[]) => scalars.length <= INLINE_SLIDER_LIMIT
 
 /**
  * Where a value came from — the **source tag** every input carries. Colour
@@ -128,18 +122,12 @@ export function columnSource(
 }
 
 /**
- * Whether a row says where its value came from with a chip of its own: a
- * judgment always does, and any input not at its default (§3.4). The rest of
- * a group shares one "All ● Default" line.
+ * Whether a row says where its value came from (provenance by exception,
+ * docs/tool-template-v3.md §2.4): only a value that isn't the example's —
+ * yours, a published figure, a filed cell or a link. A default needs no ink;
+ * a judgment keeps its ◆ whatever its source.
  */
-export const ownChip = (judgment: boolean | undefined, source: ValueSource) => !!judgment || source.kind !== 'default'
-
-/** The shared line's word: "All" when every row of the group is at its default, else "The rest". */
-export function sharedDefaultLabel(rows: readonly { judgment?: boolean; source: ValueSource }[]): string | null {
-  const shared = rows.filter(r => !ownChip(r.judgment, r.source)).length
-  if (!shared) return null
-  return shared === rows.length ? 'All' : 'The rest'
-}
+export const ownChip = (source: ValueSource) => source.kind !== 'default'
 
 /** A column's values, as the origin a fill records. */
 export const columnValues = (rows: readonly Record<string, unknown>[], key: string) => rows.map(r => r[key])
@@ -161,6 +149,19 @@ export function formulaText(formula: string, numbers: ReadonlyMap<string, number
     const n = numbers.get(key)
     return n === undefined ? whole : `(${n})`
   })
+}
+
+/**
+ * A computed column's formula as the line under the grid prints it, every
+ * column named as well as numbered: "(4) Ultimate = (1) Latest + (5) IBNR".
+ */
+export function formulaLine(key: string, formula: string, numbers: ReadonlyMap<string, number>, labels: ReadonlyMap<string, string>): string {
+  const name = (k: string) => {
+    const n = numbers.get(k)
+    const label = labels.get(k)
+    return n === undefined ? `{${k}}` : label ? `(${n}) ${label}` : `(${n})`
+  }
+  return `${name(key)} = ${formula.replace(/\{(\w+)\}/g, (_whole, k: string) => name(k))}`
 }
 
 /** The reading a method is taught from, short: "Friedland, Ch. 9". */

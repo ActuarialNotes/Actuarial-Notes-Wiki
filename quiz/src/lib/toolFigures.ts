@@ -665,7 +665,7 @@ const BUILDERS: Record<string, Builder> = {
     }
   },
 
-  'finance.bond_price': r => priceYield(r, 'finance.bond_price', num(r.input.yield), num(r.values.price)),
+  'finance.bond_price': r => priceYield(r, 'finance.bond_price', num(r.values.nominal_yield), num(r.values.price)),
   'finance.bond_yield': r => priceYield(r, 'finance.bond_price', num(r.values.nominal_yield), num(r.input.price)),
 
   'finance.bond_amortization': r => {
@@ -715,12 +715,20 @@ const BUILDERS: Record<string, Builder> = {
 
 /** A bond's price against its yield, the bond's own point marked — from Bond Price, run over a range of yields. */
 function priceYield(r: ToolResult, toolId: string, y: number, price: number): FigureSpec {
-  const input = { face: r.input.face, coupon: r.input.coupon, redemption: r.input.redemption, years: r.input.years, m: r.input.m }
+  // A solved coupon or term is the run's, not its input's.
+  const input = {
+    face: r.input.face,
+    coupon: (r.values.coupon_rate as number | undefined) ?? r.input.coupon,
+    redemption: r.input.redemption,
+    years: (r.values.years as number | undefined) ?? r.input.years,
+    m: r.input.m,
+  }
   const curve = sweep(toolId, input, 'yield', range(Math.max(0.0001, y - 0.06), y + 0.06, 41), res => num(res.values.price))
   return {
     kind: 'lines',
     series: [{ name: 'Price', points: curve, role: 'base' }],
-    point: { x: y, y: price, name: 'P', drag: r.tool === 'finance.bond_price' ? { field: 'yield' } : undefined },
+    // Dragging moves the yield, so only while the yield is an input.
+    point: { x: y, y: price, name: 'P', drag: r.tool === 'finance.bond_price' && (r.values.solve ?? 'price') !== 'yield' ? { field: 'yield' } : undefined },
     level: { y: num(r.input.redemption ?? r.input.face), name: 'Redemption' },
     xUnit: 'percent',
     yUnit: 'money',

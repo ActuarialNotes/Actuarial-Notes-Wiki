@@ -83,6 +83,7 @@ export const insurerReturn: ToolSpec = {
   fields: [insurer, quarter, line],
   notation: () => 'OSFI PC4, page 10.00: the line as filed',
   view: 'table',
+  resultLabel: 'This return, as filed',
   compute: input => {
     const file = filingsInstalled()
     if (!file) throw new ToolInputError('insurer', NOT_LOADED)
@@ -123,10 +124,12 @@ export const insurerReturn: ToolSpec = {
         columns: [
           { key: 'line', label: 'Line', kind: 'text' },
           { key: 'label', label: "OSFI's label", kind: 'text' },
-          { key: 'value', label: 'As filed', kind: 'number', unit: 'plain', computed: true },
+          { key: 'value', label: 'As filed', kind: 'number', unit: 'money', computed: true },
           { key: 'unit', label: 'Unit', kind: 'text' },
         ],
         rows,
+        // The line asked about, marked in the table.
+        highlight: rows.findIndex(r => r.line === l.line),
       },
       trace: [
         { label: `Read off: ${file.return_title}, page ${l.page}, line ${l.line} (${address})`, formula: `${name}, ${periodLabel(period)}: "${l.en}"`, result: read(address), unit: 'plain' },
@@ -143,6 +146,10 @@ export const insurerReturn: ToolSpec = {
         label: l.en,
         label_fr: l.fr,
         test,
+        // What line 140 is made of, for the card that sets one against the other.
+        capital_available: read(branch ? MCT_LINES.netAssets : MCT_LINES.capital),
+        capital_line: branch ? '25' : '10',
+        minimum_required: read(MCT_LINES.minimum),
         history_periods: history.map(h => h.period),
         history: history.map(h => h.value),
         handoff: {

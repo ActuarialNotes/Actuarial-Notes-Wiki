@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import {
   FloatingSearchBack,
@@ -13,6 +13,20 @@ import { highlightMatch } from '@/components/SearchHighlight'
 import { AREAS, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { areaCounts, searchTools } from '@/lib/toolSearch'
 import type { Back } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { cn } from '@/lib/utils'
+
+/**
+ * One step of a tool page's **breadcrumb** (docs/tool-template-v2.md §3.2):
+ * `Tools › Ratemaking › Permissible Loss Ratio`, the last the page itself.
+ * A step with `back` goes back through the browser's history (the page left,
+ * scroll intact) rather than opening a fresh copy of it.
+ */
+export interface Crumb {
+  label: string
+  to?: string
+  back?: Back
+}
 
 /**
  * The **Tools top bar** (docs/actuarial-tools.md §6.2) — the floating search
@@ -42,11 +56,13 @@ type Props =
       back: Back
       /** At the strip's right edge: the tool's answer, once its card has scrolled away (§19). */
       pinned?: ReactNode
+      /** The breadcrumb that replaces the back arrow, its last step this page. */
+      crumbs?: Crumb[]
     }
 
 export function ToolsSearchBar(props: Props) {
   if (props.kind === 'catalogue') return <CatalogueBar {...props} />
-  return <ToolPageBar title={props.title} back={props.back} pinned={props.pinned} />
+  return <ToolPageBar title={props.title} back={props.back} pinned={props.pinned} crumbs={props.crumbs} />
 }
 
 function AreaPills({ query, area, onArea }: { query: string; area: PracticeArea | null; onArea: (a: PracticeArea | null) => void }) {
@@ -88,7 +104,7 @@ function CatalogueBar({ query, area, onQuery, onArea }: Extract<Props, { kind: '
   )
 }
 
-function ToolPageBar({ title, back, pinned }: { title: string; back: Back; pinned?: ReactNode }) {
+function ToolPageBar({ title, back, pinned, crumbs }: { title: string; back: Back; pinned?: ReactNode; crumbs?: Crumb[] }) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [area, setArea] = useState<PracticeArea | null>(null)
@@ -144,10 +160,59 @@ function ToolPageBar({ title, back, pinned }: { title: string; back: Back; pinne
             <ToolResults tools={results} query={query} onOpen={open} />
           </div>
         ) : (
-          <FloatingSearchStrip title={title} backLink={<FloatingSearchBack back={back} />}>{pinned}</FloatingSearchStrip>
+          crumbs?.length ? (
+            <div className="flex h-[calc(3.5rem-1px)] items-center gap-2.5">
+              <Breadcrumb crumbs={crumbs} />
+              {pinned}
+            </div>
+          ) : (
+            <FloatingSearchStrip title={title} backLink={<FloatingSearchBack back={back} />}>{pinned}</FloatingSearchStrip>
+          )
         )}
       </FloatingSearchBar>
     </>
+  )
+}
+
+/**
+ * The breadcrumb. Every step but the last is a link up the stack; on a phone
+ * only the last two show, the rest folded into "…".
+ */
+function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
+  const folded = crumbs.length > 2
+  return (
+    <nav aria-label="Breadcrumb" className="min-w-0 flex-1" data-testid="tool-breadcrumb">
+      <ol className="flex min-w-0 items-center gap-1 text-sm">
+        {folded && (
+          <li className="flex shrink-0 items-center gap-1 text-muted-foreground sm:hidden" aria-hidden>
+            … <ChevronRight className="h-3.5 w-3.5" />
+          </li>
+        )}
+        {crumbs.map((c, k) => {
+          const last = k === crumbs.length - 1
+          const hidden = folded && k < crumbs.length - 2
+          return (
+            <li key={`${k}-${c.label}`} className={cn('flex min-w-0 items-center gap-1', hidden && 'hidden sm:flex', last ? 'shrink' : 'shrink-0')}>
+              {last ? (
+                <span className="truncate font-semibold" aria-current="page">{c.label}</span>
+              ) : (
+                <>
+                  <Link
+                    to={c.back?.to ?? c.to ?? '/tools'}
+                    state={RESTORE_SCROLL}
+                    onClick={c.back?.onLinkClick}
+                    className="truncate text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {c.label}
+                  </Link>
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                </>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
   )
 }
 

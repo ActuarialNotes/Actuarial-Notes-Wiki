@@ -20,6 +20,7 @@ export {
   assumptionRef,
   bankFigure,
   bankFigures,
+  figuresFitting,
   figuresFor,
   installAssumptionBank,
   printedFigure,

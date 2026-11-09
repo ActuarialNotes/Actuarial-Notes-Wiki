@@ -12,6 +12,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ToolInputError,
+  toolBySlug,
   assumptionRef,
   bankFigure,
   filedCell,
@@ -29,6 +30,7 @@ import {
   type DateField,
   type NumberField,
   type TableField,
+  type ToolHandoff,
   type ToolInput,
   type ToolResult,
   type ToolSpec,
@@ -39,7 +41,7 @@ import { figureFor } from '@/lib/toolFigures'
 import { lastRun, rememberRun } from '@/lib/toolRuns'
 import { runToolCall, toolResultSheets } from '@/lib/toolExport'
 import { draftFromStore, draftToStore, fieldVisible, initialDraft, type Draft } from '@/lib/toolDraft'
-import { columnValues, originOf, type Origin } from '@/lib/toolTemplate'
+import { arrivalOrigins, columnValues, givesTo, handoffPath, originHolds, originOf, takesFrom, type Neighbour, type Origin } from '@/lib/toolTemplate'
 import { downloadWorkbook } from '@/lib/xlsx'
 import type { Sourcing } from './SourceSheet'
 import type { ToolMenuItem } from './ToolMenu'
@@ -84,9 +86,15 @@ export interface ToolCardOptions {
   onResult?: (result: ToolResult | null) => void
   embedded?: boolean
   persist?: boolean
+  /**
+   * The slug of the tool that sent this run (the run URL's `?from=`): every
+   * value it carried arrives **linked** to it, not as the reader's own
+   * (docs/tool-template-v2.md §3.3).
+   */
+  sender?: string | null
 }
 
-export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedded = false, persist = false }: ToolCardOptions) {
+export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedded = false, persist = false, sender = null }: ToolCardOptions) {
   const navigate = useNavigate()
   const storeKey = `${DRAFT_STORE}${spec.id}`
   const [draft, setDraft] = useState<Draft>(() =>
@@ -127,7 +135,20 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   const lastGood = useRef<ToolResult | null>(null)
   const [sourcing, setSourcing] = useState<Sourcing | null>(null)
   // What another tool filled, and with what (the template's "linked" tag).
-  const [origins, setOrigins] = useState<Record<string, Origin>>({})
+  const [origins, setOrigins] = useState<Record<string, Origin>>(() =>
+    arrivalOrigins(spec, sender ? toolBySlug(sender) : undefined, initialInput),
+  )
+  /** Drop a link: the value stays, and is the reader's own. */
+  const unlink = (key: string) => setOrigins(o => {
+    const next = { ...o }
+    delete next[key]
+    return next
+  })
+  /** Set a field from another tool's result, remembered as linked to it. */
+  const takeFrom = (key: string, value: number, tool: ToolSpec) => {
+    set(key, value)
+    setOrigins(o => ({ ...o, [key]: originOf(tool.name, value, tool.id) }))
+  }
   // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval.
   // A new triangle starts them over.
   const selecting = spec.id === SELECTING_TOOL
@@ -274,20 +295,29 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     }))
 
   const slug = toolSlug(spec)
-  const sends = (embedded ? [] : spec.next ?? []).flatMap(next => {
-    const target = toolById(next.tool)
-    if (!target || !result || stale) return []
-    const picked = selecting && selections.some(Boolean)
+  const picked = selecting && selections.some(Boolean)
+  /** What a hand-off would carry from the current result, or null while there is no good one. */
+  const buildFor = (next: ToolHandoff): Partial<ToolInput> | null => {
+    if (!result || stale) return null
+    return picked && next.tool === 'reserving.development_to_ultimate'
+      ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
+      : next.build(result.input, result)
+  }
+  /** Open the next tool with what this one gives it, naming this one as the sender so the values arrive linked. */
+  const sendTo = (n: Neighbour) => {
+    const built = buildFor(n.handoff)
+    if (built) navigate(handoffPath(runPath(toolSlug(n.tool), built), slug))
+  }
+  const neighbours = useMemo(() => (embedded ? { before: [], after: [] } : { before: takesFrom(spec.id), after: givesTo(spec) }), [embedded, spec])
+  // Once a link has been made, Takes from names only the tool it came from.
+  const linkedTool = Object.entries(origins).find(([key, o]) => o.tool && originHolds(o, draft[key]))?.[1].tool ?? null
+  const sends = neighbours.after.flatMap(n => {
+    if (!result || stale) return []
     return [{
-      key: `next-${next.tool}`,
-      label: `Send ${picked ? 'selections ' : ''}to ${next.label}`,
+      key: `next-${n.tool.id}`,
+      label: `Send ${picked && n.tool.id === 'reserving.development_to_ultimate' ? 'selections ' : ''}to ${n.handoff.label}`,
       icon: 'next' as const,
-      run: () => {
-        const built = picked
-          ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
-          : next.build(result.input, result)
-        navigate(runPath(toolSlug(target), built))
-      },
+      run: () => sendTo(n),
     }]
   })
   const download = () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) }
@@ -316,7 +346,8 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     spec, slug, draft, set, unset, valueOf, numberOf, touched,
     undo, reset, undoReset,
     outcome, result, stale, figure, dragTo,
-    sourcing, setSourcing, origins,
+    sourcing, setSourcing, origins, unlink, takeFrom, linkedTool,
+    neighbours, buildFor, sendTo,
     selecting, selections, setSelections,
     drawnFigure, drawnFiling, shownUnderField, bankValue, filedNumber, fillFrom, sourcesFor,
     menu, sends, download,

@@ -4,7 +4,7 @@ import { ToolInputError, type TableRow, type ToolSpec } from '../types'
 const TYPE = { key: 'type', label: 'Expense', kind: 'text' as const }
 const EXPENSES = { key: 'expenses', label: 'Expenses', kind: 'number' as const, unit: 'money' as const }
 const PREMIUM = { key: 'premium', label: 'Premium', kind: 'number' as const, unit: 'money' as const }
-const FIXED_SHARE = { key: 'fixed_share', label: '% fixed', kind: 'number' as const, unit: 'percent' as const }
+const FIXED_SHARE = { key: 'fixed_share', label: '% fixed', kind: 'number' as const, unit: 'percent' as const, judgment: true }
 
 export const expenseRatios: ToolSpec = {
   id: 'ratemaking.expense_ratios',
@@ -50,9 +50,9 @@ export const expenseRatios: ToolSpec = {
       table: {
         columns: [
           TYPE, EXPENSES, PREMIUM, FIXED_SHARE,
-          { key: 'ratio', label: 'Ratio', kind: 'number', unit: 'percent', computed: true },
-          { key: 'fixed', label: 'Fixed', kind: 'number', unit: 'percent', computed: true },
-          { key: 'variable', label: 'Variable', kind: 'number', unit: 'percent', computed: true },
+          { key: 'ratio', label: 'Ratio', kind: 'number', unit: 'percent', computed: true, formula: '{expenses} / {premium}' },
+          { key: 'fixed', label: 'Fixed', kind: 'number', unit: 'percent', computed: true, formula: '{ratio} · {fixed_share}' },
+          { key: 'variable', label: 'Variable', kind: 'number', unit: 'percent', computed: true, formula: '{ratio} · [1 − {fixed_share}]' },
         ],
         rows: out,
         footer: { type: 'Provision', expenses: null, premium: null, fixed_share: null, ratio: F + V, fixed: F, variable: V },

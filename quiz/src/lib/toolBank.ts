@@ -38,6 +38,13 @@ export function toBankFigures(bank: readonly AssumptionSet[]): BankFigure[] {
         resource: set.source,
         verdict: set.verification?.status ?? 'unverified',
         openCritical: set.verification?.openCritical ?? 0,
+        ...(set.shortName ? { shortName: set.shortName } : {}),
+        ...(set.line ? { line: set.line } : {}),
+        ...(row.basis ? { basis: row.basis } : {}),
+        ...(row.meaning ? { meaning: row.meaning } : {}),
+        ...(set.lead ? { lead: set.lead } : {}),
+        ...(row.fits ? { fits: row.fits } : {}),
+        ...(set.pageOffset ? { pageOffset: set.pageOffset } : {}),
       })),
   )
 }
@@ -62,6 +69,35 @@ export function figureUses(row: Pick<AssumptionRow, 'id' | 'kind' | 'unit' | 'de
       .filter((f): f is NumberField => f.kind === 'number' && !!f.bank?.includes(row.kind) && unitFits(row.unit, f.unit))
       .map(field => ({ tool, field, path: runPath(toolSlug(tool), { [field.key]: { assumption: row.id } }) })),
   )
+}
+
+/**
+ * A figure the document holds but the bank hasn't transcribed yet: a blank
+ * row of a kind and unit the field takes. Listed in the edit sheet, explained,
+ * never selectable (docs/tool-template-v2.md §3.7).
+ */
+export interface PendingFigure {
+  set: AssumptionSet
+  row: AssumptionRow
+}
+
+export function pendingFiguresFor(field: Pick<NumberField, 'bank' | 'unit'>, bank: readonly AssumptionSet[] = sets): PendingFigure[] {
+  if (!field.bank?.length) return []
+  return bank.flatMap(set =>
+    set.supersededBy ? [] : set.rows
+      .filter(row => row.decimal == null && row.kind !== 'fact' && field.bank!.includes(row.kind) && unitFits(row.unit, field.unit))
+      .map(row => ({ set, row })),
+  )
+}
+
+/** A set by its id, for a figure's level-2 explanation (its document, its lead). */
+export const assumptionSet = (id: string): AssumptionSet | undefined => sets.find(s => s.id === id)
+
+/** A set's figures in the order the shelf lists them: those with a value first, a blank never leading. */
+export function shelfRows(rows: readonly AssumptionRow[], kind: string | null): { shown: AssumptionRow[]; folded: AssumptionRow[] } {
+  const ordered = [...rows.filter(r => r.raw !== ''), ...rows.filter(r => r.raw === '')]
+  if (!kind) return { shown: ordered, folded: [] }
+  return { shown: ordered.filter(r => r.kind === kind), folded: ordered.filter(r => r.kind !== kind) }
 }
 
 /** The kinds a bank holds figures or rows of, in the vocabulary's order — the shelf's filter. */

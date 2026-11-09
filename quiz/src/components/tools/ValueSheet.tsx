@@ -1,22 +1,28 @@
-// The tool template's **edit sheet** (docs/actuarial-tools.md §19): what a
-// value pill opens. For a number, everything a value can come from, in one
-// place — the slider, the published figures the Assumptions Bank holds for
-// the field, the tools it can be taken from, the reader's own value typed on
-// the app's keypad (so the phone's keyboard never covers the sheet), and the
-// way back to the default. For a choice, its options.
+// The tool template's **edit sheet** (docs/actuarial-tools.md §19,
+// docs/tool-template-v2.md §3.7): what a value pill opens. For a number,
+// everything a value can come from, in this order — the slider; the tools in
+// front of this one that fill the field, each with its result this session or
+// a way to open it; the published figures the Assumptions Bank holds for it,
+// each one line that opens in place (and the ones the document holds that
+// haven't been entered yet, listed but not selectable); and the reader's own
+// value typed on the app's keypad (so the phone's keyboard never covers the
+// sheet), with the way back to the default. For a choice, its options.
 //
 // A bottom sheet on a phone, a centred one from `sm` — the quiz setup sheet's
 // frame. Every change applies as it is made; the card behind recomputes live.
 
 import { useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react'
 import { ChevronRight, Delete, X } from 'lucide-react'
-import { formatValue, printedFigure, type BankFigure, type ChoiceField, type NumberField } from '@/lib/tools'
+import type { PendingFigure } from '@/lib/toolBank'
+import type { Neighbour } from '@/lib/toolTemplate'
+import { FigureDetails, FigureLine } from './FigureNote'
+import { GHOST, readFigure, readLabel } from './figureRead'
+import { formatValue, type BankFigure, type ChoiceField, type NumberField } from '@/lib/tools'
 import { fromDisplay } from '@/lib/tools/format'
 import { keypadValue, pressKey, type KeypadKey, type ValueSource } from '@/lib/toolTemplate'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
-import { UncheckedTag } from './SourceTag'
 import type { ScalarSourceLink } from './useToolCard'
 
 export function BottomSheet({ title, symbol, value, onClose, style, children }: {
@@ -132,11 +138,14 @@ export function NumberSheet({
   figure,
   figures,
   sources,
+  handoffs = [],
+  pending = [],
   error,
   onChange,
   onPickFigure,
+  onTake,
+  onOpenTool,
   onDefault,
-  onOpenSource,
   onClose,
   style,
 }: {
@@ -147,13 +156,18 @@ export function NumberSheet({
   figure: BankFigure | null
   /** The bank's figures this field takes. */
   figures: BankFigure[]
-  /** The tools it can be taken from. */
+  /** The tools it can be taken from through a source sheet (§6.6). */
   sources: ScalarSourceLink[]
+  /** The tools in front of this one whose hand-off fills the field, each with its value from this session's last run (null: not run). */
+  handoffs?: { neighbour: Neighbour; value: number | null }[]
+  /** Figures the document holds for the field that haven't been entered yet. */
+  pending?: PendingFigure[]
   error: string | null
   onChange: (v: number) => void
   onPickFigure: (id: string) => void
+  onTake?: (n: Neighbour, value: number) => void
+  onOpenTool?: (n: Neighbour) => void
   onDefault: () => void
-  onOpenSource: (resource: string) => void
   onClose: () => void
   style?: CSSProperties
 }) {
@@ -170,6 +184,8 @@ export function NumberSheet({
   const sliderMin = Math.min(field.sliderMin ?? field.min, Math.max(value, field.min))
   const suffix = field.unit === 'percent' ? '%' : ''
   const own = source.kind === 'yours' || source.kind === 'linked'
+  // The published figure opened to its details (level 2): the one in use, to begin with.
+  const [opened, setOpened] = useState<string | null>(figure?.id ?? null)
 
   return (
     <BottomSheet title={field.label} symbol={field.symbol} value={formatValue(value, field.unit)} onClose={onClose} style={style}>
@@ -185,40 +201,32 @@ export function NumberSheet({
       />
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
 
-      {figures.length > 0 && (
-        <SheetGroup label="Published figures">
-          <div role="radiogroup" aria-label={`${field.label} from the Assumptions Bank`} data-testid="tool-bank-figures">
-            {figures.map(f => (
-              <OptionRow
-                key={f.id}
-                on={figure?.id === f.id}
-                onPick={() => { setText(''); onPickFigure(f.id) }}
-                label={`${f.publisher}, ${f.edition}`}
-                detail={
-                  <span className="flex flex-wrap items-center gap-1.5">
-                    <span>{f.label} · {f.locator}</span>
-                    {f.verdict !== 'verified' && <UncheckedTag />}
-                  </span>
-                }
-                value={printedFigure(f)}
-              />
-            ))}
-          </div>
-          {figure && (
+      {(handoffs.length > 0 || sources.length > 0) && (
+        <SheetGroup label="Take from a tool">
+          {handoffs.map(({ neighbour: n, value: v }) => (
             <button
+              key={n.tool.id}
               type="button"
-              onClick={() => onOpenSource(figure.resource)}
-              className="flex w-full items-center justify-between px-3.5 py-2.5 text-sm font-medium hover:bg-muted/60"
+              onClick={() => {
+                if (v != null && onTake) { setText(''); onTake(n, v) }
+                else { onClose(); onOpenTool?.(n) }
+              }}
+              aria-label={v != null ? `${field.label} from ${n.tool.name}, ${formatValue(v, field.unit)}` : `Open ${n.tool.name}`}
+              className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted/60"
+              data-testid="sheet-handoff"
             >
-              Read the source <ChevronRight className="h-4 w-4 text-muted-foreground" aria-hidden />
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-semibold">{n.tool.name}</span>
+                <span className="block text-xs text-muted-foreground">{v != null ? 'Your last run' : 'Not run this session'}</span>
+              </span>
+              {v != null ? (
+                <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-sm font-semibold tabular-nums">{formatValue(v, field.unit)}</span>
+              ) : (
+                <span className="inline-flex shrink-0 items-center text-sm text-muted-foreground">open <ChevronRight className="h-4 w-4" aria-hidden /></span>
+              )}
             </button>
-          )}
-        </SheetGroup>
-      )}
-
-      {sources.length > 0 && (
-        <SheetGroup label="From a tool">
-          {sources.map(s => (
+          ))}
+          {sources.filter(s => !handoffs.some(h => h.neighbour.tool.name === s.label)).map(s => (
             <button
               key={s.label}
               type="button"
@@ -229,6 +237,48 @@ export function NumberSheet({
               {s.label} <ChevronRight className="h-4 w-4 text-muted-foreground" aria-hidden />
             </button>
           ))}
+        </SheetGroup>
+      )}
+
+      {(figures.length > 0 || pending.length > 0) && (
+        <SheetGroup label="Published">
+          <div data-testid="tool-bank-figures">
+            {figures.map(f => (
+              <div key={f.id} className="px-3.5 py-1">
+                <FigureLine figure={f} open={opened === f.id} onToggle={() => setOpened(o => (o === f.id ? null : f.id))} />
+                {opened === f.id && (
+                  <div className="pb-2">
+                    <FigureDetails
+                      figure={f}
+                      yours={figure?.id === f.id ? null : { value, shown: formatValue(value, field.unit) }}
+                      onUse={figure?.id === f.id ? undefined : () => { setText(''); onPickFigure(f.id) }}
+                    />
+                    {figure?.id === f.id && <p className="pt-1 text-xs font-medium" data-testid="figure-in-use">In use</p>}
+                  </div>
+                )}
+              </div>
+            ))}
+            {pending.map(({ set, row }) => (
+              <div key={row.id} className="space-y-1.5 px-3.5 py-2.5" data-testid="pending-figure" aria-disabled="true">
+                <p className="text-xs text-muted-foreground">{set.publisher}, {set.edition}</p>
+                <p className="flex items-center gap-2 text-sm">
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold">{row.label}</span>
+                    <span className="block text-xs text-muted-foreground">{row.locator}</span>
+                  </span>
+                  <span className="shrink-0 text-muted-foreground" aria-label="No value yet">—</span>
+                </p>
+                <p className="text-xs text-muted-foreground">The figures are in the document but haven’t been entered here yet.</p>
+                <button
+                  type="button"
+                  onClick={() => readFigure({ document: set.document, title: set.title, publisher: set.publisher, locator: row.locator, resource: set.source, pageOffset: set.pageOffset })}
+                  className={cn(GHOST, 'w-full')}
+                >
+                  {readLabel(row.locator)}
+                </button>
+              </div>
+            ))}
+          </div>
         </SheetGroup>
       )}
 

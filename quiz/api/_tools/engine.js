@@ -2758,7 +2758,7 @@ var combinedTrend = {
 var TYPE = { key: "type", label: "Expense", kind: "text" };
 var EXPENSES = { key: "expenses", label: "Expenses", kind: "number", unit: "money" };
 var PREMIUM = { key: "premium", label: "Premium", kind: "number", unit: "money" };
-var FIXED_SHARE = { key: "fixed_share", label: "% fixed", kind: "number", unit: "percent" };
+var FIXED_SHARE = { key: "fixed_share", label: "% fixed", kind: "number", unit: "percent", judgment: true };
 var expenseRatios = {
   id: "ratemaking.expense_ratios",
   version: "1.0.0",
@@ -2810,9 +2810,9 @@ var expenseRatios = {
           EXPENSES,
           PREMIUM,
           FIXED_SHARE,
-          { key: "ratio", label: "Ratio", kind: "number", unit: "percent", computed: true },
-          { key: "fixed", label: "Fixed", kind: "number", unit: "percent", computed: true },
-          { key: "variable", label: "Variable", kind: "number", unit: "percent", computed: true }
+          { key: "ratio", label: "Ratio", kind: "number", unit: "percent", computed: true, formula: "{expenses} / {premium}" },
+          { key: "fixed", label: "Fixed", kind: "number", unit: "percent", computed: true, formula: "{ratio} \xB7 {fixed_share}" },
+          { key: "variable", label: "Variable", kind: "number", unit: "percent", computed: true, formula: "{ratio} \xB7 [1 \u2212 {fixed_share}]" }
         ],
         rows: out,
         footer: { type: "Provision", expenses: null, premium: null, fixed_share: null, ratio: F2 + V, fixed: F2, variable: V }
@@ -4615,6 +4615,9 @@ function unitFits(figureUnit, unit) {
 function figuresFor(field) {
   if (!field.bank?.length) return [];
   return installed2.filter((f) => field.bank.includes(f.kind) && unitFits(f.unit, field.unit) && !f.supersededBy).sort((a, b) => b.effective.localeCompare(a.effective) || a.title.localeCompare(b.title));
+}
+function figuresFitting(toolId) {
+  return installed2.filter((f) => f.fits?.split("#")[0] === toolId && !f.supersededBy);
 }
 function assumptionRef(raw) {
   if (raw && typeof raw === "object" && !Array.isArray(raw)) {
@@ -10874,6 +10877,7 @@ export {
   describeTool,
   encodeRunInput,
   evaluateArithmetic,
+  figuresFitting,
   figuresFor,
   filedCell,
   filedPlace,

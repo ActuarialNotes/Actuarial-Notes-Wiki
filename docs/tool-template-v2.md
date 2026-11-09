@@ -8,7 +8,8 @@ also published at <https://claude.ai/artifact/7zwMX2YgNhNtnhMiajnVbq>. Where thi
 mock-ups disagree, this text wins; the mock-ups' sample runs marked as illustrative are not
 outputs of the engine.
 
-Status: **proposed, not built.** Roadmap row: A2 (Tools), §3.4 *Proposed*.
+Status: **built 2026-11-09** (§8 says what was built and where it differs from this text).
+Roadmap row: A10, §3.4 *Proposed*.
 
 ## 1. The problems it fixes
 
@@ -221,3 +222,60 @@ Permissible Loss Ratio with F and V linked from that run and Q 20% (the reader's
 VPLR 62.9% (its own defaults, F 0%, V 25%, Q 5%, give 70%); Trend Factor at its defaults,
 1.0767 over 2.50 years (3%, accident year 2023, effective Jan 1, 2025, 12 and 12 months), and
 1.0877 with an illustrative 3.42% linked from Trend Fit.
+
+## 8. What was built (2026-11-09)
+
+All eight steps of §5, on the seven tools in `TEMPLATE_TOOLS` (Trend Factor and Expense Ratios
+added). Where the build differs from the text above, this section is the record.
+
+- **Colour** (`lib/toolFigures.ts`): every `split` part carries a `quantity`, a `symbol` and, for
+  an input, its `field`. `QUANTITY_STEPS` gives each quantity its step: 1 the lightest (a tool's
+  answer), 2 fixed expense, 3 variable expense, 4 the darkest and hatched (profit; loss & LAE;
+  variable expense and profit). The colours are `STEP_FILL` (`color-mix` of `--exam-accent-vivid`,
+  the primary colour outside an exam). `segmentLabel` prints "F 11.028", then "F", then nothing.
+  `toolFigures.test.ts` holds every split to distinct steps and fixed expense to step 2 on both
+  tools. Expense Ratios' bar is the provision alone, F beside V, scaled to its own total
+  (`fit`): the rest of the premium is another tool's answer.
+- **The answer card**: no logo; Expense Ratios leads with its total (`LEAD_TILE`, since the
+  engine's tile order is public API); the notation is printed once, under the answer, and left
+  out of the working. A figure the bank marks `Fits` this tool sits under the figure as a
+  comparison line (`figuresFitting`), opening with no Use button.
+- **Navigation**: `Crumb`s in `ToolsSearchBar` (`Tools › Ratemaking › …`; the area step opens the
+  catalogue showing that area alone, `/tools?area=`). A hand-off's URL names the sender,
+  `?from=<slug>` (`handoffPath`); the arriving tool records an `Origin` for each carried field
+  (`arrivalOrigins`) and adds the sender to the breadcrumb, whose step goes Back when the page
+  left was the sender. `takesFrom` is the reverse index (`buildSenders`), in registry order, so
+  Trend Factor reads "Price Index + 2 more". *Gives to* replaced the template's "Send to …" rows
+  at the foot of the card; the ⋯ menu keeps them (D-TT2's default).
+- **The from chip** (`SourceTag.tsx`): one bordered shape for all four origins; published reads
+  `▤ AIRB, Alberta` (`publishedLabel`). `ownChip` / `sharedDefaultLabel`: "All ● Default", or
+  "The rest ● Default" when some rows have chips of their own. A grid column not at its default
+  keeps its chip under its header; the rest share the line under the grid. A judgment column
+  (`TableColumn.judgment`, Expense Ratios' % fixed) is marked ◆.
+- **In place** (`FigureNote.tsx`): `FigureLine` (level 1, `contextLine`: "Alberta, private
+  passenger vehicles · cap") and `FigureDetails` (level 2: meaning, What it is / Where / Basis /
+  In force / Source, the amber line, `comparison`, Use and Read). **Read** opens the app's PDF
+  reader at the locator's page plus the set's `Page offset` where the document is a PDF the
+  proxy serves (the AIRB report's host was added to both allowlists), else the resource page
+  (`figureRead.ts`). A linked number row draws no slider, as drawn. The link's words differ from
+  §3.6's draft: a tool page doesn't recompute from the sender, so it says "A change in Trend Fit
+  doesn't reach here. Change the value here and it becomes yours."
+- **The edit sheet**: slider; *Take from a tool* (`fills` / `handoffValue` over this session's
+  `lastRun`, or "Not run this session"), then any `scalarSources` not already listed; *Published*,
+  each figure a level-1 line opening to level 2, and the document's blank rows
+  (`pendingFiguresFor`) listed, explained and unselectable; *Your own*.
+- **Bank data**: D-TT1 settled as columns, `| Basis | Meaning | Fits |` after `Locator`, optional
+  (the five-column table still parses). `Fits` names a tile by its label's slug
+  (`ratemaking.expense_ratios#total`). The bases add `minimum` and `target` for OSFI's ratios.
+  A third frontmatter key, `Page offset`, was needed beyond §4's two. The AIRB meanings were
+  transcribed from the report (sha256 checked); GISA's from its set's lead; OSFI's rows are left
+  to the lead except the internal target. `assumption_lint.py` checks the basis, the `Fits` tool
+  id against the engine's sources and the offset.
+- **The shelf**: as §3.8 (`shelfRows`). One tool takes the figure: the chip is a link; several:
+  "Permissible Loss Ratio + 2 more" opens *Use in…*.
+- **Tests**: `toolTemplate.test.ts` (hand-offs both ways, carried values, arrival origins, chips,
+  context, locator pages, comparison, the lead tile), `toolFigures.test.ts`,
+  `assumptionBank.test.ts`, `scripts/test_assumption_lint.py`, and `e2e/tools.spec.ts`: Expense
+  Ratios → Permissible Loss Ratio arriving linked, Unlink, back through the breadcrumb; Trend
+  Factor's three senders and the AIRB trends listed but not selectable; a figure used from its
+  level-2 details.

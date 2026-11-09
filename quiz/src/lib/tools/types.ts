@@ -78,6 +78,8 @@ export interface TableColumn {
   unit?: NumberUnit
   /** A column that may be left blank (a text one reads as '', a number one as null). */
   optional?: boolean
+  /** A column whose values are a matter of judgment (R3), marked ◆ in its header. */
+  judgment?: boolean
   /** What an empty cell of it shows, faintly: the words it takes ("exclude…"). */
   placeholder?: string
   /**

@@ -1,12 +1,27 @@
 import { describe, expect, it } from 'vitest'
-import { TOOLS, toolById } from './tools'
+import { TOOLS, runTool, toolById } from './tools'
 import {
   TEMPLATE_TOOLS,
   columnNumbers,
   columnSource,
   formulaText,
+  arrivalOrigins,
+  buildSenders,
+  carried,
+  comparison,
+  contextLine,
+  fills,
+  givesTo,
+  handoffPath,
+  handoffValue,
   inputGroups,
   isScalar,
+  locatorPage,
+  ownChip,
+  publishedLabel,
+  sharedDefaultLabel,
+  takesFrom,
+  tilesInOrder,
   keypadValue,
   originOf,
   pressKey,
@@ -27,11 +42,108 @@ describe('the template tools', () => {
 })
 
 describe('inputGroups', () => {
-  it('puts the judgments first, each group in the spec\'s order', () => {
+  it('keeps three inputs or fewer in the formula\'s order, judgments among them', () => {
     const plr = toolById('ratemaking.permissible_loss_ratio')!.fields.filter(isScalar)
     const { judgments, inputs } = inputGroups(plr)
-    expect(judgments.map(f => f.key)).toEqual(['profit'])
-    expect(inputs.map(f => f.key)).toEqual(['fixed', 'variable'])
+    expect(judgments).toEqual([])
+    expect(inputs.map(f => f.key)).toEqual(['fixed', 'variable', 'profit'])
+  })
+
+  it('puts the judgments first past three inputs, each group in the spec\'s order', () => {
+    const tf = toolById('ratemaking.trend_factor')!.fields.filter(isScalar)
+    const { judgments, inputs } = inputGroups(tf)
+    expect(judgments.map(f => f.key)).toEqual(['trend'])
+    expect(inputs.map(f => f.key)).toEqual(['basis', 'year', 'effective', 'in_effect', 'term'])
+  })
+})
+
+describe('Takes from / Gives to (template v2, §3.3)', () => {
+  it('reads both directions off the tools\' hand-offs', () => {
+    const plr = toolById('ratemaking.permissible_loss_ratio')!
+    expect(takesFrom(plr.id).map(n => n.tool.id)).toEqual(['ratemaking.expense_ratios'])
+    expect(givesTo(plr).map(n => n.tool.id)).toEqual(['ratemaking.loss_ratio_method'])
+    const er = toolById('ratemaking.expense_ratios')!
+    expect(takesFrom(er.id)).toEqual([])
+    expect(givesTo(er).map(n => n.tool.id).sort()).toEqual(['ratemaking.loss_ratio_method', 'ratemaking.permissible_loss_ratio'])
+    expect(takesFrom('ratemaking.trend_factor').map(n => n.tool.id).sort()).toEqual(['data.price_index', 'ratemaking.combined_trend', 'ratemaking.trend_fit'])
+  })
+
+  it('agrees with every tool\'s own next, both ways', () => {
+    const senders = buildSenders(TOOLS)
+    for (const t of TOOLS) for (const h of t.next ?? []) expect(senders.get(h.tool)?.some(n => n.tool.id === t.id)).toBe(true)
+  })
+
+  it('says which values a hand-off carries, in the arriving tool\'s order', () => {
+    const er = toolById('ratemaking.expense_ratios')!
+    const r = runTool(er, {})
+    const [n] = givesTo(er).filter(x => x.tool.id === 'ratemaking.permissible_loss_ratio')
+    const c = carried(n.tool, n.handoff.build(r.input, r))
+    expect(c.map(x => x.field.key)).toEqual(['fixed', 'variable'])
+    expect(c[0].value).toBeCloseTo(Number(r.values.fixed_provision), 12)
+  })
+
+  it('finds the value a sender would give a field, from its last run or none', () => {
+    const [fit] = takesFrom('ratemaking.trend_factor').filter(n => n.tool.id === 'ratemaking.trend_fit')
+    expect(fills(fit, 'trend')).toBe(true)
+    expect(fills(fit, 'year')).toBe(false)
+    expect(handoffValue(fit, 'trend', undefined)).toBeNull()
+    const v = handoffValue(fit, 'trend', runTool(fit.tool, {}).input)
+    expect(typeof v).toBe('number')
+    expect(handoffValue(fit, 'year', runTool(fit.tool, {}).input)).toBeUndefined()
+  })
+
+  it('names the sender in a hand-off\'s path, and its values arrive linked', () => {
+    expect(handoffPath('/tools/permissible-loss-ratio#input=abc', 'expense-ratios')).toBe('/tools/permissible-loss-ratio?from=expense-ratios#input=abc')
+    const plr = toolById('ratemaking.permissible_loss_ratio')!
+    const er = toolById('ratemaking.expense_ratios')!
+    const origins = arrivalOrigins(plr, er, { fixed: 0.11, variable: 0.171 })
+    expect(Object.keys(origins)).toEqual(['fixed', 'variable'])
+    expect(scalarSource({ touched: true, value: 0.11, origin: origins.fixed })).toEqual({ kind: 'linked', label: 'Expense Ratios', tool: er.id })
+    expect(arrivalOrigins(plr, undefined, { fixed: 0.11 })).toEqual({})
+  })
+})
+
+describe('the from chip (template v2, §3.4)', () => {
+  it('is on a judgment and on any changed input; the rest share one line', () => {
+    expect(ownChip(true, { kind: 'default' })).toBe(true)
+    expect(ownChip(false, { kind: 'default' })).toBe(false)
+    expect(ownChip(false, { kind: 'yours' })).toBe(true)
+    expect(sharedDefaultLabel([{ source: { kind: 'default' } }, { source: { kind: 'default' } }])).toBe('All')
+    expect(sharedDefaultLabel([{ source: { kind: 'default' } }, { source: { kind: 'yours' } }])).toBe('The rest')
+    expect(sharedDefaultLabel([{ judgment: true, source: { kind: 'default' } }])).toBeNull()
+  })
+
+  it('names a published figure by its short name and place', () => {
+    expect(publishedLabel({ shortName: 'AIRB', publisher: 'Automobile Insurance Rate Board', jurisdiction: 'CA-AB' })).toBe('AIRB, Alberta')
+    expect(publishedLabel({ publisher: 'A Board', jurisdiction: 'XX' })).toBe('A Board, XX')
+  })
+})
+
+describe('a published figure in place (template v2, §3.5)', () => {
+  it('says where and on what basis in one line', () => {
+    expect(contextLine({ jurisdiction: 'CA-AB', line: 'Private passenger vehicles', basis: 'cap' })).toBe('Alberta, private passenger vehicles · cap')
+    expect(contextLine({ jurisdiction: 'CA' })).toBe('Canada')
+  })
+
+  it('reads the page a locator cites', () => {
+    expect(locatorPage('Profit (p. 7)')).toBe(7)
+    expect(locatorPage('Implied factors (pp. 10–11)')).toBe(10)
+    expect(locatorPage('1.2.1 MCT supervisory capital ratio')).toBeNull()
+  })
+
+  it('sets the reader\'s value against the figure only when they differ', () => {
+    expect(comparison(0.2, 0.06, 'cap', '20%')).toBe('Your 20% is above this cap.')
+    expect(comparison(0.04, 0.06, 'cap', '4%')).toBe('Your 4% is below this cap.')
+    expect(comparison(0.0601, 0.06, 'cap', '6%')).toBeNull()
+    expect(comparison(0.3, 0.278, 'selected', '30%')).toBe('Your 30% is above this figure.')
+  })
+})
+
+describe('the answer card\'s lead', () => {
+  it('leads Expense Ratios with the total, the others in their order', () => {
+    const r = runTool(toolById('ratemaking.expense_ratios')!, {})
+    expect(tilesInOrder('ratemaking.expense_ratios', r.tiles).map(t => t.symbol)).toEqual(['F + V', 'F', 'V'])
+    expect(tilesInOrder('ratemaking.permissible_loss_ratio', r.tiles).map(t => t.symbol)).toEqual(['F', 'V', 'F + V'])
   })
 })
 

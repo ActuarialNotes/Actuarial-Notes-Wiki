@@ -12,12 +12,19 @@ from. This lint fails a set for:
                double-quoted: Title, Source (a `[[link]]` to the document's
                resource page), Publisher, Edition, Effective (a date),
                Superseded by (optional, a `[[link]]` to the set that replaces
-               it), Jurisdiction (`CA`, `CA-ON`, `US` …), Practice (optional),
+               it), Short name (optional, the tools' chip: "AIRB"),
+               Jurisdiction (`CA`, `CA-ON`, `US` …), Line (optional, the line
+               of business: "Private passenger auto"), Practice (optional),
                Extraction (`transcribed` or `extracted`), Document (the https
                link to the copy that was read), Source sha256 (the bytes that
-               were read), Read (the date they were read), Licence (optional),
+               were read), Read (the date they were read), Page offset
+               (optional: the PDF's page number less the printed one, so a
+               locator's "p. 7" opens at the right page), Licence (optional),
                then the `verification:` block every content file carries
-  table        one table, headed `| Assumption | Kind | Value | Unit | Locator |`;
+  table        one table, headed `| Assumption | Kind | Value | Unit | Locator |`,
+               or with `| Basis | Meaning | Fits |` after it (a basis from the
+               vocabulary's `bases`; a sentence saying what the figure is;
+               `<tool id>#<tile>` for a figure that matches a tool's answer);
                every kind in the vocabulary (`assumption_vocab.json`) and every
                unit one its kind allows; a figure written as a plain number
                (`150`, `1.1189`, `-2.5` — no sign, comma or `%`, the unit says
@@ -64,26 +71,36 @@ ROOT = vl.REPO_ROOT
 FOLDER = "Assumptions"
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assumption_vocab.json"), encoding="utf-8") as _fh:
-    KINDS: dict[str, list[str]] = json.load(_fh)["kinds"]
+    _VOCAB = json.load(_fh)
+KINDS: dict[str, list[str]] = _VOCAB["kinds"]
+BASES: list[str] = _VOCAB["bases"]
 
 #: (key, required) in the order a set writes them, `verification` last.
 KEYS: list[tuple[str, bool]] = [
     ("Title", True),
     ("Source", True),
     ("Publisher", True),
+    ("Short name", False),
     ("Edition", True),
     ("Effective", True),
     ("Superseded by", False),
     ("Jurisdiction", True),
+    ("Line", False),
     ("Practice", False),
     ("Extraction", True),
     ("Document", True),
     ("Source sha256", True),
     ("Read", True),
+    ("Page offset", False),
     ("Licence", False),
 ]
 EXTRACTIONS = ("transcribed", "extracted")
 HEADER = ["Assumption", "Kind", "Value", "Unit", "Locator"]
+#: The longer table (docs/tool-template-v2.md §4, D-TT1): each figure's basis,
+#: what it is, and the tool answer it matches where it is one.
+HEADER_EXPLAINED = HEADER + ["Basis", "Meaning", "Fits"]
+FITS_RE = re.compile(r"^([a-z_]+\.[a-z0-9_]+)#[a-z0-9-]+$")
+TOOLS_DIR = os.path.join(ROOT, "quiz", "src", "lib", "tools")
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 JURISDICTION_RE = re.compile(r"^[A-Z]{2}(-[A-Z]{2})?$")
@@ -101,6 +118,9 @@ class Row:
     unit: str
     locator: str
     line: int
+    basis: str = ""
+    meaning: str = ""
+    fits: str = ""
 
 
 @dataclass
@@ -150,8 +170,9 @@ def parse(path: str, text: str) -> AssumptionSet:
     if header_at is None:
         s.errors.append("no table")
         return s
-    if _cells(lines[header_at]) != HEADER:
-        s.errors.append(f"table header must be | {' | '.join(HEADER)} |")
+    header = _cells(lines[header_at])
+    if header not in (HEADER, HEADER_EXPLAINED):
+        s.errors.append(f"table header must be | {' | '.join(HEADER)} | (or with | Basis | Meaning | Fits |)")
         return s
     if header_at + 1 >= len(lines) or not re.match(r"^\s*\|?\s*:?-{3,}", lines[header_at + 1]):
         s.errors.append("table header has no `|---|` separator row")
@@ -159,14 +180,33 @@ def parse(path: str, text: str) -> AssumptionSet:
     i = header_at + 2
     while i < len(lines) and lines[i].strip().startswith("|"):
         cells = _cells(lines[i])
-        if len(cells) != len(HEADER):
-            s.errors.append(f"table row {i + 1}: {len(cells)} cells, expected {len(HEADER)}")
+        if len(cells) != len(header):
+            s.errors.append(f"table row {i + 1}: {len(cells)} cells, expected {len(header)}")
         else:
-            s.rows.append(Row(*cells, line=i + 1))
+            label, kind, value, unit, locator, *rest = cells
+            basis, meaning, fits = (rest + ["", "", ""])[:3]
+            s.rows.append(Row(label, kind, value, unit, locator, line=i + 1, basis=basis, meaning=meaning, fits=fits))
         i += 1
     if any(l.strip().startswith("|") for l in lines[i:]):
         s.errors.append("more than one table: a set is one table (split it into two sets)")
     return s
+
+
+_TOOL_IDS: set[str] | None = None
+
+
+def tool_ids() -> set[str]:
+    """Every tool's id, read off the engine's sources (`id: 'area.name'`)."""
+    global _TOOL_IDS
+    if _TOOL_IDS is None:
+        found: set[str] = set()
+        for dirpath, _dirs, files in os.walk(TOOLS_DIR):
+            for name in files:
+                if name.endswith(".ts") and not name.endswith(".test.ts"):
+                    with open(os.path.join(dirpath, name), encoding="utf-8") as fh:
+                        found.update(re.findall(r"\bid: '([a-z_]+\.[a-z0-9_]+)'", fh.read()))
+        _TOOL_IDS = found
+    return _TOOL_IDS
 
 
 def lint(s: AssumptionSet, vault: vl.Vault, body: str) -> list[str]:
@@ -207,6 +247,8 @@ def lint(s: AssumptionSet, vault: vl.Vault, body: str) -> list[str]:
         errors.append(f"Extraction must be one of {', '.join(EXTRACTIONS)}")
     if m.get("Document") and not m["Document"].startswith("https://"):
         errors.append("Document must be an https link")
+    if m.get("Page offset") and not re.match(r"^-?\d+$", m["Page offset"]):
+        errors.append("Page offset is a whole number: the PDF's page number less the page number the document prints")
     if m.get("Source sha256") and not SHA_RE.match(m["Source sha256"]):
         errors.append("Source sha256 must be 64 lower-case hex digits")
 
@@ -231,6 +273,16 @@ def lint(s: AssumptionSet, vault: vl.Vault, body: str) -> list[str]:
             errors.append(f"{where}: a figure is a plain number (`150`, `1.1189`), not {r.value!r}")
         if not r.locator:
             errors.append(f"{where}: no locator")
+        if r.basis and r.basis not in BASES:
+            errors.append(f"{where}: basis {r.basis!r} is not in assumption_vocab.json ({', '.join(BASES)})")
+        if r.fits:
+            fm = FITS_RE.match(r.fits)
+            if not fm:
+                errors.append(f"{where}: Fits is `<tool id>#<tile>`, not {r.fits!r}")
+            elif fm.group(1) not in tool_ids():
+                errors.append(f"{where}: Fits names {fm.group(1)!r}, which is not a tool")
+            if r.kind == "fact" or not r.value:
+                errors.append(f"{where}: only a figure can fit a tool's answer")
 
     # Shape: a lead, then the table, then ## Sources last with the Document.
     pre = body.split("|", 1)[0]

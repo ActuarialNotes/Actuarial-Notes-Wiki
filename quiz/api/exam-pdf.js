@@ -46,6 +46,7 @@ const DEFAULT_HOSTS = [
   'www.msaresearch.com',
   'pacicc.ca',
   'www.pacicc.ca',
+  'www.airbfordrivers.ca',
   'www.cia-ica.ca',
 ];
 

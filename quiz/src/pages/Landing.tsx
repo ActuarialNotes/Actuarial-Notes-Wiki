@@ -559,10 +559,19 @@ export default function Landing() {
             count={quizCount}
             estimate={quizEstimate}
             pills={pills}
+            countOptions={countOptions}
+            maxCount={quizPool.length}
+            onCountChange={handleCountChange}
             levels={difficulties}
+            levelCounts={difficultyCounts}
+            onLevelsChange={quizSettings.onDifficultiesChange}
             timed={quizSettings.timed}
+            timedPace={timedPace}
+            onTimedChange={quizSettings.onTimedChange}
             revealDuring={quizSettings.reveal === 'during'}
+            onRevealDuringChange={on => quizSettings.onRevealChange(on ? 'during' : 'end')}
             conceptLinks={quizSettings.conceptLinks}
+            onConceptLinksChange={quizSettings.onConceptLinksChange}
             onChange={openQuizSheet}
             onStart={startQuiz}
           />

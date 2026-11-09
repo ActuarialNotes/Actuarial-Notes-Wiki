@@ -60,6 +60,12 @@ export interface AssumptionRow {
   decimal: number | null
   /** Where in the document it is printed. */
   locator: string
+  /** What kind of figure it is (`BASES`); '' where the set doesn't say. */
+  basis: string
+  /** One sentence saying what the figure is; '' where the set gives none. */
+  meaning: string
+  /** A figure that matches a tool's answer, not an input: `<tool id>#<tile>`; '' for none. */
+  fits: string
 }
 
 export interface AssumptionSet {
@@ -70,18 +76,24 @@ export interface AssumptionSet {
   /** The resource page of the document it is read from (the `Source` link's target). */
   source: string
   publisher: string
+  /** A short name for the publisher, for the tools' from chip ("AIRB"); '' to use the publisher. */
+  shortName: string
   edition: string
   /** The date the figures apply from (YYYY-MM-DD). */
   effective: string
   /** The set that replaces this one, when a newer edition has been added. */
   supersededBy: string | null
   jurisdiction: string
+  /** The line of business the figures are for ("Private passenger auto"); '' where they aren't for one. */
+  line: string
   practice: string | null
   extraction: 'transcribed' | 'extracted'
   /** The copy that was read. */
   document: string
   sourceSha256: string
   read: string
+  /** The PDF's page number less the page number the document prints (0 where they agree). */
+  pageOffset: number
   licence: string | null
   /** The lead paragraph(s). */
   lead: string
@@ -92,6 +104,15 @@ export interface AssumptionSet {
 const LINK = /^\[\[([^\]|#]+)\]\]$/
 const NUMBER = /^-?\d+(\.\d+)?$/
 const HEADER = ['Assumption', 'Kind', 'Value', 'Unit', 'Locator']
+/**
+ * The longer table (docs/tool-template-v2.md §4, D-TT1): what each figure is
+ * and on what basis, and the tool answer it matches where it is one.
+ */
+const HEADER_EXPLAINED = [...HEADER, 'Basis', 'Meaning', 'Fits']
+
+/** The bases a figure may be on (`scripts/assumption_vocab.json`'s `bases`, held equal by the test). */
+export const BASES = ['cap', 'selected', 'benchmark', 'observed', 'minimum', 'target'] as const
+const FITS = /^[a-z_]+\.[a-z0-9_]+#[a-z0-9-]+$/
 
 function slug(text: string): string {
   return text
@@ -131,12 +152,16 @@ export function parseAssumptionSet(path: string, text: string): AssumptionSet {
   const lines = body.split('\n')
   const headerAt = lines.findIndex(l => l.trim().startsWith('|'))
   if (headerAt < 0) throw new Error(`${path}: no table`)
-  if (cells(lines[headerAt]).join('|') !== HEADER.join('|')) throw new Error(`${path}: table header must be | ${HEADER.join(' | ')} |`)
+  const header = cells(lines[headerAt]).join('|')
+  const explained = header === HEADER_EXPLAINED.join('|')
+  if (!explained && header !== HEADER.join('|')) throw new Error(`${path}: table header must be | ${HEADER.join(' | ')} | (or with | Basis | Meaning | Fits |)`)
 
   const rows: AssumptionRow[] = []
   const used = new Set<string>()
   for (let i = headerAt + 2; i < lines.length && lines[i].trim().startsWith('|'); i++) {
-    const [label, kind, raw, unit, locator] = cells(lines[i])
+    const [label, kind, raw, unit, locator, basis = '', meaning = '', fits = ''] = cells(lines[i])
+    if (basis && !(BASES as readonly string[]).includes(basis)) throw new Error(`${path}: row "${label}" has unknown basis "${basis}"`)
+    if (fits && !FITS.test(fits)) throw new Error(`${path}: row "${label}" fits "${fits}", not <tool id>#<tile>`)
     if (!isAssumptionKind(kind)) throw new Error(`${path}: row "${label}" has unknown kind "${kind}"`)
     const figure = kind !== 'fact' && raw !== ''
     if (figure && !NUMBER.test(raw)) throw new Error(`${path}: row "${label}" value "${raw}" is not a plain number`)
@@ -153,6 +178,9 @@ export function parseAssumptionSet(path: string, text: string): AssumptionSet {
       number,
       decimal: number == null ? null : unit === '%' ? Math.round(number * 1e10) / 1e12 : number,
       locator,
+      basis,
+      meaning,
+      fits,
     })
   }
 
@@ -168,15 +196,18 @@ export function parseAssumptionSet(path: string, text: string): AssumptionSet {
     title: str(attributes, 'Title'),
     source: linkTarget(str(attributes, 'Source')),
     publisher: str(attributes, 'Publisher'),
+    shortName: str(attributes, 'Short name'),
     edition: str(attributes, 'Edition'),
     effective: str(attributes, 'Effective'),
     supersededBy: linkTarget(str(attributes, 'Superseded by')) || null,
     jurisdiction: str(attributes, 'Jurisdiction'),
+    line: str(attributes, 'Line'),
     practice: str(attributes, 'Practice') || null,
     extraction: str(attributes, 'Extraction') === 'extracted' ? 'extracted' : 'transcribed',
     document: str(attributes, 'Document'),
     sourceSha256: str(attributes, 'Source sha256'),
     read: str(attributes, 'Read'),
+    pageOffset: Number(str(attributes, 'Page offset')) || 0,
     licence: str(attributes, 'Licence') || null,
     lead,
     rows,

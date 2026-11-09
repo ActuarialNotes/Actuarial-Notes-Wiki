@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
+import { StickyGroupHeading, TrackHeading } from '@/components/TrackHeading'
+import { TRACKS } from '@/data/tracks'
 import { ListPanel } from '@/components/ui/ListPanel'
 import { TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import type { ExamBody } from '@/lib/bodyFilter'
@@ -15,8 +17,7 @@ import {
 import { badgeCountFor, type TodayPlanCount } from '@/lib/todayPlanCount'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
-// QuizFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0)
-const SEARCH_BAR_H = 56
+const trackByKey = new Map(TRACKS.map(t => [t.key, t]))
 
 function QuizExamRow({
   exam,
@@ -118,16 +119,15 @@ export function QuizExamLadder({
     <div className="space-y-6">
       {groups.map(group => (
         <div key={group.key}>
-          {/* Sticky track header — sits just below the search bar, the
-              same row the Study Guides ladder pins its headings to. */}
-          <div
-            className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
-            style={{ top: `${SEARCH_BAR_H}px` }}
-          >
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              {group.name}
-            </p>
-          </div>
+          {/* The credential's heading — the Study Guides tab's own
+              (components/TrackHeading.tsx), so the two lists match. */}
+          {trackByKey.get(group.key)
+            ? <TrackHeading track={trackByKey.get(group.key)!} sourcePath="/" />
+            : (
+              <StickyGroupHeading>
+                <h2 className="text-xl font-bold tracking-tight">{group.name}</h2>
+              </StickyGroupHeading>
+            )}
           {/* One grouped list per track, a row per exam (components/ExamRow.tsx),
               two columns from `sm` up. */}
           <ListPanel columns={2}>

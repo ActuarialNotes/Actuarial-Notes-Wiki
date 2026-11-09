@@ -24,7 +24,7 @@ import type { Question } from '@/lib/parser'
 import { cn } from '@/lib/utils'
 
 /** Paper confetti in the winner's colour and gold. Decorative; gone with reduced motion. */
-function Confetti({ seat }: { seat: Seat }) {
+export function Confetti({ seat }: { seat: Seat }) {
   const pieces = useMemo(
     () => Array.from({ length: 28 }, (_, i) => ({
       left: (i * 37) % 100,
@@ -111,7 +111,7 @@ function PlayerCard({
 }
 
 /** One question of the battle, to look back over: who took it, and the question itself on a tap. */
-function ReviewRow({ battle, index, question }: { battle: BattleState; index: number; question: Question | undefined }) {
+export function ReviewRow({ battle, index, question }: { battle: BattleState; index: number; question: Question | undefined }) {
   const [open, setOpen] = useState(false)
   const round = battle.rounds[index]
   const taker = roundTaker(round)

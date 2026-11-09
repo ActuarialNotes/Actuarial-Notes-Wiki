@@ -24,7 +24,7 @@ online battle whose room the lobby chose (see *Matchmaking* below):
 | Players | two people at one device | one on each device, joined by a 4-character room code — or by the lobby |
 | Rules | `'buzzer'` — first to buzz answers; a miss hands the other the steal | `'simultaneous'` — each locks in an answer the other can't see |
 | Why | on one screen, whoever claims the question first is visible to both; buzzing *is* the game | over a network, a buzzer race goes to whoever has the shorter ping; locking in doesn't care |
-| Controls | buzz with **A** (left) / **L** (right) or the big buttons; answer with **1–5** or the answer pad | answer with **1–5**, the options, or the answer pad; **Enter** for the next question |
+| Controls | buzz with **A** / **L** or by tapping your half of the phone; answer with **1–5** or the answer pad | choose with **1–5** or the options, then **Lock in** (or **Enter**); **Enter** for the next question |
 
 Only questions a click can mark are raced: multiple choice with the answer among
 its options (`isBattleQuestion`). Written and multi-part questions are
@@ -157,7 +157,11 @@ other's, and the buzzer race is drawn from the whole exam as before.
 | The music, played on the app's audio graph | `quiz/src/lib/battleMusicPlayer.ts` |
 | Hooks: the local battle's clock, an online session, a lobby session, the music, `useNow` | `quiz/src/hooks/useBattle.ts` |
 | The page: the way in, the setup, joining, the lobby, and which battle to show | `quiz/src/pages/Battle.tsx` (lazy) |
-| The screens | `quiz/src/components/battle/` (the lobby is `Matchmaking.tsx`, the topic pick and the draw `TopicPick.tsx`) |
+| The Deck's facts: the hand of modes, a setting stepped on, each round's points, the lost round to practise — pure, tested | `quiz/src/lib/battleDeck.ts` |
+| The intro's once-per-visit flag | `quiz/src/hooks/useBattleIntro.ts` |
+| The screens — the Deck, Quiz Battle's own look | `quiz/src/components/battle/deck/` (`DeckIntro`, `DeckHome`, `DeckLobby`, `DeckRoom`, `DeckLocal`, `DeckTopicPick`, `DeckRound`, `DeckQuestionCard`, `DeckResults`, and their parts in `DeckParts`) |
+| The screens — Monte Carlo Station's look | `quiz/src/components/battle/` (the lobby is `Matchmaking.tsx`, the topic pick and the draw `TopicPick.tsx`) |
+| The battle's own styles: its motion, the Deck's tokens, and its Tailwind utilities, all in the lazy chunk | `quiz/src/components/battle/battle.css`, `quiz/tailwind.battle.config.ts` |
 
 ### The engine
 
@@ -251,9 +255,11 @@ told it's full.
 ### Matchmaking: a random opponent
 
 **Random opponent** puts the player in a lobby — one more public channel,
-`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. Walking
-in doesn't queue anyone: the player sees who is waiting and chooses their exam,
-and joins the queue only by pressing **Ready** (and leaves it with **Cancel**).
+`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. On Monte
+Carlo Station, walking in doesn't queue anyone: the player sees who is waiting and
+chooses their exam, and joins the queue only by pressing **Ready** (and leaves it
+with **Cancel**). On the Deck the start screen's *Find an opponent* is the Ready, and
+*Leave the lobby* the Cancel.
 Everyone in the queue sees everyone else (name, avatar, exam, how long they've waited), and the
 first compatible player to arrive is the match. Nothing about it is stored
 either: the lobby is presence on a channel, and a matched pair go on to an
@@ -264,8 +270,10 @@ ordinary room with a code nobody had to type.
   Ready takes a place at the back of the queue (`since` is the moment it was
   pressed; `setReady` in `lib/battleMatchmaking.ts`). Cancel withdraws any offer
   in flight and takes the entry down. A new name (a new entry) keeps the choice;
-  every fresh way into the lobby, *Find another opponent* included, starts not
-  ready.
+  on Monte Carlo Station every fresh way into the lobby, *Find a new opponent*
+  included, starts not ready. On the Deck, walking in *is* pressing Ready — *Find an
+  opponent* and *New opponent* both queue the player — and *Leave the lobby* is
+  Cancel; the rule underneath is the same.
 - **The queue outlives the page** (`lib/battleQueue.ts`,
   `stores/battleQueueStore.ts`). The lobby session is held by an app-level
   store, not the lobby screen: a player who leaves the lobby *not* ready leaves
@@ -298,7 +306,8 @@ ordinary room with a code nobody had to type.
   Start: both screens show the two players (`MatchIntro`) for 1.8 s and the
   topic pick follows. A host whose
   opponent hasn't walked into the room in 15 s is told so and offered someone
-  else. At the end, *Find another opponent* goes straight back to the lobby.
+  else. At the end, *New opponent* (*Find a new opponent* on the station) goes
+  straight back to the lobby.
 - **An empty lobby says so.** The way in watches the lobby without joining it
   (an *observer* session: it counts, never matches) and the Random opponent
   card reads *No one's in the lobby right now* or *3 players waiting now*.
@@ -319,38 +328,79 @@ ordinary room with a code nobody had to type.
 
 ## The screens
 
+Quiz Battle's own page is drawn as **the Deck** — a card table on a dark ground
+(`docs/quiz-battle-redesign.md`, phase 1, and its canvas). Monte Carlo Station keeps
+its own look and the screens it always had (*Skins* below); the skin's `deck` flag
+says which.
+
+- **The intro** (`DeckIntro`): full screen, about 3 s, once per visit to `/battle`
+  (`useBattleIntro` — a visit is a history entry, so moving between the page's own
+  screens, or Back to an entry already seen, doesn't replay it). A deck drops in and
+  fans out, two cards fly up and flip — yours and the rival's — clash, and the title
+  comes up. A tap skips it; under reduced motion it is a short fade of the title.
+- **The start screen** (`DeckHome`): back, the title, the exam shown as a deck
+  (*Exam P deck*, *Change exam* opening the exams), and the three ways in as a hand of
+  cards — *Random opponent* raised in the middle, *Same screen* and *A friend* tilted
+  either side. Tapping a card raises it, and the button under the hand follows it
+  (*Find an opponent*, *Play on this device*, *Create a room*). Under it, the lobby's
+  count, live, as before. The trophy and the record are phase 3's.
+- **The lobby** (`DeckLobby`): *Find an opponent* is the Ready — the player walks in
+  queued, and *Leave the lobby* is Cancel. The table shows their card against a
+  face-down one shuffling, with *Finding an opponent · 0:18*, the exam, the length and
+  the time; the Deck row picks the start screen's exam or *Any exam*; anyone waiting on
+  another exam is named with a *Play Exam MAS-I* button. **Browse while you wait**: a
+  row of the exam's concept cards (the flashcard tile, its foil the player's level; no
+  levels signed out), *See all* for every one, each opening in the concept popup above
+  the lobby. Browsing touches nothing about the queue — the lobby stays mounted under
+  the popup, heartbeat and all — and a match unmounts the lobby, closing the popup.
+- **The friend room** (`DeckRoom`): *Host | Join*. The host's room opens at once — its
+  code as four playing cards, *Send the code* (the share sheet, or the link copied),
+  the two seats (an empty one blinking), and **Settings**: questions and time each step
+  on with a tap, the exam opens the exams (the room's `setConfig`, open until the
+  battle starts). The button reads *Waiting for your friend*, disabled, until the seat
+  fills, then *Start battle*. *Join* is four empty card slots to type the code into,
+  and the name to sit under. The friend's view is the room with its settings, waiting
+  for the host.
+- **Same screen** (`DeckLocal`): the phone split for two people facing each other —
+  player 2's half turned 180° at the top, player 1's at the foot, each with their card
+  and name — and a middle strip with back, **Deal**, and the settings chip (exam,
+  length, time, difficulty). In the battle each half is that player's buzzer: tap
+  anywhere on it to buzz, and it becomes their answer pad, turned to face them. **A**
+  and **L** still buzz from a keyboard.
+- **The topic pick** (`DeckTopicPick`): today's rules in the deck look — a step header
+  with its one step, **Pick**, and the clock; the other player's hand as face-down
+  pips (filled once they lock in, never what is on them); your hand as three slots;
+  the exam's topics as flashcard tiles under the syllabus's groups, with a search; and
+  *Lock in my hand*. The draw lays both hands face up and turns the questions over.
+- **A round** (`DeckRound`, `DeckQuestionCard`): the rival's strip at the top (card,
+  name, score, *Locked in* with a face-down card once they have answered), the question
+  card — *Round 1 of 3* (*Final ×2* in gold), the topic as a chip in its picker's
+  colour, a fuse along the top for the clock, the stem, the options as rows each led by
+  a playing-card index — and this player's strip and the lock-in at the foot, held in
+  reach under a long question. An option is chosen, then locked in (*Lock in A*). At the
+  reveal: who got it and what it was worth, the reactions, and the way on.
+- **The results** (`DeckResults`): the winner's card in foil, marked *Winner* (both
+  cards on a draw), the score (*473 to 295*), each round with its topic and what each
+  player took, then **the round you lost** — the weakest topic, by the player's own
+  level, when they lost more than one (`weakestLostTopic`) — with **Practice**, a quiz
+  on it through the quiz builder's concept launch (`practicePath`). Then *Rematch Sam*,
+  *New opponent* (a matched battle; *Leave room* in a friend's room, *Change settings*
+  on one screen), and *Review questions*, the battle question by question.
+
+Monte Carlo Station's screens are as they were:
+
 - **The way in** (`pages/Battle.tsx`): *Random opponent* first, with how many
   are waiting (or that nobody is); then *Same screen* and *A friend online*
   (create a room, or join with a code); and the rules. An invite link,
-  `/battle?join=CODE`, opens straight onto joining.
+  `/battle?join=CODE`, opens straight onto joining (on either skin).
 - **The lobby** (`Matchmaking`): the player's own tile under a radar pulse in
   their colour (only once they're ready), what they're looking for and how long
   they've waited, the exam pills (*Any exam* first), the **Ready** button (Cancel
-  once pressed), and who else is here — or the empty state. The name
-  they appear under is editable above it; the account's name is the default.
-- **Setup** (`BattleSetupForm`): the names (the account's own name and avatar
-  for the first player), the exam, the length, the pace, the difficulty.
-- **The topic pick** (`TopicPick.tsx`, online): both players and the 30-second
-  ring pinned at the top, the exam's topics as flashcard tiles under their
-  learning objectives with a search above them, and a bar at the foot counting
-  the pick ("2 of 3 picked") with **Lock in**.
-- **The draw**: both picks face up, each under its player, then the questions
-  turned over one at a time in a row, *Final ×2* on the last.
-- **The battle**: the scoreboard pinned at the top (`BattleScoreboard`) — each
-  player's tile, name, score (counting up), streak flame and what they're doing
-  ("Buzzed in!", "Locked in", "Thinking…"), the round clock as a ring between
-  them, and a tug-of-war bar underneath that is each player's share of the
-  points. The question (`BattleQuestionCard`) in the middle. And a bar pinned to
-  the foot (`BattleActionBar`): the two buzzers; the **answer pad** — the options
-  as big letters in the answering player's colour, because on a phone a long
-  stem pushes option E below the fold and a 10-second window is no time to
-  scroll; and, once the round is over, what happened and the way on.
-- **The results** (`BattleResults`): the winner, in their colour, wearing the
-  rainbow foil a Level 3 card wears (earned, so the foil — style guide §4.3);
-  paper confetti; both players' right answers, fastest and average right answer,
-  best streak and steals; Rematch; and the battle **question by question** — who
-  took each one, and the question itself, with both players' picks and the
-  solution, a tap away. The battle is over, but the questions are still study.
+  once pressed), and who else is here — or the empty state.
+- **Setup** (`BattleSetupForm`), **the topic pick** (`TopicPick.tsx`), **the battle**
+  (`BattleScoreboard`, `BattleQuestionCard`, `BattleActionBar` with its buzzers and
+  answer pad) and **the results** (`BattleResults`: the winner in foil, paper
+  confetti, both players' stats, Rematch, and the battle question by question).
 
 Online, both players can send a reaction (🔥 👏 😅 🤯 😤 🎉) at any time; it floats
 up off the sender's panel on both screens.
@@ -420,12 +470,24 @@ release waits half a second before it stops. The results are silent but for
 
 ### Motion
 
-`index.css`, "Quiz Battle": the count-in pops, won or lost points float off the
+`components/battle/battle.css` — the battle chunk's own stylesheet, so first paint
+doesn't carry it (the confetti it shares with the Pro celebration stays in
+`index.css`): the count-in pops, won or lost points float off the
 score, a buzz flares a ring in the player's colour, a wrong buzz shakes the
 player's tile once, reactions float up, confetti falls once, and in the draw the
 picks settle onto the table and each question card flips over as it lands. Each marks a thing
 that happened; under reduced motion each has a static end state, and no
 information is carried by movement alone.
+
+The Deck's motion is cards on a table, and each runs once: the intro, a card dealt
+onto the table, the raised mode card's float and sheen, the winner's card tilting.
+Only the waits loop for as long as the wait lasts — the lobby's face-down card
+shuffling, an empty seat blinking. Under reduced motion the intro is a short fade and
+the rest stand still. The Deck's colours are tokens on its scope (`.battle-deck`, under
+`dark`), its Tailwind utilities are generated into the same lazy stylesheet under a
+`.battle-css` scope (`tailwind.battle.config.ts`) so they can't override the app's own,
+and nothing on the page has a `view-transition-name`: the page's screens move with
+`moveScreen`, as before.
 
 ## Skins: Monte Carlo Station
 
@@ -441,7 +503,8 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   lists sectors, with an exam that has no raceable questions disabled and the
   reason given rather than hidden; the question sits in a HUD frame; the logo is the
   Actuaria mark; the way back leads to the star map. The components read the skin,
-  so they have no `if (actuaria)` branches of their own. Player colours are
+  so they have no `if (actuaria)` branches of their own — the one switch is the skin's
+  `deck` flag, which draws Quiz Battle's own page as the Deck. Player colours are
   untouched: sky and fuchsia are still the only colours a player's tile, buzzer, pad
   or score wears.
 - **The two skins play each other.** A room's code is its channel's name, so a room
@@ -505,13 +568,21 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   louder than what sits under them, no cue for a miss.
 - `lib/battleSkin.test.ts` — the two skins' words, and that each invites a friend to
   its own page.
-- `e2e/battle.spec.ts` — a same-screen battle played to the end (buzz, miss,
-  steal on the pad, results, rematch), an online battle between two pages
-  over BroadcastChannel (invite link, lobby, a topic each, the draw on both
-  screens, hidden lock-ins, reveals on both screens, Ready, results, a rematch
-  asked for and back to the pick), the empty lobby said so on the way in and
-  inside it, and two strangers matched from the lobby, through the pick, into a
-  three-question battle and sent back to it with *Find another opponent*; a battle
+- `lib/battleDeck.test.ts` — the hand of modes and a raised card, a setting stepped on,
+  each round's points, the rounds a player lost, the weakest of them by level, the
+  Practice address and a round's name.
+- `e2e/battle.spec.ts` — every Deck screen: the intro (skipped with a tap, ending on
+  its own, not replayed in the same visit, a fade under reduced motion), the start
+  screen's hand and its exam, a same-screen battle played to the end on the halves
+  (buzz, miss, steal on the pad, the results' rounds, the lost round's Practice,
+  Review questions, rematch), a friend room (the code as cards, its settings, Join and
+  back to Host) and an online battle between two pages over BroadcastChannel (invite
+  link, a topic each, the draw on both screens, hidden lock-ins, reveals on both
+  screens, Ready, results, a rematch asked for and back to the pick), the empty lobby
+  said so on the way in and browsed in — a concept card open in the popup while the
+  player stays queued, as another page sees — and two strangers matched from the
+  lobby (the popup closing on the match), through the pick, into a three-question
+  battle and sent back to it with *New opponent*; a battle
   across the two skins — hosted at Monte Carlo Station, joined from Quiz Battle —
   with the claims review on the station only and nothing saved on either, and the
   lobby pairing a player on each page; and a private room with abilities on. It runs with
@@ -521,10 +592,10 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
 
 ## Next
 
-A redesign is agreed and not yet built: `docs/quiz-battle-redesign.md` (roadmap X10). It redraws
-the battle as a card game, replaces the topic pick with a draft (draw 4, strike 1, questions
-dealt to pairs), and, if D36 is decided that way, adds a battle record, a rating and a
-leaderboard for signed-in players. Until it ships, this doc describes the game as it is.
+The redesign (`docs/quiz-battle-redesign.md`, roadmap X10) has shipped its first phase, the
+look and the flow above. Next is phase 2, which replaces the topic pick with a draft (draw 4,
+strike 1, questions dealt to pairs) and adds the Strike, Deal and Coin flip screens; then, if
+D36 is decided that way, phase 3's battle record, rating and leaderboard for signed-in players.
 
 Ideas deliberately left out so far: more than two players (the engine's seats
 are a pair throughout); a battle on the written CAS papers (it would need

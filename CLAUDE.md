@@ -98,7 +98,9 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
+  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
+  chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).

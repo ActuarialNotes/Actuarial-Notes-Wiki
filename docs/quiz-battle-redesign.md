@@ -1,7 +1,8 @@
 # Quiz Battle redesign: the Deck
 
-**Status:** proposed, design agreed with the maintainer on 2026-11-08. Nothing is built yet.
-Roadmap item **X10** (`docs/roadmap.md` §3.4); the decision it needs is **D36** (§6.1).
+**Status:** design agreed with the maintainer on 2026-11-08. **Phase 1 is built** (2026-11-09,
+see §6); phases 2 and 3 are not. Roadmap item **X10** (`docs/roadmap.md` §3.4); the decision it
+needs is **D36** (§6.1).
 
 **The design:** the canvas *Quiz Battle redesign*,
 <https://claude.ai/artifact/XkurpjUkA3Xx2WPeFuhgcN> (private to the maintainer until shared).
@@ -297,12 +298,28 @@ exam. That is a later change; `planMatches` stays deterministic either way.
 
 Each phase is one PR off `main`, and each updates `quiz-battle.md` and this doc's status.
 
-1. **The look and the flow, with no rule changes.** The intro, the start screen, the lobby (with
-   browsing), the friend room, same-screen seating, the round, and the results with Practice.
-   The topic pick keeps today's rules but takes the deck look. Mostly `pages/Battle.tsx` and
-   `components/battle/`, plus a hook for the intro's once-per-visit flag. Tests: e2e
-   (`e2e/battle.spec.ts`) through every screen with `VITE_BATTLE_TRANSPORT=local`. The view
-   transitions (`moveScreen`) still apply, and nothing on a page gets a `view-transition-name`.
+1. **The look and the flow, with no rule changes.** ✅ *Built 2026-11-09.* The intro, the start
+   screen, the lobby (with browsing), the friend room, same-screen seating, the round, and the
+   results with Practice. The topic pick keeps today's rules but takes the deck look. Mostly
+   `pages/Battle.tsx` and `components/battle/`, plus a hook for the intro's once-per-visit flag.
+   Tests: e2e (`e2e/battle.spec.ts`) through every screen with `VITE_BATTLE_TRANSPORT=local`. The
+   view transitions (`moveScreen`) still apply, and nothing on a page gets a `view-transition-name`.
+
+   *What shipped, and where it differs from the canvas:* the screens are `components/battle/deck/`
+   under the plain skin only (`BattleSkin.deck`); Monte Carlo Station keeps its look. The trophy
+   and the record are left off the start screen (phase 3). The pick's step header shows one
+   step, **Pick**, and its hand three slots (today's `MAX_TOPICS`); its title is today's *Pick
+   your topics*, since *Draw 4 topics* would describe phase 2. Online, an option is chosen and
+   then locked in (*Lock in A*), where it used to lock on the tap. A round's chip is the one
+   topic it was drawn for, in its picker's colour (split when both picked it), until phase 2
+   pairs them. Entering the lobby is pressing Ready; *Leave the lobby* is Cancel. The intro and
+   the start card still say *Draw four topics and strike one of theirs* and *each pairing a card
+   from your hand with one of theirs*, word for word from the canvas, though phase 1 has no
+   strike and no pairs: phase 2 makes them true. New strings not on the canvas: *Pick an
+   answer* (the lock-in before a choice), *{name} is waiting for {exam}* (the lobby, when
+   someone waits on another exam), the same-screen settings sheet's labels (*Settings*, *Time
+   each*, *Difficulty*), and the buttons reused from today (*Play on this device*, *Create a
+   room*, *Start battle*, *Leave room*, *Change settings*).
 2. **The pairs draft.** §4 in `lib/battleTopics.ts` (or a new `lib/battleDraft.ts`): draw,
    strike, pair, order and the coin, all pure and tested, plus the vault test that plays random
    drafts on every raceable exam. Session and protocol changes are tested host against guest,

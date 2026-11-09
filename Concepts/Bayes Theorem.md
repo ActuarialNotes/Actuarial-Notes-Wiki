@@ -1,70 +1,53 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80c99e6d8ea4aea474a6c14e39547a8f1be9a0db15dee3808f4defcaac134c4c
+  content_hash: sha256:657702862ea48f0dde8f702089b2dfcb0fcdb9d09a68d1264b173e3890d4f102
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule, sha256:c352ede4dc334d99bc724927ca8b51853cf8561e407a34f59f165b22ae00042a — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (definition (1.8) P(A∩B|C)=P(A|C)P(B|C); two-coin example P(A∩B)=Σ P(A|C)P(B|C)P(C) by LTP = 5/8 ≠ P(A)P(B)=9/16; 'if we know A has occurred … more likely that we have chosen Coin 2 … increases the conditional probability that B occurs'; conditional independence neither implies nor is implied by independence), sha256:ad951e9a3bf2fbaacbf4d3da76be9e02ed2c33627bed79427c4584355903b027 — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes' Formula: hypotheses partition Ω, prior, evidence, P(E|H_i), posterior; eqs (4.1)-(4.3) P(E)=Σ P(H_k)P(E|H_k) (pp.145-146, PDF pp.153-154), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule (Bayes' rule with LTP denominator over a partition), read 2026-11-06, sha256:47b55f920c18f40f4e9332d6d9dc13e065da3b748de97d18a8dcf53d52a2d48d — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (P(A∩B|C)=P(A|C)P(B|C); two-coin example, P(A∩B)=Σ P(A|C_i)P(B|C_i)P(C_i)), read 2026-11-06, sha256:c0648f3ab8dbef113ddc1bd80d29e311a705fbd2a4adc143f549eb567a2e28d6 — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.2 Law of Total Probability (partition of S; P(A)=Σ P(A|B_i)P(B_i)), read 2026-11-06, sha256:e670bbb6d9b77df6d4a0c8d7fa5d5317d0bc1991eb0f7fb8e4df15a2b41a3825 — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Poisson distribution P(Y=k)=e^{−λt}(λt)^k/k! (Ch. 5 exercise 11, PDF p.206), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (2026-05 file), Q306 solution, PDF p.84 (Bayes with survival likelihoods P(T>1|H), P(T>1|A) for 'still in force'), read 2026-11-06, sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2), Topic 2 outcome b (PDF p.3), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md
 ---
 
-**Bayes' Theorem** is a formula for reversing conditional probabilities, updating the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \mid E)$ after observing evidence $E$.
-- The denominator $P(E)$ is computed via [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
-
-> $$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$
-
-> $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
-
-- $H$ is the hypothesis and $E$ is the observed evidence
-- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$
-- See also [[Bayesian Credibility]]
-
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 
-### Evidence restricted to a subset of hypotheses
+**Bayes' Theorem** is the rule that reverses a [[Conditional Probability|conditional probability]]: it finds $P(F \mid E)$ from $P(E \mid F)$. For [[Event|events]] $E$ and $F$ with $P(E) > 0$, the probability of $F$ given $E$ is
 
-When the evidence is an event $E$ together with the information that the outcome lies in a subset $H_1, \ldots, H_k$ of the hypotheses, condition on both: the denominator of Bayes' theorem sums over only the hypotheses in that subset.
+> $$P(F \mid E) = \frac{P(E \mid F)\,P(F)}{P(E)}$$
 
-> $$P\big(H_j \mid E \cap (H_1 \cup \cdots \cup H_k)\big) = \frac{P(E \mid H_j)\,P(H_j)}{\sum_{i=1}^{k} P(E \mid H_i)\,P(H_i)}, \quad j \le k$$
+- $P(F)$ is the **prior** probability of $F$, before $E$ is observed.
+- $P(F \mid E)$ is the **posterior** probability of $F$, after $E$ is observed.
+- $P(E \mid F)$ is the **likelihood** of $E$ when $F$ holds.
 
-- This is Bayes' theorem with the evidence $E' = E \cap (H_1 \cup \cdots \cup H_k)$: $P(E' \mid H_i) = P(E \mid H_i)$ for $i \le k$ and $0$ for every other hypothesis, so the other categories drop out of the denominator.
+> [!example]- 20% of an insurer's policyholders are high-risk and 80% are low-risk. A high-risk policyholder files a claim with probability 0.40, and a low-risk one with probability 0.10. A policyholder files a claim. What is the probability that they are high-risk? {Example}
+> - Let $F$ be "is high-risk" and $E$ be "files a claim", so $P(F) = 0.20$ and $P(E \mid F) = 0.40$.
+> - By the [[The Law of Total Probability|law of total probability]], $P(E)$ is $0.40(0.20) + 0.10(0.80)$, which is $0.16$.
+> - $P(F \mid E) = \frac{0.40 \times 0.20}{0.16} = 0.50$.
+> - The claim raised the probability of high-risk from the prior 0.20 to the posterior 0.50.
 
-### Conditionally independent events
+## Bayes' theorem for a partition
 
-Events $A$ and $B$ are conditionally independent given each class $C_i$ of a partition when $P(A \cap B \mid C_i) = P(A \mid C_i)\,P(B \mid C_i)$: within a class, the probability of several outcomes is the product of their conditional probabilities.
+When the events $F_1, F_2, \ldots, F_n$ partition the sample space, the probability of $F_j$ given $E$ is
 
-> $$P(A \cap B) = \sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)$$
+> $$P(F_j \mid E) = \frac{P(E \mid F_j)\,P(F_j)}{\sum_{i=1}^{n} P(E \mid F_i)\,P(F_i)}$$
 
-> $$P(B \mid A) = \frac{\sum_i P(A \mid C_i)\,P(B \mid C_i)\,P(C_i)}{\sum_i P(A \mid C_i)\,P(C_i)}$$
+- $F_1, \ldots, F_n$ are [[Mutually Exclusive Events|mutually exclusive]] and exhaustive: every outcome is in exactly one of them.
 
-- Events that are independent given each class are in general not independent unconditionally when the class is unknown, because observing one event updates the probability of each class.
-- Repeated tosses of a coin chosen at random are independent only given which coin was chosen; unconditionally they are dependent, because each toss gives information about the coin.
-- The second formula is a Bayesian update of the class probabilities, $P(B \mid A) = \sum_i P(B \mid C_i)\,P(C_i \mid A)$: compute the joint probability and the probability of the observed event by conditioning on each class, then divide.
-- Observing $A$ shifts weight toward the classes under which $A$ is more likely; with two classes, when $A$ and $B$ are both more likely in the same class, this raises the probability of $B$, so $P(B \mid A) > P(B)$.
+The denominator is $P(E)$, found by the law of total probability. The likelihood $P(E \mid F_i)$ can come from each class's distribution: a Poisson probability for a claim count, or a survival probability $P(T > t)$ for "still in force at time $t$".
 
-> [!example]- Two tosses of an unknown coin {Example}
-> A bag holds a fair coin and a coin that lands heads with probability 0.8. One coin is drawn at random and tossed twice. Find the probability that the second toss is heads given that the first is.
->
-> > [!answer]-
-> > **Plan:** the tosses are independent given the coin, so condition on the coin for both numerator and denominator.
-> > $$P(H_1) = 0.5(0.5) + 0.5(0.8) = 0.65$$
-> > $$P(H_1 \cap H_2) = 0.5(0.5)^2 + 0.5(0.8)^2 = 0.125 + 0.32 = 0.445$$
-> > $$P(H_2 \mid H_1) = \frac{0.445}{0.65} \approx 0.685$$
-> > A first head makes the biased coin more likely, so the second head is more likely than the unconditional 0.65.
+> [!example]- 60% of drivers have a Poisson claim count with mean 1, and 40% have mean 3. A driver has exactly 2 claims. What is the probability that the driver has mean 3? {Example}
+> - The likelihood of 2 claims is $\frac{e^{-1}\,1^2}{2!} = 0.1839$ for mean 1 and $\frac{e^{-3}\,3^2}{2!} = 0.2240$ for mean 3.
+> - $P(E)$ is $0.60(0.1839) + 0.40(0.2240)$, which is $0.2000$.
+> - The probability that the driver has mean 3 is $\frac{0.40 \times 0.2240}{0.2000} = 0.448$.
 
-> [!example]- Identifying a High-Risk Policyholder After a Claim {Example}
-> 20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10. A randomly selected policyholder files a claim. What is the probability they are high-risk?
->
-> > [!answer]-
-> > First find $P(\text{claim})$ by the Law of Total Probability:
-> > $$P(C) = P(C \mid H)P(H) + P(C \mid L)P(L) = (0.40)(0.20) + (0.10)(0.80) = 0.08 + 0.08 = 0.16$$
-> > Now apply Bayes' Theorem:
-> > $$P(H \mid C) = \frac{P(C \mid H)\,P(H)}{P(C)} = \frac{0.40 \times 0.20}{0.16} = \frac{0.08}{0.16} = 0.50$$
-> > After observing a claim, the probability the policyholder is high-risk rises from 20% to 50%.
+> [!trap] Reading the likelihood as the posterior
+> A test flags 95% of defective items and 10% of good ones, and 2% of items are defective. "Flags 95% of defective items" is $P(\text{flagged} \mid \text{defective})$, not $P(\text{defective} \mid \text{flagged})$. The posterior is $\frac{0.95 \times 0.02}{0.95 \times 0.02 + 0.10 \times 0.98} = 0.162$, far below 0.95.

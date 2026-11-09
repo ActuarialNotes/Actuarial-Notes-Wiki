@@ -153,18 +153,16 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, exa
               onToggle={value => update({ facets: toggleResourceFacet(choice.facets, facet, value) })}
               getCount={value => counts.get(value) ?? 0}
               emptyTitle={EMPTY_TITLE[facet]}
-              surface="card"
             />
           )
         })}
         <MultiSelectDropdown
-          label="Vintage"
+          label="Syllabus edition"
           options={vintageOptions}
           selected={new Set(vintage ? [vintage.edition.label] : [])}
           onToggle={chooseVintage}
           getCount={value => vintageOptions.find(o => o.value === value)?.count ?? 0}
           emptyTitle="No earlier edition of this exam’s syllabus is on file"
-          surface="card"
           single
         />
         {objectiveOptions.length > 0 && (
@@ -174,7 +172,6 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, exa
             selected={choice.codes}
             onToggle={toggleCode}
             getCount={code => objectiveCounts.get(code) ?? 0}
-            surface="card"
           />
         )}
         {filtered && (
@@ -201,7 +198,7 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, exa
       )}
       {shown.length === 0 && (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed px-4 py-10 text-center">
-          <p className="text-sm text-muted-foreground">No sources match these filters.</p>
+          <p className="text-sm text-muted-foreground">No resources match these filters.</p>
           <button
             type="button"
             onClick={() => update(noChoice())}

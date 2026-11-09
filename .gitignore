@@ -16,6 +16,7 @@ questions/exam-p-backup/
 
 # Listen recordings: made by quiz/scripts/listen-recording.mjs, kept in object storage, never in git
 quiz/public/listen/
+quiz/public/podcast/
 
 # Compiled TypeScript under quiz/: the app is typechecked with noEmit and bundled by vite, so a
 # .js/.d.ts beside a .ts source, or a .tsbuildinfo, is a stray `tsc -b` / `tsc` run — never source.
@@ -37,3 +38,9 @@ quiz/playwright.config.d.ts
 # Usage report (docs/usage-report.md): the private config names the team; the outputs list readers' masked accounts
 scripts/usage_report/config.local.json
 usage-reports/
+
+# OSFI snapshots (scripts/osfi_extract.py): manifests, institutions and checks are committed as the
+# audit trail; the labels and values are rebuilt by re-running the extract until docs/osfi-pc-data.md
+# D-OSFI-2 settles where the data lives.
+.osfi/**/*.labels.json
+.osfi/**/*.values.json

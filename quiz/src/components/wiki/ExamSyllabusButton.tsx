@@ -1,5 +1,6 @@
 import { getSyllabusPdfLink } from '@/data/examPdfLinks'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
+import { inkToolTile } from '@/components/ui/ink'
 
 /**
  * The publisher's syllabus for this exam, in the study guide's sticky header.
@@ -38,10 +39,11 @@ export function ExamSyllabusButton({
       url={link.url}
       label={link.label}
       subtitle={examLabel}
-      tooltip={`${examLabel} — the published syllabus (PDF)`}
+      tooltip={`${examLabel} syllabus (PDF)`}
       chip={false}
-      className="shrink-0 min-h-0 h-8 gap-1.5 px-2.5 py-1 text-xs"
-      labelClassName="hidden sm:inline"
+      // An Ink tool tile (style guide §7.0), like Info and Quiz beside it.
+      className={inkToolTile(false, 'min-h-0 border-0 bg-transparent py-0 pt-0.5 shadow-none [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:text-current')}
+      shortLabel="Syllabus"
     />
   )
 }

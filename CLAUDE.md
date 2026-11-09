@@ -64,6 +64,9 @@ comprehension-checks/<exam-id>/*.md               — retired flashcard-collect 
                                                     concept, parsed by lib/comprehensionCheckParser.ts);
                                                     kept in the vault, rendered nowhere
 Media/Attachments/                                — images referenced via ![[...]]
+Assumptions/*.md                                  — the Assumptions Bank: one published document's figures
+                                                    and facts per file, a typed table with locators
+                                                    (docs/assumptions-bank.md; assumption_lint.py)
 .verify/<mirrors the vault path>.md               — VERIFY: one append-only fact-check log per
                                                     content file (+ `_runs/` batch summaries)
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
@@ -95,7 +98,9 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
+  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
+  chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
@@ -107,6 +112,11 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   an empty corner. Don't reach for lucide's `Check` / `CheckCircle2` for these: their tick is
   a drawn stroke, and the white-tick-on-green-disc it replaces is only invisible against one
   surface. See `docs/style-guide.md` §10.1.
+  `components/ui/ink.ts` (with `ui/buttonVariants.ts`) is **Ink**, the one control style:
+  nothing filled at rest, what is chosen goes solid in the *pick* (`bg-pick` — black/white,
+  or the exam's colour inside `examAccentStyle`), dropdowns a bold label and a chevron, the
+  committing action the inverted solid. Reach for its helpers before styling a trigger, menu
+  row, chip or header tool by hand. See `docs/style-guide.md` §7.0.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one
@@ -130,7 +140,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
-  tick when picked. The add-flashcards picker, Quiz Battle's topic pick and Concept Craft's deck
+  tick when picked. The add-flashcards picker, Quiz Battle's draw and Concept Craft's deck
   all draw it (levels read through `latestMasteryStates` in `lib/mastery.ts` — for the latter
   two via `hooks/useConceptLevels.ts`), so one concept is the same card in each. The craft deck
   passes `showLock={false}`: every card in hand can be played.
@@ -146,7 +156,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   SOA's and CAS's fee pages — the info panel's "Fee" row and the Store's registration
   price), `storeCatalog.ts` (the Store's sellers, study materials and calculators — see
   `docs/store.md`),
-  `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
+  `quests.ts` (daily-quest
   catalogue), `examGuides.ts` (the exam-page orientation guide — the tip
   pages themselves live in the vault under `Guides/`, see below), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
@@ -164,6 +174,30 @@ before touching that area**:
   listed default, or ask), and an index of every subplan with its health. A PR that changes an
   item's status updates its line there in the same PR; new work goes under §3.4 *Proposed*.
   Read it before starting anything that isn't a small fix.
+- `docs/assumptions-bank.md` — the **Assumptions Bank** (roadmap A9; Phase 0 built): figures and
+  facts a published document states (OSFI's 150% MCT target, GISA's ULAE factors, the AIRB's
+  profit provision) as data. One file per set under `Assumptions/`, resource-style frontmatter
+  (`Source: "[[resource page]]"`, `Edition`, `Effective`, `Document`, `Source sha256`, `Read`)
+  then one table `| Assumption | Kind | Value | Unit | Locator |`, optionally followed by
+  `| Basis | Meaning | Fits |` (what the tools' in-place explanations read — `docs/tool-template-v2.md` §4),
+  with `Short name`, `Line` and `Page offset` the optional keys that go with them. A figure is a plain number
+  (unit in its own column), a `fact` row is the document's words, and a blank is a row whose
+  figure hasn't been read yet. The kinds are `scripts/assumption_vocab.json`.
+  `scripts/assumption_lint.py` is the CI gate. **`--against <file>` is how a set is
+  transcribed**: it checks the file's sha256 and that every figure is printed in the document's
+  text, so nothing is retyped from memory. VERIFY covers the folder. `lib/assumptionBank.ts` is
+  the parser and lookups (`figuresOfKind`, `inForce`, `assumptionById`), bundled as
+  `virtual:assumption-bank`. Cowork's document rows are **derived** from it
+  (`withBankAssumptions`), so don't author `assumptions:` in `coworkSources.ts` for a document
+  the bank holds. **In the tools (Phase 1):** the engine never bundles the bank; the app
+  installs it (`lib/toolBank.ts`, imported by `ToolCard`) through `installAssumptionBank` in
+  `lib/tools/bank.ts`. A number field names the kinds it takes (`bank: ['profit-provision']`),
+  and its input may be `{ "assumption": "<set>#<row>" }`, which the run reads in and records:
+  the judgment's `source`, a working step, the hash, and a warning until fact checked. The card's
+  **From…** menu lists the figures; the shelf is `/tools/assumptions`
+  (`components/assumptions/`), with each figure linking into the tools that take it; a resource
+  page shows its sets (`ResourceAssumptionsCard`). The MCP tools are Phase 2. Read before adding
+  a set or a `bank:` field (and run `npm run tools:bundle` after touching `lib/tools/`).
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,
@@ -251,6 +285,23 @@ before touching that area**:
 - `docs/daily-plan-email.md` — the opt-in daily study-plan email: how the sender derives
   "today's concepts" from the (usually day-old) `study_plan_cache`, the hourly pg_cron →
   edge-function send loop, and the one-time Resend/vault setup checklist.
+- `docs/daily-podcast.md` — the **daily podcast** (Pro): Today's Study Plan read aloud, from the
+  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, in
+  `ReadinessCard`) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
+  word is the concept page's, through the Listen pipeline, with fixed links between — **no model
+  writes anything** (`lib/podcastScripts.ts`: definition, two formulas, a few bullets, *The
+  idea*, the first exam trap). A clip is shared by every reader and named by its script's hash
+  and voice; `scripts/podcast-segments.mjs sync` records what is missing (Kokoro-82M `af_heart`
+  on the CPU now, ElevenLabs later — `--provider elevenlabs`) into the public `podcast` bucket,
+  nightly in `.github/workflows/podcast-segments.yml`, and rewrites `index.json` with only the
+  clips current with the vault. The app checks each clip again against the build's script
+  hashes (`virtual:podcast-scripts`), plans the episode (`planEpisode` in `lib/podcast.ts`,
+  mirrored in the email's edge function and held to it by `duplicationContracts.test.ts`) and
+  joins the clips byte for byte into one track — every clip is CBR MP3 with no tags and no Xing
+  header, which is what makes that work. The one `<audio>` and its lock-screen controls are
+  `stores/podcastStore.ts`; the player is a pill in the resume dock
+  (`components/podcast/PodcastPlayer.tsx`, lazy). Read before touching anything named
+  `podcast*`.
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
@@ -266,6 +317,18 @@ before touching that area**:
   Battle's own cues and music (the soundtrack keeps the same key and the same
   1 kHz ceiling, so a cue can't clash with it). Read before adding or changing a
   sound.
+- `docs/question-spreadsheet.md` — **Open in Spreadsheet**: a question from an exam sat with a
+  spreadsheet (the CAS exams at Pearson VUE — `data/examSpreadsheets.ts`, by progress key) gets a
+  **Spreadsheet** button in the question bar. The sheet opens docked beside the question (right
+  of a wide screen, bottom of a narrow one), pops out into a movable window, and starts with the
+  question's own tables (`questionWorkbook` in `lib/questionSheet.ts`, read mechanically, never
+  retyped). An **Insert H3** button under an answer box drops the selected cell in at the caret.
+  Exam-day rules — Off / Warn / Enforce, per mode, Warn for a quiz and Enforce for a practice
+  exam (`lib/sheetRules.ts`) — check formulas against Pearson VUE's own function list
+  (`data/pearsonVueFunctions.json`, generated by `scripts/spreadsheet_functions.py`; never
+  hand-edit it). The pane (`components/quiz/QuestionSheet.tsx`, lazy) carries `data-own-keys`,
+  which `isTypingTarget` honours so the grid's Enter never confirms the answer. Read before
+  touching anything named `questionSheet*`, `sheetRules` or `examSpreadsheets`.
 - `docs/visual-noise-review.md` — a **review backlog**: where the app explains itself in grey
   text instead of designing the fact, the five tests for whether a muted caption has earned
   its place, and the surface-by-surface list to work through. The Exam Readiness popup (§3.1)
@@ -323,6 +386,10 @@ before touching that area**:
   readers who block it). The team's emails and devices are a private config
   (`USAGE_REPORT_CONFIG` or the git-ignored `config.local.json`), never committed; outputs go
   to the git-ignored `usage-reports/`. Read before answering any question about usage.
+- `docs/writing-style.md` — **writing for readers**: the one set of rules for every reader-facing
+  word (true to the code or the source, one name per thing, no code words, say it once, and the
+  table of tells to cut), written from the UI copy review (`docs/ui-copy-review.md`). Every
+  writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -354,7 +421,7 @@ before touching that area**:
   `/games` — `pages/Games.tsx`, opened by the one Games row at the top of the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
   opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
   logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
-  (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
+  (`seedConcepts`; 3 to 41 cards, about half of the vault) — and the reader
   drops one card on another: **any two connect** — a line joins them carrying the
   connection's **strength**, 0–100, drawn as its thickness, and what one is to the other in
   1–5 words (`lib/conceptRelations.ts`: a label written for each of the graph's connections in
@@ -425,11 +492,14 @@ before touching that area**:
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
   every message is untrusted and parsed field by field. Before every online battle (a room's,
-  a matched one's, each rematch's) comes a **topic pick** — up to 3 concepts each in 30 s,
-  drawn as flashcard tiles, hidden from the other player until both are in — and a **draw**
-  that deals the questions from both picks, the players taking turns, shown on both screens
-  before the count-in (`lib/battleTopics.ts`, `components/battle/TopicPick.tsx`); same-screen
-  battles have no pick. **Random opponent** is a matchmaking
+  a matched one's, each rematch's, on either skin) comes the **draft** — each player draws
+  4 topics as flashcard tiles in 30 s and strikes 1 of the other's in 15 s, each hidden until
+  both are in; the 3 cards left in each hand are **dealt to pairs** by Concept Craft's strength
+  (`readPair`), the most pairs some question tests both of first, the strongest of those the
+  final; a pair no question covers is settled by a **coin** the host tosses when its round
+  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
+  — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
+  most rounds (measured, `docs/quiz-battle-redesign.md` §4); a same-screen battle drafts with the phone passed between turns (`LocalDraft` in `DeckLocal.tsx`). **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
   offer → accept → go handshake seals each match, so nobody ends up in two rooms; a matched
@@ -526,6 +596,24 @@ before touching that area**:
   whose tables `scripts/dataset_extract.py` reads off NCHS's, Statistics Canada's, BLS's and the
   Treasury's own files with each file's sha256 and licence, into
   `lib/tools/data/datasets/*.json` — never hand-edited; re-run the script for a new edition.
+  **§19 is the tool template** (`components/tools/ToolTemplate.tsx`, which every tool's page draws;
+  `ToolCard` remains for the cards embedded in a workflow step or a source sheet, both over
+  `useToolCard.ts`): the answer card in
+  the colour of the earliest exam that teaches the method (`lib/toolExam.ts`), judgments first, inline sliders
+  at three inputs or fewer, a source tag on every input, the edit sheet with the app's own keypad
+  (`ValueSheet.tsx`), and grids numbered as an exhibit (`TableColumn.formula`). **Template v2**
+  (`docs/tool-template-v2.md`, built) is the pass on top: one swatch per quantity
+  (`QUANTITY_STEPS` in `lib/toolFigures.ts`), a breadcrumb, *Takes from* / *Gives to* read off
+  `spec.next` both ways (`takesFrom` / `givesTo` in `lib/toolTemplate.ts`; a hand-off's URL carries
+  `?from=<sender>` and its values arrive linked), one "from" chip (`SourceTag.tsx`), and published
+  figures and links explained in place (`FigureNote.tsx`). Its §8.1 is the simplified card every tool
+  now draws: a row's slider opens in place (open at three inputs or fewer), the number alone opens the
+  keypad sheet, and several tools able to supply one value are offered on that row as alternatives.
+  **Template v3, the Ledger** (`docs/tool-template-v3.md`) is the pass after a full phone review
+  (`docs/tools-ux-review.md`): every number row one line at any count, choices first, a chip only for
+  a value that isn't the default, a Data Source's inputs above its answer, grids that count their
+  off-screen columns, a **Solve for** strip for a spec naming `solveFor` (Bond Price), the chain strip
+  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
@@ -588,10 +676,10 @@ before touching that area**:
   jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
   leaves it alone forever.
 - `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
-  still `mock-exam`, and it is now the *format*, not the source: the builder asks where the
-  questions come from — the tab reads **Past Papers**, or **By Source** for an exam with no released
-  sittings (`examSourceLabel`) — and, separately beside Start, whether to sit them as a **Quiz** or a
-  **Practice Exam** (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`); any source either way): the
+  still `mock-exam`, and it is the *format*, not the source: on the quiz setup screen the
+  **Past Papers** tile — **By Source** for an exam with no released sittings (`examSourceLabel`) —
+  opens the shelf in the setup sheet, and a paper is sat whole as a **Practice Exam**
+  (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`), as is the **Practice exam** tile's draw): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
@@ -663,6 +751,11 @@ Other important `lib/` modules:
   the vault, so no page's fact check goes stale. It splits only at top-level separators, only
   between pieces that each carry an `=`, and keeps an index range (`k = 1, 2, \ldots`) and
   anything with an implication arrow whole; `formulaBoxes.test.ts` holds it to the vault.
+  Because a one-line `$$…$$` parses as *inline* math, KaTeX would typeset every formula box in
+  text style (a small ∫ with its limits beside it, shrunk fractions); `displayMath.ts`
+  (`remarkDisplayFormulaBoxes`, after `remark-math` in `WikiArticle` and block `MarkdownText`)
+  prefixes `\displaystyle` to every `$$` span written on a line of its own, and breaks the line
+  either side of one that shares a paragraph with prose or with more lines of working.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
@@ -774,9 +867,9 @@ Other important `lib/` modules:
 - `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
   answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
   page has always read a `reveal` search param; this module is the reader's side of
-  it — the checkbox in the quiz builder's settings menu
-  (`components/QuizSettingsMenu.tsx`, the button beside the deck card),
-  remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  it — the *Show answers after each question* switch in the quiz setup sheet
+  (`components/landing/QuizSetupSheet.tsx`, opened by any pill on the setup card or by a
+  paper tile), remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
   different things: a quiz is practice *with* feedback (`during`), a practice exam is
   a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
   mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
@@ -791,7 +884,7 @@ Other important `lib/` modules:
   guide's `data-wikiref`; a tap opens it in `ConceptPopup` and the popup walks every mention on the
   card (`mentionWalk`, walk kind `question`), highlighting and scrolling each one through
   `hooks/useConceptHighlight.ts` — the hook `WikiArticle` uses for the same thing. Only words already
-  on screen are marked. On by default for a quiz, off for a practice exam — the settings menu's
+  on screen are marked. On by default for a quiz, off for a practice exam — the setup sheet's
   *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
   panel's concept rows open the same popup. Pure and tested.
 - `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
@@ -800,13 +893,22 @@ Other important `lib/` modules:
   (`todaysPlanSelection`), the pool each source covers (`builderPool`), the draw's size and
   signature, and the `/quiz` address every launch writes (`quizLaunchUrl` — each kind keeps
   its key order, since a quiz resumes by its address). The page holds only the state that
-  joins it to what it draws — `components/landing/` (the exam ladder, the concept groups,
-  Today's Plan, the past-paper shelf, the action bar) and the `useQuizExamScreen` /
-  `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` / `useShuffledDraw` /
-  `useDashboardAutostart` hooks. Pure and tested.
-- `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
-  mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
-  an unticked level is out of the pool, so the deck card's count, the count clamp and
+  joins it to what it draws — `components/landing/` (the exam ladder, and an exam's **setup
+  screen**: `QuizHeroCard`, the reader's own quiz in the exam's colour — a big count, the time
+  it should take, a pill for each topic, the settings (difficulty, timed, when answers show) as a
+  row of icons, and Start; the count, a pill or an icon opens the sheet at its own section
+  (`SetupSection`, the sheet's `focus`); `QuizLaunchTiles`, today's
+  plan under it — Pro's to start, shown locked and not a button to anyone else, so the plan never
+  stands above building your own — then **Practice exam** and **Past Papers** side by side, the
+  same height; and `QuizSetupSheet`, the sheet a pill or tile opens: topics (the concept groups),
+  how many (the presets, or any number typed in *Other*), difficulty, and how it's sat as switches, ending in its own Start) and the
+  `useQuizExamScreen` / `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` /
+  `useDashboardAutostart` hooks. What the card says — the time estimate at the paper's pace, the
+  topics' pills (an objective picked whole is one pill), the difficulty pill — is
+  `lib/quizSetup.ts`. Pure and tested.
+- `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (the setup sheet, the
+  card's quiz only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
+  an unticked level is out of the pool, so the setup card's count, the count clamp and
   Today's Plan pool all move with it (`inDifficultyLevels`, the quiz builder's `inLevels`), and each level
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
@@ -816,14 +918,14 @@ Other important `lib/` modules:
 - `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
   `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
   Exam 5), the set's time budget (`timeAllowanceSeconds`, null rather than invented for an
-  exam with no pace), and the per-mode stored choice. The builder's settings menu sets
-  `timed=1`; `components/QuizTimer.tsx` counts down in the quiz header from the first
+  exam with no pace), and the per-mode stored choice. The setup sheet's *Timed* switch sets
+  `timed=1` (and the setup card's time estimate is this pace, `estimateSeconds` in `lib/quizSetup.ts`); `components/QuizTimer.tsx` counts down in the quiz header from the first
   question (not the pre-quiz concept list), goes amber in the last tenth and counts the
   overrun in red rather than ending the quiz. Pure and tested.
 - `writtenAnswer.ts` — the **written parts** of a long-answer question (`answer === ''`: a CAS
   essay or calculation part the reader marks against the sample answer). `splitSampleAnswers`
   cuts a part's sample answer into the separate answers the examiners printed — `Alternatively:`,
-  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` headings — so
+  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` and `Accepted Answer 2 — <title>` headings (the title kept) — so
   `components/AnswerReference.tsx` can draw each as its own card inside one *Sample answer*
   panel, with the examiner's report a card of its own. A bare `or`, and an alternative *inside*
   one section of a sectioned answer, split nothing: both are used within one answer as often as
@@ -836,6 +938,29 @@ Other important `lib/` modules:
   graded no credit — never a free "correct"; the store's `effectiveIsCorrect` is that credit at 1.
   The results screen weights each question by its `points` too (`quizPoints` in `lib/quizScore.ts`).
   Pure and tested; the flow is in `e2e/quiz.spec.ts`.
+- `numericCheck.ts` — the **suggested grade** for a written part's final figure
+  (`docs/answer-checking.md`): the reader's last figure (`finalFigures`) against the part's
+  `### Answer` line (`keyFigures`) or where each sample answer ends, read through markdown and
+  LaTeX with labels — AY 2012, 36 months, `($000)` — left out (`parseNumbers`). Within 0.5% is a
+  match (Full credit), within 3% close (Partial), else No credit against a key and nothing against
+  a sample. `components/GradeSuggestion.tsx` says why, as `SelfGradeButtons`' `hint`, and the
+  suggested button is outlined until the reader picks — it never grades for them. No model.
+  `numericCheckVault.test.ts` holds every key to checking as a match against itself. Pure and tested.
+- `essayChecklist.ts` — the **essay checklist** (roadmap L14, `docs/answer-checking.md` layer 2):
+  an essay part's sample answer cut into points where its text already breaks — a top-level
+  bullet or numbered item, a paragraph of prose — with headings, lead-ins, formulas and short
+  labels left as text and the "Other acceptable …" paragraph a box that stands in for a point
+  (`sampleChecklist`); a heading over candidates' responses ("Sample responses:", "Responses for
+  Model 1") makes its list a **pool**, any one (or the heading's or stem's count) making the point.
+  Where the examiner's report lists what full credit needed ("Candidates were expected to:", "Any
+  two of the following received full credit:"), that list is the checklist instead (`reportRubric`,
+  its boxes in the Examiner's report card, ticks under `RUBRIC` from `lib/checklistKeys.ts`). The reader ticks what their answer makes (`components/SampleChecklist.tsx`,
+  inside `SampleAnswerCards`; ticks in `stores/checklistStore.ts`), and the ticks suggest Full
+  credit or Partial against the sample the answer covers most of, as many points as the stem asks
+  for (`askedFor`, `checklistSuggestion`). `essayChecklistVault.test.ts` holds every cut to keeping
+  every word of the sample (and of a report used as the rubric). With `numericCheck.ts` it is one lazy chunk, `lib/answerChecks.ts`,
+  fetched by `hooks/useAnswerChecks.ts` when a written part is locked in — keep both off the first
+  page's bundle. Pure and tested.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
   one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past
@@ -953,6 +1078,11 @@ Other important `lib/` modules:
   the page's own ISBN, the vended detail-page link used untouched, an hour at the CDN and
   nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
   beside any price (the wording is pinned by `amazonPrice.test.ts`).
+- `storeKit.ts` — the Store's **exam kit** (`docs/store.md`, "The kit"): one exam's shelf as
+  steps (register → calculator → learn → practise → review), the first unticked one in the
+  spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
+  comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
+  `components/store/ExamKit.tsx`; pure and tested.
 - `store.ts` / `storeBooks.ts` — the **Store** (`docs/store.md`). `store.ts` is its logic,
   pure and tested: the four aisles, the exams the shelf narrows to (`STORE_EXAMS`, in
   ladder order), price printing (`Free` for nothing, "From" over choices), registration
@@ -993,7 +1123,14 @@ Other important `lib/` modules:
   has passed and a countdown on what comes next. This module merges a sittings row's own
   window / registration deadline with what `data/examSittingDetails.ts` transcribes (a
   transcribed one replaces the row's, under the publisher's label) and places today among
-  them — at most one step is *next*, none while a window is open. Which sitting is selected
+  them — at most one step is *next*, none while a window is open.
+  It also writes the panel's **status banner** — the headline and countdown
+  (`sittingHeadline`: "Exam window open · Closes Nov 15 · 7 days") and the to-scale
+  **ruler** under it (`sittingRuler`: every date placed by its distance in days, today
+  ticked) — and the rest of the panel is grouped lists (`components/ui/GroupedList.tsx`;
+  the fee first and long values under their label, sources folded past two —
+  `lib/sittingInfo.ts`). A note about sitting the window itself is the details'
+  `windowNote`, drawn under the window's row. Which sitting is selected
   is `hooks/useExamVersion.ts`, shared with `ExamVersionMenu` so the two can't disagree.
   Pure and tested. The drawing is `components/SittingTimeline.tsx`, which the Store's
   registration sheet draws too — its own small module, so the Store importing it doesn't
@@ -1135,11 +1272,10 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the Dashboard's exam
-  card (one card washed in the exam's accent: `NN% Ready` inside a mini readiness ring
-  beside the days left and the exam date, under the exam tabs drawn as exam logos; the
-  calendar, the primary actions and **Today's Study Plan** follow), the **Study Guide**
-  popup the card's ring opens (the ring and the
+  tally); every surface that prints a readiness % calls it — the Dashboard's **Today's
+  session** wheel (`components/dashboard/SessionWheel.tsx`, `NN%` ready in the middle of the
+  ring, today's concepts outlined on it), the **Exam Readiness**
+  popup the wheel opens (the ring and the
   criterion bar — it sits under the concept popup, ending where that pane begins, so a
   tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
@@ -1155,13 +1291,34 @@ Other important `lib/` modules:
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Study Guide popup (`StudyGuideRadial`, with `MiniReadinessRing` — the arcs alone, round the
-  score — on the Dashboard exam card's ring that opens it in `components/ReadinessCard.tsx`, with a legend,
+  Exam Readiness popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
+  concepts outlined — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a middle that prints the score until a concept is hovered or
   selected, then that concept's readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
   about the shape of a syllabus. Geometry is in a fixed 280-unit viewBox; pick a size by
   scaling the SVG, not by editing the constants.
+- `todaySession.ts` — **Today's session**, the Dashboard's one card of work for the day
+  (`components/dashboard/TodaySessionCard.tsx`, under the week strip): its **steps** in the
+  order they are done — *Fix N mistakes* (the missed questions not yet answered right),
+  *Learn N new concepts* and *Review N concepts* (today's plan, split by the state each
+  concept was scheduled in) — each a numbered checklist, its concepts outlined on the wheel
+  (`sessionPins`); its **size**, the plan quiz's own count (`questionsNeededForPlan`) plus
+  the mistakes, in minutes at the exam's pace (`sessionMinutes` — none for an exam paced by
+  the point); the walk a tapped row opens in the concept popup — every row's concept in the
+  order listed, each once (`sessionWalk`), the row the popup is on held highlighted
+  (`.concept-row-current`); and what **Start** does (`nextSessionAction`). Start runs the
+  whole session as **one quiz**: the missed questions' ids go to the quiz builder through
+  `storeSessionMistakes` (`lib/quizBuilder.ts`) and its autostart puts them ahead of the
+  fewest questions that complete today's plan (`sessionQuizIds`) — or launches them alone
+  once the plan is done or there is none. The pinned exam row carries a copy of Start
+  (`startSessionTrigger` / `onSessionChange` between the Dashboard and `ReadinessCard`).
+  Pure and tested.
+- `analyticsSummary.ts` — the head of the Dashboard's **Analytics** section
+  (`components/analytics/AnalyticsSummary.tsx`): four tiles (accuracy, the marks the
+  costliest section is losing, first tries, pace), the span day by day (`dailyColumns`) and
+  accuracy by difficulty. It is the whole section: the *Marks at risk* tile opens
+  `SectionLeaksCard` in a popup (`components/analytics/SectionLeaksDialog.tsx`). Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
@@ -1196,8 +1353,8 @@ Other important `lib/` modules:
   context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
   `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
   `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
-  `hooks/useQuests.ts` + `components/QuestsCard.tsx` (collapsible Dashboard section)
-  and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  `hooks/useQuests.ts`, the Level badge's Quests tab (`components/QuestsPanel.tsx`, whose
+  Collect button is `QuestsCard.tsx`'s `CollectButton`) and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
   layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
@@ -1225,12 +1382,19 @@ Other important `lib/` modules:
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
-  reader's review: the Dashboard's **Accuracy** card (`components/AccuracyTrendCard.tsx`, via
-  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
-  reader picks, every figure on the card covering that one span: the rate against the span before,
-  by difficulty with each count (stepped back under 10 answers), a pooled rolling 7-day line over
-  each day's dot sized by its answers, the weakest topics each starting a quiz on that topic, and a
-  tapped day opening its questions (`components/AccuracyDayDialog.tsx`); signed-in only, lazy), the results screen's score **by difficulty** (shown only once
+  reader's review: the Dashboard's accuracy figures (via `hooks/useAccuracyTrend.ts` — one exam's
+  `question_responses` over a 7 / 30 / 90-day span the reader picks, every figure covering that
+  one span; any rate under 10 answers stepped back to grey), drawn by the summary
+  (`lib/analyticsSummary.ts`) that is the Dashboard's **Analytics** section — the full Accuracy
+  card with its rolling line and day dialog was removed (its rolling-window and day helpers stay
+  in the lib, tested) — signed-in and Pro only, lazy, a **Pro** feature: anyone else gets `components/analytics/AnalyticsLocked.tsx`
+  (the locked study-plan card's shape, a drawn stand-in, nothing of theirs fetched — the Dashboard
+  passes `useAccuracyTrend` a null exam) — `components/analytics/AnalyticsSection.tsx`, whose
+  header's span picker covers every card; beside it, `lib/performanceAnalytics.ts`: **where you're losing marks**,
+  each syllabus section's misses weighed by its share of the paper (`sectionLeaks`, sections
+  matched through the questions' `wiki_link` concepts), **pacing**, the median time a question
+  or point took against `quizTiming.ts`'s allowance (`pacing`), and the card's **first try vs
+  retry** split (`attempts`, from the ids answered before the fetch window)), the results screen's score **by difficulty** (shown only once
   the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
   **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder and
   the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed
@@ -1362,10 +1526,10 @@ Other important `lib/` modules:
   open critical finding. `aiConnector.ts` holds the public addresses (connector URL, skill zip) the
   Settings card (`components/AiConnectorCard.tsx`) and `llms.txt` hand out. The run-time half is
   plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
-  `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
+  `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
-  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` /
+  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` / `battleDraft.ts` /
   `battleMusic.ts` / `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
   pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
   own time; a disallowed event returns the state by identity), the scoring constants, the
@@ -1378,11 +1542,16 @@ Other important `lib/` modules:
   `battleSession.ts` is `HostSession` (runs the reducer, sends the redacted room on every change
   and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
   framework-free and tested against each other over an in-memory channel — the host also runs
-  the **topic pick** (`openTopics`, the pick's clock and its grace, the draw, then `start`);
-  `battleTopics.ts` is that pick as data: the topics an exam offers (`topicCatalogue`, grouped
-  by the syllabus), the rules a pick is held to (`cleanTopicPick`), the draw from two picks
-  (`drawFromTopics` — turns, every pick before any twice, the whole exam last) and the
-  `BattleDraft` the room carries, hidden per player until the draw; `battleTransport.ts`
+  the **draft** (`openDraft`, the draw's and the strikes' clocks and their grace, the deal, then
+  `start`, and each coin round's toss — `settleCoin`, after the reducer, so its rules are
+  untouched); `battleTopics.ts` is the topics an exam offers (`topicCatalogue`, grouped by the
+  syllabus); `battleDraft.ts` is the draft as data: a hand (`cleanHand`, `topUpHand`), a missed
+  strike (`autoStrike`), the pairing and its order (`dealPairs`, `orderPairs`, `roundPairs`), a
+  round's question and its fallbacks (`drawRound`), the pair reader over Concept Craft's
+  `readPair` (`battlePairReader`), and the `BattleDraft` the room carries, redacted per seat
+  (`redactDraft`) — plus the words the draft is told in, kept out of `battleDisplay.ts` because
+  that module is in the first-paint bundle; `battleDraftVault.test.ts` plays it on the real bank
+  (`BATTLE_DRAFT_MEASURE=1` prints the coin share); `battleTransport.ts`
   is the channel — Supabase Realtime broadcast, or BroadcastChannel with
   `VITE_BATTLE_TRANSPORT=local` (the e2e suite). The **matchmaking lobby**: `battleLobby.ts` is
   its rules as data (entries and handshake messages validated, the queue, `planMatches` — the
@@ -1399,7 +1568,7 @@ Other important `lib/` modules:
   modules are tested.
 - `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Settings → Support hides the "Take the tour" row. The component, store and
@@ -1461,12 +1630,25 @@ compile — don't "clean up" the flagged code as dead.
 ## Content conventions (markdown vault)
 
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
-- Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill: definition →
-  `> $$formula$$` (or, for a qualitative concept, its defining list/hierarchy/table) → bullets →
-  `> [!idea] The idea` → collapsed examples → collapsed *How it appears on the exam* and *Exam
-  traps*. `[!idea]` and `[!trap]` are **note cards** — always open, in the Examiner's report
-  shape (`MarkdownCallout`, style guide §7.2b). Nothing callout-shaped goes above the bullets:
-  the opening is read by Concept Craft's recipe reader (`pageOpening`) and the SEO lead.
+- Concept pages (`Concepts/*.md`) follow the `actuarial-concept-definitions` skill. Since
+  2026-11-06 the shape is short and open: figure → `A **Term** is …` (a singular noun) →
+  `> $$formula$$` → one bullet per term the words before it didn't define (a new term is a
+  sentence, never a bullet) → a folded `> [!example]- <the whole question> {Example}` right under
+  it (the `{Example}` tag draws it as a green card with an *Example* pill —
+  `WORKED_EXAMPLE_STYLE` in `MarkdownCallout.tsx`; untagged, `[!example]` is a learning objective)
+  → `##` sections, one per variation, headed plainly, each built the same way → an optional
+  `[!idea] The idea` (one sentence; a table or worked line expanding it goes below the card as
+  plain text) and at most one `[!trap]`, both open. No running example, *Try it* or *Exam
+  traps* fold. A rule on another page is linked at its heading, `[[Page#Heading|rule]]`, which
+  the concept popup opens scrolled to (`headingSlug` in `lib/wikiRoutes.ts`; every `##`/`###`
+  carries that id). One symbol per thing across an exam (Exam P's
+  table is in the skill's `references/vault-mechanics.md`: $S$, $s$, $E$/$F$, ${}_nP_k$,
+  $\binom{n}{k}$). Exam P, MAS-I and Exam 5 are converted (Probability, Combinatorics, Permutation are the
+  models; Pure Premium, Loss Ratio and Exposure Base for Exam 5); other exams' pages are still
+  in the older running-example shape. `[!idea]` and
+  `[!trap]` are **note cards** — always open, in the Examiner's report shape (`MarkdownCallout`,
+  style guide §7.2b). Nothing callout-shaped goes above the bullets: the opening is read by
+  Concept Craft's recipe reader (`pageOpening`, which skips a leading figure) and the SEO lead.
   `Resources/Books/` pages have their own skill, `resource-pages`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
@@ -1496,11 +1678,20 @@ compile — don't "clean up" the flagged code as dead.
   too, naming itself — `%%credential-path ACAS%%` — so it opens on that society at that
   stage (`readCredentialPathMarker`; a name no stage has is left on the page as text). The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
   CERA, FCIA) has no track behind it and is transcribed from the societies' own pages.
-- The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
-  (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
-  headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
-  one-line change there. Each carries its `%%credential-path <designation>%%` line just above
-  `## Requirements`; `credentialPaths.test.ts` fails if one goes missing.
+- The six credential pages — `Concepts/Associate of the Casualty Actuarial Society
+  (ACAS).md` and its ASA / FCAS / FSA / ACIA / FCIA siblings — are what the Study Guides page's
+  track headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
+  one-line change there. Each is short: a one-sentence definition (no `##` heading repeating the
+  title), then its `%%credential-path <designation>%%` line — the **route**, drawn down the page
+  (`components/wiki/CredentialPath.tsx`: a stop per stage, the page's own open and marked *This
+  page*, a SOA / CAS / CIA switch), carrying the reader's own progress on each requirement
+  (`lib/credentialProgress.ts`: done, studying with the readiness score, from `exam_progress`;
+  nothing for a reader with nothing on the path) — then only what the route doesn't say. No
+  requirements list: the route is the list. `credentialPaths.test.ts` fails if a marker goes
+  missing. **`Concepts/Credential Path.md`** is the page about choosing between the societies:
+  its `%%credential-map%%` line is `components/wiki/CredentialMap.tsx`, the three societies'
+  credentials on one map (P and FM one trunk splitting into the SOA and CAS, the CIA from a
+  degree, dashed where credit carries over), a tapped node opening that stage underneath.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
@@ -1630,6 +1821,18 @@ compile — don't "clean up" the flagged code as dead.
   and Statistics Canada's price indexes, the Treasury's par yield curves, each file's URL, sha256
   and date read recorded with the licence. Downloads cached outside the repo (`--cache`,
   `--offline`); openpyxl for NCHS's `.xlsx`. Tests: `scripts/test_datasets.py`.
+- `osfi_extract.py` — OSFI's insurer filings from the **Open Government Portal's API**
+  (`datastore_search`, OGL-Canada) → `.osfi/<dataset>/<period>/`: one quarter of PC1–PC4 (or the
+  Life returns) paged, cached outside the repo, hashed, labelled with OSFI's own bilingual labels,
+  and checked (each filed MCT ratio recomputed, balance-sheet identities), findings never
+  corrections. Manifests, institutions and checks are committed; labels and values are rebuilt by
+  re-running it. Stdlib. Tests: `scripts/test_osfi_extract.py`. See `docs/osfi-pc-data.md`.
+  `export-summary --to <quarter>` writes PC4 page 10.00, every quarter, to
+  `quiz/src/lib/tools/data/filings/osfi-pc4-summary.json` — what **Insurer Return** and
+  **MCT Ratio** read. The engine never carries it: it is *installed* (`lib/tools/filings.ts`),
+  fetched by the app (`lib/toolFilings.ts`) and by the connector (`/ai/osfi-pc4-summary.json`),
+  and an input may be a filed cell, `{ "filed": "osfi-pc:<quarter>:<id>:<address>" }`. Never
+  hand-edit the file; re-run the export. See `docs/osfi-tools-design.md` §8.
 - `tool_fixtures.py` — published worked examples → **Actuarial Tools** fixtures
   (`quiz/src/lib/tools/fixtures/*.json`): Friedland's and Werner & Modlin's exhibits read off
   the CAS's PDFs, each checked by sha256, with no model retyping a number. PyMuPDF, imported
@@ -1652,7 +1855,7 @@ compile — don't "clean up" the flagged code as dead.
 cd quiz
 npm install
 npm run dev        # vite dev server
-npm run build      # tsc + vite build
+npm run build      # tsc + vite build (with a 4 GB heap: the build needs more than Node's ~2 GB default)
 npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
 npm run mcp:local  # after a build: the AI connector at http://localhost:8787/api/mcp
@@ -1674,6 +1877,8 @@ modules that read directly from the repo root:
   registers where each lives — `lib/resourceFolders.ts`, `resourceRepoPath`)
 - `virtual:cowork-vault` — the practice resource pages read for Cowork's catalogue
   (`lib/coworkVault.ts`): title, publisher, type, year, link, the lead's first sentence
+- `virtual:assumption-bank` — every `Assumptions/*.md` set, parsed by `lib/assumptionBank.ts`
+  (small; Cowork's chunk reads it). A set the parser can't read fails the build
 - `virtual:questions-content` — `questions/`, as a chunk of its own: `fetchAllQuestions`
   (`lib/github.ts`) dynamic-imports it the first time anything asks for a question. It is
   ~11 MB, and it used to be imported eagerly in `main.tsx`, which put it in the entry chunk
@@ -1687,6 +1892,11 @@ modules that read directly from the repo root:
   never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
+- `virtual:podcast-scripts` — every concept page's daily-podcast script hashes, by slug
+  (`buildScriptHashes` in `lib/podcastScripts.ts`, ~60 KB, the podcast's own chunk). The vite
+  config runs the Listen pipeline to make it, which is why `listenTokens.ts` and what it imports
+  use relative imports and read no Vite env (`stripFrontmatter` / `BREADCRUMB_RE` live in
+  `wikiParser.ts`, re-exported from `wikiMarkdown.ts`)
 - `virtual:store-books` — the Store's textbook aisle: the `Resources/Books` textbooks with
   an ISBN that an exam assigns, with each exam's chapters (`lib/storeBooks.ts`, ~20 KB)
 - `virtual:seo-pages` — every exam, concept and resource page, described (`lib/seo.ts`).
@@ -1820,6 +2030,14 @@ no count: the workflow store reads the tools engine). Populating the corpus more
   imports/vars or `npm run build` will fail.
 - Prefer editing/extending existing `lib/` modules and hooks over introducing new
   abstractions; the codebase favors small, pure, well-tested utility functions.
+- **Every word a reader sees follows `docs/writing-style.md`**: app screens, emails, edge-function
+  errors, the AI connector's descriptions, Fact Check findings, and the vault's own prose. Check
+  each sentence against what the code or the source does, use the app's nouns as the `app-copy`
+  skill's glossary spells them (Store, Today's Study Plan, Practice Exam, Level 1–3, Collect…),
+  and cut the tells it lists (em-dash hinges, rules of three, closing aphorisms, exclamation marks,
+  "No more X", things acting like people). For any UI string, use the `app-copy` skill; its
+  decisions log outranks everything. `quiz/src/lib/copyGuard.test.ts` fails a build on the
+  mechanical tells and holds UI em-dash hinges to a ceiling that only goes down.
 - AI is used for content organization, code, and review — but the README is explicit that
   no wiki content is published 100% AI-written without human review. Keep that in mind if
   asked to generate concept/exam content.
@@ -1843,6 +2061,10 @@ to know before changing it:
    first. `search`/`fetch` keep ChatGPT's exact result shapes; tool names are public API.
 3. **The export and the endpoint are versioned together.** Change the export's shape → bump
    `KNOWLEDGE_BASE_VERSION` and `SUPPORTED_KB_VERSION` in the same change.
+4. **Use is measured without people.** Every request is one `{"mcp_usage": …}` log line
+   (`quiz/api/_mcp/usage.js`: method, tool, client, outcome, an allowlist of arguments — never an
+   answer, a calculator's input or an IP), and the links it hands into the app carry
+   `utm_source=mcp`. A new tool argument stays out of the log until it is added to that allowlist.
 
 ## The Tutor
 

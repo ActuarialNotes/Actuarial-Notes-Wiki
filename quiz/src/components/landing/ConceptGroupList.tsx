@@ -101,19 +101,18 @@ function GroupSection({
     : 'group-hover:bg-accent/30'
 
   return (
-    <div className="overflow-hidden rounded-lg bg-background">
-      <div className="relative">
-        {/* Share of the exam, drawn as the row itself: the fill reaches the
-            group's percentage while collapsed and runs the full width when
-            expanded — the same background the study guide's learning
-            objectives use, in the exam's own colour (`--exam-accent-muted`,
-            scoped by the builder; card grey where no exam is in scope). The
-            selection tints below are translucent and sit on top, so a picked
-            group still shows its weight. */}
+    <div className="overflow-hidden rounded-xl bg-background">
+      <div className={cn('relative', examPercentage !== null && 'bg-card')}>
+        {/* Share of the exam, drawn exactly as the study guide's learning
+            objectives draw it (`MarkdownCallout`): a card with a line along its
+            bottom edge in the exam's own colour (`--exam-accent-vivid`, scoped
+            by the builder), drawn to the group's percentage while collapsed and
+            run the full width when open. Foreground grey where no exam is in
+            scope. */}
         {examPercentage !== null && (
           <div
             aria-hidden
-            className="absolute inset-y-0 left-0 bg-[color:var(--exam-accent-muted,hsl(var(--card)))] transition-all duration-300"
+            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] h-[3px]`}
             style={{ width: open ? '100%' : `${Math.min(100, examPercentage)}%` }}
           />
         )}
@@ -135,7 +134,7 @@ function GroupSection({
             {allSelected ? (
               <CheckMark className="h-5 w-5" />
             ) : someSelected ? (
-              <CheckMark className="h-5 w-5 text-green-500/40" />
+              <CheckMark className="h-5 w-5 opacity-40" />
             ) : (
               <Circle className="h-5 w-5 text-muted-foreground/60" />
             )}
@@ -156,8 +155,8 @@ function GroupSection({
               <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
                 {group.name}
               </span>
-              {/* The precise reading of what the fill behind the row shows. */}
-              {group.weight && <ExamWeightLabel weight={group.weight} />}
+              {/* The precise reading of what the edge under the row shows. */}
+              {group.weight && <ExamWeightLabel weight={group.weight} bar={false} />}
               <ChevronDown
                 className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
               />

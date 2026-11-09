@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examDisplayName, isNonExamRequirement, requirementDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
+import { examDisplayName, headingSlug, hrefToEntryRef, isNonExamRequirement, requirementDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
 
 describe('requirementDisplayName', () => {
   it('titles a non-exam requirement without "Exam"', () => {
@@ -78,5 +78,29 @@ describe('studyGuidesSection', () => {
     expect(studyGuidesSection('/')).toBeNull()
     expect(studyGuidesSection('/wikipedia')).toBeNull()
     expect(studyGuidesSection('/project')).toBeNull()
+  })
+})
+
+describe('heading links', () => {
+  it('slugs a heading, dropping its math', () => {
+    expect(headingSlug('The multiplication principle')).toBe('the-multiplication-principle')
+    expect(headingSlug('Arranging all $n$ objects')).toBe('arranging-all-objects')
+  })
+
+  it('keeps a [[Page#Heading]] target as the page plus its heading', () => {
+    expect(hrefToEntryRef('Combinatorics#The multiplication principle')).toEqual({
+      kind: 'concept',
+      name: 'Combinatorics',
+      heading: 'the-multiplication-principle',
+    })
+    expect(hrefToEntryRef('/wiki/concept/Combinatorics#the-multiplication-principle')).toEqual({
+      kind: 'concept',
+      name: 'Combinatorics',
+      heading: 'the-multiplication-principle',
+    })
+  })
+
+  it('reads #repeat as no heading', () => {
+    expect(hrefToEntryRef('/wiki/concept/Event#repeat')).toEqual({ kind: 'concept', name: 'Event' })
   })
 })

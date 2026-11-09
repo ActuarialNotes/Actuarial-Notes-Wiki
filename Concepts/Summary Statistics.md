@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6dddf2eb2a3f7ec113e50c8a23ef11b995009cd4cd111aef79777accbe13b16d
+  content_hash: sha256:5389ce26db611ca9d536bceb18a6e8a2dd493f4df1cbca865de006ec3503d4ca
   sources:
     - "Few, 'Effectively Communicating Numbers' (Perceptual Edge 2005), PDF p.6 (tables for look-up, graphs for shape), sha256:4de4c11e00faec2ea5fb3f4f31e240908e8356808a0253938d268359144f3a4e — https://www.perceptualedge.com/articles/Whitepapers/Communicating_Numbers.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.10 PDF p.187 (univariate results distorted), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
@@ -17,75 +17,55 @@ verification:
   log: .verify/Concepts/Summary Statistics.md
 ---
 
-**Summary statistics** condense a data set, or a fitted model, into a few numbers a reader can take in at once. For **data** they measure location, spread, shape and association, usually tabulated by group; for a **fitted model** they measure fit against complexity — the log-likelihood, [[AIC]], [[BIC]] and, in a [[Linear Mixed Model]], the estimated [[Variance Components|variance components]].
+**Summary statistics** are a few numbers that condense a data set, or a fitted model, so a reader can take it in at once. For data they measure location, spread, shape and association, usually tabulated by group. For a fitted model they measure fit against complexity: the log-likelihood, [[AIC]], [[BIC]] and, in a [[Linear Mixed Model|linear mixed model]], the estimated [[Variance Components|variance components]]. The sample mean and sample standard deviation of $x_1, \ldots, x_n$ are
 
 > $$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$$
 
 > $$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
 
-**Describing data** — the tabular half of presenting data, beside [[Data Visualization|graphs]]:
+> [!example]- Five claims are 1, 2, 2, 3 and 12 (thousands). What are the mean, median and standard deviation? {Example}
+> - The mean is $20/5 = 4$, and the median is the middle value, $2$.
+> - The squared deviations from 4 sum to $9 + 4 + 4 + 1 + 64 = 82$, so $s = \sqrt{82/4} = 4.53$.
+> - The mean sits well above the median because the losses are right-skewed.
 
-- **Location**: the [[Sample Mean|mean]] $\bar{x}$ and the [[Median|median]]. For right-skewed severity the mean sits well above the median, and the gap is itself a finding
-- **Spread**: the standard deviation $s$ ([[Sample Variance]]), the interquartile range $Q_3 - Q_1$, the range, and the [[Coefficient of Variation|coefficient of variation]] $s/\bar{x}$ for comparing spread across variables on different scales
-- **Shape and completeness**: [[Percentile|percentiles]] (the five-number summary behind a [[Box Plot]]), the share of zeros, the largest values, and the count of [[Missing Data|missing]] values in each column
-- **Categorical variables and association**: counts, proportions and — in insurance — *exposure* by level; the [[Correlation|correlation]] matrix for numeric predictors and two-way tables for categorical ones
-- **Insurance one-way tables** show exposure, claim count, [[Frequency|frequency]], [[Severity|severity]] and [[Pure Premium|pure premium]] by level, with pure premium $=$ frequency $\times$ severity. Each is a ratio of sums, not an average of ratios, and each level's figure is confounded with everything correlated with it — the reason final relativities come from a multivariate model
-- Use a table when the reader needs exact values, a graph when the message is a shape or a comparison
+## Summary statistics of data
 
-**Summarizing a fitted mixed model:**
+1. **Location**: the [[Sample Mean|mean]] $\bar{x}$ and the [[Median|median]]. For right-skewed severity the mean sits well above the median.
+2. **Spread**: the standard deviation $s$ ([[Sample Variance|sample variance]]), the interquartile range $Q_3 - Q_1$, the range, and the [[Coefficient of Variation|coefficient of variation]] $s/\bar{x}$ for comparing spread across variables on different scales.
+3. **Shape and completeness**: [[Percentile|percentiles]] (the five-number summary behind a [[Box Plot|box plot]]), the share of zeros, the largest values and the count of [[Missing Data|missing]] values in each column.
+4. **Categorical variables and association**: counts, proportions and, in insurance, exposure by level, the [[Correlation|correlation]] matrix for numeric predictors and two-way tables for categorical ones.
 
-- **$-2 \times$ log-likelihood**, by [[Restricted Maximum Likelihood|REML]] or ML, and the [[Likelihood Ratio Test|likelihood ratio test]] between nested models. Use REML to compare random effects or [[Covariance Structure|covariance structures]] with identical fixed effects; use ML to compare fixed effects
-- **AIC** $= -2\ell + 2k$ and **BIC** $= -2\ell + k\ln n$ for choices that are not nested. BIC's penalty per parameter is heavier once $\ln n > 2$, i.e. $n \geq 8$, so it favours smaller models
-- **Variance components** and the implied [[Intraclass Correlation|intraclass correlation]]. A component estimated at zero means the grouping explains nothing. Testing whether a variance is zero puts the null on the boundary of the parameter space, so the naive $\chi^2$ p-value is too large — for a single variance component it should be halved
-- **Fixed-effect tests** — a $t$ or $F$ statistic per term — guide [[Variable Selection|variable selection]], alongside the [[Model Diagnostics|diagnostic plots]] that check the assumptions behind them
+A table is used when the reader needs exact values, and a [[Data Visualization|graph]] when the message is a shape or a comparison.
 
-> [!example]- A One-Way Table by Vehicle Use {Example}
-> Personal auto experience by vehicle use:
+## One-way tables
+
+An insurance one-way table shows exposure, claim count, [[Frequency|frequency]], [[Severity|severity]] and [[Pure Premium|pure premium]] by level, with pure premium equal to frequency times severity. Each is a ratio of sums, not an average of ratios. A combined frequency is total claims over total exposure, which equals the exposure-weighted average of the group frequencies.
+
+Each level's figure is confounded with everything correlated with it, which is why final relativities come from a multivariate model. An apparent effect of one variable may be explained by a third, such as coverage mix, so the pattern is checked within subgroups.
+
+> [!example]- Pleasure use has 6,000 exposures, 300 claims and losses of 1,500,000; commute 3,000, 195 and 1,053,000; business 1,000, 90 and 540,000. What are the frequency, severity and pure premium of each, the relativities to pleasure, and the overall frequency? {Example}
+> The figures by use are:
 >
-> | Use | Exposure | Claims | Losses |
-> | :--- | ---: | ---: | ---: |
-> | Pleasure | 6,000 | 300 | 1,500,000 |
-> | Commute | 3,000 | 195 | 1,053,000 |
-> | Business | 1,000 | 90 | 540,000 |
+> | Use | Frequency | Severity | Pure premium | Relativity |
+> | :--- | ---: | ---: | ---: | ---: |
+> | Pleasure | 0.0500 | 5,000 | 250.00 | 1.000 |
+> | Commute | 0.0650 | 5,400 | 351.00 | 1.404 |
+> | Business | 0.0900 | 6,000 | 540.00 | 2.160 |
 >
-> Build the frequency, severity and pure premium table, with pure premium relativities to Pleasure, and the all-uses totals.
->
-> > [!answer]-
-> > | Use | Frequency | Severity | Pure premium | Relativity |
-> > | :--- | ---: | ---: | ---: | ---: |
-> > | Pleasure | 0.0500 | 5,000 | 250.00 | 1.000 |
-> > | Commute | 0.0650 | 5,400 | 351.00 | 1.404 |
-> > | Business | 0.0900 | 6,000 | 540.00 | 2.160 |
-> > | All | 0.0585 | 5,287 | 309.30 | |
-> >
-> > The Business relativity decomposes as $1.80$ in frequency times $1.20$ in severity, which is $2.16$. The overall frequency is $585/10{,}000 = 0.0585$, not the average of the three rows ($0.0683$), because Pleasure carries $60\%$ of the exposure. Before quoting $2.16$ as a rating factor, check what else Business use travels with — annual mileage, vehicle type — since a one-way table credits all of it to vehicle use.
+> - The business relativity is $1.80$ in frequency times $1.20$ in severity, which is $2.16$.
+> - The overall frequency is $585/10{,}000 = 0.0585$, not the average of the three rows ($0.0683$), because Pleasure carries $60\%$ of the exposure.
 
-> [!example]- Choosing a Random-Effects Structure from Summary Statistics {Example}
-> Loss ratios for $500$ policy-years are fitted by REML with identical fixed effects. Model 1 has a random intercept per policyholder ($2$ covariance parameters); Model 2 adds a random slope on year and its covariance with the intercept ($4$). The $-2$ REML log-likelihoods are $2{,}431.6$ and $2{,}420.2$. Compare them by likelihood ratio test, AIC and BIC.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{LRT} &= 2{,}431.6 - 2{,}420.2 \\
-> > &= 11.4 \\
-> > \text{AIC}_1 &= 2{,}431.6 + 2(2) \\
-> > &= 2{,}435.6 \\
-> > \text{AIC}_2 &= 2{,}420.2 + 2(4) \\
-> > &= 2{,}428.2 \\
-> > \text{BIC}_1 &= 2{,}431.6 + 2\ln 500 \\
-> > &= 2{,}444.0 \\
-> > \text{BIC}_2 &= 2{,}420.2 + 4\ln 500 \\
-> > &= 2{,}445.1
-> > \end{align*}
-> > $$
-> > The LRT of $11.4$ on $2$ degrees of freedom exceeds $\chi^2_{0.05,\,2} = 5.99$; because the slope variance is tested on its boundary, the true p-value is smaller still than the naive one, so the conclusion only strengthens. AIC also prefers Model 2. BIC, charging $\ln 500 = 6.21$ per parameter rather than $2$, narrowly prefers Model 1. When the criteria split, look at the size of the estimated slope variance and at the residual plots by policyholder before adding structure.
+## Summary statistics of a fitted mixed model
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA:** Section 8.1 covers traditional data analysis. Questions give a small table of policy or claim data and ask for a mean, median, standard deviation or a one-way frequency, severity or pure premium, or ask what a gap between mean and median says about skewness.
-> - **MAS-II:** Questions compare fitted mixed models by log-likelihood, AIC and BIC, as in the second example.
+1. $-2$ times the log-likelihood, by [[Restricted Maximum Likelihood|REML]] or ML, and the [[Likelihood Ratio Test|likelihood ratio test]] between nested models. REML compares random effects or [[Covariance Structure|covariance structures]] with identical fixed effects, and ML compares fixed effects.
+2. $\text{AIC} = -2l + 2k$ and $\text{BIC} = -2l + k\ln n$ for choices that are not nested. BIC's penalty per parameter is heavier once $\ln n > 2$, that is $n \geq 8$, so it favours smaller models.
+3. The variance components and the implied [[Intraclass Correlation|intraclass correlation]]. Testing whether a variance is zero puts the null on the boundary of the parameter space, so the naive $\chi^2$ p-value is too large. For a single variance component it is halved.
+4. A $t$ or $F$ statistic for each fixed effect, which guides [[Variable Selection|variable selection]] alongside the [[Model Diagnostics|diagnostic plots]].
 
-> [!warning]- Exam traps
-> - **Average of ratios:** An overall frequency is total claims over total exposure, not the average of the levels' frequencies.
-> - **Mean of skewed losses:** For right-skewed severity the mean sits well above the median; reporting only the mean overstates the typical claim.
-> - **One-way tables confound:** A level's relativity in a one-way table includes the effect of everything correlated with it.
+> [!example]- Two mixed models of 500 policy-years with identical fixed effects are fitted by REML: a random intercept (2 covariance parameters, $-2l = 2{,}431.6$) and a random intercept and slope (4 covariance parameters, $-2l = 2{,}420.2$). Which do the likelihood ratio test, AIC and BIC prefer? {Example}
+> - The likelihood ratio statistic is $2{,}431.6 - 2{,}420.2 = 11.4$ on 2 degrees of freedom, above $\chi^2_{0.95,2} = 5.99$, so it prefers the slope model.
+> - AIC is $2{,}431.6 + 2(2) = 2{,}435.6$ against $2{,}420.2 + 2(4) = 2{,}428.2$, so it prefers the slope model.
+> - BIC is $2{,}431.6 + 2\ln 500 = 2{,}444.0$ against $2{,}420.2 + 4\ln 500 = 2{,}445.1$, so it prefers the intercept model.
 
+> [!trap] Average of ratios
+> An overall frequency is total claims over total exposure, not the average of the levels' frequencies.

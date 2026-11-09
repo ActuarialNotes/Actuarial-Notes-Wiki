@@ -33,9 +33,9 @@ import type { BackOptions } from '@/lib/navTrail'
 const EXAM_LIST_ONLY: BackOptions = { only: path => path.split(/[?#]/)[0] === '/wiki' }
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
-  not_started: 'Not started — click to update exam status',
-  in_progress: 'In Progress — click to update exam status',
-  completed: 'Passed — click to update exam status',
+  not_started: 'Exam status: Not started',
+  in_progress: 'Exam status: In progress',
+  completed: 'Exam status: Passed',
 }
 
 // Compact exam-day label for the in-progress badge; the year is only worth the
@@ -82,7 +82,7 @@ function ExamStatusBadge({ progressKey }: { progressKey: string }) {
   const examDate = currentStatus === 'in_progress' ? targetDates[progressKey] : null
   const examDateLabel = examDate ? formatExamDate(examDate) : ''
   const title = user
-    ? (examDateLabel ? `Exam ${examDateLabel} — click to update exam status` : STATUS_TITLE[currentStatus])
+    ? (examDateLabel ? `Exam on ${examDateLabel}` : STATUS_TITLE[currentStatus])
     : 'Sign in to track progress'
 
   // Nothing beside the title until the exam is actually being tracked; the
@@ -160,7 +160,7 @@ export default function WikiExam() {
   // so the strip says which exam you are in with the object you
   // picked it with, rather than restating the heading a few pixels below it.
   const pageIcon = useMemo(() => (
-    <ExamLogo examKey={progressKey} size="md" />
+    <ExamLogo examKey={progressKey} size="strip" />
   ), [progressKey])
 
   // Always back to the exam list: the browser's Back when the reader came
@@ -273,13 +273,14 @@ export default function WikiExam() {
   const smallTitleBadge = useMemo(() => {
     const examLabel = extractedTitle ?? examDisplayName(examFileName)
     return (
-      <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
+      // The exam's scope, so what is chosen in the strip fills with its colour.
+      <span className="inline-flex items-center gap-0.5 not-prose shrink-0" style={examAccentStyle(progressKey)}>
         <ExamVersionMenu progressKey={progressKey} />
         <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={examLabel} />
         <ExamSyllabusButton examId={wikiExamId} examLabel={examLabel} />
         <ExamQuizButton examFileName={examFileName} />
         {/* PCPA's second part: the project, which the syllabus page can't be. */}
-        {progressKey === 'CAS-PCPA' && <ExamProjectButton iconOnlyOnPhone />}
+        {progressKey === 'CAS-PCPA' && <ExamProjectButton />}
       </span>
     )
   }, [progressKey, wikiExamId, extractedTitle, examFileName])
@@ -392,7 +393,7 @@ export default function WikiExam() {
     ref: titleRef,
     open: menuOpen,
     onToggle: () => setMenuOpen(v => !v),
-    label: `${extractedTitle ?? examDisplayName(examFileName)} — page actions`,
+    label: `Actions for ${extractedTitle ?? examDisplayName(examFileName)}`,
   }), [menuOpen, extractedTitle, examFileName])
 
   // The menu's Today's Study Plan, walked right here: the popup opens on the

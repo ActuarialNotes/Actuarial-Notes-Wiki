@@ -1,0 +1,69 @@
+{
+  "dataset": "pc",
+  "title": "Property and casualty companies",
+  "publisher": "Office of the Superintendent of Financial Institutions (OSFI)",
+  "page": "https://open.canada.ca/data/en/dataset/4c6c515f-7c44-4bb6-ab56-c5f79f75f705",
+  "api": "https://open.canada.ca/data/en/api/3/action/datastore_search",
+  "package_last_modified": "2026-10-21T13:51:06.810918",
+  "period": "2026Q2",
+  "units": "$ thousands (ratios in %), as filed",
+  "licence": {
+    "name": "Open Government Licence – Canada",
+    "url": "https://open.canada.ca/en/open-government-licence-canada",
+    "attribution": "Contains information licensed under the Open Government Licence – Canada."
+  },
+  "returns": {
+    "PC1": {
+      "resource_id": "d4c1d98d-c19e-4730-ab2d-6e64160351a7",
+      "resource": "PC1 - P&C Core Financial Statement Return (Active)",
+      "resource_last_modified": "2026-10-09T19:26:50.484740",
+      "rows": 16206,
+      "pages": 17,
+      "read_at": "2026-11-09T04:23:57+00:00",
+      "content_sha256": "sha256:bd96fd965cbd2140877937450f838d0d4acd132ae4a0603e7306c67395f8240a"
+    },
+    "PC2": {
+      "resource_id": "1d3afc80-6482-4b27-93e9-91127825232f",
+      "resource": "PC2 - P&C Supervisory Quarterly Return (Active)",
+      "resource_last_modified": "2026-10-09T19:32:54.923884",
+      "rows": 178785,
+      "pages": 179,
+      "read_at": "2026-11-09T04:25:43+00:00",
+      "content_sha256": "sha256:c582ea2d345cc64a65c56423dd494c75ab60019e0395fbbdb1e2997d170946fc"
+    },
+    "PC4": {
+      "resource_id": "2658af9f-0676-4d61-8e49-fc8fa612bc69",
+      "resource": "PC4 - P&C Minimum Capital Test and Branch Adequacy of Assets Test (Active)",
+      "resource_last_modified": "2026-10-09T19:42:17.166135",
+      "rows": 7953,
+      "pages": 8,
+      "read_at": "2026-11-09T04:24:05+00:00",
+      "content_sha256": "sha256:0beb5f7c7a5ebd73045a70a816115475e46299f5ddd1202e6a264e032f4b9321"
+    }
+  },
+  "institutions": 129,
+  "aggregates": [
+    "Total Canadian Property & Casualty",
+    "Total Foreign Property & Casualty"
+  ],
+  "checks": {
+    "balance_sheet": {
+      "companies": 129,
+      "balanced": 127,
+      "unbalanced": 2,
+      "lines_sum": 129,
+      "lines_differ": 0
+    },
+    "mct_ratio": {
+      "filed": 128,
+      "exact": 116,
+      "within_rounding": 12,
+      "mismatch": 0,
+      "incomplete": 0
+    },
+    "findings": {
+      "mismatch": 2
+    }
+  },
+  "note": "Only non-zero cells are published. Aggregate rows are OSFI's column sums (they add up ratios too) — never a company, never used for a ratio."
+}

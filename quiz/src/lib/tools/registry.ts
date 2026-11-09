@@ -36,6 +36,8 @@ import { expectedPayment } from './distributions/expectedPayment'
 import { lifeTable } from './data/lifeTable'
 import { priceIndex } from './data/priceIndex'
 import { yieldCurve } from './data/yieldCurve'
+import { insurerReturn } from './data/insurerReturn'
+import { mctRatio } from './capital/mctRatio'
 
 /** Bumped whenever the engine's shared behaviour (input reading, the envelope) changes. */
 export const ENGINE_VERSION = '0.1.0'
@@ -49,6 +51,7 @@ export const AREAS: { id: PracticeArea; label: string }[] = [
   { id: 'distributions', label: 'Loss distributions' },
   { id: 'credibility', label: 'Credibility' },
   { id: 'finance', label: 'Financial mathematics' },
+  { id: 'capital', label: 'Risk and capital' },
 ]
 
 /** Every tool, in the order a chain runs within each area. */
@@ -56,6 +59,7 @@ export const TOOLS: ToolSpec[] = [
   lifeTable,
   priceIndex,
   yieldCurve,
+  insurerReturn,
   ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
@@ -90,6 +94,7 @@ export const TOOLS: ToolSpec[] = [
   bondAmortization,
   durationConvexity,
   redingtonImmunization,
+  mctRatio,
 ]
 
 const BY_ID = new Map(TOOLS.map(t => [t.id, t]))

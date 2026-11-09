@@ -6,6 +6,7 @@
 
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { vaultMediaUrl } from '@/lib/vaultAssets'
+import { BREADCRUMB_RE, stripFrontmatter } from '@/lib/wikiParser'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
 const GITHUB_BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
@@ -81,10 +82,13 @@ export function rewriteWikilinks(md: string): string {
 
       return line.replace(linkRe, (_full, target: string, display?: string) => {
         const t = target.trim()
-        const label = (display ?? '').trim() || (t.includes('/') ? t.split('/').pop()! : t)
-        const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: t }
+        const shown = t.split('#')[0]!
+        const label = (display ?? '').trim() || (shown.includes('/') ? shown.split('/').pop()! : shown)
+        const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: shown }
         let route = wikiRoute(ref)
-        if (inExample) {
+        // `[[Page#Heading]]` keeps its heading, so the popup opens at it.
+        if (ref.heading) route += `#${ref.heading}`
+        else if (inExample) {
           const key = ref.name.toLowerCase()
           if (seen.has(key)) route += '#repeat'
           else seen.add(key)
@@ -106,7 +110,8 @@ export function extractImages(markdown: string): Array<{ src: string; alt: strin
     if (!m) continue
     const target = m[1].trim()
     if (!IMAGE_EXT_RE.test(target)) continue
-    const display = m[2]?.trim() ?? ''
+    // `|340` (or `|340x200`) is Obsidian's display width, not a label.
+    const display = (m[2]?.trim() ?? '').replace(/^\d+(?:x\d+)?$/, '')
     const alt = display || (target.includes('/') ? target.split('/').pop()! : target)
     const src = rawGithubUrl(target)
     let caption = m[3].trim()
@@ -138,13 +143,39 @@ export function extractImages(markdown: string): Array<{ src: string; alt: strin
 // file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
 // or [[Wiki]] / [[Concepts]] / **Concept Name**
 // These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
-export const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
-
-export function stripFrontmatter(raw: string): string {
-  return raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
-}
+// Pure and import-free in wikiParser, so the vite config can read a page the
+// way the app does (the podcast's build-time script hashes, lib/podcast.ts).
+export { BREADCRUMB_RE, stripFrontmatter }
 
 const CALLOUT_TYPE_RE = /^\s*\[!/
+
+// A line that is only a picture — the figure a concept page opens with
+// (`![[Media/Figures/X.svg|340]]`), or a markdown image — or only an Obsidian
+// comment. None of it is prose, so none of it is the definition.
+const NON_PROSE_LINE_RE = /^(?:!\[\[[^\]]*\]\]|!\[[^\]]*\]\([^)]*\)|%%.*%%)\s*$/
+
+// Splits a concept page's definition — its first paragraph of prose — from
+// the rest of the body, so the flashcard back can show the definition and
+// "expand" can show only what follows. Concept pages open with their figure
+// (docs/concept-figures.md), so leading pictures are skipped rather than taken
+// for the paragraph (the figure is the Images view's).
+export function splitDefinition(markdown: string): { paragraph: string; rest: string } {
+  const cleaned = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+  const lines = cleaned.split('\n')
+  const isBreak = (t: string) =>
+    t === '' || /^[*+-] /.test(t) || /^\d+\. /.test(t) || t.startsWith('>') || t.startsWith('#') ||
+    t.startsWith('|') || NON_PROSE_LINE_RE.test(t)
+  let first = -1
+  for (let i = 0; i < lines.length; i++) {
+    if (!isBreak(lines[i].trim())) { first = i; break }
+  }
+  if (first < 0) return { paragraph: '', rest: '' }
+  let end = first
+  while (end < lines.length && !isBreak(lines[end].trim())) end++
+  const paragraph = lines.slice(first, end).map(l => l.trim()).join('\n')
+  const rest = lines.slice(end).join('\n')
+  return { paragraph, rest }
+}
 
 export function extractMathBlockquotes(raw: string): string[] {
   const md = stripFrontmatter(raw).replace(BREADCRUMB_RE, '')

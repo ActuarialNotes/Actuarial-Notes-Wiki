@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
@@ -9,7 +9,10 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
+import { ExamLogo } from '@/components/ExamLogo'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
+import { QuizSignInPrompt } from '@/components/QuizSignInPrompt'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { SelfGradeScreen } from '@/components/SelfGradeScreen'
@@ -23,15 +26,15 @@ import { mentionWalk } from '@/lib/conceptMentions'
 import { loadConceptLinks, parseConceptLinksParam } from '@/lib/quizConceptLinks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
-import { ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
+import { partResponses, ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
-import { difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
+import { DIFFICULTY_LEVELS, difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
+import { QuizSettingsButton, QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
 import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
 import { reportRaidHit } from '@/lib/actuaria/raidClient'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
@@ -45,6 +48,16 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
+import { LoadingMark } from '@/components/LoadingMark'
+import { SpreadsheetButton } from '@/components/quiz/SpreadsheetButton'
+import { spreadsheetProfileFor } from '@/data/examSpreadsheets'
+import { examAccentStyle } from '@/lib/examColors'
+import { lazyRoute } from '@/lib/lazyRoute'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
+
+// Open in Spreadsheet (docs/question-spreadsheet.md): Fortune-sheet is the
+// heaviest thing the quiz can show, so the pane is its own chunk.
+const { Component: QuestionSheet } = lazyRoute(() => import('@/components/quiz/QuestionSheet'))
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -102,6 +115,7 @@ export default function Quiz() {
       exam: searchParams.get('exam') ?? undefined,
       topics: topicsParam ? topicsParam.split(',') : undefined,
       concepts: conceptsParam ? conceptsParam.split(',') : undefined,
+      cover: searchParams.get('plan') === '1',
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
       difficulties: difficultyLevelsFromParam(searchParams.get('levels')) ?? undefined,
       difficultyTarget: difficultyFromParam(searchParams.get('level')) ?? undefined,
@@ -115,6 +129,16 @@ export default function Quiz() {
   }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const { questions, loading, error } = useQuestions(filters)
+
+  // What the setup card's icons showed, kept in the header while the quiz runs.
+  // A link with no `levels` draws from every level (an old `level` lean only
+  // weights the draw, so it is every level too).
+  const quizSettings: QuizSettings = useMemo(() => ({
+    levels: filters.difficulties ?? (filters.difficulty ? [filters.difficulty] : [...DIFFICULTY_LEVELS]),
+    timed,
+    revealDuring: reveal === 'during',
+    conceptLinks: linkConcepts,
+  }), [filters, timed, reveal, linkConcepts])
 
   const {
     questions: storeQuestions,
@@ -140,6 +164,10 @@ export default function Quiz() {
     setPending,
     conceptListDismissed,
     dismissConceptList,
+    sheets,
+    sheetOpen,
+    setSheet,
+    setSheetOpen,
   } = useQuizStore()
 
   // A quiz outlives this page: the reader can go anywhere in the app mid-quiz
@@ -195,6 +223,10 @@ export default function Quiz() {
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  // Today's quiz opened from the daily email by a reader who isn't signed in:
+  // once they start it, offer a sign-in (back to this same quiz) before the
+  // first question. They can carry on as a guest; the quiz works either way.
+  const [signInPromptDismissed, setSignInPromptDismissed] = useState(false)
   const [showIncompletePartsDialog, setShowIncompletePartsDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -209,6 +241,7 @@ export default function Quiz() {
   // keyed by `${questionId}__${partLabel}`
   const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   // Where the current question came from — its sitting and its vault file.
   const [showQuestionInfo, setShowQuestionInfo] = useState(false)
 
@@ -300,6 +333,9 @@ export default function Quiz() {
   )
   const questionOnScreen =
     status !== 'idle' && status !== 'complete' && !showConceptList && !awaitingConceptListDecision
+  const showSignInPrompt =
+    quizFrom === 'email' && !user && !signInPromptDismissed &&
+    questionOnScreen && Object.keys(responses).length === 0
   useEffect(() => {
     if (timeAllowance !== null && questionOnScreen && timer === null) startTimer(timeAllowance)
   }, [timeAllowance, questionOnScreen, timer, startTimer])
@@ -379,7 +415,7 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo || gradePrompt !== null
+  const anyDialogOpen = showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showSettings || showQuestionInfo || gradePrompt !== null
 
   // Per-part grades for a multi-part question, read back from the store keyed
   // by part label (the store keys them as `${id}__${label}`).
@@ -533,7 +569,8 @@ export default function Quiz() {
       // the quiz was started, never onto a quiz that is over.
       navigate(`/review?${searchParams.toString()}`, { replace: true, state: REPLACE_AS_PUSH })
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Failed to save quiz. Please try again.')
+      console.error('quiz: completing the quiz failed:', err)
+      setSubmitError('Your answers couldn’t be saved just now. Check your connection and press Finish again.')
       setIsSubmitting(false)
     }
   }
@@ -552,10 +589,7 @@ export default function Quiz() {
   // hold the quiz up.
   if ((!resumed && (loading || (status === 'idle' && !error))) || awaitingConceptListDecision) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading questions…</p>
-      </div>
+      <LoadingMark className="flex items-center justify-center min-h-[60vh]" />
     )
   }
 
@@ -565,10 +599,10 @@ export default function Quiz() {
       <div className="container max-w-md mx-auto px-4 py-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-destructive">Failed to load questions</CardTitle>
+            <CardTitle className="text-destructive">The questions didn’t load</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">{error}</p>
+            <p className="text-sm text-muted-foreground">Check your connection and try again.</p>
             <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
               Try again
             </Button>
@@ -588,7 +622,7 @@ export default function Quiz() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              No questions match your selected filters. Try different topics or difficulty.
+              No questions match the topics and difficulty you picked. Pick more of either and start again.
             </p>
             <Button onClick={back.go} variant="outline" className="w-full">
               Back to {back.label}
@@ -607,6 +641,7 @@ export default function Quiz() {
       <PreQuizConcepts
         concepts={newQuizConcepts}
         planConcepts={planConcepts}
+        exam={EXAM_LABEL_TO_ID[storeQuestions[0]?.exam ?? '']}
         onStart={dismissConceptList}
         onQuit={handleQuit}
       />
@@ -640,8 +675,14 @@ export default function Quiz() {
   const setPartGrade = (partLabel: string, grade: SelfGrade) =>
     setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
 
+  // The exam this question is from, as its logo in the header's right corner.
+  const examLogoKey = EXAM_LABEL_TO_ID[currentQuestion.exam]
+  // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet offers.
+  const sheetProfile = spreadsheetProfileFor(examLogoKey)
+
   return (
     <>
+    <div className="question-sheet-host">
     <div
       className="container max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5"
       // Below lg the concept popup docks as a bottom sheet; keep the question
@@ -657,20 +698,13 @@ export default function Quiz() {
           className="-ml-3 h-11 px-3 text-base text-muted-foreground hover:text-foreground"
         >
           <X className="h-5 w-5 mr-1.5" />
-          Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
+          {/* On a phone the word after Quit gives its room to the settings. */}
+          Quit <span className="sr-only sm:not-sr-only sm:ml-1">{mode === 'mock-exam' ? 'exam' : 'quiz'}</span>
         </Button>
 
-        <div className="flex items-center gap-2">
-          <span
-            className={
-              'inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full border ' +
-              (mode === 'mock-exam'
-                ? 'bg-primary/10 text-primary border-primary/30'
-                : 'bg-muted text-muted-foreground border-border')
-            }
-          >
-            {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
-          </span>
+        <div className="flex min-w-0 items-center gap-2">
+          <QuizSettingsButton settings={quizSettings} open={showSettings} onOpenChange={setShowSettings} />
+          {examLogoKey && <ExamLogo examKey={examLogoKey} size="sm" />}
           {timer !== null && (
             <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
           )}
@@ -707,6 +741,10 @@ export default function Quiz() {
           isFlagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
           info={
+            <>
+            {sheetProfile && (
+              <SpreadsheetButton open={sheetOpen} onToggle={() => setSheetOpen(!sheetOpen)} />
+            )}
             <QuestionInfoButton
               question={currentQuestion}
               open={showQuestionInfo}
@@ -716,9 +754,26 @@ export default function Quiz() {
               showStudyMeta={isLocked}
               onOpenConcept={openTaggedConcept}
             />
+            </>
           }
         />
       </div>
+
+      {showSignInPrompt && (
+        <QuizSignInPrompt
+          onSignIn={() => navigate('/auth', { state: { from: `/quiz${search}` } })}
+          onContinue={() => setSignInPromptDismissed(true)}
+        />
+      )}
+
+      {showSettings && (
+        <QuizSettingsDialog
+          settings={quizSettings}
+          examKey={examLogoKey}
+          practiceExam={mode === 'mock-exam'}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
 
       {showQuitDialog && (
         <QuitQuizDialog
@@ -744,8 +799,11 @@ export default function Quiz() {
           parts={(currentQuestion.parts ?? []).filter(p => gradePrompt.includes(p.label))}
           grades={partGradeMap}
           onGrade={setPartGrade}
+          responses={partResponses(displayAnswer)}
+          questionId={currentQuestion.id}
+          questionStem={currentQuestion.stem}
           isOnlyPart={(currentQuestion.parts ?? []).length === 1}
-          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? 'Exam' : 'Quiz'}` : 'Next Question'}
+          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}` : 'Next Question'}
           onContinue={() => {
             setGradePrompt(null)
             moveOn()
@@ -763,7 +821,10 @@ export default function Quiz() {
 
       {/* The sheet Next and Back turn. A tap on a concept it names opens that
           concept (handleMentionClick); everything else passes through. */}
-      <div ref={cardRef} className="paper-sheet mt-4" onClick={handleMentionClick}>
+      {/* The question has no card of its own — it lies on the page — but the
+          sheet still carries the page's colour, so while Next flicks it off the
+          pile the outgoing question covers the one rising beneath it. */}
+      <div ref={cardRef} className="paper-sheet mt-4 bg-background" onClick={handleMentionClick}>
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it
@@ -786,6 +847,7 @@ export default function Quiz() {
           essaySelfGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
           onEssaySelfGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
           conceptNames={conceptNames}
+          spreadsheet={!!sheetProfile}
         />
       </div>
 
@@ -836,7 +898,7 @@ export default function Quiz() {
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >
                     {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                    Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                    Finish {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
                   </Button>
                 ) : (
                   <Button
@@ -853,6 +915,21 @@ export default function Quiz() {
         </div>
       )}
     </div>
+    </div>
+    {sheetOpen && sheetProfile && (
+      <div style={examLogoKey ? examAccentStyle(examLogoKey) : undefined}>
+        <Suspense fallback={null}>
+          <QuestionSheet
+            question={currentQuestion}
+            mode={mode}
+            profile={sheetProfile}
+            workbook={sheets[currentQuestion.id]}
+            onWorkbookChange={setSheet}
+            onClose={() => setSheetOpen(false)}
+          />
+        </Suspense>
+      </div>
+    )}
     <ConceptPopup />
     </>
   )

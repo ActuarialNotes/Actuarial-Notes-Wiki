@@ -1,75 +1,62 @@
 ---
 verification:
-  status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:124d760db5ad297ccf6a089e946879418a441a4727a91700aa6e3fd185ddd5fd
+  content_hash: sha256:2ac0277246b7077b8dd08772e99f830e67eda64abc4f7b24b437f893a4941c28
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 4 pp.22-23 (PDF pp.30-31), Thm 1.4 p.24 (PDF p.32), Thm 3.8 Inclusion-Exclusion Principle p.104 (PDF p.112), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q1 and Q3 p.2, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B), A−B=A∩B^c; Example 1.11 either but not both), fetched 2026-10-30, sha256:984952f1ea762230cb0c228497cb48dced7032a55616e2ef6ca339338bd2fdfb — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.4.1 Independence (A, B independent ⇒ A and B^c, A^c and B independent), fetched 2026-10-30, sha256:d3a628b19b7630f57b78839bd1c92defb3988d4897dcdab840d5811dc5522dbd — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, difference rule, increasing property, Bonferroni's inequality, two-event bounds P(A)+P(B)−1 ≤ P(A∩B), three-event exercise (exactly two = 0.21 reproduced by Σpairwise − 3·triple), sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 property 4, Thm 1.2 (pairwise disjoint), Thm 1.3 (P(E)=Σ P(E∩A_i) over a partition), Thm 1.4 with proof 'added twice … subtracted once' (pp.22-24, PDF pp.30-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.8 Inclusion-Exclusion Principle and proof: an outcome in k sets counted C(k,1)−C(k,2)+…=1 times (pp.104-105, PDF pp.112-113), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.3.3 Finding Probabilities (P(A−B)=P(A)−P(A∩B); inclusion-exclusion for two and three events; complement), read 2026-11-06, sha256:256f9c0f56e043d695aa7631cad51a37c5fcffc82a2c24ff9ab5519641f8025b — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.1 Independence (complements of independent events independent; P(∪A_i)=1−∏(1−P(A_i)); warning not to confuse independence with disjointness), read 2026-11-06, sha256:fcf1aacf872ba059ed46a7a386f0e4725016d0ae10db09bd5d4f77d9883c35a7 — https://www.probabilitycourse.com/chapter1/1_4_1_independence.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Probability Spaces > Probability Measures (Boole's inequality; Bonferroni two-event bounds P(A)+P(B)−1 ≤ P(A∩B) ≤ P(B); general Bonferroni inequalities: truncated inclusion-exclusion sum is an upper bound if it ends on a positive term (m odd), lower bound if negative), read 2026-11-06, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2), Topic 2 outcome b (PDF p.3), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probability Addition Rule.md
 ---
 
-The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs, correcting for the double-counting of outcomes in their intersection.
-- Also known as the Inclusion-Exclusion Principle
-- When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition
-- For three events the rule extends to include all pairwise and triple intersections:
-
-> $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
-
-> $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
-
 ![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
-### Only one, exactly one, exactly two
+The **Probability Addition Rule** gives the [[Probability|probability]] that at least one of two [[Event|events]] occurs. For events $E$ and $F$, that probability is
 
-- "$A$ but not $B$" has probability $P(A \cap B^c) = P(A) - P(A \cap B)$: subtract the joint probability with $B$ from the probability of $A$.
-- "Exactly one of $A$ and $B$" is the union of the two mutually exclusive events ($A$ occurs and $B$ does not) and ($B$ occurs and $A$ does not), so its probability is the sum of the two "only" probabilities.
+> $$P(E \cup F) = P(E) + P(F) - P(E \cap F)$$
 
-> $$
-> \begin{align*}
-> P(\text{exactly one of } A, B) &= P(A \cap B^c) + P(A^c \cap B) \\
-> &= P(A) + P(B) - 2P(A \cap B)
-> \end{align*}
-> $$
+- $P(E \cap F)$ is the probability that both $E$ and $F$ occur.
 
-- Equivalently, the probability that exactly one of $A$ or $B$ occurs is $P(A \cup B) - P(A \cap B)$: the union with the intersection taken out.
-- When $A$ and $B$ are independent, so are $A$ and $B^c$, and each "only" probability is a product: exactly one has probability $P(A)(1 - P(B)) + (1 - P(A))P(B)$.
-- For three events, each "exactly two" region is a pairwise intersection less the triple intersection, so:
+When $E$ and $F$ are [[Mutually Exclusive Events|mutually exclusive]], $P(E \cap F) = 0$ and the rule is the sum $P(E) + P(F)$.
 
-> $$P(\text{exactly two of } A, B, C) = P(A \cap B) + P(A \cap C) + P(B \cap C) - 3P(A \cap B \cap C)$$
+> [!idea] The idea
+> Adding $P(E)$ and $P(F)$ counts the outcomes in both events twice, so the overlap is subtracted once.
 
-- When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.
-- When some pairs are mutually exclusive, only the remaining pairs contribute: if $A \cap C = B \cap C = \emptyset$, exactly two of the three can occur only as $A \cap B$, so the probability that exactly two occur is $P(A \cap B)$.
+> [!example]- Over a year, 30% of an insurer's policyholders file a property claim, 20% file a liability claim and 8% file both. What is the probability that a policyholder files at least one of the two? {Example}
+> - Let $E$ be "a property claim" and $F$ be "a liability claim".
+> - The probability of at least one is $P(E \cup F)$, which is $0.30 + 0.20 - 0.08 = 0.42$.
 
-### When the overlap is not given
+## Counting the elements of a union
 
-- If $P(A \cap B)$ is not given, it is only bounded: $A \cap B$ lies inside both events, and $P(A \cup B) \leq 1$ forces $P(A \cap B) \geq P(A) + P(B) - 1$.
+The same rule counts the elements of a union of two sets:
 
-> $$\max(0,\ P(A) + P(B) - 1) \leq P(A \cap B) \leq \min(P(A),\ P(B))$$
+> $$|E \cup F| = |E| + |F| - |E \cap F|$$
 
-- So $P(A \cup B)$ ranges from $\max(P(A), P(B))$, when one event contains the other, up to $\min(1, P(A) + P(B))$, and $P(\text{neither}) = 1 - P(A \cup B)$ ranges accordingly.
+> [!example]- An agent has 100 clients. 60 have an auto policy, 45 have a homeowners policy and 25 have both. How many clients have neither policy? {Example}
+> - The clients with at least one policy number $60 + 45 - 25 = 80$.
+> - Neither is the rest of the 100, so $100 - 80 = 20$ clients have neither policy.
 
-> [!example]- Only, Exactly One, and Bounds {Example}
-> (a) $P(A) = 0.5$, $P(B) = 0.4$ and $P(A \cap B) = 0.15$. Find the probability that exactly one of $A$, $B$ occurs. (b) If instead only $P(A) = 0.5$ and $P(B) = 0.7$ are known, what values can $P(A \cup B)$ take?
->
-> > [!answer]-
-> > (a) The two "only" probabilities are $0.5 - 0.15 = 0.35$ and $0.4 - 0.15 = 0.25$, so
-> > $$P(\text{exactly one}) = 0.35 + 0.25 = 0.60$$
-> > Check: $P(A \cup B) = 0.5 + 0.4 - 0.15 = 0.75$, and $0.75 - 0.15 = 0.60$.
-> >
-> > (b) $P(A \cap B)$ lies between $0.5 + 0.7 - 1 = 0.2$ and $\min(0.5, 0.7) = 0.5$, so $P(A \cup B) = 1.2 - P(A \cap B)$ lies between $0.7$ and $1$, and $P(\text{neither})$ between $0$ and $0.3$.
+## Finding the probability of an intersection
 
-> [!example]- Probability of at Least One Coverage Trigger {Example}
-> For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?
->
-> > [!answer]-
-> > Let $F$ = fire and $L$ = flood. Applying the addition rule:
-> > $$P(F \cup L) = P(F) + P(L) - P(F \cap L) = 0.05 + 0.03 - 0.01 = 0.07$$
-> > There is a 7% probability of experiencing at least one loss in the year.
+When the union is known, the rule gives the probability that both events occur:
+
+> $$P(E \cap F) = P(E) + P(F) - P(E \cup F)$$
+
+> [!example]- A policyholder has probability 0.75 of no emergency room visit this year, 0.80 of no hospital stay and 0.62 of neither. What is the probability of at least one emergency room visit and at least one hospital stay? {Example}
+> - Let $E$ be "at least one emergency room visit" and $F$ be "at least one hospital stay", so $P(E) = 0.25$ and $P(F) = 0.20$.
+> - "Neither" is the complement of the union, so $P(E \cup F) = 1 - 0.62 = 0.38$.
+> - The probability of both is $P(E \cap F)$, which is $0.25 + 0.20 - 0.38 = 0.07$.
+
+For three or more events, the rule extends to the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]].
+
+> [!trap] Independent read as mutually exclusive
+> [[Independent Events|Independent]] events with positive probabilities overlap, with $P(E \cap F) = P(E)\,P(F)$. If property and liability claims were independent, the overlap would be $0.30 \times 0.20 = 0.06$ and the union $0.30 + 0.20 - 0.06 = 0.44$. The plain sum, $0.50$, is wrong.

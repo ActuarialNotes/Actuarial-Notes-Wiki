@@ -1,61 +1,65 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4884263d2cfeb2a28c88c4f7ac6ca01f449722582b474d32815cfd01a96ac5ab
+  content_hash: sha256:e2ac338e6a0b163a6333b5a8e8b20f6a53f5f7e587353bca555dc1a643cd4df9
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric p.185 (PDF p.193), negative binomial pp.186-187 (PDF pp.194-195), hypergeometric p.193 (PDF p.201); 6.2 Exercise 11 p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Tables for Exam C (Fall 2009), Appendix B.2 (a,b,0) class: B.2.1.1 Poisson (PDF p.14); B.2.1.2 geometric, B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §3.2.1 CDF: F_X(x_k) - F_X(x_k - eps) = P_X(x_k), sha256:1684aa6588e7d87737c1d625bd7a606c6f1a6954681ff1a3cd02b084eec1a151 — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §1.3.2 Axiom 3 (additivity over disjoint events), sha256:f8ea87ae887db4bef1c3ff1b41879371f1573edb8d70c80df361acd52f45fb1d — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 geometric P(T=j)=q^(j-1)p p.185, negative binomial pp.186-187, Poisson as binomial limit p.189, hypergeometric p.193 (PDF pp.193-195, 197, 201); §6.2 Ex. 11 discrete uniform E=(n+1)/2 p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 2.7 Distribution and Quantile Functions: for a discrete distribution f(x) = F(x) - F(x^-), sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 13.4 The Poisson Distribution: P(N_t=n) = e^{-rt}(rt)^n/n!; modes at a-1 and a for integer a; sum of independent Poissons; N_s given N_t = n is binomial(n, s/t), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 geometric P(T=j) = q^(j-1)p p.185 (PDF p.193); P(T>k) = q^k and memoryless P(T>r+s|T>r) = q^s, also obeyed by the exponential, p.186 (PDF p.194); §6.2 Example 6.19 E(T)=1/p, V(T)=q/p^2 p.262 (PDF p.270), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables (PDF p.3); Topic 3 Multivariate Random Variables incl. order statistics (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Discrete Univariate Distributions.md
 ---
 
-A **Discrete Univariate Distribution** describes the probability law of a single [[Random Variable]] $X$ that takes on a countable set of values.
-- The probability mass function (PMF) $f(k)$ specifies the probability that the variable takes a particular distinct value $k$
-- The PMF must satisfy $f(k) \geq 0$ for all $k$ and $\sum_{k} f(k) = 1$:
-
-> $$P(X = k) = f(k), \quad k \in \{x_1, x_2, \ldots\}$$
-
-- The cumulative distribution function (CDF) specifies the probability that the variable is at most $x$:
-
-> $$F(x) = P(X \leq x)$$
-
-> $$= \sum_{k \leq x} f(k)$$
-
-- **Back from tail or cumulative probabilities.** For an integer-valued $X$ the PMF is recovered by differencing:
-
-> $$f(k) = P(X \geq k) - P(X \geq k+1) = F(k) - F(k-1)$$
-
-- At the largest possible value $m$, $f(m) = P(X \geq m)$, and for a non-negative $X$, $f(0) = 1 - P(X \geq 1)$.
-
-## Choosing the right one
-
-Most of the difficulty is identification, not computation. Read the question for **what is being counted** and **whether the trial count is fixed**:
-
-- Successes in a **fixed** number of independent trials → [[Binomial Distribution]] $(n,p)$, with $E[X] = np$
-- Successes in a **fixed** number of draws taken **without replacement** from a finite pool → [[Hypergeometric Distribution]] $(N,K,n)$, with $E[X] = nK/N$
-- **Trials until** the first success, the trial count not fixed in advance → [[Geometric Distribution]] $(p)$, with $E[X] = 1/p$
-- **Trials until** the $r$-th success → [[Negative Binomial Distribution]] $(r,p)$, with $E[X] = r/p$
-- Events occurring over a fixed interval of **time or space**, with no trial count at all → [[Poisson Distribution]] $(\lambda)$, with $E[X] = \lambda$
-- One of the integers $1, \ldots, n$, each equally likely → [[Uniform Discrete|Discrete Uniform]], with $E[X] = (n+1)/2$ (on $a, \ldots, b$ the mean is $(a+b)/2$)
-
-- **Binomial vs. hypergeometric** turns entirely on replacement. When the population is large relative to the sample the two nearly agree, and the binomial is the intended shortcut.
-- **Binomial vs. Poisson**: a fixed number of trials points to binomial; "per year", "per hour", "per 100 policies" with no trial count points to Poisson.
-- The **variance-to-mean ratio** is a fast identification check: it is $< 1$ for binomial, $= 1$ for Poisson, and $> 1$ for the negative binomial counted as *failures* before the $r$-th success ($\text{Var}/E = 1/p$). The trials count above has ratio $(1-p)/p$, below 1 whenever $p > 1/2$, so apply the test to the failures form.
-- For "at least one", reach for the complement $1 - P(X=0)$ rather than summing the tail.
-
 ![[Media/Figures/Discrete_Univariate_Distributions.svg|340]]
 
-> [!example]- PMF Verification for a Simple Discrete Distribution {Example}
-> A random variable $X$ has PMF $f(k) = c \cdot k$ for $k = 1, 2, 3, 4$. Find $c$ and compute $P(X \leq 3)$.
->
-> > [!answer]-
-> > For $f$ to be a valid PMF we need $\sum_{k=1}^{4} c \cdot k = 1$, so
-> > $$c(1 + 2 + 3 + 4) = 10c = 1 \implies c = \frac{1}{10}$$
-> > Then
-> > $$P(X \leq 3) = F(3) = \frac{1}{10}(1+2+3) = \frac{6}{10} = 0.6$$
+A **Discrete Univariate Distribution** is the probability distribution of a single [[Discrete Random Variable|discrete random variable]] $X$. It is given by the [[Probability Mass Function (PMF)|probability mass function]] $f(k) = P(X = k)$, whose values over all $k$ add to 1:
+
+> $$\sum_k f(k) = 1$$
+
+- $f(k) \ge 0$ for every $k$.
+
+> [!example]- A policy's number of claims $X$ has PMF $f(k) = ck$ for $k = 1, 2, 3, 4$. What are $c$ and $P(X \le 3)$? {Example}
+> - The probabilities must add to 1, so $c(1 + 2 + 3 + 4) = 1$.
+> - $10c = 1$, so $c = 0.1$.
+> - $P(X \le 3) = 0.1(1 + 2 + 3) = 0.6$.
+
+## The PMF from the CDF
+
+The [[Cumulative Distribution Function (CDF)|cumulative distribution function]] $F(k) = P(X \le k)$ steps up by $f(k)$ at each value $k$, so for a count
+
+> $$f(k) = F(k) - F(k - 1)$$
+
+- In the same way, $f(k)$ is the drop between neighbouring tail probabilities, $P(X \ge k) - P(X \ge k + 1)$.
+
+> [!example]- The number of accidents $X$ in a month is at most 3, with $P(X \ge 1) = 0.6$, $P(X \ge 2) = 0.25$ and $P(X \ge 3) = 0.1$. What is the PMF of $X$, and what is $E[X]$? {Example}
+> - $f(0) = 1 - 0.6 = 0.40$.
+> - $f(1) = 0.6 - 0.25 = 0.35$ and $f(2) = 0.25 - 0.1 = 0.15$.
+> - 3 is the largest value, so $f(3) = P(X \ge 3) = 0.10$.
+> - $E[X]$ is $1(0.35) + 2(0.15) + 3(0.10)$, which is $0.95$.
+
+## Named discrete distributions
+
+Each named distribution counts something different:
+
+| What is counted | Distribution | Mean |
+| --- | --- | --- |
+| Successes in $n$ independent trials | [[Binomial Distribution]] $(n, p)$ | $np$ |
+| Successes in $n$ draws without replacement | [[Hypergeometric Distribution]] $(N, K, n)$ | $nK/N$ |
+| Trials until the first success | [[Geometric Distribution]] $(p)$ | $1/p$ |
+| Trials until the $r$th success | [[Negative Binomial Distribution]] $(r, p)$ | $r/p$ |
+| Events in a period, at a rate | [[Poisson Distribution]] $(\lambda)$ | $\lambda$ |
+| One of $1, \ldots, n$, equally likely | [[Uniform Discrete]] | $(n+1)/2$ |
+
+> [!example]- Of 30 claim files, 5 are fraudulent, and an auditor reviews 8 chosen without replacement. An agent makes calls until the second sale, each a sale with probability 0.1. Claims arrive at 4 per month. What distribution does each count follow, and what is its mean? {Example}
+> - The fraudulent files reviewed are hypergeometric, with mean $8 \times \frac{5}{30} = 1.33$.
+> - The calls until the second sale are negative binomial with $r = 2$, with mean $\frac{2}{0.1} = 20$.
+> - The claims in a month are Poisson, with mean 4.
+
+> [!trap] A Poisson rate on the wrong interval
+> A Poisson count with mean 4 per month has mean 2 per half month and 48 per year. Using the monthly mean for a different period gives the probability of the wrong count.

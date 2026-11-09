@@ -4,7 +4,11 @@ import {
   accuracyTrend,
   axisTicks,
   dayQuestions,
+  firstAttempts,
+  isThin,
+  rollingWindow,
   spanChange,
+  todaysMisses,
   weakestTopics,
   type AnswerRow,
   type QuestionFacts,
@@ -66,13 +70,13 @@ describe('accuracyTrend', () => {
     expect(t.total.answered).toBe(0)
   })
 
-  it('pools the rolling line over the 7 days ending at each day, reaching before the span', () => {
+  it('pools the rolling line over the window ending at each day, reaching before the span', () => {
     const t = accuracyTrend([
       row('h1', '2026-10-22', true),   // outside a 7-day span, inside the first day's window
       row('h1', '2026-10-25', false),
       row('h1', '2026-10-25', false),
       row('h1', '2026-10-31', true),
-    ], lookup, TODAY, { dayOf, span: 7 })
+    ], lookup, TODAY, { dayOf, span: 7, window: 7 })
     expect(t.rolling).toHaveLength(7)
     expect(t.rolling[0]).toEqual({ day: '2026-10-25', percent: 33 })  // 22nd + 25th
     expect(t.rolling[5].percent).toBe(0)                               // 30th: only the 25th
@@ -160,5 +164,71 @@ describe('axisTicks', () => {
     expect(axisTicks(7)).toEqual([6, 5, 4, 3, 2, 1, 0])
     expect(axisTicks(30)).toEqual([28, 21, 14, 7, 0])
     expect(axisTicks(90)).toEqual([60, 30, 0])
+  })
+})
+
+describe('rollingWindow', () => {
+  it('pools fewer days than the span, so the line can move inside it', () => {
+    expect(rollingWindow(7)).toBe(3)
+    expect(rollingWindow(30)).toBe(7)
+    expect(rollingWindow(90)).toBe(14)
+    for (const span of [7, 30, 90]) expect(rollingWindow(span)).toBeLessThan(span)
+  })
+
+  it('is the window a trend pools over by default', () => {
+    const t = accuracyTrend([row('h1', '2026-10-28', true)], lookup, TODAY, { dayOf, span: 7 })
+    expect(t.window).toBe(3)
+    // The 28th reaches the 30th (3 days ending there) but not the 31st.
+    expect(t.rolling.map(p => p.percent)).toEqual([null, null, null, 100, 100, 100, null])
+  })
+})
+
+describe('isThin', () => {
+  it('is true under ten answers', () => {
+    expect(isThin({ answered: 1, correct: 1 })).toBe(true)
+    expect(isThin({ answered: 9, correct: 0 })).toBe(true)
+    expect(isThin({ answered: 10, correct: 0 })).toBe(false)
+  })
+})
+
+describe('todaysMisses', () => {
+  it('lists the questions missed at least once today', () => {
+    const t = accuracyTrend([
+      row('h1', TODAY, false, '09:00:00'),
+      row('h1', TODAY, true, '10:00:00'),
+      row('e1', TODAY, true, '11:00:00'),
+      row('h2', '2026-10-30', false),
+    ], lookup, TODAY, { dayOf })
+    expect(todaysMisses(t, TODAY).map(q => q.questionId)).toEqual(['h1'])
+  })
+
+  it('is empty on a day not studied', () => {
+    const t = accuracyTrend([row('h2', '2026-10-30', false)], lookup, TODAY, { dayOf })
+    expect(todaysMisses(t, TODAY)).toEqual([])
+  })
+})
+
+describe('first tries and retries', () => {
+  it('splits the span by whether each question had been answered before', () => {
+    const t = accuracyTrend([
+      row('h1', '2026-10-30', false),             // h1, first ever: a miss
+      row('h1', TODAY, true),                     // h1 again: a retry
+      row('e1', TODAY, true),                     // e1, answered before the fetch: a retry
+      row('m1', TODAY, true),                     // m1, first ever
+    ], lookup, TODAY, { dayOf, priorIds: new Set(['e1']) })
+    expect(t.attempts).toEqual({
+      first: { answered: 2, correct: 1 },
+      retry: { answered: 2, correct: 2 },
+    })
+  })
+
+  it('is null without the history before the fetch', () => {
+    expect(accuracyTrend([row('h1', TODAY, true)], lookup, TODAY, { dayOf }).attempts).toBeNull()
+  })
+
+  it('takes the earliest row of a question as its first, whatever order the rows come in', () => {
+    const late = row('h1', TODAY, true)
+    const early = row('h1', '2026-10-01', false)
+    expect([...firstAttempts([late, early], new Set())]).toEqual([early])
   })
 })

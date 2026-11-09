@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d64ddd90e13f9afe5f37ecc04387d21aa2c0364b0f5293dd03b17ee52d84356b
+  content_hash: sha256:f98559a3fc68ddf6ed4cfca45250c50dc9473ba44d3d95eebdc543b1e50d08c9
   sources:
     - "Rodriguez, Generalized Linear Models (Princeton lecture notes), Appendix B §B.3.2 pp.6-7, eqs (B.11)-(B.13): -2 log lambda = D/phi (scaled deviance), nested models -2 log lambda = [D(omega1) - D(omega2)]/phi, phi known or estimated from the larger model, asymptotically chi^2 with p2 - p1 df; normal linear model: exact F(p2 - p1, n - p2); binomial/Poisson phi = 1, deviance = scaled deviance, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
     - "Rodriguez, Generalized Linear Models, Appendix A §A.2 pp.5-9: -2 log lambda -> chi^2 with nu = dim difference under regularity conditions; Wald, score and LR tests asymptotically equivalent, 'small-sample properties are not known, but some simulation studies suggest that the likelihood ratio test may be better', sha256:bfcc766141f43095433287dcc61f127df49103be1dd31d71454c56aa6ed8f8a6 — https://grodri.github.io/glms/notes/a1.pdf"
@@ -18,33 +18,89 @@ verification:
   log: .verify/Concepts/Likelihood Ratio Test.md
 ---
 
-A **Likelihood Ratio Test** (LRT) compares two nested models by how much better the larger one fits: it takes the ratio of maximized likelihoods and rejects the restricted model when the ratio is too small. It is the general-purpose test behind the analysis of [[Deviance]] used to compare [[Generalized Linear Model]]s.
-
-> $$\Lambda = \frac{\sup_{\theta \in \Theta_0} L(\theta)}{\sup_{\theta \in \Theta} L(\theta)}$$
-
-> $$-2\ln\Lambda = 2\left[\ell(\hat\theta) - \ell(\hat\theta_0)\right] \ \dot\sim\ \chi^2_{r}$$
-
-- $r$ is the number of **restrictions** — the difference in free parameters between the full and reduced models — and the $\chi^2$ approximation is asymptotic (Wilks' theorem)
-- Reject $H_0$ (the reduced model) when $-2\ln\Lambda$ exceeds the upper-$\alpha$ point of $\chi^2_r$ (at $\alpha = 0.05$, the $0.950$ column of the CAS MAS-I table, which gives lower-tail areas): a large value means the extra parameters bought a real improvement in fit
-- For a GLM this statistic is the **difference in deviances divided by the dispersion**, $-2\ln\Lambda = (D_{\text{reduced}} - D_{\text{full}})/\phi$, with $D$ the unscaled deviance and $\phi$ the [[Dispersion Parameter]] (equivalently, the difference in scaled deviances). That is why the analysis of deviance table is an LRT in disguise. For Poisson and binomial models $\phi = 1$ and the statistic is the deviance difference $\Delta D$ itself
-- Models must be **nested** and fitted to the *same* data; comparing non-nested models needs [[AIC]] or [[BIC]] instead
-- By the **Neyman–Pearson lemma** the LRT is the most powerful test of a simple null against a simple alternative — it maximizes the [[Power of a Test|power]] at any given level $\alpha$
-- The Wald test (coefficient over its standard error, as printed in [[Parameter Estimate Tables]]) and the score test are asymptotically equivalent to the LRT. Their small-sample properties are not known, though some simulation studies suggest the LRT may do better than the other two in small samples
-- When $\phi$ is unknown, estimate it from the full model and use the $F$ form $F = \dfrac{(D_{\text{reduced}} - D_{\text{full}})/r}{\hat\phi_{\text{full}}}$, built from the *unscaled* deviances, on $(r,\ n - p_{\text{full}})$ degrees of freedom. For a normal linear model the deviances are residual sums of squares and this $F$ is exact
-
 ![[Media/Figures/Likelihood_Ratio_Test.svg|340]]
 
-> [!example]- Testing a Group of Predictors {Example}
-> A Poisson GLM with $4$ parameters has log-likelihood $\ell = -412.6$. Adding a 3-level territory variable (2 extra parameters) gives $\ell = -407.1$. Test at $\alpha = 0.05$ whether territory belongs in the model, given $\chi^2_{0.05, 2} = 5.99$.
->
-> > [!answer]-
-> > $$-2\ln\Lambda = 2\left[-407.1 - (-412.6)\right] = 2(5.5) = 11.0$$
-> > Since $11.0 > 5.99$, **reject** the reduced model — territory significantly improves the fit. Equivalently, the deviance drops by $11.0$ on $2$ degrees of freedom.
+A **Likelihood Ratio Test** is a [[Hypothesis Testing|hypothesis test]] of a null hypothesis $H_0$ that restricts a parameter $\theta$ to a subset of its possible values, which rejects $H_0$ when the maximized likelihood under $H_0$ is small compared with the maximized likelihood without the restriction. The likelihood ratio is
 
-> [!example]- Comparing an Exponential to a Gamma Fit {Example}
-> A Gamma model fitted to $n = 300$ claim sizes has $\ell = -2{,}401.2$; the exponential special case ($\alpha = 1$) has $\ell = -2{,}403.0$. Does the extra shape parameter earn its place at $\alpha = 0.05$?
+> $$\Lambda = \frac{L(\hat{\theta}_0)}{L(\hat{\theta})}$$
+
+- $L(\theta)$ is the likelihood of $\theta$.
+- $\hat{\theta}_0$ is the [[Maximum Likelihood Estimation|maximum likelihood estimate]] under $H_0$, and $\hat{\theta}$ is the maximum likelihood estimate over all values of $\theta$.
+- $0 \le \Lambda \le 1$, because the restricted maximum cannot exceed the unrestricted one.
+
+The test statistic is
+
+> $$-2 \ln \Lambda = 2\left[l(\hat{\theta}) - l(\hat{\theta}_0)\right]$$
+
+- $l(\theta) = \ln L(\theta)$ is the log-likelihood.
+
+For a large sample, under $H_0$, the statistic has approximately a [[Chi-Squared Distribution|chi-squared distribution]] with $r$ degrees of freedom, where $r$ is the number of free parameters without the restriction minus the number of free parameters under $H_0$.
+
+The test rejects $H_0$ at significance level $\alpha$ when $-2 \ln \Lambda \ge \chi^2_{\alpha,r}$, the upper $\alpha$ point. A small $\Lambda$ leads to rejection, and the largest $\Lambda$ that is rejected is $e^{-\chi^2_{\alpha,r}/2}$.
+
+> [!example]- Claim sizes are exponential with mean $\theta$. A sample of 50 claims has mean 1,200. Does the likelihood ratio test reject $H_0: \theta = 1{,}000$ against $H_1: \theta \ne 1{,}000$ at significance level 0.05? {Example}
+> - The log-likelihood is $l(\theta) = -n \ln \theta - n\bar{x}/\theta$, and the unrestricted estimate is $\hat{\theta} = \bar{x} = 1{,}200$.
+> - Substituting $\hat{\theta} = 1{,}200$ and $\theta_0 = 1{,}000$ gives the statistic:
 >
-> > [!answer]-
-> > One restriction, so compare with $\chi^2_{0.05,1} = 3.84$:
-> > $$-2\ln\Lambda = 2\left[-2{,}401.2 + 2{,}403.0\right] = 3.6$$
-> > $3.6 < 3.84$, so **fail to reject** — the exponential is an adequate simplification of the Gamma here. The call is close: the statistic depends only on the log-likelihood gap, not on $n$, and a gap above $3.84/2 = 1.92$ would have rejected.
+> $$
+> \begin{aligned}
+> -2 \ln \Lambda &= 2n\left[\frac{\bar{x}}{\theta_0} - 1 - \ln\frac{\bar{x}}{\theta_0}\right] \\
+> &= 100\,(1.2 - 1 - \ln 1.2) \\
+> &= 1.768
+> \end{aligned}
+> $$
+>
+> - $H_0$ fixes one parameter, so $r = 1$ and $\chi^2_{0.05,1} = 3.841$.
+> - Because $1.768 < 3.841$, the test does not reject $H_0$.
+> - The test would reject only for $\Lambda \le e^{-3.841/2} = 0.1465$.
+
+## Comparing nested models
+
+A model is nested in a larger model when it is obtained by fixing some of the larger model's parameters, both models being fitted to the same data. The likelihood ratio test compares nested models with the statistic
+
+> $$2\left[l_{\text{full}} - l_{\text{reduced}}\right]$$
+
+- $l_{\text{full}}$ and $l_{\text{reduced}}$ are the maximized log-likelihoods of the larger model and the nested model.
+
+Under $H_0$ that the nested model is adequate, the statistic is approximately chi-squared with degrees of freedom equal to the difference in the numbers of parameters. The test is valid only for nested models. Models that are not nested are compared with [[AIC]] or [[BIC]] in [[Model Selection|model selection]].
+
+> [!example]- A gamma model fitted to claim sizes has maximized log-likelihood $-2{,}401.2$, and its exponential special case, with shape parameter 1, has $-2{,}403.4$. At what significance levels does the test reject the exponential model? {Example}
+> - The exponential model fixes one parameter of the gamma model, so it is nested, with 1 degree of freedom.
+> - The statistic is $2\left[-2{,}401.2 - (-2{,}403.4)\right] = 4.4$.
+> - The critical values with 1 degree of freedom are $\chi^2_{0.05,1} = 3.841$ and $\chi^2_{0.025,1} = 5.024$.
+> - Because $3.841 < 4.4 < 5.024$, the test rejects the exponential model at 5% but not at 2.5%.
+
+## Analysis of deviance for generalized linear models
+
+For two nested [[Generalized Linear Model|generalized linear models]], the likelihood ratio statistic is the drop in [[Deviance|deviance]] divided by the [[Dispersion Parameter|dispersion parameter]]:
+
+> $$-2 \ln \Lambda = \frac{D_{\text{reduced}} - D_{\text{full}}}{\phi}$$
+
+- $D_{\text{reduced}}$ and $D_{\text{full}}$ are the deviances of the nested model and the larger model.
+- $\phi = 1$ for the Poisson and binomial distributions, so the statistic is the drop in deviance.
+
+Under $H_0$ it is approximately chi-squared with $r$ degrees of freedom, the number of parameters the larger model adds. The difference in residual degrees of freedom of the two models equals $r$.
+
+> [!example]- A Poisson GLM with 4 parameters has maximized log-likelihood $-412.6$. Adding a territory variable with 3 levels gives $-407.1$. Does territory belong in the model at significance level 0.05? {Example}
+> - A variable with 3 levels adds $3 - 1 = 2$ parameters, so $r = 2$.
+> - The statistic is $2\left[-407.1 - (-412.6)\right] = 11.0$, which is also the drop in deviance.
+> - Because $11.0 > \chi^2_{0.05,2} = 5.991$, the test rejects the model without territory.
+
+## F test for nested models
+
+When $\phi$ is unknown, it is estimated from the larger model, and the test uses the statistic
+
+> $$F = \frac{(D_{\text{reduced}} - D_{\text{full}})/r}{D_{\text{full}}/(n - k)}$$
+
+- $k$ is the number of parameters in the larger model, so $n - k$ is its residual degrees of freedom.
+
+Under $H_0$, $F$ has approximately an [[F-Distribution|$F$ distribution]] with $r$ and $n - k$ degrees of freedom. For a normal response with the identity link, the deviance is the [[Residual Sum of Squares|residual sum of squares]], and the distribution is exact.
+
+> [!example]- A linear model with residual sum of squares 520 on 46 degrees of freedom gains two predictors, and its residual sum of squares falls to 460 on 44 degrees of freedom. Do the two predictors improve the model at significance level 0.05? {Example}
+> - The improvement is $520 - 460 = 60$ on $r = 2$ degrees of freedom.
+> - The statistic is $F = \frac{60/2}{460/44} = \frac{30}{10.455} = 2.870$.
+> - With 2 and 44 degrees of freedom, $F_{0.05,2,44} = 3.209$.
+> - Because $2.870 < 3.209$, the test does not reject the smaller model.
+
+> [!trap] Counting all the parameters as the degrees of freedom
+> The degrees of freedom are the number of parameters the larger model adds, not its total number of parameters. Adding a 3-level variable to a 4-parameter model is a test on 2 degrees of freedom, not 6.

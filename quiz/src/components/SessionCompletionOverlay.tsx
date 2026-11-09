@@ -31,6 +31,8 @@ function formatDate(iso: string): string {
 export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props) {
   useSoundOnMount('open')
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' })
+  // Bumped by Try again, so the load runs once more.
+  const [attempt, setAttempt] = useState(0)
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -73,7 +75,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
     }
     load()
     return () => { cancelled = true }
-  }, [session.id])
+  }, [session.id, attempt])
 
   // Scroll overlay to top on mount
   useEffect(() => {
@@ -130,11 +132,11 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
 
         {loadState.status === 'error' && (
           <div className="rounded-xl bg-destructive/10 p-6 text-center space-y-2">
-            <p className="text-sm font-semibold text-destructive">Failed to load session</p>
-            <p className="text-xs text-muted-foreground">{loadState.message}</p>
+            <p className="text-sm font-semibold text-destructive">Couldn't load this quiz's questions</p>
+            <p className="text-xs text-muted-foreground">Check your connection and try again.</p>
             <button
               type="button"
-              onClick={() => { setLoadState({ status: 'loading' }) }}
+              onClick={() => { setLoadState({ status: 'loading' }); setAttempt(n => n + 1) }}
               className="text-xs text-primary hover:underline"
             >
               Try again

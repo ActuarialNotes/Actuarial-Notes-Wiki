@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ee4e19a034aab1f4d48e2588aa8eb5e93ad1a455e763794ae66aec2d243eea10
+  content_hash: sha256:e1cfc0133f3fdcf79092734245393c240a2094428d6e6501b8961c67d9abcb0e
   sources:
     - "Siegrist, Random (randomservices.org), ch.7 §2 Estimation in the Normal Model: assumption 'random sample from the normal distribution'; T = (M - mu)/(S/sqrt n) ~ t_{n-1}, V = (n-1)S^2/sigma^2 ~ chi^2_{n-1}; M +/- z(1-alpha/2) sigma/sqrt n, M +/- t_{n-1}(1-alpha/2) S/sqrt n, [(n-1)S^2/chi^2_{n-1}(1-alpha/2), (n-1)S^2/chi^2_{n-1}(alpha/2)] with chi^2_k(p) the quantile of order p; 'Robustness': mean intervals approximately valid for large n by the CLT, variance intervals not robust, sha256:21c59dd27f38c17148de5af35d53d94a01c51cd4f230c81d75e91173a9917586 — https://www.randomservices.org/random/interval/Normal.html"
     - "NIST/SEMATECH e-Handbook of Statistical Methods §1.3.5.8 Chi-Square Test for the Variance: T = (N-1)(s/sigma0)^2, critical values chi^2_{1-alpha,N-1} / chi^2_{1-alpha/2,N-1} (lower-tail quantile notation), interval for the variance, sha256:479a6c6d7f68671d8a61d0daa073e5884a428b477d7b0308c50863c7f164d467 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda358.htm"
@@ -14,35 +14,74 @@ verification:
   log: .verify/Concepts/Confidence Interval.md
 ---
 
-A **Confidence Interval** is a range computed from a sample that covers the unknown parameter with a stated long-run probability $1 - \alpha$. It reports the same information as a [[Hypothesis Testing|hypothesis test]] but on the parameter's own scale — the interval contains exactly those null values the test would not reject.
-
-> $$\bar{X} \pm z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}} \qquad (\sigma \text{ known})$$
-
-> $$\bar{X} \pm t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}} \qquad (\sigma \text{ estimated})$$
-
-- Both intervals assume a random sample from a **normal** population. The $z$ interval is then exact, and so is the $t$ interval, because $(\bar{X} - \mu)/(S/\sqrt{n})$ has a [[Student's t-Distribution|$t$ distribution]] with $n - 1$ degrees of freedom. For a non-normal population both are only approximate, through the [[Central Limit Theorem (CLT)|CLT]], and need a larger $n$ the further the population is from normal
-- The general form is $\hat\theta \pm (\text{critical value}) \times \text{SE}(\hat\theta)$, where the critical value comes from the estimator's [[Sampling Distribution]]
-- The **coverage** statement is about the procedure, not one interval: $95\%$ of intervals built this way contain $\theta$. Once computed, a given interval either contains $\theta$ or does not
-- Width shrinks like $1/\sqrt{n}$ and grows with confidence — going from $95\%$ to $99\%$ multiplies the half-width by $2.576/1.96 = 1.31$
-- Use $t_{n-1}$ whenever $\sigma$ is replaced by $S$; the extra width is the price of estimating the spread, and it matters most for small $n$. Here $z_{\alpha/2}$ and $t_{\alpha/2,\,n-1}$ are **upper**-tail points (area $\alpha/2$ above them). The CAS MAS-I $t$ table is headed by *two-sided* tail areas, so $t_{\alpha/2,\,n-1}$ is in the column headed $\alpha$: $t_{0.025,\,15} = 2.131$ is under $0.05$
-- For a variance, the interval is built from the [[Chi-Squared Distribution|$\chi^2$ distribution]], since $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ for a normal sample, and is **asymmetric**: $\left(\frac{(n-1)S^2}{\chi^2_{n-1}(1-\alpha/2)},\ \frac{(n-1)S^2}{\chi^2_{n-1}(\alpha/2)}\right)$. Here $\chi^2_{n-1}(p)$ is the point with **lower**-tail area $p$, which is the CAS MAS-I chi-square table's column $p$, so the larger point gives the lower endpoint. For $n = 16$ at $95\%$ the df $15$ row gives $\left(\frac{15S^2}{27.49},\ \frac{15S^2}{6.26}\right)$. This interval needs the normal population at every $n$: no CLT rescues it
-- For an [[Maximum Likelihood Estimation|MLE]], the large-sample interval $\hat\theta \pm z_{\alpha/2}/\sqrt{n I(\hat\theta)}$ uses the [[Fisher Information]]; for a GLM coefficient it is $\hat\beta_j \pm z_{\alpha/2}\text{SE}(\hat\beta_j)$, and exponentiating both endpoints gives an interval for the multiplicative rating factor
-
 ![[Media/Figures/Confidence_Interval.svg|340]]
 
-> [!example]- Interval for a Mean with Unknown Variance {Example}
-> A sample of $n = 16$ claims, assumed drawn from a normal population, has $\bar{x} = 8{,}400$ and $s = 1{,}200$. Build a $95\%$ confidence interval for $\mu$, given $t_{0.025, 15} = 2.131$.
->
-> > [!answer]-
-> > $$\text{SE} = \frac{s}{\sqrt{n}} = \frac{1{,}200}{4} = 300$$
-> > $$8{,}400 \pm 2.131(300) = 8{,}400 \pm 639 = (7{,}761,\ 9{,}039)$$
-> > Because $8{,}000$ lies inside the interval, a two-sided test of $H_0: \mu = 8{,}000$ at $\alpha = 0.05$ would **not** reject.
+A **Confidence Interval** for a parameter $\theta$ is an interval computed from a [[Random Sample|random sample]] that contains $\theta$ with a stated probability $1 - \alpha$, called the confidence coefficient, before the sample is drawn. For the mean $\mu$ of a [[Normal Distribution|normal distribution]] with known standard deviation $\sigma$, the $100(1 - \alpha)\%$ confidence interval is
 
-> [!example]- From a Coefficient to a Rating Factor {Example}
-> A log-link GLM gives $\hat\beta = 0.35$ for "urban territory" with $\text{SE} = 0.12$. Give a $95\%$ interval for the multiplicative effect on expected claim frequency.
->
-> > [!answer]-
-> > On the linear-predictor scale: $0.35 \pm 1.96(0.12) = (0.115,\ 0.585)$.
-> > Exponentiating the endpoints:
-> > $$\left(e^{0.115},\ e^{0.585}\right) = (1.12,\ 1.80)$$
-> > Urban risks are estimated to have $12\%$ to $80\%$ higher frequency. The interval excludes $1.00$, so the effect is significant at $5\%$ — but it is wide enough that the indicated relativity is far from precisely known.
+> $$\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}}$$
+
+- $\bar{X}$ is the [[Sample Mean|sample mean]].
+- $z_{\alpha/2}$ is the upper $\alpha/2$ point of the standard normal distribution.
+
+The probability $1 - \alpha$ belongs to the procedure. Once an interval is computed, it either contains $\theta$ or it does not.
+
+> [!example]- Claim sizes are normal with standard deviation 300. A sample of 36 claims has mean 1,200. What is the 95% confidence interval for the mean claim size? {Example}
+> - The standard deviation of $\bar{X}$ is $300 / \sqrt{36} = 50$.
+> - For 95% confidence, $z_{0.025} = 1.96$, so the half-width is $1.96 \times 50 = 98$.
+> - The 95% confidence interval is $1{,}200 \pm 98$, or $(1{,}102,\ 1{,}298)$.
+
+## Confidence interval for a mean with unknown variance
+
+When $\sigma$ is unknown, it is replaced by the sample standard deviation $S$, and the $100(1 - \alpha)\%$ confidence interval for $\mu$ is
+
+> $$\bar{X} \pm t_{\alpha/2,\,n-1} \frac{S}{\sqrt{n}}$$
+
+- $t_{\alpha/2,\,n-1}$ is the upper $\alpha/2$ point of the [[Student's t-Distribution|$t$ distribution]] with $n - 1$ degrees of freedom.
+
+The CAS MAS-I $t$ table is headed by the two-sided tail area, so $t_{0.025,15} = 2.131$ is in the column headed 0.05.
+
+> [!example]- Claim sizes are normal. A sample of 16 claims has mean 8,400 and sample standard deviation 1,200. What is the 95% confidence interval for the mean claim size? {Example}
+> - The estimated standard deviation of $\bar{X}$ is $1{,}200 / \sqrt{16} = 300$.
+> - With 15 degrees of freedom, $t_{0.025,15} = 2.131$, so the half-width is $2.131 \times 300 = 639$.
+> - The 95% confidence interval is $8{,}400 \pm 639$, or $(7{,}761,\ 9{,}039)$.
+
+## Confidence interval for a variance
+
+For a random sample from a normal distribution, $(n-1)S^2/\sigma^2$ has a [[Chi-Squared Distribution|chi-squared distribution]] with $n - 1$ degrees of freedom, and the $100(1 - \alpha)\%$ confidence interval for $\sigma^2$ is
+
+> $$\left(\frac{(n-1)S^2}{\chi^2_{\alpha/2,\,n-1}},\ \frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\,n-1}}\right)$$
+
+- $\chi^2_{\alpha/2,\,n-1}$ and $\chi^2_{1-\alpha/2,\,n-1}$ are the upper $\alpha/2$ and the upper $1 - \alpha/2$ points of the chi-squared distribution.
+
+The interval is not symmetric about $S^2$, and it requires a normal population at every sample size.
+
+> [!example]- A sample of 16 claims from a normal distribution has sample standard deviation 1,200. What is the 95% confidence interval for the standard deviation? {Example}
+> - With 15 degrees of freedom, $\chi^2_{0.025,15} = 27.488$ and $\chi^2_{0.975,15} = 6.262$.
+> - The numerator is $(n-1)S^2 = 15 \times 1{,}200^2 = 21{,}600{,}000$.
+> - The lower endpoint for $\sigma^2$ is $\frac{21{,}600{,}000}{27.488} = 785{,}797$.
+> - The upper endpoint for $\sigma^2$ is $\frac{21{,}600{,}000}{6.262} = 3{,}449{,}377$.
+> - Taking square roots, the 95% confidence interval for $\sigma$ is $(886,\ 1{,}857)$.
+
+## Large-sample confidence interval
+
+For an estimator $\hat{\theta}$ that is approximately normal in large samples, such as a [[Maximum Likelihood Estimation|maximum likelihood estimator]], the approximate $100(1 - \alpha)\%$ confidence interval is
+
+> $$\hat{\theta} \pm z_{\alpha/2}\,\text{SE}(\hat{\theta})$$
+
+- $\text{SE}(\hat{\theta})$ is the standard error of $\hat{\theta}$. For a maximum likelihood estimator it is $1/\sqrt{n I(\hat{\theta})}$, with $I(\theta)$ the [[Fisher Information|Fisher information]] of one observation.
+
+At 95% confidence, $z_{0.025} = 1.96$, which is why an interval of about two standard errors on either side of an estimate is read as an approximate 95% confidence interval.
+
+> [!example]- A portfolio has 400 claims in a year, and the number of claims is Poisson. What is an approximate 95% confidence interval for the expected number of claims? {Example}
+> - The estimate of the Poisson mean is 400, and the variance of a Poisson count equals its mean, so the standard error is $\sqrt{400} = 20$.
+> - The half-width is $1.96 \times 20 = 39.2$.
+> - The approximate 95% confidence interval is $(360.8,\ 439.2)$.
+
+## Confidence intervals and hypothesis tests
+
+A two-sided [[Hypothesis Testing|hypothesis test]] of $H_0: \theta = \theta_0$ at significance level $\alpha$ rejects $H_0$ exactly when $\theta_0$ lies outside the $100(1 - \alpha)\%$ confidence interval. For a coefficient $\beta_j$ of a [[Generalized Linear Model|generalized linear model]] with a log link, the interval $\hat{\beta}_j \pm 1.96\,\text{SE}(\hat{\beta}_j)$ tests $H_0: \beta_j = 0$ at the 5% level, and exponentiating its endpoints gives the interval for the multiplicative relativity $e^{\beta_j}$. A relativity whose interval contains 1.00, the relativity of the base level, is not significantly different from the base level. At the same confidence level, a narrower interval, like a narrower [[Prediction Interval|prediction interval]], pins the quantity down more precisely.
+
+> [!example]- A log-link GLM gives $\hat{\beta} = 0.35$ with standard error 0.12 for an urban territory. What is the 95% confidence interval for the urban relativity, and is the relativity significantly different from the base level? {Example}
+> - On the scale of the linear predictor, the interval is $0.35 \pm 1.96 \times 0.12 = (0.115,\ 0.585)$.
+> - Exponentiating the endpoints gives the interval for the relativity, $(e^{0.115},\ e^{0.585}) = (1.12,\ 1.80)$.
+> - The interval does not contain 1.00, so the urban relativity is significantly different from the base level at the 5% level.

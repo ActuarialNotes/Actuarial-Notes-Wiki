@@ -1,66 +1,76 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:27819bd5a5b5d04e25896f1cee79e08db3f6b69c96c7f959db2d537a2e2d00c7
+  content_hash: sha256:192f1cd1363d3036b95f4b434055eef6b9cec440d983be5c21cb09fba4f85175
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 (PDF p.152), Thm 4.2 (PDF p.173), Def. 4.8 (PDF p.176), p.184 (PDF p.192), p.207 (PDF p.215), Thms 6.7 and 6.9 (PDF pp.267-268), Cor. 6.1 (PDF p.283), §9.2 (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §III theorem on S_n (PDF pp.4-5), §VI Deductibles (PDF p.7) and Benefit Limits (PDF pp.8-9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q117, Q124, Q249 (PDF p.73), Q448 (PDF p.125), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 2 outcomes e-f (PDF p.3) and Topic 3 outcome i (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, conditional expectation as the integral against f_{X|A}; independent X, Y have f_XY = f_X f_Y and E[g(X)h(Y)] = E[g(X)]E[h(Y)], HTML fetched 2026-10-30, sha256:b9e764e0b2adb7b888334dd58ee563d47c9c6cd66bd666fa4fa24c7d5e3b32a4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: if {X_i} is independent then {g_i(X_i)} is independent; the Bernoulli indicator sequence is exchangeable (permuting does not change the probability), HTML fetched 2026-10-30, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry (distribution symmetric about a with E(X) existing gives E(X) = a; density form f(a+x) = f(a-x)), Linearity, indicator E(1_A) = P(A), conditional density f(x|A) and its conditional expected values, HTML fetched 2026-10-30, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 independent trials process: mutually independent with the same distribution (PDF p.151); Thm 6.7 V(cX) = c^2 V(X) and Thm 6.9 E(S_n) = n mu, V(S_n) = n sigma^2 (PDF pp.267-268); §9.2 Central Limit Theorem (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Order Statistics: F_1(x) = 1 - [1 - F(x)]^n and F_n(x) = [F(x)]^n for an i.i.d. sample, HTML fetched 2026-11-06, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Poisson Distribution: independent Poisson N, M with parameters a, b: N + M is Poisson(a + b), HTML fetched 2026-11-06, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Gamma Distribution (Poisson process): T_n, the sum of n independent exponential inter-arrival times, has the gamma distribution, HTML fetched 2026-11-06, sha256:bbea5da3e0577d07d2670905b5727657c25b044f8382e17cee3bdfdd723bbe16 — https://www.randomservices.org/random/poisson/Gamma.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Central Limit Theorem: the sum or average of many i.i.d. variables is approximately normal, HTML fetched 2026-11-06, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: functions g_i(X_i) of independent variables are independent; the indicator sequence is exchangeable, HTML fetched 2026-11-06, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 objective (order statistics, linear combinations of independent variables) and outcomes f, h, i (Central Limit Theorem for i.i.d. sums) (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Independent and Identically Distributed.md
 ---
 
-Random variables $X_1, X_2, \ldots, X_n$ are **Independent and Identically Distributed** (i.i.d.) when they are mutually [[Independent Random Variables|independent]] *and* share one common distribution — the same CDF $F$, hence the same mean $\mu$ and variance $\sigma^2$. It is the standard model for a [[Random Sample]] and for a book of similar, unrelated policies.
+Random variables $X_1, \ldots, X_n$ are **Independent and Identically Distributed** (i.i.d.) when they are [[Independent Random Variables|independent]] and have the same distribution. If each has probability function or density $f$, their joint probability function or density is
 
-> $$f(x_1, \ldots, x_n) = \prod_{i=1}^{n} f(x_i)$$
+> $$f(x_1, \ldots, x_n) = f(x_1)\,f(x_2) \cdots f(x_n)$$
 
-> $$\begin{aligned} E[S_n] &= n\mu \\ \text{Var}(S_n) &= n\sigma^2 \end{aligned}$$
+The product is the independence, and the same $f$ in every factor is the identical distribution. I.i.d. random variables model a [[Random Sample|random sample]] or a book of similar, unrelated policies.
 
-- Here $f$ is the common PMF or PDF and $S_n = X_1 + \cdots + X_n$. The product form is the independence; using the same $f$ in every factor is the identical distribution. Each half can fail on its own.
-- **Identically distributed is not identical.** $X_1 + X_2$ has variance $2\sigma^2$, but $2X_1$ has variance $4\sigma^2$. Fifty independent policies are far less risky than one policy fifty times the size.
-- The mean of $S_n$ grows like $n$ but its standard deviation only like $\sqrt{n}$, so the [[Coefficient of Variation]] of the total falls as $1/\sqrt{n}$ — the pooling effect behind the [[Law of Large Numbers]]. For the average, $E[\bar{X}] = \mu$ and $\text{Var}(\bar{X}) = \sigma^2/n$.
-- The version of the [[Central Limit Theorem]] on Exam P assumes i.i.d. summands with finite variance; it is what licenses the [[Normal Approximation]] $S_n \approx N(n\mu,\ n\sigma^2)$.
-- The [[Order Statistics]] formulas rely on it too: the maximum has $P(X_{(n)} \le x) = F(x)^n$ and the minimum has $P(X_{(1)} > x) = [1 - F(x)]^n$.
-- Some i.i.d. sums are known exactly: Bernoulli$(p)$ terms sum to a [[Binomial Distribution|binomial]]$(n, p)$, Poisson$(\lambda)$ terms to a Poisson$(n\lambda)$, and [[Exponential Distribution|exponentials]] with mean $\theta$ to a [[Gamma]]$(n, \theta)$.
-- **Symmetry.** The joint density $f(x_1)\,f(x_2)$ is unchanged when $x_1$ and $x_2$ swap, so $(X_1, X_2)$ has the same joint distribution as $(X_2, X_1)$, and an event and its mirror image with the roles swapped have equal probability: $P(X_1 > g(X_2)) = P(X_2 > g(X_1))$ for any function $g$, for example $P(X_1 > 3X_2) = P(X_2 > 3X_1)$ and $P(X_1 < X_2) = P(X_2 < X_1)$.
-- The symmetry survives conditioning on an event $C$ that treats the items alike (such as "at least one item is of type E"): every item has the same conditional probability $P(\text{item } i \text{ has } A \mid C)$. Writing the number of items with property $A$ as a sum of indicators, linearity gives $E[\text{count} \mid C] = n \cdot P(\text{item 1 has } A \mid C)$.
+> [!example]- Each policy has 0, 1 or 2 claims with probabilities 0.50, 0.35 and 0.15, independently of the other policies. What is the probability that two policies have 2 claims in total? {Example}
+> - The totals of 2 are $(2, 0)$, $(0, 2)$ and $(1, 1)$.
+> - Each joint probability is a product: $(0.15)(0.50)$, $(0.50)(0.15)$ and $(0.35)(0.35)$.
+> - The probability is $0.075 + 0.075 + 0.1225$, which is 0.2725.
 
-> [!example]- Fifty Policies versus One Large Policy {Example}
-> Each of 50 independent policies has an annual loss with mean \$1,000 and standard deviation \$400. Compare the total $S = X_1 + \cdots + X_{50}$ with a single risk $T = 50X_1$ that has the same expected loss.
->
-> > [!answer]-
-> > Both have mean $50 \times 1{,}000 = 50{,}000$. The variances differ because the i.i.d. terms add variances, while scaling one risk squares the multiplier:
-> > $$
-> > \begin{align*}
-> > \text{Var}(S) &= 50(400^2) \\
-> >               &= 8{,}000{,}000 \\
-> > \text{SD}(S) &= 2{,}828 \\
-> > \text{Var}(T) &= 50^2(400^2) \\
-> >               &= 400{,}000{,}000 \\
-> > \text{SD}(T) &= 20{,}000
-> > \end{align*}
-> > $$
-> > The coefficient of variation is $2{,}828/50{,}000 = 0.057$ for the pooled book against $0.40$ for the single large risk. Same expected loss, but pooling cuts the standard deviation to $1/\sqrt{50} \approx 14\%$ of the concentrated risk's.
+## Sums of i.i.d. random variables
 
-> [!example]- The Largest of Five Claims {Example}
-> Five claims are i.i.d. exponential with mean \$2,000. Find the probability that the largest exceeds \$5,000.
->
-> > [!answer]-
-> > One claim stays at or below \$5,000 with probability $F(5{,}000) = 1 - e^{-2.5} = 0.917915$. The maximum is at or below \$5,000 only if all five claims are, and independence with a common $F$ turns that into a power:
-> > $$
-> > \begin{align*}
-> > P(X_{(5)} > 5{,}000) &= 1 - F(5{,}000)^5 \\
-> >                      &= 1 - 0.917915^5 \\
-> >                      &= 1 - 0.651647 \\
-> >                      &= 0.3484
-> > \end{align*}
-> > $$
-> > A single claim exceeds \$5,000 only $8.2\%$ of the time, but with five claims there is a $34.8\%$ chance at least one does — the reason a per-claim retention is hit far more often than a single claim's tail suggests.
+If each $X_i$ has mean $\mu$ and variance $\sigma^2$, their sum $S_n = X_1 + \cdots + X_n$ has
+
+> $$E[S_n] = n\mu$$
+
+> $$\text{Var}(S_n) = n\sigma^2$$
+
+The average $\bar{X} = S_n / n$ has mean $\mu$ and variance $\sigma^2 / n$. For large $n$, the [[Central Limit Theorem]] makes $S_n$ approximately normal.
+
+> [!example]- For the policies above, what are the mean and standard deviation of the total number of claims on 100 policies? {Example}
+> - One policy has $\mu = 0.35 + 2(0.15) = 0.65$.
+> - Its second moment is $0.35 + 4(0.15) = 0.95$, so $\sigma^2 = 0.95 - 0.65^2 = 0.5275$.
+> - The total has mean $100(0.65) = 65$.
+> - Its variance is $100(0.5275) = 52.75$, so its standard deviation is 7.26.
+
+> [!trap] $n\sigma^2$ or $n^2\sigma^2$
+> A sum of $n$ i.i.d. terms has variance $n\sigma^2$. A single term multiplied by $n$ has variance $n^2\sigma^2$. Two policies with independent claims are less risky than one policy written twice as large.
+
+## The largest and smallest of $n$
+
+The largest of $n$ i.i.d. random variables is at most $x$ only if every one of them is, and the smallest is above $x$ only if every one of them is:
+
+> $$P(X_{(n)} \le x) = F(x)^n$$
+
+> $$P(X_{(1)} > x) = \big(1 - F(x)\big)^n$$
+
+- $F$ is the common cumulative distribution function.
+- $X_{(n)}$ and $X_{(1)}$ are the largest and smallest of the $X_i$, the extreme [[Order Statistics|order statistics]].
+
+> [!example]- For three of the policies above, what is the probability that no policy has 2 claims? {Example}
+> - No policy has 2 claims exactly when the largest count is at most 1.
+> - Each policy has at most 1 claim with probability $F(1) = 0.85$.
+> - The probability is $0.85^3 = 0.6141$.
+
+## Symmetry
+
+Swapping two i.i.d. random variables doesn't change their joint distribution. So an event and its mirror image, with the roles of the variables swapped, have the same probability. For $n$ i.i.d. continuous random variables, each is equally likely to be the smallest:
+
+> $$P\big(X_1 = X_{(1)}\big) = \frac{1}{n}$$
+
+> [!example]- Three people have i.i.d. continuous future lifetimes. What is the probability that the first person dies first? {Example}
+> - The three lifetimes are i.i.d. and continuous, so ties have probability 0.
+> - Each of the three is equally likely to be the smallest.
+> - The probability is $\frac{1}{3}$.

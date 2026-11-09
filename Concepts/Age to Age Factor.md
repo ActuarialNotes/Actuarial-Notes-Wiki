@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:17ca0e19e0bfbe3f7c174b9f59206fa869f12a09f0efe5e693b909d3b9248b7d
+  content_hash: sha256:426f6730cecf4ecbf3d40769dbf87f105fae6663edaf4bb4d3007a6625090c95
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.11 Frequency-Severity Techniques, PDF pp.202-205 (printed 196-199): Auto Collision Insurer half-year example, seasonality in closed counts, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,81 +12,73 @@ verification:
   log: .verify/Concepts/Age to Age Factor.md
 ---
 
-**Age-to-Age Factor** (link ratio) is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity — the observed development between two ages.
+![[Media/Figures/Age_to_Age_Factor.svg|340]]
+
+An **Age-to-Age Factor**, also called a link ratio or report-to-report factor, is the ratio of a cohort's cumulative value at one age to its value at the previous age. It measures the change in recorded claims from one valuation date to the next, and it is named by its two ages, as the 12-24 factor. The age-to-age factor of accident year AY from age $n$ to age $n+1$ is
 
 > $$f_{n \to n+1}^{\text{AY}} = \frac{C_{\text{AY},\,n+1}}{C_{\text{AY},\,n}}$$
 
+- $C_{\text{AY},n}$ is the accident year's cumulative value at age $n$, such as its reported claims, paid claims or claim counts.
+
+A triangle of age-to-age factors has one less row and one less column than its [[Development Triangle|data triangle]].
+
+> [!example]- Accident year 2021 has reported claims of $\$37{,}000$ at 12 months and $\$43{,}000$ at 24 months. What is its 12-24 factor? {Example}
+> - The factor is the claims at 24 months divided by the claims at 12 months.
+> - It is $43{,}000/37{,}000 = 1.162$.
+
+## Averages of age-to-age factors
+
+A factor is selected for each age from the column of observed factors, usually by an average of them. Over a chosen set of accident years, the volume-weighted average is
+
 > $$f_{n \to n+1}^{\text{vol-wtd}} = \frac{\sum_{\text{AY}} C_{\text{AY},\,n+1}}{\sum_{\text{AY}} C_{\text{AY},\,n}}$$
 
-**Selecting a factor** from the column of observations is the central judgment of the [[Chain Ladder Method|chain ladder]]. The candidates:
+- The sums run over the same accident years, those that have both ages.
 
-- **Volume-weighted (all-year)** — the ratio of column sums. Weights each year by its size, so it is stable and dominated by the large years. The default choice.
-- **Simple average** — equal weight to each year, so a small, volatile year counts as much as a large one. Useful when volume differs for reasons unrelated to the pattern.
-- **Latest $k$-year** average (volume-weighted or simple) — responsive to a genuine change in the pattern, at the cost of credibility.
-- **Medial average** (drop high and low) — robust to a single distorted year.
-- **Judgmental selection**, documented — the honest answer when the column contains a known one-off.
+The other common averages are:
 
-Further points:
+1. **Simple average**, the arithmetic mean of the factors, which gives each year equal weight however small it is.
+2. **Medial average**, the simple average excluding the highest and lowest factors, which is robust to one distorted year.
+3. **Geometric average**, the $k$th root of the product of $k$ factors.
+4. **Latest $k$ years**, any of these over only the most recent accident years.
 
-- Factors need **not** exceed $1.000$. Salvage and subrogation recoveries, conservative initial case reserving, and claims closing below their reserves all produce downward development. Flooring factors at $1.000$ because "losses only go up" is a standard error.
-- Look at the column **before** averaging it. A steady column supports a volume-weighted all-year selection; a column trending over time is a signal, not noise, and calls for the latest years or an investigation.
-- A factor that moves along the **diagonal** rather than down the column is a calendar-year effect ([[Development Triangle]]) and should be addressed by restating the triangle, not by averaging it away.
-- **Seasonality.** With accident periods shorter than a year (half-years, quarters), factors can differ systematically with the part of the year a period covers. In Friedland's auto collision example, accident half-years ending in December close a smaller share of their claims by six months than half-years ending in June, so their 6–12 month closed count factors run higher (Friedland, Ch. 11, pp. 197–198). An average across all periods then blends two patterns and fits neither. When factors show seasonality, select the factor for each season by averaging only the factors of accident periods from that season, and apply to each period the factor for its own season.
-- Each accident period is projected to ultimate from its own latest value with its own season's factors; an accident year's ultimate is the sum of the projected ultimates of the periods within it.
-- The same selection process runs on paid, reported, count and ALAE triangles, and the selections should be mutually consistent — a paid factor implying faster emergence than the reported factor at the same age needs an explanation.
+The volume-weighted average weights each year by its claims, so the large years dominate it. Fewer years make an average more responsive to a recent change, and more years make it more stable. The selection trades one against the other.
 
-![[Media/Figures/Age_to_Age_Factor.svg|340]]
+> [!example]- Reported claims are 500, 750 and 875 at 12, 24 and 36 months for accident year 2021, 550, 825 and 950 for 2022, and 600 and 900 for 2023. What are the volume-weighted factors? {Example}
+> - The 12-24 factor is $(750 + 825 + 900)/(500 + 550 + 600) = 2{,}475/1{,}650 = 1.500$.
+> - The 24-36 factor is $(875 + 950)/(750 + 825) = 1{,}825/1{,}575 = 1.159$.
+> - The individual 24-36 factors are $875/750 = 1.167$ and $950/825 = 1.152$, so their simple average is $1.159$ too.
 
-> [!example]- Selecting Factors from a Column {Example}
-> Cumulative reported losses ($000s):
->
-> | AY | 12 mo | 24 mo | 36 mo |
-> |---|---|---|---|
-> | $2021$ | $500$ | $750$ | $875$ |
-> | $2022$ | $550$ | $825$ | $950$ |
-> | $2023$ | $600$ | $900$ | |
->
-> Compute the individual and volume-weighted factors and select.
->
-> > [!answer]-
-> > **$12$–$24$:**
-> >
-> > $$\frac{750}{500} = 1.500 \qquad \frac{825}{550} = 1.500 \qquad \frac{900}{600} = 1.500$$
-> >
-> > $$f^{\text{vol-wtd}} = \frac{750 + 825 + 900}{500 + 550 + 600} = \frac{2{,}475}{1{,}650} = 1.500$$
-> >
-> > **$24$–$36$:**
-> >
-> > $$\frac{875}{750} = 1.167 \qquad \frac{950}{825} = 1.152$$
-> >
-> > $$f^{\text{vol-wtd}} = \frac{875 + 950}{750 + 825} = \frac{1{,}825}{1{,}575} = 1.159$$
-> >
-> > Selections: $1.500$ and $1.159$. With only two observations at $24$–$36$ and a $1.5\%$ spread between them, the volume-weighted average is a reasonable pick — but the column is thin, and a benchmark from a wider data source is worth comparing against before it is trusted.
+## Selecting an age-to-age factor
 
-> [!example]- When the Averages Disagree {Example}
-> The $12$–$24$ column of a liability triangle:
->
-> | AY | Factor | Losses at 12 mo ($000s$) |
-> |---|---|---|
-> | $2018$ | $1.42$ | $4{,}100$ |
-> | $2019$ | $1.45$ | $4{,}300$ |
-> | $2020$ | $1.38$ | $900$ |
-> | $2021$ | $1.61$ | $4{,}800$ |
-> | $2022$ | $1.63$ | $5{,}200$ |
-> | $2023$ | $1.66$ | $5{,}600$ |
->
-> ($2020$ was a partial year of writings after a mid-year book transfer.) What should be selected?
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Simple all-year} &= 1.525 \\
-> > \text{Volume-weighted all-year} &= 1.558 \\
-> > \text{Latest 3-year simple} &= 1.633 \\
-> > \text{Medial (drop high/low)} &= 1.528
-> > \end{align*}$$
-> >
-> > The averages span eleven points, and choosing between them by formula misses the point. **The column has a trend**: $1.42$, $1.45$, $1.38$, then $1.61$, $1.63$, $1.66$. Something changed around $2021$ — development is genuinely slower to emerge, or case reserving weakened, or the mix shifted toward longer-reporting claims.
-> >
-> > Any all-year average blends two regimes and lands between them, describing neither. The defensible selection is from the **latest three years** ($\approx 1.63$), *provided* the actuary can identify what changed and satisfy themselves it will persist. If it cannot be explained, the factor selection is not the real problem — the unexplained change is, and it needs the operational enquiry Friedland's Chapter 4 describes.
-> >
-> > The $2020$ year deserves separate handling in any case: at $900$ against a normal $4{,}000$+, it is a partial year whose factor carries little information, which is precisely the case for a medial or volume-weighted approach rather than a simple average.
+Friedland lists what actuaries look for in the factors before selecting:
+
+1. **Smooth progression** across the ages, with development decreasing steadily as the accident year matures.
+2. **Stability** down each column, a small range of factors at the same age.
+3. **Credibility** of the experience, from its volume and how alike its claims are.
+4. **Changes in patterns** that suggest a change in operations or environment.
+5. **Applicability** of the history to the future development.
+
+A trend or shift in the recent factors of a column is a signal, not noise, and an all-year average blends two regimes and fits neither. The latest years are then selected, provided the change can be explained and is expected to last. A factor high along a **diagonal** rather than down a column is a calendar year effect, which is fixed by restating the triangle, such as by [[Berquist-Sherman Method|Berquist-Sherman]], not by averaging. An anomalous [[Large Loss|large loss]] is removed from the triangle before the factors are computed. When the insurer's own data are thin, benchmark factors from similar lines or the industry are used, with caution about differences in claims practices, coverage and mix.
+
+> [!example]- A liability triangle's 12-24 factors for accident years 2018 to 2023 are 1.42, 1.45, 1.38, 1.61, 1.63 and 1.66, on 12-month claims ($000s) of 4,100, 4,300, 900, 4,800, 5,200 and 5,600. Accident year 2020 was a partial year after a book transfer. Which average should be selected? {Example}
+> - The all-year simple average is $1.525$, the medial average is $1.528$ and the volume-weighted average is $1.558$.
+> - The latest three years' simple average is $1.633$.
+> - The factors jump from about 1.42 to about 1.63 in 2021, so the column has two regimes, and every all-year average lands between them.
+> - The latest three years, about 1.63, are selected if the change can be identified and is expected to persist.
+> - Accident year 2020's factor rests on little volume, which a volume-weighted or medial average gives little weight.
+
+## Age-to-age factors and cumulative development factors
+
+The selected factors are multiplied together into [[Cumulative Development Factor|cumulative development factors]], so the factor from age $n$ to age $n+1$ is also the CDF at age $n$ divided by the CDF at age $n+1$.
+
+## Development below 1.000
+
+Age-to-age factors need not be above 1.000. Salvage and subrogation recoveries, conservative initial case reserving, and claims closing below their reserves all produce downward development. A large claim settling below its case reserve depresses that age's factor.
+
+## Seasonality
+
+With accident periods shorter than a year, factors can differ with the part of the year a period covers. In Friedland's private passenger collision example, accident half-years ending in December close fewer of their claims by six months than those ending in June. An average across all periods blends two patterns. Each season's factor is then the average of the factors of that season's accident periods, applied to the periods of that season. Each accident period is projected to ultimate from its own latest value. An accident year's ultimate is the sum of the projected ultimates of the periods within it.
+
+## Age-to-age factors in Mack's model (Exam 7)
+
+Mack's chain ladder model makes the selected factor the weighted average of the individual factors that has the least variance, given the variance of the next value. If the variance of the next incremental loss is proportional to the losses to date, the factor is the volume-weighted average. If it is proportional to their square, the factor is the simple average. A weighted average factor is simple, uses the company's own data and can weight recent years more, but it is sensitive to outlying factors. A fitted growth curve smooths them, but because it always increases it cannot reflect downward development.

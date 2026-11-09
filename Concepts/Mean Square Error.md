@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6d6d1f02c1b1f7ea8f2347e36553461435c34a96c6a6826385b9da4e2cfd21ca
+  content_hash: sha256:56925b07cbc9200fe18747fdb93d52e32c51727d5fbb839e03705671aa1bb374
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 8 'applying criteria to estimates such as consistency, unbiasedness, sufficiency, efficiency, minimum variance, mean square error' (PDF p.4); James et al. Chapters 1, 2 (excluding Section 2.2.3) on Domain C (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §6.1 Estimators: bias(U) = E(U) − θ; mse(U) = E[(U − θ)²] = var(U) + bias²(U); U unbiased if E(U) = θ for all θ ∈ T; 'if we have two unbiased estimators of θ, we naturally prefer the one with the smaller variance (mean square error)'; more efficient / eff(U, V) = var(V)/var(U) defined for U, V unbiased; asymptotic relative efficiency for asymptotically unbiased sequences; consistency = convergence in probability; mean-square consistent ⇒ consistent; var(M_n) = σ²/n; var(S_n²) = (1/n)(σ4 − (n−3)σ⁴/(n−1)), sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
@@ -18,48 +18,70 @@ verification:
   log: .verify/Concepts/Mean Square Error.md
 ---
 
-The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **overall accuracy** by combining both variance (spread) and bias (systematic error); the same name is used for the prediction error of a fitted model (see *MSE as prediction error* below):
-
-> $$\text{MSE}(\hat{\theta})$$
-
-> $$= E\!\left[(\hat{\theta} - \theta)^2\right]$$
-
-> $$= \text{Var}(\hat{\theta}) + \left(\text{Bias}(\hat{\theta})\right)^2$$
-
-> $$\text{where } \text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
-
-- For an **[[Unbiasedness|unbiased]]** estimator, $\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta})$
-- **Bias–variance trade-off**: a slightly biased estimator can have lower MSE than an unbiased one if its variance is sufficiently reduced
-- The **root mean square error (RMSE)** $= \sqrt{\text{MSE}}$ is in the same units as $\theta$
-- In [[Bühlmann Credibility|Bühlmann (least-squares) credibility]], the credibility estimator is chosen to minimize MSE
-
 ![[Media/Figures/Mean_Square_Error.svg|340]]
 
-> [!example]- MSE of a Biased Estimator {Example}
-> For $X_i \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, compare the MSE of $S^2 = \frac{1}{n-1}\sum(X_i-\bar{X})^2$ (unbiased) and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i-\bar{X})^2$ (biased MLE).
->
-> > [!answer]-
-> > $E[S^2] = \sigma^2$ so $\text{Bias}(S^2) = 0$ and $\text{MSE}(S^2) = \text{Var}(S^2) = \dfrac{2\sigma^4}{n-1}$.
-> >
-> > $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ so $\text{Bias}(\hat{\sigma}^2) = -\frac{\sigma^2}{n}$ and
-> > $$\text{MSE}(\hat{\sigma}^2) = \frac{2(n-1)\sigma^4}{n^2} + \frac{\sigma^4}{n^2} = \frac{(2n-1)\sigma^4}{n^2}$$
-> > For $n > 1$, $\text{MSE}(\hat{\sigma}^2) < \text{MSE}(S^2)$, so the biased MLE has smaller MSE despite being biased.
+The **Mean Square Error** of an [[Estimator|estimator]] $\hat{\theta}$ of a parameter $\theta$ is the expected squared difference between the estimator and the parameter. The mean square error, $\text{MSE}(\hat{\theta})$, is
 
-## MSE as prediction error
+> $$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
 
-In statistical learning the target is a random response, not a fixed parameter. For a model $Y = f(X) + \varepsilon$ fitted as $\hat f$, the MSE on the $n$ observations used to fit it is the **training MSE**; the same average over unseen observations is the **test MSE** (see [[Test Error]]):
+Expanding the square, the mean square error is the variance of the estimator plus the square of its [[Bias|bias]]:
 
-> $$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}\big(y_i - \hat f(x_i)\big)^2$$
+> $$\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta}) + \left[\text{Bias}(\hat{\theta})\right]^2$$
 
-The expected test MSE at a point $x_0$ has **three** parts, not two:
+- $\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$ is the bias of $\hat{\theta}$.
+
+For an [[Unbiasedness|unbiased]] estimator the bias is 0, so the mean square error equals the variance.
+
+> [!example]- Estimator A of $\theta$ is unbiased with variance 100. Estimator B has bias $-4$ and variance 50. What is the mean square error of each? {Example}
+> - The mean square error of A is $100 + 0^2 = 100$.
+> - The mean square error of B is $50 + (-4)^2 = 66$.
+
+## Comparing estimators by mean square error
+
+Of two estimators of the same parameter, the one with the smaller mean square error is preferred, and two estimators with nearly equal mean square errors are about equally good. A biased estimator can have a smaller mean square error than an unbiased one when its variance is smaller by more than its squared bias, as estimator B is above.
+
+For a normal sample of size $n$, the sample variance $S^2$ divides the sum of squared deviations by $n - 1$ and is unbiased. Its mean square error is
+
+> $$\text{MSE}(S^2) = \frac{2\sigma^4}{n-1}$$
+
+The estimator $\hat{\sigma}^2$ that divides by $n$ has [[Bias#Bias of the variance estimator that divides by the sample size|bias]] $-\sigma^2/n$, and its mean square error is
+
+> $$\text{MSE}(\hat{\sigma}^2) = \frac{(2n-1)\sigma^4}{n^2}$$
+
+For every $n \ge 2$, the biased estimator $\hat{\sigma}^2$ has the smaller mean square error.
+
+> [!example]- A normal sample of size 10 is drawn from a population with variance 4. Which of $S^2$ and $\hat{\sigma}^2$ has the smaller mean square error? {Example}
+> - The mean square error of $S^2$ is $2 \times 16/9 = 3.556$.
+> - The variance of $\hat{\sigma}^2$ is $2 \times 9 \times 16/100 = 2.88$, and its bias is $-4/10 = -0.4$.
+> - The mean square error of $\hat{\sigma}^2$ is $2.88 + 0.16 = 3.04$, which equals $19 \times 16/100$.
+> - The biased estimator $\hat{\sigma}^2$ has the smaller mean square error.
+
+## Mean square error of a prediction
+
+In [[Statistical Learning|statistical learning]] the target is a response $y_i$ rather than a parameter. The mean square error of a fitted model on $n$ observations is
+
+> $$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
+- $\hat{y}_i$ is the fitted value for observation $i$.
+
+On the observations used to fit the model it is the training MSE, and on observations not used to fit it the test MSE ([[Test Error|test error]]). The mean square error of a forecast is the same average, taken over the squared forecast errors. For a model $Y = f(X) + \varepsilon$ fitted as $\hat{f}$, the expected test MSE at a new point $x_0$ is
 
 > $$
 > \begin{aligned}
-> E\big[(y_0 - \hat f(x_0))^2\big] &= \text{Var}\big(\hat f(x_0)\big) \\
-> &\quad + \big[\text{Bias}\big(\hat f(x_0)\big)\big]^2 \\
+> E\left[(y_0 - \hat{f}(x_0))^2\right] &= \text{Var}(\hat{f}(x_0)) \\
+> &\quad + \left[\text{Bias}(\hat{f}(x_0))\right]^2 \\
 > &\quad + \text{Var}(\varepsilon)
 > \end{aligned}
 > $$
 
-- $\text{Var}(\varepsilon)$ is the **irreducible error**: the expected test MSE can never lie below it, however good $\hat f$ is (the [[Bias-Variance Tradeoff]] governs the other two terms)
-- Reserving uses the same split: Mack (1994) takes the MSE of a reserve forecast $\hat C_{iI}$ given the data $D$ observed so far, $E\big[(\hat C_{iI} - C_{iI})^2 \mid D\big]$, and splits it into $\text{Var}(C_{iI} \mid D)$, the future random (process) error, plus $\big(E[C_{iI} \mid D] - \hat C_{iI}\big)^2$, the estimation error — see [[Mack Chain Ladder Model]]
+- $\text{Var}(\varepsilon)$ is the irreducible error, the variance of the error term that no model of $f$ can predict.
+
+The expected test MSE is never below $\text{Var}(\varepsilon)$, however flexible the model. The first two terms are governed by the [[Bias-Variance Tradeoff|bias-variance tradeoff]].
+
+> [!example]- A model fitted to three observations $y = 3, 5, 7$ gives fitted values $\hat{y} = 4, 5, 6$. What is the training MSE? {Example}
+> - The residuals are $-1$, 0 and 1.
+> - Their squares sum to 2.
+> - The training MSE is $2/3 = 0.6667$.
+
+> [!trap] Comparing biased estimators by their variances
+> The smaller variance means the smaller mean square error only when both estimators are unbiased. An estimator with variance 10 and bias 10 has a mean square error of $10 + 100 = 110$, larger than the 100 of an unbiased estimator with variance 100.

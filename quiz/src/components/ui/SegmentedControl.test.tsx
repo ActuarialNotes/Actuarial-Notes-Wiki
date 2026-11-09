@@ -39,13 +39,12 @@ describe('SegmentedControl', () => {
     expect(render('custom')).toContain('disabled=""')
   })
 
-  // The selected state is a raised neutral, not a primary fill — a segmented
-  // control is a refinement, and the view's one solid button is the one that
-  // commits (style guide §1.2). Two stacked primary fills was the specific
-  // problem on the quiz builder.
-  it('does not paint the selected option as a primary action', () => {
+  // The selected state is the Ink pick — solid, and the exam's own hue inside
+  // an exam — not the primary fill the view's committing action wears
+  // (style guide §7.0).
+  it('paints the selected option in the pick, not as a primary action', () => {
     const html = render('custom')
-    expect(html).toContain('bg-background')
+    expect(html).toContain('bg-pick')
     expect(html).not.toContain('bg-primary')
   })
 

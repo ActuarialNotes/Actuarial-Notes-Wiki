@@ -48,3 +48,14 @@ describe('rewriteWikilinks repeated-mention dimming', () => {
     expect(out).not.toContain('#repeat')
   })
 })
+
+describe('heading links', () => {
+  it('keeps a [[Page#Heading|label]] heading on the route, labelled by its display text', () => {
+    const out = rewriteWikilinks('By the [[Combinatorics#The multiplication principle|multiplication principle]].')
+    expect(out).toContain('[multiplication principle](/wiki/concept/Combinatorics#the-multiplication-principle)')
+  })
+
+  it('labels an unlabelled heading link by its page', () => {
+    expect(rewriteWikilinks('[[Combinatorics#The multiplication principle]]')).toContain('[Combinatorics](')
+  })
+})

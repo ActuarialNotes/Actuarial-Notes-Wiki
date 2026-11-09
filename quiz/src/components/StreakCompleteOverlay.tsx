@@ -93,13 +93,13 @@ export function StreakCompleteOverlay({ onResolved }: { onResolved: () => void }
               {streak}
             </p>
             <p className="text-lg font-bold tracking-tight">
-              day streak{streak === 1 ? '' : 's'}!
+              day streak
             </p>
           </div>
           <p className="text-sm text-muted-foreground">
             {streak === 1
-              ? 'You lit the flame — answer a question correctly tomorrow to keep it going.'
-              : 'Nice work — answer a question correctly tomorrow to grow your streak.'}
+              ? 'Answer a question correctly tomorrow to make it 2 days.'
+              : `Answer a question correctly tomorrow to make it ${streak + 1} days.`}
           </p>
         </div>
 

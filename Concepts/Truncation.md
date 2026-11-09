@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fd9f0ccba2b73f652bb6b44e224b850b6c0a58615fbb63b5c9958222479506b2
+  content_hash: sha256:eb4a0936c2f10f196aa03f58bc24bac13d09727d26e43b68b50ffa1152d818a4
   sources:
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (open textbook), Ch.4 §4.3.1.3 truncated data (left truncation at a deductible; right truncation; truncated outcomes are not observed at all, censored ones are recorded in limited form; Fig. 4.12), §4.3.1.4 contribution f(x)/(1 - F(C_L)) and exponential special case, HTML fetched 2026-10-05, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.3 MLE for truncated data (L = Π f(x_i)/S(d); 'we would not have been aware of the existence of these values had they not exceeded d'), HTML fetched 2026-10-05, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -15,26 +15,36 @@ verification:
   log: .verify/Concepts/Truncation.md
 ---
 
-**Truncation** occurs when observations below (or above) a threshold are **not recorded at all** — unlike [[Censoring]], which records that an unobserved value exists. In insurance, **left-truncation** arises with deductibles: only losses exceeding the deductible $d$ are reported.
-
-> **Left-truncated likelihood contribution** (only losses $X > d$ are observed):
-> $$L_i(\theta) = \frac{f(x \mid \theta)}{S(d \mid \theta)}$$
-
-> $$= \frac{f(x \mid \theta)}{P(X > d \mid \theta)}$$
-
-> $$x > d$$
-
-- Under left-truncation at $d$, the effective distribution is the **conditional** distribution $X \mid X > d$
-- Failing to adjust for truncation biases the estimates. The average of the reported claims estimates $E[X \mid X > d]$, not $E[X]$, so it is biased **upward** (only the larger claims are seen). A distribution fitted without the adjustment can err in either direction: a lognormal fitted naively to truncated data overestimates $\mu$, yet can under-predict the high quantiles
-- **Right-truncation**: only values below some upper limit are recorded (less common in insurance)
-- Truncation differs from censoring: with truncation, you do not even know an observation exists; with censoring, you know there is an observation but not its exact value
-
 ![[Media/Figures/Truncation.svg|340]]
 
-> [!example]- MLE With Left-Truncated Exponential Data {Example}
-> Claims above a deductible $d = 1$ are reported. Two reported claims are $x_1 = 2$ and $x_2 = 3$. Assume $X \sim \text{Exp}(\theta)$. Write and maximize the likelihood.
->
-> > [!answer]-
-> > $S(1|\theta) = e^{-1/\theta}$, so each claim contributes $f(x|\theta)/S(1|\theta) = \frac{1}{\theta}e^{-x/\theta}/e^{-1/\theta} = \frac{1}{\theta}e^{-(x-1)/\theta}$.
-> > $$L(\theta) = \frac{1}{\theta}e^{-(2-1)/\theta}\cdot\frac{1}{\theta}e^{-(3-1)/\theta} = \frac{1}{\theta^2}e^{-3/\theta}$$
-> > Solving $\ell'(\theta) = -2/\theta + 3/\theta^2 = 0$ gives $\hat{\theta} = 3/2 = 1.5$. This equals $\bar{x} - d = 2.5 - 1 = 1.5$, the sample mean of **excess losses**.
+**Truncation** is the exclusion from the data of every value outside a range, so that an excluded value is not recorded at all. Data are left-truncated at $d$ when values at or below $d$ are not recorded, as when losses below a [[Deductible|deductible]] $d$ are not reported. A value recorded from data left-truncated at $d$ is drawn from the distribution of $X$ given $X > d$, so in [[Maximum Likelihood Estimation|maximum likelihood estimation]] it contributes the conditional density
+
+> $$\frac{f(x)}{S(d)}$$
+
+- $f(x)$ is the density of the loss $X$, and $S(x) = 1 - F(x)$ is its survival function.
+- $x > d$.
+
+> [!example]- Losses are exponential with mean $\theta$, and only losses above a deductible of 1 are reported. The two reported losses are 2 and 3. What is the maximum likelihood estimate of $\theta$? {Example}
+> - With $S(1) = e^{-1/\theta}$, each loss contributes $\frac{f(x)}{S(1)} = \frac{1}{\theta}e^{-(x - 1)/\theta}$.
+> - The likelihood is $L(\theta) = \theta^{-2}e^{-(1 + 2)/\theta} = \theta^{-2}e^{-3/\theta}$.
+> - Setting $l'(\theta) = -2/\theta + 3/\theta^2$ to 0 gives $\hat{\theta} = 3/2 = 1.5$.
+
+## Exponential losses above a deductible
+
+The exponential distribution is [[Exponential Distribution#Memorylessness|memoryless]], so given $X > d$, the excess $X - d$ is exponential with the same mean $\theta$. For $n$ losses $x_1, \ldots, x_n$ left-truncated at $d$, the maximum likelihood estimate of $\theta$ is therefore the mean of the excesses:
+
+> $$\hat{\theta} = \frac{1}{n}\sum_{i=1}^{n} (x_i - d)$$
+
+> [!example]- Losses are exponential, and a policy has an ordinary deductible of 500. Losses below the deductible are not reported. The payments on three reported losses are 1,000, 4,000 and 2,500. What is the maximum likelihood estimate of the mean loss? {Example}
+> - Each payment is the excess $x_i - 500$ of a loss above the deductible.
+> - The estimate is the mean payment, $\hat{\theta} = 7{,}500/3 = 2{,}500$.
+> - The deductible does not change the distribution of the payment, so the ground-up mean loss is also estimated as 2,500.
+
+## The mean of truncated data
+
+The average of the losses recorded above a deductible $d$ estimates $E[X \mid X > d]$, not $E[X]$. It overstates the mean of all losses, because only the larger losses are seen. The mean payment when losses below the deductible are not reported is the [[Deductible#Expected payment per payment|expected payment per payment]], $E[X - d \mid X > d]$.
+
+Data are right-truncated at $u$ when values above $u$ are not recorded. A recorded value then contributes $f(x)/F(u)$.
+
+> [!trap] Confusing truncation with censoring
+> A truncated value is not in the data at all, so the likelihood divides by $S(d)$ for every recorded value. A [[Censoring|censored]] value is in the data with only its range known, so it contributes $S(u)$ in place of a density. A loss below a deductible is truncated, and a loss paid at a policy limit is censored.

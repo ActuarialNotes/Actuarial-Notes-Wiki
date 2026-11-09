@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ef294381eee2a7f233116f6808e04d2d785d6b4d62baf5809264de564acdf5f5
+  content_hash: sha256:77ffa16f1b322ecba722078510ef624fbc6cbabc130a70469f80443a2de86588
   sources:
     - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §3.2 components, additive/multiplicative and log equivalence; §3.3 2x4-MA weights [1/8,1/4,1/4,1/4,1/8]; §3.4 classical decomposition (seasonal averaged per season and adjusted to add to zero / m; no trend estimate for the first and last m/2 observations); seasonally adjusted series, read 2026-10-18, sha256:c11e3a143a4e52c5365ce641b76b17dd41e682b285de613906a5a661dab3e00f — https://otexts.com/fpp3/decomposition.html"
   open_findings: 0
@@ -12,25 +12,41 @@ verification:
   log: .verify/Concepts/Time Series Decomposition.md
 ---
 
-**Decomposition** splits a [[Time Series]] into a trend-cycle component, a seasonal component and an irregular remainder, so each can be inspected and modelled on its own.
-
-> $$\text{additive: } Y_t = m_t + s_t + z_t$$
->
-> $$\text{multiplicative: } Y_t = m_t \times s_t \times z_t$$
-
-- **Trend $m_t$** is estimated by a centred moving average of length $s$ — for quarterly data $\hat m_t = \tfrac{1}{8}Y_{t-2} + \tfrac14(Y_{t-1}+Y_t+Y_{t+1}) + \tfrac18 Y_{t+2}$, the two half-weights at the ends keeping the window centred
-- **Seasonal $s_t$** is the average detrended value for each period, re-centred so the $s$ factors sum to 0 (additive) or average 1 (multiplicative)
-- **Irregular $z_t$** is what is left, and is what an [[ARIMA]] model is then fitted to
-- A multiplicative decomposition is an additive one on $\log Y_t$: $\log Y_t = \log m_t + \log s_t + \log z_t$
-- The moving average **loses $s/2$ observations at each end**, so the most recent trend estimate — the one a forecaster wants — is the one decomposition cannot give
-- **Seasonal adjustment** is $Y_t - \hat s_t$ (or $Y_t/\hat s_t$), the series with [[Seasonality]] removed
-
 ![[Media/Figures/Time_Series_Decomposition.svg|340]]
 
-> [!example]- Extracting a Seasonal Factor {Example}
-> Quarterly claim counts for one year are 880, 1,020, 1,150, 950, and the centred moving average at Q3 is 1,000. What is the Q3 detrended value under each decomposition?
->
-> > [!answer]-
-> > $$\text{additive: } 1{,}150 - 1{,}000 = +150$$
-> > $$\text{multiplicative: } 1{,}150 / 1{,}000 = 1.15$$
-> > Averaging these over all the years in the data gives the raw Q3 seasonal, which is then re-centred so the four additive factors sum to 0 (or the four multiplicative factors average 1). Reporting an unadjusted factor is the common slip — it leaves a bias in the trend.
+A **Time Series Decomposition** is the split of a [[Time Series|time series]] into a trend, a seasonal effect and a random part, so each can be studied on its own. The additive decomposition is
+
+> $$x_t = m_t + s_t + z_t$$
+
+- $m_t$ is the [[Deterministic and Stochastic Trend|trend]].
+- $s_t$ is the [[Seasonality|seasonal effect]].
+- $z_t$ is the random part, usually correlated over time.
+
+When the seasonal effect grows with the trend, the multiplicative decomposition $x_t = m_t \times s_t \times z_t$ is used instead.
+
+## Estimating the trend
+
+The trend is estimated by a moving average centred on $t$, with a window equal to the seasonal period. For monthly data the window is 12 months, and the centred moving average is
+
+> $$\hat{m}_t = \frac{\frac{1}{2}x_{t-6} + x_{t-5} + \cdots + x_{t+5} + \frac{1}{2}x_{t+6}}{12}$$
+
+The half weights at the ends keep the even-length window centred on $t$. For quarterly data the window runs from $x_{t-2}$ to $x_{t+2}$, with the half weights at the ends and the total divided by 4.
+
+> [!example]- Five consecutive quarterly values are 880, 1,020, 1,150, 950 and 920. What is the centred moving average at the third quarter? {Example}
+> - The window is centred on 1,150, with half weights on the two end values.
+> - $\hat{m}_t = (440 + 1{,}020 + 1{,}150 + 950 + 460)/4 = 1{,}005$.
+
+## Estimating the seasonal effect
+
+In the additive decomposition, the seasonal effect at time $t$ is estimated by the observation minus the estimated trend:
+
+> $$\hat{s}_t = x_t - \hat{m}_t$$
+
+In the multiplicative decomposition it is $x_t/\hat{m}_t$. The estimates for each season are averaged over the years and adjusted so that the $s$ effects sum to zero, or average 1 when multiplicative. The seasonally adjusted series is $x_t - \hat{s}_t$.
+
+> [!example]- A quarter's value is 1,150 and its centred moving average is 1,005. What is its seasonal effect under each decomposition? {Example}
+> - Additive: $1{,}150 - 1{,}005 = 145$.
+> - Multiplicative: $1{,}150/1{,}005 = 1.144$.
+
+> [!trap] The moving average loses the ends
+> A centred moving average of window $s$ has no value for the first and last $s/2$ observations. The most recent trend, the one a forecast needs, is the one the decomposition cannot estimate.

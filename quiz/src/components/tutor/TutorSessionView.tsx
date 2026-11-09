@@ -118,7 +118,7 @@ export function TutorSessionView({ engine, actions, character }: Props) {
           <p className="text-xs font-medium text-muted-foreground">New concept</p>
           <h3 className="text-base font-semibold">{current.concept}</h3>
           <p className="text-sm text-muted-foreground">
-            Read it before you're asked about it — try its worked example with the answer folded away. The check
+            Read it before you're asked about it, and try its worked example with the answer folded away. The check
             comes when you're back.
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -126,7 +126,7 @@ export function TutorSessionView({ engine, actions, character }: Props) {
               <BookOpen className="h-4 w-4" /> Open the page
             </Button>
             <Button variant="outline" className="flex-1" onClick={() => { skipRead(current.concept); next() }}>
-              I know it — check me
+              I know it, check me
             </Button>
           </div>
         </section>
@@ -156,7 +156,7 @@ export function TutorSessionView({ engine, actions, character }: Props) {
           <p className="text-sm text-muted-foreground">
             {session.answered === 0
               ? 'Nothing is due right now.'
-              : `${session.answered} answered. What you missed comes back — later today if you keep going, tomorrow if not.`}
+              : `${session.answered} answered. What you missed comes back after a few more questions if you keep going, or next session if not.`}
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button variant="outline" className="flex-1" onClick={() => { setExtra(); setCurrent(null) }}>

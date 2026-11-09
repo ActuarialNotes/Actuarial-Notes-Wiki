@@ -122,10 +122,10 @@ Priority follows how much a candidate is hurt, not how easy the fix is:
 4. **Pages that state but don't explain.** A page with a definition and a
    formula but no `> [!idea] The idea` card, examples that plug in numbers with
    no plan or "why" line, or no contrast with the concept it is confused with.
-   And **missing warnings and identification guidance**: the two collapsible
-   closing sections — `> [!tip]- How it appears on the exam` and
-   `> [!warning]- Exam traps` — with at most one inline `> [!trap]` card where a
-   slip is tied to the formula. The `actuarial-concept-definitions` skill has the
+   And **missing teaching and warnings**: no `##` sections working one running
+   example, no `## Try it`, or no collapsible `> [!warning]- Exam traps` closing
+   the page, with at most one or two inline `> [!trap]` cards where a slip
+   happens. The `actuarial-concept-definitions` skill has the
    shape of all of these.
 5. **Second worked examples** on pages carrying only a plug-in.
 6. **Questions** for zero-coverage concepts.
@@ -195,6 +195,10 @@ These break the built app while looking perfect in the markdown and in Obsidian.
   a standard normal table *is* provided on-screen; calculators limited to the
   TI BA-35 / BA II Plus / BA II Plus Professional / TI-30Xa / TI-30X II /
   TI-30X MultiView; scored 0–10 with 6 to pass.
+
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. When the review rewrites a page, a question or a guide, the rewrite is held to it; when it finds the app saying something about an exam (a status line, an exam list, a count), check that against the app-copy glossary and the code, since stale exam lists in the app were the most common untrue copy the UI review found.
 
 ## Reporting back
 

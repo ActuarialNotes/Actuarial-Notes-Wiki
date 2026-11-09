@@ -25,6 +25,7 @@
  */
 
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { formatAssumptionValue, type AssumptionSet } from '@/lib/assumptionBank'
 
 /** Whose book of business a document is about. */
 export type PracticeArea = 'life' | 'pc' | 'pensions' | 'erm'
@@ -182,6 +183,10 @@ export interface SourceResource {
   /**
    * What the document supplies to the work built on it — listed on its step
    * in a workflow, each row naming where in the document it comes from.
+   *
+   * Derived from the Assumptions Bank (`withBankAssumptions`) for every
+   * document that has a set there; only a document the bank has no set for
+   * still authors its rows here, and the test fails one that does both.
    */
   assumptions?: ResourceAssumption[]
   /**
@@ -218,6 +223,36 @@ export interface ResourceAssumption {
   value?: string
   /** Where in the document it comes from — a section, a table, a page. */
   locator?: string
+  /** The Assumptions Bank row this is (`<set>#<row>`), when it comes from the bank. */
+  bankId?: string
+}
+
+/** The vault page a resource is, by name — what a bank set's `Source` link names. */
+export function resourcePageName(resource: Pick<SourceResource, 'wikiRef'>): string | null {
+  const ref = resource.wikiRef
+  if (!ref) return null
+  return ref.path ? ref.path.replace(/^.*\//, '').replace(/\.md$/i, '') : ref.name
+}
+
+/**
+ * A resource with its assumption rows read from the bank: every set whose
+ * `Source` is this resource's page and that no newer set replaces, newest
+ * first, each row with its locator and its bank id. A resource the bank has
+ * no set for is returned as it is.
+ */
+export function withBankAssumptions(resource: SourceResource, sets: readonly AssumptionSet[]): SourceResource {
+  const page = resourcePageName(resource)
+  const mine = page ? sets.filter(s => s.source === page && !s.supersededBy) : []
+  if (!mine.length) return resource
+  const assumptions = [...mine]
+    .sort((a, b) => b.effective.localeCompare(a.effective))
+    .flatMap(set =>
+      set.rows.map(row => {
+        const value = formatAssumptionValue(row)
+        return { label: row.label, ...(value ? { value } : {}), locator: row.locator, bankId: row.id }
+      }),
+    )
+  return { ...resource, assumptions }
 }
 
 /** The popup-viewer target for a resource: a vault page or its virtual one. */

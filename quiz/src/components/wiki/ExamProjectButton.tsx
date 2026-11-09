@@ -10,14 +10,13 @@ import { HeaderLinkButton } from '@/components/HeaderLinkButton'
  *
  * Only PCPA has a project, so the exam page renders this for `CAS-PCPA` alone.
  */
-export function ExamProjectButton({ iconOnlyOnPhone = false }: { iconOnlyOnPhone?: boolean }) {
+export function ExamProjectButton() {
   return (
     <HeaderLinkButton
       to="/project"
       icon={FlaskConical}
       label="Project"
-      title="The PCPA project — build, validate and report on a GLM in a simulated project window"
-      iconOnlyOnPhone={iconOnlyOnPhone}
+      title="Rehearse the PCPA project"
     />
   )
 }

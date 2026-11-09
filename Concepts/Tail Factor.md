@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0f759105f82e63b82bcff650d0b677567c45fd02573682a91d434486d2bd0733
+  content_hash: sha256:dbf6015c4cd138cde26bae52b1f3acf60314d8bf685258258047ad2576132f30
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.7 Step 5-6, PDF pp.95-97 (printed 89-91): tail factor approaches, Thorne on tail leverage, CDF at the last age = tail, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
@@ -12,65 +12,41 @@ verification:
   log: .verify/Concepts/Tail Factor.md
 ---
 
-**Tail Factor** is the development factor applied beyond the last maturity observable in the triangle — the estimate of all emergence that will occur after the data runs out.
-
-> $$\text{CDF}_{\text{last age} \to \text{ult}} = \text{Tail} \qquad \text{CDF}_{\text{prior age} \to \text{ult}} = f_{\text{last observed}} \times \text{Tail}$$
-
-- The tail is the one factor with **no data behind it**, and in [[Long Tail Lines|long-tail lines]] it is often the single largest assumption in the analysis. A triangle that runs ten years still misses decades of workers compensation medical payments.
-- Methods for selecting one:
-  - **Industry benchmarks** — published patterns (ISO, NCCI, Schedule P aggregates) for the same line, adjusted for differences in limits, mix and case reserving.
-  - **Curve fitting** — fit an exponential or inverse-power curve to the observed age-to-age factors and extrapolate the decay. The inverse power curve gives a heavier tail than the exponential.
-  - **Bondy method** — set the tail equal to the last observed age-to-age factor (or a multiple of it), on the reasoning that development decays geometrically.
-  - **Paid-to-reported convergence** — for a paid tail where reported development is already considered to be at ultimate: reported losses must eventually equal paid, so the ratio of the two at the oldest maturities implies how much paid development remains.
-  - **Judgment**, documented, informed by the settlement characteristics of the line.
-- The tail on a **paid** triangle is larger than on a **reported** one, since case reserves have already anticipated much of the reported development.
-- A tail of exactly $1.000$ is itself an assumption — that development is complete — and it is the wrong one for any casualty line. Understating the tail is a classic source of reserve deficiency, especially with latent exposures (asbestos, environmental, abuse claims).
-- Because the tail multiplies the *oldest* accident years — the ones with the most dollars already reported — a small change in it moves a large reserve. Sensitivity testing the tail is not optional in a long-tail analysis.
-
 ![[Media/Figures/Tail_Factor.svg|340]]
 
-> [!example]- Tail Selection Moves the Reserve {Example}
-> The last observable age is $120$ months, with $\$2{,}000{,}000$ reported. Two tail estimates are under consideration: $1.030$ and $1.050$.
->
-> Quantify the difference.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Tail } 1.030: \; \text{Ultimate} &= \$2{,}060{,}000, \; \text{IBNR} = \$60{,}000 \\
-> > \text{Tail } 1.050: \; \text{Ultimate} &= \$2{,}100{,}000, \; \text{IBNR} = \$100{,}000
-> > \end{align*}$$
-> >
-> > Two points of tail is $\$40{,}000$ on this year — a $67\%$ difference in its IBNR.
-> >
-> > And the tail applies to **every** open accident year, not just the oldest. Across ten years of a mature book with $\$20$M reported beyond $120$ months, the same two-point difference is $\$400{,}000$ of reserve, arrived at by judgment alone.
+A **Tail Factor** is the development factor from the last age observed in a [[Development Triangle|development triangle]] to ultimate. It is needed when the [[Age to Age Factor|age-to-age factors]] at the oldest ages are still above 1.000. For an accident year at the last age $N$ of the triangle, it is
 
-> [!example]- Fitting a Tail by Curve Extrapolation {Example}
-> Observed age-to-age factors for a workers compensation reported triangle:
->
-> | Interval | Factor |
-> |---|---|
-> | $72$–$84$ | $1.040$ |
-> | $84$–$96$ | $1.028$ |
-> | $96$–$108$ | $1.020$ |
-> | $108$–$120$ | $1.014$ |
->
-> Estimate the tail beyond $120$ months.
->
-> > [!answer]-
-> > Work with the **excess** over $1.0$, which is what decays: $0.040$, $0.028$, $0.020$, $0.014$. Successive ratios are
-> >
-> > $$\frac{0.028}{0.040} = 0.70 \qquad \frac{0.020}{0.028} = 0.71 \qquad \frac{0.014}{0.020} = 0.70$$
-> >
-> > A clean geometric decay at $r = 0.70$. Extrapolating from the last excess of $0.014$:
-> >
-> > $$\begin{align*}
-> > \text{Total remaining excess} &= 0.014 \times \frac{0.70}{1 - 0.70} \\
-> > &= 0.014 \times 2.333 \\
-> > &= 0.0327
-> > \end{align*}$$
-> >
-> > $$\text{Tail} \approx 1.033$$
-> >
-> > The **Bondy** shortcut — take the tail as the last observed factor, $1.014$ — gives a materially smaller answer, because it captures only one further period rather than the whole infinite remainder.
-> >
-> > Two cautions. An exponential fit assumes the decay rate holds forever; an **inverse power curve**, which decays more slowly, would give a heavier tail and is the more conservative choice for a line with latent exposure. And the fit describes the *observed* pattern — if the last diagonals contain a case strengthening, the fitted decay inherits it.
+> $$\text{Tail} = \frac{\text{Ultimate Claims}}{C_{\text{AY},\,N}}$$
+
+- $C_{\text{AY},N}$ is the accident year's claims at age $N$.
+
+The tail factor is the [[Cumulative Development Factor|cumulative development factor]] at the last age. When no development is expected after the last age, the tail factor is 1.000. The cumulative factor at an earlier age then includes only the remaining age-to-age factors, and an accident year at the last age is fully developed, with no IBNR. A triangle whose data have stopped developing, such as a report year triangle with no claims reported after its last age, needs no tail.
+
+> [!example]- The oldest accident year has $\$2{,}000{,}000$ of reported claims at 120 months, the last age of the triangle. Two tail factors are considered, 1.030 and 1.050. How much IBNR does each give the year? {Example}
+> - With a tail of 1.030, the ultimate claims are $2{,}000{,}000 \times 1.030 = \$2{,}060{,}000$, so the IBNR is $\$60{,}000$.
+> - With a tail of 1.050, the ultimate claims are $\$2{,}100{,}000$, so the IBNR is $\$100{,}000$.
+> - Two points of tail change this year's IBNR by two-thirds.
+
+The tail factor enters the CDF of every accident year, so it can have a disproportionate leverage on the whole estimate. For [[Long Tail Lines|long-tail lines]], such as U.S. workers compensation and medical professional liability, some claims take more than fifteen years to settle, and the tail is often the largest single judgment.
+
+## Selecting a tail factor
+
+Friedland gives three common approaches:
+
+1. **Industry benchmarks.** Development factors from the industry or from similar lines of the insurer, used with caution about differences in limits, mix and case reserving.
+2. **Curve fitting.** A curve, commonly an exponential decay, is fitted to the selected or observed age-to-age factors and extrapolated beyond the last age.
+3. **Ratio of reported to paid claims.** For a paid triangle whose reported claims are already at ultimate, the ratio of reported to paid claims at the last paid age is the paid tail factor.
+
+When the insurer's history is short, its own data are too thin to show the tail of a long-tailed coverage, which must then be extrapolated or taken from external data.
+
+> [!example]- The excesses over 1.000 of the last four age-to-age factors of a workers compensation triangle are 0.040, 0.028, 0.020 and 0.014, ending at 108-120 months. What tail factor does an exponential decay give beyond 120 months? {Example}
+> - The ratios of successive excesses are $0.028/0.040 = 0.70$, $0.020/0.028 = 0.71$ and $0.014/0.020 = 0.70$, so the excesses decay by about 0.70 a period.
+> - The future excesses are $0.014 \times 0.70 = 0.0098$, then $0.0069$, and so on.
+> - Their product, $1.0098 \times 1.0069 \times \cdots$, is a tail factor of $1.033$.
+
+> [!example]- A paid triangle runs to 108 months. At that age the reported claims of the oldest accident years are at ultimate, and they are 1.002 times their paid claims. What is the paid tail factor? {Example}
+> - The paid claims must still grow to the reported claims, which are ultimate.
+> - The paid tail factor is the ratio of reported to paid claims, $1.002$.
+
+> [!trap] Assuming a tail of 1.000 when development has not stopped
+> A tail of 1.000 is itself an assumption, that development is complete at the last age. When the oldest age-to-age factors are still well above 1.000, a tail of 1.000 understates every accident year's ultimate claims.

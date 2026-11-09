@@ -486,7 +486,8 @@ under **Study Guides**. The page showing is the filled row; the tab's own row is
 
 ### 5.1 Fixed bottom action bars
 
-Several views pin their commit action to the bottom (`Landing`, `Flashcards`, `Search`).
+Several views pin their commit action to the bottom (`Flashcards`, `Search`). The quiz setup
+screen no longer does: its Start is inside the card, and the setup sheet ends in its own.
 The shape:
 
 ```
@@ -521,8 +522,9 @@ element type — match it:
 
 | Element | Radius |
 |---|---|
-| Pills, badges, avatars, icon buttons, rings | `rounded-full` |
-| Buttons, inputs, nav items, small controls | `rounded-md` |
+| Buttons, chips, segments, pills, badges, avatars, icon buttons, rings | `rounded-full` |
+| Dropdown triggers (`rounded-lg`), header tool tiles (10px), menu rows (`rounded-lg`) | see §7.0 |
+| Inputs, nav items | `rounded-md` |
 | **Cards & panels** | `rounded-lg` |
 | Larger feature cards / sheets | `rounded-xl` |
 | Modals / dialogs | `rounded-2xl` |
@@ -558,10 +560,39 @@ raw `shadow-md`. Don't invent new shadow recipes for standard surfaces.
 Use the primitives in `quiz/src/components/ui/` (shadcn-style, CVA variants). Extend a variant
 before writing a bespoke element.
 
+### 7.0 Ink — the control style
+
+Every pill, button, chip and dropdown follows one style, **Ink**. Its class strings live in
+`components/ui/ink.ts` (dropdown triggers and menus, tool tiles, chips) and
+`components/ui/buttonVariants.ts` (buttons). Four rules:
+
+1. **Nothing is filled at rest.** A control is its words or its icon. A press or hover lays a
+   light wash under it (`hover:bg-muted`). No borders on controls.
+2. **What is chosen goes solid, in the pick.** A selected chip or segment, an open dropdown
+   trigger, the picked menu row, an active tool, a filter that narrows the list: all
+   `bg-pick text-pick-foreground`. The pick is black on white / white on black — **or the
+   exam's own colour inside an exam's scope**: `examAccentStyle` sets `--pick` to the exam's
+   vivid hue (white text on it). A menu that portals out of the scope spreads
+   `examAccentStyle` onto itself (`ExamVersionMenu`). The picked menu row ends in the
+   `CheckMark`, in the row's text colour.
+3. **A dropdown is a bold label and a chevron** (`inkTrigger`, 40px, `text-base font-semibold`),
+   the same on the exam strip, the filter rows and the concept popup's footer; its menu is
+   `INK_MENU` with `inkMenuItem` rows (40px, 15px text).
+4. **The committing action is the inverted solid** (`Button` `default`, `bg-primary`) — never
+   the exam colour. So colour reads as *chosen* and black/white as *do it*. The **Return to
+   quiz** pill is the inverted solid too: the one filled object on a page.
+
+An exam's header strip draws its tools as **labelled tiles** (`inkToolTile`: an 18px icon over
+an 11px word — Info, Syllabus, Quiz, Project, Study Guide), solid while the panel each opens
+is open (`aria-expanded`).
+
 ### 7.1 Buttons (`button.tsx`)
 
-Variants: `default` (solid primary), `destructive`, `outline`, `secondary`, `ghost`, `link`.
-Sizes: `default` (h-10), `sm` (h-9), `lg` (h-11), `icon` (h-10 w-10).
+Variants: `default` (inverted solid), `destructive`, `outline`, `secondary`, `ghost`, `link`.
+Sizes: `default` (h-11, 15px), `sm` (h-9), `lg` (h-12), `icon` (h-10 w-10). Every button is a
+pill (`rounded-full`). `outline` and `secondary` are semibold words with no fill; `ghost` is the
+same in the muted colour. All three go solid in the pick while `aria-expanded` or
+`aria-pressed` is true (§7.0).
 
 - **One `default` per view.** Secondary actions → `outline`/`secondary`; tertiary → `ghost` or
   `link`. Cancel in a dialog is `ghost`/`outline`, confirm is `default` (or `destructive`).
@@ -612,6 +643,30 @@ for the one thing on the page the reader must not miss; anything that can wait �
 the closing *Exam traps* list — stays a folding callout. Don't add a fourth card without a meaning
 that none of these carries.
 
+### 7.2c Info popups (`ui/InfoSheet.tsx`)
+
+A popup that reads out **what something is** — a question's Info, the quiz builder's bank
+info, Fact Check, *Where you're losing marks*, the level popup, Learning Progress, the
+keyboard shortcuts — is an **info popup**, built from `InfoSheet` and modelled on the study
+guide's sitting panel (`ExamSittingInfoButton`):
+
+- **A black sheet** (`bg-background`, `rounded-2xl`, `max-w-sm`) so its grouped lists
+  (`GroupedList`, `bg-card`) read as cards on it.
+- **A banner** leads (`InfoBanner`): a tinted card holding the popup's own header — a tile
+  (the exam logo, a verdict mark, the level), a small line naming what the title belongs to,
+  the title, a round close — and, along its foot, a **stat strip** (`Stat`) of the two to
+  four figures that matter. Tinted in the exam's accent when an exam scopes the popup
+  (`examAccentStyle` on the sheet, `EXAM_BANNER`), in a verdict's tone for Fact Check, and
+  the neutral wash otherwise (`NEUTRAL_BANNER`). A figure that isn't known is left out, never
+  estimated — the strip simply has fewer columns.
+- **Rows** below, in grouped lists: a link or button row is `GROUP_ACTION_ROW` with a small
+  `RowTile` or `PublisherChip` and a `RowChevron`; a fact is a `GroupRow`. A group gets a
+  label only when it has a neighbour to be told apart from.
+- **Fine print** last (`InfoFinePrint`): an id, a link to the file, a secondary action.
+- **No captions.** A heading over a list that says what the list plainly is, a line repeating
+  a figure the banner shows, an explanation of what a row does when tapped — cut them
+  (`docs/visual-noise-review.md`).
+
 ### 7.3 Badges & chips (`badge.tsx`)
 
 `rounded-full`, `text-xs font-semibold`. Variants: `default`, `secondary`, `destructive`,
@@ -638,16 +693,16 @@ Exam", a question count. **Always this component**, never a hand-rolled row of b
 four of those had accumulated in two different shapes, none announcing itself as a group.
 
 ```
-Group:     rounded-lg border border-border bg-muted/50 p-0.5   role="radiogroup" + aria-label
-Option:    h-9 (sm) / h-10 (md) rounded-md                     role="radio" + aria-checked
-Selected:  bg-background text-foreground shadow-sm
+Group:     flex gap-1 (no tray)                                  role="radiogroup" + aria-label
+Option:    h-9 (sm) / h-10 (md) rounded-full, words at rest     role="radio" + aria-checked
+Selected:  bg-pick text-pick-foreground font-semibold
 ```
 
 Two rules the component enforces for you:
 
-- **The selected option is a raised neutral, never `bg-primary`.** A segmented control is a
-  refinement, not the view's committing action; a solid primary fill here competes with the
-  one button that is (§1.2, §7.1).
+- **The selected option is the pick, never `bg-primary`** (§7.0). Outside an exam the pick
+  looks like the primary fill, but it is a different token: inside an exam it is the exam's
+  colour, and it never takes the committing action's place.
 - **Roving tabindex + arrow keys.** One tab stop for the group, arrows move within it and
   wrap. `role="radio"` also earns the `select` cue from the delegated sound listener, which
   is the right cue for "picked one of several" (`docs/sound-design.md`).
@@ -728,8 +783,17 @@ dashboard, a search result — gets the plain bar.
 
 ### 7.6 Empty, loading & error states
 
-- **Loading:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted text
-  (`text-sm text-muted-foreground`) — see `WikiFallback`.
+- **Loading a page:** `PageLoading` / `LoadingMark` (`components/LoadingMark.tsx`): six cells
+  of a development triangle, each diagonal pulsing in turn, no words. It fades in after 300ms,
+  so a short wait shows nothing. Every route fallback (`WikiFallback`) and the quiz's wait for
+  its questions use it.
+- **Loading the app (first visit):** the full development triangle in `index.html` (`#boot`),
+  plain HTML drawn before any bundle. It fills **one diagonal per boot step that has really
+  happened** (page, styles, app code, started, session, drawn, first page ready — the later
+  steps reported through `bootStep` in `components/BootDone.tsx`), then the *Ult* column goes
+  green and it lifts. Never advance it on a timer: a step it can't measure fills when it ends.
+- **Loading inside a control:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted
+  text (`text-sm text-muted-foreground`).
 - **Empty:** centered icon in a soft `bg-primary/10 rounded-2xl` tile + short heading +
   one muted explanatory line + a single primary action (see the Dashboard welcome/empty cards).
 - **Error:** route-level `ErrorBoundary` for crashes; inline errors use `text-destructive`.
@@ -937,7 +1001,11 @@ row, a pill or an overhung corner without carrying a background of its own — a
 the old "green circle, white tick" pattern is gone, since a white tick is only invisible
 against one surface.
 
-- **Colour** comes from `currentColor`, defaulting to the `green-500` of §4.1. Override only
+- **Colour** comes from `currentColor`. Inside an exam's scope (an ancestor spreads
+  `examAccentStyle`) it defaults to that exam's `--exam-accent-vivid`, so a topic picked in
+  the quiz setup sheet or a step done in an exam's kit is the exam's colour; outside any exam
+  it defaults to the `green-500` of §4.1. A pass/fail verdict that sits beside a red cross
+  pins its own green. Override only
   where the mark belongs to something that already owns a colour — the streak badge's check
   is orange because it marks the flame, not a finished plan.
 - **Sizes** follow §10: `h-3.5 w-3.5` in a chip, `h-4 w-4` in a row, `h-5 w-5` in a group

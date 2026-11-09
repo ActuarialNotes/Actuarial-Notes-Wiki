@@ -24,6 +24,9 @@ describe('battle skins (docs/actuaria-online.md §6.8)', () => {
     expect(skin.reviewMisses).toBe(true)
     expect(skin.abilities).toBe(true)
     expect(PLAIN_SKIN.abilities).toBe(false)
+    // The Deck is Quiz Battle's own look; the station keeps its own.
+    expect(PLAIN_SKIN.deck).toBe(true)
+    expect(skin.deck).toBe(false)
   })
 
   it('invites a friend to the page the room was made on — the code is the same room either way', () => {

@@ -155,9 +155,9 @@ export interface Label {
 
 /** A question's verdict — answerable, out of reach (`untagged`) or a gap. */
 export const VERDICT_LABEL: Record<string, Label> = {
-  answerable: { label: 'Answerable', tone: 'green' },
-  untagged: { label: 'Out of reach', tone: 'amber' },
-  gap: { label: 'Gap', tone: 'red' },
+  answerable: { label: 'All taught', tone: 'green' },
+  untagged: { label: 'Taught on other pages', tone: 'amber' },
+  gap: { label: 'Not all taught', tone: 'red' },
   'no requirements': { label: 'Nothing required', tone: 'grey' },
   error: { label: 'Check failed', tone: 'grey' },
 }
@@ -168,12 +168,12 @@ export function verdictLabel(verdict: string): Label {
 
 /** Where one requirement is taught, as the reader is told it. */
 export const TIER_LABEL: Record<AnswerabilityTier, Label> = {
-  tagged: { label: 'Tagged page', tone: 'green' },
-  linked: { label: 'One link away', tone: 'green' },
+  tagged: { label: "On this question's concept pages", tone: 'green' },
+  linked: { label: 'On a linked page', tone: 'green' },
   syllabus: { label: 'On the syllabus', tone: 'green' },
-  prerequisite: { label: 'Prerequisite', tone: 'green' },
-  elsewhere: { label: 'Out of reach', tone: 'amber' },
-  missing: { label: 'Not taught', tone: 'red' },
+  prerequisite: { label: 'On a prerequisite exam', tone: 'green' },
+  elsewhere: { label: 'On another page', tone: 'amber' },
+  missing: { label: 'Not taught yet', tone: 'red' },
 }
 
 /** A requirement's standing: what closed it if anything did, else where the check found it. */
@@ -199,18 +199,18 @@ export function checkSentence(entry: AnswerabilityEntry): string {
   const count = (s: string) => reqs.filter((r) => r.status === s).length
   const reach = reqs.filter((r) => IN_REACH.has(r.status)).length
   const parts = [
-    reach && `${reach} ${reach === 1 ? 'is' : 'are'} taught within its reach`,
+    reach && `${reach} ${reach === 1 ? 'is' : 'are'} taught on pages a candidate for this exam would read`,
     count('elsewhere') && `${count('elsewhere')} elsewhere in the notes`,
-    count('missing') && `${count('missing')} on no page`,
+    count('missing') && `${count('missing')} not taught yet`,
   ].filter(Boolean) as string[]
   const things = `${reqs.length} ${reqs.length === 1 ? 'thing' : 'things'}`
   if (parts.length === 1 && reach === reqs.length) {
-    return `The official solution uses ${things}, and every one is taught within its reach.`
+    return `The official solution uses ${things}, and every one is taught on pages a candidate for this exam would read.`
   }
   const list = parts.length > 1
     ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`
     : parts[0]
-  return `The official solution uses ${things}: ${list}.`
+  return `The official solution uses ${things}. ${list.charAt(0).toUpperCase()}${list.slice(1)}.`
 }
 
 export type AnswerabilityEvent =
@@ -399,10 +399,10 @@ export function nowSentence(entry: AnswerabilityEntry, reach?: ReachNow): string
   const notRequired = states.filter((s) => s.state === 'not-required').length
   const things = `${reqs.length} ${reqs.length === 1 ? 'thing' : 'things'}`
   if (open === 0) {
-    if (notRequired === 0) return 'Everything the solution uses is taught within its reach.'
+    if (notRequired === 0) return 'Everything the solution uses is taught on pages a candidate for this exam would read.'
     if (notRequired === reqs.length) return 'Nothing the solution uses needs to be taught in the notes.'
-    return `Everything the solution uses is taught within its reach, but for ${notRequired} ${notRequired === 1 ? 'step' : 'steps'} the notes needn’t teach.`
+    return `Everything the solution uses is taught on pages a candidate for this exam would read, apart from ${notRequired} ${notRequired === 1 ? 'step' : 'steps'} the notes don’t need to teach.`
   }
-  return `${open} of the ${things} the solution uses ${open === 1 ? 'is' : 'are'} still open.`
+  return `${open} of the ${things} the solution uses ${open === 1 ? 'isn’t' : 'aren’t'} yet taught on pages a candidate for this exam would read.`
 }
 

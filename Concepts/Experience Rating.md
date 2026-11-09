@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:dc1e9d1c1bd7e6499d9b2a8074f26bd51116ab40c961dcb37937dbb8b8621e7d
+  content_hash: sha256:0b882464ce7199e034e238b4e7f7156fc6eb5f642fdbe0e4c783eef245d9e5a0
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 p.201 (PDF p.213); Ch. 15 pp.295-296, Tables 15.4-15.5 (PDF pp.307-308); App. D p.D-2 (PDF p.395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 1
@@ -12,127 +12,121 @@ verification:
   log: .verify/Concepts/Experience Rating.md
 ---
 
-**Experience Rating** modifies an individual insured's manual premium prospectively, using its own past loss experience, weighted by [[Credibility|credibility]]. The output is an **experience modification factor** (mod): above $1.0$ for worse-than-expected experience, below for better.
+![[Media/Figures/Experience_Rating.svg|340]]
+
+**Experience Rating** modifies an individual insured's manual premium prospectively, using its own past loss experience, weighted by [[Credibility|credibility]]. The output is an **experience modification factor** (mod): above $1.0$ for worse-than-expected experience, below for better. In its simplest form, the mod is
 
 > $$M = Z \times \frac{A}{E} + (1 - Z)$$
 
+- $A$ is the insured's actual losses over the experience period and $E$ the losses expected for a risk of its size and class.
+- $Z$ is the credibility of the insured's experience, between 0 and 1.
+
+The mod is applied to the manual premium, so
+
 > $$\text{Modified Premium} = \text{Manual Premium} \times M$$
 
-- $A$ is the insured's actual losses over the experience period and $E$ the losses expected for a risk of its size and class. A mod is therefore a **relative** measure: it says how this risk compares with the average risk already reflected in the manual rate.
-- Credibility rises with size. A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little; a large risk approaches $Z = 1$ and effectively self-rates.
-- Losses are **capped** at a per-claim limit before entering $A$. A single catastrophic claim should not dominate a mod, and the split between primary (capped) and excess losses is the mechanism the NCCI workers compensation formula uses to weight frequency more heavily than severity — the theory being that frequency is more predictive of future experience than severity.
-- Experience rating is **prospective**: it uses a completed experience period (typically three years, excluding the most recent, incomplete one) to modify the *coming* policy's premium. [[Retrospective Rating|Retrospective rating]] instead adjusts the *current* policy's premium after the fact.
-- It creates a real incentive for loss control, and an equally real incentive for **claim suppression** — paying small claims outside the policy to keep them out of the mod. Both are consequences of the same mechanism.
-- Order of application: schedule and experience modifications apply to the manual premium to give **standard premium**, which is then the base for a retro plan or a large-deductible programme.
-- **What a credibility factor must do.** Whatever method produces it, the credibility factor $Z$ is expected to have three properties. $Z$ is a value between 0 and 1: credibility can be neither negative nor more than 100%. $Z$ does not decrease as the size of the risk (its expected losses $E$) increases. As the size of a risk increases, the ratio of $Z$ to $E$ decreases, which amounts to the charge for a loss of any given size decreasing as the size of the risk increases.
-- **Bühlmann credibility.** Experience rating uses a Bühlmann framework, $Z = E/(E+K)$, where $K$ is the expected value of the process variance divided by the variance of the hypothetical means. Substituting it into the mod gives $M = \dfrac{ZA + (1-Z)E}{E} = \dfrac{A + K}{E + K}$. Process variance is purely random and should not be charged to the risk; the variance of the hypothetical means is the risk being innately different from its class, and $Z$ is the portion of experience due to those differences.
-- **Stabilising the mod.** A Maximum Single Loss (MSL) caps individual large losses when they enter the risk's actual experience $A$, so a single random event cannot exert too much influence on the mod. A minimum and maximum mod are a final measure to keep the experience rating adjustment from being too extreme. The MSL, the min and max mods and $Z$ itself all vary with the size of the risk.
-- **Split loss plans.** A split loss plan separates each claim into layers at a split point. Apply the split point to each claim separately: the claim's primary loss is the lesser of the claim's loss and the split point, and its excess loss is the remainder above the split point, which is zero for a claim at or below the split point. Primary and excess losses are dollar amounts, each summed over the risk's claims, not claim counts. The risk's actual primary and excess losses are then compared with expected primary and excess losses separately.
-- With a low split point the primary layer measures **frequency** (actual primary above expected must mean more claims than expected, since primary losses are truncated from above) and the excess layer measures **severity**.
-- **Why split.** Many real loss distributions are skewed with extremely heavy tails, so the most predictive estimate might come from normalising the losses, for example by assigning credibility to the logarithm of the loss amount. A split rating plan, which gives much more weight to the primary portion of losses than to the excess portion, is a linear approximation to assigning credibility to the log of the loss amount — a compromise between simplicity and precision. The split plan has been found to produce empirically better results for the NCCI workers compensation plan than a total or limited loss plan, perhaps because workers compensation loss distributions are very heavy tailed.
-- **The split-plan mod.** With subscripts $p$ for primary and $e$ for excess, $E = E_p + E_e$ total expected losses, and credibilities $Z_p$ and $Z_e$:
+A mod is therefore a **relative** measure: it says how this risk compares with the average risk already reflected in the manual rate. Experience rating is **prospective**: it uses a completed experience period (typically three years, excluding the most recent, incomplete one) to modify the *coming* policy's premium. [[Retrospective Rating|Retrospective rating]] instead adjusts the current policy's premium after the period. Order of application: schedule and experience modifications apply to the manual premium to give **standard premium**, which is then the base for a retro plan or a large-deductible programme.
 
-  $$M = \frac{Z_p A_p + (1-Z_p)E_p + Z_e A_e + (1-Z_e)E_e}{E} = 1 + Z_p\frac{A_p - E_p}{E} + Z_e\frac{A_e - E_e}{E}$$
+The mod creates an incentive for loss control. It also creates an incentive for **claim suppression**, paying small claims outside the policy to keep them out of the mod.
 
-  In words, the split-plan mod is unity (the manual premium) plus the primary credibility times the primary deviation (actual minus expected primary losses) divided by total expected losses, plus the excess credibility times the excess deviation (actual minus expected excess losses) divided by total expected losses.
-- **The NCCI weight-and-ballast form.** The NCCI uses a mathematically equivalent formula written with an excess loss weighting factor $w$ and a ballast value $B$:
+> [!example]- An insured has expected losses of $\$200{,}000$, actual capped losses of $\$280{,}000$ and a credibility of 0.60. Its manual premium is $\$100{,}000$. What are its mod and modified premium? {Example}
+> - The ratio of actual to expected losses is $280{,}000/200{,}000 = 1.40$.
+> - The mod is $0.60 \times 1.40 + 0.40 = 1.24$.
+> - The modified premium is $100{,}000 \times 1.24 = \$124{,}000$.
+> - With a credibility of 0.25, the same experience would give a mod of $0.25 \times 1.40 + 0.75 = 1.10$.
 
-  $$M = \frac{A_p + wA_e + (1-w)E_e + B}{E_p + (1-w)E_e + B + wE_e} = \frac{A_p + wA_e + (1-w)E_e + B}{E + B}$$
+## Credibility in experience rating
 
-  Matching the two forms, the primary credibility is $Z_p = E/(E+B)$ and the excess credibility is $Z_e = wZ_p = wE/(E+B)$.
-- **NCCI expected losses** (Werner & Modlin, Ch. 15). The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, multiplied by the class's expected loss rate per hundred dollars of payroll. The expected loss rates reflect the losses expected to be reported at the evaluation of each experience-period policy.
-- **The D-ratio.** The expected primary losses are the expected losses multiplied by the D-ratio, the [[Loss Elimination Ratio|loss elimination ratio]] at the primary loss limit, which is the share of expected losses that is expected to be primary. The expected excess losses are the expected losses minus the expected primary losses, which is one minus the D-ratio times the expected losses.
-- **Mods in an overall indication** (Werner & Modlin, App. D). In a workers compensation rate level indication, historical loss cost premium is computed as if each year's historical average experience modification factor was used. Multiplying it by the ratio of the average mod expected in the projected period to that year's historical average mod brings it to the mod level expected in the future.
-- **Evaluating a plan: the quintile test.** An effective experience rating plan should identify risk differences among otherwise similar risks and adjust for them. Rank the risks by the size of their mod and collapse them into five groups; calculate the manual loss ratio (losses over manual premium) and the standard loss ratio (losses over standard, modified premium) for each group; and observe any trends across the groups. An upward trend in manual loss ratios as the mod rises shows that the plan identifies differences between risks. Standard loss ratios that are much less dispersed, with no discernible trend, show that it adjusts for them.
-- A downward trend in standard loss ratios as the mods increase means the plan gives too much credibility to the risks' own experience; an upward trend means it does not give enough credibility. A good experience rating plan will have no discernible trend in the modified loss ratios, so that risks with credit mods and risks with debit mods are equally profitable after the mod is applied — all risks equal in profit potential and therefore equally desirable to write.
-- **The efficiency test.** For each plan, the efficiency test statistic is the ratio of the variance of the standard loss ratios across the quintiles to the variance of the manual loss ratios. The plan with the lower variance ratio is better: it makes risks of differing experience more equally desirable.
-- **Ballast as a stabiliser.** The ballast value $B$ is added to both the numerator and the denominator of the NCCI mod. Since the primary credibility is $Z_p = E/(E+B)$, a larger ballast gives the risk's own losses less credibility and keeps the mod closer to $1$. With the Maximum Single Loss and the minimum and maximum mods, the ballast is one of the devices that dampen the effect of one risk's experience on its mod.
-- **Don't count the same experience twice.** Whatever already shows in a risk's past losses is already reflected in its experience mod. A schedule credit for a safety program that was in place during the experience period would double-count the expected benefit of the program, first by the schedule credit and then by the experience mod. A recent change that the experience period does not yet reflect, such as a newly hired safety manager, can properly earn a schedule credit. A risk too small to have fully credible experience might still be given some schedule credit for a program it has always had, but less than a risk whose program is new, because its mod credits the program's effect only in part.
-- **The ISO commercial general liability plan.** ISO's *Commercial General Liability Experience and Schedule Rating Plan* experience rates and schedule rates CGL risks. A policy may be written on an occurrence basis, covering claims that occur while it is in force, or on a claims-made basis, covering any claim reported while it is in force whatever the accident date. The rules below are as BattleActs' study guide to the manual describes them.
-- **ISO experience period (Rule 4).** The plan uses the three most recent complete policy years, or as few as one complete policy year when no more data exists. Those years end no later than six months before the rating date, which leaves out the most recent policy year, since it is still incomplete.
-- **ISO experience modification (Rule 5).** The ISO experience modification is defined from two ratios, the actual experience ratio (AER) and the expected experience ratio (EER). A positive modification is a debit and a negative modification is a credit.
-- **ISO basic limits expected losses.** For each experience year and sub-line (premises/operations and products), the basic limits expected losses (BLEL), which include allocated loss adjustment expense, are the company expected loss ratio times the annual basic limits company premium. When only total annual company premium at the limits actually purchased is available, Rule 10 restates it at basic limits first.
-- **ISO company subject loss cost (Rule 5B, the standard approach).** For each experience year and sub-line, multiply the basic limits expected losses by policy adjustment factor 13B, policy adjustment factor 13C and the detrend factor from Rule 14. The company subject loss cost (CSLC) is the sum of these products over all experience years and sub-lines.
-- **What the ISO adjustment factors do.** Policy adjustment factor 13B translates the policy type being rated, such as a claims-made policy, to an occurrence basis. Policy adjustment factor 13C then converts that occurrence basis to the policy type that was in force in each historical year. The detrend factor brings the expected losses back to the cost level of the historical experience they will be compared with. So a risk whose first claims-made policy is being rated still uses its prior occurrence policies as its experience period, and the change of policy type is handled by the policy adjustment factors.
-- **The CSLC is already detrended.** Because the detrend factor is one of the factors in every row of the company subject loss cost, the CSLC is already at the level of the historical experience, and no further trend or detrend factor is applied to it.
-- **ISO credibility, EER and MSL (Rule 16).** The company subject loss cost is looked up in the Rule 16 table to find the risk's credibility (which also decides eligibility for experience rating), its expected experience ratio and its Maximum Single Loss.
-- **ISO expected future development (Rules 5D and 5E).** For each experience year and sub-line, the expected future development is that row's company subject loss cost times the expected experience ratio times a loss development factor from Rule 15, and the rows are summed. The expected future development is also called the Adjustment to Reflect Ultimate Level of Losses (ARULL).
-- **Claims-made years are not developed.** In the ISO plan a claims-made policy always has a loss development factor of 0, so a claims-made year in the experience period adds no expected future development and only its reported losses enter the actual experience.
-- **ISO loss history.** For each experience year and sub-line, the loss history is the incurred loss excluding ALAE capped at the basic per-occurrence limit, plus the ALAE, then capped at the Maximum Single Loss. The actual experience ratio is built from the loss history and the expected future development. Capping every loss at the basic limit makes the ISO CGL plan respond mostly to frequency.
+Credibility rises with size. A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little. A large risk approaches $Z = 1$ and effectively self-rates. Whatever method produces it, the credibility $Z$ is expected to have three properties:
 
-![[Media/Figures/Experience_Rating.svg|340]]
+1. $Z$ is between 0 and 1, so credibility is neither negative nor more than 100%.
+2. $Z$ does not decrease as the size of the risk, its expected losses $E$, increases.
+3. The ratio $Z/E$ decreases as the size of the risk increases, so the charge for a loss of any given size decreases as the size of the risk increases.
 
-> [!example]- Computing an Experience Modification {Example}
-> An insured has expected losses $E = \$200{,}000$, actual capped losses $A = \$280{,}000$, and credibility $Z = 0.60$. The manual premium is $\$100{,}000$.
->
-> Compute the mod and the modified premium.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > M &= 0.60 \times \frac{\$280{,}000}{\$200{,}000} + 0.40 \\
-> > &= 0.60 \times 1.40 + 0.40 \\
-> > &= 0.84 + 0.40 \\
-> > &= 1.24
-> > \end{align*}$$
-> >
-> > $$\text{Modified premium} = \$100{,}000 \times 1.24 = \$124{,}000$$
-> >
-> > The insured's raw loss ratio was $40\%$ worse than expected; credibility passes $60\%$ of that through, giving a $24\%$ surcharge. Had $Z$ been $0.25$ — a much smaller risk with the same relative experience — the mod would be $1.10$ and the surcharge only $10\%$.
+Experience rating uses a Bühlmann framework, $Z = E/(E + K)$, where $K$ is the expected value of the process variance divided by the variance of the hypothetical means. Substituted into the mod, it gives
 
-> [!example]- Why Losses Are Capped {Example}
-> Two insureds in the same class each have $\$200{,}000$ of expected losses and $Z = 0.50$. Over the experience period:
->
-> - **Insured A**: $40$ claims totalling $\$300{,}000$, largest claim $\$25{,}000$.
-> - **Insured B**: $4$ claims totalling $\$300{,}000$, of which one is $\$250{,}000$.
->
-> Compute the mods with and without a $\$50{,}000$ per-claim cap, and comment.
->
-> > [!answer]-
-> > **Uncapped** — both have $A = \$300{,}000$:
-> >
-> > $$M = 0.50 \times 1.50 + 0.50 = 1.25 \text{ for both}$$
-> >
-> > **Capped at $\$50{,}000$** — A is unaffected; B's large claim is cut to $\$50{,}000$, so $A_B = \$100{,}000$. Expected losses must be capped on the same basis; suppose the capped expectation is $\$150{,}000$:
-> >
-> > $$\begin{align*}
-> > M_A &= 0.50 \times \frac{300}{150} + 0.50 = 1.50 \\[4pt]
-> > M_B &= 0.50 \times \frac{100}{150} + 0.50 = 0.83
-> > \end{align*}$$
-> >
-> > The uncapped calculation treats these two risks as identical. They are not: **A has a frequency problem** — forty claims where the class expects far fewer — which is persistent, controllable and highly predictive of next year. **B had one bad accident**, which is largely luck and says little about its future.
-> >
-> > Capping is what lets the mod respond to the signal (frequency) rather than the noise (one severity outcome). It is the same reasoning that caps [[Large Loss|large losses]] in a class rate indication, applied at the level of the individual risk.
+> $$M = \frac{A + K}{E + K}$$
 
-> [!example]- A Split-Plan Mod, Both Ways {Example}
-> A risk has expected primary losses $E_p = \$40{,}000$ and expected excess losses $E_e = \$60{,}000$, so $E = \$100{,}000$. The plan splits each claim at $\$10{,}000$, its ballast is $B = \$100{,}000$ and its excess weighting factor is $w = 0.4$. The risk's claims over the experience period were $\$8{,}000$, $\$4{,}000$, $\$10{,}000$, $\$15{,}000$, $\$25{,}000$ and $\$31{,}000$.
->
-> Split the losses and compute the mod in the weight-and-ballast form and in the credibility form.
->
-> > [!answer]-
-> > Each claim is split on its own: primary is the lesser of the claim and $\$10{,}000$, excess is the rest.
-> >
-> > | Claim | Primary | Excess |
-> > |---|---|---|
-> > | $8{,}000$ | $8{,}000$ | $0$ |
-> > | $4{,}000$ | $4{,}000$ | $0$ |
-> > | $10{,}000$ | $10{,}000$ | $0$ |
-> > | $15{,}000$ | $10{,}000$ | $5{,}000$ |
-> > | $25{,}000$ | $10{,}000$ | $15{,}000$ |
-> > | $31{,}000$ | $10{,}000$ | $21{,}000$ |
-> > | **Total** | $A_p = 52{,}000$ | $A_e = 41{,}000$ |
-> >
-> > **Weight and ballast:**
-> >
-> > $$\begin{align*}
-> > M &= \frac{52{,}000 + 0.4(41{,}000) + 0.6(60{,}000) + 100{,}000}{100{,}000 + 100{,}000} \\
-> > &= \frac{52{,}000 + 16{,}400 + 36{,}000 + 100{,}000}{200{,}000} = \frac{204{,}400}{200{,}000} = 1.022
-> > \end{align*}$$
-> >
-> > **Credibility form:** $Z_p = 100{,}000/200{,}000 = 0.5$ and $Z_e = 0.4 \times 0.5 = 0.2$.
-> >
-> > $$\begin{align*}
-> > M &= 1 + 0.5\,\frac{52{,}000 - 40{,}000}{100{,}000} + 0.2\,\frac{41{,}000 - 60{,}000}{100{,}000} \\
-> > &= 1 + 0.060 - 0.038 = 1.022
-> > \end{align*}$$
-> >
-> > The two forms agree. The risk had more primary loss than expected (a frequency signal, given half credibility) and less excess loss than expected (a severity signal, given only a fifth): the debit from frequency outweighs the credit from severity.
+Process variance is purely random and should not be charged to the risk. The variance of the hypothetical means is the risk being innately different from its class, and $Z$ is the portion of experience due to those differences.
+
+> [!example]- An insured has expected losses of $\$200{,}000$ and actual losses of $\$280{,}000$, and $K = \$300{,}000$. What are its credibility and mod? {Example}
+> - The credibility is $200{,}000/(200{,}000 + 300{,}000) = 0.40$.
+> - The mod is $(280{,}000 + 300{,}000)/(200{,}000 + 300{,}000) = 1.16$.
+> - In the credibility form, $0.40 \times 1.40 + 0.60 = 1.16$, the same mod.
+
+## Capping losses
+
+Losses are **capped** at a per-claim limit before entering $A$. A single catastrophic claim should not dominate a mod, so a Maximum Single Loss (MSL) caps individual large losses when they enter the risk's actual experience. A minimum and maximum mod are a final measure to keep the adjustment from being too extreme. The MSL, the minimum and maximum mods and $Z$ itself all vary with the size of the risk. The expected losses are capped on the same basis as the actual losses.
+
+> [!example]- Two insureds each have $\$200{,}000$ of expected losses and a credibility of 0.50. Insured A had 40 claims totalling $\$300{,}000$, the largest $\$25{,}000$. Insured B had 4 claims totalling $\$300{,}000$, one of them $\$250{,}000$. With a $\$50{,}000$ per-claim cap, the capped expected losses are $\$150{,}000$. What are their mods with and without the cap? {Example}
+> - Uncapped, both have $A = \$300{,}000$ and a mod of $0.50 \times 1.50 + 0.50 = 1.25$.
+> - Capped, A's losses are unchanged, and its mod is $0.50 \times 300/150 + 0.50 = 1.50$.
+> - Capped, B's large claim falls to $\$50{,}000$, its losses to $\$100{,}000$, and its mod to $0.50 \times 100/150 + 0.50 = 0.83$.
+> - **A has a frequency problem**, forty claims where the class expects far fewer, which is persistent, controllable and highly predictive of next year.
+> - **B had one bad accident**, which is largely luck and says little about its future.
+> - Capping is what lets the mod respond to the signal (frequency) rather than the noise (one severity outcome).
+
+## The ISO experience rating plan
+
+In Werner and Modlin's commercial general liability example, the experience rating credit or debit is a credibility weighting of the actual and expected experience ratios:
+
+> $$\text{Credit or Debit} = \frac{\text{AER} - \text{EER}}{\text{EER}} \times Z$$
+
+- $\text{AER}$ is the actual experience ratio, the projected ultimate losses and ALAE, at basic limits and limited by the MSL, divided by the company subject basic limits loss and ALAE costs.
+- $\text{EER}$ is the expected experience ratio, the complement of the expected deviation of the plan's loss costs from those underlying the manual rate, caused for example by the MSL.
+
+A positive result is a debit, which increases premium, and a negative one a credit. In ISO's *Commercial General Liability Experience and Schedule Rating Plan*:
+
+1. **Experience period.** The three most recent complete policy years, or as few as one, ending no later than six months before the rating date, which leaves out the incomplete most recent year.
+2. **Basic limits expected losses.** For each experience year and sub-line (premises/operations and products), the company expected loss ratio times the annual basic limits company premium, including ALAE.
+3. **Company subject loss cost (CSLC).** The basic limits expected losses times policy adjustment factors 13B and 13C and the detrend factor, summed over years and sub-lines. Factor 13B translates the policy type being rated, such as claims-made, to an occurrence basis, and 13C converts that to the policy type in force in each historical year. The detrend factor, the reciprocal of the trend factor, brings current loss costs back to the cost level of each historical year, so no further trend is applied to the CSLC.
+4. **Credibility, EER and MSL.** The CSLC is looked up in the Rule 16 table for the risk's credibility, which also decides eligibility, its EER and its MSL.
+5. **Expected future development.** For each experience year and sub-line, the expected future development is that row's company subject loss cost times the expected experience ratio times a loss development factor from Rule 15, and the rows are summed. A claims-made year has a development factor of 0.
+6. **Loss history.** For each experience year and sub-line, the loss history is the incurred loss excluding ALAE capped at the basic per-occurrence limit, plus the ALAE, then capped at the Maximum Single Loss. The actual experience ratio is built from the loss history and the expected future development.
+
+Capping every loss at the basic limit makes the ISO plan respond mostly to frequency.
+
+> [!example]- A risk's projected ultimate losses and ALAE, at basic limits and limited by the MSL, are $\$200{,}262$, and its company subject basic limits loss and ALAE costs are $\$181{,}366$. Its expected experience ratio is 0.888 and its credibility 0.44. What is its experience credit or debit? {Example}
+> - The actual experience ratio is $200{,}262/181{,}366 = 1.104$.
+> - The deviation from expected is $(1.104 - 0.888)/0.888 = 0.243$.
+> - The debit is $0.243 \times 0.44 = 0.107$, so **the premium rises 10.7%**.
+
+## Split loss plans
+
+The NCCI workers compensation plan splits losses into primary and excess components, so that it weights frequency more heavily than severity, on the theory that frequency is more predictive of future experience than severity. Apply the split point to each claim separately: the claim's primary loss is the lesser of the claim's loss and the split point, and its excess loss is the remainder above the split point, which is zero for a claim at or below the split point. With a low split point the primary layer measures **frequency** and the excess layer **severity**. With primary credibility $Z_p$ and excess credibility $Z_e$, the mod is
+
+> $$M = \frac{Z_p A_p + (1-Z_p)E_p + Z_e A_e + (1-Z_e)E_e}{E} = 1 + Z_p\frac{A_p - E_p}{E} + Z_e\frac{A_e - E_e}{E}$$
+
+- $A_p$ and $A_e$ are the actual primary and excess losses, dollar amounts summed over the risk's claims.
+- $E_p$ and $E_e$ are the expected primary and excess losses, and $E = E_p + E_e$.
+
+The NCCI writes the same mod with a ballast value $B$ and an excess weighting value $w$:
+
+> $$M = \frac{A_p + wA_e + (1-w)E_e + B}{E_p + (1-w)E_e + B + wE_e} = \frac{A_p + wA_e + (1-w)E_e + B}{E + B}$$
+
+- $B$ is the ballast, with $Z_p = E/(E + B)$.
+- $w = Z_e/Z_p$, so $Z_e = wE/(E + B)$.
+
+The ballast and the weighting value come from a table by the policy's expected losses, and both increase as expected losses increase. A larger ballast gives the risk's own losses less credibility and keeps the mod closer to 1.
+
+The expected losses are the actual payroll in hundreds of dollars, by class, for the experience period, times the class's expected loss rate. The rates reflect the losses expected to be reported at each policy's evaluation, 18, 30 and 42 months from the start of the three policy years. The expected primary losses are the expected losses times the **D-ratio**, the [[Loss Elimination Ratio|loss elimination ratio]] at the primary loss limit, and the expected excess losses are the rest.
+
+A split plan is a linear approximation to assigning credibility to the logarithm of the loss amount, which suits heavy-tailed loss distributions. It has been found to produce empirically better results for the NCCI plan than a total or limited loss plan.
+
+> [!example]- A risk has expected primary losses of $\$40{,}000$ and expected excess losses of $\$60{,}000$. The split point is $\$10{,}000$, $B = \$100{,}000$ and $w = 0.4$. Its claims were $\$8{,}000$, $\$4{,}000$, $\$10{,}000$, $\$15{,}000$, $\$25{,}000$ and $\$31{,}000$. What is its mod? {Example}
+> - The primary losses are $8{,}000 + 4{,}000 + 10{,}000 + 3 \times 10{,}000 = \$52{,}000$.
+> - The excess losses are $5{,}000 + 15{,}000 + 21{,}000 = \$41{,}000$.
+> - The numerator is $52{,}000 + 0.4(41{,}000) + 0.6(60{,}000) + 100{,}000 = \$204{,}400$.
+> - The mod is $204{,}400/200{,}000 = 1.022$.
+> - In the credibility form, $Z_p = 0.5$ and $Z_e = 0.2$, and $1 + 0.5(12{,}000/100{,}000) + 0.2(-19{,}000/100{,}000) = 1.022$.
+
+## Evaluating an experience rating plan
+
+An effective plan identifies risk differences among otherwise similar risks and adjusts for them. In the **quintile test**, the risks are ranked by their mods and collapsed into five groups, and the manual loss ratio (losses over manual premium) and standard loss ratio (losses over modified premium) of each group are compared. An upward trend in manual loss ratios as the mod rises shows that the plan identifies differences. Standard loss ratios that are much less dispersed, with no discernible trend, show that it adjusts for them.
+
+A downward trend in standard loss ratios as the mods increase means the plan gives too much credibility to the risks' own experience, and an upward trend means it gives too little. In the **efficiency test**, the statistic is the variance of the standard loss ratios across the quintiles divided by the variance of the manual loss ratios, and the plan with the lower ratio is better.
+
+Whatever already shows in a risk's past losses is already reflected in its experience mod, so a [[Schedule Rating|schedule rating]] credit for it would count it twice. In a workers compensation rate level indication, historical premium is brought to the mod level expected in the future by the ratio of the average projected mod to each year's historical average mod.
+
+> [!trap] Capping the actual losses but not the expected
+> The actual and expected losses must be on the same basis. Capping each claim in $A$ while comparing with uncapped expected losses gives every risk a credit, because the capped losses are compared with an expectation that includes the losses above the cap.

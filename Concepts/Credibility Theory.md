@@ -4,31 +4,51 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:17200fe82cdd7ca8361b090501fca78ee5bd8dbba0a04b6025fdb21233bea219
+  content_hash: sha256:c78c534b7f55fa23ec2f14bfe03fce2e9d6244e0888543d2c8419762a08c29e1
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Credibility Theory.md
 ---
 
-**Credibility Theory** provides the framework for weighting observed experience data against prior or external expectations, balancing the statistical reliability of an individual group's data with the stability of broader pooled data.
-
-> $$\text{Estimate} = Z \cdot \bar{X} + (1 - Z)\cdot \mu_0$$
-
-- $Z \in [0, 1]$ is the **credibility factor**, $\bar{X}$ is the observed experience, and $\mu_0$ is the **complement of credibility** (a class mean, industry data, or manual rate)
-- **Classical ([[Limited Fluctuation Credibility|limited fluctuation]]) credibility** assigns full credibility ($Z = 1$) when a dataset meets a minimum size standard; below that threshold, the square-root rule $Z = \sqrt{n / n_0}$ applies
-- **[[Bühlmann Credibility|Bühlmann]] (greatest accuracy) credibility** derives $Z$ from the ratio of between-group variance to total variance; it minimizes mean squared error rather than satisfying a probability bound
-- **[[Bayesian Credibility|Bayesian]]** credibility takes the estimate to be the posterior mean $E[\theta \mid \mathbf{X}]$, and equals Bühlmann exactly for conjugate priors
-
 ![[Media/Figures/Credibility_Theory.svg|340]]
 
-> [!example]- Classical vs. Bühlmann Credibility {Example}
-> A rating class has $n = 300$ claims. The full-credibility standard for frequency is $n_0 = 1{,}082$ claims.
->
-> > [!answer]-
-> > **Classical:** $Z = \sqrt{300 / 1{,}082} = \sqrt{0.277} = 0.527$
-> >
-> > **Bühlmann** (if between-group variance $v = 0.10$, process variance $\sigma^2 = 0.20$):
-> > $$Z = \frac{v}{v + \sigma^2/n} = \frac{0.10}{0.10 + 0.20/300} = \frac{0.10}{0.1007} \approx 0.993$$
-> >
-> > The two methods yield very different credibilities because Bühlmann accounts for variance structure; classical only uses count relative to the full-credibility threshold.
+**Credibility Theory** is the set of methods for weighting a risk's observed experience against a broader expectation, so that an estimate uses the risk's own data as far as that data is reliable. Every method gives an estimate of the form
+
+> $$U = Z D + (1 - Z) M$$
+
+- $D$ is the observed experience.
+- $M$ is the [[Complement of Credibility|complement of credibility]], such as a class mean, industry data or a manual rate.
+- $Z$ is the [[Credibility|credibility]], between 0 and 1.
+
+The methods differ in how they choose $Z$.
+
+> [!example]- A class's observed pure premium is 250, the manual pure premium is 200, and its credibility is $0.40$. What is the credibility-weighted pure premium? {Example}
+> - The estimate is $0.40(250) + 0.60(200) = 100 + 120 = 220$.
+
+## Limited fluctuation credibility
+
+[[Limited Fluctuation Credibility|Limited fluctuation credibility]] gives full credibility once the experience reaches a [[Full Credibility Standard|full credibility standard]] $n_F$, and below it uses the square-root rule:
+
+> $$Z = \min\left(\sqrt{\frac{n}{n_F}},\; 1\right)$$
+
+- $n$ is the volume of the experience, in the same unit as $n_F$.
+
+> [!example]- A rating class has 300 claims, and the full credibility standard is 1,082 claims. What is its limited fluctuation credibility? {Example}
+> - $Z = \sqrt{300/1{,}082} = \sqrt{0.277} = 0.527$.
+
+## Greatest accuracy credibility
+
+[[Bühlmann Credibility|Bühlmann (greatest accuracy) credibility]] chooses $Z$ to minimize the expected squared error of the estimate. With $n$ observations, the credibility is
+
+> $$Z = \frac{n}{n + k}$$
+
+- $k = v/a$, the [[Expected Value of Process Variance|expected value of the process variance]] $v$ divided by the [[Variance of Hypothetical Means|variance of the hypothetical means]] $a$.
+
+> [!example]- A risk has 3 years of experience, with $v = 400$ and $a = 100$. What is its Bühlmann credibility? {Example}
+> - $k = 400/100 = 4$.
+> - $Z = 3/(3 + 4) = 0.429$.
+
+## Bayesian credibility
+
+[[Bayesian Credibility|Bayesian credibility]] takes the estimate to be the mean of the risk's hypothetical mean given its experience, $E[\mu(\Theta) \mid X_1, \ldots, X_n]$, computed from the [[Posterior Distribution|posterior distribution]] of the risk parameter $\Theta$. It is not of the form $Z D + (1 - Z) M$ in general. When it is, it equals the Bühlmann estimate, and the credibility is called [[Exact Credibility|exact]].

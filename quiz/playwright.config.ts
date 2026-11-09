@@ -38,6 +38,8 @@ const buildEnv = {
   // The Community tab is open to one approved account; the suite's build opens
   // it to every viewer (e2e/community.spec.ts, `COMMUNITY_OPEN_TO_ALL`).
   VITE_COMMUNITY_PREVIEW: 'on',
+  // Games (Quiz Battle, Concept Craft) are hidden from the Quiz tab while in development.
+  VITE_GAMES_PREVIEW: 'on',
 }
 
 export default defineConfig({

@@ -3,6 +3,7 @@ import { FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { opensInReader } from '@/lib/examPdf'
 import { openPdfReader, type PdfReaderDoc } from '@/hooks/usePdfReader'
+import { GROUP_ACTION_ROW, RowChevron, RowTile } from '@/components/ui/infoRows'
 
 /**
  * **The** PDF button. One published document, opened in the app's reader.
@@ -65,11 +66,16 @@ interface PdfLinkButtonProps {
   ariaLabel?: string
   className?: string
   /**
-   * Classes for the label alone — a host with little room (the study guide's
-   * sticky header on a phone) can hide the words and keep the icon, since the
-   * aria-label and tooltip still name the document.
+   * The words drawn on the button when they should be shorter than `label`,
+   * which still names the document to a screen reader and the reader — the
+   * study guide's header tile says "Syllabus".
    */
-  labelClassName?: string
+  shortLabel?: string
+  /**
+   * `row` draws it as a row of an info popup's grouped list (`InfoSheet`): a
+   * small tile, the label, "PDF" and a chevron, the row's full width.
+   */
+  variant?: 'button' | 'row'
 }
 
 /** An unmodified left click — what the aria-label is written for. */
@@ -102,7 +108,8 @@ export function PdfLinkButton({
   tooltip,
   ariaLabel,
   className,
-  labelClassName,
+  shortLabel,
+  variant = 'button',
 }: PdfLinkButtonProps) {
   // Whether *a* plain click would open here, for the label a screen reader
   // hears. The click itself re-decides with the modifiers it actually carries.
@@ -122,14 +129,25 @@ export function PdfLinkButton({
         if (onRead) onRead(doc)
         else openPdfReader(doc)
       }}
-      className={cn('not-prose bg-card', BASE_CLASS, className)}
+      className={variant === 'row' ? cn('not-prose', GROUP_ACTION_ROW, className) : cn('not-prose bg-card', BASE_CLASS, className)}
     >
+      {variant === 'row' ? (
+        <>
+          <RowTile><Icon className="h-3.5 w-3.5" /></RowTile>
+          <span className="min-w-0 flex-1">{shortLabel ?? label}</span>
+          {chip && <span className="shrink-0 text-xs text-muted-foreground">PDF</span>}
+          <RowChevron />
+        </>
+      ) : (
+        <>
       <Icon className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-      {labelClassName ? <span className={labelClassName}>{label}</span> : label}
+      {shortLabel ?? label}
       {chip && (
         <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
           PDF
         </span>
+      )}
+        </>
       )}
     </a>
   )

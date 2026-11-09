@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test'
-import type { Page } from '@playwright/test'
+import { test, expect } from './test'
+import type { Page } from './test'
 
 // The reveal choice, end to end (see quiz/src/lib/revealMode.ts). The same
 // question answered with reveal=during unfolds its verdict and explanation, and
@@ -44,11 +44,11 @@ test.describe('answer reveal', () => {
 
   test('the builder checkbox is remembered across visits', async ({ page }) => {
     const label = 'Show answers after each question'
-    // The choice lives in the settings menu beside the deck card.
-    const settings = page.getByRole('button', { name: 'Quiz settings' })
+    // The choice lives in the setup sheet, which any pill on the card opens.
+    const settings = page.getByTestId('quiz-pill').first()
     await page.goto('/?topic=Probability')
     await settings.click()
-    const box = page.getByRole('checkbox', { name: label })
+    const box = page.getByRole('switch', { name: label })
     // A quiz defaults to answering as you go.
     await expect(box).toBeVisible()
     await expect(box).toHaveAttribute('aria-checked', 'true')
@@ -58,7 +58,7 @@ test.describe('answer reveal', () => {
 
     await page.goto('/?topic=Probability')
     await settings.click()
-    await expect(page.getByRole('checkbox', { name: label }))
+    await expect(page.getByRole('switch', { name: label }))
       .toHaveAttribute('aria-checked', 'false')
   })
 })

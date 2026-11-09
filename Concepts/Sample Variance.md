@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:db6dbdd2770b77502c336473a658554d58cd01b940e13c2be832f0a1fe9e2120
+  content_hash: sha256:e22042d69cfaa7f22ddc2bfa2ab45176b722214fae7729a2ea4bd6fe623638d0
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §5.5 The Sample Variance (divisor n − 1, n − 1 free deviations, computing formula, E(S²) = σ², var(S²) = (σ4 − (n−3)σ⁴/(n−1))/n; outlier exercise: s 16 → 11.62 when one score is dropped), sha256:452e2841007fad173229a9bb069a4acdda8e0d0bc6c1632f7239ef585248b0c6 — https://www.randomservices.org/random/sample/Variance.html"
@@ -19,33 +19,57 @@ verification:
   log: .verify/Concepts/Sample Variance.md
 ---
 
-The **Sample Variance** $S^2$ measures the spread of a random sample around its [[Sample Mean]]. Dividing the sum of squared deviations by $n - 1$ rather than $n$ makes it an [[Unbiasedness|unbiased]] estimator of the population variance $\sigma^2$.
-
-> $$S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$$
-
-> $$E[S^2] = \sigma^2, \qquad \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1} \ \text{ (Normal data)}$$
-
-- The divisor $n - 1$ is the **degrees of freedom**: one is spent estimating $\mu$ by $\bar{X}$, and the deviations $X_i - \bar{X}$ sum to zero, so only $n-1$ of them are free
-- Dividing by $n$ instead gives $\hat\sigma^2 = \frac{n-1}{n}S^2$, which is biased low by $\sigma^2/n$ for any population. For a Normal population it is the [[Maximum Likelihood Estimation|MLE]] and has smaller [[Mean Square Error]] than $S^2$ — the classic bias-variance trade-off in estimation. The MSE comparison needs normality: for Bernoulli$(1/2)$ data, $S^2$ has the smaller MSE once $n \ge 5$
-- The computing form $S^2 = \frac{1}{n-1}\left(\sum X_i^2 - n\bar{X}^2\right)$ is what exam problems usually need
-- For Normal data, $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ independent of $\bar{X}$; this is what makes the $t$-statistic $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ work, and it gives $\text{Var}(S^2) = 2\sigma^4/(n-1)$
-- Tests and [[Confidence Interval|intervals]] for $\sigma^2$ come from the same $\chi^2$ [[Sampling Distribution]]
-- $S^2$ is even less resistant than $\bar{X}$ — deviations are squared, so a single outlier can dominate it entirely
-
 ![[Media/Figures/Sample_Variance.svg|340]]
 
-> [!example]- Computing the Sample Variance {Example}
-> Five claim amounts (in thousands) are $4, 6, 9, 11, 20$. Find $\bar{x}$ and $s^2$.
->
-> > [!answer]-
-> > $$\bar{x} = \frac{4 + 6 + 9 + 11 + 20}{5} = 10$$
-> > $$\sum x_i^2 = 16 + 36 + 81 + 121 + 400 = 654$$
-> > $$s^2 = \frac{654 - 5(10)^2}{5 - 1} = \frac{154}{4} = 38.5$$
-> > So $s = 6.20$ (thousand). Dividing by $5$ instead — the MLE, if the claims are a Normal sample — gives $\hat\sigma^2 = 154/5 = 30.8$.
+A **Sample Variance** is the sum of the squared deviations of a [[Random Sample|random sample]] from its [[Sample Mean|sample mean]] $\bar{X}$, divided by one less than the number of observations. It is the usual [[Estimator|estimator]] of the variance $\sigma^2$ of the distribution. The sample variance $S^2$ of a random sample $X_1, \ldots, X_n$ is
 
-> [!example]- Testing a Variance {Example}
-> A sample of $n = 25$ losses from a Normal population gives $s^2 = 150$. Test $H_0: \sigma^2 = 100$ against $H_1: \sigma^2 > 100$ at $\alpha = 0.05$, given $\chi^2_{0.05, 24} = 36.42$.
->
-> > [!answer]-
-> > $$\chi^2 = \frac{(n-1)s^2}{\sigma_0^2} = \frac{24 \times 150}{100} = 36.0$$
-> > Since $36.0 < 36.42$, **fail to reject $H_0$** at the $5\%$ level — the observed spread is not quite strong enough evidence that the true variance exceeds $100$.
+> $$S^2 = \frac{1}{n-1}\sum_{i=1}^{n} \left(X_i - \bar{X}\right)^2$$
+
+- $n - 1$ is the degrees of freedom of $S^2$, the number of observations less the one used in estimating $\mu$ by $\bar{X}$.
+
+The sample standard deviation $S$ is the square root of $S^2$. Applied to the differences $d_1, \ldots, d_n$ of paired observations, the same formula gives the sample variance of the differences, $s_d^2$.
+
+The sum of squared deviations equals the sum of squares less $n\bar{X}^2$, so the sample variance is also
+
+> $$S^2 = \frac{1}{n-1}\left(\sum_{i=1}^{n} X_i^2 - n\bar{X}^2\right)$$
+
+> [!example]- Five claim amounts, in thousands, are 4, 6, 9, 11 and 20. What is the sample variance? {Example}
+> - The sample mean is $\bar{x} = 50/5 = 10$.
+> - The sum of squares is $16 + 36 + 81 + 121 + 400 = 654$.
+> - The sample variance is $s^2 = (654 - 5 \times 10^2)/4 = 154/4 = 38.5$.
+
+## Unbiasedness of the sample variance
+
+The expected sum of squared deviations from the sample mean is $(n-1)\sigma^2$. Dividing it by $n - 1$ makes the sample variance an [[Unbiasedness|unbiased]] estimator of $\sigma^2$:
+
+> $$E[S^2] = \sigma^2$$
+
+For a random sample from a [[Normal Distribution|normal distribution]], $S^2$ is the minimum variance unbiased estimator of $\sigma^2$.
+
+The estimator that divides by $n$ is $\hat{\sigma}^2 = \frac{n-1}{n}S^2$, the [[Maximum Likelihood Estimation|maximum likelihood estimator]] of $\sigma^2$ for a normal sample. Its expected value is
+
+> $$E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$$
+
+The estimator $\hat{\sigma}^2$ underestimates $\sigma^2$ by $\sigma^2/n$ on average, and this [[Bias|bias]] goes to 0 as $n$ grows. For a normal sample, $\hat{\sigma}^2$ has a smaller [[Mean Square Error|mean square error]] than $S^2$, because its smaller variance outweighs its squared bias.
+
+> [!example]- A random sample of 10 observations is drawn from a normal distribution with variance 50. What are the bias and the mean square error of $S^2$ and of $\hat{\sigma}^2$? {Example}
+> - $S^2$ is unbiased. For a normal sample $\text{Var}(S^2) = 2\sigma^4/(n-1) = 2 \times 2{,}500/9 = 555.6$, which is its mean square error.
+> - $E[\hat{\sigma}^2] = 0.9 \times 50 = 45$, so the bias of $\hat{\sigma}^2$ is $-5$.
+> - $\text{Var}(\hat{\sigma}^2) = 0.9^2 \times 555.6 = 450$, so the mean square error of $\hat{\sigma}^2$ is $450 + (-5)^2 = 475$.
+> - The biased estimator $\hat{\sigma}^2$ has the smaller mean square error.
+
+## Sample variance of a normal sample
+
+For a random sample from a normal distribution, the sample variance is independent of the sample mean, and
+
+> $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$$
+
+- $\chi^2(n-1)$ is the [[Chi-Squared Distribution|chi-squared distribution]] with $n - 1$ degrees of freedom.
+
+> [!example]- A random sample of 10 observations is drawn from a normal distribution with variance 4. What value does the sample variance exceed with probability 0.05? {Example}
+> - $9S^2/4$ has a chi-squared distribution with 9 degrees of freedom.
+> - The value that $\chi^2(9)$ exceeds with probability 0.05 is 16.92.
+> - The sample variance exceeds $16.92 \times 4/9 = 7.52$ with probability 0.05.
+
+> [!trap] Dividing by $n$ for an unbiased estimate
+> Dividing the sum of squared deviations by $n$ gives $\hat{\sigma}^2$, which underestimates $\sigma^2$ on average. For the five claims above it gives $154/5 = 30.8$, not the unbiased estimate 38.5.

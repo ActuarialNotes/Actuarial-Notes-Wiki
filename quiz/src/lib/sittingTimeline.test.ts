@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ExamSitting } from '../data/examSittings'
-import { daysBetween, formatStepDate, sittingTimeline, stepCountdown, type SittingMilestone } from './sittingTimeline'
+import { daysBetween, formatStepDate, formatStepDateShort, sittingHeadline, sittingRuler, sittingTimeline, stepCountdown, type SittingMilestone } from './sittingTimeline'
 
 const oct: ExamSitting = { examId: 'CAS-5', format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-08-27' }
 const paperDay: ExamSitting = { examId: 'FM', format: 'P/P', startDate: '2026-10-01', endDate: null, registrationDeadline: null }
@@ -104,5 +104,58 @@ describe('a project window', () => {
   it("is called a project window, not an exam's", () => {
     const pcpa: ExamSitting = { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-12-16', endDate: '2026-12-31', registrationDeadline: null }
     expect(sittingTimeline(pcpa, [], '2026-09-27')[0].label).toBe('Project window')
+  })
+})
+
+describe('sittingHeadline', () => {
+  const p: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-11-04', endDate: '2026-11-15', registrationDeadline: '2026-09-30' }
+  it('counts down an open window to its close', () => {
+    const today = '2026-11-08'
+    expect(sittingHeadline(sittingTimeline(p, [], today), today)).toEqual({
+      title: 'Exam window open', detail: 'Closes Nov 15', count: '7 days', state: 'now',
+    })
+  })
+  it('says the last day as such', () => {
+    expect(sittingHeadline(sittingTimeline(p, [], '2026-11-15'), '2026-11-15')?.count).toBe('Last day')
+  })
+  it('counts to the next step when nothing is open', () => {
+    const today = '2026-11-08'
+    const fm: ExamSitting = { examId: 'FM', format: 'CBT', startDate: '2026-12-03', endDate: '2026-12-14', registrationDeadline: '2026-11-04' }
+    expect(sittingHeadline(sittingTimeline(fm, [], today), today)).toEqual({
+      title: 'Exam window opens', detail: 'Dec 3', count: '25 days', state: 'next',
+    })
+    expect(sittingHeadline(sittingTimeline(p, [], '2026-09-29'), '2026-09-29')?.title).toBe('Registration deadline')
+    expect(sittingHeadline(sittingTimeline(p, [], '2026-09-29'), '2026-09-29')?.count).toBe('Tomorrow')
+  })
+  it('says nothing once every date has passed', () => {
+    expect(sittingHeadline(sittingTimeline(p, [], '2027-03-01'), '2027-03-01')).toBeNull()
+  })
+})
+
+describe('formatStepDateShort', () => {
+  it("drops the year only when it is this year's", () => {
+    expect(formatStepDateShort({ date: '2026-11-04', endDate: '2026-11-15' }, '2026-11-08')).toBe('Nov 4–15')
+    expect(formatStepDateShort({ date: '2027-01-15' }, '2026-11-08')).toBe('Jan 15, 2027')
+  })
+})
+
+describe('sittingRuler', () => {
+  const p: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-11-04', endDate: '2026-11-15', registrationDeadline: '2026-09-30' }
+  const transcripts: SittingMilestone = { kind: 'results', label: 'Transcripts released', date: '2027-01-18' }
+  it('places every date to scale, the window as a span', () => {
+    const today = '2026-11-08'
+    const r = sittingRuler(sittingTimeline(p, [transcripts], today), today)!
+    expect(r.marks.map(m => [m.at, m.to])).toEqual([[0, undefined], [31.8, 41.8], [100, undefined]])
+    expect(r.today).toBe(35.5)
+    expect(r.months.map(m => m.label)).toEqual(['Nov', 'Dec', 'Jan'])
+  })
+  it('starts the run at today when today comes first', () => {
+    const r = sittingRuler(sittingTimeline(p, [], '2026-09-20'), '2026-09-20')!
+    expect(r.today).toBe(0)
+    expect(r.marks[0].at).toBeGreaterThan(0)
+  })
+  it('drops the today tick once the run is over, and draws nothing for one date', () => {
+    expect(sittingRuler(sittingTimeline(p, [], '2026-12-01'), '2026-12-01')?.today).toBeNull()
+    expect(sittingRuler(sittingTimeline(paperDay, [], '2026-10-01'), '2026-10-01')).toBeNull()
   })
 })

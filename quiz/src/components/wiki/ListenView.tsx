@@ -150,7 +150,7 @@ export function ListenView({ markdown, recordingFor }: Props) {
         </label>
         <span className="ml-auto pr-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
           {engine === 'studio'
-            ? <><Sparkles className="h-3 w-3" /> Studio voice</>
+            ? <><Sparkles className="h-3 w-3" /> Recorded voice</>
             : engine === 'pro'
             ? <><Sparkles className="h-3 w-3" /> Pro voice</>
             : <><Volume2 className="h-3 w-3" /> Browser voice</>}

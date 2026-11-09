@@ -322,6 +322,10 @@ friction.
 
 ---
 
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. An entity's or a resource's description is drawn on a card in the app, so it is app copy too (`.claude/skills/app-copy/`): one or two plain sentences saying what the publisher is or what the document holds. `src/lib/copyGuard.test.ts` counts the em-dash hinges in `data/coworkSources.ts` with the rest of the UI, so take one out when you touch an entry, and lower the ceiling.
+
 ## Checklist
 
 - [ ] Real document → it is a vault page with a `wikiRef`; sample → `sample: true`,

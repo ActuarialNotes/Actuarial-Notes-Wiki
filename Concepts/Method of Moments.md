@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c8ff55592b89ae557a287011d9ae5c16c71234fb1884994f0974de8c68be0e1
+  content_hash: sha256:9a857c2105c2e5e6e1d9a865776d897099c75b69be7929304ad0db23acc14868
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §6.2 Method of Moments (matching sample and distribution moments; mean/variance matching; T² bias −σ²/n and 'no simple, general relationship between mse(T²) and mse(S²)', T² smaller MSE for normal samples; negative binomial U = M²/(T² − M); uniform MoM 2M), sha256:43755b5bee6179fca8d7c1c964e7c6a9bb1a9de6f3916130100c69e666a3194e — https://www.randomservices.org/random/point/Moments.html"
@@ -19,36 +19,60 @@ verification:
   log: .verify/Concepts/Method of Moments.md
 ---
 
-The **Method of Moments** (MoM) estimates parameters by setting the sample moments equal to the theoretical moments and solving. With $k$ unknown parameters, the first $k$ moment equations are used. It is the simplest estimation method and often supplies the starting values for [[Maximum Likelihood Estimation]].
-
-> $$\frac{1}{n}\sum_{i=1}^{n} X_i^{\,r} = E[X^{\,r}], \qquad r = 1, 2, \ldots, k$$
-
-> $$\bar{X} = E[X \mid \theta], \qquad \frac{1}{n}\sum X_i^2 = E[X^2 \mid \theta]$$
-
-- One parameter needs one equation ($\bar{X} = \mu(\theta)$); two parameters need the first two moments, usually solved as mean and variance
-- MoM estimators are **[[Consistency|consistent]]** by the law of large numbers, but they are generally **not** [[Efficiency|efficient]] and not always [[Unbiasedness|unbiased]] — MLE beats them asymptotically
-- They can produce **impossible values** (a negative variance, a shape parameter below zero) when the sample moments are unusual; MLE is constrained by the likelihood and cannot
-- MoM is not built from the [[Sufficient Statistic]], so in some models it leaves information on the table — for the gamma (both parameters unknown), beta and Pareto, the moment estimators are not functions of the sufficient statistics. In others it lands on one anyway: $\bar{X}$ for the Bernoulli and Poisson, and $\big(\bar{X}, \tfrac{1}{n}\sum (X_i - \bar{X})^2\big)$ for the Normal, where the MoM estimators are also the MLEs
-- It handles awkward likelihoods well: for a mixture or a compound distribution, the moments are simple even when the density is not
-- **Grouped data.** When only the counts $n_j$ in intervals $(c_{j-1}, c_j]$ are known, approximate the sample mean from the class marks, the interval midpoints $t_j = (c_{j-1} + c_j)/2$: $\bar{x} \approx \frac{1}{n}\sum_j n_j t_j$. If losses are assumed uniform within each interval, each interval's mean is its midpoint, so the count-weighted average of the midpoints is the mean of the grouped distribution, and it is the sample mean set equal to $E[X \mid \theta]$ (see [[Grouped Data]])
-- Censored or truncated data breaks the plain method — the sample moments no longer estimate the population moments, so the theoretical moments must be recomputed under the [[Censoring]] or [[Truncation]] scheme
-
 ![[Media/Figures/Method_of_Moments.svg|340]]
 
-> [!example]- Gamma Parameters by Moments {Example}
-> A sample of claim amounts has $\bar{x} = 500$ and $s^2 = 125{,}000$ (using the $n$ divisor). Fit a [[Gamma]] distribution with shape $\alpha$ and scale $\theta$ by the method of moments.
->
-> > [!answer]-
-> > For a Gamma, $E[X] = \alpha\theta$ and $\text{Var}(X) = \alpha\theta^2$. Setting these to the sample values:
-> > $$\alpha\theta = 500, \qquad \alpha\theta^2 = 125{,}000$$
-> > Dividing the second by the first gives $\theta = 250$, and then
-> > $$\alpha = \frac{500}{250} = 2$$
-> > The fitted distribution is $\text{Gamma}(\alpha = 2, \theta = 250)$.
+The **Method of Moments** is a method of [[Parameter Estimation|parameter estimation]] that sets the [[Moment|moments]] of a distribution equal to the corresponding moments of the sample and solves for the parameters. For a distribution with $k$ unknown parameters and a sample $x_1, \ldots, x_n$, the $k$ equations are
 
-> [!example]- Method of Moments vs MLE for the Uniform {Example}
-> A sample from $\text{Uniform}(0, \theta)$ has $\bar{x} = 6$ with largest observation $x_{(n)} = 14$. Compare the MoM and ML estimates of $\theta$.
->
-> > [!answer]-
-> > MoM: $E[X] = \theta/2$, so $\hat\theta_{\text{MoM}} = 2\bar{x} = 12$.
-> > MLE: the likelihood is positive only when $\theta \ge x_{(n)}$ and decreasing in $\theta$, so $\hat\theta_{\text{MLE}} = x_{(n)} = 14$.
-> > The MoM estimate is **impossible** — it is smaller than an observed value. This is the standard illustration that matching moments ignores the structure of the likelihood.
+> $$E[X^r] = \frac{1}{n}\sum_{i=1}^{n} x_i^r$$
+
+- $E[X^r]$ is the $r$th raw moment of the distribution, written in terms of its parameters.
+- $\frac{1}{n}\sum x_i^r$ is the $r$th raw moment of the sample.
+- $r = 1, 2, \ldots, k$.
+
+A parameter whose value is given rather than estimated needs no equation. Method of moments estimates are easy to compute, and they are used as starting values for the numerical search for a [[Maximum Likelihood Estimation|maximum likelihood estimate]].
+
+> [!example]- Losses follow a [[Pareto Distribution|Pareto distribution]] with $\alpha = 3$ and unknown $\theta$, so $E[X] = \theta/(\alpha - 1)$. The sample mean of the losses is 500. What is the method of moments estimate of $\theta$? {Example}
+> - There is one unknown parameter, so one equation is needed: $E[X] = \bar{x}$.
+> - The equation is $\theta/2 = 500$.
+> - The method of moments estimate is $\hat{\theta} = 1{,}000$.
+
+## Matching the mean and the variance
+
+For two parameters, the first two moment equations are equivalent to setting the mean of the distribution equal to $\bar{x}$ and its variance equal to
+
+> $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n} x_i^2 - \bar{x}^2$$
+
+- $\hat{\sigma}^2$ divides by $n$, not by $n - 1$ as the [[Sample Variance|sample variance]] $S^2$ does.
+
+> [!example]- A random sample of 10 values from a normal distribution has $\sum x_i = 100$ and $\sum x_i^2 = 2{,}000$. What is the method of moments estimate of the variance? {Example}
+> - The first sample moment is $\bar{x} = 100/10 = 10$.
+> - The second sample moment is $2{,}000/10 = 200$.
+> - The estimate of the variance is $\hat{\sigma}^2 = 200 - 10^2 = 100$.
+
+For a [[Gamma|gamma distribution]] with $E[X] = \alpha\theta$ and $\text{Var}(X) = \alpha\theta^2$, dividing the variance equation by the mean equation gives
+
+> $$\hat{\theta} = \frac{\hat{\sigma}^2}{\bar{x}}$$
+
+> $$\hat{\alpha} = \frac{\bar{x}}{\hat{\theta}}$$
+
+> [!example]- Claim amounts have a sample mean of 500 and $\hat{\sigma}^2 = 125{,}000$. What are the method of moments estimates of the parameters of a gamma distribution? {Example}
+> - The scale estimate is $\hat{\theta} = 125{,}000/500 = 250$.
+> - The shape estimate is $\hat{\alpha} = 500/250 = 2$.
+
+## Grouped data
+
+For [[Grouped Data|grouped data]], only the number of observations $n_j$ in each interval $(c_{j-1}, c_j]$ is known. If the values are assumed uniform within each interval, the sample mean is
+
+> $$\bar{x} = \frac{1}{n}\sum_j n_j\, t_j$$
+
+- $t_j = (c_{j-1} + c_j)/2$ is the midpoint of interval $j$.
+
+> [!example]- Of 100 losses, 60 are in $(0, 1{,}000]$, 30 are in $(1{,}000, 3{,}000]$ and 10 are in $(3{,}000, 5{,}000]$. Losses are uniform within each interval. An exponential distribution is fitted by the method of moments. What is the fitted probability that a loss exceeds 2,000? {Example}
+> - The midpoints of the intervals are 500, 2,000 and 4,000.
+> - The counts multiplied by the midpoints are 30,000, 60,000 and 40,000, which sum to 130,000.
+> - The sample mean is $130{,}000/100 = 1{,}300$.
+> - The exponential mean equals the sample mean, so $\hat{\theta} = 1{,}300$.
+> - The fitted probability is $e^{-2{,}000/1{,}300} = 0.2147$.
+
+> [!trap] An estimate below the largest observation
+> The method of moments ignores which values of a parameter the data allow. For a uniform distribution on $(0, \theta)$, $E[X] = \theta/2$, so the estimate is $2\bar{x}$. A sample with $\bar{x} = 6$ and largest value 14 gives $\hat{\theta} = 12$, which is impossible because a value of 14 was observed. The [[Maximum Likelihood Estimation#Maximum at a boundary|maximum likelihood estimate]] is the largest observation, 14.

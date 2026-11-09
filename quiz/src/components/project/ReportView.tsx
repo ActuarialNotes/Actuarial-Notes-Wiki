@@ -186,7 +186,7 @@ export function ReportView({
           />
         )}
         {!locked && !body.trim() && (
-          <Button variant="outline" size="sm" onClick={() => setBody(outline(projectCase))} title="Insert section headings — a study aid; the CAS provides no template">
+          <Button variant="outline" size="sm" onClick={() => setBody(outline(projectCase))} title="Section headings, as a study aid. The CAS provides no template.">
             <ListTree className="mr-1.5 h-4 w-4" /> Outline
           </Button>
         )}
@@ -195,13 +195,13 @@ export function ReportView({
             <ListChecks className="mr-1.5 h-4 w-4" /> <span className="tabular-nums">{checksFound} / {checks.length}</span>
           </Button>
         )}
-        <Button variant="outline" size="sm" onClick={print} title="Open the report in a print view — save it as PDF from there">
+        <Button variant="outline" size="sm" onClick={print} title="Print view, to save the report as a PDF">
           <Printer className="mr-1.5 h-4 w-4" /> Print / PDF
         </Button>
       </div>
       {bodyImages > 0 && (
         <p className="shrink-0 border-b border-border bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-          The body embeds {bodyImages === 1 ? 'an image' : `${bodyImages} images`}. Attach graphics as appendices instead — they count toward the limit of {APPENDIX_LIMIT}.
+          The body embeds {bodyImages === 1 ? 'an image' : `${bodyImages} images`}. Attach graphics as appendices instead. They count toward the limit of {APPENDIX_LIMIT}.
         </p>
       )}
       <div className="flex min-h-0 flex-1">
@@ -266,7 +266,7 @@ export function ReportView({
         <ProjectDialog title="Attach an appendix" onClose={() => setPicking(false)} wide>
           {candidates.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No images or tables in the project yet. Save a plot from the Plots pane, or write one from code — e.g.
+              No images or tables in the project yet. Save a plot from the Plots pane, or write one from code, e.g.
               <span className="font-mono"> ggsave("output/lift.png")</span>, <span className="font-mono">plt.savefig("output/lift.png")</span> or
               <span className="font-mono"> write.csv(coefs, "output/coefficients.csv")</span>.
             </p>

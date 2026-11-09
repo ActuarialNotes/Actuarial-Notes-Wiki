@@ -46,8 +46,8 @@ export const bornhuetterFerguson: ToolSpec = {
       table: {
         columns: [
           ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN,
-          { key: 'ultimate', label: 'Ultimate', kind: 'number', unit: 'money', computed: true },
-          { key: 'reserve', label: reserve, kind: 'number', unit: 'money', computed: true },
+          { key: 'ultimate', label: 'Ultimate', kind: 'number', unit: 'money', computed: true, formula: '{latest} + {reserve}' },
+          { key: 'reserve', label: reserve, kind: 'number', unit: 'money', computed: true, formula: '{expected} · [1 − 1/{cdf}]' },
         ],
         rows: out,
         footer: {

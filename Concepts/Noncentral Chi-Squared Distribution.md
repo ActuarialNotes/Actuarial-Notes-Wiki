@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:73d93e3855e875032297f90f017dd2b495a21c874ddeefb11434ddfba27f8c58
+  content_hash: sha256:26b577d13c14439c21a05a4f8d7a69992629c55e22e189e105dc934f83b8b977
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018) — publisher eBook preview, §1.4.2 items 4, 6, 7 printed pp.9-10 (PDF pp.26-27): non-central chi-squared chi2(n, lambda) with lambda = sum mu_i^2 for unit-variance normals, mean n + lambda, variance 2n + 4lambda; y'V^-1 y ~ chi2(n, mu'V^-1 mu) for y ~ MVN(mu, V); reproductive property (sum of independent chi2(n_i, lambda_i) is chi2(sum n_i, sum lambda_i)); §1.4.4 item 3 printed p.11 (PDF p.28): non-central F = ratio of non-central chi2/df to independent central chi2/df, mean larger than the central F's, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "Levine, STAT 517 Lecture 24 'Noncentral chi-squared, F, and multiple comparisons' (Purdue, Spring 2016; course reading Hogg, McKean & Craig), PDF pp.2-5: Y = (1/sigma^2) sum X_i^2 with X_i ~ N(mu_i, sigma^2) has mgf (1-2t)^(-r/2) exp(t theta/(1-2t)), t < 1/2, theta = sum mu_i^2/sigma^2; theta = 0 gives central chi2_r; theta = Q(mu_1..mu_n)/sigma^2 for a quadratic form with Q/sigma^2 ~ chi2_r(theta) (p.4); noncentral F = r2 U/(r1 V) with U ~ chi2_r1(theta), V ~ chi2_r2 independent, sha256:f84259546359e3b92d9a0e6f2de41a7f4b445a3063739fdbefe1047f5a9214ae — https://www.stat.purdue.edu/~mlevins/docs/stat517/Lecture24_STAT517.pdf"
@@ -18,73 +18,61 @@ verification:
   log: .verify/Concepts/Noncentral Chi-Squared Distribution.md
 ---
 
-The **Noncentral Chi-Squared Distribution** $\chi^2(r, \theta)$ is the distribution of $\sum X_i^2/\sigma^2$ for $r$ independent [[Normal Distribution|normal]] variables $X_i \sim N(\mu_i, \sigma^2)$ whose means are not all zero. When the null hypothesis is false, a chi-square statistic built from normal data follows it and an F statistic follows the **noncentral F-distribution** built from it, so the two give the [[Power of a Test|power]] of those tests.
+A **Noncentral Chi-Squared Distribution** with $r$ degrees of freedom and noncentrality parameter $\theta$, written $\chi^2(r, \theta)$, is the distribution of the sum of the squares of $r$ independent [[Normal Distribution|normal]] random variables $X_1, \ldots, X_r$ divided by their common variance $\sigma^2$, when their means $\mu_1, \ldots, \mu_r$ are not all 0. A noncentral chi-squared random variable is
 
-> $$Y = \frac{1}{\sigma^2}\sum_{i=1}^{r} X_i^2 \sim \chi^2(r, \theta)$$
+> $$Y = \frac{1}{\sigma^2}\sum_{i=1}^{r} X_i^2$$
+
+and its noncentrality parameter is
 
 > $$\theta = \frac{1}{\sigma^2}\sum_{i=1}^{r} \mu_i^2$$
 
-> $$M_Y(t) = \frac{e^{\theta t/(1 - 2t)}}{(1 - 2t)^{r/2}}, \quad t < \tfrac{1}{2}$$
+With $\theta = 0$, $Y$ has the central [[Chi-Squared Distribution|chi-squared distribution]] $\chi^2(r)$.
 
-> $$f(y) = \sum_{j=0}^{\infty} \frac{e^{-\theta/2}\,(\theta/2)^j}{j!}\, f_{r + 2j}(y)$$
+The mean of $Y$ is
 
 > $$E[Y] = r + \theta$$
 
+and its variance is
+
 > $$\text{Var}(Y) = 2r + 4\theta$$
 
-- $r$ is the degrees of freedom and $\theta \geq 0$ the **noncentrality parameter**. $f_v$ is the density of the central [[Chi-Squared Distribution|chi-squared]] distribution with $v$ degrees of freedom, so $f$ is a [[Mixture Distribution|mixture]] of central chi-squared densities with [[Poisson Distribution|Poisson]]$(\theta/2)$ weights. With $\theta = 0$ it is the central $\chi^2(r)$.
-- **Convention:** $\theta$ here is the full sum $\sum \mu_i^2/\sigma^2$, not half of it. Dobson & Barnett write $\chi^2(n, \lambda)$ with $\lambda = \sum \mu_i^2$ for unit-variance normals, mean $n + \lambda$ and variance $2n + 4\lambda$. Some references define the parameter as half that sum, or its square root; under the halved parameter $\lambda'$ the mean is $r + 2\lambda'$. Check which one a source uses before reading off its mean.
-- **Additivity:** independent $\chi^2(r_i, \theta_i)$ variables sum to $\chi^2\!\left(\sum r_i,\ \sum \theta_i\right)$.
-- **Quadratic forms:** when $Q/\sigma^2$ is chi-squared for normal $X_i$, its noncentrality parameter is found by replacing each $X_i$ in $Q/\sigma^2$ by its mean, $\theta = Q(\mu_1, \dots, \mu_n)/\sigma^2$. For $\mathbf{y} \sim \text{MVN}(\boldsymbol\mu, \mathbf{V})$, $\mathbf{y}^\top\mathbf{V}^{-1}\mathbf{y} \sim \chi^2(n,\ \boldsymbol\mu^\top\mathbf{V}^{-1}\boldsymbol\mu)$.
-- **Noncentral F:** for independent $U \sim \chi^2(r_1, \theta)$ and $V \sim \chi^2(r_2)$, $F = \dfrac{U/r_1}{V/r_2}$ has the noncentral F-distribution $F(r_1, r_2, \theta)$, with mean $\dfrac{r_2(r_1 + \theta)}{r_1(r_2 - 2)}$ for $r_2 > 2$, larger than the central [[F-Distribution]]'s $r_2/(r_2 - 2)$.
-- **Power of the ANOVA F test:** with $k$ groups of $n$ observations and group means $\mu_j$, the between-groups sum of squares over $\sigma^2$ is $\chi^2(k - 1, \theta)$ with $\theta = n\sum_j(\mu_j - \bar\mu)^2/\sigma^2$, so the [[ANOVA]] statistic is $F(k - 1,\ k(n - 1),\ \theta)$. It is central only when $H_0$ (all $\mu_j$ equal) is true. The power is $P\big(F(k - 1, k(n - 1), \theta) > c\big)$, where $c$ is the central critical value; $\theta$ grows with $n$ and the spread of the true means and falls as $\sigma^2$ grows.
-- The CAS MAS-I tables give only central chi-squared and F percentiles, so a noncentral probability needs software.
+> [!example]- Four lines' loss-ratio deviations from plan are independent and normal with standard deviation 0.05, and their true means are 0.05, $-0.05$, 0.10 and 0. What are the distribution, mean and variance of $Y = \sum_{i=1}^{4} X_i^2/0.05^2$, and what is the probability that it exceeds the 5% critical value of $\chi^2(4)$? {Example}
+> - The noncentrality parameter is $\theta = (0.0025 + 0.0025 + 0.01 + 0)/0.0025 = 6$.
+> - $Y$ is $\chi^2(4, 6)$, with mean $4 + 6 = 10$ and variance $2 \times 4 + 4 \times 6 = 32$.
+> - The upper 5% value of the central $\chi^2(4)$ is 9.49.
+> - Software gives $P(Y > 9.49) = 0.470$.
 
-> [!example]- Mean and Power for a Loss-Ratio Monitoring Statistic {Example}
-> Each of four lines' loss-ratio deviation from plan is independent and normal with standard deviation $\sigma = 0.05$. The monitoring statistic is $Y = \sum_{i=1}^{4} X_i^2/\sigma^2$, which is $\chi^2(4)$ when every true deviation is 0. This year the true mean deviations are $0.05$, $-0.05$, $0.10$ and $0$. Find the distribution of $Y$, its mean and variance, and the chance it exceeds the 5% critical value.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \theta &= \frac{0.05^2 + 0.05^2 + 0.10^2 + 0^2}{0.05^2} \\
-> > &= \frac{0.015}{0.0025} \\
-> > &= 6
-> > \end{align*}
-> > $$
-> >
-> > So $Y \sim \chi^2(4, 6)$, with
-> >
-> > $$
-> > \begin{align*}
-> > E[Y] &= 4 + 6 \\
-> > &= 10 \\
-> > \text{Var}(Y) &= 2(4) + 4(6) \\
-> > &= 32
-> > \end{align*}
-> > $$
-> >
-> > The test rejects when $Y > 9.49$, the $0.950$ entry in the $df = 4$ row of the CAS chi-square table. Software gives $P\big(\chi^2(4, 6) > 9.49\big) = 0.470$. Even with one line's true deviation at two standard deviations, the test flags the drift less than half the time.
+## The noncentral F-distribution
 
-> [!example]- Power of a Territory Severity ANOVA {Example}
-> Mean log severity in three territories is truly $8.0$, $8.3$ and $8.6$, with $\sigma = 0.4$. A one-way ANOVA at the 5% level uses $n = 6$ claims per territory. Find the noncentrality parameter, the expected F-statistic and the power.
->
-> > [!answer]-
-> > $\bar\mu = 8.3$, so $\sum(\mu_j - \bar\mu)^2 = 0.09 + 0 + 0.09 = 0.18$:
-> >
-> > $$
-> > \begin{align*}
-> > \theta &= \frac{6(0.18)}{0.4^2} \\
-> > &= 6.75
-> > \end{align*}
-> > $$
-> >
-> > The statistic is $F(2, 15, 6.75)$, with $k - 1 = 2$ and $k(n - 1) = 15$:
-> >
-> > $$
-> > \begin{align*}
-> > E[F] &= \frac{15(2 + 6.75)}{2(15 - 2)} \\
-> > &= 5.05
-> > \end{align*}
-> > $$
-> >
-> > against $15/13 = 1.15$ when $H_0$ is true. The CAS table's upper 5% point of $F(2, 15)$ is $3.682$, and software gives $P\big(F(2, 15, 6.75) > 3.682\big) = 0.546$. Raising $n$ to 10 claims per territory gives $\theta = 11.25$ on $(2, 27)$ df and a power of $0.817$.
+If $U$ is $\chi^2(r_1, \theta)$ and $V$ is an independent central $\chi^2(r_2)$, the ratio
+
+> $$W = \frac{U/r_1}{V/r_2}$$
+
+has the noncentral $F$-distribution $F(r_1, r_2, \theta)$. Its mean is
+
+> $$E[W] = \frac{r_2(r_1 + \theta)}{r_1(r_2 - 2)}$$
+
+- $r_2 > 2$.
+
+With $\theta = 0$ it is the central [[F-Distribution|F-distribution]], whose mean $r_2/(r_2 - 2)$ is smaller.
+
+## Power of the one-way ANOVA F test
+
+In a one-way [[ANOVA]] with $k$ groups of $n$ observations, common variance $\sigma^2$ and true group means $\mu_1, \ldots, \mu_k$, the between-groups sum of squares divided by $\sigma^2$ is $\chi^2(k-1, \theta)$ with
+
+> $$\theta = \frac{n}{\sigma^2}\sum_{j=1}^{k} \left(\mu_j - \bar{\mu}\right)^2$$
+
+- $\bar{\mu}$ is the average of the $k$ group means.
+
+The $F$ statistic therefore has the $F(k - 1, k(n-1), \theta)$ distribution, which is central only when all the group means are equal. The [[Power of a Test|power]] of the test is the probability that this noncentral $F$ exceeds the central critical value. With the degrees of freedom and the critical value fixed, the power increases as $\theta$ increases.
+
+The noncentrality parameter depends only on the deviations of the group means from their average. Adding the same constant to every group mean leaves $\theta$ and the power unchanged. A wider spread of the means, more observations per group or a smaller $\sigma$ raises them.
+
+> [!example]- Mean log severity in three territories is truly 8.0, 8.3 and 8.6, with $\sigma = 0.4$. A one-way ANOVA at the 5% level uses 6 claims per territory. What are the noncentrality parameter, the mean of the $F$ statistic and the power? {Example}
+> - The average of the means is 8.3, so $\sum(\mu_j - \bar{\mu})^2 = 0.09 + 0 + 0.09 = 0.18$.
+> - The noncentrality parameter is $\theta = 6 \times 0.18/0.4^2 = 6.75$.
+> - The statistic is $F(2, 15, 6.75)$, with mean $\dfrac{15(2 + 6.75)}{2(15 - 2)} = 5.05$.
+> - The upper 5% value of the central $F(2, 15)$ is 3.682, and software gives a power of $P(W > 3.682) = 0.546$.
+
+> [!trap] Using the halved noncentrality parameter
+> With $\theta = \sum \mu_i^2/\sigma^2$ the mean is $r + \theta$. A text that defines the parameter as $\lambda = \theta/2$ writes the mean as $r + 2\lambda$. Mixing the two gives a mean that is off by $\theta/2$.

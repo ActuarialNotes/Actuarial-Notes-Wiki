@@ -283,7 +283,7 @@ cash-flow PV.
 |---|---|---|---|---|
 | **Copula Aggregation** | What's the combined distribution of these lines? | Marginal distributions, correlation, copula (Gaussian or t), seed → combined sample and the diversification benefit. → VaR & TVaR, Capital Allocation | Brehm et al. | 3 |
 | **Capital Allocation** | How much capital does each unit use? | Joint sample by unit, measure (TVaR), method (proportional, marginal, Euler) → allocation by unit | Cummins (2000) | 3 |
-| **MCT Ratio** | What's the MCT ratio? | Capital available and each risk's amounts, with every factor transcribed from the OSFI guideline in force (version and date shown) → the ratio. A factor the vault hasn't transcribed is absent, not estimated | OSFI MCT | 3 |
+| **MCT Ratio** | What's the MCT ratio? | Test (MCT or BAAT), capital available and the four risk margins at target, each typed or taken as filed with OSFI → the diversification credit, the minimum and the ratio, beside the filing's own ratio when the inputs are one filing's. **Built** (`capital.mct_ratio`, `docs/osfi-tools-design.md` §8): reproduces all 1,909 MCT and BAAT ratios filed Q1 2023 – Q2 2026, and CAS Exam 6C Spring 2017 Q24 | OSFI MCT | ✓ |
 
 ### 4.9 Life contingencies (SOA, ALTAM/FAM and the FSA tracks)
 
@@ -355,13 +355,16 @@ held to R1–R11 like any other tool, plus these rules, which are R2 applied to 
 | **Yield Curve** | What were interest rates on this date? | Curve, date, term → the curve on or before the date, the yield at the term and the 10Y − 2Y slope | **Built:** the Treasury's daily par yield curve, its last trading day of each month since January 2000 (and the latest day of the month in progress). **Waiting:** the Bank of Canada's zero-coupon curves (§14) | Interest Converter (a par yield is nominal, convertible semiannually; the converter gives the effective rate), and through it Present Value, Annuity, Duration & Convexity and Redington Immunization, whose rate offers it as a source | V2 ✓ |
 | **Loss Development Data** | What are this insurer's published triangles? | Line of business, company → paid and incurred triangles and earned premium by accident year | The CAS Loss Reserving Database (Meyers & Shi, built from NAIC Schedule P: six lines, accident years 1988–1997, ten years of development, the later diagonals kept for back-testing) | Age-to-Age Factors, Ratio Triangle, Expected Claims (premium), Cape Cod | Waits on §14's terms |
 | **Exposure Curve** | What share of a risk's loss sits below this point? | Curve, a point as a share of the sum insured → the share of expected loss | Bernegger's (1997) MBBEFD parameters for the Swiss Re Y1–Y4 curves | Exposure Rating (§4.6) | 2 |
+| **Insurer Return** | What did this insurer file with OSFI? | Insurer, quarter, line of PC4 page 10.00 → the value as filed, the page around it and the line's history; hands the filed lines to MCT Ratio as references | OSFI's *Property and casualty companies* (Open Government Licence – Canada), installed rather than carried (`lib/tools/filings.ts`, `docs/osfi-tools-design.md` §8) | MCT Ratio (§4.8) | ✓ |
 | **Capital Factors** | What factor does the regulator set for this risk? | Guideline in force, risk category → the factor, with the guideline's section | OSFI's MCT guideline, by year | MCT Ratio (§4.8) | 3 |
 
 Second-wave candidates, each waiting on its terms or an extraction script: the SOA's Mortality
 and Other Rate Tables site (CPM2014, Pri-2012 and the other pension and annuity tables, published
 as XTbML), the Human Mortality Database (CC BY 4.0, behind a registration), the published
 loss-trend reviews of Canadian auto regulators, and OSFI's quarterly P&C returns, which the vault
-already describes (`Resources/Data/OSFI/`).
+already describes (`Resources/Data/OSFI/`). The OSFI returns now have a plan of their own,
+`docs/osfi-pc-data.md` (roadmap A11): OSFI's open-data API as the source, an *Insurer Return* data
+source, and MCT Ratio proven against every company's filed ratio.
 
 The Loss Development Data triangles are real filed data, not a worked example, so they're not
 the "Load an example" a card offers (R2 keeps that for cited worked examples). They're what a
@@ -683,6 +686,13 @@ way. Six pieces, each small:
 None of this adds a row to the card (R10). The menu lives in the header that's already there,
 the stepper replaces the keyboard rather than sitting beside it, and the candidates appear only
 while a cell is being edited.
+
+**A published figure** is the seventh source (2026-11-08, `docs/assumptions-bank.md` §5.2): a
+number field that names Assumptions Bank kinds (`bank` on the field) lists the bank's figures of
+those kinds under its **From…** menu. A figure taken is a reference, `{ "assumption": id }`, and
+the run records its document, edition, locator and fact check in the judgment's `source` (R3),
+the working and the input hash (R4). The bank is installed into the engine, never bundled
+(`lib/tools/bank.ts`).
 
 ### 6.7 A figure on every card
 
@@ -1569,3 +1579,104 @@ with no triangle of their own, or an analyst wanting the latest medical CPI, lea
 it. → Data Sources (§4.11).
 
 The changes are planned as **V2**, ahead of Phase 2 (§11).
+
+---
+
+## 19. The tool template (2026-11-09)
+
+A redesign of the tool page, worked out over three rounds of mock-ups and built first on five
+tools so it could be checked on a phone before the other tools moved over (**every tool's page
+draws it since 2026-11-09**; see the end of this section). The five were: **Bornhuetter-Ferguson** (a grid), **Permissible Loss Ratio**
+(three inputs, one a published figure), **Bond Price** (six inputs), and two test tools,
+**Limited Expected Value** (a choice that changes which inputs exist) and **Age-to-Age Factors**
+(a triangle with its selection exhibit). Every other tool still draws `ToolCard`; both run one
+hook, `components/tools/useToolCard.ts`, so moving a tool changes how it looks and nothing it
+computes. The workflow board's embedded cards stay `ToolCard`. The **Assumptions Bank** shelf
+(`/tools/assumptions`) takes the same shape. The catalogue (`/tools`) is next, after the template.
+
+**The page** (`components/tools/ToolTemplate.tsx`), top to bottom:
+
+- **The answer card**: the info popup's banner (style guide §7.2c), tinted in the tool's exam
+  (below). The exam's logo, the area and the reading ("Reserving · Friedland, Ch. 9"), the name
+  (which opens the method), then the answer as one big figure with the rest beside it, and the
+  live figure (§6.7) inside the card. Reset and the ⋯ menu sit at its corner. The question the
+  tool answers is not repeated under the name: it is in the menu and the page's description.
+- **The answer stays on screen.** Once the card scrolls under the search bar, the first figure
+  rides in the title strip at the right (`PinnedPill` in `pages/Tools.tsx`, through
+  `ToolsSearchBar`'s `pinned`). That replaces R10's "fits a phone without scrolling" for template
+  tools, which a six-input tool can't keep with a slider per row.
+- **Your judgments first** (`inputGroups`): the inputs flagged `judgment` (R3), in their own
+  group above the rest.
+- **The grid** is numbered as a published exhibit: every column but the origin, inputs then
+  computed (`columnNumbers`), and each computed column carrying a `formula` (on `TableColumn`,
+  written in `{key}`s) printed under the grid in those numbers, `(4) = (1) + (5)`. Each input
+  column carries its source tag under its name.
+- **Input rows**: label, value pill, source tag. A tool with **three scalar inputs or fewer**
+  keeps a slider on every row (`INLINE_SLIDER_LIMIT`); past that, a row is one line and opens the
+  edit sheet, which has the slider. A short choice is a segmented control in its row; a long one
+  opens a sheet of options.
+- **The edit sheet** (`components/tools/ValueSheet.tsx`), opened by a value pill: the slider,
+  the published figures the bank holds for the field, the tools it can be taken from, the reader's
+  own value typed on **the app's own keypad** (so the phone's keyboard never covers the sheet;
+  `pressKey` / `keypadValue`), and the way back to the default. A field with none of the first
+  two gets just the slider and the keypad.
+- Then the working (one fold, the notation at its head), where the result can go next, Download
+  .xlsx, and one line of fine print: what it was tested against.
+
+**Where a value came from** — the source tag on every input (`components/tools/SourceTag.tsx`,
+`scalarSource` / `columnSource`): **Default** (still the example's value: the draft holds every
+non-judgment input from the start, so "in the draft" is not the test, `touched` is), **Yours**,
+**Published** (the document and locator, plus *Not fact checked* in amber until it is), and
+**Linked** (taken from another tool, for as long as the input still holds what that tool gave
+it — an `Origin` is remembered with its value, so no edit has to clear it). Colour belongs to the
+exam, so a tag is told by its mark and its words.
+
+**A tool's colour** is the **earliest exam whose syllabus teaches its method** (`lib/toolExam.ts`):
+the exam pages whose learning objectives link any of `spec.method.concepts`, and of those the one
+lowest on the ladder, read off the exam hues themselves. Both bodies' ladders count, so a method
+the SOA's FAM teaches before CAS Exam 5 takes FAM's colour (Bornhuetter-Ferguson, Loss Ratio
+Method). A bank set takes the exam whose Source Material lists its document (OSFI's MCT → Exam 6);
+one on no syllabus is neutral. `toolExam.test.ts` pins the template tools' exams against the vault.
+
+**The Assumptions Bank shelf**: each document is a banner (its exam's tint, the publisher over
+the title, "N of M figures read" and the effective date), its figures as rows (value, locator, how
+many tools take it), the Fact Check badge and the source links under it. A figure a tool takes
+opens **Use in…**, a sheet of those tools, each with its exam's logo.
+
+**Every tool, simplified (2026-11-09).** After template v2 every tool page moved to the template,
+in variation A of the simplified card (`docs/tool-template-v2.md` §8.1): sliders in place (a row
+opens its own past three inputs), the keypad only from the number, tools that can supply a value
+offered on that value as alternatives, and less text on the answer card. `ToolCard` remains for
+the embedded cards (a workflow step, a source sheet).
+
+**Template v2, built 2026-11-09.** A phone review of this template led to a second pass on
+navigation and connection, `docs/tool-template-v2.md` (mock-ups in
+`docs/tool-template-v2-mockups.html`; §8 there records what was built). What changed from the
+description above:
+
+- **No exam logo** on the answer card or the shelf; the tint stays.
+- **One colour per quantity**: a split's segments carry their symbol and value inside the bar
+  ("F 11.028"), each quantity on a fixed step of the exam's hue (`QUANTITY_STEPS` in
+  `lib/toolFigures.ts`), and the input it is wears the same swatch on its row.
+- **A breadcrumb** (`Tools › Ratemaking › Permissible Loss Ratio`) replaces the back arrow.
+- **Takes from** above the answer card and **Gives to** below the inputs, read off `spec.next`
+  both ways (`takesFrom` / `givesTo` in `lib/toolTemplate.ts`). Gives to lists what each tool
+  would receive; following it opens the run with `?from=<sender>`, and the carried values arrive
+  **linked**.
+- **Inputs in the formula's order** at three or fewer; past three, judgments still lead.
+- **One "from" chip** on a judgment and on any changed input; rows at their default share "All ●
+  Default". A published figure or a link opens its explanation **in place**, in two levels.
+- **The edit sheet**: slider, *Take from a tool* (with this session's result), *Published* (and
+  figures the document holds that the bank hasn't entered, listed but not selectable), *Your own*.
+- **The bank** carries each figure's basis, meaning and, for a figure that matches an answer, the
+  tool it fits (`docs/assumptions-bank.md` §4.1).
+- **Trend Factor** and **Expense Ratios** moved to the template.
+
+**Template v3, the Ledger (2026-11-09).** After a full phone review (`docs/tools-ux-review.md`)
+the maintainer chose the *Ledger* direction: `docs/tool-template-v3.md`. Every tool page now draws
+its number rows as one line (the slider opens on a tap, at any count), choices first, provenance
+only for a value that isn't the default, a scale on its figure, and grids that count their hidden
+columns and name the columns a formula cites; a Data Source asks its question before it answers.
+Bond Price solves for any of its unknowns (`ToolSpec.solveFor`), Bornhuetter-Ferguson shows the
+reserving chain, Insurer Return sets capital against the minimum, and the catalogue leads with
+area chips and the tools used last.

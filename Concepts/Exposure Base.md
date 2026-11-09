@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b0402578db774d9dedbce8c30725142f9d3d5044cd1472590af5456b2dca92d
+  content_hash: sha256:3dafcae1c046f053c232f2e6b069bb40e762e2e9ee55b9413463235e47d254fe
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 49-51, 58 (PDF pp. 61-63, 70); Ch. 6 p. 101 (PDF p. 113); App. D p. D-2 (PDF p. 395), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
@@ -12,68 +12,75 @@ verification:
   log: .verify/Concepts/Exposure Base.md
 ---
 
-**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*. It measures a policy's exposure to loss, which is why it is the basis of the premium: base rates are expressed per exposure, and it is the denominator of the pure premium.
+![[Media/Figures/Exposure_Base.svg|340]]
 
-> $$\text{Pure Premium} = \frac{\text{Losses} + \text{LAE}}{\text{Earned Exposures}}$$
+An **Exposure Base** is the unit that measures a policy's exposure to loss, such as a car-year, a house-year or $\$100$ of payroll. Base rates are expressed per unit of the exposure base, so before [[Rating Variable|rating variables]] adjust it, a policy's premium is
 
 > $$\text{Premium} = \text{Rate} \times \text{Exposures}$$
 
-Werner & Modlin give three criteria for choosing one:
+- $\text{Rate}$ is the base rate per exposure.
+- $\text{Exposures}$ is the number of units of the exposure base the policy has.
 
-- **Proportional to expected loss.** All else equal, a policy with two exposures should have twice the expected loss of a similar policy with one. Expected loss varies by many other factors too; those become rating or underwriting variables, and the factor with the most direct relationship to losses is chosen as the base.
-- **Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years). Where the most proportional measure cannot be tracked, a practical proxy is used: products liability rates on gross sales because products in use cannot be counted.
-- **Consistent with historical precedence.** A change of base can cause large premium swings for individual insureds, requires a change in the rating algorithm and systems, and may force significant adjustments to the several years of data a ratemaking analysis uses.
+One unit of the base is an exposure. Exposure is counted per year of coverage, so one home insured for two years is two house-years, and a six-month auto policy is one-half of a written car-year. Exposures are written, [[Earned Exposure|earned]], unearned or [[In-Force|in-force]], and the earned exposures are the denominator of the [[Pure Premium|pure premium]].
 
-Further properties:
+> [!example]- A workers compensation rate is $\$2.50$ per $\$100$ of payroll. What is the premium for an employer with a payroll of $\$4{,}000{,}000$? {Example}
+> - The exposure is the payroll in units of $\$100$, which is $4{,}000{,}000/100 = 40{,}000$ exposures.
+> - The premium is $2.50 \times 40{,}000 = \$100{,}000$.
 
-- **Exposure is counted per year of coverage.** One home insured for two years has twice the expected loss of the same home insured for one year, so it is two house-years of exposure; a policy written for a term other than a year counts its term in exposure units, and a six-month policy is one-half of a written exposure (Werner & Modlin, Ch. 4).
-- **Why workers compensation uses payroll.** As the number of workers or the hours they work rise or fall, payroll and the risk of loss move together (Werner & Modlin, Ch. 4). Payroll also tracks the size of claims: indemnity benefits are a percentage of the injured worker's pre-injury wage (Ch. 6), and as indemnity benefits are tied to wage levels, they change as wages change (App. D). So payroll reflects both how much the workforce is exposed to injury and the size of its indemnity claims, whereas hours worked measure only the time exposed; the 1980s proposal to switch to hours worked was for the medical coverage (Ch. 4).
-- Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property).
-- **In underwriting (DISC-RM):** the premium base for a general liability account follows its classification. IRMI lists payroll, receipts, sales, square footage, area or man-hours for general liability, units for auto and value per \$1,000 for property, and a [[Premium Audit|premium audit]] verifies the base after the policy ends ([[Commercial General Liability]]).
-- Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.
-- Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not.
-- Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].
-- **Premium as the base.** In Bailey and Simon's merit rating study, claim frequency is measured per unit of premium rather than per car year; see [[Merit Rating]].
+## Criteria for an exposure base
 
-![[Media/Figures/Exposure_Base.svg|340]]
+A good exposure base meets three criteria:
 
-> [!example]- Why Workers Compensation Rates on Payroll {Example}
-> Two employers in the same class code have identical operations. Employer A employs $10$ workers at $\$200{,}000$ each; Employer B employs $20$ workers at $\$50{,}000$ each.
->
-> Compare payroll against headcount as the exposure base.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Payroll}_A &= 10 \times \$200{,}000 = \$2{,}000{,}000 \\
-> > \text{Payroll}_B &= 20 \times \$50{,}000 = \$1{,}000{,}000
-> > \end{align*}$$
-> >
-> > Under **headcount**, B pays twice A's premium. Under **payroll**, A pays twice B's.
-> >
-> > Payroll is the workers compensation base because it is responsive to changes in exposure: as the number of workers or the hours they work rise or fall, both payroll and the risk of loss move with them. Headcount would miss the hours.
-> >
-> > But the comparison also shows where payroll is disputed. A pays twice B's premium for half the workers, purely because its wages are higher. In the 1980s there was pressure to move workers compensation medical coverage to *hours worked*, to correct perceived inadequacies of payroll for union companies with higher pay scales. The base was not changed — concerns about the transition were a major reason — and the rating variables and algorithm were adjusted instead: historical precedence at work. Payroll is also inflation-sensitive, which is why its trend is measured — see [[Exposure Trend]].
+1. **Proportional to expected loss.** All else equal, a policy with two exposures should have twice the expected loss of a similar policy with one.
+2. **Practical.** The base is objective, and relatively easy and inexpensive to obtain and verify. An objective base also keeps policyholders and producers from manipulating it.
+3. **Consistent with historical precedence.** A change of base can cause large premium swings for individual insureds, requires a change in the rating algorithm and systems, and may force significant adjustments to the several years of data a ratemaking analysis uses.
 
-> [!example]- Testing a Proposed Exposure Base {Example}
-> A homeowners insurer currently rates on house-years and proposes rating on *amount of insurance* (AOI) per $\$1{,}000$ instead. Analysis of its book shows:
->
-> | AOI band | Earned house-years | Losses |
-> |---|---|---|
-> | $\$100$K–$200$K | $20{,}000$ | $\$12{,}000{,}000$ |
-> | $\$200$K–$400$K | $15{,}000$ | $\$13{,}500{,}000$ |
-> | over $\$400$K | $5{,}000$ | $\$7{,}000{,}000$ |
->
-> Evaluate the proposal.
->
-> > [!answer]-
-> > Pure premium per house-year:
-> >
-> > $$\begin{align*}
-> > \$100\text{K–}200\text{K} &= \frac{12{,}000{,}000}{20{,}000} = \$600 \\[4pt]
-> > \$200\text{K–}400\text{K} &= \frac{13{,}500{,}000}{15{,}000} = \$900 \\[4pt]
-> > \text{over } \$400\text{K} &= \frac{7{,}000{,}000}{5{,}000} = \$1{,}400
-> > \end{align*}$$
-> >
-> > Loss cost rises with amount of insurance, so a single rate per house-year with nothing else would leave small homes subsidizing large ones. But the rise is far from proportional: from the lowest band to the highest, loss per house-year rises by a factor of $1{,}400/600 = 2.3$, while the band boundaries quadruple from $\$100$K to $\$400$K. Rating per $\$1{,}000$ of AOI would over-charge large homes.
-> >
-> > This is Werner & Modlin's own homeowners illustration: the expected loss for a $\$200{,}000$ home is higher than for a $\$100{,}000$ home, but not necessarily twice as high. On the criterion that the exposure base should be the factor most directly proportional to expected loss, **house-years remain the exposure base**, and amount of insurance is used as a **rating variable** — an AOI relativity applied to the base rate per house-year, as in Werner's homeowners rating algorithm. The proposal should be rejected; the AOI effect in the table is a case for an [[Classification Ratemaking|AOI relativity]], not a new base. (Werner notes that some U.K. homeowners insurers do use AOI or number of bedrooms as the base, adjusting the rating algorithm for the lack of proportionality.)
+Expected loss varies by many other factors too. Those become rating or underwriting variables, and the factor most directly proportional to expected loss is chosen as the base.
+
+> [!example]- For a homeowners insurer, the expected loss of a $\$200{,}000$ home is higher than that of a $\$100{,}000$ home, but not twice as high. Should it rate on house-years or on amount of insurance? {Example}
+> - One home insured for two years has twice the expected loss of the same home insured for one year, so house-years are proportional to expected loss.
+> - Doubling the amount of insurance does not double the expected loss, so amount of insurance is not.
+> - On the criterion that the exposure base should be the factor most directly proportional to expected loss, **house-years remain the exposure base**, and amount of insurance is used as a **rating variable**.
+
+> [!example]- Why is payroll, and not the number of employees, the exposure base for workers compensation? {Example}
+> - Payroll is the workers compensation base because it is responsive to changes in exposure: as the number of workers or the hours they work rise or fall, both payroll and the risk of loss move with them.
+> - A headcount would miss a change in the hours worked.
+> - Indemnity benefits are a percentage of the injured worker's pre-injury wage, so payroll also tracks the size of the claims.
+> - Payroll is recorded by the employer and can be verified by a [[Premium Audit|premium audit]], so it is practical.
+
+> [!example]- Why is products liability rated on gross sales, when the number of products in use is more nearly proportional to expected loss? {Example}
+> - An insurer cannot track how many of a company's products are in use during the policy period, so products in use is not practical.
+> - Gross sales are known and verifiable, and they are a reasonable proxy for products in use.
+> - The proxy is better for a product in use for a short time, such as a cup of coffee, than for one used for years, such as a lawnmower.
+
+> [!example]- Telematics now lets a personal auto insurer measure miles driven accurately. Should it replace car-years with miles driven as its exposure base? {Example}
+> - Miles driven are more nearly proportional to expected loss than car-years, because a car driven more is exposed to loss for longer.
+> - Measured by a device rather than declared, miles driven are objective and hard to manipulate, so the base is practical.
+> - Against historical precedence, the change would swing the premiums of individual insureds, require a new rating algorithm and systems, and leave years of historical data on car-years to be restated.
+> - The change is justified only if the gain in proportionality outweighs the cost of the transition.
+
+## Typical exposure bases
+
+| Line of business | Typical exposure base |
+| --- | --- |
+| Personal automobile | Earned car-years |
+| Homeowners | Earned house-years |
+| Workers compensation | Payroll |
+| Commercial general liability | Sales revenue, payroll, square footage, number of units |
+| Commercial business property | Amount of insurance coverage |
+| Physicians professional liability | Number of physician-years |
+| Professional liability | Number of professionals |
+| Personal articles floater | Value of the item |
+
+Self-insurers collect no premium, so their reserving uses other observable exposures. Friedland lists sales or square footage for general liability of corporations, and average occupied beds and outpatient visits for hospital professional liability.
+
+## Inflation-sensitive exposure bases
+
+Some bases, such as payroll and sales revenue, are highly influenced by inflation. Count-based bases, such as car-years and house-years, are not. The premium on an inflation-sensitive base changes with inflation at an unchanged rate, so its [[Exposure Trend|exposure trend]] is measured and the exposures are trended to the period the rates will be in effect.
+
+> [!example]- In a recession, wages fall 3% while an employer's workforce and hours are unchanged. What happens to its workers compensation premium at an unchanged rate? {Example}
+> - The exposure is payroll, so the exposure falls 3%.
+> - At an unchanged rate per $\$100$ of payroll, the premium falls 3%, although the number of workers exposed to injury has not changed.
+
+> [!trap] Treating a rating variable as the exposure base
+> A characteristic that raises expected loss is not an exposure base unless expected loss rises in proportion to it. Amount of insurance raises a home's expected loss, but rating per $\$1{,}000$ of it would overcharge large homes. It belongs in the rating algorithm as a relativity on the base rate per house-year.

@@ -124,6 +124,17 @@ export const LEAGUES_ENABLED: boolean = true
 export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
 
 /**
+ * The daily podcast — Today's Study Plan read aloud (docs/daily-podcast.md), a
+ * Pro feature like the plan it reads. When ON, the Pro Today's Study Plan card
+ * offers today's episode, the player rides the resume dock, and the daily
+ * email links to it. Its episodes are recorded clips in the public `podcast`
+ * bucket (scripts/podcast-segments.mjs); with none recorded the button simply
+ * doesn't appear. The engine (lib/podcast.ts) and its tests stay compiled
+ * either way.
+ */
+export const PODCAST_ENABLED: boolean = true
+
+/**
  * Fix-mistakes card — surfaces the questions a learner most recently got wrong
  * and, for each, ranks the concept(s) most likely to blame (weighted by the
  * learner's miss-rate on that concept plus its current mastery level — see
@@ -298,3 +309,13 @@ export const COMMUNITY_ENABLED: boolean = true
  * (playwright.config.ts); no deployed build does.
  */
 export const COMMUNITY_OPEN_TO_ALL: boolean = import.meta.env.VITE_COMMUNITY_PREVIEW === 'on'
+
+/**
+ * Games — Quiz Battle and Concept Craft — are still under development, so the
+ * Quiz tab's Games row (`components/landing/QuizGamesPanel.tsx`) is hidden.
+ * The pages themselves (`/games`, `/battle`, `/craft`) are left intact and still
+ * open by address. Only the e2e suite's build sets `VITE_GAMES_PREVIEW=on`
+ * (playwright.config.ts), so its flows through the Games row keep running.
+ * Re-enabling is a one-line change: set this to `true`.
+ */
+export const GAMES_ENABLED: boolean = import.meta.env.VITE_GAMES_PREVIEW === 'on'

@@ -18,44 +18,52 @@ export interface LexiconEntry {
   term: string
   /** The plain app term it stands for — the tooltip / `aria-description`. */
   plain: string
+  /**
+   * The plain meaning in a few words, printed beside the term the first time
+   * it appears on a screen (`components/actuaria/Term.tsx`), so a phone, which
+   * shows no tooltip, still says what the word means.
+   */
+  gloss: string
 }
 
 export const LEXICON = {
-  actuaria: { term: 'Actuaria', plain: 'The game world of Actuarial Notes' },
-  sector: { term: 'Sector', plain: 'An exam' },
-  region: { term: 'Region', plain: 'A learning objective of the exam' },
-  landmark: { term: 'Landmark', plain: 'A concept' },
+  actuaria: { term: 'Actuaria', plain: 'The game world of Actuarial Notes', gloss: 'study game' },
+  sector: { term: 'Sector', plain: 'An exam', gloss: 'exam' },
+  region: { term: 'Region', plain: 'A learning objective of the exam', gloss: 'learning objectives' },
+  landmark: { term: 'Landmark', plain: 'A concept', gloss: 'concepts' },
   landmarkCredibility: {
     term: 'Credibility',
-    plain: 'The concept’s mastery level: 0 when New or Forgotten, 0.33 at Level 1, 0.67 at Level 2, 1.00 at Level 3',
+    plain: 'The concept’s level: 0 when New or Forgotten, 0.33 at Level 1, 0.67 at Level 2, 1.00 at Level 3',
+    gloss: 'concept level',
   },
-  sectorCredibility: { term: 'Credibility', plain: 'Exam readiness, as a fraction of 1' },
-  orbitalDecay: { term: 'Orbital decay', plain: 'Mastery decay — a concept not reviewed steps down a level' },
-  uncharted: { term: 'Uncharted sector', plain: 'An exam you aren’t studying yet' },
-  gems: { term: 'Gems', plain: 'Gems' },
-  coverage: { term: 'Coverage', plain: 'Your daily streak' },
-  graceDay: { term: 'Grace day', plain: 'A streak freeze' },
-  lapse: { term: 'Lapse', plain: 'A broken streak' },
+  sectorCredibility: { term: 'Credibility', plain: 'Exam readiness, as a fraction of 1', gloss: 'exam readiness' },
+  orbitalDecay: { term: 'Orbital decay', plain: 'A concept not reviewed in time steps down a level', gloss: 'concepts losing a level' },
+  uncharted: { term: 'Uncharted sector', plain: 'An exam you aren’t studying yet', gloss: 'exam you aren’t studying' },
+  gems: { term: 'Gems', plain: 'Gems', gloss: 'gems' },
+  coverage: { term: 'Coverage', plain: 'Your daily streak', gloss: 'daily streak' },
+  graceDay: { term: 'Grace day', plain: 'A streak freeze', gloss: 'streak freezes' },
+  lapse: { term: 'Lapse', plain: 'A broken streak', gloss: 'broken streak' },
   transmission: {
     term: 'Daily Transmission',
     plain: 'A three-question review quiz of the concepts closest to decaying',
+    gloss: '3-question review',
   },
-  station: { term: 'Monte Carlo Station', plain: 'Quiz Battle' },
-  duel: { term: 'Duel', plain: 'A Quiz Battle' },
-  openChannel: { term: 'Open channel', plain: 'Random opponent' },
-  privateChannel: { term: 'Private channel', plain: 'A friend online' },
-  dogfight: { term: 'Dogfight', plain: 'Same screen' },
-  surplus: { term: 'Surplus', plain: 'Battle points' },
-  claim: { term: 'Claim', plain: 'A penalty' },
-  claimsReview: { term: 'Claims review', plain: 'Review my misses — a quiz of the questions you got wrong' },
-  boss: { term: 'Gambler’s Ruin', plain: 'The weekly raid boss' },
-  cohort: { term: 'Cohort', plain: 'A study group for one exam sitting' },
-  riskPool: { term: 'Risk pool', plain: 'The cohort’s gem bonus on a day most members study' },
-  guide: { term: 'Guide', plain: 'A member who has passed this exam' },
-  largeNumbers: { term: 'Large Numbers', plain: 'The leaderboard' },
-  hangar: { term: 'Hangar', plain: 'Your abilities and ship cosmetics' },
-  ability: { term: 'Ability', plain: 'A once-per-battle power-up' },
-  simulation: { term: 'Simulation', plain: 'A timed practice exam' },
+  station: { term: 'Monte Carlo Station', plain: 'Quiz Battle', gloss: 'Quiz Battle' },
+  duel: { term: 'Duel', plain: 'A Quiz Battle', gloss: 'Quiz Battle' },
+  openChannel: { term: 'Open channel', plain: 'Random opponent', gloss: 'random opponent' },
+  privateChannel: { term: 'Private channel', plain: 'A friend online', gloss: 'a friend online' },
+  dogfight: { term: 'Dogfight', plain: 'Same screen', gloss: 'same screen' },
+  surplus: { term: 'Surplus', plain: 'Battle points', gloss: 'battle points' },
+  claim: { term: 'Claim', plain: 'A penalty', gloss: 'penalty' },
+  claimsReview: { term: 'Claims review', plain: 'A quiz of the questions you got wrong', gloss: 'review my misses' },
+  boss: { term: 'Gambler’s Ruin', plain: 'The weekly raid boss', gloss: 'weekly raid boss' },
+  cohort: { term: 'Cohort', plain: 'A study group for one exam sitting', gloss: 'study group' },
+  riskPool: { term: 'Risk pool', plain: 'The cohort’s gem bonus on a day most members study', gloss: 'group gem bonus' },
+  guide: { term: 'Guide', plain: 'A member who has passed this exam', gloss: 'members who passed' },
+  largeNumbers: { term: 'Large Numbers', plain: 'The leaderboard', gloss: 'leaderboard' },
+  hangar: { term: 'Hangar', plain: 'Your abilities and ship cosmetics', gloss: 'abilities and ship' },
+  ability: { term: 'Ability', plain: 'A once-per-battle power-up', gloss: 'battle power-ups' },
+  simulation: { term: 'Simulation', plain: 'A timed Practice Exam', gloss: 'Practice Exam' },
 } as const satisfies Record<string, LexiconEntry>
 
 export type LexiconId = keyof typeof LEXICON

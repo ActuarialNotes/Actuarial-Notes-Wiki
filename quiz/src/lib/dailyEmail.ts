@@ -65,17 +65,75 @@ export function deriveTodaysConcepts(plan: EmailPlanSnapshot, today: string): st
 /** Human phrasing for the plan's pacing status, used as the email's status line. */
 export function describePacing(status: string | undefined): string {
   switch (status) {
-    case 'on_track': return "You're on track"
-    case 'ahead': return "You're ahead of schedule"
-    case 'behind': return "You're behind pace — a session today helps you catch up"
-    case 'review_mode': return 'Everything is mastered — keep it fresh with review'
-    case 'target_passed': return 'Your target date has passed — pacing against your exam date'
+    case 'on_track': return 'On track'
+    case 'ahead': return 'Ahead of schedule'
+    case 'behind': return 'Behind schedule'
+    case 'review_mode': return 'Every concept is at Level 3'
+    case 'target_passed': return 'Past your ready date, paced to your exam date'
     default: return ''
   }
 }
 
 /** Cap for concepts listed in full in the email body; the rest collapse to "+N more". */
 export const MAX_EMAIL_CONCEPTS = 12
+
+// ── The quiz link ─────────────────────────────────────────────────────────────
+
+/**
+ * The question bank's `exam:` label for each exam_progress key — the inverse of
+ * EXAM_LABEL_TO_ID in lib/examIds.ts (duplicationContracts.test.ts holds the
+ * two equal). An exam with no bank (PCPA) has no quiz to link to.
+ */
+export const EMAIL_BANK_LABELS: Record<string, string> = {
+  'P': 'Probability',
+  'FM': 'Financial Mathematics',
+  'SRM': 'Exam SRM',
+  'FAM': 'Exam FAM',
+  'ASTAM': 'Exam ASTAM',
+  'ALTAM': 'Exam ALTAM',
+  'MAS-I': 'Exam MAS-I',
+  'MAS-II': 'Exam MAS-II',
+  'CAS-DA': 'Exam DISC-DA',
+  'CAS-RM': 'Exam DISC-RM',
+  'CAS-IA': 'Exam DISC-IA',
+  'CAS-5': 'Exam 5',
+  'CAS-6': 'Exam 6C',
+  'CAS-7': 'Exam 7',
+  'CAS-8': 'Exam 8',
+  'CAS-9': 'Exam 9',
+}
+
+/** Most concepts a quiz link carries, so the address stays a sensible length. */
+export const MAX_QUIZ_LINK_CONCEPTS = 40
+
+/**
+ * The `/quiz` path (with its query) of today's quiz for one exam: the bank,
+ * the day's concepts and `plan=1`, which has the quiz page draw the fewest
+ * questions that cover them (as the app's own Today's Plan quiz does) rather
+ * than every question on them. The concepts ride the URL, so the link works
+ * for a reader who isn't signed in; `from=email` is what has the quiz offer
+ * them a sign-in first. Null when there is no bank or nothing to quiz.
+ * A name with a comma can't ride the comma-separated list and is left out.
+ */
+export function planQuizPath(examId: string, concepts: string[]): string | null {
+  const exam = EMAIL_BANK_LABELS[examId]
+  if (!exam) return null
+  const seen = new Set<string>()
+  const names: string[] = []
+  for (const c of concepts) {
+    if (typeof c !== 'string' || !c.trim() || c.includes(',')) continue
+    const key = c.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    names.push(c.trim())
+    if (names.length >= MAX_QUIZ_LINK_CONCEPTS) break
+  }
+  if (names.length === 0) return null
+  const params = new URLSearchParams({
+    exam, concepts: names.join(','), plan: '1', mode: 'quiz', from: 'email',
+  })
+  return `/quiz?${params.toString()}`
+}
 
 // ── Send-time helpers ─────────────────────────────────────────────────────────
 

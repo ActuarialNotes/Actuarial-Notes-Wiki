@@ -59,7 +59,7 @@ import { cn } from '@/lib/utils'
 
 const HEAD = {
   title: 'Workflows | Actuarial Notes',
-  description: 'Chain sources, data, calculations and concepts into an actuarial workflow, run it live, and run it in Claude.',
+  description: 'Connect sources, data, calculations and concepts into an actuarial workflow, and run it in the app or in Claude.',
   noindex: true,
 }
 
@@ -494,8 +494,8 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
                 <h2 className="text-lg font-semibold">{parent ? 'An empty workflow' : 'Build a workflow'}</h2>
                 <p className="text-sm text-muted-foreground">
                   Add documents from your sources, data, calculations and the concepts behind them, then drag from a
-                  step&rsquo;s dot to the next to say what flows where. Calculations the engine can chain fill each other in
-                  as you go.
+                  step&rsquo;s dot to the next to say what flows where. A calculation joined to one that takes its
+                  result fills that one in as you go.
                 </p>
               </div>
               <button
@@ -704,7 +704,7 @@ function Header({
           type="button"
           onClick={onToggleSaved}
           aria-pressed={!!workflow.saved}
-          aria-label={workflow.saved ? 'In your library — tap to take it out' : 'Save to your library'}
+          aria-label={workflow.saved ? 'Remove from your library' : 'Save to your library'}
           title={workflow.saved ? 'In your library' : 'Save to your library'}
           className={cn(
             'flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
@@ -726,10 +726,10 @@ function Header({
           forClaude ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground ring-1 ring-border hover:bg-accent',
         )}
         data-testid="workflow-open-claude"
-        aria-label="Run in Claude"
+        aria-label="Run in Claude or ChatGPT"
       >
         <ClipboardCopy className="h-4 w-4" aria-hidden />
-        <span className="hidden sm:inline">Run in Claude</span>
+        <span className="hidden sm:inline">Run in Claude or ChatGPT</span>
       </button>
     </header>
   )

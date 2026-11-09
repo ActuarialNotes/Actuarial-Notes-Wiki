@@ -23,12 +23,15 @@
 
 import { ErrorCode, McpError, ResourceNotFoundError } from './protocol.js'
 import { normalizeTerm } from './knowledgeBase.js'
+import { withConnectorSource } from './usage.js'
 import {
   AREAS as TOOL_AREAS,
   TOOLS as CALCULATORS,
   ToolInputError as CalculatorInputError,
   MAX_BATCH_RUNS,
   describeTool,
+  filingsInstalled,
+  installFilings,
   runBatch,
   runPath,
   runTool,
@@ -50,20 +53,20 @@ const CACHE_TTL_MS = 60 * 60 * 1000
 /** A fetched document is cut here; the rest is a link away. */
 const MAX_TEXT = 40000
 
-export const INSTRUCTIONS = `Actuarial Notes is a study wiki for the SOA and CAS actuarial exams (P, FM, MAS-I, MAS-II, 5, 6C, 6U, 7, 8, 9, PCPA): each exam's syllabus with learning-objective weights and assigned readings, concept pages (definition, formulas in LaTeX, worked examples), source and regulation pages, exam-strategy guides, and a bank of past and sample exam questions with worked solutions.
+export const INSTRUCTIONS = `Actuarial Notes is a set of study notes for the SOA and CAS actuarial exams (list_exams gives every exam it covers and how far along each one is): each exam's syllabus with learning-objective weights and assigned readings, concept pages (definition, formulas in LaTeX, worked examples), source and regulation pages, exam-strategy guides, and a bank of past and sample exam questions with worked solutions.
 
 - Ground answers about exam material in the notes: search (or get_concept / get_exam) before answering, and cite the page URL you relied on.
 - Report what the notes say. Objectives, weights and readings come from get_exam; if something is not there, say so rather than filling it in.
-- Every result carries a fact-check status. Most pages are "Not fact checked" — community-written and not yet checked against the source text — so when an exact figure, formula or rule matters, say that and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
+- Every result carries a fact-check status. Nearly every practice question has been checked against its source; most concept and source pages have not, and read "Not fact checked". When an exact figure, formula or rule on an unchecked page matters, say so and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
 - To quiz someone, get_practice_questions returns questions without their answers. Ask one at a time, wait for the student's answer, then call check_answer to mark it and show the official solution. Never reveal or hint at an answer first.
 - An exam marked "in development" has a syllabus outline, few written concept pages and little or no question bank.
-- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits (with intervals, exclusions, level shifts and breaks), frequency × severity and two-step trends, trend factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
+- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits (with intervals, exclusions, level shifts and breaks), frequency × severity and two-step trends, trend factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization, and the MCT ratio), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves, and what each Canadian P&C insurer filed with OSFI on its MCT summary — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
 - This is study material, not professional actuarial advice.`
 
 const STATUS_WORDS = {
-  ready: 'complete — full syllabus and question bank',
-  beta: 'beta — usable, still being filled out',
-  development: 'in development — syllabus outline only',
+  ready: 'ready — every syllabus concept has a written page and at least one practice question',
+  beta: 'beta — questions and pages are still being added and checked',
+  development: 'in development — syllabus outline only, no practice questions yet',
 }
 
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -155,7 +158,7 @@ function examCatalogue(ix) {
     '|---|---|---|---|---|---|---|',
     ...rows,
     '',
-    'Material: complete = full syllabus and question bank; beta = usable, still being filled out; in development = syllabus outline only.',
+    `Material: ${Object.values(STATUS_WORDS).map(w => w.replace(' — ', ' = ')).join('; ')}.`,
     'Pass a key to get_exam for the syllabus, or to get_practice_questions for questions.',
   ].join('\n')
 }
@@ -387,7 +390,7 @@ function invoking(busy, done) {
 const DOC_TYPES = ['concept', 'exam', 'resource', 'guide', 'question']
 const EXAM_ARG = {
   type: 'string',
-  description: 'Exam key or name: "P", "FM", "MAS-I", "MAS-II", "5", "6C", "6U", "7", "8", "9", "PCPA" (also accepts "Exam P", "Probability", "MAS 1"…).',
+  description: 'Exam key or name, e.g. "P", "FAM", "MAS-I", "5" (also accepts "Exam P", "Probability", "MAS 1"…). list_exams gives every key.',
 }
 
 export const TOOLS = [
@@ -479,7 +482,7 @@ export const TOOLS = [
     name: 'list_exams',
     title: 'List exams',
     description:
-      'List the actuarial exams Actuarial Notes covers — SOA P and FM; CAS MAS-I, MAS-II, 5, 6C, 6U, 7, 8, 9 and PCPA — with each exam\'s key, subject, how complete its material is, and how many practice questions it has.',
+      'List the SOA and CAS actuarial exams Actuarial Notes covers, with each exam\'s key, subject, how far along its material is (ready, beta or in development), and how many practice questions it has.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
     annotations: { title: 'List exams', ...READ_ONLY },
     _meta: invoking('Listing exams…', 'Listed exams'),
@@ -573,7 +576,7 @@ export const TOOLS = [
       const lines = [
         `# Practice set — ${scope} · ${drawn.length} question${drawn.length === 1 ? '' : 's'}`,
         'Answers are hidden. Ask one question at a time, exactly as written, and wait for the student\'s answer. Then call check_answer with the question id and their answer. Don\'t reveal or hint at an answer first.',
-        `Take this set in the Actuarial Notes app (progress is tracked there): ${ix.kb.site}/quiz?ids=${ids.map(encodeURIComponent).join(',')}`,
+        `Take this set in the Actuarial Notes app (progress is tracked there): ${withConnectorSource(`${ix.kb.site}/quiz?ids=${ids.map(encodeURIComponent).join(',')}`, 'get_practice_questions')}`,
         `(${pool.length} questions matched; to draw more without repeats, pass these ids in exclude.)`,
       ]
       drawn.forEach((q, i) => lines.push('', '---', '', `## Question ${i + 1} · id: ${q.id}`, questionPrompt(ix, q)))
@@ -617,6 +620,9 @@ export const TOOLS = [
 // ── Calculators (docs/actuarial-tools.md §7) ─────────────────────────────────
 
 const AREA_IDS = TOOL_AREAS.map(a => a.id)
+
+/** The MCP tools that run the calculators, which may read OSFI's filings. */
+const CALCULATOR_TOOLS = new Set(['list_tools', 'describe_tool', 'run_tool'])
 
 function calculator(args) {
   const id = text(args, 'tool', { required: true, max: 120 })
@@ -729,7 +735,7 @@ TOOLS.push(
         input_hash: inputHash,
         method: methodRefs(ix, spec.method),
         tested_against: toolSummary(spec).tested_against,
-        app_url: `${site}${runPath(toolSlug(spec), input)}`,
+        app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), input)}`, 'run_tool'),
       }))
     },
   },
@@ -757,7 +763,7 @@ function batch(spec, args, site) {
           warnings: run.warnings,
           defaulted_judgments: run.judgments.filter(j => j.default).map(j => j.field),
           input_hash: run.inputHash,
-          app_url: `${site}${runPath(toolSlug(spec), run.input)}`,
+          app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), run.input)}`, 'run_tool'),
         }
       : { label, error })),
     tested_against: toolSummary(spec).tested_against,
@@ -1016,10 +1022,20 @@ Use only what the syllabus says; don't invent readings or weights. Mention that 
 // ── The server ───────────────────────────────────────────────────────────────
 
 /**
- * @param {{ loadIndex: () => Promise<ReturnType<import('./knowledgeBase.js').indexKnowledgeBase>>, siteUrl?: string }} options
+ * @param {{ loadIndex: () => Promise<ReturnType<import('./knowledgeBase.js').indexKnowledgeBase>>, loadFilings?: () => Promise<unknown>, siteUrl?: string }} options
  */
-export function createActuarialNotesServer({ loadIndex, siteUrl = DEFAULT_SITE_URL }) {
+export function createActuarialNotesServer({ loadIndex, loadFilings, siteUrl = DEFAULT_SITE_URL }) {
   const site = siteUrl.replace(/\/+$/, '')
+  // OSFI's filings, installed into the engine before a calculator runs. A
+  // failed load leaves them out: the tools that read them then say so.
+  const ensureFilings = async () => {
+    if (!loadFilings || filingsInstalled()) return
+    try {
+      installFilings(await loadFilings())
+    } catch {
+      // Insurer Return answers that the filings aren't loaded.
+    }
+  }
   const index = async () => {
     try {
       return await loadIndex()
@@ -1058,6 +1074,7 @@ export function createActuarialNotesServer({ loadIndex, siteUrl = DEFAULT_SITE_U
         // A calculator needs the notes only to link its method pages, so it
         // still answers — unlinked — when the knowledge base can't be loaded.
         const ix = tool.standalone ? await index().catch(() => null) : await index()
+        if (CALCULATOR_TOOLS.has(params.name)) await ensureFilings()
         try {
           return await tool.run(isObject(params.arguments) ? params.arguments : {}, ix, { site })
         } catch (err) {

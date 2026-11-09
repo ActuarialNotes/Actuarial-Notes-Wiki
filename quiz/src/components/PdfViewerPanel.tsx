@@ -120,7 +120,7 @@ export function PdfDocumentView({
   const { play } = useSoundEffects()
 
   const proxied = useMemo(() => pdfProxyUrl(url), [url])
-  const { doc, pageCount, status, error } = usePdfDocument(proxied)
+  const { doc, pageCount, status } = usePdfDocument(proxied)
   // The document's own bookmarks, which cut the page bar into chapters. Empty
   // for anything that carries none — most of the scanned papers — and the bar
   // is then the plain strip it has always been.
@@ -653,7 +653,7 @@ export function PdfDocumentView({
       >
         {status === 'error' ? (
           <ReadingFailure
-            message={error ? `This document couldn't be loaded — ${error}.` : "This document couldn't be loaded."}
+            message="This document couldn't be loaded here. Open it at the source, or download it."
             url={url}
             sourceHost={sourceHost}
           />
@@ -700,7 +700,7 @@ export function PdfDocumentView({
         {pageError && status !== 'error' && (
           <div className="absolute inset-0 bg-card/95">
             <ReadingFailure
-              message={`This page couldn't be drawn (${pageError}).`}
+              message="This page couldn't be drawn. Open the document at the source, or download it."
               url={url}
               sourceHost={sourceHost}
             />
@@ -852,7 +852,7 @@ export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: P
       // Non-modal, like the concept popup: the shelf behind stays live, so this
       // is a document you read beside the quiz rather than a dialog over it.
       role="complementary"
-      aria-label={subtitle ? `${title} — ${subtitle}` : title}
+      aria-label={subtitle ? `${title}, ${subtitle}` : title}
     >
       {!focusMode && (
         <div

@@ -124,7 +124,7 @@ export function CraftDeck({ concepts, total, fresh, levels, held, showHow, onTap
           selected={isHeld}
           showLock={false}
           aria-pressed={isHeld}
-          aria-label={`${name}${isNew ? ', new' : ''}${isHeld ? ' — held' : ''}`}
+          aria-label={`${name}${isNew ? ', new' : ''}${isHeld ? ', held' : ''}`}
           data-sound="none"
           data-testid="craft-deck-tile"
           className={'w-full touch-pan-y cursor-grab'}

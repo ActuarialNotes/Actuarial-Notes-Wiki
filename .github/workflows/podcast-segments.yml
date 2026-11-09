@@ -1,0 +1,116 @@
+name: Podcast Segments
+
+# Records the daily podcast's clips (docs/daily-podcast.md) into the public
+# `podcast` bucket: quiz/scripts/podcast-segments.mjs `sync`, with Kokoro-82M
+# (Apache-2.0) on the runner's CPU.
+#
+#   • Nightly: every concept on a Pro reader's plan over the next 7 days first,
+#     then the rest of the vault, until the time budget runs out — the first
+#     backfill takes a few nights; after that a night records only what changed.
+#   • On a push to main that changes a concept page or the script code: the
+#     plans' concepts only, so an edited page is re-read the same day.
+#   • By hand: Actions → Podcast Segments → Run workflow.
+#
+# A clip is named by its script's hash, and the index lists only clips current
+# with the vault, so a re-run never re-records what it already has.
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'Concepts/**'
+      - 'quiz/src/lib/podcast.ts'
+      - 'quiz/src/lib/podcastScripts.ts'
+      - 'quiz/src/lib/listenTokens.ts'
+      - 'quiz/src/lib/mathSpeech.ts'
+      - 'quiz/scripts/podcast-segments.mjs'
+      - 'quiz/scripts/podcast_tts_kokoro.py'
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'plans = the next week of Pro plans; all = plans, then the whole vault'
+        required: false
+        default: 'all'
+      budget:
+        description: 'Minutes of recording before stopping'
+        required: false
+        default: '300'
+
+# One run at a time: two writing the index at once would drop each other's clips.
+concurrency:
+  group: podcast-segments
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  KOKORO_RELEASE: https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0
+  KOKORO_MODEL_SHA256: 7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5
+  KOKORO_VOICES_SHA256: bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    defaults:
+      run:
+        working-directory: quiz
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quiz/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Kokoro
+        run: |
+          python -m pip install --quiet kokoro-onnx==0.6.1 soundfile==0.14.0
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+
+      - name: Cache the Kokoro model
+        uses: actions/cache@v4
+        with:
+          path: ~/kokoro
+          key: kokoro-v1.0-${{ env.KOKORO_MODEL_SHA256 }}
+
+      - name: Download the Kokoro model
+        run: |
+          mkdir -p ~/kokoro && cd ~/kokoro
+          [ -f kokoro-v1.0.onnx ] || curl -sSLf -o kokoro-v1.0.onnx "$KOKORO_RELEASE/kokoro-v1.0.onnx"
+          [ -f voices-v1.0.bin ] || curl -sSLf -o voices-v1.0.bin "$KOKORO_RELEASE/voices-v1.0.bin"
+          echo "$KOKORO_MODEL_SHA256  kokoro-v1.0.onnx" | sha256sum -c -
+          echo "$KOKORO_VOICES_SHA256  voices-v1.0.bin" | sha256sum -c -
+
+      - name: Record
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # The project ref is what deploy-functions.yml already uses; with no
+          # SUPABASE_URL secret, the URL is built from it.
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PODCAST_PYTHON: python
+          SCOPE: ${{ github.event_name == 'push' && 'plans' || inputs.scope || 'all' }}
+          BUDGET: ${{ github.event_name == 'push' && '60' || inputs.budget || '300' }}
+        run: |
+          export KOKORO_MODEL="$HOME/kokoro/kokoro-v1.0.onnx" KOKORO_VOICES="$HOME/kokoro/voices-v1.0.bin"
+          if [ -z "$SUPABASE_URL" ] && [ -n "$SUPABASE_PROJECT_REF" ]; then
+            export SUPABASE_URL="https://$SUPABASE_PROJECT_REF.supabase.co"
+          fi
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::Missing secrets: set SUPABASE_PROJECT_REF (or SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          args="--plans --budget-minutes $BUDGET --voice af_heart"
+          [ "$SCOPE" = "all" ] && args="$args --all"
+          node scripts/podcast-segments.mjs sync $args

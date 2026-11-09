@@ -6,8 +6,14 @@ export const LOGO_TILE_SIZES = {
   xs: 20,
   /** A list row or a pill. */
   sm: 26,
-  /** The wiki header strip, where the tile stands in for the exam's title. */
+  /** A dialog's header, a card's exam strip. */
   md: 34,
+  /**
+   * The exam header strip (study guide, quiz builder), where the tile stands in
+   * for the exam's title — the height of the strip's Ink dropdown (40px,
+   * `inkTrigger`), so the logo and the sitting pill line up.
+   */
+  strip: 40,
   /**
    * A card, or a row of a grouped list (`ui/ListPanel.tsx`). One size for
    * both exam lists — Study Guides and the quiz builder — so the same exam is

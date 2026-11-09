@@ -1,3 +1,5 @@
+import { sourceOf, uncheckedWarning } from './bank'
+import { filedPlace, filedValue, filingLine, institutionName, periodLabel } from './filings'
 import { formatValue } from './format'
 import { canonicalJson, sha256Hex } from './hash'
 import { normalizeInput } from './input'
@@ -10,26 +12,95 @@ import { ToolInputError, type ResultTable, type ToolResult, type ToolSpec } from
  * `ToolInputError` for an input it can't read; the caller decides how to say so.
  */
 export function runTool(spec: ToolSpec, raw: unknown): ToolResult {
-  const { input, defaulted, notes } = normalizeInput(spec, raw)
+  const { input, defaulted, notes, sources, filed } = normalizeInput(spec, raw)
   const output = spec.compute(input)
   const judgments = spec.fields
-    .filter(f => f.judgment)
-    .map(f => ({ field: f.key, label: f.label, value: input[f.key], default: defaulted.includes(f.key) }))
+    .filter(f => f.judgment || sources[f.key] || filed[f.key])
+    .map(f => ({
+      field: f.key,
+      label: f.label,
+      value: input[f.key],
+      default: defaulted.includes(f.key),
+      ...(sources[f.key] ? { source: sourceOf(sources[f.key]) } : {}),
+      ...(filed[f.key] ? { filed: filed[f.key].source } : {}),
+    }))
+  // A figure from the Assumptions Bank says where it was read, first in the
+  // working, and warns until it has been fact checked (docs/assumptions-bank.md, D-AB4).
+  const sourced = spec.fields.filter(f => sources[f.key])
+  const sourceSteps = sourced.map(f => {
+    const s = sources[f.key]
+    return {
+      label: `${f.label}: ${s.label}`,
+      formula: `${s.title}, ${s.edition} (${s.publisher}), ${s.locator}`,
+      result: input[f.key] as number,
+      unit: f.kind === 'number' ? f.unit : 'plain' as const,
+    }
+  })
+  const sourceWarnings = sourced
+    .filter(f => sources[f.key].verdict !== 'verified')
+    .map(f => uncheckedWarning(f.label, sources[f.key]))
+  // A filed value says which filing and line it was read off, in OSFI's words
+  // (docs/osfi-pc-data.md §2: as filed, labelled only by OSFI).
+  const fromFilings = spec.fields.filter(f => filed[f.key])
+  const filedSteps = fromFilings.map(f => {
+    const s = filed[f.key].source
+    return {
+      label: `${f.label}: as filed with OSFI`,
+      formula: `${filedPlace(s)} (${s.address}), "${s.label}", ${s.units}${s.blank ? '; nothing published, so a zero' : ''}`,
+      result: input[f.key] as number,
+      unit: f.kind === 'number' ? f.unit : 'plain' as const,
+    }
+  })
+  const filings = new Set(fromFilings.map(f => `${filed[f.key].source.period}:${filed[f.key].source.institution}`))
+  const filedWarnings = filings.size > 1 ? ['The filed values come from more than one filing, so they describe no one insurer at one date.'] : []
+  // The filing's own figure for the answer, beside the recomputed one.
+  let filedAnswer: Record<string, unknown> | null = null
+  const answer = spec.filedAnswer
+  if (answer && filings.size === 1 && output.tiles[answer.tile]) {
+    const [period, institution] = [...filings][0].split(':')
+    const raw = filedValue(period, institution, answer.address)
+    if (raw != null && raw !== 0) {
+      const value = raw * answer.scale
+      const tile = output.tiles[answer.tile]
+      const tolerance = answer.tolerance(input, raw)
+      const agrees = Math.abs(tile.value - value) <= tolerance
+      const line = filingLine(answer.address)
+      const name = institutionName(institution) ?? institution
+      filedAnswer = { value, unit: tile.unit, agrees, institution, name, period, address: answer.address, line: line?.line, label: line?.en }
+      filedSteps.push({
+        label: `Filed with OSFI: ${line?.en ?? answer.address}`,
+        formula: `${name}, ${periodLabel(period)}, line ${line?.line} (${answer.address}): ${agrees ? 'agrees with' : 'differs from'} the ${formatValue(tile.value, tile.unit)} recomputed here`,
+        result: value,
+        unit: tile.unit,
+      })
+      if (!agrees) {
+        filedWarnings.unshift(`${name} filed ${formatValue(value, tile.unit)} for ${periodLabel(period)}; recomputed from its own lines it is ${formatValue(tile.value, tile.unit)}, further apart than the filed figures' rounding allows.`)
+      }
+    }
+  }
+  // The figures' ids and editions, and the filings' hashes, are part of what was run (R4).
+  const hashed = sourced.length || fromFilings.length
+    ? {
+        ...input,
+        ...(sourced.length ? { $sources: Object.fromEntries(sourced.map(f => [f.key, `${sources[f.key].id}@${sources[f.key].edition}`])) } : {}),
+        ...(fromFilings.length ? { $filed: Object.fromEntries(fromFilings.map(f => [f.key, `${filed[f.key].source.filed}@${filed[f.key].source.sha256}`])) } : {}),
+      }
+    : input
   const summary = output.summary
     ?? `${spec.name}: ${output.tiles.map(t => `${t.label === 'Total' ? t.symbol : t.label} ${formatValue(t.value, t.unit)}`).join('; ')}.`
   return {
     tool: spec.id,
     version: spec.version,
     engine: ENGINE_VERSION,
-    inputHash: `sha256:${sha256Hex(canonicalJson(input))}`,
+    inputHash: `sha256:${sha256Hex(canonicalJson(hashed))}`,
     input,
     summary,
     tiles: output.tiles,
     table: output.table,
-    values: output.values,
+    values: filedAnswer ? { ...output.values, filed_answer: filedAnswer } : output.values,
     judgments,
-    warnings: [...notes, ...output.warnings],
-    trace: output.trace,
+    warnings: [...notes, ...sourceWarnings, ...output.warnings, ...filedWarnings],
+    trace: [...sourceSteps, ...filedSteps, ...output.trace],
     method: spec.method,
   }
 }

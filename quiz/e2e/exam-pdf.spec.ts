@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 import { buildSamplePdf } from './fixtures/samplePdf'
 
 // The examiner's-report viewer: opening a past paper from the mock-exam shelf,

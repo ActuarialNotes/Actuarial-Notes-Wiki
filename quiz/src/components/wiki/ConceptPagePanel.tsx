@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { Headphones, ImageIcon, Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -16,6 +16,17 @@ import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { figureLabel, pictureImages } from '@/lib/conceptFigures'
+
+// The Assumptions Bank's card for a resource page (docs/assumptions-bank.md),
+// fetched with the bank only when a resource page is opened: the popup is in
+// the first-paint bundle, and the bank isn't something every reader needs.
+const ResourceAssumptionsCard = lazy(() =>
+  import('@/components/wiki/ResourceAssumptionsCard').then(m => ({ default: m.ResourceAssumptionsCard })),
+)
+
+// A section heading is drawn at the pane title's size (text-lg, sm:text-xl
+// in the header above), so a page's `##` never reads bigger than its name.
+const POPUP_HEADING_CLASS = 'prose-h2:text-lg sm:prose-h2:text-xl'
 
 /**
  * The open page of the concept popup's stack: its header (the title, which is
@@ -137,6 +148,18 @@ export function ConceptPagePanel({
   // has nothing to scroll through. See lib/pageScrollMemory.ts.
   useEffect(() => {
     if (content === null) return
+    // A link to a heading (`[[Page#Heading]]`) opens the page at that heading.
+    if (entry.heading) {
+      const heading = entry.heading
+      const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
+        const body = bodyRef.current
+        const target = body?.querySelector<HTMLElement>(`[id="${CSS.escape(heading)}"]`)
+        if (body && target) {
+          body.scrollTop += target.getBoundingClientRect().top - body.getBoundingClientRect().top - 8
+        }
+      }))
+      return () => cancelAnimationFrame(frame)
+    }
     const saved = recallPageScroll(entry)
     if (saved <= 0) return
     const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -207,7 +230,7 @@ export function ConceptPagePanel({
               aria-haspopup="menu"
               aria-expanded={showPlayMenu}
               title={entry.name}
-              aria-label={`${entry.name} — page actions`}
+              aria-label={`Actions for ${entry.name}`}
               className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
             >
               {entry.name}
@@ -327,12 +350,21 @@ export function ConceptPagePanel({
                     compact
                     className="mb-0"
                   />
+                  {entry.kind === 'resource' && (
+                    <Suspense fallback={null}>
+                      <ResourceAssumptionsCard resource={entry.name} compact />
+                    </Suspense>
+                  )}
                 </div>
               )}
               <WikiArticle
                 markdown={processedContent ?? content}
-                className={resourceMeta ? RESOURCE_ARTICLE_CLASS : undefined}
+                className={`${POPUP_HEADING_CLASS} ${resourceMeta ? RESOURCE_ARTICLE_CLASS : '[--sticky-heading-top:-1rem]'}`}
                 outlineItems={!!resourceMeta}
+                // A concept's section headings pin to the top of the pane while
+                // their section is read — flush with its edge, over the body's
+                // pt-4, so no text shows above them.
+                stickyHeadings={entry.kind === 'concept'}
                 sourcePath={sourcePath}
                 hideImages
                 onReadPdf={onOpenPdf}

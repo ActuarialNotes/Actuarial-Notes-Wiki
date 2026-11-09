@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:58c9ff271657a94009a6a6890c629a6c35335f09c6ae1db84b74e1214191e0fd
+  content_hash: sha256:3db440427c0cb803b58a564b667c92a8f8087011994e911af576b5bdb0047e0d
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.13 Berquist-Sherman Techniques, PDF pp.289-298 (printed 283-292): case adequacy adjustment, settlement rate adjustment (pp.288-290), XYZ Insurer combined adjustment (p.292), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,96 +12,80 @@ verification:
   log: .verify/Concepts/Berquist-Sherman Method.md
 ---
 
-**Berquist-Sherman Method** restates a historical [[Development Triangle|triangle]] so that every year reflects **current** claims practice, removing the distortion caused by a change in [[Case Adequacy|case reserve adequacy]] or in [[Settlement Rate|claim settlement rates]]. Development factors are then selected from the restated triangle.
-
-> $$\text{Adjusted Avg Case}_{\text{AY},n} = \text{Avg Case}_{\text{latest},n} \times \left(1 + t\right)^{-(\text{years before latest})}$$
-
-> $$\text{Adjusted Reported}_{\text{AY},n} = \text{Paid}_{\text{AY},n} + \text{Adjusted Avg Case}_{\text{AY},n} \times \text{Open Counts}_{\text{AY},n}$$
-
-**The case adequacy adjustment** (for a *reported* triangle):
-
-1. Compute **average case outstanding** per open claim at each accident year and maturity.
-2. Select a severity trend $t$ — the rate at which average case outstanding *should* grow if adequacy were unchanged.
-3. **Trend the latest diagonal's** average case outstanding backwards at $t$ to restate each historical cell at today's adequacy level.
-4. Multiply the restated averages by the open claim counts to get adjusted case reserves, add paid, and rebuild the reported triangle.
-5. Select factors from the **restated** triangle.
-
-**The settlement rate adjustment** (for a *paid* triangle):
-
-1. Compute **disposal rates** — closed claims ÷ ultimate claims — at each accident year and maturity.
-2. Select the disposal rates on the latest diagonal as the basis, and multiply the selected disposal rate at each age by each accident year's ultimate claim counts to get the adjusted closed claim counts. The latest diagonal is then unchanged, in both the closed counts and the paid claims.
-3. For each historical cell, estimate the paid losses that *would* have been paid had that year closed claims at the current rate. Berquist and Sherman fit an exponential curve, Y = a × e^(bX), to cumulative paid claims Y against cumulative closed claim counts X between each pair of successive ages in an accident year, and read the adjusted paid claims off the curve at the adjusted closed counts: by interpolation when the adjusted count lies between two actual counts, otherwise by extrapolation from the pair with the closest range (Friedland, Ch. 13, p. 289).
-4. Rebuild the paid triangle at the common disposal pattern and select factors from it.
-
-**Both adjustments together** (Friedland, Ch. 13, p. 292): when case adequacy and settlement rate have both changed, the two adjustments are combined into a single adjusted reported triangle, which gives one projection in place of two.
-
-- Adjusted open claim counts are reported claim counts minus adjusted closed claim counts.
-- Adjusted reported claims are the adjusted average case outstanding times the adjusted open claim counts, plus the adjusted paid claims from the settlement rate adjustment.
-
-Further points:
-
-- The trigger for either adjustment is a **diagonal effect**: age-to-age factors on the latest diagonal all above (or all below) their column history. That is a calendar-year signal, and averaging it into the selections applies a one-time shift as though it were an ongoing pattern.
-- Which adjustment applies is decided by the **diagnostic**, not by preference: a jump in average case outstanding across all years points to adequacy; a jump in closure rates points to settlement speed. Both can be happening at once.
-- The adjustments are **large and judgment-laden** — the severity trend and the target disposal pattern are both selections — so the restated result should be compared against methods that are insensitive to the distortion in question (paid methods for a case-adequacy change; reported methods for a settlement-rate change).
-- Berquist-Sherman does not fix the diagonal itself. Strengthened reserves are on the books and belong in the estimate; what the restatement fixes is the *factors*, which would otherwise develop the strengthening a second time.
-
 ![[Media/Figures/Berquist-Sherman_Method.svg|340]]
 
-> [!example]- Case Adequacy Adjustment {Example}
-> Average case outstanding per open claim at $12$ months:
->
-> | AY | Avg case O/S | Open claims |
-> |---|---|---|
-> | $2022$ | $\$4{,}000$ | $250$ |
-> | $2023$ | $\$4{,}200$ | $250$ |
-> | $2024$ | $\$5{,}500$ | $250$ |
->
-> Paid at $12$ months is $\$300{,}000$ for each year. The selected severity trend is $5\%$; average case outstanding grew $31\%$ in the latest year, indicating a strengthening.
->
-> Restate the $12$-month reported column.
->
-> > [!answer]-
-> > Trend the **latest** average ($\$5{,}500$) backwards at $5\%$ to put every year on today's adequacy level:
-> >
-> > $$\begin{align*}
-> > 2023: \; \$5{,}500 / 1.05 &= \$5{,}238 \\
-> > 2022: \; \$5{,}500 / 1.05^{2} &= \$4{,}989
-> > \end{align*}$$
-> >
-> > Adjusted case reserves and reported losses:
-> >
-> > | AY | Adj. avg | Adj. case | Adj. reported |
-> > |---|---|---|---|
-> > | $2022$ | $\$4{,}989$ | $\$1{,}247{,}250$ | $\$1{,}547{,}250$ |
-> > | $2023$ | $\$5{,}238$ | $\$1{,}309{,}500$ | $\$1{,}609{,}500$ |
-> > | $2024$ | $\$5{,}500$ | $\$1{,}375{,}000$ | $\$1{,}675{,}000$ |
-> >
-> > Against the original reported figures ($\$1{,}300{,}000$, $\$1{,}350{,}000$, $\$1{,}675{,}000$), the older years have been raised by around $19\%$ while the latest is unchanged.
-> >
-> > The consequence for the factors is the point: in the original triangle, the $12$-month column was artificially *low* in the old years relative to their subsequent (post-strengthening) development, inflating the $12$–$24$ factors. Restating the base removes that inflation, and the factors selected from the adjusted triangle no longer develop the strengthening a second time.
+The **Berquist-Sherman Method** is a pair of adjustments that restate a historical [[Development Triangle|development triangle]] to the current level of [[Case Adequacy|case reserve adequacy]] or of [[Settlement Rate|claim settlement rate]], so that development factors selected from it suit the latest diagonal. The case outstanding adjustment restates the reported claims triangle. The latest diagonal's average case outstanding at each age is taken as the current adequacy and detrended back along its column, so the adjusted average case outstanding of an accident year at age $n$ is
 
-> [!example]- Which Adjustment Does the Data Call For? {Example}
-> Diagnostics for a liability book:
+> $$\text{Adjusted Average Case} = \frac{\text{Average Case on the Latest Diagonal}}{(1 + t)^k}$$
+
+- $\text{Average Case on the Latest Diagonal}$ is the case outstanding per open claim at age $n$ on the latest diagonal.
+- $t$ is the selected annual severity trend, the rate at which average case outstanding would grow with adequacy unchanged.
+- $k$ is the number of years from the accident year to the accident year on the latest diagonal at that age.
+
+Each cell of the adjusted reported triangle is then
+
+> $$\text{Adjusted Reported Claims} = \text{Paid Claims} + \text{Adjusted Average Case} \times \text{Open Claim Counts}$$
+
+- $\text{Paid Claims}$ and $\text{Open Claim Counts}$ are the cell's actual cumulative paid claims and open counts, unadjusted.
+
+The latest diagonal is unchanged. Age-to-age factors are selected from the adjusted triangle and applied to the latest reported claims as in the [[Chain Ladder Method|development technique]]. Raising the older years' reported claims while leaving the latest diagonal alone lowers the factors after a strengthening, so the projected ultimate falls. The adjusted factors can also give the percent unreported in the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] method.
+
+> [!example]- At 12 months the average case outstanding per open claim is $\$4{,}000$, $\$4{,}200$ and $\$5{,}500$ for AY 2022, 2023 and 2024, with 250 open claims and $\$300{,}000$ paid in each year. The severity trend is 5%. What is the adjusted 12-month reported column? {Example}
+> - The latest average, $\$5{,}500$, rose 31% in a year, far above the 5% trend, so case reserves were strengthened.
+> - AY 2023's adjusted average is $5{,}500/1.05 = \$5{,}238$, and AY 2022's is $5{,}500/1.05^2 = \$4{,}989$.
 >
-> | AY at 24 mo | Avg case O/S | Closed ÷ reported counts | Paid ÷ reported losses |
-> |---|---|---|---|
-> | $2021$ | $\$12{,}000$ | $58\%$ | $0.42$ |
-> | $2022$ | $\$12{,}600$ | $59\%$ | $0.43$ |
-> | $2023$ | $\$13{,}100$ | $67\%$ | $0.52$ |
-> | $2024$ | $\$13{,}700$ | $74\%$ | $0.61$ |
+> | AY | Adjusted average | Adjusted case | Adjusted reported |
+> | --- | --- | --- | --- |
+> | 2022 | $\$4{,}989$ | $\$1{,}247{,}250$ | $\$1{,}547{,}250$ |
+> | 2023 | $\$5{,}238$ | $\$1{,}309{,}500$ | $\$1{,}609{,}500$ |
+> | 2024 | $\$5{,}500$ | $\$1{,}375{,}000$ | $\$1{,}675{,}000$ |
 >
-> Which Berquist-Sherman adjustment applies?
->
-> > [!answer]-
-> > **The settlement rate adjustment, on the paid triangle.**
-> >
-> > Average case outstanding is growing $\approx 4.5\%$ a year — steady, and consistent with ordinary severity trend. There is no sign of a case adequacy shift.
-> >
-> > The closed-to-reported ratio, though, has moved from $58\%$ to $74\%$ in three years, and the paid-to-reported ratio has moved with it. Claims are **closing much faster**.
-> >
-> > The consequences:
-> >
-> > - **Paid development factors are biased.** Historical factors were built on a book that had paid only $42\%$ of reported losses by $24$ months; AY 2024 has paid $61\%$. Applying the old factors to the new diagonal over-develops it substantially.
-> > - **Reported development is largely unaffected**, since reported losses include case reserves whether or not the claim has closed.
-> >
-> > So: restate the **paid** triangle to a common disposal rate before selecting paid factors, and use the **reported** chain ladder — which is insensitive to settlement speed — as the check on the result. Applying the case adequacy adjustment here would correct a distortion that is not present.
+> - The adjusted case is the adjusted average times 250 open claims, and the adjusted reported claims add the $\$300{,}000$ paid.
+> - The older years rise about 19% from their actual $\$1{,}300{,}000$ and $\$1{,}350{,}000$, and AY 2024 is unchanged.
+
+## Detecting a change in case adequacy or settlement rate
+
+The adjustments are needed when the claims department reports, and the diagnostics confirm, a change in case reserving or settlement practice. A change shows up as a shift along the latest diagonal, a calendar-year effect.
+
+1. **Case adequacy.** Average case outstanding, case outstanding over open counts, rising much faster than average paid claims or the severity trend points to a strengthening. Average reported claims moving with the severity trend point to stable adequacy.
+2. **Settlement rate.** A rising ratio of closed to reported claim counts, or of closed counts to ultimate counts (the disposal rate), at the same age points to faster settlement. The ratio of paid to reported claims moves with it.
+
+A change in case adequacy distorts the reported projections, and the paid development and [[Expected Loss Method|expected claims]] techniques are unaffected. A change in settlement rate distorts the paid projections, and the reported development technique is largely unaffected, because reported claims include case reserves whether or not a claim has closed. Either adjustment addresses claims practice, not a change in the legal environment.
+
+> [!example]- For a liability book at 24 months, average case outstanding is $\$12{,}000$, $\$12{,}600$, $\$13{,}100$ and $\$13{,}700$ for AY 2021 to 2024. The ratio of closed to reported counts is 58%, 59%, 67% and 74%, and paid over reported claims is 0.42, 0.43, 0.52 and 0.61. Which adjustment applies? {Example}
+> - Average case outstanding grows about 4.5% a year, steadily, so case adequacy has not changed.
+> - The closed-to-reported ratio has risen from 58% to 74% and paid-to-reported with it, so claims are closing faster.
+> - Historical paid factors were built on years that had paid less by 24 months, so they over-develop the latest paid diagonal.
+> - The settlement rate adjustment applies to the paid triangle, with the reported development technique as the check.
+
+## The settlement rate adjustment
+
+The settlement rate adjustment restates the paid claims triangle to the disposal rates of the latest diagonal. The disposal rate on the latest diagonal at each age is selected, and the adjusted closed claim counts of an accident year at age $n$ are
+
+> $$\text{Adjusted Closed Counts} = \text{Selected Disposal Rate} \times \text{Ultimate Claim Counts}$$
+
+- $\text{Selected Disposal Rate}$ is the disposal rate, cumulative closed counts over ultimate counts, on the latest diagonal at age $n$.
+- $\text{Ultimate Claim Counts}$ are the accident year's selected ultimate counts.
+
+The adjusted paid claims are read off the year's relationship between cumulative paid claims and cumulative closed counts. Berquist and Sherman fit an exponential curve between each pair of successive ages,
+
+> $$\text{Paid Claims} = a\,e^{b \times \text{Closed Counts}}$$
+
+- $a$ and $b$ are the curve's parameters, fitted through the two ages' actual closed counts and paid claims.
+
+An adjusted count between two actual counts is interpolated on their curve, and one outside them is extrapolated from the closest pair. Linear interpolation is the simpler alternative. The latest diagonal is unchanged, and the paid factors are selected from the adjusted triangle. The key assumption is that a higher share of claims closed means a higher share of ultimate claims paid. A shift toward settling larger claims first breaks it, and the adjustment then makes the years less comparable.
+
+> [!example]- AY 2022 had closed 300 claims and paid $\$1{,}200{,}000$ at 12 months, and closed 600 and paid $\$3{,}000{,}000$ at 24 months. Its ultimate counts are 1,000 and the latest diagonal's disposal rate at 12 months is 40%. What are its adjusted closed counts and paid claims at 12 months? {Example}
+> - The adjusted closed counts are $0.40 \times 1{,}000 = 400$, between the actual 300 and 600.
+> - Through the two points, $b = \ln(3{,}000{,}000/1{,}200{,}000)/300 = 0.0030543$ and $a = 1{,}200{,}000/e^{300b} = 480{,}000$.
+> - The adjusted paid claims are $480{,}000 \times e^{400b} = \$1{,}628{,}651$.
+> - Linear interpolation would give $1{,}200{,}000 + \tfrac{100}{300} \times 1{,}800{,}000 = \$1{,}800{,}000$.
+
+## Both adjustments together
+
+When case adequacy and settlement rate have both changed, the two adjustments are combined into one adjusted reported triangle, which gives one projection in place of two. The adjusted open counts are the reported counts less the adjusted closed counts. The adjusted reported claims are the adjusted average case outstanding times the adjusted open counts, plus the adjusted paid claims.
+
+The adjustments are judgment-laden: the result is highly sensitive to the selected severity trend, and the case adjustment attributes every change in average case outstanding beyond that trend to adequacy. The restated result is checked against the methods insensitive to the distortion, paid methods for a case adequacy change and reported methods for a settlement rate change. The strengthened reserves on the latest diagonal stay in the estimate. What the restatement removes is factors that would develop the strengthening a second time.
+
+> [!trap] Multiplying by reported counts
+> The adjusted average case outstanding is a per-open-claim amount, so it multiplies the **open** claim counts, and the paid claims are added. For AY 2022 above, $4{,}989 \times 250 + 300{,}000 = \$1{,}547{,}250$. With 400 reported claims in place of the 250 open ones, the case alone would be $4{,}989 \times 400 = \$1{,}995{,}600$, and the paid claims would be reserved again on top.

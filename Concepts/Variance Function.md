@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8f9d71826ddea11cdab13af24ef3243fd45ac27dcdce0b2d47447aaa2324a312
+  content_hash: sha256:a1e32bf81f809d1eba0199fe5f9b27cb91ef8e708c8a74dc13129119aaf59e31
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph No. 5, 2nd ed., §2.2 eq. 3 and Table 1 (variance functions), §2.5 (weights: Var = phi V(mu)/w), §2.7.1-2.7.3 (gamma, inverse Gaussian, Tweedie p=0,1,2,3, 1<p<2 compound Poisson-gamma), pp.7-8, 16, 19-23, sha256:06f7c01d4c80af9a9c6672cb0ace7814c533499b4662b783218f23d12cc46318 — https://www.casact.org/sites/default/files/2021-03/8_GLM.pdf"
     - "Rodriguez, Generalized Linear Model Theory (GLM notes Appendix B), eqs. B.3, B.6-B.8 (var = phi b''(theta)/p_i; IRLS working variable and weights p_i/[b''(theta)(d eta/d mu)^2]), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
@@ -17,62 +17,75 @@ verification:
   log: .verify/Concepts/Variance Function.md
 ---
 
-**The variance function** $V(\mu)$ specifies how the variance of a response depends on its mean. In a [[Generalized Linear Model]] it is fixed by the choice of [[Exponential Family|exponential-family]] distribution. In a [[Linear Mixed Model]] the residual variance is constant by default, and a variance function is added when the data say it is not.
+A **Variance Function** $V(\mu)$ is the function that says how the variance of a response depends on its mean. In a [[Generalized Linear Model|generalized linear model]] it is fixed by the choice of [[Exponential Family|exponential-family]] distribution, and the variance of observation $i$ is
 
-> $$\mathrm{Var}(Y_i) = \frac{\phi\,V(\mu_i)}{w_i}$$
+> $$\text{Var}(Y_i) = \frac{\phi\,V(\mu_i)}{w_i}$$
 
-- $\phi$ is the [[Dispersion Parameter|dispersion parameter]] and $w_i$ the prior weight (exposure, claim count). The standard choices of $V(\mu)$:
-  - normal: $1$ (constant variance)
-  - Poisson: $\mu$
-  - binomial: $\mu(1 - \mu)$
-  - [[Gamma|gamma]]: $\mu^2$ (constant coefficient of variation)
-  - inverse Gaussian: $\mu^3$
-  - [[Tweedie Distribution|Tweedie]] with $1 < p < 2$: $\mu^p$
-- **What it does in the fit.** A GLM's estimating equations weight each residual $y_i - \mu_i$ by $w_i/V(\mu_i)$, along with a factor from the link. Under a gamma model, a $\$3{,}000$ miss on a $\$50{,}000$ claim counts far less than the same miss on a $\$5{,}000$ claim. The Pearson residual $(y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ puts all residuals on one scale. A fan shape in a [[Residual Plot|residual plot]] of such residuals means the wrong $V$ was chosen.
-- **Choosing it.** Plot group variances against group means on log–log axes. The slope estimates $p$ in $V(\mu) = \mu^p$: $0$ for normal, $1$ for Poisson, $2$ for gamma, and between $1$ and $2$ for Tweedie.
-- **In a linear mixed model.** The default residual covariance is $\mathbf{R}_i = \sigma^2\mathbf{I}$: constant variance. It can be relaxed in two ways:
-  - **heterogeneous variances**, a separate $\sigma_g^2$ for each level of a factor (a treatment group, a region)
-  - **variance as a function** of a covariate or of the fitted mean, e.g. the power form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\lvert\mu_{ij}\rvert^{2\delta}$ (the `varPower` structure in R's `nlme`)
-    - with a variance covariate $v_{ij}$ (a covariate such as development age, or the fitted value), the residual variance is $\sigma^2$ times the variance function: the **exponential** form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\exp(2\delta v_{ij})$ (`nlme`'s `varExp`) and the **power** form $\mathrm{Var}(\varepsilon_{ij}) = \sigma^2\lvert v_{ij}\rvert^{2\delta}$ (`varPower`), where $\delta$ is the estimated variance-function coefficient
-- **Testing it.** Unlike in a GLM, the LMM's mean–variance link is a modelling choice with its own estimated parameters. The competing models share their fixed effects, so they are compared by a [[Likelihood Ratio Test|likelihood ratio test]] on [[Restricted Maximum Likelihood|REML]] fits, or by AIC. The choice feeds the [[Covariance Structure|covariance structure]], and so the standard errors of every fixed effect.
+- $\phi$ is the [[Dispersion Parameter|dispersion parameter]] and $w_i$ the prior weight (exposure, claim count).
+- $\mu_i = E[Y_i]$ is the mean.
 
-> [!example]- Same Miss, Different Claims {Example}
-> A gamma severity GLM has $\phi = 0.5$. Claim 1 has $\hat{\mu} = \$5{,}000$ and settles for $\$8{,}000$. Claim 2 has $\hat{\mu} = \$50{,}000$ and settles for $\$53{,}000$. Compare the claims' standard deviations and their Pearson residuals, each miss divided by the claim's estimated standard deviation.
->
-> > [!answer]-
-> > With $V(\mu) = \mu^2$, $\mathrm{SD} = \sqrt{\phi}\,\mu = 0.7071\mu$: $\$3{,}536$ for claim 1 and $\$35{,}355$ for claim 2.
-> > $$
-> > \begin{align*}
-> > r_1 &= \frac{8{,}000 - 5{,}000}{\sqrt{0.5}\,(5{,}000)} \\
-> > &= 0.849 \\
-> > r_2 &= \frac{53{,}000 - 50{,}000}{\sqrt{0.5}\,(50{,}000)} \\
-> > &= 0.085
-> > \end{align*}
-> > $$
-> > The same $\$3{,}000$ miss is ten times as surprising on the small claim. A normal model with constant variance would have treated the two identically.
+The prior weight sets how much each observation counts in the fit. In a severity GLM on average claim size, the number of claims is the prior weight.
 
-> [!example]- Reading a Mean–Variance Plot {Example}
-> Pure premium data are grouped into three cells with means $200$, $400$ and $800$, and variances $60{,}000$, $180{,}000$ and $540{,}000$. Which variance function is indicated?
->
-> > [!answer]-
-> > Each doubling of the mean triples the variance, so on log–log axes:
-> > $$
-> > \begin{align*}
-> > p &= \frac{\ln 3}{\ln 2} \\
-> > &= 1.585
-> > \end{align*}
-> > $$
-> > $V(\mu) \approx \mu^{1.6}$ lies between Poisson ($p = 1$) and gamma ($p = 2$). That is a **Tweedie** with $p \approx 1.6$, the compound Poisson–gamma shape expected of pure premium, with its point mass at zero.
+> [!example]- A gamma severity GLM has $\phi = 0.5$. A claim with $\hat{\mu} = 5{,}000$ and claim count 1 has what standard deviation, and what if the observation were the average of 4 claims? {Example}
+> - The gamma variance function is $V(\mu) = \mu^2$, so the variance is $0.5(5{,}000^2)/1$ and the standard deviation is $\sqrt{0.5}(5{,}000) = 3{,}536$.
+> - With a prior weight of 4, the variance is divided by 4, so the standard deviation halves to $1{,}768$.
 
-> [!example]- Testing Heterogeneous Residual Variance in an LMM {Example}
-> A random-intercept model of loss ratios by insured is fitted by REML twice, with identical fixed effects. With one common residual variance, $-2\ell_R = 1{,}254.6$. With a separate residual variance for each of three regions, $-2\ell_R = 1{,}241.2$. Test at $5\%$, given $\chi^2_{0.05,\,2} = 5.991$.
->
-> > [!answer]-
-> > The heterogeneous model has $2$ extra variance parameters.
-> > $$
-> > \begin{align*}
-> > \text{LRT} &= 1{,}254.6 - 1{,}241.2 \\
-> > &= 13.4
-> > \end{align*}
-> > $$
-> > $13.4 > 5.991$, so **reject** a common residual variance. The regions differ in volatility, and a constant-variance model would give wrong standard errors for the fixed effects. REML fits are the right basis here because only the variance structure differs between the models. Equal variances is not a boundary hypothesis, so the plain $\chi^2_2$ applies.
+## Variance functions of the common distributions
+
+- normal: $1$ (constant variance)
+- Poisson: $\mu$
+- binomial: $\mu(1 - \mu)$
+- [[Gamma|gamma]]: $\mu^2$ (constant coefficient of variation)
+- inverse Gaussian: $\mu^3$
+- [[Tweedie Distribution|Tweedie]] with $1 < p < 2$: $\mu^p$
+
+A normal model assumes constant variance, so it does not fit data whose spread grows with the mean. If the standard deviation is proportional to the mean, the variance is proportional to the mean squared, which is the gamma's variance function. Under a Poisson model the standard deviation grows like the square root of the mean.
+
+## Role of the variance function in the fit
+
+A GLM's estimating equations weight each residual $y_i - \mu_i$ by $w_i/V(\mu_i)$, along with a factor from the link. The Pearson residual puts all residuals on one scale:
+
+> $$r_i = \frac{y_i - \hat{\mu}_i}{\sqrt{V(\hat{\mu}_i)}}$$
+
+A fan shape in a [[Residual Plot|residual plot]] of such residuals means the wrong $V$ was chosen.
+
+> [!example]- A gamma severity GLM has $\phi = 0.5$. Claim 1 has $\hat{\mu} = 5{,}000$ and settles for $8{,}000$, and claim 2 has $\hat{\mu} = 50{,}000$ and settles for $53{,}000$. How do the two misses compare, each divided by the claim's standard deviation? {Example}
+> - The standard deviation is $\sqrt{0.5}\,\hat{\mu}$: $3{,}536$ for claim 1 and $35{,}355$ for claim 2.
+> - Claim 1's miss is $3{,}000/3{,}536 = 0.849$ standard deviations.
+> - Claim 2's miss is $3{,}000/35{,}355 = 0.085$ standard deviations.
+> - The same $3{,}000$ miss is ten times as surprising on the small claim.
+
+## Choosing a variance function
+
+Plot group variances against group means on log–log axes. The slope estimates $p$ in $V(\mu) = \mu^p$: $0$ for normal, $1$ for Poisson, $2$ for gamma, and between $1$ and $2$ for Tweedie. A fan or wedge in a plot of the response against a predictor, with the spread widening as the mean grows, points the same way.
+
+> [!example]- Pure premium data in three cells have means 200, 400 and 800 and variances 60,000, 180,000 and 540,000. Which variance function is indicated? {Example}
+> - Each doubling of the mean triples the variance.
+> - The log–log slope is $p = \ln 3/\ln 2 = 1.585$.
+> - $V(\mu) \approx \mu^{1.6}$ lies between Poisson and gamma, so a Tweedie with $p \approx 1.6$ is indicated.
+
+## Variance functions in a linear mixed model
+
+In a [[Linear Mixed Model|linear mixed model]] the default residual covariance is $\mathbf{R}_i = \sigma^2\mathbf{I}$, a constant variance. It can be relaxed in two ways.
+
+1. **Heterogeneous variances**: a separate residual variance $\sigma_g^2$ for each level of a factor (a treatment group, a region). With $G$ levels, the model has $G - 1$ extra variance parameters.
+2. **Variance as a function of a covariate** $v_{ti}$, such as development age or the fitted value, with an estimated coefficient $\delta$. The exponential form (`varExp` in R's `nlme`) and the power form (`varPower`) are
+
+> $$\text{Var}(\varepsilon_{ti}) = \sigma^2\exp(2\delta v_{ti})$$
+
+> $$\text{Var}(\varepsilon_{ti}) = \sigma^2\lvert v_{ti}\rvert^{2\delta}$$
+
+Under the exponential form the residual standard deviation is $\sigma\exp(\delta v_{ti})$, and $\delta = 0$ gives a constant variance.
+
+## Testing a variance function
+
+In a linear mixed model the variance function is a modelling choice with its own estimated parameters. The competing models share their fixed effects, so they are compared by a [[Likelihood Ratio Test|likelihood ratio test]] on [[Restricted Maximum Likelihood|REML]] fits, or by AIC from REML fits. The choice feeds the [[Covariance Structure|covariance structure]], and so the standard errors of every fixed effect.
+
+> [!example]- A random intercept model of loss ratios is fitted by REML with one residual variance, $-2\,l_R = 1{,}254.6$, and with a separate residual variance for each of three regions, $-2\,l_R = 1{,}241.2$. Is a common residual variance rejected at 5%? {Example}
+> - The heterogeneous model has $2$ extra variance parameters.
+> - The statistic is $1{,}254.6 - 1{,}241.2 = 13.4$.
+> - $13.4 > \chi^2_{0.95,2} = 5.991$, so a common residual variance is rejected.
+> - Equal variances is not a boundary hypothesis, so the plain $\chi^2_2$ applies.
+
+> [!trap] A variance of zero is on the boundary
+> When the null hypothesis sets a variance to zero, as in testing whether a random effect is needed, the value lies on the boundary of the parameter space. The plain $\chi^2$ p-value is then too large. For a single variance component it is halved.

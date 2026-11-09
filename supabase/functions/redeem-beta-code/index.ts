@@ -1,6 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
+// What the reader sees when redeeming fails on our side; the code is left unused.
+const REDEEM_FAILED = 'That code couldn’t be redeemed just now. It hasn’t been used, so try again in a minute.'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
@@ -63,7 +65,7 @@ async function redeemAccessKey(
   // A paying subscriber's period is Stripe's to set — the webhook would
   // overwrite the extension — so don't spend their key on nothing.
   if (activePro && sub?.stripe_subscription_id) {
-    return json({ error: 'You already have a Pro subscription' }, 400)
+    return json({ error: 'You already have a Pro subscription, so there’s nothing to redeem.' }, 400)
   }
 
   const { data: claimed, error: claimErr } = await admin
@@ -77,9 +79,9 @@ async function redeemAccessKey(
 
   if (claimErr) {
     console.error('redeem-beta-code: claim key error:', claimErr)
-    return json({ error: 'Failed to redeem code' }, 500)
+    return json({ error: REDEEM_FAILED }, 500)
   }
-  if (!claimed) return json({ error: 'Invalid or already used code' }, 400)
+  if (!claimed) return json({ error: 'That code is invalid or already used. Check it and try again.' }, 400)
 
   // Months are added to whatever Pro time the account already has left.
   const start = activePro && periodEnd ? periodEnd : now
@@ -104,7 +106,7 @@ async function redeemAccessKey(
       .from('pro_access_keys')
       .update({ redeemed_by: null, redeemed_at: null })
       .eq('code_hash', codeHash)
-    return json({ error: 'Failed to activate Pro' }, 500)
+    return json({ error: REDEEM_FAILED }, 500)
   }
 
   return json({ success: true, currentPeriodEnd: end.toISOString() })
@@ -130,11 +132,11 @@ Deno.serve(async (req: Request) => {
   try {
     body = await req.json()
   } catch {
-    return json({ error: 'Invalid request body' }, 400)
+    return json({ error: REDEEM_FAILED }, 400)
   }
 
   const code = (body.code ?? '').trim().toLowerCase()
-  if (!code) return json({ error: 'No code provided' }, 400)
+  if (!code) return json({ error: 'Enter a code to redeem.' }, 400)
 
   if (!getAcceptedCodes().has(code)) {
     return redeemAccessKey(admin, user.id, code)
@@ -148,7 +150,7 @@ Deno.serve(async (req: Request) => {
     .maybeSingle()
 
   if (existing) {
-    return json({ error: 'You have already redeemed a beta code' }, 400)
+    return json({ error: 'You’ve already redeemed a beta code on this account.' }, 400)
   }
 
   // Record the redemption
@@ -158,7 +160,7 @@ Deno.serve(async (req: Request) => {
 
   if (insertErr) {
     console.error('redeem-beta-code: insert redemption error:', insertErr)
-    return json({ error: 'Failed to redeem code' }, 500)
+    return json({ error: REDEEM_FAILED }, 500)
   }
 
   // Grant Pro access (no expiry — use a far-future date for compatibility).
@@ -182,7 +184,7 @@ Deno.serve(async (req: Request) => {
     console.error('redeem-beta-code: upsert subscription error:', upsertErr)
     // Roll back redemption record on failure
     await admin.from('beta_code_redemptions').delete().eq('user_id', user.id)
-    return json({ error: 'Failed to activate Pro' }, 500)
+    return json({ error: REDEEM_FAILED }, 500)
   }
 
   return json({ success: true })

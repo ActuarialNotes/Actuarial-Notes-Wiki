@@ -10,9 +10,12 @@
 // whose tick is drawn, not subtracted).
 //
 // Colour comes from `currentColor`, so a surface sets it with a text class.
-// The default is the semantic "done" green of docs/style-guide.md §4.1; the
-// mark is deliberately *not* themed per surface beyond that, so a check never
-// has to be decoded.
+// The default is the exam's own colour wherever an exam is in scope (an
+// ancestor spreads `examAccentStyle`, which sets `--exam-accent-vivid`), and
+// the semantic "done" green of docs/style-guide.md §4.1 everywhere else. A
+// check picked or finished inside one exam's screen is that exam's, the way
+// the edge under its topic group and its logo are; outside any exam it stays
+// the one green, so a check never has to be decoded.
 //
 // Sizing is the caller's: pass `h-4 w-4` (row), `h-5 w-5` (group row) or
 // `h-7 w-7` (card corner). See `CompletionCornerBadge` for the corner overlay.
@@ -21,13 +24,17 @@ import { useId } from 'react'
 import { cn } from '@/lib/utils'
 
 export interface CheckMarkProps {
-  /** Size + colour classes. Colour defaults to the "done" green. */
+  /** Size + colour classes. Colour defaults to the exam's accent in an exam's
+   *  scope, else the "done" green. */
   className?: string
   /** Thickness of the cut-out tick, in the 24-unit viewBox. */
   strokeWidth?: number
   /** Accessible name. Omitted — the default — renders the mark decorative. */
   label?: string
 }
+
+/** The exam's accent where one is in scope, else the "done" green. */
+export const CHECK_COLOR = 'text-[color:var(--exam-accent-vivid,theme(colors.green.500))]'
 
 export function CheckMark({ className, strokeWidth = 2.75, label }: CheckMarkProps) {
   // One mask per instance: ids are document-global, and two marks with the
@@ -36,7 +43,7 @@ export function CheckMark({ className, strokeWidth = 2.75, label }: CheckMarkPro
   return (
     <svg
       viewBox="0 0 24 24"
-      className={cn('shrink-0 text-green-500', className)}
+      className={cn(CHECK_COLOR, 'shrink-0', className)}
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}

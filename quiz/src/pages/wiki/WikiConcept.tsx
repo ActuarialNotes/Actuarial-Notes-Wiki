@@ -12,8 +12,10 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
+import { useStandalonePage } from '@/hooks/useStandalonePage'
 import { compareExamLabels } from '@/lib/resourceExams'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 // Picks the syllabus to redirect to when it's unambiguous. Returns null when
 // the concept isn't in any syllabus (show the standalone page) or when it's
@@ -121,6 +123,11 @@ export default function WikiConcept() {
     [content],
   )
 
+  // Read on its own, the page behaves as it does in the popup: the title opens
+  // its action menu, and a link opens in the popup over the page.
+  const conceptEntry = useMemo<WikiEntryRef>(() => ({ kind: 'concept', name: conceptName }), [conceptName])
+  const standalonePage = useStandalonePage(conceptEntry, content, pageRefs, `Concepts/${conceptName}.md`)
+
   useEffect(() => {
     setExamId(fromExam)
     setPageRefs(pageRefs)
@@ -165,8 +172,22 @@ export default function WikiConcept() {
   return (
     <div className="space-y-4 relative">
       <h1 className="text-2xl font-bold tracking-tight">
-        {conceptName}
+        {content !== null ? (
+          <button
+            ref={standalonePage.titleAction.ref}
+            type="button"
+            data-play-menu-trigger
+            onClick={standalonePage.titleAction.onToggle}
+            aria-haspopup="menu"
+            aria-expanded={standalonePage.titleAction.open}
+            aria-label={standalonePage.titleAction.label}
+            className="action-title-underline text-left"
+          >
+            {conceptName}
+          </button>
+        ) : conceptName}
       </h1>
+      {content !== null && standalonePage.menu}
 
       {/* A visitor who landed here reads the concept on its own; these are the
           way into the study guide(s) it belongs to, opened at this concept. */}
@@ -199,6 +220,10 @@ export default function WikiConcept() {
         <WikiArticle
           markdown={content}
           sourcePath={`Concepts/${conceptName}.md`}
+          // Section headings pin just under the floating search bar.
+          stickyHeadings
+          onWikiLink={standalonePage.onWikiLink}
+          className="[--sticky-heading-top:var(--floating-search-height,0px)]"
           titleBadge={
             <FactCheckBadge
               verification={parseVerification(content)}

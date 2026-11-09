@@ -114,7 +114,7 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
         <LibraryPill
           active={libraryOnly}
           count={libraryCount}
-          title="Only the resources you have taken"
+          title="Only the resources in your library"
           onToggle={() => setLibraryOnly(v => !v)}
         />
         {RESOURCE_FACETS.map(facet => {
@@ -129,7 +129,6 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
               onToggle={value => toggle(facet, value)}
               getCount={value => counts.get(value) ?? 0}
               emptyTitle={EMPTY_TITLE[facet]}
-              surface="card"
             />
           )
         })}
@@ -155,7 +154,7 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
       {shown.length === 0 ? (
         libraryOnly && libraryCount === 0 ? (
           <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
-            You have not taken any resources yet. Turn My Library off to browse the catalogue.
+            You haven’t added any resources yet. Turn My Library off to browse the catalogue.
           </p>
         ) : (
           <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed px-4 py-10 text-center">

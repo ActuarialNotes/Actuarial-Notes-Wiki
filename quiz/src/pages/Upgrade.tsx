@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { AnalyticsArt, PlanQuizArt, PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +25,9 @@ const HEADLINE_BENEFITS = [
   'A study plan for every day until your exam',
   'Study in syllabus order, or the heaviest topics first',
   'Each day’s list in your inbox, at the time you choose',
+  'Quiz yourself on today’s plan in one tap',
+  'Listen to each day’s plan as a short episode',
+  'See how your accuracy is trending, and where you’re weakest',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -42,11 +45,40 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: StrategyArt,
   },
   {
+    title: 'Quiz Today’s Plan',
+    body: 'Pick Today’s Plan on the Quiz tab and the questions come from the concepts you’re meant to study today. One quiz to finish the day, or a few questions whenever you have a minute.',
+    Art: PlanQuizArt,
+  },
+  {
+    title: 'Listen to Today’s Plan',
+    body: 'Each day’s concepts read aloud as one short episode: the definition, the key formulas and the trap to watch for. Play it from your plan, or from the Listen button in the daily email, and keep going with your phone locked.',
+    Art: PodcastArt,
+  },
+  {
+    title: 'Track Your Accuracy',
+    body: 'See how often you get questions right over the last week, month or three months, and whether that’s going up. The syllabus sections costing you the most marks are listed first, each one a tap from a quiz on it.',
+    Art: AnalyticsArt,
+  },
+  {
     title: 'Rehearse the PCPA Project',
     body: 'Pick a case, get a data set and build your model in R or Python in the browser. Write the report under the real 1,250-word limit, then see how your model does on data it hasn\'t seen.',
     Art: ProjectArt,
   },
 ]
+
+// What a reader sees when checkout or a code fails: never the server's own
+// words (R5 in the app-copy skill), which can be a config error or "Unauthorized".
+const CHECKOUT_FAILED = 'Checkout didn’t open. Try again in a minute, or contact us from Settings if it keeps happening.'
+
+/** The redeem-beta-code function's errors, said the way a reader needs them. */
+function betaCodeMessage(raw: string): string {
+  const msg = raw.toLowerCase()
+  if (msg.includes('invalid or already used')) return 'That code isn’t valid or has already been used. Check it and try again.'
+  if (msg.includes('already redeemed')) return 'You’ve already redeemed a code on this account.'
+  if (msg.includes('already have a pro')) return 'You already have Pro, so there’s nothing to redeem.'
+  if (msg.includes('unauthorized')) return 'Your sign-in has expired. Sign in again, then redeem the code.'
+  return 'That code couldn’t be redeemed just now. Try again in a minute.'
+}
 
 export default function Upgrade() {
   const navigate = useNavigate()
@@ -87,7 +119,7 @@ export default function Upgrade() {
       setBetaSuccess(true)
       requestProCelebration({ confirmed: true })
     } catch (err) {
-      setBetaError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setBetaError(betaCodeMessage(err instanceof Error ? err.message : ''))
     } finally {
       setBetaSubmitting(false)
     }
@@ -120,7 +152,7 @@ export default function Upgrade() {
       window.location.assign(data.url)
     } catch (err) {
       console.error('upgrade: checkout failed:', err)
-      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setError(CHECKOUT_FAILED)
       setSubmitting(false)
     }
   }
@@ -233,8 +265,7 @@ export default function Upgrade() {
         <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
           <CardContent className="p-6 space-y-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-semibold">Try it for a month</p>
-              <p className="text-sm text-muted-foreground">$10 / month. Cancel anytime.</p>
+              <p className="text-lg font-semibold">Get Pro</p>
             </div>
             {cta}
           </CardContent>

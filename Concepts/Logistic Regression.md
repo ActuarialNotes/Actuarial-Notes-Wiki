@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb0a20dc900dc789b12f4a5a5a2edd6dddd21fcac93fde65fad1983412a923f4
+  content_hash: sha256:447cd0072c5b73a451af1b0cfb6baa198a0b23e72f97b79d25a45226e4b47fd4
   sources:
     - "Rodríguez, Lecture Notes on Generalized Linear Models (Princeton), Ch. 3 Logit Models for Binary Data, §3.2.1 Maximum Likelihood Estimation (PDF p.10): log L(β) = Σ{y_i log π_i + (n_i − y_i) log(1 − π_i)} except for a constant; §3.2.2 grouped-data deviance → χ²(n−p) as n_i → ∞, not with individual data (PDF pp.11–12); exp(β_j) an odds ratio; §3.7 Other Choices of Link (PDF pp.41–43): 'The logit and probit transformations are almost linear functions of each other for values of π_i in the range from 0.1 to 0.9, and therefore tend to give very similar results… coefficients in a logit model should be standardized dividing by π/√3', sha256:2243f2c49c0e15545740a0b4fb8d98ad8a5b3e37653c13feee545195801efedc — https://grodri.github.io/glms/notes/c3.pdf"
     - "Rodríguez, GLM notes, Ch. 6 Multinomial Response Models, §6.2.1 baseline-category multinomial logit (PDF p.3); §6.5 ordered logit / proportional odds (PDF pp.18–19), sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf"
@@ -15,48 +15,64 @@ verification:
   log: .verify/Concepts/Logistic Regression.md
 ---
 
-**Logistic Regression** is the [[Generalized Linear Model]] for a binary response (with extensions to more than two categories, below): the outcome is modelled as binomial and the **logit** [[Link Function]] maps the probability $\pi \in (0,1)$ onto the whole real line, so the linear predictor can take any value and the fitted probability always stays between $0$ and $1$.
-
-> $$\ln\!\left(\frac{\pi}{1-\pi}\right) = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p$$
-
-> $$\pi = \frac{e^{\eta}}{1 + e^{\eta}} = \frac{1}{1 + e^{-\eta}}$$
-
-- $\pi/(1-\pi)$ is the **odds**; the model is linear in the log-odds, so $e^{\beta_j}$ is the **odds ratio** for a one-unit increase in $x_j$ — the coefficient's natural interpretation
-- The logit is the canonical link for the binomial, and the [[Dispersion Parameter]] is fixed at $\phi = 1$. With **grouped** data ($y_i$ successes out of $n_i$ trials) the residual [[Deviance]] is approximately $\chi^2_{n-p}$ as the group sizes $n_i$ grow, so a deviance far above its degrees of freedom signals overdispersion or a missing term; with individual $0/1$ responses the deviance has no such distribution and this check does not apply. Overdispersion can be handled by quasi-likelihood, which estimates a scale factor between the mean and the variance alongside the coefficients
-- Coefficients are fitted by [[Maximum Likelihood Estimation]] (there is no closed form), and their standard errors come from the [[Fisher Information]]. For individual $0/1$ responses $y_i$ with fitted success probabilities $\pi_i$, the log-likelihood that is maximized is $\ell = \sum_i \left[ y_i \ln \pi_i + (1 - y_i) \ln(1 - \pi_i) \right]$: each success contributes $\ln \pi_i$ and each failure $\ln(1 - \pi_i)$. With grouped data, $y_i$ successes in $n_i$ trials, it is $\sum_i \left[ y_i \ln \pi_i + (n_i - y_i) \ln(1 - \pi_i) \right]$ up to a constant (Rodríguez, Ch. 3, §3.2.1). Evaluated at the fitted $\pi_i$ of two nested models, it gives the [[Likelihood Ratio Test|likelihood ratio test]] statistic, twice the difference in log-likelihoods
-- **Logit or probit.** The probit link, the inverse of the standard normal CDF, is the main alternative. The two curves are both S-shaped and almost linear functions of each other for probabilities between about $0.1$ and $0.9$, so they tend to give very similar fitted results. Their coefficients differ in scale, since the standard logistic distribution has standard deviation $3.1416/\sqrt{3} \approx 1.81$ against the standard normal's $1$: divide logit coefficients by about $1.81$ before comparing them with probit ones (Rodríguez, Ch. 3, §3.7)
-- Fit is judged by deviance, [[AIC]], and classification measures (confusion matrix, ROC/AUC) rather than [[R-Squared]]; **pseudo-$R^2$** measures exist but are not comparable to the linear-model version
-- Actuarial uses: policyholder retention and conversion, fraud referral, whether a claim exceeds a large-loss threshold, and any yes/no underwriting decision
-- **Complete separation** — a predictor that perfectly splits the outcomes — sends a coefficient to infinity and produces enormous standard errors; it is a data problem, not a computing one
-
-**More than two categories.** Logistic regression extends to a response with $K > 2$ categories.
-
-**Nominal (multinomial) logistic regression** is for unordered categories. One category, $K$, is the baseline, and the log-odds of each other category against it is linear in the predictors, with its own coefficients:
-
-> $$\ln\frac{\Pr(Y = k \mid x)}{\Pr(Y = K \mid x)} = \eta_k = \beta_{k0} + \beta_{k1}x_1 + \cdots + \beta_{kp}x_p, \qquad k = 1, \ldots, K-1$$
-
-> $$\Pr(Y = k \mid x) = \frac{e^{\eta_k}}{1 + \sum_{l=1}^{K-1} e^{\eta_l}}, \qquad \Pr(Y = K \mid x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\eta_l}}$$
-
-The choice of baseline changes the coefficients but not the fitted probabilities, and $e^{\beta_{kj}}$ is the factor by which the odds of category $k$ *versus the baseline* change per unit increase in $x_j$. See [[Multinomial Logistic Regression]].
-
-**Ordinal logistic regression** is for ordered categories. The **proportional odds** (cumulative logit) model applies the logit to the cumulative probabilities $\gamma_j = \Pr(Y \le j)$, with an intercept for each cut-point but one set of slopes:
-
-> $$\ln\frac{\gamma_j}{1-\gamma_j} = \theta_j + \mathbf{x}^\top\boldsymbol{\beta}, \qquad j = 1, \ldots, K-1$$
-
-A change in the covariates multiplies the odds of a response in category $j$ or below by the same factor, $e^{\Delta\mathbf{x}^\top\boldsymbol{\beta}}$, for every $j$ — hence the name. Dobson & Barnett also cover adjacent-categories and continuation-ratio logit models. See [[Ordinal Logistic Regression]].
-
 ![[Media/Figures/Logistic_Regression.svg|340]]
 
-> [!example]- From Coefficients to a Predicted Probability {Example}
-> A retention model gives $\hat\eta = 1.20 - 0.030\,(\text{rate increase }\%)$. Find the predicted renewal probability for a $10\%$ increase, and the odds ratio per extra percentage point.
->
-> > [!answer]-
-> > $$\hat\eta = 1.20 - 0.030(10) = 0.90$$
-> > $$\hat\pi = \frac{1}{1 + e^{-0.90}} = \frac{1}{1 + 0.4066} = 0.711$$
-> > Each additional percentage point of rate increase multiplies the odds of renewal by $e^{-0.030} = 0.970$ — a $3.0\%$ reduction in the odds per point.
+A **Logistic Regression** is a [[Generalized Linear Model|generalized linear model]] for a binary response, in which the response $Y_i$ has a [[Binomial Distribution|binomial (Bernoulli) distribution]] with probability of success $\pi_i$ and the [[Link Function|link function]] is the logit. It is a [[Supervised Learning|supervised learning]] method for classifying an observation into one of two classes from its predictors $x_{i1}, \ldots, x_{ip}$.
 
-> [!example]- Why Not Ordinary Regression? {Example}
-> An analyst fits OLS to a $0/1$ lapse indicator and obtains fitted values ranging from $-0.08$ to $1.06$. Name two assumptions that fail.
->
-> > [!answer]-
-> > First, the **fitted values are not probabilities** — the identity link is unbounded, so predictions leave $[0,1]$. Second, a Bernoulli response has variance $\pi(1-\pi)$, which depends on the mean, so the **constant-variance** assumption of [[Linear Regression]] fails; the errors are not Normal either, being two-valued. The logit link and the binomial variance function fix both.
+The odds of success are $\pi_i/(1-\pi_i)$, and the logit is the natural logarithm of the odds. The logit of the probability of success is
+
+> $$\ln\!\left(\frac{\pi_i}{1-\pi_i}\right) = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
+
+- $\beta_0, \beta_1, \ldots, \beta_p$ are the coefficients, estimated by [[Maximum Likelihood Estimation|maximum likelihood]].
+
+The logit maps a probability in $(0, 1)$ onto the whole real line, so the linear predictor $\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$ can take any value. Solving for $\pi_i$, the probability of success is
+
+> $$\pi_i = \frac{e^{\eta_i}}{1 + e^{\eta_i}}$$
+
+> $$\pi_i = \frac{1}{1 + e^{-\eta_i}}$$
+
+This inverse of the logit is the logistic function. It maps any value of $\eta_i$ into $(0, 1)$, so every fitted value is a probability. The probit link, the inverse of the standard normal cumulative distribution function, also maps $(0, 1)$ onto the real line and gives similar fitted probabilities. The logit is the canonical link of the binomial distribution, and the [[Dispersion Parameter|dispersion parameter]] of the binomial is fixed at $\phi = 1$.
+
+> [!example]- A logistic regression for the probability that a policy renews has $\hat\beta_0 = 1.20$ and $\hat\beta_1 = -0.03$, where $x$ is the rate increase in percent. What is the probability of renewal for a $10\%$ rate increase? {Example}
+> - The linear predictor is $\hat\eta = 1.20 - 0.03 \times 10 = 0.90$.
+> - The probability of renewal is $\hat\pi = \frac{1}{1 + e^{-0.90}} = \frac{1}{1.4066} = 0.711$.
+
+## The odds ratio
+
+Exponentiating the logit, the odds of success are
+
+> $$\frac{\pi_i}{1 - \pi_i} = e^{\beta_0}\, e^{\beta_1 x_{i1}} \cdots e^{\beta_p x_{ip}}$$
+
+A one-unit increase in $x_j$, with the other predictors held fixed, multiplies the odds by $e^{\beta_j}$. This factor is the odds ratio of $x_j$.
+
+> [!example]- In the renewal model above, what are the odds of renewal for a $10\%$ rate increase, and by what factor does each additional percentage point of rate increase change them? {Example}
+> - The odds of renewal are $e^{\hat\eta} = e^{0.90} = 2.460$.
+> - Each additional percentage point multiplies the odds by $e^{-0.03} = 0.970$, a reduction of $3.0\%$.
+
+Because the model is linear on the log-odds scale, two fitted probabilities at two values of one predictor fix both coefficients. The slope is the change in log-odds divided by the change in $x$.
+
+> [!example]- A logistic regression with one predictor gives fitted probabilities of $0.5$ at $x = 2$ and $0.8$ at $x = 4$. What are $\hat\beta_0$ and $\hat\beta_1$? {Example}
+> - At $x = 2$ the log-odds are $\ln(0.5/0.5) = 0$.
+> - At $x = 4$ the log-odds are $\ln(0.8/0.2) = \ln 4 = 1.3863$.
+> - The slope is $\hat\beta_1 = \frac{1.3863 - 0}{4 - 2} = 0.6931$.
+> - The intercept is $\hat\beta_0 = 0 - 2 \times 0.6931 = -1.3863$.
+> - The odds ratio is $e^{0.6931} = 2$, so each unit of $x$ doubles the odds of success.
+
+## The linear probability model
+
+The linear probability model fits [[Linear Regression|linear regression]] to a $0/1$ response, so that the probability of success is
+
+> $$\pi_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
+
+It has three drawbacks that the logit link and the binomial distribution remove:
+
+1. Fitted values can fall below 0 or above 1, so they are not always probabilities.
+2. The variance of a $0/1$ response is $\pi_i(1 - \pi_i)$, which changes with the mean, so the errors are heteroscedastic.
+3. The errors take only two values for each $x_i$, so they are not normal and residual analysis is not meaningful.
+
+## Responses with more than two categories
+
+A response with more than two unordered categories is modelled by [[Multinomial Logistic Regression|multinomial logistic regression]]. A response with ordered categories is modelled by [[Ordinal Logistic Regression|ordinal logistic regression]].
+
+> [!trap] Multiplying the probability by the odds ratio
+> The odds ratio $e^{\beta_j}$ multiplies the odds, not the probability. In the renewal model, an $11\%$ rate increase gives odds of $2.460 \times 0.970 = 2.387$ and a probability of $2.387/3.387 = 0.705$. Multiplying the probability instead, $0.711 \times 0.970 = 0.690$, is wrong.

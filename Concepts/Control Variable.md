@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1d7af73d56e9a995cf24a309039f28ff049883b1cf78a2bdf0eaa8974350c76d
+  content_hash: sha256:749c0a8e823912cf7bf2608e42e818a38321a1ab14924ebd1fba68e1998b728c
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.6 (PDF p.27), sec.2.9 (PDF p.37), sec.5.1.3 (PDF p.56), sec.9.2 (PDF p.100), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C task 6 (PDF p.5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -13,19 +13,32 @@ verification:
   log: .verify/Concepts/Control Variable.md
 ---
 
-A **Control Variable** is a predictor included in an insurance [[Generalized Linear Model]] to account for a real, known effect on the response — preventing that effect from being incorrectly absorbed into the coefficients of the rating variables — even though the control variable itself will not be used to set the final rate.
-
-> $$\hat{\beta}_{\text{rating}}\big|_{\text{control omitted}} \;\neq\; \hat{\beta}_{\text{rating}}\big|_{\text{control included}} \quad \text{if the rating and control variables are correlated}$$
-
-- The common control variable in ratemaking is a temporal variable such as accident year or calendar year, which picks up trend, loss development and rate changes the target has not been adjusted for
-- A territory or class that is priced separately outside the model is **not** a control variable: it enters as an [[Offset Variable|offset]], with its coefficient fixed, so the other variables are fitted in its presence
-- Omitting a relevant control variable causes **omitted variable bias**: correlated rating variables' coefficients absorb some of the missing variable's true effect, distorting the indicated rate relativities
-- A control variable's coefficient is **estimated from the data**, unlike an **[[Offset Variable]]**, whose coefficient is fixed at $1$
-
 ![[Media/Figures/Control_Variable.svg|340]]
 
-> [!example]- Including a Control Variable to Avoid Bias {Example}
-> An actuary fits a Poisson frequency GLM with vehicle age as the only rating variable. Calendar year is known to affect frequency (due to changing claim-reporting patterns) and is correlated with the vehicle-age mix of the book, but calendar year will not be used to set rates. Should calendar year be included in the model?
->
-> > [!answer]-
-> > Yes — calendar year should be included as a **control variable**. Because it is correlated with vehicle age and has a real effect on frequency, omitting it would let part of the calendar-year effect leak into the vehicle-age coefficient, biasing the indicated vehicle-age relativities. Including it (without using its coefficient for rating) isolates the true vehicle-age effect.
+A **Control Variable** is a [[Predictor Variable|predictor variable]] included in a [[Generalized Linear Model]] so that the other predictors' coefficients are estimated net of its effect, but that is not used in the rating plan. A variable is included as a control variable when
+
+1. it has a real effect on the response,
+2. it is correlated with the [[Rating Variable|rating variables]],
+3. it will not be used to set rates.
+
+The coefficients of a control variable are estimated from the data like any other predictor's. When the relativities are extracted, the control variable is dropped, or the rates are set at one chosen level of it. The most common control variable in ratemaking is a time variable, such as accident year or calendar year, which picks up trend and other changes over time.
+
+> [!example]- A frequency GLM uses vehicle age as a rating variable. Reported frequency has changed from year to year, and the vehicle-age mix of the book has shifted over the same years. Calendar year will not be used in the rates. Should calendar year be in the model? {Example}
+> - Calendar year has a real effect on frequency.
+> - Calendar year is correlated with vehicle age through the shift in the mix of the book.
+> - Without calendar year, part of its effect would be absorbed by the vehicle-age coefficients, and the vehicle-age relativities would be biased.
+> - Calendar year should be included as a control variable and left out of the rates.
+
+## Omitted variable bias
+
+When a variable that affects the response and is correlated with an included predictor is left out of the model, the included predictor's coefficients absorb part of the omitted variable's effect. This is omitted variable bias. A model without the control variable has fewer parameters, but fewer parameters do not justify a model whose coefficients for the rating variables are biased. The choice between the two models weighs bias and fit, not the number of parameters alone.
+
+## Control variables and offsets
+
+A control variable and an [[Offset Variable|offset]] both enter the linear predictor without being rating variables, but their coefficients are treated differently:
+
+| | Control variable | Offset |
+| --- | --- | --- |
+| Coefficient | Estimated from the data | Fixed at 1 |
+| Purpose | Remove an effect from the other coefficients | Impose a known effect, such as exposure |
+| In the rates | Dropped, or fixed at one level | Used at its known value |

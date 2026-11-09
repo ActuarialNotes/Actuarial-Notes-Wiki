@@ -13795,7 +13795,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -13812,7 +13820,15 @@
        "page": "Credibility",
        "quote": "For pure **frequency** with Poisson claim counts, $p = 90\\%$ and $k = \\pm 5\\%$ gives the standard $n_{\\text{full}} = (1.645/0.05)^2 = 1{,}082$ claims."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -14257,7 +14273,15 @@
        "page": "Full Credibility Standard",
        "quote": "$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -14274,7 +14298,15 @@
        "page": "Normal Distribution",
        "quote": "$z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r7",
@@ -14588,7 +14620,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -14605,7 +14645,15 @@
        "page": "Limited Fluctuation Credibility",
        "quote": "Partial credibility uses the **square root rule**: $Z = \\sqrt{n/n_{\\text{full}}}$ when $n < n_{\\text{full}}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r6",
@@ -14622,7 +14670,15 @@
        "page": "Normal Distribution",
        "quote": "Useful percentiles: $z_{0.90} = 1.282$, $z_{0.95} = 1.645$, $z_{0.975} = 1.960$, $z_{0.99} = 2.326$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$p = 0.90 \\Rightarrow z_{0.95} = 1.645$, and $k = 0.05$.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     }
    ]
   },
@@ -14934,7 +14990,15 @@
        "page": "Deductible Rating",
        "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]] — the share of expected losses the deductible removes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]], the share of expected losses the deductible removes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -16547,7 +16611,15 @@
        "page": "Full Credibility Standard",
        "quote": "It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\\%$ of its expected value with probability $p$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "It is the smallest volume for which the observed value $W$ is within $100k\\%$ of its expected value with probability $p$:",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -16564,7 +16636,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$n_F = \\lambda_0\\,\\frac{\\text{Var}(N)}{E[N]^{2}}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -17224,7 +17304,15 @@
        "page": "Full Credibility Standard",
        "quote": "$$n_F = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}\\left[\\frac{\\sigma_N^{2}}{\\mu_N} + \\left(\\frac{\\sigma_X}{\\mu_X}\\right)^{2}\\right]$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r5",
@@ -17850,7 +17938,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "For Poisson claim counts $\\text{Var}(N) = E[N]$, so the standard reduces to $n_F = \\lambda_0$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -17867,7 +17963,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -18575,7 +18679,15 @@
        "page": "Permissible Loss Ratio",
        "quote": "$$\\text{Indicated Change} = \\frac{\\text{Projected Loss \\& LAE Ratio}}{\\text{PLR}} - 1$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio Method",
+      "quote": "$$\\text{Indicated Change} = \\frac{\\text{Projected Loss \\& LAE Ratio}}{\\text{PLR}} - 1$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -18622,7 +18734,15 @@
        "page": "Loss Trend",
        "quote": "The first policy is exposed $7/1/2025$–$6/30/2026$ and the last $7/1/2026$–$6/30/2027$, so the exposure period runs $7/1/2025$ to $6/30/2027$ and its midpoint — the average loss date — is $7/1/2026$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -18635,7 +18755,15 @@
        "page": "Loss Trend",
        "quote": "Accident year $2023$ runs $1/1$–$12/31/2023$; with losses occurring uniformly, its average loss date is $7/1/2023$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "With losses occurring uniformly, its average loss date is $7/1/2023$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -18774,7 +18902,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$1/\\text{CDF}$ is the percent reported, so $1 - 1/\\text{CDF}$ is the percent unreported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -18816,7 +18952,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\prod_{k \\ge n} f_{k \\to k+1} \\times \\text{Tail}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\left(\\prod_{k \\ge n} f_{k \\to k+1}\\right) \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -18833,7 +18977,15 @@
        "page": "Tail Factor",
        "quote": "A tail of exactly $1.000$ is itself an assumption — that development is complete — and it is the wrong one for any casualty line."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "An accident year at the last age with no further development has a CDF of 1.000, so its ultimate claims are its current claims.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -18846,7 +18998,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$\\text{IBNR} = U_{\\text{AY}} - C_{\\text{AY},\\,n}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The [[Unpaid Claims|unpaid claims]] are the ultimate claims minus the paid claims, which is the case outstanding plus the IBNR.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -18905,7 +19065,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\prod_{k \\ge n} f_{k \\to k+1} \\times \\text{Tail}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\left(\\prod_{k \\ge n} f_{k \\to k+1}\\right) \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -18922,7 +19090,15 @@
        "page": "Cumulative Development Factor",
        "quote": "The reciprocal is the **percentage reported** (or paid): $p_n = 1/\\text{CDF}_n$, and $1 - p_n$ is the percentage unreported."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{Reported \\%} = \\frac{1}{\\text{CDF}_{n \\to \\text{ult}}}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -18939,7 +19115,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$1/\\text{CDF}$ is the percent reported, so $1 - 1/\\text{CDF}$ is the percent unreported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r6",
@@ -18952,7 +19136,15 @@
        "page": "Chain Ladder Method",
        "quote": "| **Total** | $2{,}550$ | | $3{,}433$ | $883$ |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "The total IBNR is the sum over the accident years, and a year at the last age with no tail has none.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -18977,7 +19169,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "The expected unreported claims are the [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -18994,7 +19194,15 @@
        "page": "Expected Loss Method",
        "quote": "$$U = \\text{ELR} \\times \\text{Earned Premium}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$\\text{Expected Claims}$ are the a priori expected ultimate claims, usually the expected claim ratio times the earned premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -19011,7 +19219,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\prod_{k \\ge n} f_{k \\to k+1} \\times \\text{Tail}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\left(\\prod_{k \\ge n} f_{k \\to k+1}\\right) \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -19045,7 +19261,15 @@
        "page": "Chain Ladder Method",
        "quote": "| **Total** | $2{,}550$ | | $3{,}433$ | $883$ |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "The total IBNR is the sum over the accident years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -19231,7 +19455,15 @@
        "page": "Exponential Trend",
        "quote": "$b$ is the [[Linear Regression|least-squares]] slope of $\\ln y_t$ on $t$: $b = \\sum (t - \\bar{t})(\\ln y_t - \\overline{\\ln y}) \\big/ \\sum (t - \\bar{t})^2$. With $t$ in years, $\\hat{T}$ is the annual trend"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Trend",
+      "quote": "$$\\hat{T} = e^{b} - 1$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -19248,7 +19480,15 @@
        "page": "Premium Trend",
        "quote": "for calendar-year 2011 earned premium and annual policies written in 2013, $1/1/2011$ to $6/30/2013$, or $2.5$ years."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -19265,7 +19505,15 @@
        "page": "Loss Trend",
        "quote": "Accident year $2023$ runs $1/1$–$12/31/2023$; with losses occurring uniformly, its average loss date is $7/1/2023$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "With losses occurring uniformly, its average loss date is $7/1/2023$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -19278,7 +19526,15 @@
        "page": "Loss Ratio Method",
        "quote": "Weighting the loss ratios $20/30/50$ toward recency would give $70.9\\%$ here"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio Method",
+      "quote": "The years are combined into one projected ratio, usually by summing the projected losses and premium across all years, which weights each year by its premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -19379,7 +19635,15 @@
        "page": "Deductible Rating",
        "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]] — the share of expected losses the deductible removes."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Deductible Rating",
+      "quote": "The rate credit is derived from the [[Loss Elimination Ratio|loss elimination ratio]], the share of expected losses the deductible removes.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -19447,7 +19711,15 @@
        "page": "Inflation",
        "quote": "$$\\frac{698.2}{606.5} - 1 = +15.1\\%$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Elimination Ratio",
+      "quote": "$$\\frac{2{,}400 \\times 0.812}{2{,}000 \\times 0.779} = 1.251$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -19506,7 +19778,15 @@
        "page": "Limited Expected Value",
        "quote": "| Exponential$(\\theta)$ | $\\theta(1 - e^{-u/\\theta})$ |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Elimination Ratio",
+      "quote": "For an exponential distribution with mean $\\theta$, $E[X \\wedge d] = \\theta\\left(1 - e^{-d/\\theta}\\right)$ and $E[X] = \\theta$, so the loss elimination ratio is",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20157,7 +20437,15 @@
        "page": "Full Credibility Standard",
        "quote": "It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\\%$ of its expected value with probability $p$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "It is the smallest volume for which the observed value $W$ is within $100k\\%$ of its expected value with probability $p$:",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -20174,7 +20462,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -20242,7 +20538,15 @@
        "page": "Credibility",
        "quote": "Adding severity variation raises the standard to $1{,}082 \\times (1 + \\text{CV}_S^2)$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "With Poisson claim counts the frequency term is $1$, so $n_F = \\lambda_0\\,(1 + \\mathrm{CV}_X^2)$ expected claims.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -20259,7 +20563,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$z_{(1+p)/2}$ is the $(1+p)/2$ quantile of the standard normal distribution, because the range is two-sided.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -20328,7 +20640,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$U_0 = \\text{ELR} \\times \\text{EP}$ the a priori expectation"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Loss Method",
+      "quote": "$$\\text{Ultimate Claims} = \\text{Expected Claim Ratio} \\times \\text{Earned Premium}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -20345,7 +20665,15 @@
        "page": "Unpaid Claims",
        "quote": "$$\\text{Unpaid} = \\text{Ultimate} - \\text{Paid to date}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Unpaid Claims",
+      "quote": "$$\\text{Unpaid Claims} = \\text{Ultimate Claims} - \\text{Paid Claims}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -20371,7 +20699,15 @@
        "page": "Cape Cod Method",
        "quote": "| **Total** | | $\\$2{,}309$K |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cape Cod Method",
+      "quote": "The total IBNR is the sum over the accident years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -20392,7 +20728,15 @@
        "page": "Bornhuetter-Ferguson Method",
        "quote": "$$U_{\\text{BF}} = C + \\left(1 - \\tfrac{1}{\\text{CDF}}\\right) \\times U_{0}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "The expected unreported claims are the [[IBNR]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -20422,7 +20766,15 @@
        "page": "Tail Factor",
        "quote": "\\text{CDF}_{\\text{last age} \\to \\text{ult}} = \\text{Tail} \\qquad \\text{CDF}_{\\text{prior age} \\to \\text{ult}} = f_{\\text{last observed}} \\times \\text{Tail}"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Cumulative Development Factor",
+      "quote": "Each age-to-age factor is therefore the ratio of successive CDFs, $f_{n \\to n+1} = \\text{CDF}_{n \\to \\text{ult}}/\\text{CDF}_{n+1 \\to \\text{ult}}$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20456,7 +20808,15 @@
        "page": "Exponential Trend",
        "quote": "$b$ is the [[Linear Regression|least-squares]] slope of $\\ln y_t$ on $t$: $b = \\sum (t - \\bar{t})(\\ln y_t - \\overline{\\ln y}) \\big/ \\sum (t - \\bar{t})^2$. With $t$ in years, $\\hat{T}$ is the annual trend; with $t$ in quarters, the annual trend is $e^{4b} - 1$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Exponential Trend",
+      "quote": "$$\\hat{T} = e^{b} - 1$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -20490,7 +20850,15 @@
        "page": "Loss Trend",
        "quote": "Accident year $2023$ runs $1/1$–$12/31/2023$; with losses occurring uniformly, its average loss date is $7/1/2023$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "With losses occurring uniformly, its average loss date is $7/1/2023$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20503,7 +20871,15 @@
        "page": "Loss Trend",
        "quote": "The first policy is exposed $7/1/2025$–$6/30/2026$ and the last $7/1/2026$–$6/30/2027$, so the exposure period runs $7/1/2025$ to $6/30/2027$ and its midpoint — the average loss date — is $7/1/2026$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -20516,7 +20892,15 @@
        "page": "Loss Ratio Method",
        "quote": "whether to weight the three years by premium volume (as here — summing losses and premium across years, which weights each year's loss ratio by its premium) or to select weights that give more to the most recent years"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio Method",
+      "quote": "Selected weights, often favouring the most recent years, are an alternative, and the selection is justified by the stability of the years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -20541,7 +20925,15 @@
        "page": "Loss Trend",
        "quote": "The first policy is exposed $7/1/2025$–$6/30/2026$ and the last $7/1/2026$–$6/30/2027$, so the exposure period runs $7/1/2025$ to $6/30/2027$ and its midpoint — the average loss date — is $7/1/2026$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -20571,7 +20963,15 @@
        "page": "Loss Trend",
        "quote": "The first policy is exposed $7/1/2025$–$6/30/2026$ and the last $7/1/2026$–$6/30/2027$, so the exposure period runs $7/1/2025$ to $6/30/2027$ and its midpoint — the average loss date — is $7/1/2026$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20605,7 +21005,15 @@
        "page": "Loss Ratio Method",
        "quote": "summing losses and premium across years, which weights each year's loss ratio by its premium"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Ratio Method",
+      "quote": "Selected weights, often favouring the most recent years, are an alternative, and the selection is justified by the stability of the years.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -20630,7 +21038,15 @@
        "page": "Cape Cod Method",
        "quote": "$$\\text{IBNR}_i = \\text{ELR} \\times \\text{EP}_i \\times \\left(1 - \\tfrac{1}{\\text{CDF}_i}\\right)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$1/\\text{CDF}$ is the percent reported, so $1 - 1/\\text{CDF}$ is the percent unreported.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -20647,7 +21063,15 @@
        "page": "Expected Loss Method",
        "quote": "$$U = \\text{ELR} \\times \\text{Earned Premium}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bornhuetter-Ferguson Method",
+      "quote": "$\\text{Expected Claims}$ are the a priori expected ultimate claims, usually the expected claim ratio times the earned premium.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -20664,7 +21088,15 @@
        "page": "Incurred Losses",
        "quote": "$$\\text{Reported (Incurred)} = \\text{Paid} + \\text{Case Reserves}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Incurred Losses",
+      "quote": "$$\\text{IBNR} = \\text{Ultimate Claims} - \\text{Reported Claims}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20677,7 +21109,15 @@
        "page": "Chain Ladder Method",
        "quote": "$$U_{\\text{AY}} = C_{\\text{AY},\\,n} \\times \\text{CDF}_{n \\to \\text{ult}}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$$\\text{IBNR} = \\text{Reported Claims} \\times (\\text{CDF} - 1)$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -20694,7 +21134,15 @@
        "page": "Incurred Losses",
        "quote": "$$\\text{Reported (Incurred)} = \\text{Paid} + \\text{Case Reserves}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Incurred Losses",
+      "quote": "$$\\text{IBNR} = \\text{Ultimate Claims} - \\text{Reported Claims}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -20736,7 +21184,15 @@
        "page": "Parallelogram Method",
        "quote": "**The picture.** A calendar year is a unit square: time across, fraction of the policy term earned up."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "On-Leveling",
+      "quote": "A calendar year is a unit square whose horizontal axis is calendar time and whose vertical axis is the fraction of the policy term elapsed.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -20783,7 +21239,15 @@
        "page": "On-Leveling",
        "quote": "For **annual** policies written uniformly, a rate change effective at time $p$ through year $Y$ earns over a triangle of area $\\tfrac{1}{2}(1-p)^2$ in year $Y$ … Notice how a single mid-year change takes two full years to work through earned premium"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "On-Leveling",
+      "quote": "$$A_{\\text{new}} = \\tfrac{1}{2}(1 - p)^2$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -20846,7 +21310,15 @@
        "page": "Parallelogram Method",
        "quote": "**The picture.** A calendar year is a unit square: time across, fraction of the policy term earned up. A rate change for policies written on or after a date is a **diagonal** line whose slope is set by the term (steeper for six-month policies)."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "On-Leveling",
+      "quote": "A calendar year is a unit square whose horizontal axis is calendar time and whose vertical axis is the fraction of the policy term elapsed.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -20863,7 +21335,15 @@
        "page": "Parallelogram Method",
        "quote": "The second formula is the area earned in the same calendar year at a new level effective a fraction $p$ of the way through it, for annual policies."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "On-Leveling",
+      "quote": "$$A_{\\text{new}} = \\tfrac{1}{2}(1 - p)^2$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -21338,7 +21818,15 @@
        "page": "Loss Development",
        "quote": "$$\\text{CDF}_{n \\to \\text{ult}} = \\prod_{k \\ge n} f_{k \\to k+1} \\times \\text{Tail}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Chain Ladder Method",
+      "quote": "$$\\text{CDF}_n = f_{n \\to n+1} \\times f_{n+1 \\to n+2} \\times \\cdots \\times \\text{Tail}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -21431,7 +21919,15 @@
        "page": "Loss Trend",
        "quote": "The first policy is exposed $7/1/2025$–$6/30/2026$ and the last $7/1/2026$–$6/30/2027$, so the exposure period runs $7/1/2025$ to $6/30/2027$ and its midpoint — the average loss date — is $7/1/2026$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Loss Trend",
+      "quote": "The first policy is exposed from $7/1/2025$ and the last until $6/30/2027$, so the average loss date of the forecast period is the midpoint, $7/1/2026$.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -21465,7 +21961,15 @@
        "page": "Loss Ratio Method",
        "quote": "Weighting the loss ratios $20/30/50$ toward recency would give $70.9\\%$ here, and a slightly lower indication of $+3.9\\%$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Overall Rate Level Indication",
+      "quote": "Each year's projected loss ratio is calculated, and the years are combined into one.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -21503,7 +22007,15 @@
        "page": "Pure Premium Method",
        "quote": "Force them to agree — set $F\\% = \\$25/\\$425 = 5.88\\%$ — and both give $+3.8\\%$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Fixed Expenses",
+      "quote": "In the [[Loss Ratio Method|loss ratio method]] the same expense is a fixed expense ratio, $F\\%$, added to the projected loss ratio in the numerator.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -21625,7 +22137,15 @@
        "page": "Credibility",
        "quote": "$$n_{\\text{full}} = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "$$\\lambda_0 = \\left(\\frac{z_{(1+p)/2}}{k}\\right)^{2}$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r2",
@@ -21642,7 +22162,15 @@
        "page": "Full Credibility Standard",
        "quote": "**Severity**: $n_F = (z/k)^2 \\cdot \\mathrm{CV}_X^2$ claims, where $\\mathrm{CV}_X = \\sigma_X/\\mu_X$ is the [[Coefficient of Variation]] of claim size"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Full Credibility Standard",
+      "quote": "Every full credibility standard is $\\lambda_0$ times the squared [[Coefficient of Variation|coefficient of variation]] of one unit of what is being estimated, counted in that unit.",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r3",
@@ -21663,7 +22191,15 @@
        "page": "Credibility",
        "quote": "$$Z = \\sqrt{\\frac{n}{n_{\\text{full}}}} \\qquad \\text{(limited fluctuation)}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Partial Credibility",
+      "quote": "$$Z = \\min\\left(\\sqrt{\\frac{n}{n_F}},\\; 1\\right)$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     },
     {
      "id": "r4",
@@ -21680,7 +22216,15 @@
        "page": "Credibility",
        "quote": "$$\\text{Estimate} = Z \\times \\text{Experience} + (1 - Z) \\times \\text{Complement}$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Limited Fluctuation Credibility",
+      "quote": "$$U = Z D + (1 - Z) M$$",
+      "note": "re-quoted from the page's rewrite in the new concept shape",
+      "date": "2026-11-07",
+      "run": "claude/charming-faraday-vrakyq"
+     }
     }
    ]
   },

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { formatValue } from '@/lib/tools'
-import { labelRows, linesExtent, scale, type FigureSpec, type Point, type Role } from '@/lib/toolFigures'
+import { HUE, STEP_FILL, STEP_TEXT, labelRows, linesExtent, quantityStep, scale, segmentLabel, type FigureSpec, type Point, type Role } from '@/lib/toolFigures'
 
 /**
  * A tool's figure (docs/actuarial-tools.md §6.7): one small picture of the
@@ -21,6 +21,18 @@ const FILL: Record<Role, { fill: string; fillOpacity: number }> = {
   result: { fill: 'hsl(var(--primary))', fillOpacity: 0.9 },
   base: { fill: 'currentColor', fillOpacity: 0.35 },
   muted: { fill: 'currentColor', fillOpacity: 0.18 },
+}
+
+/** The hatch step 4 fills with, defined once per figure. */
+function HatchDef() {
+  return (
+    <defs>
+      <pattern id="quantity-hatch" width={6} height={6} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width={6} height={6} fill={`color-mix(in oklab, ${HUE} 25%, black)`} />
+        <rect width={3} height={6} fill={`color-mix(in oklab, ${HUE} 45%, black)`} />
+      </pattern>
+    </defs>
+  )
 }
 
 export function ToolFigure({
@@ -151,6 +163,30 @@ export function ToolFigure({
           {!compact && (figure.xTicks ?? []).map(t => (
             <text key={t.label} x={x(t.x)} y={H - 4} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.6}>{t.label}</text>
           ))}
+          {/* Axes a reader can read a value off (docs/tool-template-v3.md §2.6): the
+              x range at the foot where no ticks are given, the y range at the left,
+              and the run's own point in numbers beside it. */}
+          {!compact && !figure.xTicks?.length && (
+            <g fontSize={9} fill="currentColor" fillOpacity={0.6} data-testid="figure-axis">
+              <text x={x(ext.x[0])} y={H - 4} textAnchor="start">{formatValue(ext.x[0], figure.xUnit)}</text>
+              <text x={x(ext.x[1])} y={H - 4} textAnchor="end">{formatValue(ext.x[1], figure.xUnit)}</text>
+            </g>
+          )}
+          {!compact && (
+            <g fontSize={9} fill="currentColor" fillOpacity={0.6}>
+              <text x={pad.l} y={pad.t - 6}>{fy(ext.y[1])}</text>
+            </g>
+          )}
+          {!compact && figure.point && (() => {
+            const px = x(figure.point.x)
+            const right = px < W * 0.6
+            return (
+              <text x={px + (right ? 9 : -9)} y={y(figure.point.y) - 8} textAnchor={right ? 'start' : 'end'} fontSize={10} fontWeight={600} fill="currentColor" data-testid="figure-point-label">
+                {/* On a ticked axis (quarters, ages) the point's own name says where it is. */}
+                {fy(figure.point.y)} at {figure.xTicks?.length ? figure.point.name : formatValue(figure.point.x, figure.xUnit)}
+              </text>
+            )
+          })()}
         </>
       )
       break
@@ -239,33 +275,43 @@ export function ToolFigure({
     case 'split': {
       const bars = figure.bars
       const bh = Math.min(28, (H - pad.t - pad.b) / bars.length - 6)
-      // One scale for every bar: a premium dollar, or whichever bar reaches further.
-      const reach = Math.max(1, ...bars.map(b => b.parts.reduce((t, p) => t + Math.max(0, p.value), 0)))
+      const sum = (b: (typeof bars)[number]) => b.parts.reduce((t, p) => t + Math.max(0, p.value), 0)
+      // One scale for every bar: a premium dollar, or whichever bar reaches
+      // further — or, for a split that is a whole of its own, its own total.
+      const reach = figure.fit ? Math.max(1e-12, ...bars.map(sum)) : Math.max(1, ...bars.map(sum))
       const x = scale(0, reach, pad.l + (compact || bars.length < 2 ? 0 : 52), W - pad.r)
-      body = bars.map((b, k) => {
-        const top = pad.t + k * (bh + 8) + 2
-        let at = 0
-        return (
-          <g key={b.name}>
-            {!compact && bars.length > 1 && <text x={pad.l} y={top + bh / 2 + 3} fontSize={10} fill="currentColor" fillOpacity={0.7}>{b.name}</text>}
-            {b.parts.map(p => {
-              const x0 = x(at)
-              at += Math.max(0, p.value)
-              const w = Math.max(0, x(at) - x0)
-              return (
-                <g key={p.name} {...name(`${p.name}: ${formatValue(p.value, figure.unit)}`)}>
-                  <rect x={x0} y={top} width={w} height={bh} {...FILL[p.role]} />
-                  {!compact && w > 64 && (
-                    <text x={x0 + 6} y={top + bh / 2 + 3.5} fontSize={10} fill={p.role === 'result' ? 'hsl(var(--primary-foreground))' : 'currentColor'}>
-                      {truncate(p.name, Math.floor((w - 8) / 5.6))}
-                    </text>
-                  )}
-                </g>
-              )
-            })}
-          </g>
-        )
-      })
+      body = (
+        <>
+          <HatchDef />
+          {bars.map((b, k) => {
+            const top = pad.t + k * (bh + 8) + 2
+            let at = 0
+            return (
+              <g key={b.name}>
+                {!compact && bars.length > 1 && <text x={pad.l} y={top + bh / 2 + 3} fontSize={10} fill="currentColor" fillOpacity={0.7}>{b.name}</text>}
+                {b.parts.map(p => {
+                  const x0 = x(at)
+                  at += Math.max(0, p.value)
+                  const w = Math.max(0, x(at) - x0)
+                  const step = quantityStep(p.quantity)
+                  const text = compact ? '' : segmentLabel(p.symbol, formatValue(p.value, figure.unit).replace(/%$/, ''), w)
+                  return (
+                    <g key={p.name} {...name(`${p.name}: ${formatValue(p.value, figure.unit)}`)} data-quantity={p.quantity} data-step={step}>
+                      <rect x={x0} y={top} width={w} height={bh} fill={STEP_FILL[step]} />
+                      {w > 1 && <line x1={x0 + w} x2={x0 + w} y1={top} y2={top + bh} stroke="hsl(var(--background))" strokeWidth={1} />}
+                      {text && (
+                        <text x={x0 + w / 2} y={top + bh / 2 + 3.5} textAnchor="middle" fontSize={10} fontWeight={600} fill={STEP_TEXT[step]} data-testid="split-label">
+                          {text}
+                        </text>
+                      )}
+                    </g>
+                  )
+                })}
+              </g>
+            )
+          })}
+        </>
+      )
       break
     }
     case 'axis': {
@@ -302,8 +348,8 @@ export function ToolFigure({
           <circle cx={x1} cy={mid} r={compact ? 2.5 : 5} fill="hsl(var(--primary))" />
           {!compact && (
             <>
-              <text x={x0 - 6} y={mid + 20} textAnchor="start" fontSize={10} fill="currentColor" fillOpacity={0.7}>{figure.from}</text>
-              <text x={x1 + 6} y={mid + 20} textAnchor="end" fontSize={10} fill="currentColor" fillOpacity={0.7}>{figure.to}</text>
+              <text x={x0 - 6} y={mid + 20} textAnchor="start" fontSize={10} fill="currentColor" fillOpacity={0.7}>{dateLabel(figure.from)}</text>
+              <text x={x1 + 6} y={mid + 20} textAnchor="end" fontSize={10} fill="currentColor" fillOpacity={0.7}>{dateLabel(figure.to)}</text>
               <text x={(x0 + x1) / 2} y={mid - 10} textAnchor="middle" fontSize={11} fontWeight={600} fill="currentColor">{formatValue(figure.years, 'years')} years</text>
             </>
           )}
@@ -363,6 +409,14 @@ function BarsLegend({ figure }: { figure: Extract<FigureSpec, { kind: 'bars' }> 
       ))}
     </ul>
   )
+}
+
+/** An ISO date as a reader reads it, "2022-07-01" → "Jul 1, 2022"; anything else as it is. */
+function dateLabel(text: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text)
+  if (!m) return text
+  const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(m[2]) - 1]
+  return `${month} ${Number(m[3])}, ${m[1]}`
 }
 
 /** Where an axis label sits, by row: above the line, below it, then further out each way. */

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c003664a1b3f078911ab47e7f273ae5cd9448e676f2d972ac1605b4b72bb21e9
+  content_hash: sha256:709c07216c7cc3821692288e6da0afcc433d6a246c50ce34a6942b6aa8fe192b
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 printed p.189 (PDF 201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 11 pp.188-191 (PDF pp.200-203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
@@ -13,59 +13,46 @@ verification:
   log: .verify/Concepts/Territory Ratemaking.md
 ---
 
-**Territory Ratemaking** is the derivation of geographic rate differentials. It is [[Classification Ratemaking|classification ratemaking]] with one distinctive property: geography is *spatially correlated*, so neighbouring territories inform one another and boundaries are themselves a decision.
+![[Media/Figures/Territory_Ratemaking.svg|340]]
+
+**Territory Ratemaking** is the derivation of geographic rate differentials. It is [[Classification Ratemaking|classification ratemaking]] with two challenges of its own: location is heavily correlated with other rating variables, and the data in each small geographic unit is sparse. Under the [[Pure Premium|pure premium]] approach, the indicated relativity of territory $i$ is
 
 > $$\text{Territory Relativity}_i = \frac{\text{Pure Premium}_i}{\text{Pure Premium}_{\text{base}}}$$
 
+- $\text{Pure Premium}_{\text{base}}$ is the pure premium of the base territory.
+
+The rate in territory $i$ is then
+
 > $$\text{Rate}_i = \text{Base Rate} \times \text{Territory Relativity}_i$$
 
-- Geographic cost drivers: population and traffic density, crime, weather and catastrophe exposure, repair and medical costs, litigation propensity and local court behaviour, and — for property — building codes and fire protection class.
-- Territories are defined at some granularity (postal code, county, census tract) and then **grouped** into rating territories. Too fine and no cell is [[Credibility|credible]]; too coarse and real cost differences are averaged away — the [[Homogeneity|homogeneity/credibility]] trade-off in its sharpest form.
-- **Choosing the basic geographic unit** (Werner & Modlin, Ch. 11, p. 189). The unit should be refined enough to be relatively homogeneous with respect to geographic differences while still having some observations in most units, and each option trades one advantage for another. Zip codes have the advantage of being the most readily available, but they change over time. Counties are static and readily available, but most are large and so contain very heterogeneous risks. Census blocks are relatively static over time, but require a process to map insurance policies to them.
-- **Spatial smoothing** is what makes fine granularity workable: because loss cost varies continuously across space, a cell's estimate can borrow strength from its neighbours. Werner describes distance-based and adjacency-based smoothing, applied *before* territories are grouped.
-- Territory must be estimated **alongside** other rating variables, not before them. Urban territories carry different vehicle mixes, limit selections and driver populations, and a one-way territorial relativity absorbs all of it — see the univariate problem under [[Classification Ratemaking]].
-- **Off-balance.** New territorial relativities change the book's average relativity, so the base rate is offset to keep the overall change at the indicated level. The off-balance factor, the exposures it is weighted by, and each territory's resulting rate change are worked through on [[Balancing Back]].
-- **Catastrophe** exposure must be handled separately. Coastal territories' relativities computed on experience including hurricane losses swing on whether a storm happened to make landfall during the period; the modelled [[Catastrophe Loss|catastrophe load]] belongs in the territory rate as its own component.
-- Territorial rating attracts the most **social and regulatory** scrutiny of any variable, because geography correlates with income and demographics. Some jurisdictions restrict or prohibit territory in certain lines.
+> [!example]- The base territory has 10,000 exposures and $\$2{,}000{,}000$ of losses. An urban territory has 4,000 exposures and $\$1{,}200{,}000$ of losses. The base rate is $\$400$. What are the urban relativity and rate? {Example}
+> - The base pure premium is $2{,}000{,}000/10{,}000 = \$200$.
+> - The urban pure premium is $1{,}200{,}000/4{,}000 = \$300$.
+> - The urban relativity is $300/200 = 1.50$.
+> - The urban rate is $400 \times 1.50 = \$600$.
 
-![[Media/Figures/Territory_Ratemaking.svg|340]]
+## Establishing territorial boundaries
 
-> [!example]- Territory Relativities and Rates {Example}
-> Base territory: $10{,}000$ exposures, $\$2{,}000{,}000$ losses. Urban territory: $4{,}000$ exposures, $\$1{,}200{,}000$ losses. The base rate is $\$400$.
->
-> Compute the urban relativity and rate.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{PP}_{\text{base}} &= \frac{\$2{,}000{,}000}{10{,}000} = \$200 \\[4pt]
-> > \text{PP}_{\text{urban}} &= \frac{\$1{,}200{,}000}{4{,}000} = \$300 \\[6pt]
-> > \text{Relativity} &= \frac{300}{200} = 1.50 \\[4pt]
-> > \text{Urban rate} &= \$400 \times 1.50 = \$600
-> > \end{align*}$$
-> >
-> > With $4{,}000$ exposures the urban indication is reasonably credible; a territory with $400$ would need weighting toward the statewide average or a spatially smoothed neighbour estimate.
+Territories are defined at some granularity (postal code, county, census block) and then **grouped** into rating territories. Too fine and no cell is [[Credibility|credible]], and too coarse and real cost differences are averaged away. This is the [[Homogeneity|homogeneity/credibility]] trade-off in its sharpest form. The actuary:
 
-> [!example]- Smoothing and Grouping Territories {Example}
-> A state is divided into $60$ postal-code territories. Indicated relativities for five adjacent coastal codes, with their exposure volumes:
->
-> | Code | Exposures | Indicated relativity |
-> |---|---|---|
-> | $101$ | $2{,}400$ | $1.42$ |
-> | $102$ | $310$ | $0.95$ |
-> | $103$ | $2{,}900$ | $1.48$ |
-> | $104$ | $180$ | $2.10$ |
-> | $105$ | $2{,}600$ | $1.51$ |
->
-> How should these be treated?
->
-> > [!answer]-
-> > The three large codes ($101$, $103$, $105$) tell a consistent story: coastal loss costs run about $1.45$–$1.50$. The two small codes swing wildly in opposite directions — $0.95$ and $2.10$ — on $310$ and $180$ exposures respectively.
-> >
-> > Those swings are **noise**, not geography. Loss cost does not fall by a third and then triple across three miles of the same coastline.
-> >
-> > Two mechanisms, applied in order:
-> >
-> > 1. **Spatial smoothing.** Estimate each cell partly from its neighbours. Codes $102$ and $104$ have little data of their own, so their smoothed estimates are pulled toward the $\approx 1.47$ level of the surrounding codes.
-> > 2. **Grouping.** Combine all five into one rating territory at a credibility-weighted relativity near $1.47$. The combined cell has $8{,}390$ exposures — comfortably credible — and the grouping is defensible because the codes are contiguous and share the same cost drivers.
-> >
-> > Taking the raw indications instead would charge one small coastal community half what its neighbours pay and another double, on the strength of a few hundred exposures — indefensible actuarially and unsustainable competitively.
+1. **Chooses the basic geographic unit.** The unit should be refined enough to be relatively homogeneous with respect to geographic differences while still having some observations in most units. Zip codes have the advantage of being the most readily available, but they change over time. Counties are static and readily available, but most are large and so contain very heterogeneous risks. Census blocks are relatively static over time, but require a process to map insurance policies to them.
+2. **Estimates the geographic risk of each unit.** Actual experience is signal plus noise, and the signal has non-geographic elements (age, amount of insurance) and geographic ones (density, weather indices, crime rates). A univariate pure premium or loss ratio by unit is too volatile to separate signal from noise, and biased by the correlation of location with other variables. A multivariate model such as a [[Generalized Linear Model|GLM]], with geo-demographic and geo-physical variables, isolates the geographic signal.
+3. **Smooths the estimates spatially.** Because loss cost varies continuously across space, a cell's estimate can borrow strength from its neighbours. Distance-based smoothing weights nearby units by their distance and suits weather-related perils. Adjacency-based smoothing weights rings of adjacent units, handles urban and rural differences and natural boundaries better, and suits perils driven by socio-demographic characteristics, such as theft.
+4. **Clusters the units into territories.** The goal is to minimize the heterogeneity within groups and maximize it between groups. Quantile methods create clusters of equal numbers of units or equal exposure. Similarity methods (average linkage, centroid, Ward's) cluster units whose estimators are close. These routines do not produce contiguous territories unless a contiguity constraint is added.
+
+Too much smoothing masks real spatial variation, and too little leaves noise in the estimator. The actuary selects the number of clusters that minimizes noise without creating significant jumps between adjacent territories.
+
+> [!example]- Five adjacent coastal postal codes have indicated relativities of 1.42 on 2,400 exposures, 0.95 on 310, 1.48 on 2,900, 2.10 on 180 and 1.51 on 2,600. How should they be treated? {Example}
+> - The three large codes agree that coastal loss costs run about 1.45 to 1.50.
+> - The two small codes swing to 0.95 and 2.10 on a few hundred exposures, which is noise rather than geography.
+> - Spatial smoothing pulls the two small codes' estimates toward the level of their neighbours.
+> - **Grouping all five into one territory** at a relativity near 1.47 gives a cell of 8,390 exposures, contiguous and sharing the same cost drivers.
+
+## Calculating territorial relativities
+
+Once the boundaries are set, the relativities are calculated with the classification techniques. Territory must be estimated **alongside** other rating variables, not before them. Urban territories carry different vehicle mixes, limit selections and driver populations, and a one-way territorial relativity absorbs all of it. The new territories are therefore modeled with the other explanatory variables in a GLM.
+
+New territorial relativities change the book's average relativity, so the base rate is offset to keep the overall change at the indicated level ([[Balancing Back]]). [[Catastrophe Loss|Catastrophe]] exposure is handled separately, because coastal relativities computed on experience that includes hurricane losses swing on whether a storm made landfall during the period.
+
+> [!trap] Reading a one-way relativity as the territory's effect
+> A univariate territorial relativity carries every other variable correlated with location. An urban territory with younger drivers shows a high relativity partly for its drivers, and charging it on top of a driver-age relativity double-counts.

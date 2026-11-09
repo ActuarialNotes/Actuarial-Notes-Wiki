@@ -26,12 +26,9 @@ type CalloutStyle = {
   icon: ComponentType<{ className?: string }> | null
   borderClass: string
   accentClass: string
-  roundLeft?: boolean
   noBorder?: boolean
   bgClass?: string
   contentClass?: string
-  /** Replaces the rounding `roundLeft` picks. */
-  roundClass?: string
   /** Replaces the default `my-4` between callouts. */
   marginClass?: string
   /** Padding for the header row (and the toggle button that wraps it). */
@@ -65,27 +62,49 @@ const SKY: CalloutStyle = {
   accentClass: 'text-sky-600 dark:text-sky-400',
 }
 
+// A concept page's closing "How it appears on the exam" (tip) and "Exam traps"
+// (warning) folds: rounded cards at reading size, the icon carrying the colour
+// instead of a side rule — the same shape as the worked examples above them.
 const TEAL: CalloutStyle = {
   icon: Lightbulb,
   borderClass: 'border-teal-500/60',
   accentClass: 'text-teal-600 dark:text-teal-400',
+  noBorder: true,
+  contentClass: 'text-base text-foreground',
 }
 
 const EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
   borderClass: 'border-slate-300 dark:border-slate-500',
   accentClass: 'text-foreground',
-  roundLeft: true,
   noBorder: true,
   bgClass: 'bg-card',
   contentClass: 'text-base text-muted-foreground',
 }
 
+// A concept page's worked example — one marked `{Example}` in its title. A green
+// card with an "Example" pill, folded so the reader meets the question first:
+// green sits beside the violet idea card and the amber trap card without
+// meaning *correct* there, because it is a card of its own shape, never a verdict
+// on an answer.
+const WORKED_EXAMPLE_STYLE: CalloutStyle = {
+  icon: null,
+  borderClass: '',
+  accentClass: 'text-emerald-950 dark:text-emerald-50',
+  noBorder: true,
+  bgClass: 'bg-emerald-50 dark:bg-emerald-950/40',
+  hoverClass: 'hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40',
+  contentClass: 'text-base text-foreground',
+  plainBody: true,
+}
+
+/** The `{Example}` tag that marks a worked example, rather than a learning objective. */
+const EXAMPLE_TAG_RE = /\s*\{Example\}\s*$/
+
 const EMERALD: CalloutStyle = {
   icon: CheckCircle2,
   borderClass: 'border-emerald-500/60',
   accentClass: 'text-emerald-600 dark:text-emerald-400',
-  roundLeft: true,
   noBorder: true,
 }
 
@@ -93,6 +112,8 @@ const AMBER: CalloutStyle = {
   icon: AlertTriangle,
   borderClass: 'border-amber-500/60',
   accentClass: 'text-amber-600 dark:text-amber-400',
+  noBorder: true,
+  contentClass: 'text-base text-foreground',
 }
 
 const RED: CalloutStyle = {
@@ -110,7 +131,6 @@ const QUESTION_STYLE: CalloutStyle = {
   borderClass: '',
   accentClass: 'text-foreground',
   noBorder: true,
-  roundClass: 'rounded-xl',
   marginClass: 'my-3',
   bgClass: 'bg-muted/60 dark:bg-white/[0.06]',
   hoverClass: 'hover:bg-muted dark:hover:bg-white/[0.09]',
@@ -238,6 +258,13 @@ interface MatchResult {
   type: string
   fold: '' | '-' | '+'
   title: string
+  /**
+   * The rest of the title line after its first run of text: inline math, emphasis
+   * or code that the markdown parser split off as elements of their own, and the
+   * text after them. Without it a title is cut at its first `$…$`, and the rest of
+   * the line drops into the body.
+   */
+  titleRest: ReactNode[]
   body: ReactNode[]
 }
 
@@ -303,6 +330,7 @@ function matchCallout(children: ReactNode): MatchResult | null {
   const titleTail = (match[3] ?? '').trim()
 
   const body: ReactNode[] = []
+  const titleRest: ReactNode[] = []
 
   if (headerInsideP) {
     const headerChild = childArray[headerIdx] as ReactElement
@@ -310,14 +338,38 @@ function matchCallout(children: ReactNode): MatchResult | null {
       ((headerChild as ReactElement).props as { children?: ReactNode }).children ?? [],
     )
     const newlineIdx = headerString.indexOf('\n')
-    const remainingFirstText = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
-    const remainingPKids = pKids.slice(1)
+    let remainingFirstText = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
+    let remainingPKids = pKids.slice(1)
+
+    // The title line runs on past the header's own text node when it holds
+    // inline math or emphasis: take everything up to the line's end.
+    if (newlineIdx < 0) {
+      let i = 0
+      for (; i < remainingPKids.length; i++) {
+        const kid = remainingPKids[i]
+        if (typeof kid === 'string' && kid.includes('\n')) {
+          const cut = kid.indexOf('\n')
+          if (cut > 0) titleRest.push(kid.slice(0, cut))
+          remainingFirstText = kid.slice(cut + 1)
+          i++
+          break
+        }
+        titleRest.push(kid)
+      }
+      remainingPKids = remainingPKids.slice(i)
+    }
 
     if (remainingFirstText.length > 0 || remainingPKids.length > 0) {
       const newPKids: ReactNode[] = []
       if (remainingFirstText.length > 0) newPKids.push(remainingFirstText)
       for (const c of remainingPKids) newPKids.push(c)
-      body.push(<p key="callout-p-head">{newPKids}</p>)
+      // A formula on the line under the header is broken onto its own line
+      // (lib/displayMath.ts); with the header lifted out, that break would open
+      // the body on an empty line.
+      while (newPKids.length > 0 && isValidElement(newPKids[0]) && (newPKids[0] as ReactElement).type === 'br') {
+        newPKids.shift()
+      }
+      if (newPKids.length > 0) body.push(<p key="callout-p-head">{newPKids}</p>)
     }
   } else {
     const newlineIdx = headerString.indexOf('\n')
@@ -329,15 +381,55 @@ function matchCallout(children: ReactNode): MatchResult | null {
     body.push(childArray[i])
   }
 
-  return { type, fold, title: titleTail, body }
+  // A title that ends in a run of text after its math keeps that text's end free
+  // of whitespace, as the header's own text is.
+  const last = titleRest[titleRest.length - 1]
+  if (typeof last === 'string') titleRest[titleRest.length - 1] = last.trimEnd()
+
+  return { type, fold, title: titleRest.length > 0 ? (match[3] ?? '').trimStart() : titleTail, titleRest, body }
+}
+
+/** Does the title end in the `{Example}` tag, and the title without it. */
+function splitExampleTag(title: string, titleRest: ReactNode[]): { title: string; titleRest: ReactNode[]; isExample: boolean } {
+  const last = titleRest[titleRest.length - 1]
+  if (typeof last === 'string' && EXAMPLE_TAG_RE.test(last)) {
+    return { title, titleRest: [...titleRest.slice(0, -1), last.replace(EXAMPLE_TAG_RE, '')], isExample: true }
+  }
+  if (titleRest.length === 0 && EXAMPLE_TAG_RE.test(title)) {
+    return { title: title.replace(EXAMPLE_TAG_RE, ''), titleRest, isExample: true }
+  }
+  return { title, titleRest, isExample: false }
+}
+
+/** The title line: its text (with `{…}` pills) and whatever inline nodes followed it. */
+function renderTitleLine(title: string, titleRest: ReactNode[]): ReactNode {
+  if (titleRest.length === 0) return renderTitle(title)
+  return (
+    <Fragment>
+      {renderTitle(title)}
+      {titleRest.map((node, i) => (
+        <Fragment key={i}>{typeof node === 'string' ? renderTitle(node) : node}</Fragment>
+      ))}
+    </Fragment>
+  )
 }
 
 interface CalloutProps {
   type: string
   fold: '' | '-' | '+'
   title: string
+  titleRest?: ReactNode[]
   children: ReactNode
 }
+
+// Every callout box, folding or not, has the same corners and spans the column,
+// so a page's boxes read as one set.
+const CALLOUT_ROUND = 'rounded-xl'
+// A folding box's title is underlined, so it reads as something to tap — the
+// article's own link underline (the text's colour, the default thickness), so it
+// looks like the concept links around it. A worked example is not: its pill
+// already says what it is.
+const TOGGLE_TITLE = 'underline'
 
 // The hairline under the header and the body's padding below it.
 const BODY_FRAME = 'border-t border-border/40 px-4 pb-4 pt-3'
@@ -366,34 +458,50 @@ const CONTENT_CLASSES = `text-sm text-foreground ${BODY_FRAME} ${LEAD_PARAGRAPH}
 // A note card's body: the article's reading size, flush with the card's padding.
 const CARD_BODY_CLASSES = `text-base text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 ${CONTENT_CLASSES_SHARED}`
 
-function NoteCard({ style, title, children }: { style: CalloutStyle; title: string; children: ReactNode }) {
+function NoteCard({ style, title, titleRest = [], children }: { style: CalloutStyle; title: string; titleRest?: ReactNode[]; children: ReactNode }) {
   const Icon = style.icon
   return (
-    <section aria-label={title} className={`not-prose my-4 space-y-2 rounded-xl p-4 ${style.bgClass ?? 'bg-muted'}`}>
+    <section aria-label={titleRest.length > 0 ? undefined : title} className={`not-prose my-4 space-y-2 ${CALLOUT_ROUND} p-4 ${style.bgClass ?? 'bg-muted'}`}>
       <p className={`flex items-center gap-1.5 text-sm font-semibold ${style.accentClass}`}>
         {Icon && <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />}
-        {renderTitle(title)}
+        <span>{renderTitleLine(title, titleRest)}</span>
       </p>
       {Children.count(children) > 0 && <div className={CARD_BODY_CLASSES}>{children}</div>}
     </section>
   )
 }
 
-function Callout({ type, fold, title, children }: CalloutProps) {
+function Callout({ type, fold, title, titleRest = [], children }: CalloutProps) {
   const style = getStyle(type)
   if (style.card) {
     return (
-      <NoteCard style={style} title={title || titleCase(type)}>
+      <NoteCard style={style} title={title || titleCase(type)} titleRest={titleRest}>
         {children}
       </NoteCard>
     )
   }
-  return <FoldingCallout type={type} fold={fold} title={title} style={style}>{children}</FoldingCallout>
+  if (type === 'example') {
+    const tagged = splitExampleTag(title, titleRest)
+    if (tagged.isExample) {
+      return (
+        <FoldingCallout type={type} fold={fold} title={tagged.title} titleRest={tagged.titleRest} style={WORKED_EXAMPLE_STYLE} pill="Example">
+          {children}
+        </FoldingCallout>
+      )
+    }
+  }
+  return <FoldingCallout type={type} fold={fold} title={title} titleRest={titleRest} style={style}>{children}</FoldingCallout>
 }
 
-function FoldingCallout({ type, fold, title, style, children }: CalloutProps & { style: CalloutStyle }) {
+function FoldingCallout({ type, fold, title, titleRest = [], style, pill, children }: CalloutProps & { style: CalloutStyle; pill?: string }) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
+  // Once the reader has toggled it, the body streams in on every open, like
+  // text being written (`.callout-stream` in index.css). A body open on first
+  // render doesn't animate — nobody asked for it.
+  const [toggled, setToggled] = useState(false)
+  const toggle = () => { setToggled(true); setOpen(v => !v) }
+  const streamClass = toggled ? ' callout-stream' : ''
   const Icon = style.icon
   const hasBody = Children.count(children) > 0
 
@@ -403,25 +511,32 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
   // instead of trailing titles of ragged length. Any other `{…}` tag stays in
   // the title and keeps the inline pill.
   const { title: baseTitle, weight: examWeight } =
-    type === 'example' ? splitWeightTag(title) : { title, weight: null }
-  const displayTitle = baseTitle || titleCase(type)
+    type === 'example' && titleRest.length === 0 && !pill ? splitWeightTag(title) : { title, weight: null }
+  // A title that opens with math has no text of its own; it is not titleless.
+  const displayTitle = baseTitle || (titleRest.length > 0 ? '' : titleCase(type))
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
-      {examWeight && <ExamWeightLabel weight={examWeight} />}
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
+        {pill && (
+          <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
+            {pill}
+          </span>
+        )}
+        {renderTitleLine(displayTitle, titleRest)}
+      </span>
+      {examWeight && <ExamWeightLabel weight={examWeight} bar={false} />}
       {collapsible && hasBody && (
         <ChevronDown
-          className={`${style.plainBody ? 'h-4 w-4' : 'h-3.5 w-3.5'} shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
       )}
     </div>
   )
 
-  const roundClass = style.roundClass ?? (style.roundLeft ? 'rounded-lg' : 'rounded-r-lg')
   const borderClasses = style.noBorder ? '' : `border-l-[3px] ${style.borderClass}`
   const bgClass = style.bgClass ?? 'bg-card'
   const marginClass = style.marginClass ?? 'my-4'
@@ -435,33 +550,34 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
 
   if (isBarGraph) {
     return (
-      <div className="not-prose my-4 rounded-lg overflow-hidden bg-background">
-        <div className="relative">
-          {/* The bar fills to the exam coverage % when collapsed, full width when
-              expanded. It is filled in the colour of the exam whose page it is on
-              (`--exam-accent-muted`, scoped by `WikiExam` — the soft wash read as a
-              tint rather than the exam's colour), and plain card grey wherever no
-              exam is in scope. */}
+      <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden bg-background`}>
+        <div className="relative bg-card">
+          {/* The objective is a card like the page's other rows, and its share of
+              the exam is a line along its bottom edge in the exam's own colour
+              (the logo's `--exam-accent-vivid`, scoped by `WikiExam`): drawn to
+              the percentage while collapsed, run the full width when open.
+              Plain foreground grey wherever no exam is in scope. */}
           <div
-            className="absolute inset-y-0 left-0 bg-[color:var(--exam-accent-muted,hsl(var(--card)))] transition-all duration-300"
+            aria-hidden
+            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] h-[3px]`}
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (
             <button
               type="button"
               data-callout-toggle
-              onClick={() => setOpen(v => !v)}
-              className="relative z-10 w-full px-4 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
+              onClick={toggle}
+              className={`relative z-10 w-full px-5 py-3 text-left hover:bg-accent/30 transition-colors duration-150`}
               aria-expanded={open}
             >
               {headerContent}
             </button>
           ) : (
-            <div className="relative z-10 px-4 py-3">{headerContent}</div>
+            <div className="relative z-10 px-5 py-3">{headerContent}</div>
           )}
         </div>
         {hasBody && (
-          <div data-callout-body hidden={!open} className={contentClasses}>
+          <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
             {children}
           </div>
         )}
@@ -470,12 +586,12 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
   }
 
   return (
-    <div className={`not-prose ${marginClass} ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>
+    <div className={`not-prose ${marginClass} ${borderClasses} ${bgClass} ${CALLOUT_ROUND} overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"
           data-callout-toggle
-          onClick={() => setOpen(v => !v)}
+          onClick={toggle}
           className={`w-full ${headerClass} text-left ${hoverClass} transition-colors duration-150`}
           aria-expanded={open}
         >
@@ -485,7 +601,7 @@ function FoldingCallout({ type, fold, title, style, children }: CalloutProps & {
         <div className={headerClass}>{headerContent}</div>
       )}
       {hasBody && (
-        <div data-callout-body hidden={!open} className={contentClasses}>
+        <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
           {children}
         </div>
       )}
@@ -538,7 +654,7 @@ export function CalloutBlockquote(props: ComponentProps<'blockquote'> & ExtraPro
         // overlay it opens plays the panel cue. See components/MathFocus.tsx.
         data-math-block={isMathBlock ? '' : undefined}
         data-sound={isMathBlock ? 'none' : undefined}
-        className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
+        className={`not-prose my-4 bg-background ${CALLOUT_ROUND} px-6 py-4 text-center [&_p]:m-0${
           isMathBlock ? ' cursor-zoom-in hover:ring-2 hover:ring-primary/40 transition-shadow' : ''
         }`}
       >
@@ -547,7 +663,7 @@ export function CalloutBlockquote(props: ComponentProps<'blockquote'> & ExtraPro
     )
   }
   return (
-    <Callout type={match.type} fold={match.fold} title={match.title}>
+    <Callout type={match.type} fold={match.fold} title={match.title} titleRest={match.titleRest}>
       {match.body}
     </Callout>
   )

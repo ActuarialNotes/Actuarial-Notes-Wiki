@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Loads the wiki from the build-time bundled markdown (virtual:wiki-content),
 // no network required, then drills into an exam study-guide page.

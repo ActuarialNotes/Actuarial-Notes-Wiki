@@ -44,11 +44,17 @@ interface SegmentedControlProps<T extends string> {
    * a pill reads as one object you flip (style guide §4).
    */
   pill?: boolean
+  /**
+   * Size each option to its label, with the same padding either side, rather
+   * than splitting the width evenly — even widths leave a short label floating
+   * in space beside a long one that nearly fills its segment.
+   */
+  fit?: boolean
   className?: string
 }
 
 const SIZES = {
-  xs: 'h-6 text-xs',
+  xs: 'h-7 text-[13px]',
   sm: 'h-9',
   md: 'h-10',
   lg: 'h-11',
@@ -62,6 +68,7 @@ export function SegmentedControl<T extends string>({
   label,
   size = 'md',
   pill = false,
+  fit = false,
   className,
 }: SegmentedControlProps<T>) {
   const groupRef = useRef<HTMLDivElement>(null)
@@ -93,8 +100,9 @@ export function SegmentedControl<T extends string>({
       aria-label={label}
       onKeyDown={handleKeyDown}
       className={cn(
-        'flex items-center gap-0.5 border border-border bg-muted/50 p-0.5',
-        pill ? 'rounded-full' : 'rounded-lg',
+        // Ink (style guide §7.0): no tray — the options are words, and the
+        // chosen one goes solid in the pick.
+        'flex items-center gap-1',
         className,
       )}
     >
@@ -113,16 +121,17 @@ export function SegmentedControl<T extends string>({
             // the group. This is the standard radiogroup interaction.
             tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(option.value)}
-            style={{ flex: option.flex ?? 1 }}
+            style={{ flex: fit ? 'none' : (option.flex ?? 1) }}
             className={cn(
               'flex min-w-0 items-center justify-center gap-1.5 text-sm font-medium transition-colors',
-              pill ? 'rounded-full px-4' : 'rounded-md px-2',
+              'rounded-full',
+              pill ? 'px-4' : 'px-3',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
               'disabled:pointer-events-none disabled:opacity-40',
               SIZES[size],
               isActive
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
+                ? 'bg-pick font-semibold text-pick-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}
           >
             {option.label}

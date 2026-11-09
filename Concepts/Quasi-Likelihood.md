@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4d42729b453a72eba35725d68b83f3667efd496bbecd754ee49ca742f07c9d2c
+  content_hash: sha256:f770554e7e406dd93a3e190894f613292b0dbfab46939f125b93f1e7e280fbcb
   sources:
     - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), 'Quasi-Likelihood' (p.1), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
     - "Rodriguez, GLM lecture notes (Princeton), addendum 'Models for Count Data With Overdispersion' (rev. Oct 2022), sec.1 The Over-Dispersed Poisson Model (PDF pp.1-3), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
@@ -15,56 +15,59 @@ verification:
   log: .verify/Concepts/Quasi-Likelihood.md
 ---
 
-**Quasi-Likelihood** is a way of estimating the parameters of a [[Generalized Linear Model]] when the full distribution of the response is not known or not trusted. The analyst specifies only how the mean depends on the predictors and how the variance depends on the mean, up to a constant of proportionality $\phi$. Its estimating equations are a variation on the likelihood (score) equations, hence the name.
+**Quasi-Likelihood** is a method of fitting a [[Generalized Linear Model|generalized linear model]] that specifies only how the mean of the response depends on the predictors and how its variance depends on its mean, without assuming a full distribution for the response. The mean $\mu_i$ is related to the linear predictor $\eta_i$ by a [[Link Function|link function]], $g(\mu_i) = \eta_i$, and the variance of the response is
 
-> $$g(\mu_i) = \mathbf{x}_i^\top\boldsymbol\beta$$
+> $$\text{Var}(Y_i) = \phi\, V(\mu_i)$$
 
-> $$\text{Var}(Y_i) = \phi\,V(\mu_i)$$
+- $V(\mu)$ is the [[Variance Function|variance function]].
+- $\phi$ is the [[Dispersion Parameter|dispersion parameter]], estimated from the data.
 
-> $$\hat\phi = \frac{X^2}{n-p}$$
+The estimating equations use only the mean and the variance, and $\phi$ cancels out of them. The coefficient estimates are therefore the same as those of the distribution with variance function $V$, and only their variances change.
 
-> $$X^2 = \sum_{i=1}^{n}\frac{(y_i - \hat\mu_i)^2}{V(\hat\mu_i)}$$
+## Estimating the dispersion parameter
 
-- $g$ is the [[Link Function]], $V(\mu)$ the [[Variance Function]], $\phi$ the [[Dispersion Parameter]], $X^2$ Pearson's chi-square statistic, $n$ the number of observations and $p$ the number of parameters. No [[Exponential Family]] distribution has to be assumed.
-- **Why it works.** The iteratively reweighted least squares algorithm that fits a GLM uses only the mean and the variance of the observations. Applying it with just a mean–variance relationship gives the maximum quasi-likelihood estimates, which share many of the optimality properties of maximum likelihood estimates.
-- **Quasi-Poisson.** For [[Poisson Regression]] with $\text{Var}(Y) = \phi\mu$, $\phi$ cancels out of the weighted least-squares step. So $\hat{\boldsymbol\beta}$ is *exactly* the Poisson estimate, and $\phi$ is estimated alongside it. Only the variances change: $\text{Var}(\hat{\boldsymbol\beta}) = \phi(X^\top W X)^{-1}$, so standard errors are multiplied by $\sqrt{\hat\phi}$.
-- $\phi > 1$ is **overdispersion** (variance larger than the Poisson or binomial formula allows), and $\phi < 1$ is underdispersion, which is rare. Ignoring overdispersion understates standard errors, overstates significance and can lead to overly complex models.
-- **Testing under quasi-likelihood.** Single coefficients use $t = \hat\beta/(\sqrt{\hat\phi}\,SE)$ on $n - p$ degrees of freedom. Nested models use the drop in [[Deviance]] per degree of freedom divided by $\hat\phi$, which is compared with an $F$ distribution.
-- Treating a large $X^2$ as dispersion assumes the systematic part of the model is right. A large $X^2$ can also mean a missing predictor or a wrong link. The fully specified alternative is a [[Negative Binomial Distribution|negative binomial]] model.
+The dispersion parameter is estimated by Pearson's chi-square statistic divided by its degrees of freedom:
 
-> [!example]- Adjusting a Frequency Model's Standard Errors {Example}
-> A Poisson frequency GLM fitted to $n - p = 500$ degrees of freedom gives a vacant-building coefficient $\hat\beta = 0.25$ with standard error $0.08$, and Pearson $X^2 = 1{,}450$. Refit as quasi-Poisson. Is the coefficient significant at the $5\%$ level?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\phi &= \frac{1{,}450}{500} \\
-> > &= 2.90 \\[4pt]
-> > SE_Q &= 0.08\sqrt{2.90} \\
-> > &= 0.08(1.703) \\
-> > &= 0.136
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > t &= \frac{0.25}{0.136} \\
-> > &= 1.84
-> > \end{align*}
-> > $$
-> >
-> > The two-sided $5\%$ critical value of $t_{500}$ is about $1.96$, so the term is **not** significant. The unadjusted Poisson test gave $z = 0.25/0.08 = 3.13$, which only looked significant because the overdispersion was ignored. The estimate and its relativity $e^{0.25} = 1.284$ are unchanged; only the uncertainty around them has grown.
+> $$\hat\phi = \frac{X^2}{n - (p + 1)}$$
 
-> [!example]- Drop-in-Deviance Test With Overdispersion {Example}
-> In the same model, adding a 5-level territory variable lowers the residual deviance from $1{,}560$ (on $504$ df) to $1{,}520$ (on $500$ df), and $\hat\phi = 2.90$. Test whether territory belongs in the model. The $95$th percentile of $F_{4,500}$ is $2.39$.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > F &= \frac{(1{,}560 - 1{,}520)/(504 - 500)}{\hat\phi} \\
-> > &= \frac{40/4}{2.90} \\
-> > &= 3.45
-> > \end{align*}
-> > $$
-> >
-> > $3.45 > 2.39$, so territory is significant even after allowing for overdispersion. Without the adjustment, the drop of $40$ would have been compared with $\chi^2_4$ (critical value $9.49$), which overstates the evidence by a factor of $\hat\phi$.
+> $$X^2 = \sum_{i=1}^{n} \frac{(y_i - \hat\mu_i)^2}{V(\hat\mu_i)}$$
+
+- $n$ is the number of observations.
+- $p + 1$ is the number of estimated coefficients, including the intercept.
+
+The Poisson and binomial distributions fix $\phi = 1$, so for those models $\hat\phi$ well above 1 shows overdispersion, a variance larger than the distribution allows. An estimate near 1 is consistent with the distribution. For the normal, gamma and Tweedie distributions $\phi$ is a free parameter, so its size alone says nothing about the fit.
+
+## Quasi-Poisson
+
+A quasi-Poisson model keeps the Poisson mean and log link of [[Poisson Regression|Poisson regression]] but has variance $\text{Var}(Y_i) = \phi\mu_i$. Its coefficient estimates are the Poisson estimates, and the covariance matrix of the estimates is $\phi$ times the Poisson one. The standard error of each coefficient is therefore
+
+> $$\text{SE}_{\text{quasi}}(\hat\beta_j) = \sqrt{\hat\phi}\; \text{SE}(\hat\beta_j)$$
+
+- $\text{SE}(\hat\beta_j)$ is the standard error from the Poisson fit, with $\phi = 1$.
+
+The Wald statistic $\hat\beta_j / \text{SE}_{\text{quasi}}(\hat\beta_j)$ is the Poisson statistic divided by $\sqrt{\hat\phi}$, and it is compared with a $t$ distribution on $n - (p+1)$ degrees of freedom. The same adjustment gives a quasi-binomial model from a binomial one.
+
+> [!example]- A Poisson frequency model on 500 residual degrees of freedom has Pearson $X^2 = 1{,}450$. A vacant-building coefficient is $\hat\beta = 0.25$ with standard error $0.08$. After refitting as quasi-Poisson, is the coefficient significant at the $5\%$ level? {Example}
+> - The dispersion estimate is $\hat\phi = 1{,}450/500 = 2.90$.
+> - The estimate stays $0.25$, and its standard error becomes $0.08\sqrt{2.90} = 0.136$.
+> - The test statistic is $0.25/0.136 = 1.84$, below the critical value $1.96$, so the coefficient is not significant.
+> - The Poisson fit gave $0.25/0.08 = 3.13$, which looked significant only because the overdispersion was ignored.
+
+## Comparing nested models
+
+Two nested quasi-likelihood models are compared by the drop in [[Deviance|deviance]] per degree of freedom, divided by the dispersion estimate. The test statistic is
+
+> $$F = \frac{(D_0 - D_1)/(\text{df}_0 - \text{df}_1)}{\hat\phi}$$
+
+- $D_0$ and $\text{df}_0$ are the residual deviance and degrees of freedom of the smaller model.
+- $D_1$ and $\text{df}_1$ are those of the larger model.
+
+It is compared with an [[F-Distribution|F distribution]] with $\text{df}_0 - \text{df}_1$ and $\text{df}_1$ degrees of freedom.
+
+> [!example]- In the same model, adding a territory variable with 5 levels lowers the residual deviance from $1{,}560$ on 504 degrees of freedom to $1{,}520$ on 500, with $\hat\phi = 2.90$. The 95th percentile of $F_{4,500}$ is $2.39$. Does territory belong in the model? {Example}
+> - The drop in deviance per degree of freedom is $(1{,}560 - 1{,}520)/4 = 10$.
+> - The test statistic is $F = 10/2.90 = 3.45$.
+> - Because $3.45 > 2.39$, territory is significant after allowing for overdispersion.
+
+> [!trap] Reading lack of fit as overdispersion
+> A large $X^2$ is overdispersion only if the predictors and the link are right. A missing predictor, a missing interaction or a wrong link also inflates $X^2$, and a quasi-likelihood fit only widens the standard errors of that misspecified model. Fix the model before estimating $\phi$.

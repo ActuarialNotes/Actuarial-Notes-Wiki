@@ -4,6 +4,8 @@ import {
   describePacing,
   localDateHour,
   formatHourLabel,
+  planQuizPath,
+  MAX_QUIZ_LINK_CONCEPTS,
   type EmailPlanSnapshot,
 } from './dailyEmail'
 
@@ -71,10 +73,10 @@ describe('deriveTodaysConcepts', () => {
 
 describe('describePacing', () => {
   it('maps every pacing status to a phrase and unknowns to empty', () => {
-    expect(describePacing('on_track')).toContain('on track')
-    expect(describePacing('ahead')).toContain('ahead')
-    expect(describePacing('behind')).toContain('behind')
-    expect(describePacing('review_mode')).toContain('review')
+    expect(describePacing('on_track')).toBe('On track')
+    expect(describePacing('ahead')).toBe('Ahead of schedule')
+    expect(describePacing('behind')).toBe('Behind schedule')
+    expect(describePacing('review_mode')).toBe('Every concept is at Level 3')
     expect(describePacing('target_passed')).toContain('exam date')
     expect(describePacing(undefined)).toBe('')
     expect(describePacing('unknown')).toBe('')
@@ -104,5 +106,36 @@ describe('formatHourLabel', () => {
     expect(formatHourLabel(12)).toBe('12:00 PM')
     expect(formatHourLabel(17)).toBe('5:00 PM')
     expect(formatHourLabel(23)).toBe('11:00 PM')
+  })
+})
+
+describe('planQuizPath', () => {
+  it("links the exam's bank, today's concepts and the plan draw", () => {
+    const path = planQuizPath('P', ['Bayes Theorem', 'Independence'])!
+    const params = new URLSearchParams(path.split('?')[1])
+    expect(path.startsWith('/quiz?')).toBe(true)
+    expect(params.get('exam')).toBe('Probability')
+    expect(params.get('concepts')).toBe('Bayes Theorem,Independence')
+    expect(params.get('plan')).toBe('1')
+    expect(params.get('mode')).toBe('quiz')
+    expect(params.get('from')).toBe('email')
+  })
+
+  it('uses the bank label, not the progress key, for the CAS exams', () => {
+    const params = new URLSearchParams(planQuizPath('CAS-6', ['Solvency'])!.split('?')[1])
+    expect(params.get('exam')).toBe('Exam 6C')
+  })
+
+  it('drops repeats, blanks and names a comma would split, and caps the list', () => {
+    const params = new URLSearchParams(planQuizPath('FM', ['A', 'a', ' ', 'B, C', 'D'])!.split('?')[1])
+    expect(params.get('concepts')).toBe('A,D')
+    const many = Array.from({ length: MAX_QUIZ_LINK_CONCEPTS + 5 }, (_, i) => `C${i}`)
+    const capped = new URLSearchParams(planQuizPath('FM', many)!.split('?')[1])
+    expect(capped.get('concepts')!.split(',')).toHaveLength(MAX_QUIZ_LINK_CONCEPTS)
+  })
+
+  it('is null with no bank or nothing to quiz', () => {
+    expect(planQuizPath('CAS-PCPA', ['Anything'])).toBeNull()
+    expect(planQuizPath('P', [])).toBeNull()
   })
 })

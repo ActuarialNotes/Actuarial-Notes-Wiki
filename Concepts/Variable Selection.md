@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8a9d60f8ed3fe29005fe14ab6b2feadd541da0caec12ceafaff6f23ae09b585a
+  content_hash: sha256:65870d62959694ed91fa5b56f67461ab7f3b76c5d7ac19520be99baff5bb4d1c
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §6 intro printed p.226 (PDF p.234); §6.1.1-6.1.3 printed pp.227-234 (PDF pp.235-242); §6.2.2 printed pp.241-242, 247 (PDF pp.249-250, 255), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §5 variable-selection considerations (regulatory requirements) PDF p.57; §6.2.1-6.2.2 PDF pp.75-77, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
@@ -15,30 +15,58 @@ verification:
   log: .verify/Concepts/Variable Selection.md
 ---
 
-**Variable Selection** is the process of choosing which predictors to include in a model's [[Model Structure]], balancing improved fit against the risk of overfitting and loss of interpretability.
-
-| Method | Description |
-| :--- | :--- |
-| Best subset selection | Fit every combination of the $p$ predictors; keep the best model of each size (lowest RSS, or lowest [[Deviance]] for a GLM), then choose among the sizes as in the last row |
-| Forward stepwise | Start with no predictors; at each step add the one that most improves the fit; choose among the resulting sizes as in the last row |
-| Backward stepwise | Start with all predictors (needs $n > p$); at each step remove the least useful one; choose among the sizes as in the last row |
-| Hybrid stepwise | Add predictors as in forward stepwise, but after each addition remove any that no longer improve the fit |
-| Lasso ([[Regularization]]) | Fit all $p$ predictors with a penalty that sets some coefficients exactly to zero, so the selection happens within the fit; the penalty $\lambda$ is chosen by [[Cross-Validation]] |
-| Choosing among sizes | Compare models with different numbers of predictors via [[AIC]] (or $C_p$), [[BIC]], adjusted $R^2$ or [[Cross-Validation]] error — not by raw RSS, $R^2$ or deviance, which always improve as predictors are added |
-
-- **How many models are fitted.** Best subset selection fits all $2^p$ models; forward and backward stepwise each fit only $1 + p(p+1)/2$. With $p = 20$ that is $1{,}048{,}576$ models against $211$. The price is that stepwise selection is not guaranteed to find the best subset: if the best one-predictor model is $\{x_1\}$ but the best two-predictor model is $\{x_2, x_3\}$, forward stepwise cannot reach it, because every later model must keep $x_1$
-- Raw [[Deviance]] still has two uses: comparing models with the same number of parameters (best subset's choice within each size), and comparing nested models through a deviance (F or likelihood-ratio) test. Compared raw across sizes it gives an unfair advantage to the model with more parameters
-- Lower [[AIC]] or [[BIC]] indicates a better trade-off between fit and complexity; **BIC penalizes additional parameters more heavily** than AIC, so it tends to favor sparser models
-- In a [[Linear Mixed Model]], variable selection also requires deciding which effects are **fixed** versus **random**, not just which predictors to include
-- Variable selection should combine statistical significance (from the [[Parameter Estimate Tables|parameter estimate table]]) with business and actuarial judgment, e.g., regulatory restrictions on certain rating variables
-- Selecting too few variables causes underfitting (high bias); selecting too many causes overfitting (high variance) — a holdout sample or cross-validation helps detect overfitting that in-sample fit statistics alone would miss
-
 ![[Media/Figures/Variable_Selection.svg|340]]
 
-> [!example]- Choosing Between Two Model Specifications {Example}
-> Two competing GLMs for claim frequency: Model 1 has $5$ parameters and a log-likelihood of $-2{,}040$. Model 2 adds $2$ more parameters and has a log-likelihood of $-2{,}037$. Using AIC ($\text{AIC} = -2\ell + 2k$), which model is preferred?
->
-> > [!answer]-
-> > $$\text{AIC}_1 = -2(-2{,}040) + 2(5) = 4{,}080 + 10 = 4{,}090$$
-> > $$\text{AIC}_2 = -2(-2{,}037) + 2(7) = 4{,}074 + 14 = 4{,}088$$
-> > Model 2 has the lower AIC ($4{,}088 < 4{,}090$), so the extra $2$ parameters are worth the added complexity — **Model 2** is preferred.
+**Variable Selection** is the choice of which of the $p$ available predictors a model includes, so that the fitted model leaves the other predictors out entirely and their coefficient estimates are exactly 0. Removing irrelevant predictors gives a simpler model that is easier to interpret, and it reduces the variance of the fit, which can improve its predictions. Leaving out important predictors makes the model underfit. Subset selection fits models on chosen subsets of the predictors, and the [[Regularization#The lasso|lasso]] selects predictors as part of its fit by setting some coefficients exactly to 0. Ridge regression shrinks the coefficients but never sets one exactly to 0, and [[Principal Components Regression|principal components regression]] and [[Partial Least Squares|partial least squares]] use every predictor, so none of these three selects variables.
+
+## Best subset selection
+
+Best subset selection fits a model for every subset of the $p$ predictors:
+
+1. For each size $k = 1, 2, \ldots, p$, fit all the models with exactly $k$ predictors, and keep the one with the smallest RSS, or the largest $R^2$.
+2. Choose among the best models of each size, and the null model with no predictors, by cross-validated error, $C_p$, [[AIC]], [[BIC]] or adjusted $R^2$.
+
+Each predictor is either in or out of a model, so the number of models best subset selection fits is
+
+> $$2^p$$
+
+## Forward stepwise selection
+
+Forward stepwise selection starts with the null model, which has only an intercept. At each step it fits every model that adds one of the unused predictors to the current model, and it adds the predictor of the best of these models, the one with the smallest RSS or the largest $R^2$. Predictors already in the model stay in, so the models are nested, one of each size. Without a stopping rule the steps continue until all $p$ predictors are in the model, and the p-values of individual predictors play no part in the steps. The final model is chosen among the sizes as in best subset selection. Step $k$ fits $p - k$ models, for $k = 0, 1, \ldots, p - 1$, so with the null model the number of models forward stepwise selection fits is
+
+> $$1 + \frac{p(p+1)}{2}$$
+
+Forward stepwise selection may miss the best model of a given size, because it must keep every predictor it has already added. Best subset selection searches every model, so the model it chooses has an AIC no higher than the model chosen by a stepwise method.
+
+> [!example]- How many models do best subset selection and forward stepwise selection fit with $p = 10$ predictors? {Example}
+> - Best subset selection fits $2^{10} = 1{,}024$ models.
+> - Forward stepwise selection fits $1 + 10(11)/2 = 56$ models.
+
+## Backward stepwise selection
+
+Backward stepwise selection starts with the full model, which has all $p$ predictors and needs $n > p$. At each step it removes the one predictor whose removal leaves the model with the smallest RSS, or the largest $R^2$, so the models are again nested, one of each size. It fits the same number of models as forward stepwise selection. When predictors are removed by significance, as in fitting a [[Generalized Linear Model|GLM]], only one is removed at a time, the one with the highest p-value, and the model is refitted before the next is considered.
+
+## Comparing models of different sizes
+
+$R^2$ never decreases and the RSS and the [[Deviance|deviance]] never increase when a predictor is added, so they compare only models with the same number of parameters. Models of different sizes are compared by a criterion that penalizes the number of parameters, and the model with the lowest criterion is preferred:
+
+> $$\text{AIC} = -2l + 2k$$
+
+> $$\text{BIC} = -2l + k \ln n$$
+
+- $l$ is the maximized log-likelihood of the model.
+- $k$ is the number of parameters.
+
+When $\ln n > 2$, which is when $n \ge 8$, BIC penalizes each parameter more heavily than AIC, so BIC chooses a model with no more predictors than AIC. BIC can therefore leave out predictive variables, and AIC is generally considered more reliable for the large data sets of insurance.
+
+> [!example]- Model 1 for claim frequency has 5 parameters and log-likelihood $-2{,}040$. Model 2 adds 2 parameters and has log-likelihood $-2{,}037$. Which model does AIC prefer? {Example}
+> - The AIC of model 1 is $-2(-2{,}040) + 2(5) = 4{,}090$.
+> - The AIC of model 2 is $-2(-2{,}037) + 2(7) = 4{,}088$.
+> - Model 2 has the lower AIC, so AIC prefers model 2.
+
+## Tests for including a rating variable
+
+In ratemaking, a variable in a GLM is judged by its statistical significance, the standard errors of its estimates, the consistency of its effect over time and judgment. Under judgment, its fitted relativities should be explainable in direction and size, and it must be practical to collect and acceptable to regulators and the public. A variable that fails the statistical tests is excluded unless there is a judgmental reason to keep it. These tests decide on one variable, and they are different from measures of the fit or [[Lift|lift]] of the whole model.
+
+> [!trap] Comparing models of different sizes by $R^2$ or deviance
+> The larger model always has the higher $R^2$ and the lower deviance, so comparing by them always favours adding predictors. Across sizes, compare by AIC, BIC or cross-validated error.

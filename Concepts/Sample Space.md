@@ -1,54 +1,59 @@
 ---
 verification:
-  status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0ebe422c8bc4252e67838dab633cae3bcc12f1b3307ef793943f7af4bd9cd5f4
+  content_hash: sha256:b833162c99f5280293e2cf2ae0bfd048df2543b5bf43d2086b6f2657b48838e6
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 sample space (p.18, PDF p.26), Example 1.9 (p.20, PDF p.28), Infinite Sample Spaces (p.28, PDF p.36), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (outcome, sample space, event), fetched 2026-09-28, sha256:5ab5af0abfbf56905a0a023eb3242ae9749a17af50a5ff8581a6c69030ce29ad — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Example 1.11 (p.26, PDF p.34: m((i,j)) = 1/36), §3.1 A Counting Technique and tree diagrams (p.76, PDF p.84: N = n1·n2·…·nr), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Ex. 1.10, Def. 1.3 uniform m(ω)=1/n, Ex. 1.11 two dice 36 ordered pairs, no single correct sample space, Determination of Probabilities, Infinite Sample Spaces (countable; Ex. 1.13 geometric sum), Historical Remarks 36 ordered vs 21 unordered pairs (pp.24-30, PDF pp.32-38), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 A Counting Technique N = n1·n2·…·nr (p.76, PDF p.84); §3.2 Ex. 3.5 and binomial coefficients, a set of n elements has 2^n subsets (p.93, PDF p.101); §5.1 hypergeometric h(N,k,n,x) = C(k,x)C(N−k,n−x)/C(N,n) (p.193, PDF p.201), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 Ex. 2.7 continuous model assigns probability 0 to each single outcome, probabilities from a density over intervals (p.55, PDF p.63), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.1 Random Experiments (outcome, sample space = set of all possible outcomes, event = subset; union = 'or'/'at least', intersection = 'and'), read 2026-11-06, sha256:45b7306c1035a289566eaa2987945972aebd1eeab04d12c337bef7e23a4139e9 — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.1 §2 Events and Random Variables: events, S always occurs and the empty set never occurs, discrete sample space = all subsets, disjoint = mutually exclusive, read 2026-11-06, sha256:510418f107a11631155faaf9854f524c0e241b1319a4bc335ace7a769ee0aec3 — https://www.randomservices.org/random/prob/Events.html"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, introduction (calculus incl. series, differentiation, integration assumed, PDF p.1) and Topic 1 General Probability learning objective and outcomes a-g (PDF p.2), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Sample Space.md
 ---
 
-A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment.
-- Every conceivable result of the experiment appears as exactly one element of $S$
-- Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)
-- The sample space can be finite, countably infinite, or uncountably infinite depending on the experiment
-- When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
-
-> $$S = \{\omega_1, \omega_2, \ldots\}$$
->
-> $$\text{where each } \omega_i = \text{an elementary outcome of the experiment}$$
-
 ![[Media/Figures/Sample_Space.svg|340]]
 
-### Ordered pairs: the multiplication principle
+A **Sample Space** is the set of all possible outcomes of an experiment. When its outcomes can be listed, the sample space $S$ is
 
-- If an experiment is carried out in two stages, with $n_1$ outcomes at the first stage and, for each of them, $n_2$ outcomes at the second, the sample space has $n_1 \times n_2$ ordered outcomes.
+> $$S = \{s_1, s_2, \ldots\}$$
 
-> $$|S| = n_1 \times n_2$$
+- $s_i$ is an outcome of the experiment.
 
-- Rolling two fair dice gives $6 \times 6 = 36$ equally likely ordered outcomes, each with probability $1/36$.
-- When each of two independent choices is made uniformly at random from the same $n$ values, all $n^2$ ordered pairs are equally likely, each with probability $1/n^2$, so the probability of an event is the number of favourable ordered pairs divided by $n^2$.
+> [!example]- A coin is flipped and then a die is rolled. What is the sample space? {Example}
+> - An outcome records both results, so it is an ordered pair (coin, die).
+> - The sample space $S$ holds the pairs $(H, 1)$, $(H, 2)$, …, $(H, 6)$ and $(T, 1)$, $(T, 2)$, …, $(T, 6)$.
+> - There are 2 results for the coin and 6 for the die, so by the [[Combinatorics#The multiplication principle|multiplication principle]], $|S| = 2 \times 6 = 12$.
 
-> $$P(E) = \frac{\text{number of favourable ordered pairs}}{n^2}$$
+## Requirements of outcomes in a sample space
 
-> [!example]- Two Random Digits {Example}
-> Two people each pick a digit from 0 to 9, independently and uniformly at random. Find the probability that they pick the same digit.
->
-> > [!answer]-
-> > The sample space is the $10 \times 10 = 100$ equally likely ordered pairs. The favourable pairs are $(0, 0), (1, 1), \ldots, (9, 9)$, ten of them:
-> > $$P(\text{same digit}) = \frac{10}{100} = 0.10$$
+The outcomes of a sample space must be
 
-> [!example]- Sample Space for Claim Occurrence and Size {Example}
-> An experiment records whether a policyholder files a claim and, if so, classifies the loss as small ($\le$ \$$1{,}000$) or large ($>$ \$$1{,}000$). Write the sample space.
->
-> > [!answer]-
-> > There are three mutually exclusive, exhaustive outcomes:
-> > $$S = \{\text{No Claim},\; \text{Small Claim},\; \text{Large Claim}\}$$
-> > Each outcome is distinct, they cannot co-occur, and every possible result of the experiment is represented.
+- **[[Mutually Exclusive Events|mutually exclusive]]**: no two outcomes can occur together, and
+- **exhaustive**: every possible result of the experiment is one of them.
+
+Then the probabilities of the outcomes add to 1:
+
+> $$\sum_{s \in S} P(\{s\}) = 1$$
+
+- $P(\{s\})$ is the [[Probability|probability]] of the event containing the single outcome $s$.
+
+> [!example]- A policy year is recorded as No Claim, Claim or Large Claim. Is this a sample space? {Example}
+> - The list is exhaustive: every policy year has no claim or a claim.
+> - It is not mutually exclusive: a large claim is also a claim, so a year with a large claim matches two outcomes.
+> - It is not a sample space. Replacing Claim with Small Claim gives one, $S = \{\text{No Claim}, \text{Small Claim}, \text{Large Claim}\}$.
+
+## Types of sample spaces
+
+- A sample space is **finite** when it has a finite number of outcomes, like the 12 outcomes of the coin and the die.
+- It is **countably infinite** when its outcomes can be listed but the list never ends. The number of claims in a year has $S = \{0, 1, 2, \ldots\}$.
+- It is **uncountable** when its outcomes fill an interval. The time until the first claim has $S = (0, \infty)$. Its outcomes can't be listed, so probabilities come from intervals, through a [[Continuous Random Variable|continuous random variable]].
+
+> [!trap] A sample space too coarse for the question
+> Two dice are rolled and only their sum is recorded. That sample space, $\{2, 3, \ldots, 12\}$, can't answer "Did the first die show a 6?", because a sum of 8 could be $(6, 2)$ or $(2, 6)$. Choose outcomes detailed enough for every event the question asks about.

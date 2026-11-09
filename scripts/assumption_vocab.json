@@ -1,0 +1,24 @@
+{
+  "_comment": "The Assumptions Bank's closed vocabulary (docs/assumptions-bank.md §4.2): each kind and the units a row of that kind may be written in. Read by scripts/assumption_lint.py and held equal to quiz/src/lib/assumptionBank.ts by assumptionBank.test.ts. A `fact` row has no unit and its value is the document's words.",
+  "kinds": {
+    "trend": ["%"],
+    "loss-ratio": ["%"],
+    "expense-ratio": ["%"],
+    "fixed-expense": ["%", "CAD", "USD"],
+    "variable-expense": ["%"],
+    "profit-provision": ["%"],
+    "development-factor": ["factor"],
+    "ulae-factor": ["factor"],
+    "tail-factor": ["factor"],
+    "reform-factor": ["factor"],
+    "discount-rate": ["%"],
+    "capital-ratio": ["%"],
+    "capital-factor": ["factor", "%"],
+    "confidence-level": ["%"],
+    "mortality-ratio": ["%"],
+    "cat-load": ["CAD", "USD", "%"],
+    "fact": [""]
+  },
+  "_bases": "What kind of figure a row is, in the optional Basis column (docs/tool-template-v2.md §4): a regulator's cap or minimum, a figure it selected or set as a target, a benchmark, or one observed in experience. Held equal to BASES in quiz/src/lib/assumptionBank.ts.",
+  "bases": ["cap", "selected", "benchmark", "observed", "minimum", "target"]
+}

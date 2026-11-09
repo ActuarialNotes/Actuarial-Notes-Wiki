@@ -11,9 +11,11 @@
 //
 // - each studied day's rate, with how many answers it rests on (a day of one
 //   answer is 0% or 100%, and the card draws it small rather than loud);
-// - a **rolling 7-day rate** for every calendar day of the span, pooled over
-//   the answers (not an average of daily rates), so a one-answer day moves it
-//   by one answer's worth — this is the line the card draws;
+// - a **rolling rate** for every calendar day of the span, pooled over the
+//   answers (not an average of daily rates), so a one-answer day moves it by
+//   one answer's worth — this is the line the card draws. Its window follows
+//   the span (`rollingWindow`): a 7-day average over a 7-day view is just the
+//   headline again, so a week pools 3 days, a month 7 and three months 14;
 // - the span against the span before it, when both rest on enough answers;
 // - the split by difficulty and by topic, each with its count.
 //
@@ -28,6 +30,8 @@ export interface AnswerRow {
   question_id: string
   is_correct: boolean
   answered_at: string
+  /** Seconds the question was open before it was answered, when the quiz timed it. */
+  time_spent_seconds?: number | null
 }
 
 export interface Tally {
@@ -58,7 +62,7 @@ export interface TopicTally extends Tally {
 
 export interface RollingPoint {
   day: string
-  /** The rate over the 7 days ending here, or null when none of them was studied. */
+  /** The rate over the `window` days ending here, or null when none of them was studied. */
   percent: number | null
 }
 
@@ -69,10 +73,19 @@ export interface AccuracyTrend {
   days: AccuracyDay[]
   /** Every answer inside the span. */
   total: Tally & { byDifficulty: DifficultyTallies }
+  /**
+   * The span's answers split by whether the question had ever been answered
+   * before — a retry of a question just missed is easier than a fresh one, so
+   * the headline mixes two rates. Null when the history before the fetch
+   * (`priorIds`) wasn't available to tell them apart.
+   */
+  attempts: { first: Tally; retry: Tally } | null
   /** The same number of days before the span — null when the fetch doesn't reach back that far. */
   previous: Tally | null
   /** One point per calendar day of the span, oldest first. */
   rolling: RollingPoint[]
+  /** Days each rolling point pools over. */
+  window: number
   /** Every topic answered inside the span, in no particular order. */
   topics: TopicTally[]
 }
@@ -93,8 +106,21 @@ export const MIN_ANSWERS_TO_COMPARE = 5
 /** Below this many answers a rate is shown, but stepped back: it can't say much yet. */
 export const RELIABLE_ANSWERS = 10
 
-/** The window the trend line pools over. */
-export const ROLLING_DAYS = 7
+/** Fewest studied days before the chart is drawn — one day is a dot, not a trend. */
+export const MIN_CHART_DAYS = 2
+
+/**
+ * Days the trend line pools over, for a span: short enough that the line moves
+ * inside the span, long enough to smooth a one-answer day.
+ */
+export function rollingWindow(span: number): number {
+  return span <= 7 ? 3 : span <= 31 ? 7 : 14
+}
+
+/** True when the span's rate rests on too few answers to read much into. */
+export function isThin(t: Tally): boolean {
+  return t.answered < RELIABLE_ANSWERS
+}
 
 const emptyTally = (): Tally => ({ answered: 0, correct: 0 })
 const emptyByDifficulty = (): DifficultyTallies => ({ easy: emptyTally(), medium: emptyTally(), hard: emptyTally() })
@@ -113,6 +139,22 @@ function shiftDay(day: string, by: number): string {
   return new Date(Date.parse(day + 'T00:00:00Z') + by * 86_400_000).toISOString().slice(0, 10)
 }
 
+/**
+ * The rows that were each question's first answer ever: the earliest row of a
+ * question not in `priorIds` (answered before the rows begin).
+ */
+export function firstAttempts(rows: readonly AnswerRow[], priorIds: ReadonlySet<string>): Set<AnswerRow> {
+  const seen = new Set(priorIds)
+  const first = new Set<AnswerRow>()
+  const ordered = [...rows].sort((a, b) => (a.answered_at < b.answered_at ? -1 : a.answered_at > b.answered_at ? 1 : 0))
+  for (const row of ordered) {
+    if (seen.has(row.question_id)) continue
+    seen.add(row.question_id)
+    first.add(row)
+  }
+  return first
+}
+
 /** Percentage right, rounded; null when nothing was answered. */
 export function accuracyPercent(t: Tally): number | null {
   return t.answered > 0 ? Math.round((100 * t.correct) / t.answered) : null
@@ -125,6 +167,13 @@ export function accuracyTrend(
   opts: {
     span?: number
     dayOf?: (iso: string) => string
+    /**
+     * Questions answered before the earliest row — with it, each answer in the
+     * span is a first try or a retry (`attempts`); without it, `attempts` is null.
+     */
+    priorIds?: ReadonlySet<string>
+    /** Days the rolling line pools over; `rollingWindow(span)` by default. */
+    window?: number
     /** How many days back the rows reach (today included); `previous` needs twice the span. */
     history?: number
   } = {},
@@ -132,12 +181,15 @@ export function accuracyTrend(
   const span = opts.span ?? 30
   const dayOf = opts.dayOf ?? ((iso: string) => localDayKey(new Date(iso)))
   const history = opts.history ?? Infinity
+  const window = opts.window ?? rollingWindow(span)
   // Every day answered, inside the span or not: the rolling line at the
   // span's first day reaches back into the week before it.
   const byDay = new Map<string, AccuracyDay>()
   const total = { ...emptyTally(), byDifficulty: emptyByDifficulty() }
   const previous = emptyTally()
   const topics = new Map<string, TopicTally>()
+  const attempts = opts.priorIds ? { first: emptyTally(), retry: emptyTally() } : null
+  const firstTries = opts.priorIds ? firstAttempts(rows, opts.priorIds) : null
 
   for (const row of rows) {
     const facts = lookup(row.question_id)
@@ -163,6 +215,7 @@ export function accuracyTrend(
         topics.set(facts.topic, t)
       }
       add(t, row.is_correct)
+      if (attempts) add(firstTries!.has(row) ? attempts.first : attempts.retry, row.is_correct)
     } else if (ago < 2 * span) {
       add(previous, row.is_correct)
     }
@@ -174,7 +227,7 @@ export function accuracyTrend(
   for (let ago = span - 1; ago >= 0; ago--) {
     const day = shiftDay(today, -ago)
     const pooled = emptyTally()
-    for (let back = 0; back < ROLLING_DAYS; back++) {
+    for (let back = 0; back < window; back++) {
       const d = byDay.get(shiftDay(day, -back))
       if (d) {
         pooled.answered += d.answered
@@ -191,8 +244,10 @@ export function accuracyTrend(
     span,
     days,
     total,
+    attempts,
     previous: 2 * span <= history ? previous : null,
     rolling,
+    window,
     topics: [...topics.values()],
   }
 }
@@ -252,4 +307,10 @@ export function axisTicks(span: number): number[] {
   const ticks: number[] = []
   for (let ago = 0; ago < span; ago += step) ticks.push(ago)
   return ticks.reverse()
+}
+
+/** Today's questions with at least one wrong answer, newest first — empty when today went clean. */
+export function todaysMisses(trend: AccuracyTrend, today: string): DayQuestion[] {
+  const day = trend.days.find(d => d.day === today)
+  return day ? dayQuestions(day).filter(q => q.correct < q.answered) : []
 }

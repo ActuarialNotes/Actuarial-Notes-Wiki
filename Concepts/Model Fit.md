@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f9d5686506a8f3491e3c52cabaead37aeaeecc19fea758a8bb9a632e3e846fdc
+  content_hash: sha256:f506fe517347bad6ac1ac0196ca89cdca269e6da6eaf7ed568ceaa5da0994a69
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §6.1.2 eqs.15-16 p.63 (PDF 73: scaled deviance, saturated and null models); §6.2 pp.64-67 (F-test, AIC, BIC); §6.3.1 pp.67-69 (PDF 77-79: deviance residuals normal with constant variance; discrete-distribution caveat, randomized quantile and binned working residuals, aggregated data; q-q plot, right tail above the line = more skewed than gamma, inverse Gaussian); §5.4.1 p.48 (partial residual plots for non-linearity); §6.4 p.74 (Cook's distance, CV, bootstrap); §7.1 pp.75-76 (PDF 85-86: actual vs predicted on holdout, sorted by prediction and grouped into percentiles); §7.2.1 p.77 (quantile plots), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -19,56 +19,70 @@ verification:
   log: .verify/Concepts/Model Fit.md
 ---
 
-**Model Fit** is how closely a fitted model's predictions agree with the observed outcomes. It is measured in-sample with likelihood statistics such as [[Deviance]], diagnosed with residual and other [[Model Diagnostics|diagnostic plots]], and, for a rating model, confirmed by comparing actual with predicted results on a [[Holdout Sample|holdout sample]].
+**Model Fit** is how closely a fitted model's predictions agree with the observed outcomes. For a [[Generalized Linear Model|generalized linear model]], the fit is summarized by the scaled [[Deviance|deviance]], which is
 
-> $$D^* = 2\left[\ell_{\text{saturated}} - \ell_{\text{model}}\right]$$
+> $$D^* = 2\left[l_{\text{sat}} - l_{\text{model}}\right]$$
 
-- $D^*$ is the **scaled deviance**. It measures the log-likelihood gap between the model and the saturated model, which has one parameter per record and fits perfectly ($D^* = 0$). The null model (intercept only) marks the other end, so a model's deviance lies between zero and the null deviance. Maximizing likelihood is the same as minimizing deviance.
-- The **deviance residual** $d_i$ is the signed square root of record $i$'s contribution to the deviance. If the assumed distribution is right, deviance residuals are roughly normal with constant variance — for a continuous response. For a discrete distribution (Poisson, negative binomial) or one with a point mass (Tweedie, at zero), the many records with the same target value cluster the residuals into tight groups, so they will likely not look normal even when the model is right; use binned working residuals (or randomized quantile residuals) instead. Highly aggregated count data behave more like a continuous response.
-- **Fit is not predictive power.** Adding any predictor lowers deviance. In-sample measures therefore compare models only through a test ([[Likelihood Ratio Test]] or $F$-test, for nested models) or a penalty ([[AIC]], [[BIC]]). Each power of a [[Polynomial Regression|polynomial]] term counts as one more predictor, and one more parameter. Whether the fit holds on new data is a holdout question.
-- **Diagnostic plots (MAS-I).**
-  - [[Residual Plot|Residuals against fitted values]]: a trend means the mean is misspecified (wrong link or a missing term), and a funnel means the wrong [[Variance Function|variance function]].
-  - A [[QQ Plot]] of deviance residuals from a continuous response should be close to a straight line; bent tails mean the data are more or less skewed than the assumed distribution.
-  - [[Marginal Model Plot|Marginal model plots]] compare a smooth of the data with a smooth of the fitted values against each predictor, and the two should coincide.
-  - [[Added Variable Plot|Added variable plots]] show one predictor's effect net of the others, exposing any influential points. They are a weak guide to the predictor's functional form, since the plot forces the relationship to be linear; a partial residual plot is the tool for that.
-- **Rating-plan fit (Exam 8).** The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] tests fit where a rating plan needs it: actual against predicted on holdout data, grouped into quantiles of the prediction. Influential records (high Cook's distance) and estimates that swing across cross-validation folds or bootstrap samples flag fit that won't survive new data. [[Model Benchmarking]] then asks whether the model fits better than the current plan.
+- $l_{\text{sat}}$ is the maximized log-likelihood of the saturated model.
+- $l_{\text{model}}$ is the maximized log-likelihood of the fitted model.
 
-> [!example]- A Significant Model That "Explains" Little {Example}
-> A Poisson frequency GLM on $20{,}000$ policies has null deviance $9{,}840$. With $11$ rating-variable parameters added, the deviance falls to $9{,}312$. Is the fit good?
->
-> > [!answer]-
-> > For a Poisson model $\phi = 1$, so the drop in deviance is the likelihood ratio statistic:
-> >
-> > $$
-> > \begin{align*}
-> > \Delta D &= 9{,}840 - 9{,}312 \\
-> > &= 528
-> > \end{align*}
-> > $$
-> >
-> > That is far above $\chi^2_{0.05,11} = 19.68$, so the variables are overwhelmingly significant. Yet they explain only $528 / 9{,}840 = 5.4\%$ of the null deviance.
-> >
-> > That is normal for claim counts. Whether one policy has a claim this year is mostly Poisson noise, which no rating variable can predict, so even the true model would explain little of it. A rating model's fit is judged by how well it predicts **segment averages** and separates good risks from bad on holdout data, not by a pseudo-$R^2$.
+The deviance is $D = \phi D^*$, so the scaled deviance is the deviance divided by the [[Dispersion Parameter|dispersion parameter]] $\phi$. The deviance measures how far the model is from the saturated model, so a smaller deviance means a better fit and a large deviance a poor one.
 
-> [!example]- Reading a QQ Plot of a Severity Model {Example}
-> A Gamma GLM (log link) for claim severity shows deviance residuals with no pattern against fitted values. On the QQ plot, however, the right-most points rise well above the reference line. What does this say, and what should be tried?
->
-> > [!answer]-
-> > The **mean structure looks right**, since the residuals show no trend or funnel. The **distribution does not**. There are far more large positive deviance residuals than a normal distribution allows, so the claims are more right-skewed than a Gamma captures.
-> >
-> > A more skewed error distribution, such as the **inverse Gaussian**, is the natural next candidate: refit and check that its residuals line up. Left alone, the Gamma model would understate how variable large claims are, even with sensible relativities.
+> [!example]- A Poisson GLM has maximized log-likelihood $-1{,}480$, and the saturated model has $-1{,}350$. What is the model's deviance? {Example}
+> - The scaled deviance is $D^* = 2[-1{,}350 - (-1{,}480)] = 260$.
+> - A Poisson model has $\phi = 1$, so the deviance is also $D = 260$.
 
-> [!example]- Actual vs. Expected by Rating Level on Holdout {Example}
-> On holdout data, a pure premium model's predicted and actual losses by vehicle-age band are:
+## The null model and the saturated model
+
+The fit of every model lies between two extremes:
+
+1. The null model has only an intercept, and it predicts the mean of the response, $\bar{y}$, for every record. Its deviance is the null deviance.
+2. The saturated model has as many linearly independent parameters as records. It reproduces every observed response exactly, so its linear predictor is $g(y_i)$ for each record, whatever the link $g$. Its deviance is zero.
+
+## Deviance and added parameters
+
+Adding a parameter to a model never raises its deviance. A lower deviance alone is therefore not a reason to adopt a more complex model, because it would always favour the largest model and lead to overfitting. Nested models are compared by a [[Likelihood Ratio Test|likelihood ratio test]] of the added parameters, and any models by a criterion that charges for each parameter, such as [[AIC]] or [[BIC]].
+
+> [!example]- A Poisson frequency GLM on 20,000 policies has null deviance 9,840. Adding 11 rating-variable parameters lowers the deviance to 9,312. Are the variables significant? {Example}
+> - For a Poisson model $\phi = 1$, so the drop in deviance is the likelihood ratio statistic, $9{,}840 - 9{,}312 = 528$.
+> - The statistic has 11 degrees of freedom, and $\chi^2_{0.05,\,11} = 19.68$.
+> - $528 > 19.68$, so the variables are significant.
+> - They explain only $528/9{,}840 = 5.4\%$ of the null deviance, which is usual for claim counts, where most of the variation is random.
+
+## Diagnostic plots of fit
+
+The [[Model Diagnostics|diagnostic plots]] show where a model fits badly:
+
+1. A [[Residual Plot|residual plot]] against the fitted values shows a trend when the mean is misspecified and a fan when the variance function is wrong.
+2. A [[Marginal Model Plot|marginal model plot]] overlays a smooth of the observed response and a smooth of the fitted values against each predictor. The two agree when the model captures that predictor's relationship and separate when structure is missing.
+3. A [[QQ Plot|QQ plot]] of the [[Deviance Residual|deviance residuals]] should track the reference line with only small random departures, because the deviance residuals of a correct model follow the assumed distribution.
+
+When the deviance residuals of a [[Gamma]] severity model rise above the line at the high end, the claims are more right-skewed than the Gamma captures. A distribution with a heavier right tail, such as the inverse Gaussian, is the natural alternative.
+
+## Actual-to-predicted ratio
+
+A rating model's fit is checked on a [[Holdout Sample|holdout sample]] by grouping the records and comparing actual with predicted losses in each group. The actual-to-predicted ratio of a group is
+
+> $$\frac{\text{total actual losses}}{\text{total predicted losses}}$$
+
+A ratio near 1 indicates a good fit in that group. The fit is judged by how far the ratio is from 1, not by the dollar size of the gap. A better model has ratios close to 1 in every group, such as every quantile of the prediction. An overall ratio near 1 only shows that the total predicted equals the total actual, and it can hide errors that offset at the two ends.
+
+> [!example]- On holdout data, a pure premium model's predicted and actual losses are compared by vehicle age band. Where does the model fit badly? {Example}
 >
-> - 0-3 years: predicted $\$1{,}200{,}000$, actual $\$1{,}236{,}000$
-> - 4-7 years: predicted $\$1{,}500{,}000$, actual $\$1{,}470{,}000$
-> - 8-11 years: predicted $\$900{,}000$, actual $\$882{,}000$
-> - 12+ years: predicted $\$400{,}000$, actual $\$460{,}000$
+> | Vehicle age | Predicted | Actual |
+> | --- | --- | --- |
+> | 0 to 3 years | 1,200,000 | 1,236,000 |
+> | 4 to 7 years | 1,500,000 | 1,470,000 |
+> | 8 to 11 years | 900,000 | 882,000 |
+> | 12 years and over | 400,000 | 460,000 |
 >
-> Assess the fit.
->
-> > [!answer]-
-> > The actual-to-predicted ratios are $1.03$, $0.98$, $0.98$ and $1.15$. Overall the ratio is $\$4{,}048{,}000 / \$4{,}000{,}000 = 1.012$, so the model is well balanced in total.
-> >
-> > The first three bands are within a few percent. The **12+ band is under-predicted by 15%**, a sign that the fitted vehicle-age curve has the wrong shape at the old end, for example a linear term forcing a trend the data don't follow there. Check the band's volume to rule out noise, then add a hinge or a separate band and refit. Left as is, the rating plan would undercharge the oldest vehicles.
+> - The actual-to-predicted ratios are 1.03, 0.98, 0.98 and 1.15.
+> - Overall, the ratio is $4{,}048{,}000/4{,}000{,}000 = 1.012$, so the model is balanced in total.
+> - The model under-predicts the oldest vehicles by 15%, which is where it fits badly.
+
+## Model stability
+
+Model stability is the sensitivity of a model's results, such as its relativities, to small changes in the data, such as removing or adding a few records. A record with a large [[Model Diagnostics#Cook's distance|Cook's distance]] is highly influential, because the parameter estimates change materially when it is removed. Estimates that change across [[Cross-Validation|cross-validation]] folds or [[Bootstrap|bootstrap]] samples show a fit that may not hold on new data.
+
+> [!trap] Choosing the model with the lowest deviance
+> The deviance never rises when a parameter is added, so the model with the most parameters always has the lowest deviance. Compare models with a likelihood ratio test or with AIC or BIC, which account for the added parameters.

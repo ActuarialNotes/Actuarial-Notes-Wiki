@@ -399,7 +399,7 @@ function studyBody(item: Extract<StoreItem, { type: 'study' }>): SheetBody {
           <a href={study.offer.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
             {hostOf(study.offer.url)}
           </a>{' '}
-          on {shortDate(study.offer.checked)}. Nothing is sold on Actuarial Notes — you buy from {sellerName}.
+          on {shortDate(study.offer.checked)}. You buy from {sellerName}.
         </Provenance>
       </>
     ),
@@ -458,7 +458,7 @@ function registrationBody(item: Extract<StoreItem, { type: 'registration' }>, to
                     : `, and the ${registration.body} hasn’t published the one after it yet.`}
                 </p>
               )}
-              <SittingTimeline steps={steps} today={today} />
+              <SittingTimeline steps={steps} today={today} examKey={registration.examKey} windowNote={details?.windowNote} listClassName="bg-muted/40" />
             </>
           ) : (
             <p className="text-sm text-muted-foreground">The {registration.body} hasn’t published the next sitting yet.</p>
@@ -592,7 +592,7 @@ function calculatorBody(item: Extract<StoreItem, { type: 'calculator' }>): Sheet
         )}
 
         {calculator.variants?.length ? (
-          <Section title="Its twin on the lists">
+          <Section title="Also allowed">
             <ul className="space-y-2">
               {calculator.variants.map(v => (
                 <li key={v.model} className="rounded-lg bg-muted/40 px-3.5 py-2.5 text-sm">
@@ -665,7 +665,7 @@ function calculatorBody(item: Extract<StoreItem, { type: 'calculator' }>): Sheet
               ·{' '}
             </>
           )}
-          Prices as each seller listed them on the date shown. Nothing is sold on Actuarial Notes.
+          Prices as each seller listed them on the date shown.
         </Provenance>
       </>
     ),
@@ -795,7 +795,7 @@ function BookFooter({ item, amazon }: { item: Extract<StoreItem, { type: 'book' 
         <BuyButton href={amazonUrl} item={item} sellerId="amazon">{amazon ? `Buy at Amazon · ${amazon.display}` : 'Find it on Amazon'}</BuyButton>
       ) : null}
       <Provenance>
-        The book’s details and reading list come from its page in the study guide. Nothing is sold on Actuarial Notes.
+        The book’s details and reading list come from its page in the study guide.
       </Provenance>
     </>
   )
@@ -868,7 +868,7 @@ function ProductReviews({ item }: { item: StoreItem }) {
         </button>
       )}
       <p className="text-xs text-muted-foreground">
-        Quoted as written and linked to where each was posted; gathered {shortDate(REVIEWS_CHECKED)}. A review is its author’s opinion, not ours.
+        Quoted as written, with links to where each was posted. Gathered {shortDate(REVIEWS_CHECKED)}.
       </p>
     </Section>
   )

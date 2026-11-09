@@ -82,7 +82,8 @@ page view itself, the first included, through `trackPageView`:
   shelf's and Store's filters, the flashcard deck's view) is not — `isNewPageView`.
 - **The URL is cleaned** (`pageLocation`): no fragment, no auth codes or tokens, no
   `internal`/`ga_debug` switches, emails and long numbers redacted. `utm_*` and `gclid`
-  stay — they are how GA4 attributes the visit.
+  stay — they are how GA4 attributes the visit. The AI connector's links into the app carry
+  `utm_source=mcp&utm_medium=ai_connector` (`docs/ai-connector.md`, *Measuring use*).
 - **`content_group`** names the section of the app (`contentGroup`: Quiz builder, Quiz,
   Study guides, Concepts, Resources, Flashcards, Dashboard, Store…) — GA4's built-in
   *Content group* dimension, the way to read the Pages report a tab at a time.
@@ -122,6 +123,7 @@ limits (`fitParams`: 100 characters; page params longer).
 | Studying | `quiz_started`, `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome`, the connection's `strength` and how many concepts a new one `made`) `craft_topic_completed` and `craft_medal_won` (the `medal`, with how many `connections` it was won in on a board of how many `concepts`; docs/concept-craft.md) |
 | Learning (roadmap L1, `lib/learningSignals.ts`) | `concept_retention` (a concept answered for the first time after its decay window: `concept`, `exam`, `retained` — that answer — its earned `level` and `days_since_correct`; once per decay episode per device, from `quizStore` for quizzes and the fix-mistakes reviewer), `reminder_opened` (a landing with a reminder's `utm_source`; `channel`), `reminder_session` (the first quiz finished within 6 h of that landing: `channel`, `exam`, `question_count`, `correct_count`, `minutes_after_open`), `mistake_reviewed` (a missed question answered again in the reviewer: `question_id`, `exam`, `is_correct`, `days_since_miss`) |
 | The Tutor (`docs/tutor.md` §12) | `tutor_offer` (a bubble: `kind` — the moment — `exam`, `response`: `shown` / `accepted` / `declined`), `tutor_answer` (a part answered in the Tutor: `exam`, `kind` of part, `grade`, `confidence`, `relearn`, `days_since_last` answer on the concept, −1 for a first), `tutor_confused` (`exam`, `reason`), `tutor_session` (a session ended: `exam`, `items`, `minutes`, `phase`) |
+| The daily podcast (`docs/daily-podcast.md`) | `podcast_play` (an episode started, once per episode per page load: `exam`, `minutes`, `concepts`, `source` — `dashboard` or `email`), `podcast_complete` (played to the end: `exam`, `minutes`, `concepts`) |
 | Gamification | `streak_extended`, `xp_earned`, `daily_goal_met`, `quest_completed`, `quest_claimed`, `daily_quests_cleared`, `league_joined`, `league_left` |
 | Money & accounts | `upgrade_clicked`, `store_outbound_clicked` (product, seller, aisle — docs/store.md), `login`, `sign_up` |
 | Reliability | `exception` (from `errorMonitoring.ts`) |

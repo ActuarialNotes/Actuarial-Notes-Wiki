@@ -7,6 +7,8 @@ import { drawPracticeExam, practiceExamBlueprint, syllabusForBank } from '@/lib/
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import type { Question, QuestionFilter } from '@/lib/parser'
 import { useShowFlaggedQuestions } from '@/hooks/useShowFlaggedQuestions'
+import { planConceptTargets } from '@/lib/planCompletion'
+import { selectQuestionsForCoverage } from '@/lib/studyPlan'
 
 export function useQuestions(filters: QuestionFilter) {
   // Questions carrying an unresolved critical finding are excluded from a
@@ -35,7 +37,16 @@ export function useQuestions(filters: QuestionFilter) {
       .then(rawFiles => {
         if (cancelled) return
         const parsed = parseAllQuestions(rawFiles)
-        const filtered = filterQuestions(parsed, { ...filters, includeFlagged: showFlagged })
+        // Today's plan by link (the daily email's quiz): the plan names a
+        // concept as the syllabus shows it, a question tags it by its page.
+        const planConcepts = filters.cover && filters.concepts?.length && filters.exam
+          ? planConceptTargets(filters.concepts, syllabusForBank(syllabi, filters.exam))
+          : null
+        const filtered = filterQuestions(parsed, {
+          ...filters,
+          ...(planConcepts ? { concepts: planConcepts } : {}),
+          includeFlagged: showFlagged,
+        })
         const limit = filters.count || filtered.length
         // A past sitting is sat the way the paper set it, question 1 first —
         // and a quiz of a few of its questions is a random few, still in the
@@ -48,7 +59,9 @@ export function useQuestions(filters: QuestionFilter) {
         // (lib/practiceExam.ts).
         const sitting = Boolean(filters.year || filters.session) && !filters.ids?.length
         const practiceExam = filters.mode === 'mock-exam' && !sitting && !filters.ids?.length && !!filters.exam
-        const result = sitting
+        const result = planConcepts
+          ? shuffle(selectQuestionsForCoverage(filtered, planConcepts, filters.count))
+          : sitting
           ? inPaperOrder(limit < filtered.length ? shuffle(filtered).slice(0, limit) : filtered)
           : practiceExam
           ? drawPracticeExam(
@@ -61,9 +74,9 @@ export function useQuestions(filters: QuestionFilter) {
           : shuffle(filtered).slice(0, limit)
         setQuestions(result)
       })
-      .catch(err => {
+      .catch(() => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load questions')
+          setError("The questions didn't load. Check your connection and try again.")
         }
       })
       .finally(() => {
@@ -72,7 +85,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, difficultiesKey, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged, syllabi])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, difficultiesKey, topicsKey, idsKey, filters.concept, conceptsKey, filters.cover, filters.year, filters.session, showFlagged, syllabi])
 
   return { questions, loading, error }
 }

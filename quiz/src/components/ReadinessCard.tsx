@@ -1,11 +1,10 @@
-import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
+import { lazy, Suspense, useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Pencil, Settings2, X } from 'lucide-react'
+import { ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Pencil, Settings2, X } from 'lucide-react'
 import { examAccentStyle } from '@/lib/examColors'
 import { CheckMark } from '@/components/CheckMark'
 import { Link } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/buttonVariants'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -14,7 +13,21 @@ import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { ExamLogo } from '@/components/ExamLogo'
 import { ProBadge } from '@/components/ProBadge'
 import { StreakNavBadge } from '@/components/StreakBadge'
-import { STREAK_ENABLED } from '@/lib/featureFlags'
+import { MISTAKES_REVIEW_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { useRecentMistakes } from '@/hooks/useRecentMistakes'
+import { MistakesReviewModal } from '@/components/MistakesReviewModal'
+import { TodaySessionCard } from '@/components/dashboard/TodaySessionCard'
+import { SessionWheel } from '@/components/dashboard/SessionWheel'
+import { paceForExam } from '@/lib/quizTiming'
+import { storeSessionMistakes } from '@/lib/quizBuilder'
+import {
+  buildSessionSteps,
+  currentStep,
+  nextSessionAction,
+  sessionWalk,
+  sessionMinutes,
+  sessionPins,
+} from '@/lib/todaySession'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
@@ -62,6 +75,12 @@ import { useAuth } from '@/hooks/useAuth'
 import { questionExamLabel } from '@/lib/examIds'
 import { daysLeftLabel } from '@/lib/examMenu'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
+
+// The daily podcast's button and the episode it builds (docs/daily-podcast.md)
+// are their own chunk: the card shouldn't wait on them.
+const PodcastButton = lazy(() =>
+  import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })),
+)
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -250,50 +269,6 @@ function StudyGuideRadial({
   )
 }
 
-// ── Mini readiness ring ────────────────────────────────────────────────────────
-//
-// The dashboard card's ring: the Study Guide ring's arcs drawn thin around the
-// score, with nothing else — no labels, no legend, no hover. The full ring is a
-// tap away in the popup it opens.
-
-const MINI_OUTER_R = RING_OUTER_R + 8
-const MINI_INNER_R = RING_OUTER_R - 14
-
-function MiniReadinessRing({ segments, pct, flash }: { segments: RingSegment[]; pct: number; flash?: boolean }) {
-  return (
-    <svg
-      viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`}
-      className="h-full w-full"
-      aria-hidden="true"
-      style={{
-        filter: flash ? 'drop-shadow(0 0 8px rgba(34,197,94,0.55))' : 'none',
-        transition: 'filter 0.5s ease-out',
-      }}
-    >
-      <circle
-        cx={RING_CX} cy={RING_CY}
-        r={(MINI_OUTER_R + MINI_INNER_R) / 2}
-        fill="none"
-        strokeWidth={MINI_OUTER_R - MINI_INNER_R}
-        stroke="rgba(34,197,94,0.06)"
-      />
-      {segments.map((seg, i) => (
-        <path key={i} d={ringArcPath(seg.startDeg, seg.endDeg, MINI_OUTER_R, MINI_INNER_R)} fill={masteryFill(seg.state)} />
-      ))}
-      <text
-        x={RING_CX} y={RING_CY + 12} textAnchor="middle" fontSize={68} fontWeight="800"
-        fill={flash ? '#22c55e' : 'currentColor'}
-        style={{ transition: 'fill 0.8s ease-out' }}
-      >
-        {pct}%
-      </text>
-      <text x={RING_CX} y={RING_CY + 52} textAnchor="middle" fontSize={30} fill="currentColor" opacity={0.6}>
-        Ready
-      </text>
-    </svg>
-  )
-}
-
 // ── Study-plan sub-components ──────────────────────────────────────────────────
 
 function ReviewModeNote({ concepts }: { concepts: string[] }) {
@@ -301,9 +276,9 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
     <div className="rounded-lg border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-        All concepts mastered. Great work!
+        Every concept is at Level 3.
       </div>
-      <p>Today's plan uses spaced repetition to keep your weakest concepts fresh.</p>
+      <p>Today's study plan reviews the ones you answered correctly longest ago.</p>
       {concepts.length > 0 && (
         <p>Reviewing: {concepts.slice(0, 3).join(', ')}{concepts.length > 3 ? ` +${concepts.length - 3} more` : ''}</p>
       )}
@@ -345,12 +320,28 @@ interface Props {
    *  under the exam tabs so readiness is the first thing on the page. Renders inline
    *  at the top of this card's own stack when omitted. */
   readinessSlot?: HTMLElement | null
-  /** The primary actions that act on this score (Read concepts / Fix mistakes /
-   *  Start quiz). Rendered straight under the Exam readiness card, bare on the
-   *  page — but authored by the Dashboard, which
-   *  owns their triggers. Omitted, the group ends with the card. */
-  actions?: ReactNode
+  /** Fewest questions today's plan quiz asks for (`questionsNeededForPlan`) —
+   *  the size of the quiz the session's Start launches. */
+  planQuestionCount?: number
+  /** The same count for some of today's plan concepts — sizes each step. */
+  questionsFor?: (concepts: readonly string[]) => number
+  /** Bumped by the Dashboard's header Start to run the session's next step. */
+  startSessionTrigger?: number
+  /** Reports the session's next step, for the Dashboard's header Start. */
+  onSessionChange?: (summary: SessionSummary) => void
 }
+
+/** What the Dashboard's header Start says about today's session. */
+export interface SessionSummary {
+  label: string
+  minutes: number | null
+  questions: number
+  done: boolean
+  launching: boolean
+}
+
+/** How many uncorrected misses step 1 reads — everything outstanding, bounded. */
+const MISTAKE_LIMIT = 100
 
 type ScheduleView = 'week' | 'overview'
 const SCHEDULE_VIEW_KEY = 'actuarial_schedule_view'
@@ -360,7 +351,7 @@ export function ReadinessCard({
   config, loading, masteryLoading = false, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
   isPro = true, onPlanCompletionChange, openDayCompleteInfoTrigger,
-  readinessSlot, actions,
+  readinessSlot, planQuestionCount = 0, questionsFor, startSessionTrigger, onSessionChange,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -404,7 +395,6 @@ export function ReadinessCard({
       return raw ? ((JSON.parse(raw) as { amount?: number }).amount ?? 0) : 0
     } catch { return 0 }
   })
-  const [highlightedTopicIdx, setHighlightedTopicIdx] = useState<number | null>(null)
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
@@ -702,8 +692,6 @@ export function ReadinessCard({
     [examSessions, todayStr]
   )
 
-  const todayLevelUps = examCompletedToday.length
-
   const allConceptsDone = useMemo(() =>
     displayConcepts.length > 0 && displayConcepts.every(name =>
       isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
@@ -823,20 +811,24 @@ export function ReadinessCard({
     [syllabusExamId, syllabusExamTopic],
   )
 
-  const handleStartQuiz = useCallback(() => {
+  // `withMistakes`: Start session has handed missed questions to the quiz
+  // builder (`storeSessionMistakes`), so there is a quiz to autostart even
+  // with no plan behind it.
+  const handleStartQuiz = useCallback((withMistakes = false) => {
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
     const topicValue = quizTopicValue
 
     // No daily plan to sweep through — a free account, or a Pro one that
-    // hasn't set a target date. The cascade is an animation *of the plan*, and
-    // `autostart` needs one, so both would be a second of nothing before the
-    // quiz builder appeared anyway. Go straight there, with the exam already
-    // chosen.
+    // hasn't set a target date. The cascade is an animation *of the plan*, so
+    // it would be a second of nothing: go straight on — into the missed
+    // questions when there are some, else to the quiz builder with the exam
+    // already chosen.
     if (cascadeSteps.length === 0) {
       isLaunchingQuizRef.current = false
-      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      setSessionLaunching(false)
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz${withMistakes ? '&autostart=1' : ''}`)
       return
     }
 
@@ -852,7 +844,6 @@ export function ReadinessCard({
     const step = n > 0 ? Math.max(70, Math.min(130, 1000 / n)) : 0
     cascadeSteps.forEach((s, idx) => {
       setTimeout(() => {
-        setHighlightedTopicIdx(s.groupIdx)
         setQuizStartConcept(s.name.toLowerCase())
       }, startDelay + idx * step)
     })
@@ -860,9 +851,9 @@ export function ReadinessCard({
     const cascadeEnd = startDelay + n * step
     const totalDelay = Math.max(cascadeEnd + 400, 900)
     setTimeout(() => {
-      setHighlightedTopicIdx(null)
       setQuizStartConcept(null)
       setTracePlanBorder(false)
+      setSessionLaunching(false)
       isLaunchingQuizRef.current = false
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
       // today's plan (fewest questions covering every still-incomplete concept).
@@ -871,7 +862,9 @@ export function ReadinessCard({
   }, [navigate, quizTopicValue, cascadeSteps])
 
   useEffect(() => {
-    if (startQuizTrigger) handleStartQuiz()
+    if (!startQuizTrigger) return
+    storeSessionMistakes(null)
+    handleStartQuiz()
   }, [startQuizTrigger, handleStartQuiz])
 
   useEffect(() => {
@@ -937,173 +930,151 @@ export function ReadinessCard({
   // readiness score: the number says how ready you are, this says what to do
   // about it today. It rides inside `readinessCardContent` below, between the
   // score and the ring, so it portals into the Dashboard's slot with them.
+  // ── Today's session (lib/todaySession.ts) ─────────────────────────────────
+  // Step 1 is the questions the reader has missed and not yet answered right
+  // (the reviewer that used to be the Dashboard's Fix mistakes button); steps
+  // 2 and 3 are today's plan, split into what it introduces and what it
+  // brings back. Start always does the next step.
+  const { mistakes: recentMistakes, loading: mistakesLoading } = useRecentMistakes(examRecords, examLabel, MISTAKE_LIMIT)
+  const [reviewerOpen, setReviewerOpen] = useState(false)
+  // Questions the open reviewer has already fixed. It banks its answers on
+  // close, so until then the query above still counts them — subtracting them
+  // here is what makes step 1 count down as the reader works.
+  const [fixedIds, setFixedIds] = useState<string[]>([])
+  const handleFixedChange = useCallback((ids: string[]) => {
+    setFixedIds(prev => (prev.length === ids.length && prev.every((id, i) => id === ids[i]) ? prev : ids))
+  }, [])
+  const outstandingMistakes = useMemo(() => {
+    if (!MISTAKES_REVIEW_ENABLED || mistakesLoading) return []
+    if (fixedIds.length === 0) return recentMistakes
+    const fixed = new Set(fixedIds)
+    return recentMistakes.filter(m => !fixed.has(m.question.id))
+  }, [recentMistakes, mistakesLoading, fixedIds])
+  // Drop the local subtraction once the refetched list has caught up, so a
+  // question missed again later isn't still discounted as fixed.
+  useEffect(() => {
+    if (fixedIds.length === 0) return
+    const fixed = new Set(fixedIds)
+    if (!recentMistakes.some(m => fixed.has(m.question.id))) setFixedIds([])
+  }, [recentMistakes, fixedIds])
+  const openReviewer = useCallback(() => {
+    setFixedIds([])
+    setReviewerOpen(true)
+  }, [])
+
+  const sectionByConcept = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const t of syllabus.topics) for (const c of t.concepts) {
+      if (!map.has(c.name.toLowerCase())) map.set(c.name.toLowerCase(), t.name)
+    }
+    return map
+  }, [syllabus])
+  const scheduledToday = useMemo(() => {
+    const map = new Map<string, MasteryState>()
+    for (const a of plan?.assignments ?? []) {
+      if (a.scheduledDate === todayStr) map.set(a.conceptName.toLowerCase(), a.initialState)
+    }
+    return map
+  }, [plan, todayStr])
+
+  const sessionSteps = useMemo(() => buildSessionSteps({
+    mistakes: outstandingMistakes.map(m => ({ concept: m.problemConcepts[0]?.name ?? null })),
+    // A concept listed under two objectives is grouped twice; it is one row.
+    planConcepts: isPro ? [...new Map(studyPlanConceptsForModal.map(c => [c.name.toLowerCase(), c.name])).values()] : [],
+    scheduledStateOf: name => scheduledToday.get(name.toLowerCase()) ?? null,
+    targetOf: name => targetByName.get(name.toLowerCase()) ?? 'level1',
+    isDone: name => isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday),
+    sectionOf: name => sectionByConcept.get(name.toLowerCase()) ?? null,
+    questionsFor: concepts => questionsFor?.(concepts) ?? 0,
+  }), [outstandingMistakes, isPro, studyPlanConceptsForModal, scheduledToday, targetByName, masteryStateByName, examCompletedToday, sectionByConcept, questionsFor])
+
+  const sessionPinMap = useMemo(() => sessionPins(sessionSteps), [sessionSteps])
+  const planOpen = sessionSteps.some(st => st.kind !== 'mistakes' && !st.done)
+  const sessionQuestions = outstandingMistakes.length + (planOpen ? planQuestionCount : 0)
+  const sessionMinutesTotal = sessionMinutes(sessionQuestions, paceForExam(examLabel))
+  // The walk a tapped row opens: the rows' concepts in the order they are
+  // listed, each once — so Previous / Next steps down the list on screen.
+  const sessionWalkRefs = useMemo<WikiEntryRef[]>(
+    () => sessionWalk(sessionSteps).map(name => ({ kind: 'concept' as const, name })),
+    [sessionSteps],
+  )
+  const sessionAction = nextSessionAction(sessionSteps)
+  const sessionDone = sessionAction === 'extra'
+  const [sessionLaunching, setSessionLaunching] = useState(false)
+  const stepNow = currentStep(sessionSteps)
+  const planStarted = sessionSteps.some(st => st.kind !== 'mistakes' && st.rows.some(r => r.done))
+  const sessionStartLabel = sessionLaunching
+    ? 'Get ready…'
+    : sessionAction === 'extra'
+      ? 'Practise more'
+      : sessionAction === 'quiz'
+        ? 'Start a quiz'
+        : stepNow && stepNow.number > 1 && (sessionAction === 'plan' && planStarted)
+          ? `Continue · step ${stepNow.number}`
+          : 'Start session'
+
+  // Start runs the whole session as one quiz: the missed questions first, then
+  // the fewest questions that complete today's plan (the quiz builder's
+  // autostart puts them together).
+  const runSessionStep = useCallback(() => {
+    if (isLaunchingQuizRef.current) return
+    const mistakeIds = sessionAction === 'extra' || sessionAction === 'quiz'
+      ? []
+      : outstandingMistakes.map(m => m.question.id)
+    storeSessionMistakes(mistakeIds.length > 0 ? { ids: mistakeIds, plan: planOpen } : null)
+    setSessionLaunching(true)
+    handleStartQuiz(mistakeIds.length > 0)
+  }, [sessionAction, outstandingMistakes, planOpen, handleStartQuiz])
+
+  useEffect(() => {
+    if (startSessionTrigger) runSessionStep()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startSessionTrigger])
+
+  useEffect(() => {
+    onSessionChange?.({
+      label: sessionStartLabel,
+      minutes: sessionDone ? null : sessionMinutesTotal,
+      questions: sessionDone ? 0 : sessionQuestions,
+      done: sessionDone,
+      launching: sessionLaunching,
+    })
+  }, [onSessionChange, sessionStartLabel, sessionMinutesTotal, sessionQuestions, sessionDone, sessionLaunching])
+
+  // Concepts finished today beyond the plan, and the swap that puts them in it.
+  const sessionFooter = bonusConcepts.length > 0 ? (
+    <div className="space-y-1">
+      <div className="flex items-center gap-2 py-1">
+        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+        <span className="shrink-0 text-sm text-muted-foreground">Also completed today</span>
+        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+      </div>
+      {bonusConcepts.map(lu => {
+        const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+        return (
+          <button
+            key={lu.conceptSlug}
+            type="button"
+            data-study-concept={lu.conceptSlug.toLowerCase()}
+            onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
+            className={`flex w-full items-center gap-3 py-1.5 pl-9 text-left${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+          >
+            <CheckMark className="h-5 w-5" />
+            <span className="min-w-0 flex-1 truncate text-base text-muted-foreground line-through">{lu.conceptSlug}</span>
+            <span className="shrink-0 text-sm font-medium text-green-600 dark:text-green-400">→ {MASTERY_LABEL[lu.to]}</span>
+          </button>
+        )
+      })}
+      {showReplaceButton && (
+        <Button size="sm" variant="outline" onClick={handleReplace} className="h-8 w-full gap-1.5 text-xs">
+          Replace with today's completed concepts
+        </Button>
+      )}
+    </div>
+  ) : null
+
   const studyPlanCardContent = (
     <>
-      {/* Pro: today's concepts. Stays visible regardless of which day is
-          selected on the Study Schedule heatmap. */}
-      {isPro && displayConcepts.length > 0 && (
-        <Card
-          ref={studyPlanCardRef}
-          className={`border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
-        >
-          {allConceptsDone && (
-            <button
-              type="button"
-              onClick={() => setShowDayCompleteInfo(true)}
-              className="absolute -top-2 -right-2 z-10 inline-flex rounded-full text-green-500 shadow ring-2 ring-background transition-colors hover:text-green-600"
-              aria-label="Today's study plan complete — view bonus details"
-              title="Today's study plan complete — tap for details"
-            >
-              <CheckMark className="block h-7 w-7 text-current" />
-            </button>
-          )}
-          {tracePlanBorder && (
-            <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-              {/* Rainbow foil ramp — the same sky→fuchsia→gold the collected-card
-                  and lock borders wear, run diagonally across the card so the
-                  traced edge picks up all three. */}
-              <defs>
-                <linearGradient id="study-plan-trace-foil" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="rgb(56 189 248)" />
-                  <stop offset="35%" stopColor="rgb(232 121 249)" />
-                  <stop offset="70%" stopColor="rgb(250 204 21)" />
-                  <stop offset="100%" stopColor="rgb(56 189 248)" />
-                </linearGradient>
-              </defs>
-              <rect
-                x={0} y={0} width="100%" height="100%"
-                rx={8} ry={8}
-                fill="none"
-                stroke="url(#study-plan-trace-foil)"
-                strokeWidth={2}
-                pathLength={100}
-                className="study-plan-trace-path"
-              />
-            </svg>
-          )}
-          <CardContent className="p-6">
-            <div className="space-y-5">
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-semibold">Today's Study Plan</h3>
-                <ProBadge />
-                {/* The study streak — renders nothing without a live streak. */}
-                {STREAK_ENABLED && (
-                  <span className="ml-auto shrink-0"><StreakNavBadge size="md" /></span>
-                )}
-              </div>
-
-              {/* Progress pills — shown when there's activity today */}
-              {todayQuestionsAnswered > 0 && !allConceptsDone && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
-                    <CheckMark className="h-3.5 w-3.5" />
-                    {todayGemsEarned}/{todayQuestionsAnswered} correct
-                  </span>
-                  {todayGemsEarned > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
-                      <Gem className="h-3 w-3 text-cyan-400" />
-                      {todayGemsEarned} gems
-                    </span>
-                  )}
-                  {todayLevelUps > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
-                      <ArrowUp className="h-3 w-3 text-primary" />
-                      {todayLevelUps} levelled up
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {/* Grouped concept list — topic heading with its concepts listed directly below */}
-              <div className="space-y-4">
-                {groupedPlanConcepts.map((group, groupIdx) => {
-                  const isHighlighted = highlightedTopicIdx === groupIdx
-                  return (
-                    <div
-                      key={group.topicName}
-                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'plan-foil-ring bg-gradient-to-br from-sky-400/10 via-fuchsia-400/10 to-amber-300/10' : ''}`}
-                    >
-                      {/* Topic heading */}
-                      <p className="text-sm font-semibold text-muted-foreground truncate">
-                        {group.topicName}
-                      </p>
-                      {/* Concepts */}
-                      {group.concepts.map(name => {
-                        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                        const isCompleted = isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
-                        const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                        const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
-                        return (
-                          <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
-                            {isCompleted
-                              ? <CheckMark className="h-5 w-5" />
-                              : <Circle className="h-5 w-5 text-muted-foreground shrink-0" />}
-                            {/* Concept name — opens popup */}
-                            <button
-                              type="button"
-                              data-study-concept={name.toLowerCase()}
-                              onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
-                              className={`flex-1 text-left text-base py-1.5 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
-                            >
-                              {name}
-                            </button>
-                            <span className={`text-sm shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )
-                })}
-
-                {/* Bonus concepts */}
-                {bonusConcepts.length > 0 && (
-                  <>
-                    <div className="flex items-center gap-2 pt-1">
-                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                      <span className="text-sm text-muted-foreground shrink-0">Also completed today</span>
-                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                    </div>
-                    {bonusConcepts.map(lu => {
-                      const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
-                      return (
-                        <button
-                          key={lu.conceptSlug}
-                          type="button"
-                          data-study-concept={lu.conceptSlug.toLowerCase()}
-                          onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
-                          className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
-                        >
-                          <CheckMark className="h-4 w-4" />
-                          <span className="text-base py-1.5 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
-                            {lu.conceptSlug}
-                          </span>
-                          <span className="text-sm text-green-600 dark:text-green-400 shrink-0 font-medium">
-                            → {MASTERY_LABEL[lu.to]}
-                          </span>
-                        </button>
-                      )
-                    })}
-                  </>
-                )}
-              </div>
-
-              {/* Replace button */}
-              {showReplaceButton && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleReplace}
-                  className="w-full gap-1.5 text-xs h-8"
-                >
-                  Replace with today's completed concepts
-                </Button>
-              )}
-
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Locked study plan — non-Pro only, standing in the same place as
           the Pro Today's Study Plan card. */}
       {!isPro && (
@@ -1142,11 +1113,11 @@ export function ReadinessCard({
               </div>
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <p className="text-base font-semibold">Today's Study Plan</p>
                   <ProBadge />
                 </div>
                 <p className="text-xs text-muted-foreground max-w-[220px]">
-                  A daily plan tailored to you
+                  The concepts to study each day, paced to your exam date
                 </p>
               </div>
             </div>
@@ -1161,19 +1132,6 @@ export function ReadinessCard({
     </>
   )
 
-  // What the Dashboard leads with, in this order:
-  //
-  //   1. **The exam at a glance** — one card: the readiness score inside a
-  //      mini copy of the Study Guide ring, the days left and the exam date.
-  //      The ring opens the full ring and its criteria in a popup
-  //      (`studyGuideModal`).
-  //   2. **The calendar** — the schedule strip (`examScheduleBlock`, with
-  //      `dayDetailPanel` for whichever day is tapped), then the primary
-  //      actions (`actions`) bare on the page.
-  //   3. **Today's Study Plan** (`studyPlanCardContent`) — what to do about the
-  //      score today.
-  //
-  // All of it portals into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
 
   // The dates block inside that card. Two facts, in the order a candidate asks
@@ -1205,27 +1163,12 @@ export function ReadinessCard({
   const examScheduleBlock = (
     <div ref={studyScheduleCardRef} className="space-y-1">
       <div className="space-y-2">
-        {/* The view toggle, with the schedule-forming status beside it while
-            the sweep runs. */}
-        <div className="flex items-center justify-between gap-3">
-          <p className="min-w-0 text-xs font-medium text-primary" aria-live="polite">
-            {playback.active && (playback.landed && playback.summary
-              ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
-              : 'Building your schedule…')}
-          </p>
-          <SegmentedControl
-            label="Schedule view"
-            size="xs"
-            pill
-            value={scheduleView}
-            onChange={changeScheduleView}
-            options={[
-              { value: 'week', label: 'Week' },
-              { value: 'overview', label: 'Overview' },
-            ]}
-            className="shrink-0"
-          />
-        </div>
+        {/* The schedule-forming status, while the sweep runs. */}
+        <p className="min-w-0 text-xs font-medium text-primary empty:hidden" aria-live="polite">
+          {playback.active && (playback.landed && playback.summary
+            ? `Schedule set: ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} over ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
+            : 'Building your schedule…')}
+        </p>
 
         <ExamHeatmap
           layout="linear"
@@ -1267,7 +1210,7 @@ export function ReadinessCard({
       const dayLabel = new Date(displayDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
       const isFutureDay = displayDay > todayStr
       return (
-        <div className="border-t pt-4 mt-1 space-y-4">
+        <div className="pt-3 space-y-4">
           {/* Header row */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold">{dayLabel}</span>
@@ -1343,7 +1286,7 @@ export function ReadinessCard({
                 <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
                   {futureConcepts.length === 0 && (
-                    <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing scheduled — review and rest.</p>
+                    <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing new scheduled.</p>
                   )}
                   {futureConcepts.map((a, i) => {
                     const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
@@ -1381,7 +1324,7 @@ export function ReadinessCard({
             if (selectedDayLevelUps.length > 0) {
               return (
                 <div className="border-t pt-3 space-y-1">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Levelled up</p>
                   {selectedDayLevelUps.map(lu => {
                     const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
                     return (
@@ -1412,7 +1355,7 @@ export function ReadinessCard({
             if (isFutureDay) {
               // A future day with a plan already shows "Planned for this day".
               if (isPro && plan) return null
-              return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
+              return <p className="text-sm text-muted-foreground">Nothing recorded yet. This day is still ahead.</p>
             }
             if (displayDay === todayStr) {
               return <p className="text-sm text-muted-foreground">No quizzes finished yet today.</p>
@@ -1429,115 +1372,113 @@ export function ReadinessCard({
   const examDay = examDate ? new Date(examDate + 'T00:00:00') : null
   const accent = examAccentStyle(progressKey)
 
+  // What leads the Dashboard, in this order:
+  //
+  //   1. **The week** — when the exam is (the line, which opens the Study Plan
+  //      modal on its exam-date step), then the schedule strip and the day it
+  //      opens (`examScheduleBlock`, `dayDetailPanel`).
+  //   2. **Today's session** (`components/dashboard/TodaySessionCard.tsx`) — the
+  //      Study Guide wheel with today's concepts pinned (it opens the Study
+  //      Guide popup, `ringOpen`), the session's size, the steps as a
+  //      checklist, and the one Start.
+  //   3. The locked plan, for an account without Pro (`studyPlanCardContent`).
+  //
+  // All of it portals into `readinessSlot` when the Dashboard supplies one.
   const readinessCardContent = (
-    <div className="order-none flex flex-col gap-6">
-      {/* The exam at a glance — one card, in the exam's own colour, holding the
-          three numbers the dashboard is about: how ready the reader is (the
-          ring, which opens the Study Guide — `ringOpen`), how far off the exam
-          is, and the day it falls on (both open the Study Plan modal on its
-          exam-date step). They used to be three equal squares; the countdown
-          and the date are one fact read two ways, and the score is the one the
-          rest of the page acts on, so it leads and the two dates share a line. */}
-      <div style={accent} className="relative overflow-hidden rounded-2xl bg-card text-card-foreground shadow-sm">
-        {accent && (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_0%_0%,var(--exam-accent-soft),transparent_65%)]"
-          />
-        )}
-        <div className="relative flex items-center gap-4 p-4 sm:gap-8 sm:p-6">
+    <div className="order-none flex flex-col gap-5">
+      <section aria-label="Study schedule" className="space-y-2">
+        <div className="flex items-center justify-between gap-3">
           <button
-            ref={readinessSquareRef}
             type="button"
-            onClick={() => setRingOpen(true)}
-            className="relative size-28 shrink-0 rounded-full transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:size-40"
-            aria-haspopup="dialog"
-            aria-label={`Exam readiness: ${readinessPct}% — open the study guide`}
+            onClick={openExamDateStep}
+            className="group flex min-w-0 items-center gap-1.5 rounded-lg text-left text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={
+              examDate
+                ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''}. Change it`
+                : 'Set your exam date'
+            }
           >
-            <MiniReadinessRing segments={ringSegments} pct={readinessPct} flash={flashRadial} />
-          </button>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <p className="min-w-0 truncate text-sm font-medium text-muted-foreground">
-                <span className="text-foreground">{syllabus.examLabel}</span>
-                {syllabus.examTopic && <> · {syllabus.examTopic}</>}
-              </p>
-              {/* What today did to the score — green up, red down, absent when
-                  it hasn't moved (docs/exam-readiness.md). */}
-              {readinessMoveToday !== 0 && (
-                <span
-                  className={
-                    'ml-auto flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-base font-semibold leading-none tabular-nums sm:px-3 sm:py-1.5 sm:text-xl ' +
-                    (readinessMoveToday > 0
-                      ? 'bg-green-500/10 text-green-600 dark:text-green-400'
-                      : 'bg-red-500/10 text-red-600 dark:text-red-400')
-                  }
-                  title={`Readiness ${readinessMoveToday > 0 ? 'up' : 'down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
-                >
-                  {readinessMoveToday > 0
-                    ? <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                    : <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
-                  {Math.abs(readinessMoveToday)}
-                </span>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={openExamDateStep}
-              className="group mt-2 block max-w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label={
-                examDate
-                  ? `${countdownLabel ? countdownLabel + ', ' : ''}exam date ${formatReadableDate(examDate)} — change it`
-                  : 'Set your exam date'
-              }
-            >
+            <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span className="truncate">
               {daysToExam !== null && daysToExam > 1 ? (
-                <span className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold leading-none tracking-tight tabular-nums sm:text-5xl">{daysToExam}</span>
-                  <span className="text-base text-muted-foreground">days left</span>
-                </span>
+                <><span className="font-semibold text-foreground tabular-nums">{daysToExam} days</span> to {syllabus.examLabel}</>
               ) : (
-                <span className={'block text-2xl font-bold leading-tight sm:text-3xl ' + (daysToExam === null || daysToExam < 0 ? 'text-muted-foreground' : '')}>
-                  {countdownLabel ?? 'Set exam date'}
-                </span>
+                <span className="font-semibold text-foreground">{countdownLabel ?? 'Set your exam date'}</span>
               )}
-              <span className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
-                <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span className="truncate tabular-nums">
-                  {examDay
-                    ? examDay.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
-                    : 'Choose the day you sit it'}
-                </span>
-                <Pencil className="h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
-              </span>
-            </button>
-
-            {/* The next published sitting, only when it says something the
-                date doesn't: no date chosen yet, or one outside every known window. */}
-            {showNextSitting && nextSitting && (
-              <button
-                type="button"
-                onClick={openExamDateStep}
-                className="mt-1.5 block max-w-full truncate text-left text-xs text-muted-foreground hover:text-foreground"
-              >
-                Next sitting · {formatSittingDate(nextSitting)}
-                {nextSitting.format && <> · <span className="font-medium">{nextSitting.format}</span></>}
-              </button>
-            )}
-          </div>
+              {examDay && (
+                <> · {examDay.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</>
+              )}
+            </span>
+            <Pencil className="h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
+          </button>
+          <SegmentedControl
+            label="Schedule view"
+            size="xs"
+            pill
+            fit
+            value={scheduleView}
+            onChange={changeScheduleView}
+            options={[
+              { value: 'week', label: 'Week' },
+              { value: 'overview', label: 'Overview' },
+            ]}
+            className="shrink-0"
+          />
         </div>
-      </div>
-
-      {/* The calendar: the schedule strip, and the day it opens below it. */}
-      <section aria-label="Study schedule" className="space-y-1">
+        {showNextSitting && nextSitting && (
+          <button
+            type="button"
+            onClick={openExamDateStep}
+            className="block max-w-full truncate text-left text-xs text-muted-foreground hover:text-foreground"
+          >
+            Next sitting · {formatSittingDate(nextSitting)}
+            {nextSitting.format && <> · <span className="font-medium">{nextSitting.format}</span></>}
+          </button>
+        )}
         {examScheduleBlock}
         {dayDetailPanel}
       </section>
 
-      {/* The ways to act on the score, bare on the page — no card around them. */}
-      {actions}
+      <TodaySessionCard
+        ref={studyPlanCardRef}
+        accent={accent}
+        wheel={(
+          <SessionWheel
+            segments={ringSegments}
+            pins={sessionPinMap}
+            pct={readinessPct}
+            moveToday={readinessMoveToday}
+            flash={flashRadial}
+            onOpen={() => setRingOpen(true)}
+          />
+        )}
+        steps={sessionSteps}
+        totalQuestions={sessionQuestions}
+        totalMinutes={sessionMinutesTotal}
+        allDone={sessionDone}
+        answeredToday={todayQuestionsAnswered}
+        startLabel={sessionStartLabel}
+        launching={sessionLaunching}
+        onStart={runSessionStep}
+        onRow={row => {
+          if (row.aggregate) { openReviewer(); return }
+          const idx = sessionWalkRefs.findIndex(r => r.name.toLowerCase() === row.name.toLowerCase())
+          openDashboard(toRefs(allConcepts), sessionWalkRefs, 'study-plan', idx === -1 ? 0 : idx)
+        }}
+        titleAside={STREAK_ENABLED ? <StreakNavBadge size="md" /> : undefined}
+        listen={isPro && displayConcepts.length > 0 ? (
+          <Suspense fallback={null}>
+            <PodcastButton plan={plan} examKey={progressKey} examLabel={syllabus.examLabel} />
+          </Suspense>
+        ) : undefined}
+        footer={sessionFooter}
+        cascadeConcept={quizStartConcept}
+        flashingConcept={flashingConcept}
+        currentConcept={popupOpen && !popupFromRadial && popupDashboardFilter === 'study-plan' ? popupCurrentName?.toLowerCase() ?? null : null}
+        justCompleted={recentlyCompletedConcepts}
+        trace={tracePlanBorder}
+        onOpenDayComplete={() => setShowDayCompleteInfo(true)}
+      />
 
       {studyPlanCardContent}
     </div>
@@ -1559,13 +1500,13 @@ export function ReadinessCard({
           ref={studyGuideCardRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Study Guide"
+          aria-label="Exam Readiness"
           className="relative w-full max-w-2xl rounded-xl bg-card p-6 text-card-foreground shadow-xl"
           onClick={e => e.stopPropagation()}
         >
           <div className="mb-4 flex items-center gap-3">
             <ExamLogo examKey={progressKey} size="md" />
-            <h3 className="min-w-0 flex-1 text-lg font-semibold">Study Guide</h3>
+            <h3 className="min-w-0 flex-1 text-lg font-semibold">Exam Readiness</h3>
             <button
               type="button"
               onClick={() => setRingOpen(false)}
@@ -1707,6 +1648,15 @@ export function ReadinessCard({
         bonusAmount={claimedBonusAmount}
       />
 
+      {reviewerOpen && (
+        <MistakesReviewModal
+          mistakes={recentMistakes}
+          masteryRecords={examRecords}
+          onFixedChange={handleFixedChange}
+          onClose={() => setReviewerOpen(false)}
+        />
+      )}
+
       {/* Session completion overlay */}
       {viewingSession && (
         <SessionCompletionOverlay
@@ -1758,14 +1708,14 @@ function DayCompleteInfoPanel({
           </button>
         </div>
         <div className="p-5 space-y-4 text-sm leading-relaxed">
-          <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
-            <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
-            <p className="text-cyan-700 dark:text-cyan-300">
-              {bonusClaimed
-                ? <><strong>2× gem bonus applied</strong> — +{bonusAmount} bonus gem{bonusAmount === 1 ? '' : 's'} earned today.</>
-                : <>2× gem bonus is active for the rest of today.</>}
-            </p>
-          </div>
+          {bonusClaimed && (
+            <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
+              <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
+              <p className="text-cyan-700 dark:text-cyan-300">
+                Finishing the plan doubled your gems today (<strong>+{bonusAmount}</strong>).
+              </p>
+            </div>
+          )}
 
           <div>
             <p className="text-xs font-semibold text-muted-foreground mb-1.5">Today's achievements</p>

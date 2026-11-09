@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d04b5e56c102110d1e4e2b7ceef7a5cdb157140e6bc5294cb176cc948aaeade2
+  content_hash: sha256:a61f11b598e0c26ea8ea024862d748f681503947950b58299ad835a7fb22efeb
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 pp.3, 8, 11 (PDF pp.15, 20, 23); Ch.3 p.42 (PDF p.54); Ch.6 pp.91, 94, 108-112 (PDF pp.103, 106, 120-124); App. A p.A-5 (PDF p.342), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ver. July 2010), Ch.1 p.14 (PDF p.20); Ch.6 pp.70-71 (PDF pp.76-77); Ch.11 pp.206-208 (PDF pp.212-214); Ch.13 pp.284, 288 (PDF pp.290, 294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
@@ -14,85 +14,49 @@ verification:
   log: .verify/Concepts/Close Year.md
 ---
 
-**Close Year** is the vault's own label for grouping claims by the calendar year in which they **close** — settle — so that a year's closed claims and the payments on them can be compared year to year. It is not a term Exam 5's readings use: [[Basic Ratemaking (Werner - 2016)|Werner & Modlin]] name four aggregation methods ([[Calendar Year|calendar]], [[Accident Year|accident]], [[Policy Year|policy]] and [[Report Year|report]] year, Ch. 6), but both they and Friedland work with the closed-claim data behind it.
-
-> $$\text{Close-year severity}_t = \frac{\text{Paid on claims closed in year } t}{\text{Number of claims closed in year } t}$$
-
-- This is Werner & Modlin's **paid severity** — "paid losses on closed claims divided by closed claims" (Ch. 1) — with the claims grouped by the year they closed. A claim is *closed* once it is settled, and may be re-opened if further activity occurs (Ch. 1).
-- A [[Severity|severity]] has to say which losses and which claims it uses: paid or reported losses; reported, paid or closed claims; with or without claims that closed without payment (Werner & Modlin Ch. 6). Paid severity on closed claims and reported severity on reported claims are different numbers.
-- In ratemaking, closed counts are the denominator of the [[Loss Trend|loss trend]] data Werner & Modlin show for short-tailed lines: calendar-year paid losses and closed claim counts for the 12 months ending each quarter, because paid losses are free of changes in case reserving (Ch. 6, Table 6.14; Appendix A).
-- Changes in severity show loss trends and "the impact of any changes in claims handling procedures" (Werner & Modlin Ch. 1) — see [[Claims Processing Changes]].
-- Friedland measures closed counts by **accident year** instead: the **disposal rate** is cumulative closed claim counts divided by the selected ultimate claim count for the accident year (Ch. 11), used in the disposal-rate [[Frequency-Severity Method|frequency-severity technique]] and the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment for a change in [[Settlement Rate|settlement rate]] (Ch. 13).
-- Closed is not always final: Friedland's unpaid claim estimate carries an estimate for reopened claims (Ch. 1), and an insurer that re-opens a closed claim rather than coding a new one can make closed counts *fall* along an accident year (Ch. 6).
-
-> [!idea] The idea
-> The claims that close in a year are not a random sample of claims. Smaller claims settle faster than complicated, costly ones (Friedland Ch. 11), so the average closed claim depends on *which* claims the claim department finished that year as well as on what each one cost. Clear a pile of small claims and the average falls, though no claim got cheaper.
-
 ![[Media/Figures/Close_Year.svg|340]]
 
-> [!example]- One Claim, Grouped Every Way {Example}
-> A liability policy is written effective $7/1/2022$. A covered accident happens on $2/14/2023$ and is reported on $3/2/2023$, when a case reserve is set. A partial payment is made in $2024$, and the claim is settled with a final payment on $11/20/2025$.
->
-> Which year does the claim belong to under each grouping?
->
-> > [!answer]-
-> > Each grouping keys on a different date in the claim's life, so read off the matching date.
-> >
-> > | Grouping | Keyed on | Year |
-> > |---|---|---|
-> > | [[Policy Year]] | policy written | 2022 |
-> > | [[Accident Year]] | accident date | 2023 |
-> > | [[Report Year]] | report date | 2023 |
-> > | Close year | settlement date | 2025 |
-> >
-> > [[Calendar Year|Calendar year]] doesn't place the claim at all: it places *transactions*, so the reserve set in 2023, the 2024 payment and the 2025 payment each fall in their own calendar year (Werner & Modlin Ch. 6).
-> >
-> > *Why does close year wait until 2025?* The claim has no closing date until it settles; until then it sits in the accident and report years as an open claim.
+A **Close Year** of data is the claims that closed during a twelve-month period, grouped by the year they were settled, regardless of when they occurred or were reported. It is the vault's name for closed-claim data. Werner & Modlin's four aggregation methods are [[Calendar Year|calendar]], [[Accident Year|accident]], [[Policy Year|policy]] and [[Report Year|report]] year, but both they and Friedland work with the closed-claim counts behind it. The average severity of a close year is
 
-> [!example]- A Backlog Clears and Severity Falls {Example}
-> In 2024 an insurer closes $800$ small claims averaging $\$2{,}000$ and $200$ large claims averaging $\$20{,}000$. In 2025 the claim department clears a backlog, closing $1{,}200$ small claims and the same $200$ large ones, at the same average costs.
->
-> Compute close-year severity for each year and explain the change.
->
-> > [!answer]-
-> > Severity is paid on closed claims over closed claims, so total each year's payments and counts.
-> >
-> > $$\begin{align*}
-> > \text{2024 paid} &= 800(2{,}000) + 200(20{,}000) \\
-> > &= \$5{,}600{,}000 \\[4pt]
-> > \text{2024 severity} &= \frac{5{,}600{,}000}{1{,}000} \\
-> > &= \$5{,}600 \\[4pt]
-> > \text{2025 paid} &= 1{,}200(2{,}000) + 200(20{,}000) \\
-> > &= \$6{,}400{,}000 \\[4pt]
-> > \text{2025 severity} &= \frac{6{,}400{,}000}{1{,}400} \\
-> > &= \$4{,}571
-> > \end{align*}$$
-> >
-> > Severity falls $18.4\%$ with no change in the cost of any claim: the extra closures are all small, so the **mix** of what closed moved, not the cost level. A temporary rise in closings when a claim department works down its backlog is one of the claims-handling changes Friedland names (Ch. 6).
-> >
-> > > [!trap] Mix read as trend
-> > > A severity trend fitted through 2025 would show a fall in cost. It is a settlement-speed effect: know the history of claims handling (Werner & Modlin Ch. 6) before selecting a trend from it.
-> >
-> > *Why not a rise, since the backlog claims are older?* Age doesn't set the average here; size does, and the backlog was small claims.
+> $$\text{Close Year Severity} = \frac{\text{Paid Losses on Closed Claims}}{\text{Closed Claim Count}}$$
 
-> [!example]- The Claim Department Turns to Large Claims {Example}
-> Claims management says adjusters are now concentrating on large claims. Explain the likely effect on close-year severity.
->
-> > [!answer]-
-> > - Large claims settle sooner than before, so more of them close in the current year — closed severity rises.
-> > - Small claims, with less attention, settle more slowly than in the past, so fewer of them close — closed severity rises again.
-> > - Friedland (Ch. 13, after Berquist and Sherman) adds that neglected small claims may grow larger more quickly than past experience suggests — a real cost change on top of the mix change.
-> >
-> > *What separates full credit?* Naming both mix effects, and saying that the rise is mostly a change in which claims closed, not in what claims cost.
+- $\text{Paid Losses on Closed Claims}$ are the payments on the claims closed in the year.
+- $\text{Closed Claim Count}$ is the number of claims closed in the year.
 
-> [!tip]- How it appears on the exam
-> - "Close year" is not in CAS's Exam 5 outline (task A3 lists calendar, policy, accident and report year, and in-force) or its readings; it is the vault's name for closed-claim data.
-> - Closed claim counts appear as the denominator of severity in Werner & Modlin's loss trend exhibits and Appendix A indication — a frequency, severity or pure premium calculation from exposures, closed counts and paid losses.
-> - On the reserving side, closed counts feed Friedland's diagnostic triangles (closed-to-reported counts), the disposal-rate frequency-severity technique and the Berquist-Sherman paid adjustment.
-> - The vault's own question on this page asks which way closed-claim severity moves after a claims-handling change, and why.
+A claim is closed once it is settled and has no case reserve left. It may be reopened if further activity occurs. A [[Severity|severity]] says which losses and which claims it uses, and whether claims closed without payment are counted.
 
-> [!warning]- Exam traps
-> - **"Close ratio" is something else.** Werner & Modlin's close ratio is quotes that become policies, a marketing measure (Ch. 1).
-> - **"Closed" can mean "fixed".** Werner & Modlin say an accident year is "not closed (fixed)" at year end, meaning its losses still develop (Ch. 6) — not that its claims are settled.
-> - **Disposal rate denominator.** In Friedland it is the selected *ultimate* claim count for the accident year, not reported counts; she notes other authors define it differently (Ch. 13).
-> - **Closed without payment.** Counting claims closed with no payment in the denominator lowers severity; say which you used (Werner & Modlin Ch. 6).
+> [!example]- In 2024 an insurer closes 700 claims, paying $\$3{,}500{,}000$ on them. What is its close year 2024 severity? {Example}
+> - The paid losses on the closed claims are divided by the number closed.
+> - The close year severity is $3{,}500{,}000/700 = \$5{,}000$ per closed claim.
+
+## Closed claims and the mix of claim sizes
+
+The claims that close in a year are not a random sample of claims. Small, simple claims usually settle before large ones, so the average closed claim depends on which claims the claim department finished as well as on what each one cost.
+
+> [!example]- In 2024 an insurer closes 800 small claims averaging $\$2{,}000$ and 200 large claims averaging $\$20{,}000$. In 2025 it clears a backlog and closes 1,200 small claims and the same 200 large ones, at the same average costs. What happens to its close year severity? {Example}
+> - In 2024 the paid losses are $800 \times 2{,}000 + 200 \times 20{,}000 = \$5{,}600{,}000$ on 1,000 claims, a severity of $\$5{,}600$.
+> - In 2025 they are $1{,}200 \times 2{,}000 + 200 \times 20{,}000 = \$6{,}400{,}000$ on 1,400 claims, a severity of $\$4{,}571$.
+> - The severity falls 18.4%, although no claim got cheaper. The closed claim count rose by more than the paid losses, because the extra closures were all small.
+> - The fall is a change in the mix of claims closed, not a change in claim cost.
+
+## Closed claims by accident year
+
+In reserving, Friedland counts closed claims by accident year. A cell of the closed claim count triangle is the cumulative number of reported claims closed by that age. Dividing it by the accident year's ultimate claim count gives the disposal rate:
+
+> $$\text{Disposal Rate} = \frac{\text{Cumulative Closed Claim Count}}{\text{Ultimate Claim Count}}$$
+
+- $\text{Cumulative Closed Claim Count}$ is the number of the accident year's claims closed by the age.
+- $\text{Ultimate Claim Count}$ is the selected ultimate number of claims for the accident year.
+
+Friedland notes that other authors define the disposal rate differently. Disposal rates should increase with age, and at each age they should be stable across accident years unless the [[Settlement Rate|settlement rate]] has changed.
+
+> [!example]- Accident year 2023 has 700 claims closed at 24 months and a selected ultimate claim count of 1,000. What is its disposal rate at 24 months? {Example}
+> - The cumulative closed claim count is divided by the ultimate claim count.
+> - The disposal rate is $700/1{,}000 = 70\%$ of the ultimate claims closed at 24 months.
+
+## Closed claims and the Berquist-Sherman paid adjustment
+
+The [[Berquist-Sherman Method|Berquist-Sherman]] paid claim adjustment restates paid claims at each age to the latest disposal rates. Its key assumption is that a higher percentage of closed claim counts relative to ultimate claim counts goes with a higher percentage of ultimate claims paid. A shift in which sizes of claim are closed breaks that assumption. If the department closes small claims faster, disposal rates rise while paid severity on closed claims falls, and the adjustment makes the accident years less comparable rather than more.
+
+> [!trap] Reading a change in mix as a severity trend
+> A trend fitted through the backlog year above would show claim costs falling 18.4%. It is a change in which claims closed. Check closed claim counts and claims handling before selecting a severity trend from closed-claim data.

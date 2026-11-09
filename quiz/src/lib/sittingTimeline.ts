@@ -133,3 +133,96 @@ export function formatStepDate(step: Pick<SittingMilestone, 'date' | 'endDate'>)
   if (y1 === y2) return `${MONTHS[m1 - 1]} ${d1} – ${MONTHS[m2 - 1]} ${d2}, ${y1}`
   return `${MONTHS[m1 - 1]} ${d1}, ${y1} – ${MONTHS[m2 - 1]} ${d2}, ${y2}`
 }
+
+/**
+ * Whether a step's date (or span) needs its year printed: only when it isn't
+ * the year it is being read in. "Jan 15, 2027" in November 2026; "Nov 4–15".
+ */
+export function formatStepDateShort(step: Pick<SittingMilestone, 'date' | 'endDate'>, today: string): string {
+  const year = today.slice(0, 4)
+  const full = formatStepDate(step)
+  const end = step.endDate ?? step.date
+  if (step.date.slice(0, 4) !== year || end.slice(0, 4) !== year) return full
+  return full.replace(`, ${year}`, '')
+}
+
+/**
+ * **The headline** — what the status banner says above the ruler: the step
+ * happening now or coming next, told as a title, a line under it and a count.
+ * "Exam window open · Closes Nov 15 · 7 days"; "Exam window opens · Dec 3
+ * · 25 days". Null once every date has passed: there is nothing to count to.
+ */
+export interface SittingHeadline {
+  title: string
+  detail: string
+  count: string
+  state: 'now' | 'next'
+}
+
+export function sittingHeadline(steps: readonly SittingStep[], today: string): SittingHeadline | null {
+  const step = steps.find(s => s.state === 'now') ?? steps.find(s => s.state === 'next')
+  if (!step) return null
+  const days = (n: number) => `${n} ${n === 1 ? 'day' : 'days'}`
+  if (step.state === 'now') {
+    if (!step.endDate) return { title: step.label, detail: formatStepDateShort(step, today), count: 'Today', state: 'now' }
+    const left = daysBetween(today, step.endDate)
+    const close = formatStepDateShort({ date: step.endDate }, today)
+    return left === 0
+      ? { title: `${step.label} open`, detail: 'Closes today', count: 'Last day', state: 'now' }
+      : { title: `${step.label} open`, detail: `Closes ${close}`, count: days(left), state: 'now' }
+  }
+  const ahead = daysBetween(today, step.date)
+  return {
+    title: step.endDate ? `${step.label} opens` : step.label,
+    detail: formatStepDateShort({ date: step.date }, today),
+    count: ahead === 1 ? 'Tomorrow' : days(ahead),
+    state: 'next',
+  }
+}
+
+/**
+ * **The ruler** — the sitting drawn to scale, left to right: each step at its
+ * date (a span as a bar), today as a tick, the months as ticks below, so the
+ * six weeks between registration and the window *look* like six weeks. Every
+ * position is a percentage of the run from the first date (or today, if
+ * earlier) to the last. Null for a sitting with one date: there is no run to
+ * draw.
+ */
+export interface SittingRuler {
+  marks: { key: string; kind: SittingMilestoneKind; state: SittingStepState; at: number; to?: number }[]
+  /** Where today falls, or null once the whole run is behind it. */
+  today: number | null
+  months: { label: string; at: number }[]
+}
+
+export function sittingRuler(steps: readonly SittingStep[], today: string): SittingRuler | null {
+  if (steps.length === 0) return null
+  const last = steps.reduce((max, s) => ((s.endDate ?? s.date) > max ? (s.endDate ?? s.date) : max), steps[0].date)
+  const first = today < steps[0].date ? today : steps[0].date
+  const span = daysBetween(first, last)
+  if (span <= 0) return null
+  const pct = (iso: string) => Math.round((daysBetween(first, iso) / span) * 1000) / 10
+
+  const marks = steps.map(s => ({
+    key: `${s.kind}|${s.date}|${s.label}`,
+    kind: s.kind,
+    state: s.state,
+    at: pct(s.date),
+    ...(s.endDate && s.endDate !== s.date ? { to: pct(s.endDate) } : {}),
+  }))
+
+  let months: SittingRuler['months'] = []
+  let [y, m] = first.split('-').map(Number)
+  for (;;) {
+    m += 1
+    if (m > 12) { m = 1; y += 1 }
+    const iso = `${y}-${String(m).padStart(2, '0')}-01`
+    if (iso > last) break
+    const at = pct(iso)
+    // A label centred on a tick at the very edge would hang off the ruler.
+    if (at >= 4 && at <= 96) months.push({ label: MONTHS[m - 1], at })
+  }
+  if (months.length > 8) months = months.filter((_, i) => i % 2 === 0)
+
+  return { marks, today: today > last ? null : pct(today), months }
+}

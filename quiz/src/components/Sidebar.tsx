@@ -396,7 +396,7 @@ function PlayNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: ()
           collapsed && 'lg:hidden',
         )}
       >
-        Play
+        Study game
       </p>
       <SidebarItem
         to="/actuaria"
@@ -406,7 +406,7 @@ function PlayNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: ()
         onNavigate={onNavigate}
         badge={
           <span className="actuaria">
-            <StatusChip variant="live" size="sm">Live</StatusChip>
+            <StatusChip variant="beta" size="sm">Preview</StatusChip>
           </span>
         }
       />
@@ -786,7 +786,7 @@ export default function Sidebar() {
               The gem shop is a corner of it, so this row stays lit there. */}
           <SidebarItem
             to="/store"
-            label="Shop"
+            label="Store"
             icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}

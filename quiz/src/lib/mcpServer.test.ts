@@ -9,6 +9,7 @@ import { TOOLS, DEFAULT_SITE_URL, createActuarialNotesServer, normalizeAnswerTex
 import { indexKnowledgeBase, normalizeTerm as mcpNormalizeTerm, objectiveKey as mcpObjectiveKey, examLookupKey } from '../../api/_mcp/knowledgeBase.js'
 import { KNOWLEDGE_BASE_PATH } from '../../api/_mcp/load.js'
 import { ErrorCode } from '../../api/_mcp/protocol.js'
+import { installFilings as installInBundle } from '../../api/_tools/engine.js'
 import { KNOWLEDGE_BASE_ASSET, buildKnowledgeBase, normalizeTerm, readKnowledgeBaseSources, type KnowledgeBaseSources } from './knowledgeBase'
 import { PUBLIC_SITE_URL } from './aiConnector'
 import { normalizeAnswerText, objectiveKey } from './parser'
@@ -147,7 +148,7 @@ describe('search and fetch — the ChatGPT connector contract', () => {
 describe('list_exams and get_exam', () => {
   it('tabulates the exams', async () => {
     const out = await tool('list_exams', {})
-    expect(out.text).toMatch(/\| P \| Exam P-1 — Probability \| SOA \| complete \| 2 \| 5 \| 4 \|/)
+    expect(out.text).toMatch(/\| P \| Exam P-1 — Probability \| SOA \| ready \| 2 \| 5 \| 4 \|/)
     expect(out.text).toMatch(/\| 5 \| Exam 5 — Basic Techniques \| CAS \| beta \| 1 \| 1 \| 1 \|/)
   })
 
@@ -221,7 +222,7 @@ describe('get_practice_questions', () => {
     const out = (await tool('get_practice_questions', { exam: 'P', count: 10 })).text
     const ids = [...out.matchAll(/id: (p-\d+)/g)].map(m => m[1]).sort()
     expect(ids).toEqual(['p-001', 'p-002', 'p-003', 'p-006'])
-    expect(out).toContain('https://quiz.actuarialnotes.com/quiz?ids=')
+    expect(out).toMatch(/https:\/\/quiz\.actuarialnotes\.com\/quiz\?ids=[^\s]*&utm_source=mcp&utm_medium=ai_connector&utm_campaign=get_practice_questions/)
   })
 
   it('filters by concept, objective, sitting and difficulty, and honours exclude', async () => {
@@ -489,7 +490,7 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     })).text)
     expect(out.values.total_ultimate).toBeCloseTo(1986.65, 1)
     expect(out.input_hash).toMatch(/^sha256:/)
-    expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson#input=/)
+    expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson\?utm_source=mcp&utm_medium=ai_connector&utm_campaign=run_tool#input=/)
     expect(out.trace.length).toBeGreaterThan(0)
     // What it was tested against travels with the result (docs/actuarial-tools.md R6).
     expect(out.tested_against).toContain('Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Chapter 9, Exhibit I, Sheet 1, p. 162')
@@ -513,7 +514,7 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     })).text)
     expect(out.comparison.rows.map((r: { label: string }) => r.label)).toEqual(['Frequency', 'Severity', 'Bad'])
     expect(out.comparison.rows[1].trend).toBeCloseTo(0.06, 10)
-    expect(out.runs[0].app_url).toMatch(/\/tools\/trend-fit#input=/)
+    expect(out.runs[0].app_url).toMatch(/\/tools\/trend-fit\?utm_source=mcp[^#]*#input=/)
     expect(out.runs[0].trace).toBeUndefined()
     expect(out.runs[0].defaulted_judgments).toEqual(['latest', 'seasonal'])
     expect(out.runs[2].error).toMatch(/array of rows/)
@@ -527,6 +528,36 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     const body = JSON.parse(out.content[0].text)
     expect(body.values.present_value).toBeCloseTo(772.17, 2)
     expect(body.method.concepts).toEqual([{ name: 'Annuity Immediate' }, { name: 'Annuity Due' }])
+  })
+
+  it("reads OSFI's filings, loading them into the engine first when it has none", async () => {
+    const file = JSON.parse(await readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf8'))
+    installInBundle(null)
+    let loads = 0
+    const withFilings = createActuarialNotesServer({ loadIndex: async () => ix, loadFilings: async () => { loads++; return file } })
+    const call = async (args: Record<string, unknown>) =>
+      JSON.parse(((await withFilings.methods['tools/call']({ name: 'run_tool', arguments: args }, ctx)) as ToolResult).content[0].text)
+    const read = await call({ tool: 'data.insurer_return', input: { insurer: 'Intact Insurance Company', quarter: '2026Q2' } })
+    expect(loads).toBe(1)
+    expect(read.summary).toBe('Intact Insurance Company filed 191.75% on PC4 page 10.00 line 140 ("Ratio (Line 10 or line 25 as a % of line 130)") for Q2 2026, as filed with OSFI. Contains information licensed under the Open Government Licence – Canada.')
+    // The filed lines go on to MCT Ratio as references, and the filing's own ratio comes back beside the recomputed one.
+    const ratio = await call({ tool: 'capital.mct_ratio', input: read.values.handoff })
+    expect(loads).toBe(1)
+    expect(ratio.values.filed_answer).toMatchObject({ agrees: true, name: 'Intact Insurance Company', period: '2026Q2' })
+    expect(ratio.judgments.find((j: { field: string }) => j.field === 'insurance').filed.attribution).toBe('Contains information licensed under the Open Government Licence – Canada.')
+    expect(ratio.tested_against[0]).toBe('Every MCT and BAAT ratio filed with OSFI, Q1 2023 to Q2 2026 (1,909 filings), PC4 page 10.00, lines 10–140')
+  })
+
+  it("says the filings aren't loaded rather than inventing a figure", async () => {
+    installInBundle(null)
+    try {
+      const offline = createActuarialNotesServer({ loadIndex: async () => ix, loadFilings: async () => { throw new Error('404') } })
+      const out = (await offline.methods['tools/call']({ name: 'run_tool', arguments: { tool: 'data.insurer_return' } }, ctx)) as ToolResult
+      expect(out.isError).toBe(true)
+      expect(out.content[0].text).toMatch(/OSFI's filings aren't loaded here/)
+    } finally {
+      installInBundle(JSON.parse(await readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf8')))
+    }
   })
 
   it('answers a bad input with a tool error that points at describe_tool', async () => {

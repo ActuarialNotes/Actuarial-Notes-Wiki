@@ -5,6 +5,8 @@
  */
 
 import { isoDate, parseDate } from './dates'
+import { assumptionRef, bankFigure, bankFigures, unitFits, type BankFigure } from './bank'
+import { filedCell, filedRef, filingLine, isRatioLine, type FiledCell } from './filings'
 import {
   ToolInputError,
   type ChoiceField,
@@ -26,6 +28,52 @@ export interface NormalizedInput {
   defaulted: string[]
   /** What was coerced or ignored on the way in. */
   notes: string[]
+  /** Fields given as a reference to an Assumptions Bank figure, with the figure read in. */
+  sources: Record<string, BankFigure>
+  /** Fields given as a reference to a filed cell, with the cell read in. */
+  filed: Record<string, FiledCell>
+}
+
+/**
+ * A number field given as `{ "assumption": "<id>" }`: the bank's figure,
+ * checked against what the field takes (its kinds, its unit, its bounds).
+ */
+function bankField(f: NumberField, id: string): { value: number; figure: BankFigure } {
+  const figure = bankFigure(id)
+  if (!figure) {
+    const why = bankFigures().length ? 'Search the bank for its id' : 'The Assumptions Bank is not loaded here'
+    throw new ToolInputError(f.key, `"${f.key}" names "${id}", which is no figure in the Assumptions Bank. ${why}, or give a number.`)
+  }
+  if (!f.bank?.includes(figure.kind)) {
+    const takes = f.bank?.length ? `takes ${f.bank.join(' or ')} figures` : 'takes no figure from the bank'
+    throw new ToolInputError(f.key, `"${f.key}" ${takes}; "${figure.label}" is ${figure.kind}.`)
+  }
+  if (!unitFits(figure.unit, f.unit)) {
+    throw new ToolInputError(f.key, `"${f.key}" is a ${f.unit}; "${figure.label}" is in ${figure.unit}.`)
+  }
+  return { value: numberField(f, figure.value), figure }
+}
+
+/**
+ * A number field given as `{ "filed": "osfi-pc:<quarter>:<id>:<address>" }`:
+ * the filed value, checked against the lines the field takes.
+ */
+function filedField(f: NumberField, ref: string): FiledCell {
+  let cell: FiledCell
+  try {
+    cell = filedCell(ref)
+  } catch (err) {
+    throw new ToolInputError(f.key, `"${f.key}": ${(err as Error).message}`)
+  }
+  if (!f.filed?.includes(cell.source.address)) {
+    const takes = f.filed?.length
+      ? `takes ${f.filed.map(a => `line ${filingLine(a)?.line ?? a} (${a})`).join(' or ')}`
+      : 'takes no filed value'
+    throw new ToolInputError(f.key, `"${f.key}" ${takes}; ${cell.source.address} is line ${cell.source.line}, "${cell.source.label}".`)
+  }
+  // A ratio is filed in %; a percent field holds a decimal.
+  const value = isRatioLine(cell.source.address) && f.unit === 'percent' ? cell.value / 100 : cell.value
+  return { value: numberField(f, value), source: cell.source }
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
@@ -229,8 +277,20 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   const input: ToolInput = {}
   const defaulted: string[] = []
   const notes: string[] = []
+  const sources: Record<string, BankFigure> = {}
+  const filed: Record<string, FiledCell> = {}
   for (const field of spec.fields) {
-    if (given[field.key] === undefined || given[field.key] === null) {
+    const ref = field.kind === 'number' ? assumptionRef(given[field.key]) : null
+    const cellRef = field.kind === 'number' ? filedRef(given[field.key]) : null
+    if (cellRef && field.kind === 'number') {
+      const cell = filedField(field, cellRef)
+      input[field.key] = cell.value
+      filed[field.key] = cell
+    } else if (ref && field.kind === 'number') {
+      const { value, figure } = bankField(field, ref)
+      input[field.key] = value
+      sources[field.key] = figure
+    } else if (given[field.key] === undefined || given[field.key] === null) {
       input[field.key] = defaultValue(field)
       defaulted.push(field.key)
     } else {
@@ -241,5 +301,22 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   for (const key of Object.keys(given)) {
     if (!known.has(key)) notes.push(`Ignored "${key}": ${spec.id} takes ${[...known].join(', ')}.`)
   }
-  return { input, defaulted, notes }
+  return { input, defaulted, notes, sources, filed }
+}
+
+/**
+ * An input error as the card says it: the field and column keys an agent
+ * sends (`"per_year"`, `Row 3 of "points" is missing "value"`) swapped for
+ * the labels the reader sees beside the field (`Points a year`, `Row 3 of
+ * Points is missing Value`). Only keys of the field the error names are
+ * swapped, so a quoted value the reader typed is left as it is. The engine's
+ * own message, which the MCP connector returns, is unchanged.
+ */
+export function readerMessage(spec: ToolSpec, err: ToolInputError): string {
+  const field = spec.fields.find(f => f.key === err.field)
+  if (!field) return err.message
+  const labels = new Map<string, string>([[field.key, field.label]])
+  if (field.kind === 'table') for (const c of field.columns) labels.set(c.key, c.label)
+  const swapped = err.message.replace(/"([^"]+)"/g, (whole, key: string) => labels.get(key) ?? whole)
+  return swapped.charAt(0).toUpperCase() + swapped.slice(1)
 }

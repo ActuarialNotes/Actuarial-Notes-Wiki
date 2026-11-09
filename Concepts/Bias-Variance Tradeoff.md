@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:771db24925328aa13f5ec14b04420503dcbf31e1572a11f980813b9cb3a9f86f
+  content_hash: sha256:3d3ff6181e24a6aaff5e81ef7a171c40d7fcaf603125033906b68e0335989372
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §2.2.1-2.2.2 (printed pp.29-36, PDF pp.40-47), eq (2.7) on printed p.34; §6 intro (printed p.226, PDF p.234); §6.2.1 ridge bias-variance, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §4.3 overfitting PDF p.49, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
@@ -14,30 +14,47 @@ verification:
   log: .verify/Concepts/Bias-Variance Tradeoff.md
 ---
 
-The **Bias-Variance Tradeoff** is the decomposition of a model's expected prediction error into three pieces — squared [[Bias]], variance, and irreducible noise — and the fact that model complexity moves the first two in opposite directions. It is the reason the best-fitting model is almost never the best-predicting one.
-
-> $$E\!\left[(y_0 - \hat{f}(x_0))^{2}\right] = \left[\text{Bias}(\hat{f}(x_0))\right]^{2} + \text{Var}(\hat{f}(x_0)) + \sigma^{2}$$
-
-- **Bias** is error from the model being too rigid to represent the truth (a straight line through a curved relationship); **variance** is how much the fit would move if it were refitted on a different sample
-- Adding terms, interactions, or levels lowers bias and raises variance. Removing them does the reverse. The total is U-shaped, and the minimum is the right complexity
-- $\sigma^2$ is **irreducible**: no model, however good, predicts better than the noise in the response allows
-- **Underfitting** = high bias, low variance: training and test error are both high and close together. **Overfitting** = low bias, high variance: training error is tiny and test error is much larger
-- Training error is not a guide — it falls monotonically with complexity. Estimate test error with [[Cross-Validation]], or penalize complexity with [[AIC]] / [[BIC]]
-- More data lowers variance without touching bias, so a complex model that overfits at $n = 500$ may be exactly right at $n = 50{,}000$ — the practical reason large books support finer classification plans
-- Credibility weighting is this trade-off in actuarial dress: shrinking a volatile class estimate toward the overall mean accepts bias to cut variance, and lowers [[Mean Square Error]]
-
 ![[Media/Figures/Bias-Variance_Tradeoff.svg|340]]
 
-> [!example]- Decomposing Prediction Error {Example}
-> At a point $x_0$, a model has bias $-3$, variance $16$, and the response has irreducible variance $25$. Compare its expected squared prediction error with a simpler model having bias $-6$ and variance $4$.
->
-> > [!answer]-
-> > $$\text{Model A} = (-3)^2 + 16 + 25 = 9 + 16 + 25 = 50$$
-> > $$\text{Model B} = (-6)^2 + 4 + 25 = 36 + 4 + 25 = 65$$
-> > Model A predicts better despite being the more complex one. Note that both are floored at $25$ — even a perfect model cannot beat the noise.
+The **Bias-Variance Tradeoff** is the relationship between the [[Bias|bias]] and the [[Variance|variance]] of a fitted model as its flexibility changes: a more flexible model has lower bias and higher variance. The expected test mean squared error at a point $x_0$ is
 
-> [!example]- Diagnosing Overfitting in a Rating Model {Example}
-> A frequency model with territory banded into $8$ groups has training deviance $2{,}400$ and holdout deviance $2{,}510$. Refitting with all $220$ postal codes as separate levels gives training deviance $1{,}950$ and holdout deviance $2{,}890$. What happened?
->
-> > [!answer]-
-> > The $220$-level model has far lower **training** error and much worse **holdout** error — the signature of high variance. Most postal codes carry too little exposure to estimate their own relativity, so each coefficient is chasing a handful of claims. The $8$-band model accepts some bias (real differences within a band are averaged away) for a large reduction in variance, and predicts better.
+> $$
+> \begin{aligned}
+> E\left[\left(y_0 - \hat{f}(x_0)\right)^{2}\right] &= \text{Var}\big(\hat{f}(x_0)\big) \\
+> &\quad + \left[\text{Bias}\big(\hat{f}(x_0)\big)\right]^{2} \\
+> &\quad + \text{Var}(\varepsilon)
+> \end{aligned}
+> $$
+
+- $\hat{f}(x_0)$ is the model's prediction at $x_0$, and $y_0$ is the response there.
+- $\text{Var}\big(\hat{f}(x_0)\big)$ is the variance of the prediction over the training sets the model could have been fitted to.
+- $\text{Bias}\big(\hat{f}(x_0)\big)$ is $E\big[\hat{f}(x_0)\big] - f(x_0)$, the error from approximating the true function $f$ by the model.
+- $\text{Var}(\varepsilon)$ is the irreducible error, the variance of the error term in $Y = f(X) + \varepsilon$.
+
+No model can have an expected test MSE below $\text{Var}(\varepsilon)$.
+
+> [!example]- At a point $x_0$ the irreducible error is 25. Model A has bias $-3$ and variance 16, and model B has bias $-6$ and variance 4. Which model has the lower expected test MSE? {Example}
+> - The expected test MSE of model A is $16 + (-3)^2 + 25 = 50$.
+> - The expected test MSE of model B is $4 + (-6)^2 + 25 = 65$.
+> - Model A has the lower expected test MSE, although its variance is higher.
+
+## Flexibility and the test MSE
+
+The flexibility of a model is the range of shapes it can fit, and it grows with the model's degrees of freedom. [[Linear Regression|Linear regression]] is relatively inflexible, because it restricts the fit to a linear form. As flexibility increases:
+
+1. The squared bias decreases.
+2. The variance increases.
+3. The training MSE decreases, because the fitting procedure minimizes it.
+4. The test MSE first decreases and then increases, in a U-shape.
+
+The expected test MSE curve lies above the sum of the variance and the squared bias by the constant $\text{Var}(\varepsilon)$. A model to the left of the minimum underfits: it is too inflexible to capture the true relationship, for example because important predictors are left out, and its error is high on both the training and the test data. A model to the right of the minimum overfits: it fits the noise in the training data, so its training error is low and its test error is high. The minimum of the test MSE, estimated by [[Cross-Validation|cross-validation]], marks the best flexibility.
+
+Several methods trade bias for variance in the same way. Removing irrelevant predictors ([[Variable Selection|variable selection]]) or increasing the penalty of ridge regression ([[Regularization|regularization]]) reduces variance at the cost of bias, and the test error falls when the reduction in variance is larger than the added squared bias. A [[Decision Tree|decision tree]] with more splits has lower bias and higher variance. With few observations per class, [[Quadratic Discriminant Analysis|quadratic discriminant analysis]] has many parameters to estimate, so the less flexible [[Naive Bayes|naive Bayes]] classifier can have the lower test error.
+
+> [!example]- A frequency model with territory in 8 groups has training deviance 2,400 and holdout deviance 2,510. With each of 220 postal codes as its own level, the training deviance is 1,950 and the holdout deviance is 2,890. Which model is overfitting? {Example}
+> - The 220-level model has the lower training deviance, because it is the more flexible model.
+> - Its holdout deviance is higher, 2,890 against 2,510, because most postal codes have too little data to estimate their own level, and the model has high variance.
+> - The 220-level model is overfitting. The 8-group model accepts some bias for a large reduction in variance.
+
+> [!trap] Choosing the model with the lowest training error
+> The training error falls with every increase in flexibility, so the most flexible model always looks best on the training data. The model is chosen by its test error, or by an estimate of it such as the cross-validated error.

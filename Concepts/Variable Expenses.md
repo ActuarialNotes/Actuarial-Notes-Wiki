@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e2e9029559db09c70a1d3bb89d6a18add2e9f7355541954a224addf37424661b
+  content_hash: sha256:d95b70f3516680c80811a61b49bb20d1b9f537acdbb78134350ae5536cae08bf
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-135 (PDF pp.137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
@@ -13,64 +13,51 @@ verification:
   log: .verify/Concepts/Variable Expenses.md
 ---
 
-**Variable Expenses** are underwriting expenses that vary directly with premium — premium taxes and commissions are the standard examples — and are therefore expressed as a percentage $V$ of premium and carried in the **denominator** of the rate formula.
+![[Media/Figures/Variable_Expenses.svg|340]]
+
+**Variable Expenses** are underwriting expenses that vary directly with premium, so that each is a constant percentage of premium. Premium taxes and commissions are the standard examples. The variable expense provision of an expense category is
 
 > $$V = \frac{\text{Variable Expenses}}{\text{Premium}}$$
 
-> $$\text{Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
+- $\text{Variable Expenses}$ are the category's calendar year expenses times one minus its percentage assumed fixed.
+- $\text{Premium}$ is the [[Written Premium|written premium]] for expenses incurred when the policy is written (commissions, other acquisition, taxes, licenses and fees) and the [[Earned Premium|earned premium]] for expenses incurred as coverage is provided (general expenses).
 
-- The denominator placement is not a convention but arithmetic: if commission is $15\%$ *of the rate being solved for*, the rate must be grossed up by dividing, not by adding $15\%$ of something else. Adding instead of dividing under-recovers the expense.
-- The size and make-up of $V$ vary by line and by company. Commissions tend to be much higher in lines that need a comprehensive inspection at the onset (large commercial property) than in lines that do not (personal auto); and within a line, an agency-based company pays higher commissions than a national direct writer, which spends more on other acquisition such as advertising — the **distribution channel** shifts cost between the two.
-- Because commissions and taxes attach when a policy is **written**, these ratios are computed against [[Written Premium|written premium]]; expenses incurred as coverage is provided use [[Earned Premium|earned premium]]. Mixing the denominators misstates the provision in a growing or shrinking book.
-- A **structural change** in distribution — moving business direct, renegotiating commission scales, adding a contingent commission — must be reflected prospectively rather than from historical ratios, since the ratemaking question is what the expenses *will* be.
-- Commission rates may differ between new and renewal business, and **contingent commissions** vary the commission with the quality of the business written (e.g. a loss ratio) or its amount (e.g. predetermined volume goals).
+The provision is a ratio to premium, not to exposures, in every expense projection method. The categories' provisions are summed into the total variable expense provision $V$. Mixing the denominators misstates the provision in a growing or shrinking book.
 
-![[Media/Figures/Variable_Expenses.svg|340]]
+> [!example]- An insurer's commissions are $15\%$ of written premium, premium taxes $2\%$ and other variable acquisition costs $3\%$. What is its variable expense provision? {Example}
+> - The three expenses are all variable, and each is already a ratio to written premium.
+> - The variable expense provision is $V = 15\% + 2\% + 3\% = 20\%$.
 
-> [!example]- Building the Variable Expense Ratio and the Rate {Example}
-> A personal auto insurer's expense study shows commissions $15\%$ of written premium, premium taxes $2\%$, other variable acquisition $3\%$. The projected pure premium is $\$300$, fixed expenses are $\$40$ per exposure, and the target underwriting profit provision is $5\%$.
->
-> Compute the indicated rate.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > V &= 15\% + 2\% + 3\% = 20\% \\[6pt]
-> > \text{Rate} &= \frac{\$300 + \$40}{1 - 0.20 - 0.05} \\
-> > &= \frac{\$340}{0.75} \\
-> > &= \$453.33
-> > \end{align*}$$
-> >
-> > Verify that the rate actually funds everything:
-> >
-> > $$\begin{align*}
-> > \text{Variable expenses} &= 0.20 \times \$453.33 = \$90.67 \\
-> > \text{Profit} &= 0.05 \times \$453.33 = \$22.67 \\
-> > \text{Losses} + \text{fixed} &= \$340.00 \\[4pt]
-> > \text{Total} &= \$453.34 \;\checkmark
-> > \end{align*}$$
-> >
-> > Had the $25\%$ been *added* to $\$340$ instead ($\$340 \times 1.25 = \$425$), commissions and profit would consume $\$106.25$ and only $\$318.75$ would be left for a $\$340$ obligation — a $\$21$ shortfall on every policy.
+## Variable expenses in the indicated rate
 
-> [!example]- A Distribution Channel Shift {Example}
-> An insurer currently writes entirely through independent agents at $17\%$ commission. It will move $40\%$ of its business to a direct channel with no commission but $\$18$ per policy of additional fixed marketing cost. Premium taxes are $2.5\%$, other variable expenses $2\%$, fixed expenses $\$45$ per exposure, target profit $5\%$, pure premium $\$420$.
->
-> Compute the indicated rate before and after the shift.
->
-> > [!answer]-
-> > **Before:**
-> >
-> > $$\begin{align*}
-> > V &= 17\% + 2.5\% + 2\% = 21.5\% \\[4pt]
-> > \text{Rate} &= \frac{\$420 + \$45}{1 - 0.215 - 0.05} = \frac{\$465}{0.735} = \$632.65
-> > \end{align*}$$
-> >
-> > **After** — the blended commission is $0.60 \times 17\% = 10.2\%$, and fixed expenses rise by $0.40 \times \$18 = \$7.20$:
-> >
-> > $$\begin{align*}
-> > V &= 10.2\% + 2.5\% + 2\% = 14.7\% \\[4pt]
-> > \text{Rate} &= \frac{\$420 + \$52.20}{1 - 0.147 - 0.05} = \frac{\$472.20}{0.803} = \$588.04
-> > \end{align*}$$
-> >
-> > The indicated rate falls $7.1\%$ — the commission saving net of the added acquisition cost.
-> >
-> > Two cautions. First, the change must be reflected **prospectively**: historical expense ratios still contain the old channel mix and would overstate $V$. Second, the direct and agency books may not be the same risks; if the direct channel attracts a different [[Mix of Business|mix]], the loss side changes too and the expense saving cannot be taken in isolation.
+Variable expenses are a share of the rate being solved for, so they enter the denominator of the indicated rate with the target profit provision:
+
+> $$\text{Indicated Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
+
+- $F$ is the [[Fixed Expenses|fixed expense]] per exposure.
+- $Q_T$ is the target [[Profit and Contingency Provision|profit provision]], as a share of premium.
+
+Dividing by $1 - V - Q_T$ grosses up the rate, so the variable expenses are $V$ of the final rate. Adding $V$ to the costs instead under-recovers them. A fixed expense fee is grossed up the same way, $F/(1 - V - Q_T)$, so that it also carries the variable expenses and profit on the premium it brings in.
+
+> [!example]- With $V = 20\%$, a projected pure premium of $\$300$, fixed expenses of $\$40$ per exposure and a target profit provision of $5\%$, what is the indicated rate, and what does adding the $25\%$ instead give? {Example}
+> - The indicated rate is $340/0.75 = \$453.33$.
+> - It holds $0.20 \times 453.33 = \$90.67$ of variable expenses and $\$22.67$ of profit, leaving $\$340$ for losses and fixed expenses.
+> - Adding $25\%$ instead gives $340 \times 1.25 = \$425$.
+> - Of the $\$425$, variable expenses and profit take $\$106.25$, leaving $\$318.75$ for a $\$340$ obligation.
+
+## Variable expenses by line and channel
+
+The size and make-up of $V$ vary by line and by company. Commissions tend to be much higher in lines that need a comprehensive inspection at the onset of the policy, such as large commercial property, than in lines that do not, such as personal auto. Within a line, an agency-based company pays higher commissions than a national direct writer, which spends more on other acquisition costs such as advertising. Commission rates may differ between new and renewal business. Contingent commissions vary the commission with the quality of the business written (a loss ratio) or its amount (predetermined volume goals).
+
+The selected provision is a prospective estimate of what the expenses will be. A structural change in distribution, such as moving business direct, renegotiating commission scales or adding a contingent commission, is reflected prospectively rather than from the historical ratios.
+
+> [!example]- An insurer writes through agents at $17\%$ commission, with premium taxes of $2.5\%$, other variable expenses of $2\%$, fixed expenses of $\$45$ per exposure, a target profit provision of $5\%$ and a pure premium of $\$420$. It will move $40\%$ of its business to a direct channel with no commission but $\$18$ per policy of added fixed cost. What is the indicated rate before and after the move? {Example}
+> - Before the move, $V = 17\% + 2.5\% + 2\% = 21.5\%$.
+> - The indicated rate before the move is $465/0.735 = \$632.65$.
+> - After the move, the commission is $0.60 \times 17\% = 10.2\%$, so $V = 14.7\%$, and the fixed expense rises by $0.40 \times 18 = \$7.20$ to $\$52.20$.
+> - The indicated rate after the move is $472.20/0.803 = \$588.04$, a $7.1\%$ decrease.
+> - The historical expense ratios still carry the agency commission, so they would overstate $V$ for the projection period.
+
+## Trending variable expenses
+
+Variable expenses are a constant percentage of premium. They change automatically as the premium changes, so the variable expense ratio needs no trend. Only fixed expenses are trended ([[Expense Provisions#Trending expenses|trending expenses]]).

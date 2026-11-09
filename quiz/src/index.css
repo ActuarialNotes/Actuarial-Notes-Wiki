@@ -41,6 +41,13 @@
        slides (see "Paper on a desk"), so it is a step darker than the page. */
     --desk: 0 0% 80%;
     --shadow-sheet: rgba(0,0,0,0.30);
+    /* The pick — the fill of whatever is *chosen* (a selected chip, an open
+       dropdown, the picked menu row, an active tool). Black and white outside
+       an exam; `examAccentStyle` sets it to the exam's own vivid hue inside
+       one. A full colour, not an HSL triple, so the exam can replace it.
+       Style guide §7.0 (Ink). */
+    --pick: hsl(var(--foreground));
+    --pick-foreground: hsl(var(--background));
   }
 
   .dark {
@@ -66,6 +73,8 @@
     --ring: 0 0% 100%;
     --desk: 0 0% 13%;
     --shadow-sheet: rgba(0,0,0,0.75);
+    --pick: hsl(var(--foreground));
+    --pick-foreground: hsl(var(--background));
   }
 }
 
@@ -418,9 +427,13 @@
    reads best at full contrast. Everything inside that sat on `--background`
    (formula boxes, the footer) is lifted to the card step so it still stands
    off the page; `--card` surfaces inside keep their grey. */
+.concept-popup-aside {
+  --sticky-heading-bg: hsl(var(--card));
+}
 .dark .concept-popup-aside {
   background-color: hsl(0 0% 0%);
   --background: var(--card);
+  --sticky-heading-bg: hsl(0 0% 0%);
 }
 
 /* Concept popup: left edge tracks the sidebar width exactly.
@@ -770,6 +783,14 @@
   animation: concept-row-highlight 1.4s ease-out both;
 }
 
+/* The row the concept popup is reading from Today's session, held highlighted
+   for as long as the popup stays on it — so Previous / Next can always be
+   followed down the list, not only for the moment the flash lasts. */
+.concept-row-current {
+  box-shadow: 0 0 0 2px hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.10);
+}
+
 /* The same row ring in the app's rainbow foil, worn by the quiz-launch cascade
    (the sweep through today's concepts when "Start Quiz" is pressed) so the whole
    launch reads as one coloured material rather than a plain white ring. A
@@ -835,19 +856,6 @@
 .code-block--fade {
   mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
-}
-
-/* The compact "Read" / "Study" buttons slide in from the right as the full-size
-   pair scrolls up behind the pinned header. */
-@keyframes dashboard-pinned-actions-in {
-  from { opacity: 0; transform: translateX(10px); }
-  to   { opacity: 1; transform: none; }
-}
-.dashboard-pinned-actions {
-  animation: dashboard-pinned-actions-in 160ms ease-out both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .dashboard-pinned-actions { animation: none; }
 }
 
 /* Focus mode: when a concept is active and we're on its source page, dim every
@@ -1572,73 +1580,10 @@ summary .katex-display,
   .deck-card-shuffle { animation: none; }
 }
 
-/* ── Quiz Battle ─────────────────────────────────────────────────────────────
-   Two players racing, so the moments are louder than a quiz's: a count-in, a
-   buzz, points flying off a score, and confetti for the winner. Each marks a
-   thing that happened and stops (style guide §9); every one has a static end
-   state, so reduced motion loses the movement and none of the information —
-   the scores, the buzz ring and the result are all still drawn. */
-
-/* The 3-2-1 before a question: each number pops in and settles. */
-@keyframes battle-count-pop {
-  0%   { opacity: 0; transform: scale(0.4); }
-  55%  { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
-}
-.battle-count-pop {
-  display: inline-block;
-  animation: battle-count-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* Points just won or lost rise off the score and fade. */
-@keyframes battle-burst {
-  0%   { opacity: 0; transform: translateY(6px) scale(0.8); }
-  18%  { opacity: 1; transform: translateY(-4px) scale(1.1); }
-  70%  { opacity: 1; transform: translateY(-14px) scale(1); }
-  100% { opacity: 0; transform: translateY(-22px) scale(1); }
-}
-.battle-burst {
-  animation: battle-burst 1300ms cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* A buzz: a ring in the player's colour flares out from the buzzer. */
-@keyframes battle-buzz-flash {
-  0%   { box-shadow: 0 0 0 0 var(--player); }
-  100% { box-shadow: 0 0 0 14px transparent; }
-}
-.battle-buzz-flash {
-  animation: battle-buzz-flash 520ms ease-out 1;
-}
-
-/* A wrong buzz shakes the player's tile — once. */
-@keyframes battle-shake {
-  0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-4px); }
-  45%      { transform: translateX(4px); }
-  70%      { transform: translateX(-2px); }
-}
-.battle-shake {
-  display: inline-block;
-  animation: battle-shake 360ms cubic-bezier(0.4, 0, 0.2, 1) 1;
-}
-
-/* A reaction floats up off its sender's panel, swaying a little, and goes. */
-@keyframes battle-reaction {
-  0%   { opacity: 0; transform: translate(0, 8px) scale(0.6); }
-  15%  { opacity: 1; transform: translate(0, -4px) scale(1.15); }
-  60%  { opacity: 1; transform: translate(-6px, -30px) scale(1); }
-  100% { opacity: 0; transform: translate(4px, -52px) scale(0.95); }
-}
-.battle-reaction {
-  animation: battle-reaction 2400ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
-}
-
-/* The results' trophy row settles in. */
-.battle-trophy {
-  animation: streak-celebrate-card 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* Confetti for the winner: paper, falling and turning, once. */
+/* ── Quiz Battle's confetti ───────────────────────────────────────────────────
+   Paper confetti, shared by Quiz Battle's results and the Pro celebration. The
+   rest of Quiz Battle's motion and the Deck's look are the battle chunk's own
+   (components/battle/battle.css), so first paint doesn't carry them. */
 @keyframes battle-confetti {
   0%   { opacity: 0; transform: translate(0, -10px) rotate(0deg); }
   10%  { opacity: 1; }
@@ -1647,49 +1592,7 @@ summary .katex-display,
 .battle-confetti {
   animation: battle-confetti 2600ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
 }
-
-/* The matchmaking lobby's radar: two rings in the player's own colour
-   spreading out from their tile, a beat apart, for as long as they wait. The
-   only looping battle animation, and the one thing that says the page is
-   still looking. */
-@keyframes battle-radar {
-  0%   { opacity: 0.55; transform: scale(0.8); }
-  100% { opacity: 0; transform: scale(1.8); }
-}
-.battle-radar {
-  border: 2px solid var(--player);
-  animation: battle-radar 2.4s cubic-bezier(0.25, 0.6, 0.3, 1) infinite;
-}
-.battle-radar-late { animation-delay: 1.2s; }
-
-/* The draw: both players' picks settle onto the table, then each question is
-   dealt from them — a card flipping over as it lands, its topic face up. */
-@keyframes battle-pick-in {
-  0%   { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-.battle-pick-in {
-  animation: battle-pick-in 360ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
-}
-@keyframes battle-draw-card {
-  0%   { opacity: 0; transform: perspective(400px) translateY(-18px) rotateY(80deg) scale(0.85); }
-  60%  { opacity: 1; transform: perspective(400px) translateY(2px) rotateY(-6deg) scale(1.04); }
-  100% { opacity: 1; transform: perspective(400px) translateY(0) rotateY(0) scale(1); }
-}
-.battle-draw-card {
-  animation: battle-draw-card 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .battle-count-pop,
-  .battle-radar,
-  .battle-buzz-flash,
-  .battle-shake,
-  .battle-pick-in,
-  .battle-trophy { animation: none; }
-  .battle-draw-card { animation: toast-fade-in 160ms ease-out both; }
-  .battle-burst { animation: toast-fade-in 160ms ease-out both; }
-  .battle-reaction { animation: toast-fade-in 160ms ease-out both; }
   .battle-confetti { display: none; }
 }
 
@@ -2358,6 +2261,17 @@ summary .katex-display,
 /* Fortune-sheet sizes itself to its parent; give it the whole pane. */
 .pcpa-sheet > div { height: 100%; }
 
+/* Open in Spreadsheet (components/quiz/QuestionSheet.tsx). Docked, the pane
+   takes the right of a wide screen or the bottom of a narrow one, and the quiz
+   moves out from under it; popped out, it floats and the page is left alone. */
+.question-sheet-grid > div { height: 100%; }
+@media (min-width: 1024px) {
+  html[data-question-sheet='docked'] .question-sheet-host { padding-right: var(--question-sheet-width, 0px); }
+}
+@media (max-width: 1023px) {
+  html[data-question-sheet='docked'] .question-sheet-host { padding-bottom: calc(var(--question-sheet-height, 0px) + 1rem); }
+}
+
 /* A header button that is switched on — the concept popup's figures toggle and
    Listen. The same sky→fuchsia→gold foil as the simulator card's edge, as a
    travelling ring plus a soft blurred wash of it behind the button, so "on"
@@ -2484,4 +2398,66 @@ summary .katex-display,
   .community-rise { animation: none; }
   .community-live { animation: none; }
   .community-drift { animation: none; }
+}
+
+/* ── Sticky section headings (concept pages) ─────────────────────────────
+   Each `##` of a concept page is grouped with its section
+   (lib/articleSections.ts), so it pins to the top of the scroller while its
+   section is read and the next heading pushes it off. The host sets where it
+   pins (`--sticky-heading-top`: under the floating search bar on the page, the
+   pane's top in the concept popup) and the surface it is filled with
+   (`--sticky-heading-bg`, a colour: the page's background or the
+   popup's own surface), so the text scrolling under it doesn't show through. */
+.sticky-headings .article-section > h2 {
+  position: sticky;
+  top: var(--sticky-heading-top, 0px);
+  z-index: 10;
+  padding-block: 0.375rem;
+  background-color: var(--sticky-heading-bg, hsl(var(--background)));
+  scroll-margin-top: max(var(--sticky-heading-top, 0px), 0px);
+}
+
+/* ── Callout streaming in ────────────────────────────────────────────────
+   A folded callout opened by the reader is revealed top to bottom behind a
+   hard edge, like text being written in. Restarts on every open (a `hidden`
+   body leaves the render tree, so its animation replays). See FoldingCallout. */
+@keyframes callout-stream {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
+}
+
+.callout-stream:not([hidden]) {
+  animation: callout-stream 0.6s cubic-bezier(0.3, 0, 0.4, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .callout-stream:not([hidden]) {
+    animation: none;
+  }
+}
+
+/* ── The in-between loader (components/LoadingMark.tsx) ─────────────────
+   Six cells of a development triangle, each diagonal pulsing in turn. Hidden
+   for the first 300ms so a quick wait never flashes it. */
+.loading-mark {
+  opacity: 0;
+  animation: loading-mark-in 0.2s ease-out 0.3s forwards;
+}
+.loading-mark-grid {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 7px);
+  grid-auto-rows: 7px;
+  gap: 2px;
+}
+.loading-mark-grid > span {
+  border-radius: 2px;
+  background: hsl(var(--foreground));
+  opacity: 0.15;
+  animation: loading-mark-pulse 1.1s ease-in-out infinite;
+}
+@keyframes loading-mark-in { to { opacity: 1 } }
+@keyframes loading-mark-pulse { 30% { opacity: 0.9 } 60%, 100% { opacity: 0.15 } }
+@media (prefers-reduced-motion: reduce) {
+  .loading-mark { animation-duration: 0s }
+  .loading-mark-grid > span { animation: none; opacity: 0.5 }
 }

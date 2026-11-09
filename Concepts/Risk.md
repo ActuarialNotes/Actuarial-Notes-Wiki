@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3a35c43c8b260495b7a20cc3721875167d902ea915e6c9bfa15bc584a7043960
+  content_hash: sha256:36e878b02d3788b5f981e9bf49eaf10ef8dabaa8774560e5af360a091a14ae33
   sources:
     - "SOA Actuarial Glossary (2022), entries \"Risk\" (PDF p.60), \"Financial Risk\" (p.32), \"Operational Risk\" (p.48), sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953 — https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf"
     - "Society for Risk Analysis Glossary (2018), §1.1 Risk (PDF p.4), §1.13 Resilience (PDF p.6), sha256:0701d3716beb7ef322991178d1c2a2c220933f2fcdb204335af3c975254b18cc — https://www.sra.org/wp-content/uploads/2020/04/SRA-Glossary-FINAL.pdf"
@@ -17,50 +17,33 @@ verification:
   log: .verify/Concepts/Risk.md
 ---
 
-**Risk** has two meanings on the actuarial exams, and syllabi link this page in both. In **ratemaking and individual risk rating** (CAS Exams 5 and 8), a risk is an *insured*: the person or business being classified and priced. In **risk management** (CAS Exam 9 and the SOA exams), risk is the possibility that outcomes fall short of what was intended.
+A **Risk** has two meanings on the actuarial exams. In ratemaking and [[Individual Risk Rating|individual risk rating]] (CAS Exams 5 and 8), a risk is an insured, the person or business that is classified and priced. In risk management (CAS Exam 9 and the SOA exams), risk is the possibility that outcomes fall short of what was intended.
 
-## Risk as the Insured (Ratemaking)
+| | Risk as the insured | Risk as uncertainty |
+| --- | --- | --- |
+| Used in | Ratemaking, risk classification, experience rating | Enterprise risk management |
+| Definition | Individuals or entities covered by financial or personal security systems (ASOP 12, §2.7) | Possibility of failing to meet objectives (SOA Actuarial Glossary) |
+| Example | "Other risks in its class" | "The risk of random variation from the expected costs" |
 
-> **Risk(s)** — Individuals or entities covered by financial or personal security systems.
-> - [[ASOP 12 - Risk Classification (ASB - 2005)|ASOP No. 12, Risk Classification]], §2.7, Actuarial Standards Board - 2005
+> [!example]- In an Exam 8 question, an insured's experience modification is 1.15. What does "the risk" mean, and what does the mod say about it? {Example}
+> - "The risk" is the insured whose experience is being rated, not an uncertainty.
+> - Fisher et al. explain that an experience mod "merely indicates the risk's expected loss relative to other risks in its class", and call a mod above 1.0 on a risk a debit mod.
+> - A mod of 1.15 says the insured's expected loss is 15% above its class average. It does not make the insured a bad risk to be non-renewed.
 
-- A *financial or personal security system* is ASOP 12's umbrella term for insurance and its relatives: its examples include auto, homeowners and life insurance and pension plans (§2.4). A **risk class** is "a set of risks grouped together under a risk classification system" (§2.9); see [[Rating Class]].
-- This is the sense of "risk" in [[Individual Risk Rating]]. Fisher et al. explain that an experience mod "merely indicates the risk's expected loss relative to other risks in its class", and call a mod above 1.0 on a risk a debit mod (*Individual Risk Rating*, Ch.1 §1). Exam 8's objective on [[Experience Rating]] uses the word the same way: an individual risk's own experience shows how it differs from "other risks in the same class".
-- The CAS [[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)|ratemaking principles]] use it this way too: "When the experience of an individual risk does not provide a credible basis for estimating these costs, it is appropriate to consider the aggregate experience of similar risks." The same document also uses the second sense: "The rate should include a charge for the risk of random variation from the expected costs."
+## Risk as the insured
 
-## Risk as Uncertainty (Risk Management)
+[[ASOP 12 - Risk Classification (ASB - 2005)|ASOP 12]] defines risks as individuals or entities covered by financial or personal security systems (§2.7). A financial or personal security system is its umbrella term for insurance and its relatives, such as auto, homeowners and life insurance and pension plans (§2.4). A **risk class** is a set of risks grouped together under a risk classification system (§2.9), as a [[Rating Class|rating class]] is.
 
-> **Risk** — (1) Possibility of failing to meet objectives. (2) Can only be defined in context.
-> - [Actuarial Glossary](https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf) , SOA - 2022
+This is the sense of the word in [[Experience Rating|experience rating]], where an individual risk's own experience shows how it differs from other risks in the same class. The CAS [[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)|ratemaking principles]] use it too: "When the experience of an individual risk does not provide a credible basis for estimating these costs, it is appropriate to consider the aggregate experience of similar risks."
 
-### Financial and Operational Risk
+## Risk as uncertainty
 
-| Term                 | SOA Actuarial Glossary (2022)                                                                                                                                                                                                             |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [[Financial Risk]]   | "Financial impact from financial transactions." (p.32)                                                                                                                                                                                    |
-| [[Operational Risk]] | "Operational risk summarizes the risks a company undertakes when it attempts to operate within a given field or industry. It is the risk remaining after determining financing and systematic risk, and includes risks resulting from breakdowns in internal procedures, people and systems." (p.48) |
+The SOA Actuarial Glossary defines risk as the possibility of failing to meet objectives, and adds that it can only be defined in context. ISO defines it as the effect of uncertainty on objectives. Its two named kinds are:
 
-### Alternative Definitions of Risk
+- **[[Financial Risk|Financial risk]]**, the financial impact from financial transactions.
+- **[[Operational Risk|Operational risk]]**, the risk remaining after determining financing and systematic risk, including risks resulting from breakdowns in internal procedures, people and systems.
 
-> ISO defines risk as the effect of uncertainty on objectives.
-> - [Society for Risk Analysis Glossary](https://www.sra.org/wp-content/uploads/2020/04/SRA-Glossary-FINAL.pdf), §1.1, SRA - 2018
+The Society for Risk Analysis Glossary (§1.1) lists other qualitative definitions, among them "Risk is exposure to a proposition (e.g., the occurrence of a loss) of which one is uncertain" and "Risk is the deviation from a reference value and associated uncertainties". It lists metrics such as "the combination of probability and magnitude/severity of consequences" separately, and adds that none of them can be viewed as risk itself. Its **resilience** is the ability of the system to sustain or restore its basic functionality following a risk source or an event (§1.13).
 
-The Society for Risk Analysis Glossary (§1.1) lists, among its overall qualitative definitions:
-- "Risk is exposure to a proposition (e.g., the occurrence of a loss) of which one is uncertain"
-- "Risk is uncertainty about and severity of the consequences of an activity with respect to something that humans value"
-- "Risk is the deviation from a reference value and associated uncertainties"
-
-It lists separately, as risk metrics/descriptions (examples):
-- "The combination of probability and magnitude/severity of consequences"
-- "The triplet (si,pi,ci), where si is the ith scenario, pi is the probability of that scenario, and ci is the consequence of the ith scenario"
-
-and adds: "None of these examples can be viewed as risk itself, and the appropriateness of the metric/description can always be questioned."
-
-### Resilience
-
-> Resilience is the ability of the system to sustain or restore its basic functionality following a risk source or an event (even unknown).
-> - [Society for Risk Analysis Glossary](https://www.sra.org/wp-content/uploads/2020/04/SRA-Glossary-FINAL.pdf), §1.13, SRA - 2018
-
-> [!warning]- Exam traps
-> - In an Exam 5 or Exam 8 question, "a risk", "the risk's experience" and "other risks in its class" mean an insured and other insureds. Read them as uncertainty and the objective stops making sense.
-> - One reading can use both senses. The Statement of Principles speaks of "an individual risk's experience" (an insured) and of a charge for "the risk of random variation from the expected costs" (uncertainty).
+> [!trap] Reading "a risk" as an uncertainty in a ratemaking question
+> In an Exam 5 or Exam 8 question, "a risk", "the risk's experience" and "other risks in its class" mean an insured and other insureds. One reading can use both senses: the Statement of Principles speaks of an individual risk's experience and of a charge for "the risk of random variation from the expected costs".

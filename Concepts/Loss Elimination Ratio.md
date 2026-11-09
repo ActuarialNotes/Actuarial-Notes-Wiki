@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:91338c8d3e8aa3bff70fcfc376e9505c45a052a23e1ac7cca8086f6e44281d52
+  content_hash: sha256:5d1e01ba41512fb7deb8811264bfa6e037038d877ce801abf044dae75bd26c56
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.199-202 (PDF pp.211-214); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf"
@@ -14,66 +14,48 @@ verification:
   log: .verify/Concepts/Loss Elimination Ratio.md
 ---
 
-**Loss Elimination Ratio** (LER) is the proportion of ground-up losses removed by a deductible — the share of expected loss that the insured retains rather than transfers.
+![[Media/Figures/Loss_Elimination_Ratio.svg|340]]
+
+A **Loss Elimination Ratio** (LER) is the proportion of ground-up losses removed by a deductible. It is the share of expected loss that the insured retains rather than transfers to the insurer. For a ground-up loss $X$ and a deductible $d$, the loss elimination ratio is
 
 > $$\text{LER}(d) = \frac{E[X \wedge d]}{E[X]}$$
 
-> $$\text{Deductible Relativity} = 1 - \text{LER}(d)$$
+- $E[X \wedge d]$ is the [[Limited Expected Value|limited expected value]], the expected loss capped at $d$.
+- $E[X]$ is the expected ground-up loss.
 
-- $E[X \wedge d] = E[\min(X,d)]$ is the **limited expected value** — the expected loss capped at $d$. Because every loss contributes at most $d$, the LER captures both the small claims eliminated entirely and the first $d$ dollars of the large ones.
-- The LER is the bridge from a full-coverage rate to a deductible rate: multiply the full-coverage loss cost by $(1 - \text{LER})$ to get the loss cost net of the deductible. See [[Deductible Rating]].
-- LERs are computed from an empirical size-of-loss distribution (where the ground-up loss is known for every claim) or from a fitted continuous distribution, such as a [[Pareto Distribution|Pareto]], whose limited expected value has a closed form. If the data hold only losses net of the deductible, policies with a deductible above the one being priced cannot be used, because the losses they eliminated were never reported.
-- The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss — the leveraged effect described under [[Inflation]]. Deductible relativities must therefore be reviewed as costs rise, or they silently become inadequate.
-- The relativity $(1-\text{LER})$ applied to the whole rate rests on Werner's assumption that all expenses are variable. Per-policy [[Fixed Expenses|fixed expenses]] do not shrink with a deductible — where they are material and not charged as a fee, including the fixed-expense loading flattens the relativity — and on a large deductible policy the insurer often handles every claim, including those entirely within the deductible, so the premium must cover those handling costs too.
+Because every loss contributes at most $d$, the LER captures both the small claims eliminated entirely and the first $d$ dollars of the large ones. The LER is the bridge from a full-coverage rate to a deductible rate: multiply the full-coverage loss cost by $(1 - \text{LER})$ to get the loss cost net of the deductible. That gives the [[Deductible Rating|deductible relativity]].
 
-![[Media/Figures/Loss_Elimination_Ratio.svg|340]]
+> [!example]- A book of 1,000 claims has 400 claims under $\$500$ totalling $\$100{,}000$, and 600 claims of $\$500$ or more totalling $\$1{,}400{,}000$. What is the loss elimination ratio of a $\$500$ deductible? {Example}
+> - Every claim contributes $\min(X, 500)$ to the losses eliminated.
+> - The 400 claims under $\$500$ contribute their full amount, $\$100{,}000$.
+> - The 600 claims of $\$500$ or more each contribute $\$500$, which is $600 \times 500 = \$300{,}000$.
+> - The losses eliminated are $\$400{,}000$, out of total losses of $\$1{,}500{,}000$.
+> - The loss elimination ratio is $400{,}000/1{,}500{,}000 = 26.7\%$, although 40% of the claims disappear entirely.
 
-> [!example]- LER from an Empirical Loss Distribution {Example}
-> A book of $1{,}000$ claims has this size-of-loss distribution:
->
-> | Loss size | Claims | Total losses |
-> |---|---|---|
-> | $\$0$–$500$ | $400$ | $\$100{,}000$ |
-> | $\$500$–$1{,}000$ | $300$ | $\$225{,}000$ |
-> | over $\$1{,}000$ | $300$ | $\$1{,}175{,}000$ |
->
-> Compute the LER for a $\$500$ deductible.
->
-> > [!answer]-
-> > Every claim contributes $\min(X, 500)$:
-> >
-> > - The $400$ claims under $\$500$ contribute their **full** amount, $\$100{,}000$.
-> > - The $600$ claims above $\$500$ each contribute exactly $\$500$: $600 \times \$500 = \$300{,}000$.
-> >
-> > $$\begin{align*}
-> > E[X \wedge 500] \times n &= \$100{,}000 + \$300{,}000 = \$400{,}000 \\[4pt]
-> > \text{Total losses} &= \$1{,}500{,}000 \\[6pt]
-> > \text{LER}(500) &= \frac{\$400{,}000}{\$1{,}500{,}000} = 26.7\%
-> > \end{align*}$$
-> >
-> > A $\$500$ deductible eliminates $26.7\%$ of losses, so the loss cost net of the deductible is $73.3\%$ of full coverage — even though $40\%$ of *claims* disappear entirely. Claim counts and loss dollars give very different answers, and the rate depends on the dollars.
+## Loss elimination ratio of a fitted distribution
 
-> [!example]- Inflation Erodes the Loss Elimination Ratio {Example}
-> Losses follow an exponential distribution with mean $\theta = \$2{,}000$, and the deductible is $\$500$. Losses then inflate $20\%$.
+When the ground-up loss of every claim is not known, the LER is computed from a continuous distribution fitted to the losses, such as a [[Pareto Distribution|Pareto]] or an exponential, whose limited expected value has a closed form. For an exponential distribution with mean $\theta$, $E[X \wedge d] = \theta\left(1 - e^{-d/\theta}\right)$ and $E[X] = \theta$, so the loss elimination ratio is
+
+> $$\text{LER}(d) = 1 - e^{-d/\theta}$$
+
+> [!example]- Losses are exponential with mean $\$2{,}000$. What is the loss elimination ratio of a $\$500$ deductible? {Example}
+> - The ratio of the deductible to the mean is $500/2{,}000 = 0.25$.
+> - The loss elimination ratio is $1 - e^{-0.25} = 22.1\%$.
+> - The loss cost net of the deductible is $1 - 0.221 = 0.779$ of the full-coverage loss cost.
+
+## Loss elimination ratio under inflation
+
+The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss. This is the leveraged effect of [[Inflation|inflation]] on a fixed retention. Deductible relativities must be reviewed as costs rise, or they become inadequate, and losses excess of the deductible grow faster than ground-up losses.
+
+> [!example]- Losses are exponential with mean $\$2{,}000$, and the deductible is $\$500$. Losses then inflate 20%. What happens to the loss elimination ratio and to the losses excess of the deductible? {Example}
+> - Before inflation, the loss elimination ratio is $1 - e^{-500/2{,}000} = 22.1\%$.
+> - After inflation the mean is $\$2{,}400$, and the loss elimination ratio is $1 - e^{-500/2{,}400} = 18.8\%$.
+> - The deductible relativity rises from 0.779 to 0.812.
+> - The losses excess of the deductible grow by a factor of
 >
-> Show what happens to the LER and to the deductible relativity.
+> $$\frac{2{,}400 \times 0.812}{2{,}000 \times 0.779} = 1.251$$
 >
-> > [!answer]-
-> > For an exponential, $E[X \wedge d] = \theta\left(1 - e^{-d/\theta}\right)$ and $E[X] = \theta$, so
-> >
-> > $$\text{LER}(d) = 1 - e^{-d/\theta}$$
-> >
-> > $$\begin{align*}
-> > \text{Before: } \text{LER} &= 1 - e^{-500/2000} \\
-> > &= 1 - e^{-0.25} = 22.1\% \\[6pt]
-> > \text{After } (\theta = 2{,}400): \; \text{LER} &= 1 - e^{-500/2400} \\
-> > &= 1 - e^{-0.2083} = 18.8\%
-> > \end{align*}$$
-> >
-> > The deductible relativity therefore rises from $0.779$ to $0.812$ — the deductible is worth less to the insured and costs the insurer more.
-> >
-> > Two consequences follow. First, an insurer that leaves its deductible relativities untouched through an inflationary period systematically under-charges its higher-deductible policies. Second, the *ground-up* rate increase understates the increase needed on deductible business: at $20\%$ inflation, losses excess of the $\$500$ deductible grow by
-> >
-> > $$\frac{2{,}400 \times 0.812}{2{,}000 \times 0.779} - 1 = +25.1\%$$
-> >
-> > five points more than the ground-up trend.
+> - **Excess losses grow 25.1%**, five points more than the 20% ground-up trend.
+
+> [!trap] Counting claims instead of dollars
+> The LER is a ratio of loss dollars, not of claim counts. In the book above a $\$500$ deductible removes 40% of the claims but only 26.7% of the losses, and the rate depends on the dollars.

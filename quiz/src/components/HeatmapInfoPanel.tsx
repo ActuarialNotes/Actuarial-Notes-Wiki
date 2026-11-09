@@ -9,66 +9,13 @@ import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
-// The heatmap/readiness explainer slides. The modal that used to wrap them
-// (opened from the Study Schedule card's info button) is gone —
-// DashboardGuideModal renders ReadinessProjectionSlide as its last page.
+// The Dashboard guide's last page, Projected Readiness (DashboardGuideModal).
+// The heatmap and registration slides that used to live here were rendered
+// nowhere and have been removed.
 
 // How many days ahead to project readiness when there's no exam/target date.
 const DEFAULT_PROJECTION_DAYS = 90
 const MS_PER_DAY = 24 * 60 * 60 * 1000
-
-export function HeatmapOverviewSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        Each square represents one day of study. When you have an active study plan, the brightness shows how much of your daily concept quota you completed that day.
-      </p>
-      <div className="space-y-2 text-sm text-muted-foreground">
-        <div className="flex items-start gap-2.5">
-          <span className="inline-block h-4 w-4 rounded-[2px] shrink-0 mt-0.5" style={{ backgroundColor: 'rgba(34,197,94,0.25)' }} />
-          <span>Studied this day; daily plan quota not yet met</span>
-        </div>
-        <div className="flex items-start gap-2.5">
-          <span className="inline-block h-4 w-4 rounded-[2px] shrink-0 mt-0.5" style={{ backgroundColor: 'rgba(34,197,94,0.65)' }} />
-          <span>Good session; roughly half of the daily plan complete</span>
-        </div>
-        <div className="flex items-start gap-2.5">
-          <span className="inline-block h-4 w-4 rounded-[2px] shrink-0 mt-0.5" style={{ backgroundColor: 'rgba(34,197,94,1)' }} />
-          <span>Daily plan fully completed (or any active day if no plan is configured)</span>
-        </div>
-        <div className="flex items-start gap-2.5">
-          <span className="inline-block h-4 w-4 rounded-[2px] bg-muted/30 shrink-0 mt-0.5" />
-          <span>No activity</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export function ExamDatesSlide() {
-  return (
-    <div className="space-y-3">
-      <div className="rounded-lg bg-primary/5 px-3 py-2.5 space-y-1.5">
-        <div className="flex items-center gap-2 text-sm font-semibold">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary/70 shrink-0" />
-          Exam Date <span className="text-muted-foreground font-normal">(blue highlight)</span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          The actual date of your exam sitting.
-        </p>
-      </div>
-      <div className="rounded-lg bg-amber-400/5 px-3 py-2.5 space-y-1.5">
-        <div className="flex items-center gap-2 text-sm font-semibold">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
-          Target Ready Date <span className="text-muted-foreground font-normal">(amber highlight)</span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          The date you want to feel fully prepared by, typically a few weeks before your exam.
-        </p>
-      </div>
-    </div>
-  )
-}
 
 function shortDate(d: Date): string {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -79,9 +26,12 @@ function shortDate(d: Date): string {
 function ReadinessProjectionChart({
   points,
   endDate,
+  withPlan,
 }: {
   points: ReadinessProjectionPoint[]
   endDate: Date
+  /** Whether the line follows a study plan, or only decay with no more study. */
+  withPlan: boolean
 }) {
   const W = 320
   const H = 120
@@ -104,12 +54,14 @@ function ReadinessProjectionChart({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-2">
-        <p className="text-xs font-medium text-muted-foreground">Predicted readiness · if you follow your plan</p>
+        <p className="text-xs font-medium text-muted-foreground">
+          Projected readiness · {withPlan ? 'if you follow your study plan' : 'if you stop studying today'}
+        </p>
         <p className="text-xs font-semibold tabular-nums">
           {endPct}% <span className="font-normal text-muted-foreground">on {shortDate(endDate)}</span>
         </p>
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="mt-1.5 w-full" preserveAspectRatio="none" role="img" aria-label={`Readiness projected to reach ${endPct}% by ${shortDate(endDate)} if you follow your study plan`}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="mt-1.5 w-full" preserveAspectRatio="none" role="img" aria-label={`Readiness projected to reach ${endPct}% by ${shortDate(endDate)} ${withPlan ? 'if you follow your study plan' : 'if you stop studying today'}`}>
         <path d={area} fill="#22c55e" fillOpacity={0.1} />
         <path
           d={line}
@@ -170,30 +122,12 @@ export function ReadinessProjectionSlide({
         <span className="text-3xl font-bold tabular-nums leading-none text-primary">{readinessNow}%</span>
         <span className="text-xs text-muted-foreground">ready today</span>
       </div>
-      <ReadinessProjectionChart points={projection} endDate={projectionEnd} />
+      <ReadinessProjectionChart points={projection} endDate={projectionEnd} withPlan={plan !== null} />
       <p className="text-xs text-muted-foreground">
-        This projection assumes you complete each day's study plan on schedule. Readiness is weighted by both topic weight and how deeply you've mastered each concept.
+        {plan
+          ? "This assumes you finish today's study plan every day."
+          : 'With no study plan, this shows your levels stepping down as concepts go unpractised.'}
       </p>
-    </div>
-  )
-}
-
-export function RegistrationSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        Actuarial exams are offered at fixed sittings throughout the year through the SOA and CAS.
-      </p>
-      <div className="space-y-2.5 text-sm">
-        <div className="rounded-lg bg-muted/30 px-3 py-2.5 space-y-1">
-          <p className="font-semibold">SOA Exams (P, FM, IFM, LTAM, STAM, SRM, PA)</p>
-          <p className="text-muted-foreground">Register at soa.org. Most exams have multiple sittings per year.</p>
-        </div>
-        <div className="rounded-lg bg-muted/30 px-3 py-2.5 space-y-1">
-          <p className="font-semibold">CAS Exams (Exams 1–9)</p>
-          <p className="text-muted-foreground">Register at casact.org. Check the exam calendar for sitting dates.</p>
-        </div>
-      </div>
     </div>
   )
 }

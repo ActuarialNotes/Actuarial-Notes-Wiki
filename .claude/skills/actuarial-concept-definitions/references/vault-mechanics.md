@@ -118,21 +118,195 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
    dollar before the math (`\$$1{,}000$`), which starts with `$$` and can open a
    display block.
 
+5. **No long inline math.** KaTeX can't break a line inside braces or
+   parentheses, or after a comma, so one `$…$` holding a whole set
+   (`$S = \{(H, 1), \ldots, (T, 6)\}$`) or a long chain of fractions is as wide
+   as it is long. Inside an example card that width becomes the card's minimum,
+   and on a phone every line of the card is cut off on the right. Keep each
+   inline span short (roughly 25 characters of rendered math): write a list as
+   separate spans (`$\{A, B\}$, $\{A, C\}$`) and move a long expression into a
+   boxed `> $$…$$`, one step per `aligned` row if it is still wide.
+
 `quiz/src/lib/vaultMath.ts` repairs some Obsidian-isms at render time; write
 the vault the Obsidian way and these rules on top.
 
 ## Notation by exam
 
-Match the neighbouring pages:
+Match the neighbouring pages.
 
-- **Exam P:** `f(x)`, `F(x)`, `E[X]`, `\text{Var}(X)`, `P(A \mid B)`.
+**Exam P** — one symbol per thing, on every page (set 2026-11-06; the pages
+still in the older shape use $A$, $B$ for events and are brought to this table
+as they are rewritten):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| sample space | $S$ | $\Omega$ |
+| outcome | $s$ (several: $s_1, s_2, \ldots$) | $\omega$ |
+| event; a second, third event | $E$; $F$, $G$ | $A$, $B$ |
+| complement, intersection, union | $E^c$, $E \cap F$, $E \cup F$ | $\bar{E}$, $E'$, $EF$ |
+| probability of an event | $P(E)$; an outcome $P(\{s\})$ | $\Pr$, $P[E]$, $P(s)$ |
+| conditional probability | $P(E \mid F)$ | |
+| number of outcomes in a set | $\lvert E \rvert$, $\lvert S \rvert$ | $n(E)$, $\#E$ |
+| factorial | $n!$, with $0! = 1$ | |
+| permutations of $k$ from $n$ | ${}_{n}P_{k}$ | $P(n, k)$, $P^n_k$ |
+| combinations of $k$ from $n$ | $\binom{n}{k}$, read "$n$ choose $k$" | $C(n, k)$, ${}_{n}C_{k}$ |
+| random variable; pmf/pdf; cdf | $X$, $Y$; $f(x)$; $F(x)$ | |
+| mean, variance | $E[X]$, $\text{Var}(X)$ | |
+
+$F$ is both the second event and the cdf. A page that needs both writes the
+events $E_1, E_2$ instead.
+
+**Exam MAS-I** — stochastic processes (set 2026-11-07, from the Poisson
+process pages; Ross's notation, with Loss Models' $S$ and $X$ for aggregate
+losses):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| counting process | $\{N(t), t \ge 0\}$, $N(t)$ the number of events by time $t$ | |
+| rate of a Poisson process | $\lambda$; of two processes $\lambda_1$, $\lambda_2$ | $\Lambda$ for a constant rate |
+| intensity function; mean value function | $\lambda(t)$; $m(t) = \int_0^t \lambda(u)\,du$ | $\Lambda(t)$ |
+| interarrival time; time of the $n$th event | $T_n$; $S_n = T_1 + \cdots + T_n$ | $W_n$, $\tau_n$ |
+| thinning probability | $p$, or $p(t)$ when it changes over time | |
+| aggregate loss by time $t$; claim size | $S(t) = \sum_{i=1}^{N(t)} X_i$; $X_i$, $X$ | $Y_i$, $W$ |
+| ordinary deductible | $d$ | |
+| exponential mean | $\theta$ | $\beta$ |
+
+**Exam MAS-I** — the rest of the exam (set 2026-11-07):
+
+| Area | Thing | Written | Not |
+| --- | --- | --- | --- |
+| Markov chains | states; transition probability; matrix | $i$, $j$; $P_{ij}$; $\mathbf{P}$ | $p_{ij}$, $\mathbf{T}$ |
+| | $n$-step transition probability | $P_{ij}^{n}$ | $P_{ij}^{(n)}$ |
+| | stationary (limiting) probability | $\pi_j$ | |
+| | mean time in transient state $j$ from $i$ | $s_{ij}$ | |
+| | gambler's ruin | win probability $p$, $q = 1 - p$, target $N$, start $i$, $P_i$ | |
+| Reliability | state vector; structure function; reliability function | $\mathbf{x}$; $\phi(\mathbf{x})$; $r(\mathbf{p})$ | |
+| Simulation | uniform random number; target cdf; proposal density | $U$; $F$, $F^{-1}(U)$; $g(x)$, constant $c$ | |
+| Survival | survival function; hazard rate | $S(x)$; $h(x)$ (force of mortality $\mu_x$ on life-contingency pages) | $\lambda(x)$ |
+| | life-table functions | $l_x$, $d_x$, ${}_{t}p_{x}$, ${}_{t}q_{x}$, $e_x$ | $\Lambda$ |
+| | insurance and annuity | $A_x$, $\ddot{a}_x$, $v$, $i$ | |
+| Severity | limited expected value; deductible; limit | $E[X \wedge u]$; $d$; $u$ | $E[\min(X,u)]$ in a formula |
+| Estimation | sample; sample mean; sample variance | $X_1, \ldots, X_n$; $\bar{X}$; $S^2$ (divisor $n - 1$) | $s^2$ for the estimator |
+| | parameter; estimator | $\theta$; $\hat{\theta}$ | $T$ |
+| | likelihood; log-likelihood; Fisher information | $L(\theta)$; $l(\theta)$; $I(\theta)$ | $\ell$, $\mathcal{L}$ |
+| | order statistics | $X_{(1)} \le \cdots \le X_{(n)}$ | $Y_1, \ldots, Y_n$ |
+| | bias; mean square error | $\text{Bias}(\hat{\theta})$; $\text{MSE}(\hat{\theta})$ | |
+| Testing | hypotheses; significance level; Type II probability; power | $H_0$, $H_1$; $\alpha$; $\beta$; $1 - \beta$ | $H_a$ |
+| Regression | observations; predictors | $n$; $p$, written $x_1, \ldots, x_p$ (observation $i$: $x_{i1}, \ldots, x_{ip}$) | $k$ |
+| | response; fitted value; residual | $y_i$ (random $Y$); $\hat{y}_i$; $e_i = y_i - \hat{y}_i$ | $r_i$ |
+| | coefficients; estimates; error | $\beta_0, \ldots, \beta_p$; $\hat{\beta}_j$; $\varepsilon_i$ with variance $\sigma^2$ | $b_j$ |
+| | design matrix; hat matrix | $\mathbf{X}$; $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ | |
+| | sums of squares | $\text{RSS}$, $\text{TSS}$, $R^2 = 1 - \text{RSS}/\text{TSS}$ | SSE, SST |
+| GLM | mean; linear predictor; link | $\mu_i = E[Y_i]$; $\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots$; $g(\mu_i) = \eta_i$ | |
+| | dispersion; deviance | $\phi$; $D$ (scaled $D^*$) | |
+| | information criteria | $\text{AIC} = -2l + 2k$, $\text{BIC} = -2l + k \ln n$, $k$ the number of parameters | |
+
+$S_n$ (an arrival time) and $S(t)$ (an aggregate loss) never appear on the same
+page. Keep the Exam P table for events and probabilities ($E$, $P(E)$,
+$E[X]$, $\text{Var}(X)$).
+
+**Exam MAS-II** — credibility (set 2026-11-07, from the classical credibility
+pages; the vault's $p$ and $k$, shared with Exam 5 and FAM, in place of Tse's
+$1 - \alpha$):
+
+| Thing | Written | Not |
+| --- | --- | --- |
+| probability level; range parameter | $p$; $k$ | $1 - \alpha$, $r$ |
+| normal quantile | $z_{(1+p)/2}$ | $z_{\alpha/2}$ |
+| base standard (Poisson claim counts) | $\lambda_0 = (z_{(1+p)/2}/k)^2$ | $\lambda_F$ |
+| full credibility standard; observed volume | $n_F$; $n$, in the same unit | $n_{\text{full}}$ |
+| claim count of one exposure; claim size | $N$; $X$, with $\mathrm{CV}_X = \sqrt{\text{Var}(X)}/E[X]$ | $\sigma_X/\mu_X$ |
+| credibility; observed experience; complement | $Z$; $D$; $M$ | $\bar{X}$, $\mu_0$ |
+| credibility-weighted estimate | $U = Z D + (1 - Z) M$ | |
+
+**Exam MAS-II** — the rest of the exam (set 2026-11-07):
+
+| Area | Thing | Written | Not |
+| --- | --- | --- | --- |
+| Greatest accuracy credibility | risk parameter; observations | $\Theta$ (a value $\theta$); $X_1, \ldots, X_n$, mean $\bar{X}$ | |
+| | hypothetical mean; process variance | $\mu(\theta) = E[X \mid \Theta = \theta]$; $v(\theta) = \text{Var}(X \mid \Theta = \theta)$ | $\mu_X(\Theta)$, $\sigma^2_X(\Theta)$ |
+| | overall mean; EPV; VHM | $\mu = E[\mu(\Theta)]$; $v = E[v(\Theta)]$; $a = \text{Var}(\mu(\Theta))$ | $\mu_{PV}$, $\sigma^2_{HM}$ |
+| | credibility parameter; credibility | $k = v/a$; $Z = n/(n + k)$ | $K$ |
+| | credibility premium | $Z\bar{X} + (1 - Z)\mu$ | |
+| | Bühlmann-Straub exposures | $m_j$ for period $j$, $m = \sum m_j$, $Z = m/(m + k)$ | $w_j$ |
+| | empirical Bayes estimates | $\hat{\mu}$, $\hat{v}$, $\hat{a}$, $\hat{k}$ | |
+| Bayesian | prior; likelihood; posterior | $\pi(\theta)$; $f(x \mid \theta)$; $\pi(\theta \mid x_1, \ldots, x_n)$ | $g(\theta)$ |
+| | predictive distribution | $f(x_{n+1} \mid x_1, \ldots, x_n)$ | |
+| Linear mixed models | observation $t$ of cluster $i$ | $Y_{ti}$; cluster vector $\mathbf{Y}_i$ with $n_i$ rows | $y_{ij}$ |
+| | the model | $\mathbf{Y}_i = \mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathbf{u}_i + \boldsymbol{\varepsilon}_i$ | $\mathbf{b}_i$ |
+| | random effects; residuals | $\mathbf{u}_i \sim N(\mathbf{0}, \mathbf{D})$; $\boldsymbol{\varepsilon}_i \sim N(\mathbf{0}, \mathbf{R}_i)$ | $\mathbf{G}$ |
+| | marginal covariance | $\mathbf{V}_i = \mathbf{Z}_i\mathbf{D}\mathbf{Z}_i^T + \mathbf{R}_i$ | |
+| | variance components (random intercept) | $\sigma^2_{u}$ (between clusters), $\sigma^2$ (within) | $\tau^2$ |
+| | intraclass correlation | $\sigma^2_u/(\sigma^2_u + \sigma^2)$ | |
+| | covariance parameters; estimates | $\boldsymbol{\theta}$; ML, REML; $\hat{\boldsymbol{\beta}}$, EBLUP $\hat{\mathbf{u}}_i$ | |
+| Statistical learning | observations; predictors; response | $n$; $p$, $X_1, \ldots, X_p$; $Y$, fitted $\hat{f}$ | |
+| | neighbours; clusters | $K$ (KNN); $K$ (K-means), cluster $C_k$ | |
+| | tree regions; class share in region $m$ | $R_1, \ldots, R_J$; $\hat{p}_{mk}$ | |
+| | Gini index; entropy | $G = \sum_k \hat{p}_{mk}(1 - \hat{p}_{mk})$; $D = -\sum_k \hat{p}_{mk}\log\hat{p}_{mk}$ | |
+| | trees; predictors per split; boosting | $B$; $m$ (often $\sqrt{p}$); shrinkage $\lambda$, splits $d$ | |
+| | principal components | loadings $\phi_{jm}$; scores $z_{im}$; $M$ components | |
+| | neural network | $K$ hidden units, activations $A_k = g(w_{k0} + \sum_j w_{kj}X_j)$, output weights $\beta_k$ | |
+| | classification counts | TP, FP, TN, FN; sensitivity, specificity | recall, TPR |
+| Time series | series; white noise | $\{x_t\}$; $\{w_t\}$ with variance $\sigma^2$ | $\varepsilon_t$, $a_t$ |
+| | backward shift; difference | $\mathbf{B}x_t = x_{t-1}$; $\nabla = 1 - \mathbf{B}$, $\nabla^d$ | $L$ |
+| | AR($p$); MA($q$); ARIMA | $x_t = \alpha_1 x_{t-1} + \cdots + \alpha_p x_{t-p} + w_t$; $x_t = w_t + \beta_1 w_{t-1} + \cdots + \beta_q w_{t-q}$; ARIMA($p, d, q$) | $\phi$, $\theta$ |
+| | autocovariance; autocorrelation | $\gamma_k$, $\rho_k = \gamma_k/\gamma_0$; sample $c_k$, $r_k$ | |
+| | decomposition | $x_t = m_t + s_t + z_t$ (trend, seasonal, error) | |
+| | forecast | $\hat{x}_{t+k \mid t}$ | |
+
+Symbols the pages added, local to one or two pages: a gamma prior's shape
+$\alpha$ and *scale* $\beta$ (so Poisson-gamma $k = 1/\beta$), a beta prior
+Beta$(a, b)$, observations $\mathbf{x} = (x_1, \ldots, x_n)$; in mixed models a
+second grouping factor $v_{j(i)}$ (nested) or $v_j$ (crossed) with variance
+$\sigma^2_v$, random intercept and slope $u_{0i}$, $u_{1i}$ with $\mathbf{D}$'s
+entries $\sigma^2_{u0}$, $\sigma^2_{u1}$, $\sigma_{u01}$, a cluster-level covariate
+$w_i$, and the credibility weight written $n_i/(n_i + k)$, never $Z$; in
+statistical learning the KNN neighbourhood $\mathcal{N}_0$, region means
+$\hat{y}_{R_j}$, PCA eigenvalues $\lambda_m$, dissimilarity $d_{ii'}$, the
+learning rate $\rho$ with loss $R(\theta)$, and softmax outputs $Z_1, \ldots,
+Z_M$; in time series the AR constant $\alpha_0$, partial autocorrelation
+$\alpha_{kk}$, the polynomials $\alpha(\mathbf{B})$ and $\beta(\mathbf{B})$ (not
+Cowpertwait & Metcalfe's $\theta_p$, $\phi_q$), drift $\delta$ and the
+forecast horizon $k$.
+
+$k$ is Bühlmann's credibility parameter on the greatest-accuracy pages and the
+range parameter on the classical ones; a page needing both (the *Credibility*
+overview) states the classical one only through a link. $\mathbf{Z}_i$ (a design matrix) and $Z$ (a credibility) never share a page.
+
+Other exams:
 - **Exam FM:** `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`,
   `\ddot{a}_{\overline{n}|}`.
-- **Exam 5:** `\text{CDF}`, age-to-age `f_{n \to n+1}`, loss-ratio and
-  pure-premium notation; ratemaking is **prospective**, reserving
-  **retrospective** — say which, and keep the vocabularies distinct
-  (development *to* ultimate vs trend *forward to* the policy period; conflating
-  them double-counts).
+- **Exam 5** — ratemaking (set 2026-11-07, from the Pure Premium, Loss Ratio
+  and Exposure Base pages; Werner & Modlin's ratios, written out in words as on
+  the Frequency and Severity pages):
+
+  | Thing | Written | Not |
+  | --- | --- | --- |
+  | basic ratios | $\text{Frequency}$, $\text{Severity}$, $\text{Pure Premium}$, $\text{Loss Ratio}$, $\text{Average Premium}$ in `\text{}` | $PP$, $LR$ in a formula |
+  | the ratios' inputs | $\text{Losses}$, $\text{LAE}$, $\text{Earned Exposures}$, $\text{Earned Premium}$ | $L$, $E_L$, $X$ |
+  | LAE ratio; loss and LAE ratio | $\text{LAE}/\text{Losses}$; $\text{Loss Ratio} \times (1 + \text{LAE Ratio})$ | LAE over premium |
+  | development to ultimate | $\text{CDF}$; age-to-age $f_{n \to n+1}$ | LDF for an age-to-ultimate factor |
+  | trend | annual trend $t$ over $n$ years, factor $(1 + t)^n$ | |
+  | expense and profit provisions | fixed per exposure $F$ (as a share of premium $F\%$), variable $V$, target profit $Q_T$ | |
+  | permissible loss ratio | $\text{PLR} = 1 - V - Q_T$ (all-variable); with fixed expenses as a ratio, $1 - F\% - V - Q_T$ | |
+  | trend on a page whose time variable is $t$ | fitted trend $\hat{T}$; components $T_F$, $T_S$, $T_{PP}$ (Exponential Trend, Linear Trend) | $t$ for both |
+  | losses by report year and lag (claims-made) | $L(Y, i)$, Werner & Modlin Ch. 16 | |
+
+  **Exam 5** — reserving (set 2026-11-07, from the reserving pages; Friedland's
+  word *claims*, in `\text{}`):
+
+  | Thing | Written | Not |
+  | --- | --- | --- |
+  | claims | $\text{Paid Claims}$, $\text{Reported Claims}$, $\text{Case Outstanding}$, $\text{Ultimate Claims}$, $\text{IBNR}$, $\text{Unpaid Claims}$ | $C$, $U$ as bare letters; *losses* in a reserving formula |
+  | a cell of a cumulative triangle | $C_{\text{AY},\,n}$, accident year AY at age $n$ | |
+  | development | age-to-age $f_{n \to n+1}$; $\text{CDF}_{n \to \text{ult}}$ or $\text{CDF}_n$; $\text{Tail}$ | LDF for an age-to-ultimate factor |
+  | share reported (paid) | $1/\text{CDF}$ in a method's formula; $p_t$, or $p_{\text{start}}$, $p_{\text{end}}$, where an actual-versus-expected formula needs a symbol | |
+  | a priori | $\text{Expected Claims}$, $\text{Expected Claim Ratio}$; Cape Cod's $\text{Used-Up Premium}$ | ELR, $U$ |
+  | credibility weight | $Z$ (Benktander: $q$, the share unreported) | |
+
+  Ratemaking is **prospective**, reserving **retrospective** — say which, and
+  keep the vocabularies distinct (development *to* ultimate vs trend *forward
+  to* the policy period; conflating them double-counts).
 
 ## Topic reference
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Gem, Loader2, Swords } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
@@ -21,9 +21,16 @@ import type { QuestDef } from '@/data/quests'
  * (covering ones that land after). "Later" leaves the rewards claimable from
  * the Dashboard quests card.
  */
-export function QuestCompleteOverlay() {
+export function QuestCompleteOverlay({ onResolved }: { onResolved?: () => void } = {}) {
   const { user } = useAuth()
   const [quests, setQuests] = useState<QuestDef[]>(() => readJustCompletedQuests())
+  // Tell the page when there is nothing (left) to show, so whatever plays after
+  // the quests — the guest save prompt — waits for them.
+  const onResolvedRef = useRef(onResolved)
+  onResolvedRef.current = onResolved
+  useEffect(() => {
+    if (quests.length === 0) onResolvedRef.current?.()
+  }, [quests.length])
   const [claiming, setClaiming] = useState(false)
   const { play } = useSoundEffects()
   useSoundOnMount('complete', quests.length > 0)
@@ -66,7 +73,7 @@ export function QuestCompleteOverlay() {
             <Swords className="h-7 w-7 text-emerald-500" />
           </div>
           <h2 className="text-xl font-bold tracking-tight">
-            {quests.length === 1 ? 'Quest complete!' : `${quests.length} quests complete!`}
+            {quests.length === 1 ? 'Quest complete' : `${quests.length} quests complete`}
           </h2>
         </div>
 
@@ -97,7 +104,7 @@ export function QuestCompleteOverlay() {
         </button>
         {!user && (
           <p className="text-center text-xs text-muted-foreground">
-            You&apos;ll get the XP now — sign in to bank the gems too.
+            Sign in to keep the gems. You get the XP either way.
           </p>
         )}
         <button

@@ -123,6 +123,11 @@ jobs:
       - name: Lint resource pages
         run: python3 scripts/resource_lint.py
 
+      # The Assumptions Bank (docs/assumptions-bank.md). Stdlib only: `--against`, which
+      # reads a document, is run by whoever transcribes a set, not here.
+      - name: Lint assumption sets
+        run: python3 scripts/assumption_lint.py
+
   simulated-learner:
     name: simulated learner isolation
     runs-on: ubuntu-latest

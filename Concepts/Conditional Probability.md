@@ -1,89 +1,84 @@
 ---
 verification:
-  status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:29e15eb6b8d8e4ef0886d92e8e2afb325c20c74165cc9150cdad046539b13fcb
+  content_hash: sha256:911020c9b658b41387d0b7335a6898b1a58137b6fd903e2cc58b553914bed69a
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 pp.133-134 (PDF pp.141-142) definition with P(E) > 0 and Example 4.2 (woman aged 60 living to 80 as a conditional probability); §4.1 Independent Events pp.139-140 (PDF pp.147-148); §4.2 p.162 (PDF p.170) continuous conditional probability, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1f, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (conditional probability is a probability measure, Axiom 3 for disjoint unions given B, P(A^c|C)=1-P(A|C); equally likely outcomes P(A|B)=|A∩B|/|B|), sha256:c8061ae0b186a2655a22916fe53d09d9551ad8f170e533806480f8c86ced4c07 — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.2 Law of Total Probability (P(A)=Σ P(A∩B_i) over a partition), sha256:3f3ac7b3163c958cf94f52e1d3250235f12353a03aa086f2b90d4d03407a7b78 — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (conditional PMF P_{X|A}(x_i)=P(X=x_i and A)/P(A); E[X|A]=Σ x_i P_{X|A}(x_i)), sha256:f96cfc28220511431e9ae38905cb664d260d0c2d770fcc6d9a9288149ed138e0 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (F_{X|A}(x)=(F_X(x)-F_X(a))/(F_X(b)-F_X(a)) given a≤X≤b; endpoints immaterial for continuous X), sha256:b9e764e0b2adb7b888334dd58ee563d47c9c6cd66bd666fa4fa24c7d5e3b32a4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 conditional probability P(F|E)=P(F∩E)/P(E), E as the new sample space (pp.133-134, PDF pp.141-142), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 independence (either event probability 0 counts as independent), Thm 4.1 independent iff P(E∩F)=P(E)P(F) (pp.139-140, PDF pp.147-148); Def. 4.2 mutual independence over every subset, pairwise does not imply mutual (p.141, PDF p.149); Exercise 7: A heads on first toss, B heads on second, C tosses match are pairwise independent but not independent (PDF p.159), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.0 Conditional Probability (definition; conditional probability is a probability measure, P(A^c|C)=1−P(A|C); chain rule), read 2026-11-06, sha256:6068941689f60230e24fc4ad4a1589902e6d5d4e9f080efa97d0ade85a2d6e4a — https://www.probabilitycourse.com/chapter1/1_4_0_conditional_probability.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.3 Conditioning and Independence (conditional PMF P_{X|A}(x_i)=P(X=x_i and A)/P(A); E[X|A]=Σ x_i P_{X|A}(x_i); LTP over values of a discrete random variable; independent random variables: conditional PMF equals marginal), read 2026-11-06, sha256:937740fa7d0feecdb1a09585b50e5fc6bea5ed4cfae6425ad7aa56855a0f58e4 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence (conditional CDF (F_X(x)−F_X(a))/(F_X(b)−F_X(a)); law of total probability P(A)=∫P(A|X=x)f_X(x)dx (5.16)), read 2026-11-06, sha256:5d697207bda40aa9ff1ce9a59db1231fe112d2fd061fed5ce08921d8c889c03a — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2), Topic 2 outcome b (PDF p.3), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Conditional Probability.md
 ---
 
-**Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event $B$ is known to have occurred, restricting the sample space to $B$.
-
-> $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
-
-- If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
-- Conditional probability is foundational to [[Bayes Theorem]], [[The Law of Total Probability]], and various insurance and actuarial calculations
-
 ![[Media/Figures/Conditional_Probability.svg|340]]
 
-### Conditioning keeps every rule
+A **Conditional Probability** is the probability that an [[Event|event]] $E$ occurs given that an event $F$ has occurred. If $P(F) > 0$, the conditional probability of $E$ given $F$ is
 
-For a fixed event $B$ with $P(B) > 0$, $P(\cdot \mid B)$ is itself a probability, so every probability rule holds conditionally on $B$.
+> $$P(E \mid F) = \frac{P(E \cap F)}{P(F)}$$
 
-> $$P(A^c \mid B) = 1 - P(A \mid B)$$
+- $P(E \cap F)$ is the [[Probability|probability]] that both $E$ and $F$ occur.
 
-> $$P(A_1 \cup A_2 \mid B) = P(A_1 \mid B) + P(A_2 \mid B)$$
+> [!idea] The idea
+> Knowing that $F$ occurred shrinks the [[Sample Space|sample space]] to $F$.
 
-- The complement rule holds conditionally: the probability of the complement of an event given $B$ is 1 minus the probability of the event given $B$.
-- For mutually exclusive $A_1$ and $A_2$, the probability of their union given $B$ is the sum of their conditional probabilities given $B$.
-- So when a signal sent as $s$ is either received correctly or not, $P(\text{received wrongly} \mid s \text{ sent}) = 1 - P(\text{received correctly} \mid s \text{ sent})$; and when only the symbols 0 and 1 can be sent, $P(1 \text{ sent}) = 1 - P(0 \text{ sent})$.
+> [!example]- An insurer covers 1,000 drivers. 300 are young, and 60 of the young drivers had a claim last year. What is the probability that a young driver had a claim? {Example}
+> - Let $E$ be "had a claim" and $F$ be "is young".
+> - $P(E \cap F) = \frac{60}{1{,}000} = 0.06$ and $P(F) = \frac{300}{1{,}000} = 0.30$.
+> - $P(E \mid F) = \frac{0.06}{0.30} = 0.20$.
+> - This is the same as $\frac{60}{300}$, the share of the young drivers who had a claim.
 
-### Intervals of one variable
+## The multiplication rule
 
-When both events are intervals of the same random variable, their intersection is the overlap of the two intervals.
+Multiplying both sides by $P(F)$ gives the probability that both events occur:
 
-> $$P(X \le b \mid X > a) = \frac{P(a < X \le b)}{P(X > a)} = \frac{F(b) - F(a)}{1 - F(a)}, \quad a < b$$
+> $$P(E \cap F) = P(E \mid F)\,P(F)$$
 
-> $$P(a < X < b \mid c < X < d) = \frac{P(\max(a,c) < X < \min(b,d))}{P(c < X < d)}$$
+A statement such as "25% of those who insure a car also insure a home" gives a conditional probability, $P(\text{home} \mid \text{car}) = 0.25$. When $P(E \mid F) = P(E)$, knowing $F$ changes nothing, and $E$ and $F$ are [[Independent Events|independent]].
 
-- When conditioning on $X \ge a$ and asking for $X \le b$ with $a < b$, the intersection of the two events is the interval $a \le X \le b$, so for a continuous $X$ the conditional probability is $(F(b) - F(a))/(1 - F(a))$.
-- For a continuous $X$ it does not matter whether the endpoints are included.
-- For overlapping intervals with $a < c < b < d$, the overlap is $(a, b) \cap (c, d) = (c, b)$, which becomes the numerator event.
-- A person known to be alive at age $x$, such as one insured at age $x$, is conditioned on survival: with lifetime $T$ from birth, the probability of death within $n$ years is $P(T \le x + n \mid T > x)$, not $P(T \le x + n)$.
+> [!example]- 40% of policyholders insure a car, and 25% of those who insure a car also insure a home. What is the probability that a policyholder insures both? {Example}
+> - Let $F$ be "insures a car" and $E$ be "insures a home", so $P(F) = 0.40$ and $P(E \mid F) = 0.25$.
+> - $P(E \cap F) = 0.25 \times 0.40 = 0.10$.
 
-### Two-way tables
+## When one event contains the other
 
-When a population is cross-classified by two attributes, lay it out as a two-way table: each cell is a joint count, and each row or column total is the sum of its cells because the categories partition the population.
+If every outcome of $E$ is also in $F$, $E \subseteq F$, then $E \cap F = E$, and
 
-- A missing cell is found by subtraction: its row or column total minus the other cells of that row or column.
-- For a member chosen at random, a conditional probability is a cell divided by its row or column total, $P(A \mid B) = |A \cap B| / |B|$.
+> $$P(E \mid F) = \frac{P(E)}{P(F)}$$
 
-### Conditional expectation given an event
+> [!example]- A fair die is rolled and shows at least 4. What is the probability that it shows 6? {Example}
+> - Let $E = \{6\}$ and $F = \{4, 5, 6\}$, so $E \subseteq F$.
+> - $P(E \mid F) = \frac{1/6}{3/6} = \frac{1}{3}$.
 
-For an event $A$ with $P(A) > 0$, the conditional expectation of $X$ given $A$ weights each value by its conditional probability $P(X = x \mid A) = P(X = x,\ A)/P(A)$.
+## Conditioning on a random variable
 
-> $$E[X \mid A] = \sum_x x \, \frac{P(X = x,\ A)}{P(A)} = \frac{E[X \cdot 1_A]}{P(A)}$$
+A condition on a [[Random Variable|random variable]] $X$ is an event such as $\{X > a\}$. For $b > a$, the event $\{X > b\}$ is contained in $\{X > a\}$, so
 
-- where $1_A$ is the indicator of $A$: 1 if $A$ occurs and 0 otherwise.
-- The conditional expectation of $X$ given an event $A$ is the sum of $x$ times the joint probability of $x$ and $A$, divided by $P(A)$.
+> $$P(X > b \mid X > a) = \frac{P(X > b)}{P(X > a)}$$
 
-### Equally likely draws
+The complement rule still holds inside the condition: $P(X \le b \mid X > a) = 1 - P(X > b \mid X > a)$.
 
-When every outcome is equally likely, conditioning on $B$ leaves the outcomes in $B$ equally likely, so $P(A \mid B) = |A \cap B| / |B|$.
+> [!example]- A loss is uniform on $(0, 1{,}000)$. Given that it exceeds a deductible of 400, what is the probability that it is at most 800? {Example}
+> - $P(X > 800) = 0.2$ and $P(X > 400) = 0.6$.
+> - $P(X > 800 \mid X > 400) = \frac{0.2}{0.6} = \frac{1}{3}$.
+> - The probability that the loss is at most 800 is $1 - \frac{1}{3} = \frac{2}{3}$.
 
-- When $n$ items are drawn without replacement and we condition on no item of one category being drawn, every $n$-item draw from the other items is equally likely, so the conditional distribution is that of drawing $n$ without replacement from the population with that category removed.
+## Expected value given an event
 
-> [!example]- Conditioning a draw on a category being absent {Example}
-> An urn holds 4 red, 3 blue and 5 green balls. Three are drawn without replacement. Given that no green ball is drawn, what is the probability that exactly two are red?
->
-> > [!answer]-
-> > **Plan:** with green excluded, the draw is three balls from the 7 red and blue balls, all equally likely.
-> > $$P(2 \text{ red} \mid \text{no green}) = \frac{\binom{4}{2}\binom{3}{1}}{\binom{7}{3}} = \frac{6 \times 3}{35} = \frac{18}{35} \approx 0.514$$
-> > Removing the excluded category first avoids computing $P(\text{no green})$ separately.
+The [[Expected Value|expected value]] of a discrete random variable $X$ given an event $F$ weights each value by its probability within $F$:
 
-> [!example]- Claim Severity Given Deductible Threshold {Example}
-> A loss $X$ is uniformly distributed on $(0, 1000)$. Given that the loss exceeds 400, what is the probability it also exceeds 700?
->
-> > [!answer]-
-> > Let $A = \{X > 700\}$ and $B = \{X > 400\}$. Since $A \subseteq B$, we have $A \cap B = A$.
-> > $$P(A \mid B) = \frac{P(X > 700)}{P(X > 400)} = \frac{300/1000}{600/1000} = \frac{300}{600} = 0.5$$
+> $$E[X \mid F] = \sum_x x \, \frac{P(\{X = x\} \cap F)}{P(F)}$$
+
+> [!example]- A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. What is the expected loss given that the loss is positive? {Example}
+> - The event $F$ is "the loss is positive", with $P(F) = 0.3 + 0.2 + 0.1 = 0.6$.
+> - The positive losses contribute $100(0.3)$, $400(0.2)$ and $1{,}000(0.1)$, which add to $210$.
+> - $E[X \mid F] = \frac{210}{0.6} = 350$.
+
+> [!trap] Reading the condition backwards
+> "20% of young drivers had a claim" is $P(\text{claim} \mid \text{young})$. "20% of drivers with a claim are young" is $P(\text{young} \mid \text{claim})$, a different number. When a question gives one and asks for the other, use [[Bayes Theorem|Bayes' theorem]].

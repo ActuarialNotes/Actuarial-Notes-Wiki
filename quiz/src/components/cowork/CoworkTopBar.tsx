@@ -164,7 +164,7 @@ export function CoworkTopBar({
             <div className="pb-3">
               <div className="flex flex-wrap gap-1.5 py-2.5">
                 <SearchScopePill active={inSource} disabled={!entityId} onClick={() => setScope('source')}>
-                  This Source
+                  This source
                 </SearchScopePill>
                 <SearchScopePill active={!inSource} onClick={() => setScope('all')}>
                   Everywhere

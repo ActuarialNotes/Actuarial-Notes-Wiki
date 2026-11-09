@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cf5c04f0ce397039f4d1f76f4aaa4f18e2c9c1c715f971fa61428efbab8b2211
+  content_hash: sha256:6c99ff868de01087828975d54185900681f437f7e792d17c2030293d809b1042
   sources:
     - "Daniel, Poisson processes (and mixture distributions), CAS Study Note (June 2008; MAS-I reading), §1.3.3 Mixture distributions, PDF pp.9-12: Example 1.16 and Fact 1.17 (Mixing Method valid only for quantities linear in the probability/density function), Example 1.22 (Poisson with gamma(alpha, theta) mean is negative binomial with r = alpha, beta = theta), Example 1.23 (mixed Poisson process), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Loss Data Analytics (Frees et al., open textbook), ch.3 §3.3.5 finite mixtures (f, F, E[X^r] and M_X(t) are weighted sums) and §3.3.6 continuous mixtures (f = integral f(x|theta) g(theta) dtheta, E[X^k] = E[E[X^k|Theta]], Var(X) = E[Var(X|Theta)] + Var[E(X|Theta)]), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -19,76 +19,74 @@ verification:
   log: .verify/Concepts/Mixture Distribution.md
 ---
 
-A **Mixture Distribution** describes a variable $X$ drawn from a population made of subpopulations with different distributions: first a subpopulation is chosen at random, then $X$ is drawn from it. Its density (and its [[Cumulative Distribution Function (CDF)|CDF]]) is the weighted average of the component densities, with the weights given by a [[Mixing Distribution|mixing distribution]] — discrete for a finite mixture, continuous for a continuous mixture.
+A **Mixture Distribution** is the distribution of a random variable $X$ drawn by first choosing one of several component distributions at random and then drawing from it. If component $i$ is chosen with probability $a_i$, the distribution function of $X$ is
 
-> $$f_X(x) = \sum_{i=1}^{k} a_i\, f_{X_i}(x), \quad a_i \ge 0,\ \sum_i a_i = 1$$
+> $$F(x) = \sum_{i=1}^{n} a_i\,F_i(x)$$
 
-> $$f_X(x) = \int f_{X \mid \Theta}(x \mid \theta)\, g_\Theta(\theta)\, d\theta$$
+- $F_i(x)$ is the distribution function of component $i$.
+- $a_i \ge 0$ and $a_1 + \cdots + a_n = 1$.
 
-> $$E[X^m] = \sum_{i=1}^{k} a_i\, E[X_i^m] = E\big[E[X^m \mid \Theta]\big]$$
+The density, the survival function, the raw moments and the moment generating function mix with the same weights. A probability under a mixture is therefore the weighted average of the probabilities under the components. The variance and the median do not mix this way, and a mixture of exponential distributions is not an exponential distribution.
 
-- $a_i$ is the proportion of the population in subpopulation $i$; in the continuous case $\Theta$ indexes the subpopulations and $g_\Theta$ is its density. The CDF, survival function, raw moments and moment generating function mix with the same weights.
-- **The mixing method.** Any quantity that is *linear* in the density — a probability, a mean, a second moment — can be found by computing it within each subpopulation and averaging. The **variance is not linear**: compute $E[X^2] - (E[X])^2$ from the mixed moments, or use the law of total variance ([[Variance for Conditional and Marginal Distributions]]):
+> [!example]- Of a portfolio's claims, 70% are exponential with mean 1,000 and 30% are Pareto with $\alpha = 3$ and $\theta = 4{,}000$. What is the probability that a randomly chosen claim exceeds 5,000? {Example}
+> - Under the exponential component, $P(X > 5{,}000) = e^{-5} = 0.006738$.
+> - Under the Pareto component, $P(X > 5{,}000) = (4{,}000/9{,}000)^3 = 0.08779$.
+> - The mixture probability is $0.7 \times 0.006738 + 0.3 \times 0.08779 = 0.0311$.
 
-> $$\text{Var}(X) = E\big[\text{Var}(X \mid \Theta)\big] + \text{Var}\big(E[X \mid \Theta]\big)$$
+## Moments of a mixture
 
-- Averaging the component variances misses the second term, the spread *between* subpopulation means, and so understates the variance.
-- **Standard results.** A [[Poisson Distribution|Poisson]] whose mean is [[Gamma|gamma]] with parameters $\alpha$ and $\theta$ is [[Negative Binomial Distribution|negative binomial]] with $r = \alpha$, $\beta = \theta$ — the basis of the [[Mixed Poisson Process]]. An [[Exponential Distribution|exponential]] whose rate is gamma is [[Pareto Distribution|Pareto]].
-- **Mixed (discrete–continuous) type.** A mixture of a point mass and a continuous distribution gives a CDF with a jump, such as an annual loss that is $0$ with positive probability and continuous otherwise. Its moments combine a sum over the mass points with an integral over the continuous part.
+The $k$th raw moment of a mixture is the weighted average of the components' raw moments:
 
-> [!example]- Small and Large Claims in One Book {Example}
-> 70% of a portfolio's claims are exponential with mean 1,000 and 30% are Pareto with $\alpha = 3$, $\theta = 4{,}000$. Find $P(X > 5{,}000)$, $E[X]$ and $\text{Var}(X)$ for a randomly chosen claim.
->
-> > [!answer]-
-> > Mix the survival probabilities and the first two moments. For the Pareto, $E[X] = \theta/(\alpha - 1) = 2{,}000$ and $E[X^2] = 2\theta^2/[(\alpha-1)(\alpha-2)] = 16{,}000{,}000$; for the exponential, $E[X] = 1{,}000$ and $E[X^2] = 2{,}000{,}000$:
-> >
-> > $$
-> > \begin{align*}
-> > P(X > 5{,}000) &= 0.7\,e^{-5} + 0.3\left(\tfrac{4{,}000}{9{,}000}\right)^{3} \\
-> >   &= 0.00472 + 0.02634 \\
-> >   &= 0.0311 \\
-> > E[X] &= 0.7(1{,}000) + 0.3(2{,}000) \\
-> >   &= 1{,}300 \\
-> > E[X^2] &= 0.7(2{,}000{,}000) + 0.3(16{,}000{,}000) \\
-> >   &= 6{,}200{,}000 \\
-> > \text{Var}(X) &= 6{,}200{,}000 - 1{,}300^2 \\
-> >   &= 4{,}510{,}000
-> > \end{align*}
-> > $$
-> >
-> > Averaging the component variances, $0.7(1{,}000{,}000) + 0.3(12{,}000{,}000) = 4{,}300{,}000$, falls short by exactly the variance of the means, $0.7 \times 0.3 \times (2{,}000 - 1{,}000)^2 = 210{,}000$.
+> $$E[X^k] = \sum_{i=1}^{n} a_i\,E[X_i^k]$$
 
-> [!example]- Gamma-Mixed Exponential Severity {Example}
-> Each insured's claim size is exponential with rate $\Lambda$ (mean $1/\Lambda$), and $\Lambda$ varies across insureds as a gamma distribution with $\alpha = 3$ and $\theta = 0.001$. Find the unconditional survival function and $P(X > 1{,}000)$.
->
-> > [!answer]-
-> > Mix the conditional survival function $e^{-\Lambda x}$ over $\Lambda$; the expectation is the gamma moment generating function $(1 - \theta t)^{-\alpha}$ at $t = -x$:
-> >
-> > $$
-> > \begin{align*}
-> > S(x) &= E\big[e^{-\Lambda x}\big] \\
-> >   &= (1 + 0.001x)^{-3} \\
-> >   &= \left(\frac{1{,}000}{x + 1{,}000}\right)^{3}
-> > \end{align*}
-> > $$
-> >
-> > This is a Pareto with $\alpha = 3$ and $\theta = 1{,}000$, so $P(X > 1{,}000) = (1/2)^3 = 0.125$ and $E[X] = 1{,}000/2 = 500$. This Pareto has moments only of order below $3$, so its tail is heavier than any single exponential's, which has every moment. A finite mixture of exponentials, by contrast, still has every moment and stays light-tailed.
+- $X_i$ is a random variable with the distribution of component $i$.
 
-> [!example]- A Loss With a Mass at Zero {Example}
-> A policy has no loss with probability 0.6; otherwise the loss is exponential with mean 500. Find $F(0)$, $F(200)$ and $E[X]$.
->
-> > [!answer]-
-> > $X$ mixes a point mass at 0 (weight 0.6) with an exponential (weight 0.4):
-> >
-> > $$
-> > \begin{align*}
-> > F(0) &= 0.6 \\
-> > F(200) &= 0.6 + 0.4\left(1 - e^{-200/500}\right) \\
-> >   &= 0.6 + 0.4(0.3297) \\
-> >   &= 0.7319 \\
-> > E[X] &= 0.6(0) + 0.4(500) \\
-> >   &= 200
-> > \end{align*}
-> > $$
-> >
-> > The CDF jumps by 0.6 at zero and rises continuously after it — neither a discrete nor a continuous distribution.
+The variance is $E[X^2] - (E[X])^2$ from the mixed moments. Equivalently, if $I$ is the component chosen, the [[Variance for Conditional and Marginal Distributions|law of total variance]] gives
+
+> $$\text{Var}(X) = E\left[\text{Var}(X \mid I)\right] + \text{Var}\left(E[X \mid I]\right)$$
+
+The second term is the variance between the component means, so the average of the component variances understates the variance of the mixture.
+
+> [!example]- For the portfolio above, what are the mean and the variance of a randomly chosen claim? {Example}
+> - The exponential component has $E[X_1] = 1{,}000$ and $E[X_1^2] = 2{,}000{,}000$. The Pareto component has $E[X_2] = 2{,}000$ and $E[X_2^2] = 16{,}000{,}000$.
+> - The mean is $E[X] = 0.7 \times 1{,}000 + 0.3 \times 2{,}000 = 1{,}300$.
+> - The second moment is $E[X^2] = 0.7 \times 2{,}000{,}000 + 0.3 \times 16{,}000{,}000 = 6{,}200{,}000$.
+> - The variance is $6{,}200{,}000 - 1{,}300^2 = 4{,}510{,}000$.
+> - The average of the component variances is $0.7 \times 1{,}000{,}000 + 0.3 \times 12{,}000{,}000 = 4{,}300{,}000$, which falls short by the variance of the means, $0.7 \times 0.3 \times 1{,}000^2 = 210{,}000$.
+
+## Continuous mixtures
+
+When the component is indexed by a continuous random variable $\Lambda$ with density $g(\lambda)$, called the [[Mixing Distribution|mixing distribution]], the density of $X$ is
+
+> $$f(x) = \int f(x \mid \lambda)\,g(\lambda)\,d\lambda$$
+
+- $f(x \mid \lambda)$ is the density of $X$ given $\Lambda = \lambda$.
+
+The moments follow from the law of total expectation, $E[X^k] = E\left[E[X^k \mid \Lambda]\right]$. Two mixtures give named distributions:
+
+- A [[Poisson Distribution|Poisson]] whose mean $\Lambda$ is [[Gamma|gamma]] with parameters $\alpha$ and $\theta$ is [[Negative Binomial Distribution|negative binomial]] with $r = \alpha$ and $\beta = \theta$. This is the basis of the [[Mixed Poisson Process|mixed Poisson process]].
+- An [[Exponential Distribution|exponential]] whose rate $\Lambda$ is gamma with parameters $\alpha$ and $\theta$ is [[Pareto Distribution|Pareto]] with shape $\alpha$ and scale $1/\theta$.
+
+> [!example]- Each insured's claim size is exponential with rate $\Lambda$, and $\Lambda$ is gamma with $\alpha = 3$ and $\theta = 0.001$. What is the probability that a claim exceeds 1,000? {Example}
+> - Given $\Lambda = \lambda$, $P(X > x) = e^{-\lambda x}$.
+> - Averaging over the gamma distribution, $P(X > x) = E[e^{-\Lambda x}] = (1 + 0.001x)^{-3}$, the survival function of a Pareto with $\alpha = 3$ and $\theta = 1{,}000$.
+> - The probability is $P(X > 1{,}000) = 2^{-3} = 0.125$.
+
+## Mixed distributions with a point mass
+
+A mixture of a point mass and a continuous distribution is a mixed distribution. Its distribution function jumps at the point mass, and the size of the jump is the probability there. The expected value of a function $g(X)$ adds the point masses and integrates over the continuous part:
+
+> $$E[g(X)] = \sum_{j} g(x_j)\,P(X = x_j) + \int g(x)\,f(x)\,dx$$
+
+- $x_j$ are the points with positive probability.
+- $f(x)$ is the density of the continuous part, which integrates to $1 - \sum_j P(X = x_j)$.
+
+An annual loss that is 0 when no claim occurs, or a claim closed without payment, is modelled this way.
+
+> [!example]- An annual loss is 0 with probability 0.6 and otherwise exponential with mean 1,000. What are $P(X \le 500)$, $E[X]$ and $\text{Var}(X)$? {Example}
+> - The distribution function jumps by 0.6 at 0, so $P(X \le 500) = 0.6 + 0.4\left(1 - e^{-0.5}\right) = 0.7574$.
+> - The mean is $E[X] = 0.6 \times 0 + 0.4 \times 1{,}000 = 400$.
+> - The second moment is $E[X^2] = 0.4 \times 2{,}000{,}000 = 800{,}000$, so $\text{Var}(X) = 800{,}000 - 400^2 = 640{,}000$.
+
+> [!trap] Mixing the medians
+> Only the distribution function, the density and the raw moments mix with the weights. For an equal mixture of exponentials with means 1 and 3, the average of the component medians is $\frac{0.693 + 2.079}{2} = 1.386$, but the median of the mixture solves $0.5e^{-x} + 0.5e^{-x/3} = 0.5$, which gives 1.147.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ea20e1b647036d03f89d4d8c80ed7ef57b1d570f95082bc81a66f53d77a3809f
+  content_hash: sha256:d3aff079c26759dc779c5d0c9d78c4aef739f5947eda7f7b58ac27f4be6cb307
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 61-62 (PDF pp. 73-74); Ch. 6 pp. 119-120 (PDF pp. 131-132); App. D pp. D-1-D-2, D-6 (PDF pp. 394-395, 399), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
@@ -12,63 +12,45 @@ verification:
   log: .verify/Concepts/Exposure Trend.md
 ---
 
-**Exposure Trend** is the systematic change over time in the average value of a dollar-denominated [[Exposure Base|exposure base]] — payroll, sales, amount of insurance — arising from inflation and drift in the book rather than from a change in the number of risks.
+![[Media/Figures/Exposure_Trend.svg|340]]
+
+**Exposure Trend** is the change over time in the average value of an inflation-sensitive [[Exposure Base|exposure base]], such as payroll, sales or amount of insurance, arising from inflation rather than from a change in the number of risks. Historical exposures are projected to the forecast period by
 
 > $$\text{Trended Exposure} = \text{Historical Exposure} \times (1 + t_E)^{n}$$
 
-- $t_E$ is the annual exposure trend and $n$ the trend period in years, measured from the average date of the historical period to the average date of the forecast period — the same period used for [[Loss Trend|loss trend]].
-- Exposure trend applies **only** to inflation-sensitive bases. Car-years and house-years do not inflate; payroll, receipts and amount of insurance do.
-- In the [[Pure Premium Method]] the exposure trend sits in the denominator and therefore **offsets** loss trend. The quantity that matters is the *net* pure premium trend:
+- $t_E$ is the annual exposure trend.
+- $n$ is the trend period in years, measured from the average date of the historical period to the average date of the forecast period.
+
+The trend period is the same one used for [[Loss Trend|loss trend]]. Exposure trend applies **only** to inflation-sensitive bases. Car-years and house-years do not inflate, while payroll, receipts and amount of insurance do. The trend can be estimated from the insurer's own data, such as workers compensation payroll, or from industry or government indices, such as an average wage index.
+
+> [!example]- A workers compensation book's Accident Year 2023 payroll is $\$50{,}000{,}000$. Wages rise 3% a year, and the trend period is 2.5 years. What is the trended payroll? {Example}
+> - The exposure trend factor is $1.03^{2.5} = 1.0767$.
+> - The trended payroll is $50{,}000{,}000 \times 1.03^{2.5} = \$53{,}834{,}795$.
+
+## Exposure trend in the pure premium method
+
+In the [[Pure Premium Method|pure premium method]] the exposures are the denominator, so exposure trend **offsets** loss trend. The pure premium moves at the net trend
 
 > $$1 + t_{\text{net}} = \frac{1 + t_L}{1 + t_E}$$
 
-- **Workers compensation premium (Werner & Modlin, App. D).** Historical loss cost premium, already at current rate level, is brought to the current payroll level by multiplying each accident year by the cumulative product of the annual payroll level changes in the years after it, so the most recent year's factor is 1.000 and a year's own change is not applied to it. It is then multiplied by one plus the wage increase expected between the most recent historical period and the time the rates will be in effect, giving a composite exposure trend factor.
-- Ignoring exposure trend on an inflating base understates the future denominator, overstates the projected pure premium, and produces an indicated increase the insurer does not need — because the same inflation that drives the losses is already raising the premium base automatically.
-- Under the [[Loss Ratio Method]] the effect enters through [[Premium Trend|premium trend]] instead: the premium at current rates grows with the exposure base even with no rate change, so the two methods handle the same phenomenon in different places and must not both be applied.
+- $t_L$ is the annual loss trend.
 
-![[Media/Figures/Exposure_Trend.svg|340]]
+> [!example]- The same book has Accident Year 2023 losses of $\$1{,}600{,}000$ and a loss trend of 6% a year. What is the projected pure premium per $\$100$ of payroll? {Example}
+> - The trended losses are $1{,}600{,}000 \times 1.06^{2.5} = \$1{,}850{,}907$.
+> - The trended payroll in units of $\$100$ is $53{,}834{,}795/100 = 538{,}348$.
+> - The projected pure premium is $1{,}850{,}907/538{,}348 = \$3.438$ per $\$100$.
+> - Against the historical $1{,}600{,}000/500{,}000 = \$3.200$, the increase is $(1.06/1.03)^{2.5} = 1.0744$, about 2.9% a year.
 
-> [!example]- Net Pure Premium Trend in Workers Compensation {Example}
-> A workers compensation book has accident-year-2023 payroll of $\$50{,}000{,}000$ and losses of $\$1{,}600{,}000$. Annual wage (exposure) trend is $3.0\%$, annual loss trend is $6.0\%$, and the trend period is $2.5$ years.
->
-> Project the pure premium per $\$100$ of payroll.
->
-> > [!answer]-
-> > Trending each side separately:
-> >
-> > $$\begin{align*}
-> > \text{Trended payroll} &= \$50{,}000{,}000 \times 1.03^{2.5} \\
-> > &= \$50{,}000{,}000 \times 1.0767 \\
-> > &= \$53{,}835{,}000 \\[6pt]
-> > \text{Trended losses} &= \$1{,}600{,}000 \times 1.06^{2.5} \\
-> > &= \$1{,}600{,}000 \times 1.1568 \\
-> > &= \$1{,}850{,}880
-> > \end{align*}$$
-> >
-> > $$\begin{align*}
-> > \text{Projected PP per \$100} &= \frac{\$1{,}850{,}880}{\$53{,}835{,}000 / 100} \\
-> > &= \$3.438
-> > \end{align*}$$
-> >
-> > Against the historical pure premium of $\$1{,}600{,}000 / (\$50{,}000{,}000/100) = \$3.200$, the net increase is
-> >
-> > $$\frac{1.06^{2.5}}{1.03^{2.5}} = \frac{1.1568}{1.0767} = 1.0744$$
-> >
-> > i.e. $+7.4\%$ over $2.5$ years, or about $2.9\%$ a year — the $6\%$ loss trend net of the $3\%$ wage trend.
+## Exposure trend in the loss ratio method
 
-> [!example]- The Cost of Forgetting Exposure Trend {Example}
-> Using the same book, an actuary trends losses at $6\%$ but leaves payroll at its historical level.
->
-> What indication results, and what is the error?
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Untrended-exposure PP} &= \frac{\$1{,}850{,}880}{\$50{,}000{,}000 / 100} \\
-> > &= \$3.702
-> > \end{align*}$$
-> >
-> > against the correct $\$3.438$:
-> >
-> > $$\frac{3.702}{3.438} - 1 = +7.7\%$$
-> >
-> > The actuary would indicate a rate $7.7\%$ higher than needed. The reason is that the rate is charged *per $\$100$ of payroll*: as wages inflate, premium rises automatically at the current rate level without any filing. Charging a higher rate on top of an already-inflating base double-counts wage inflation — the exposure-side twin of the classic "trend and develop the same growth twice" error described in [[Loss Development]].
+Under the [[Loss Ratio Method|loss ratio method]] the effect enters through [[Premium Trend|premium trend]] instead. The premium at current rates grows with the exposure base even with no rate change. The two methods handle the same inflation in different places, and it is not applied twice.
+
+For workers compensation, Werner & Modlin bring historical premium at current rate level to the current payroll level with the cumulative product of the annual payroll level changes after each year. It is then multiplied by one plus the wage increase expected up to the period the rates will be in effect.
+
+> [!example]- Wages have risen 2% in 2023 and 3% in 2024, and a further 2.5% is expected up to the period the new rates will be in effect. What composite factor brings Accident Year 2022 premium to the projected payroll level? {Example}
+> - The changes after 2022 bring it to the current payroll level, $1.02 \times 1.03 = 1.0506$.
+> - The expected change projects it forward, so the composite factor is $1.0506 \times 1.025 = 1.0769$.
+> - The 2024 premium's factor uses no historical change, only the projection, $1.025$.
+
+> [!trap] Trending the losses but not an inflating exposure base
+> The rate is charged per $\$100$ of payroll, so premium rises with wages at an unchanged rate. Trending the losses but leaving payroll at $\$50{,}000{,}000$ gives a pure premium of $\$3.702$, against the correct $\$3.438$, and indicates a rate 7.7% higher than needed.

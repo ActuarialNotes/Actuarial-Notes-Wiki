@@ -1,64 +1,91 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e5b129de26846e85f905ef980302d3de0c2429d85c5fd75388200096e2c6e9cf
+  content_hash: sha256:3ef2bcee56e7f37d216b682ca9e407a4cc3f34db574005c27313a1fc207b0ac1
   sources:
-    - "SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), Gamma A.3.2.1 (PDF p.9), Exponential A.3.3.1 and Lognormal (PDF p.11), Poisson B.2.1.1 (PDF p.14), Binomial (PDF p.15), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q137 (PDF p.40), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, sec. 1.3.5.1 Measures of Location (fetched 2026-09-27), sha256:0a089979887b22d95c06e33973825f6222d73b60f1cde964df479a13bbd7d1d3 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (CV = SD/mean; sqrt(n) sigma less than n sigma) and benefit-limit section (premium based primarily on expected claim payments), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "SOA Probability Exam syllabus, November 2026, univariate random variables learning objectives c) (expected values incl. moments, mode, median, percentiles) and d) (variance, standard deviation, coefficient of variation), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §9.1.2 MAP estimation: f_Y(y) does not depend on x, so equivalently maximize f_(Y|X)(y|x) f_X(x), sha256:ac2073c4bbdc2b19af26236bf2d63402a9b5148981fb7bb796b6c0b6f8f9db28 — https://www.probabilitycourse.com/chapter9/9_1_2_MAP_estimation.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §4.1.1 PDF, Range R_X = {x | f_X(x) > 0}, sha256:20e46d6010878510f8f2fb209f72164daf90f0c7379d7d764099b84fc4bdab68 — https://www.probabilitycourse.com/chapter4/4_1_1_pdf.php"
-    - "OpenStax Calculus Volume 1 (HTML fetched 2026-10-30), §4.3 Maxima and Minima, Problem-Solving Strategy: Locating Absolute Extrema over a Closed Interval, sha256:ffdbe9045d9f5633b3a9364add16bde1cfbf3b1eb10f505c1982b73318e57de5 — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §4.1.3 Functions of continuous random variables, Theorem for strictly monotonic g: f_Y(y) = f_X(x_1)/|g'(x_1)| with g(x_1)=y, sha256:835de7fe604e1ea63a96adfd2249b2233249f90fd70dd314ea3bdfa0371d9979 — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php"
+    - "SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), gamma mode = theta(alpha-1) (PDF p.9), exponential mode = 0 and lognormal mode = exp(mu - sigma^2) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "SOA Exam P Sample Solutions (2026-05 file), Q137 (PDF p.40: integer Poisson parameter gives equal modes at the parameter and one less; P(N<=4)=0.815 first above 0.75), Q143-Q144 (PDF pp.40-41: constant of proportionality not needed for the mode), Q176 (PDF p.41), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "Siegrist, Random (randomservices.org), The Binomial Distribution: density maximal at floor((n+1)p); two consecutive modes m-1 and m when m=(n+1)p is an integer in 1..n, HTML fetched 2026-11-06, sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
+    - "Siegrist, Random (randomservices.org), The Poisson Process / Poisson distribution: single mode at floor(a) if a not an integer, consecutive modes a-1 and a if it is, HTML fetched 2026-11-06, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "Siegrist, Random (randomservices.org), The Lognormal Distribution: mode exp(mu - sigma^2), median/quantile exp(mu + sigma Phi^-1(p)), HTML fetched 2026-11-06, sha256:cec8c0b516a0fcc03bb953f82c186e3faa8ec2eee2479caf48df2850bfe2c51c — https://www.randomservices.org/random/special/LogNormal.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, sec. 1.3.5.1 Measures of Location: mode the most frequent value, not necessarily unique; normal mean = median = mode; right tail heavier -> mean > median (exponential sample mean 1.001, median 0.684, mode 0.254), fetched 2026-11-06, sha256:33ce7517829e7097a99e8278bab71bc8ef71ac1d166edde5c07b8fa132466b98 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), PDF p.8 (premium based primarily on the expected value of the claim payments), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §4.1.1 PDF: range R_X = {x | f_X(x) > 0}, HTML fetched 2026-11-06, sha256:02e4d8947edff66799161896805adc05409f35f8774c1c912f5c5102b47cb3fd — https://www.probabilitycourse.com/chapter4/4_1_1_pdf.php"
+    - "Pishro-Nik, probabilitycourse.com, §4.1.3 Functions of continuous random variables: strictly increasing g, f_Y(y) = f_X(x_1)/|g'(x_1)|, HTML fetched 2026-11-06, sha256:6ae3f48e0b435b90ce40f8c0ea72d109e655677fffbd0ebacb0b385d5f155788 — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php"
+    - "OpenStax Calculus Volume 1, §4.3 Maxima and Minima: absolute extrema at critical points or endpoints (endpoint extremum), HTML fetched 2026-11-06, sha256:ffdbe9045d9f5633b3a9364add16bde1cfbf3b1eb10f505c1982b73318e57de5 — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima"
+    - "SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes c) (expected values incl. mode, median, percentiles) and e) (amount an insurance company pays to a policyholder given deductibles, coinsurance percentages, benefit limits, inflation), PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mode.md
 ---
 
-The **Mode** of a [[Random Variable]] $X$ is the value at which its [[Probability Mass Function (PMF)|PMF]] or [[Probability Density Function (PDF)|PDF]] $f(x)$ is largest — the single most likely value of a [[Discrete Random Variable|discrete]] variable, or the peak of a [[Continuous Random Variable|continuous]] density.
+A **Mode** of a [[Random Variable|random variable]] $X$ is a value at which its probability function or [[Probability Density Function (PDF)|density]] $f(x)$ is largest:
 
-> $$\text{mode} = \arg\max_{x}\, f(x)$$
+> $$\text{mode} = \arg\max_x f(x)$$
 
-- **Interior peak (continuous):** solve $f'(x) = 0$ and confirm it is a maximum. Maximising $\ln f(x)$ gives the same point and is usually easier for gamma- or lognormal-type densities, where the product becomes a sum.
-- **Endpoint peak:** a density that only decreases, such as the [[Exponential Distribution|exponential]], has its mode at the left end of the support. Calculus finds no critical point there, so always check the endpoints.
-- **Discrete:** compare neighbouring probabilities. For the [[Poisson Distribution|Poisson]], $p(k)/p(k-1) = \lambda/k$, so probabilities rise while $k \le \lambda$ and the mode is $\lfloor \lambda \rfloor$ (both $\lambda - 1$ and $\lambda$ when $\lambda$ is an integer). For the [[Binomial Distribution|binomial]] the same argument gives $\lfloor (n+1)p \rfloor$ (and $(n+1)p - 1$ as well when $(n+1)p$ is an integer).
-- A mode need not be unique. A uniform distribution has every point of its support as a mode, and a mixture of two claim populations can be bimodal.
-- Standard results: [[Normal Distribution|normal]] $\mu$; [[Gamma]] $(\alpha - 1)\theta$ for $\alpha \ge 1$; [[Lognormal Distribution|lognormal]] $e^{\mu - \sigma^2}$. For a right-skewed severity, mode < [[Median|median]] < [[Expected Value|mean]] is typical, and the lognormal always obeys it: $e^{\mu - \sigma^2} < e^{\mu} < e^{\mu + \sigma^2/2}$.
-- The mode ignores the tail entirely. It describes the most common claim, not the cost of claims — pricing is done on the mean.
-- **The normalizing constant never matters.** If $f(x) = c\,g(x)$ with $c > 0$, then $f$ and $g$ are largest at the same $x$, so the mode of a density given only up to proportionality is the maximizer of $g$ over the support, and $c$ never needs to be found.
-- **Only the support counts.** A density is 0 outside its stated support, so a root of $f'(x) = 0$ that falls outside the support is discarded; compare the critical points inside it with the values at its endpoints.
-- **Scale and shift.** For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$, and the mode of $X + b$ is the mode of $X$ plus $b$. The density of $Y = cX$ is $f_Y(y) = f_X(y/c)/c$, which is largest where $y/c$ is the mode of $X$.
+- The maximum is taken over the support of $X$, where $f(x) > 0$.
 
-> [!example]- Most Likely Claim Size under a Gamma Severity {Example}
-> Claim sizes have density $f(x) = \dfrac{x\,e^{-x/2{,}000}}{2{,}000^2}$ for $x > 0$ (a gamma with $\alpha = 2$, $\theta = 2{,}000$). Find the mode and compare it with the mean.
+For a [[Discrete Random Variable|discrete]] $X$, the mode is the most likely value. For a [[Continuous Random Variable|continuous]] $X$, it is the peak of the density. A distribution or data set with two equal peaks has two modes.
+
+> [!example]- A fleet's claim counts for twelve months were 1, 2, 3, 3, 3, 4, 4, 4, 5, 2, 6 and 0. What is the mode? {Example}
+> - The mode of a data set is its most frequent value.
+> - The counts 3 and 4 each occur three times, more than any other count.
+> - The data set has two modes, 3 and 4.
+
+## The mode of a discrete distribution
+
+The probabilities of a discrete distribution rise while the ratio of each probability to the one before it is above 1:
+
+> $$\frac{f(k)}{f(k-1)} > 1$$
+
+The mode is the last $k$ at which the ratio is at least 1. For a [[Poisson Distribution|Poisson]] with mean $\lambda$, the ratio is $\frac{\lambda}{k}$, and the mode is
+
+> $$\lfloor \lambda \rfloor$$
+
+- $\lfloor \lambda \rfloor$ is $\lambda$ rounded down.
+- When $\lambda$ is a whole number, $\lambda - 1$ and $\lambda$ are both modes.
+
+For a [[Binomial Distribution|binomial]] with $n$ trials and success probability $p$, the mode is
+
+> $$\lfloor (n + 1)p \rfloor$$
+
+- When $(n + 1)p$ is a whole number, $(n + 1)p - 1$ is a mode as well.
+
+> [!example]- A fleet's monthly claim count $N$ is Poisson with mean 3.4. What is the most likely number of claims? {Example}
+> Each probability is the one before it times $\frac{3.4}{k}$:
 >
-> > [!answer]-
-> > Maximise the log-density:
-> > $$
-> > \begin{align*}
-> > \ln f(x) &= \ln x - \frac{x}{2{,}000} - 2\ln 2{,}000 \\
-> > \frac{d}{dx}\ln f(x) &= \frac{1}{x} - \frac{1}{2{,}000} \\
-> > 0 &= \frac{1}{x} - \frac{1}{2{,}000} \\
-> > x &= 2{,}000
-> > \end{align*}
-> > $$
-> > The second derivative $-1/x^2$ is negative, so this is a maximum: the mode is \$2,000, matching $(\alpha - 1)\theta$. The mean is $\alpha\theta = \$4{,}000$, and the median, found numerically from $F(m) = 0.5$, is about \$3,357. The most common claim is half the average one — a premium set at the mode would collect half the expected cost.
-
-> [!example]- Most Likely Claim Count for a Fleet {Example}
-> A fleet's annual claim count is Poisson with $\lambda = 2.6$. Find the mode and its probability.
+> | $k$ | $f(k)$ | $f(k)/f(k-1)$ |
+> | --- | --- | --- |
+> | 1 | 0.1135 | 3.40 |
+> | 2 | 0.1929 | 1.70 |
+> | 3 | 0.2186 | 1.13 |
+> | 4 | 0.1858 | 0.85 |
 >
-> > [!answer]-
-> > The ratio $p(k)/p(k-1) = 2.6/k$ is $2.6$ at $k = 1$ and $1.3$ at $k = 2$, both above 1, then $0.87$ at $k = 3$. Probabilities rise up to $k = 2$ and fall after, so the mode is $\lfloor 2.6 \rfloor = 2$.
-> > $$
-> > \begin{align*}
-> > p(2) &= \frac{e^{-2.6}\,(2.6)^2}{2} \\
-> >      &= 0.07427 \times 3.38 \\
-> >      &= 0.2510
-> > \end{align*}
-> > $$
-> > Its neighbours are $p(1) = 0.1931$ and $p(3) = 0.2176$. Two claims is the single likeliest outcome, yet it happens only a quarter of the time, and the mean of $2.6$ is not itself a possible count.
+> - The ratio drops below 1 between $k = 3$ and $k = 4$, so the probabilities rise up to 3 and fall after it.
+> - The mode is 3, which agrees with $\lfloor 3.4 \rfloor = 3$.
+
+## The mode of a continuous distribution
+
+A mode inside the support of a continuous $X$ is a point where the density stops rising, which solves
+
+> $$f'(x) = 0$$
+
+Maximizing $\ln f(x)$ gives the same point, and is often easier. A constant in front of the density does not matter.
+
+> [!example]- Claim sizes have density proportional to $x^2 e^{-x/500}$ for $x > 0$. What is the most likely claim size? {Example}
+> - The constant doesn't matter, so maximize $\ln(x^2 e^{-x/500}) = 2\ln x - \frac{x}{500}$.
+> - Its derivative is $\frac{2}{x} - \frac{1}{500}$, which is 0 at $x = 1{,}000$.
+> - The second derivative, $-\frac{2}{x^2}$, is negative, so this point is a maximum.
+> - The mode is 1,000. This is a [[Gamma|gamma]] density with $\alpha = 3$ and $\theta = 500$, whose mode is $(\alpha - 1)\theta$.
+
+## Mode, median and mean
+
+The mode depends only on where the density is highest, so a long right tail pulls the [[Median|median]] and the [[Expected Value|mean]] above it. For a right-skewed distribution, mode < median < mean is typical.
+
+The gamma claim size above has mode 1,000, median about 1,337 and mean 1,500. A [[Normal Distribution|normal]] distribution is symmetric about its mean $\mu$, so its mode, median and mean are all $\mu$.
+
+> [!trap] A peak at an endpoint
+> A density's largest value can sit at an end of its support, where $f'(x)$ is not 0. An [[Exponential Distribution|exponential]] density only falls, so its mode is 0. Compare the density at each critical point inside the support with its values at the endpoints.

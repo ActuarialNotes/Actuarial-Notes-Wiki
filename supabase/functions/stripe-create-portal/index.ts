@@ -2,6 +2,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 
 const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
+// What the reader sees when the billing page can't open; the cause goes to the log.
+const PORTAL_UNAVAILABLE = 'The billing page didn’t open. Try again in a minute.'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
@@ -30,7 +32,10 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')
-    if (!stripeSecret) return json({ error: 'Configuration error: STRIPE_SECRET_KEY is not set' }, 500)
+    if (!stripeSecret) {
+      console.error('stripe-create-portal: STRIPE_SECRET_KEY is not set')
+      return json({ error: PORTAL_UNAVAILABLE }, 500)
+    }
 
     const admin = createClient(supabaseUrl, serviceRoleKey)
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)
@@ -43,7 +48,7 @@ Deno.serve(async (req: Request) => {
       .maybeSingle()
 
     const customerId = sub?.stripe_customer_id ?? null
-    if (!customerId) return json({ error: 'No Stripe subscription found.' }, 400)
+    if (!customerId) return json({ error: 'There’s no paid subscription on this account to manage.' }, 400)
 
     const body = await req.json().catch(() => ({}))
     const returnUrl = typeof body.return_url === 'string' ? body.return_url : `${APP_ORIGIN}/settings`
@@ -57,7 +62,6 @@ Deno.serve(async (req: Request) => {
     return json({ url: session.url })
   } catch (err) {
     console.error('stripe-create-portal error:', err)
-    const message = err instanceof Error ? err.message : 'Stripe error'
-    return json({ error: message }, 500)
+    return json({ error: PORTAL_UNAVAILABLE }, 500)
   }
 })

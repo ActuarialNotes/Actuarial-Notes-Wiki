@@ -11,6 +11,7 @@ import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { buildStoreBooks, type BookPageSource } from './src/lib/storeBooks'
 import { isResourcePage, RESOURCE_FOLDERS, SHARED_RESOURCE_FOLDERS } from './src/lib/resourceFolders'
 import { readVaultDocument, type VaultDocument } from './src/lib/coworkVault'
+import { parseAssumptionSet, type AssumptionSet } from './src/lib/assumptionBank'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 import { resourcePdfUrl } from './src/lib/examPdf'
 import {
@@ -28,6 +29,7 @@ import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 import { buildQuestionSeoPages, questionMarkdown, questionNeighbours, questionRuns } from './src/lib/seoQuestions'
 import { parseAllQuestions } from './src/lib/parser'
 import { contentPathFromVerification } from './src/lib/verification'
+import { buildScriptHashes } from './src/lib/podcastScripts'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -239,6 +241,61 @@ async function collectStoreBooks() {
     books.push({ name: name.replace(/\.md$/i, ''), attrs, coverImage: extractCoverImageUrl(text) })
   }
   return buildStoreBooks(examPages, books)
+}
+
+// ── The daily podcast's script hashes ───────────────────────────────────────
+// For every concept page, the hash of the script its podcast clips are recorded
+// from (lib/podcast.ts). The player plays a recording only when its hash is
+// this one, so a clip made from an older page is never heard. ~60 KB, in the
+// podcast player's own chunk.
+function podcastScriptsPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:podcast-scripts'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'podcast-scripts',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const names = await readdir(path.join(REPO_ROOT, 'Concepts')).catch(() => [] as string[])
+      const pages: Array<{ name: string; markdown: string }> = []
+      for (const name of names.sort()) {
+        if (!name.endsWith('.md')) continue
+        const markdown = await readFile(path.join(REPO_ROOT, 'Concepts', name), 'utf-8').catch(() => null)
+        if (markdown != null) pages.push({ name: name.replace(/\.md$/i, ''), markdown })
+      }
+      return `export default ${JSON.stringify(buildScriptHashes(pages))}`
+    },
+  }
+}
+
+// ── The Assumptions Bank ─────────────────────────────────────────────────────
+// Every set under `Assumptions/` (docs/assumptions-bank.md), parsed by
+// `lib/assumptionBank.ts`: a published document's figures and facts, each with
+// its locator, edition and fact check. Small, and read only by the chunks that
+// use it (Cowork's catalogue now; the Tools in Phase 1). A file the parser
+// can't read fails the build — `scripts/assumption_lint.py` says why.
+async function collectAssumptionBank(): Promise<AssumptionSet[]> {
+  const names = await readdir(path.join(REPO_ROOT, 'Assumptions')).catch(() => [] as string[])
+  const sets: AssumptionSet[] = []
+  for (const name of names.sort()) {
+    if (!name.endsWith('.md')) continue
+    const rel = `Assumptions/${name}`
+    sets.push(parseAssumptionSet(rel, await readFile(path.join(REPO_ROOT, rel), 'utf-8')))
+  }
+  return sets
+}
+
+function assumptionBankPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:assumption-bank'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'assumption-bank',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectAssumptionBank())}`
+    },
+  }
 }
 
 // ── Cowork's vault documents ─────────────────────────────────────────────────
@@ -571,6 +628,9 @@ function examGuidesPlugin(): Plugin {
 //                                zipped the way Claude and ChatGPT upload it
 //   llms.txt                     a short index for an assistant that is only
 //                                browsing the site
+//   ai/osfi-pc4-summary.json     OSFI's filed MCT summaries, which the
+//                                connector's calculators install (the app
+//                                fetches its own hashed copy, lib/toolFilings.ts)
 //
 // Emitted into the build rather than bundled: the app itself never imports any
 // of it, and the export is ~10 MB.
@@ -617,11 +677,16 @@ async function buildSkillZip(): Promise<Uint8Array> {
   return buildZip(files)
 }
 
+/** Mirrors FILINGS_PATH in api/_mcp/load.js. */
+const FILINGS_ASSET = 'ai/osfi-pc4-summary.json'
+const readFilings = () => readFile(path.join(REPO_ROOT, 'quiz/src/lib/tools/data/filings/osfi-pc4-summary.json'), 'utf-8')
+
 function aiConnectorAssetsPlugin(): Plugin {
   const origin = _buildEnv.VITE_SITE_URL || PUBLIC_SITE_URL
   const assets: Record<string, { type: string; build: () => Promise<string | Uint8Array> }> = {
     [KNOWLEDGE_BASE_ASSET]: { type: 'application/json', build: async () => JSON.stringify(await collectKnowledgeBase()) },
     [SKILL_ASSET]: { type: 'application/zip', build: buildSkillZip },
+    [FILINGS_ASSET]: { type: 'application/json', build: readFilings },
     'llms.txt': {
       type: 'text/plain; charset=utf-8',
       build: async () => buildLlmsTxt(await collectKnowledgeBase(), connectorUrl(origin), skillUrl(origin)),
@@ -649,6 +714,7 @@ function aiConnectorAssetsPlugin(): Plugin {
       const kb = await collectKnowledgeBase()
       this.emitFile({ type: 'asset', fileName: KNOWLEDGE_BASE_ASSET, source: JSON.stringify(kb) })
       this.emitFile({ type: 'asset', fileName: SKILL_ASSET, source: await buildSkillZip() })
+      this.emitFile({ type: 'asset', fileName: FILINGS_ASSET, source: await readFilings() })
       this.emitFile({ type: 'asset', fileName: 'llms.txt', source: buildLlmsTxt(kb, connectorUrl(origin), skillUrl(origin)) })
     },
   }
@@ -928,7 +994,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), assumptionBankPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },
@@ -949,5 +1015,7 @@ export default defineConfig({
   // up by vitest's default **/*.spec.ts glob.
   test: {
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    // OSFI's filings, installed into the engine for every test (src/test/installFilings.ts).
+    setupFiles: ['src/test/installFilings.ts'],
   },
 })

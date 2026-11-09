@@ -16,6 +16,7 @@ import statcanLife from './datasets/statcan-life-table.json'
 import blsIndexes from './datasets/bls-price-indexes.json'
 import statcanCpi from './datasets/statcan-cpi.json'
 import treasury from './datasets/us-treasury-par-yields.json'
+import { filingsDataset } from '../filings'
 
 export interface SourceFile {
   url: string
@@ -24,7 +25,7 @@ export interface SourceFile {
   title: string
 }
 
-interface DatasetBase {
+export interface DatasetBase {
   id: string
   title: string
   publisher: string
@@ -71,8 +72,11 @@ export const LIFE_TABLES = [nchsLife, statcanLife] as LifeTableDataset[]
 export const INDEX_DATASETS = [blsIndexes, statcanCpi] as IndexDataset[]
 export const YIELD_CURVES = [treasury] as YieldCurveDataset[]
 
-export type Dataset = LifeTableDataset | IndexDataset | YieldCurveDataset
-export const DATASETS: Dataset[] = [...LIFE_TABLES, ...INDEX_DATASETS, ...YIELD_CURVES]
+/** OSFI's filings: installed rather than carried (`../filings.ts`), so never in `DATASETS`. */
+export type FilingsDataset = DatasetBase & { kind: 'filings' }
+
+export type Dataset = LifeTableDataset | IndexDataset | YieldCurveDataset | FilingsDataset
+export const DATASETS: (LifeTableDataset | IndexDataset | YieldCurveDataset)[] = [...LIFE_TABLES, ...INDEX_DATASETS, ...YIELD_CURVES]
 
 /** The period label of the k-th value of a series: "2024-03" or "2024-Q1". */
 export function periodAt(series: IndexSeries, k: number): string {
@@ -116,6 +120,11 @@ export function datasetsFor(toolId: string): Dataset[] {
     case 'data.life_table': return LIFE_TABLES
     case 'data.price_index': return INDEX_DATASETS
     case 'data.yield_curve': return YIELD_CURVES
+    case 'data.insurer_return':
+    case 'capital.mct_ratio': {
+      const filings = filingsDataset()
+      return filings ? [filings] : []
+    }
     default: return []
   }
 }

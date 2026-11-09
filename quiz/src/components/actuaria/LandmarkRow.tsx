@@ -49,7 +49,7 @@ export function LandmarkRow({
       {chip && <StatusChip variant={chip.variant}>{chip.label}</StatusChip>}
       <span
         className={cn('w-12 shrink-0 text-right font-mono text-xs tabular-nums', MASTERY_TEXT[state])}
-        title={`Credibility — ${MASTERY_LABEL[state]}`}
+        title={`Credibility, ${MASTERY_LABEL[state]}`}
       >
         Z {formatZ(landmarkZ(state))}
       </span>

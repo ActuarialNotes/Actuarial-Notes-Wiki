@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7c0f38776b95c833d75de78b2e345c7f354c5ecc1617e3494ee189c99e93975d
+  content_hash: sha256:da531ad54ad92da27df625f1b6666b46fa2f26930a4e7f14d9bc3ca1c6ae8108
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 95-99, 107-108, 112 (PDF pp. 107-111, 119-120, 124); Appendix B pp. B-2-B-3 (PDF pp. 359-361), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 1
@@ -12,64 +12,51 @@ verification:
   log: .verify/Concepts/Extraordinary Losses.md
 ---
 
-**Extraordinary Losses** are losses too rare and too large to be priced from a few years of experience — individual **shock losses** and **catastrophes**. In ratemaking they are removed from the historical data and replaced with a provision based on a long-term view, so that rates reflect their expected cost without jumping after a bad year and falling after a quiet one.
+**Extraordinary Losses** are losses too rare and too large to be priced from a few years of experience: individual shock losses, or [[Large Loss|large losses]], and [[Catastrophe Loss|catastrophes]]. In ratemaking they are removed from the historical data and replaced with a provision based on a long-term view, so that rates reflect their expected cost without jumping after a bad year and falling after a quiet one. For shock losses, each claim is capped at a threshold, and the long-run excess loss factor is
 
-> $$\text{ELF} = 1 + \frac{\sum \text{Excess losses}}{\sum \text{Non-excess losses}}$$
+> $$\text{ELF} = 1 + \frac{\sum \text{Excess Losses}}{\sum \text{Non-Excess Losses}}$$
 
-> $$\text{PP} = \text{PP}_{\text{capped, non-cat}} \times \text{ELF} + \text{PP}_{\text{cat}}$$
+- $\text{Excess Losses}$ are the portion of each claim above the threshold, summed over the claims of a long experience period.
+- $\text{Non-Excess Losses}$ are the losses limited to the threshold, the reported losses less the excess losses.
 
-- **Shock losses** are single high-severity claims — Werner's examples are a large multi-claimant liability claim, a total loss on an exceptionally valuable home, and the total permanent disability of a young worker. Each claim is capped at a threshold (the **non-excess** loss); the portion above it is **excess**. The excess loss factor (ELF) is the long-run ratio of excess to non-excess losses, applied to each year's capped losses. See [[Large Loss]].
-- **Choosing the threshold** balances keeping as much actual experience as possible against removing volatility: the basic limit (the indication then assumes everyone buys the basic limit, and for a loss ratio indication premium is restated to basic limits too — higher limits are priced with [[Increased Limits|ILFs]]), a percentile of the size-of-loss distribution such as the 99th, or for property a percentage of the amount of insurance.
-- **Choosing the period:** long enough to be stable, not so long the data are irrelevant — Werner contrasts about ten years for a medium-sized homeowners insurer's large fire losses with twenty for a small personal umbrella writer. Ideally the procedure censors *trended* losses, or indexes the threshold, since layers above a fixed threshold inflate faster.
-- **Catastrophes** are events that produce a large number of claims — hurricanes, tornadoes, hail, earthquakes, wildfires, winter storms, explosions, oil spills, some terrorist attacks. Werner cites the ISO Property Claim Services definition: at least $\$25$ million of direct insured property loss affecting a significant number of policyholders and insurers. See [[Catastrophe Loss]].
-  - *Non-modeled* perils that recur over decades (hail for auto comprehensive): a 10–30 year ratio of catastrophe to non-catastrophe losses, or catastrophe losses to exposures or amount-of-insurance years, applied to projected values.
-  - *Modeled* perils too sporadic for any history (hurricane, earthquake): the [[Catastrophe Modelling|catastrophe model]]'s expected annual loss for the current exposure.
-- **Order of adjustments:** a modeled provision is already at future cost and ultimate value, so add it to non-catastrophe losses *after* those are developed and trended — adding it before over-adjusts it. Catastrophes are also excluded from [[Loss Trend|trend]] data, and extraordinary losses from the data used to select development factors. Removing extraordinary losses without adding a provision back understates the rate.
+A loss below the threshold is entirely non-excess. For a loss above it, the threshold amount counts as non-excess and the remainder as excess. The procedure assumes that the share of losses that is excess is volatile in the short run but stable over a long enough period. Each year's non-excess losses are developed and trended, then multiplied by the ELF in place of the year's own excess losses. The ELF is a factor of one plus the ratio of excess to non-excess losses. It is not an excess ratio to total losses, nor one minus a loss elimination ratio.
 
-> [!example]- An Excess Loss Factor from Twelve Years {Example}
-> A liability line's reported losses over twelve years total $\$600{,}000{,}000$, including $30$ claims above the $\$500{,}000$ threshold with ground-up value $\$27{,}000{,}000$. The latest accident year's reported losses are $\$52{,}000{,}000$, including two shock losses of $\$2{,}400{,}000$ and $\$1{,}100{,}000$.
->
-> Compute the excess loss factor and the latest year's adjusted losses.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Excess} &= \$27{,}000{,}000 - 30 \times \$500{,}000 \\
-> > &= \$12{,}000{,}000 \\
-> > \text{Non-excess} &= \$600{,}000{,}000 - \$12{,}000{,}000 \\
-> > &= \$588{,}000{,}000 \\
-> > \text{ELF} &= 1 + 12 / 588 = 1.0204
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > \text{Latest excess} &= \$1{,}900{,}000 + \$600{,}000 \\
-> > &= \$2{,}500{,}000 \\
-> > \text{Non-excess} &= \$52{,}000{,}000 - \$2{,}500{,}000 \\
-> > &= \$49{,}500{,}000 \\
-> > \text{Adjusted} &= \$49{,}500{,}000 \times 1.0204 \\
-> > &= \$50{,}509{,}800
-> > \end{align*}
-> > $$
-> >
-> > The raw $\$52{,}000{,}000$ would overstate the year by $2.9\%$ because it happened to contain two shock losses; a year with none would be *loaded* up to its long-run level by the same factor.
+> [!example]- A liability line's reported losses over twelve years total $\$600{,}000{,}000$, including 30 claims above a $\$500{,}000$ threshold with ground-up value $\$27{,}000{,}000$. The latest year's reported losses are $\$52{,}000{,}000$, including shock losses of $\$2{,}400{,}000$ and $\$1{,}100{,}000$. What are the ELF and the latest year's adjusted losses? {Example}
+> - Over the twelve years, the excess losses are $27{,}000{,}000 - 30 \times 500{,}000 = \$12{,}000{,}000$.
+> - The non-excess losses are $600{,}000{,}000 - 12{,}000{,}000 = \$588{,}000{,}000$.
+> - The ELF is $1 + 12/588 = 1.0204$.
+> - The latest year's excess losses are $1{,}900{,}000 + 600{,}000 = \$2{,}500{,}000$, so its non-excess losses are $\$49{,}500{,}000$.
+> - The adjusted losses are $49{,}500{,}000 \times 1.0204 = \$50{,}510{,}000$, against the $\$52{,}000{,}000$ reported.
 
-> [!example]- Building a Homeowners Pure Premium with Two Catastrophe Provisions {Example}
-> Developed and trended non-catastrophe pure premium is $\$620$. Over $25$ years, hail losses (trended) averaged $\$0.21$ per $\$1{,}000$ of amount-of-insurance years; the projected average amount of insurance is $\$400{,}000$. The hurricane model gives an expected annual loss of $\$1{,}800{,}000$ on $20{,}000$ house-years at the forecast cost level.
->
-> Compute the pure premium. What goes wrong if the hurricane provision is added before a $1.13$ trend-and-development factor?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Hail PP} &= \$0.21 \times 400 = \$84 \\
-> > \text{Hurricane PP} &= \$1{,}800{,}000 / 20{,}000 = \$90 \\
-> > \text{Total PP} &= \$620 + \$84 + \$90 \\
-> > &= \$794
-> > \end{align*}
-> > $$
-> >
-> > The hail provision rests on a long history because hail recurs often enough to be measured; the hurricane provision comes from a model because thirty years of history may not contain the storm that matters.
-> >
-> > The model output is already at the future cost level and ultimate. Adding it to the historical losses *before* the $1.13$ factor would turn $\$90$ into $\$101.70$ — an over-adjustment of $\$11.70$ per house-year, or $1.5\%$ of the pure premium.
+## Choosing the threshold and the period
+
+The threshold ideally is the point at which losses become extraordinary and their inclusion makes the rates volatile. It balances including as many losses as possible against minimizing the volatility of the analysis:
+
+1. **The basic limit.** The indication is then the rate level need assuming every insured chooses the basic limit. In a loss ratio indication the premium is restated to basic limits too, and higher limits are priced with [[Increased Limits|increased limits factors]].
+2. **A percentile** of the size-of-loss distribution, such as the 99th, or a percentage of losses rather than of claim counts.
+3. **A percentage of the amount of insurance**, for property, whose size-of-loss distribution varies from one policy to the next.
+
+The period is long enough to give a stable estimate but not so long that older data are irrelevant. A medium-sized homeowners insurer may estimate large fire losses from 10 years of data, while a small personal umbrella insurer may need 20. Losses in higher layers inflate faster than losses below them, so the procedure is ideally run on losses trended to future levels, or with a threshold indexed for trend. A threshold that is not indexed lets inflation push more of each loss into the excess layer over time.
+
+> [!example]- An insurer caps its losses at a $\$1{,}000{,}000$ threshold, trends the capped losses to the future level, and stops there. What is wrong with its indication? {Example}
+> - Removing the excess losses without adding a provision for them understates the projected losses.
+> - The indicated rates are therefore inadequate.
+> - The capped losses must be loaded with the ELF, or the indication must use uncapped losses.
+
+## Catastrophes
+
+[[Catastrophe Loss|Catastrophes]] are events that produce a large number of claims, such as hurricanes, tornadoes, hail, earthquakes, wildfires, winter storms, explosions, oil spills and some terrorist attacks. In the U.S., ISO's Property Claim Services defines a catastrophe as an event causing at least $\$25$ million of direct insured property losses and affecting a significant number of policyholders and insurers. An event counts as a catastrophe if its industry-wide insured losses meet the definition, and a non-catastrophe excess loss factor is computed after the catastrophe claims are removed. The catastrophe losses are replaced by a long-term provision:
+
+1. **Non-modeled catastrophes** recur over decades, such as hail for auto comprehensive. Their provision is the ratio of catastrophe losses to non-catastrophe losses, or to exposures or amount of insurance years, over 10 to 30 years, applied to the projected values.
+2. **Modeled catastrophes**, such as hurricanes and earthquakes, are too sporadic for any history. Their provision is a [[Catastrophe Modelling|catastrophe model]]'s expected annual loss for the current exposure.
+
+A modeled provision is already at the future cost level and at ultimate, so it is added to the non-catastrophe losses after they have been developed and trended. Adding it before over-adjusts it.
+
+> [!example]- A homeowners book's developed and trended non-catastrophe pure premium is $\$620$. Hail losses have averaged $\$0.21$ per $\$1{,}000$ of amount of insurance years, on a projected average amount of insurance of $\$400{,}000$. A hurricane model gives an expected annual loss of $\$1{,}800{,}000$ on 20,000 house-years. What is the pure premium? {Example}
+> - The hail pure premium is $0.21 \times 400 = \$84$.
+> - The hurricane pure premium is $1{,}800{,}000/20{,}000 = \$90$.
+> - The pure premium is $620 + 84 + 90 = \$794$.
+> - Adding the hurricane provision before a $1.13$ trend and development factor would turn $\$90$ into $\$101.70$, an over-adjustment.
+
+> [!trap] Removing extraordinary losses without adding them back
+> Capping a shock loss or removing a catastrophe takes real expected cost out of the data. The rates are adequate only when the ELF or the catastrophe provision puts the long-run average back.

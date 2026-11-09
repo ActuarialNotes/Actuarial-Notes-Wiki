@@ -171,7 +171,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
       className="fixed inset-0 z-[120] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
-      aria-label="Concepts leveled up"
+      aria-label="Concepts levelled up"
     >
       {/* Backdrop — tap to skip straight to the summary. */}
       <div
@@ -200,11 +200,11 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
           <div className="flex flex-col items-center gap-1">
             {phase === 'collected' ? (
               <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
-                <Sparkles className="h-5 w-5" /> Collected!
+                <Sparkles className="h-5 w-5" /> Card collected
               </span>
             ) : (
               <span className={`text-sm font-medium text-white/70 ${collecting ? 'animate-pulse' : ''}`}>
-                {collecting ? 'Collecting…' : 'Leveling up…'}
+                {collecting ? 'Collecting…' : 'Levelling up…'}
               </span>
             )}
             <span className="inline-flex items-center gap-1.5 text-base font-bold text-white">
@@ -219,7 +219,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
       {/* ── Several cards: one grid ───────────────────────────────────────── */}
       {phase === 'grid' && (
         <div className="relative z-[121] flex w-full max-w-3xl flex-col items-center gap-3 text-center" onClick={skip}>
-          <span className="text-sm font-medium text-white/70">Leveling up…</span>
+          <span className="text-sm font-medium text-white/70">Levelling up…</span>
           <div
             ref={gridRef}
             className="relative flex max-h-[70vh] w-full flex-wrap content-start justify-center gap-3 overflow-y-auto overscroll-contain p-2 sm:gap-4"
@@ -246,7 +246,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
                       hasLanded ? (t.collected ? 'text-primary' : 'text-white') : 'invisible'
                     }`}
                   >
-                    {t.collected ? <><Sparkles className="h-3.5 w-3.5" /> Collected!</> : LEVEL_LABEL[t.to]}
+                    {t.collected ? <><Sparkles className="h-3.5 w-3.5" /> Card collected</> : LEVEL_LABEL[t.to]}
                   </span>
                 </div>
               )
@@ -263,7 +263,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
         <div className="collect-done-pop relative z-[121] flex w-full max-w-sm flex-col items-center gap-5 text-center">
           <span className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-primary">
             <Sparkles className="h-6 w-6" />
-            {transitions.length === 1 ? 'Concept Leveled Up!' : `${transitions.length} Concepts Leveled Up!`}
+            {transitions.length === 1 ? 'Concept Levelled Up' : `${transitions.length} Concepts Levelled Up`}
           </span>
 
           {/* Recap every concept that advanced, with its from → to jump. A card

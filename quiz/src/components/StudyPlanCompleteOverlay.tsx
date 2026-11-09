@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Gem, Loader2, Lock } from 'lucide-react'
+import { Gem, Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { supabase } from '@/lib/supabase'
@@ -24,6 +24,7 @@ interface Props {
  */
 export function StudyPlanCompleteOverlay({ progressKey, gemsEarned, onClose }: Props) {
   const { user } = useAuth()
+  const canCollect = !!user && gemsEarned > 0
   const [claiming, setClaiming] = useState(false)
   const { play } = useSoundEffects()
   useSoundOnMount('complete')
@@ -66,40 +67,54 @@ export function StudyPlanCompleteOverlay({ progressKey, gemsEarned, onClose }: P
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
-      aria-label="Study plan complete"
+      aria-label="Today's Study Plan done"
     >
       <div className="w-full max-w-sm space-y-4 rounded-2xl bg-card p-6 shadow-2xl">
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10">
-            <Lock className="h-7 w-7 text-emerald-500" />
+            <Gem className="h-7 w-7 text-emerald-500" />
           </div>
-          <h2 className="text-xl font-bold tracking-tight">Today's plan complete!</h2>
+          <h2 className="text-xl font-bold tracking-tight">Today's Study Plan is done</h2>
           <p className="text-sm text-muted-foreground">
-            You finished every concept on today's Study Plan. Unlock the 2× gem bonus.
+            {canCollect
+              ? "You finished every concept on today's study plan, which doubles the gems you earned today."
+              : "You finished every concept on today's study plan."}
           </p>
+          {!user && gemsEarned > 0 && (
+            <p className="text-xs text-muted-foreground">
+              Sign in to get bonus gems for finishing it.
+            </p>
+          )}
         </div>
 
-        <button
-          type="button"
-          disabled={claiming}
-          onClick={claim}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
-        >
-          {claiming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Gem className="h-4 w-4" />}
-          Unlock 2× bonus (+{gemsEarned} gems)
-        </button>
-        {!user && (
-          <p className="text-center text-xs text-muted-foreground">
-            Sign in to bank the gem bonus.
-          </p>
+        {canCollect ? (
+          <>
+            <button
+              type="button"
+              disabled={claiming}
+              onClick={claim}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600 disabled:opacity-60"
+            >
+              {claiming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Gem className="h-4 w-4" />}
+              Collect {gemsEarned} bonus gems
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full text-center text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Collect later
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={claim}
+            className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Continue
+          </button>
         )}
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full text-center text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Claim later
-        </button>
       </div>
     </div>
   )

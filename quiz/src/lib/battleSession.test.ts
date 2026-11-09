@@ -11,9 +11,9 @@ import {
   tabClientId,
   type BattleTransport,
   type ConnectionStatus,
-  type TopicSource,
+  type DraftSource,
 } from './battleSession'
-import { TOPIC_PICK_MS, drawDurationMs } from './battleTopics'
+import { COIN_MS, DEAL_MS, STRIKE_MS, TOPIC_PICK_MS, type BattleDraft } from './battleDraft'
 
 /**
  * An in-memory broadcast channel: every message reaches every *other*
@@ -270,188 +270,309 @@ describe('playing a battle', () => {
   })
 })
 
-describe('the topic pick and the draw', () => {
-  const TOPICS = ['Alpha', 'Beta', 'Gamma', 'Delta']
+describe('the draft', () => {
+  // The host's hand is A–D, the guest's E–H. Struck: the host's D and the
+  // guest's H. Of the pairs left, A–E and C–G share questions and B–F doesn't,
+  // so the deal is C–G (70), then B–F on a coin (60), then the final A–E (80).
+  const TOPICS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+  const HOST_HAND = ['A', 'B', 'C', 'D']
+  const GUEST_HAND = ['E', 'F', 'G', 'H']
+  const PAIRS: Record<string, [number, number]> = { 'A|E': [80, 1], 'B|F': [60, 0], 'C|G': [70, 2] }
+  const LEVELS: Record<string, number> = { A: 0, B: 3, C: 1, D: 2, E: 1, F: 0, G: 2, H: 3 }
+  const BANK: BattleQuestionKey[] = Array.from({ length: 12 }, (_, i) => ({ id: `q-${i}`, answer: 'B', options: ['A', 'B', 'C', 'D'] }))
 
-  /** A bank with the three questions, each drawn "for" the first topic either player picked. */
-  function source(): TopicSource & { calls: [string[], string[]][] } {
-    const calls: [string[], string[]][] = []
+  /** The bank behind the draft: a pair table, and questions handed out in order, never one in `used`. */
+  function source(): DraftSource & { draws: { cards: readonly string[]; on: string; used: string[] }[] } {
+    const draws: { cards: readonly string[]; on: string; used: string[] }[] = []
     return {
-      calls,
+      draws,
       topics: () => TOPICS,
-      draw(config, picks) {
-        calls.push(picks)
-        const topic = picks[0][0] ?? picks[1][0] ?? null
-        return QUESTIONS.slice(0, config.rounds).map(key => ({ key, topic }))
+      pair: () => (a, b) => {
+        const hit = PAIRS[`${a}|${b}`] ?? PAIRS[`${b}|${a}`] ?? [10, 0]
+        return { strength: hit[0], shared: Array.from({ length: hit[1] }, (_, i) => `${a}${b}${i}`) }
       },
+      draw(_config, cards, on, used) {
+        draws.push({ cards, on, used: [...used] })
+        const key = BANK.find(k => !used.has(k.id))
+        return key ? { key, basis: on === 'both' ? 'both' : 'one', topic: on === 'both' ? cards[0] : on } : null
+      },
+      level: t => LEVELS[t] ?? 0,
     }
   }
 
-  function room(opts: { knows?: (id: string) => boolean; latency?: number } = {}) {
+  function room(opts: { knows?: (id: string) => boolean; latency?: number; rounds?: number; coin?: number } = {}) {
     const hub = new Hub()
     hub.latency = opts.latency ?? 0
     const topics = source()
-    const h = new HostSession({ transport: hub.transport(), code: 'ABCD', host: { name: 'Ada' }, config: CONFIG, clientId: 'host', topics })
-    const g = new GuestSession({ transport: hub.transport(), code: 'ABCD', me: { name: 'Bo' }, clientId: 'guest', knows: opts.knows ?? (() => true) })
+    const config = { ...CONFIG, rounds: opts.rounds ?? 3 }
+    const h = new HostSession({
+      transport: hub.transport(), code: 'ABCD', host: { name: 'Ada' }, config, clientId: 'host', topics,
+      random: () => opts.coin ?? 0.1,
+    })
+    const g = new GuestSession({
+      transport: hub.transport(), code: 'ABCD', me: { name: 'Bo' }, clientId: 'guest',
+      knows: opts.knows ?? (() => true), level: t => LEVELS[t] ?? 0,
+    })
     vi.advanceTimersByTime(250 + hub.latency * 2)
     return { hub, h, g, topics }
   }
 
-  it('opens for both players with thirty seconds on the clock — once there are two of them', () => {
+  /** Both hands in. */
+  function drawn(r: ReturnType<typeof room>) {
+    r.h.openDraft()
+    r.h.chooseHand(HOST_HAND)
+    r.g.chooseHand(GUEST_HAND)
+    r.h.lockHand()
+    r.g.lockHand()
+    vi.advanceTimersByTime(r.hub.latency * 2 + 50)
+    return r
+  }
+
+  /** …and both strikes. */
+  function dealt(r: ReturnType<typeof room>) {
+    drawn(r)
+    r.h.strike('H')
+    r.g.strike('D')
+    vi.advanceTimersByTime(r.hub.latency * 2 + 50)
+    return r
+  }
+
+  const draftOf = (s: { getSnapshot(): { draft: BattleDraft | null } }) => s.getSnapshot().draft!
+
+  it('opens the draw for both players with thirty seconds on the clock — once there are two of them', () => {
     const hub = new Hub()
     const alone = new HostSession({ transport: hub.transport(), code: 'ABCD', host: { name: 'Ada' }, config: CONFIG, clientId: 'host', topics: source() })
-    alone.openTopics()
+    alone.openDraft()
     expect(alone.getSnapshot().stage).toBe('waiting')
 
     const { h, g } = room()
-    h.openTopics()
+    h.openDraft()
     const now = Date.now()
     for (const s of [h, g]) {
-      expect(s.getSnapshot().stage).toBe('picking')
-      expect(s.getSnapshot().draft).toMatchObject({ phase: 'picking', deadline: now + TOPIC_PICK_MS, picks: [null, null], drawn: [] })
+      expect(s.getSnapshot().stage).toBe('drafting')
+      expect(draftOf(s)).toMatchObject({ phase: 'draw', deadline: now + TOPIC_PICK_MS, counts: [0, 0], hands: [null, null], strikes: [null, null], pairs: [] })
     }
   })
 
-  it('keeps each pick from the other player until both are in, then draws from both', () => {
-    const { hub, h, g, topics } = room()
-    h.openTopics()
-    g.chooseTopics(['Beta'])
-    expect(g.getSnapshot().topicChoice).toEqual(['Beta'])
-    g.lockTopics()
-    // In — and the host's screen knows that much, and no more.
-    expect(h.getSnapshot().draft!.picks).toEqual([null, []])
-    expect(g.getSnapshot().draft!.picks).toEqual([null, ['Beta']])
+  it('shows how many cards the other player has drawn, never which, and hides a locked hand until both are in', () => {
+    const { hub, h, g } = room()
+    h.openDraft()
+    g.chooseHand(['E', 'F'])
+    expect(g.getSnapshot().topicChoice).toEqual(['E', 'F'])
+    expect(draftOf(h).counts).toEqual([0, 2])
+    h.chooseHand(['A'])
+    expect(draftOf(g).counts).toEqual([1, 2])
+    // Only the count crosses while choosing.
+    const moves = hub.log.filter((m): m is Extract<BattleMessage, { t: 'act' }> => m.t === 'act')
+    expect(moves.every(m => m.action.kind !== 'hand' || !m.action.topics)).toBe(true)
 
-    h.chooseTopics(['Alpha', 'Gamma'])
-    expect(h.getSnapshot().topicChoice).toEqual(['Alpha', 'Gamma'])
-    // A choice is only this screen's until it is locked in: nothing on the wire says it.
+    g.chooseHand(GUEST_HAND)
+    g.lockHand()
+    expect(draftOf(h).hands).toEqual([null, []])
+    expect(draftOf(g).hands).toEqual([null, GUEST_HAND])
     const rooms = hub.log.filter((m): m is Extract<BattleMessage, { t: 'room' }> => m.t === 'room')
-    expect(rooms.at(-1)!.draft!.picks).toEqual([null, ['Beta']])
+    expect(rooms.at(-1)!.draft!.hands[0]).toBeNull()
+  })
 
-    h.lockTopics()
-    expect(topics.calls).toEqual([[['Alpha', 'Gamma'], ['Beta']]])
+  it('lays both hands face up for the strikes, with each player’s level on their own cards', () => {
+    const { h, g } = drawn(room())
     for (const s of [h, g]) {
-      expect(s.getSnapshot().stage).toBe('drawing')
-      expect(s.getSnapshot().draft).toMatchObject({
-        phase: 'drawing',
-        picks: [['Alpha', 'Gamma'], ['Beta']],
-        drawn: QUESTIONS.map(q => ({ id: q.id, topic: 'Alpha' })),
+      expect(draftOf(s)).toMatchObject({
+        phase: 'strike',
+        deadline: Date.now() - 50 + STRIKE_MS,
+        hands: [HOST_HAND, GUEST_HAND],
+        levels: [[0, 3, 1, 2], [1, 0, 2, 3]],
       })
     }
   })
 
-  it('shows the draw, then starts the battle on the questions drawn, their topics kept', () => {
-    const { h, g } = room()
-    h.openTopics()
-    h.lockTopics()
-    g.lockTopics()
-    expect(h.getSnapshot().stage).toBe('drawing')
-    vi.advanceTimersByTime(drawDurationMs(QUESTIONS.length) - 300)
-    expect(g.getSnapshot().stage).toBe('drawing')
+  it('keeps each strike from the other player until both are in, then deals', () => {
+    const { h, g, topics } = drawn(room())
+    h.strike('H')
+    expect(draftOf(g).strikes).toEqual(['', null])
+    expect(draftOf(h).strikes).toEqual(['H', null])
+    g.strike('D')
+    for (const s of [h, g]) {
+      const draft = draftOf(s)
+      expect(draft.phase).toBe('deal')
+      expect(draft.strikes).toEqual(['H', 'D'])
+      expect(draft.rows).toEqual(['A', 'B', 'C'])
+      expect(draft.cols).toEqual(['E', 'F', 'G'])
+      expect(draft.grid).toEqual([[80, 10, 10], [10, 60, 10], [10, 10, 70]])
+      expect(draft.pairs.map(p => p.cards)).toEqual([['C', 'G'], ['B', 'F'], ['A', 'E']])
+      expect(draft.rounds.map(r => [r.pair, r.paired, r.coin])).toEqual([[0, true, null], [1, false, null], [2, true, null]])
+    }
+    // The paired rounds' questions are drawn now; the coin round's waits for its coin.
+    expect(topics.draws.filter(d => d.on === 'both').map(d => d.cards)).toEqual([['C', 'G'], ['A', 'E']])
+  })
+
+  it('shows the deal, then starts the battle', () => {
+    const { h, g } = dealt(room())
+    vi.advanceTimersByTime(DEAL_MS - 400)
+    expect(g.getSnapshot().stage).toBe('drafting')
     vi.advanceTimersByTime(600)
     for (const s of [h, g]) {
       expect(s.getSnapshot().stage).toBe('playing')
-      expect(s.getSnapshot().battle!.questions.map(q => q.id)).toEqual(QUESTIONS.map(q => q.id))
       expect(currentRound(s.getSnapshot().battle!).phase).toBe('countdown')
-      expect(s.getSnapshot().draft?.drawn).toHaveLength(QUESTIONS.length)
+      expect(draftOf(s).phase).toBe('deal')
     }
   })
 
-  it('locks in what each player had chosen when the time runs out', () => {
-    const { h, g, topics } = room()
-    h.openTopics()
-    h.chooseTopics(['Delta'])
-    g.chooseTopics(['Beta', 'Gamma'])
+  it('tosses a coin round’s coin when it comes up, and both screens see the same toss', () => {
+    const { h, g, topics } = dealt(room())
+    vi.advanceTimersByTime(DEAL_MS + 250 + COUNTDOWN_MS)
+    const before = h.getSnapshot().battle!.questions.map(q => q.id)
+    h.answer('B')
+    g.answer('A')
+    vi.advanceTimersByTime(ONLINE_GRACE_MS + 250)
+    expect(draftOf(g).rounds[1].coin).toBeNull()
+    h.ready()
+    g.ready()
+    vi.advanceTimersByTime(50)
+    const coinAt = Date.now() - 50
+    for (const s of [h, g]) {
+      const round = draftOf(s).rounds[1]
+      // The host's coin (0.1) lands on seat 0's card, B.
+      expect(round).toMatchObject({ coin: 0, basis: 'one', topic: 'B' })
+      const live = currentRound(s.getSnapshot().battle!)
+      expect(live.index).toBe(1)
+      expect(live.opensAt).toBe(coinAt + COUNTDOWN_MS + COIN_MS)
+      expect(s.getSnapshot().battle!.questions[1].id).toBe(live.questionId)
+    }
+    // Drawn on B, and never a question already played or held by a paired round.
+    const coinDraw = topics.draws.at(-1)!
+    expect(coinDraw).toMatchObject({ cards: ['B', 'F'], on: 'B' })
+    expect(coinDraw.used).toEqual(expect.arrayContaining([before[0], before[2]]))
+    const ids = h.getSnapshot().battle!.questions.map(q => q.id)
+    expect(new Set(ids).size).toBe(3)
+  })
+
+  it('tops up a short hand at random when the draw runs out', () => {
+    const { h, g } = room()
+    h.openDraft()
+    h.chooseHand(['A'])
+    g.chooseHand(['E', 'F'])
     vi.advanceTimersByTime(TOPIC_PICK_MS + 250)
-    expect(topics.calls).toEqual([[['Delta'], ['Beta', 'Gamma']]])
-    expect(g.getSnapshot().stage).toBe('drawing')
+    for (const s of [h, g]) {
+      const draft = draftOf(s)
+      expect(draft.phase).toBe('strike')
+      expect(draft.hands[0]).toHaveLength(4)
+      expect(draft.hands[0]![0]).toBe('A')
+      expect(draft.hands[1]!.slice(0, 2)).toEqual(['E', 'F'])
+      expect(draft.hands[1]).toHaveLength(4)
+    }
   })
 
-  it('gives a pick locked in at the last moment the grace an answer gets to arrive', () => {
-    // The pick opened 400ms later on the joining player's screen, and their
-    // pick takes 400ms to come back.
-    const { h, g, topics } = room({ latency: 400 })
-    h.openTopics()
+  it('gives a hand locked in at the last moment the grace an answer gets to arrive', () => {
+    const { h, g } = room({ latency: 400 })
+    h.openDraft()
+    h.chooseHand(HOST_HAND)
+    h.lockHand()
     vi.advanceTimersByTime(400)
-    g.chooseTopics(['Beta'])
+    g.chooseHand(GUEST_HAND)
     vi.advanceTimersByTime(TOPIC_PICK_MS - 400)
-    expect(h.getSnapshot().draft!.picks[1]).toBeNull()
-    expect(h.getSnapshot().stage).toBe('picking')
+    expect(draftOf(h).hands[1]).toBeNull()
     vi.advanceTimersByTime(ONLINE_GRACE_MS + 400)
-    expect(topics.calls).toEqual([[[], ['Beta']]])
+    expect(draftOf(h).hands[1]).toEqual(GUEST_HAND)
   })
 
-  it('draws on a player who never picked as having picked nothing', () => {
-    const { hub, h, topics } = room()
-    h.openTopics()
+  it('deals a hand to a player who never sent one, and strikes for one who never struck', () => {
+    const { hub, h } = room()
+    h.openDraft()
     hub.drop = m => m.from === 'guest'
-    h.chooseTopics(['Alpha'])
-    h.lockTopics()
+    h.chooseHand(HOST_HAND)
+    h.lockHand()
     vi.advanceTimersByTime(TOPIC_PICK_MS + ONLINE_GRACE_MS + 250)
-    expect(topics.calls).toEqual([[['Alpha'], []]])
-    expect(h.getSnapshot().stage).toBe('drawing')
+    expect(draftOf(h).phase).toBe('strike')
+    expect(draftOf(h).hands[1]).toHaveLength(4)
+    h.strike(draftOf(h).hands[1]![0])
+    vi.advanceTimersByTime(STRIKE_MS + ONLINE_GRACE_MS + 250)
+    // O3: the guest's missed strike takes the host's highest-levelled card, B (L3).
+    expect(draftOf(h)).toMatchObject({ phase: 'deal', rows: ['A', 'C', 'D'] })
+    expect(draftOf(h).strikes[1]).toBe('B')
   })
 
-  it('holds the joining player’s pick to the exam’s topics, three at most', () => {
-    const { h, g, topics } = room()
-    h.openTopics()
-    g.chooseTopics(['Nope', 'beta', 'Gamma', 'Alpha', 'Delta'])
-    g.lockTopics()
-    h.lockTopics()
-    expect(topics.calls[0][1]).toEqual(['Beta', 'Gamma'])
-    expect(g.getSnapshot().draft!.picks[1]).toEqual(['Beta', 'Gamma'])
+  it('holds the joining player’s hand to the exam’s topics, and a strike to the other’s hand', () => {
+    const { h, g } = room()
+    h.openDraft()
+    g.chooseHand(['Nope', 'e', 'F', 'G', 'H'])
+    g.lockHand()
+    h.chooseHand(HOST_HAND)
+    h.lockHand()
+    // Cleaned to E, F, G, then topped up to four.
+    expect(draftOf(h).hands[1]!.slice(0, 3)).toEqual(['E', 'F', 'G'])
+    expect(draftOf(h).hands[1]).toHaveLength(4)
+    g.strike('Z')
+    h.strike('Nope')
+    expect(draftOf(h).strikes).toEqual([null, null])
   })
 
-  it('resends a pick the channel lost', () => {
+  it('resends a hand and a strike the channel lost', () => {
     const { hub, h, g } = room()
-    h.openTopics()
+    h.openDraft()
+    h.chooseHand(HOST_HAND)
+    h.lockHand()
     let dropped = 0
     hub.drop = m => m.t === 'act' && dropped++ === 0
-    g.chooseTopics(['Beta'])
-    g.lockTopics()
-    expect(h.getSnapshot().draft!.picks[1]).toBeNull()
+    g.chooseHand(GUEST_HAND)
+    hub.drop = m => m.t === 'act' && (m.action.kind === 'hand' && !!m.action.topics) && dropped++ < 2
+    g.lockHand()
+    expect(draftOf(h).phase).toBe('draw')
     // Shown locked in here all the same, and not given up on.
-    expect(g.getSnapshot().draft!.picks[1]).toEqual(['Beta'])
+    expect(draftOf(g).hands[1]).toEqual(GUEST_HAND)
     vi.advanceTimersByTime(HEARTBEAT_MS)
-    expect(h.getSnapshot().draft!.picks[1]).toEqual([])
-    expect(g.getSnapshot().draft!.picks[1]).toEqual(['Beta'])
+    expect(draftOf(h).phase).toBe('strike')
+
+    let strikes = 0
+    hub.drop = m => m.t === 'act' && m.action.kind === 'strike' && strikes++ === 0
+    g.strike('A')
+    expect(draftOf(h).strikes[1]).toBeNull()
+    expect(draftOf(g).strikes[1]).toBe('A')
+    vi.advanceTimersByTime(HEARTBEAT_MS)
+    // In now — the host's screen knows that much, and no more.
+    expect(draftOf(h).strikes[1]).toBe('')
   })
 
-  it('ignores a pick meant for an earlier battle in the room', () => {
+  it('ignores a hand or a strike meant for an earlier battle in the room', () => {
     const { hub, h } = room()
-    h.openTopics()
-    hub.transport().send({ t: 'act', v: PROTOCOL_VERSION, from: 'guest', action: { kind: 'topics', game: 99, topics: ['Beta'] } })
-    expect(h.getSnapshot().draft!.picks[1]).toBeNull()
+    h.openDraft()
+    hub.transport().send({ t: 'act', v: PROTOCOL_VERSION, from: 'guest', action: { kind: 'hand', game: 99, count: 4, topics: GUEST_HAND } })
+    hub.transport().send({ t: 'act', v: PROTOCOL_VERSION, from: 'guest', action: { kind: 'strike', game: 99, topic: 'A' } })
+    expect(draftOf(h).hands[1]).toBeNull()
+    expect(draftOf(h).counts[1]).toBe(0)
   })
 
-  it('opens a fresh pick for a rematch, the last choice cleared', () => {
-    const { h, g } = room()
-    h.openTopics()
-    g.chooseTopics(['Beta'])
-    g.lockTopics()
-    h.lockTopics()
-    vi.advanceTimersByTime(drawDurationMs(QUESTIONS.length) + 250)
+  it('goes round the pairs again in a longer room, each time with a new question, ending on the final', () => {
+    const { h, topics } = dealt(room({ rounds: 5 }))
+    expect(draftOf(h).rounds.map(r => r.pair)).toEqual([1, 2, 0, 1, 2])
+    const paired = topics.draws.filter(d => d.on === 'both')
+    expect(paired).toHaveLength(3)
+    expect(new Set(paired.map((_, i) => BANK[i].id)).size).toBe(3)
+  })
+
+  it('opens a fresh draw for a rematch, the last hand cleared', () => {
+    const { h, g } = dealt(room())
+    vi.advanceTimersByTime(DEAL_MS + 250)
     h.endForAbsentGuest()
     expect(g.getSnapshot().stage).toBe('finished')
     g.requestRematch()
-    h.openTopics()
+    h.openDraft()
     for (const s of [h, g]) {
-      expect(s.getSnapshot()).toMatchObject({ stage: 'picking', rematch: [false, false], topicChoice: [], battle: null })
-      expect(s.getSnapshot().draft).toMatchObject({ game: 2, picks: [null, null] })
+      expect(s.getSnapshot()).toMatchObject({ stage: 'drafting', rematch: [false, false], topicChoice: [], battle: null })
+      expect(draftOf(s)).toMatchObject({ game: 2, phase: 'draw', hands: [null, null] })
     }
   })
 
-  it('calls a draw of questions this device doesn’t have a version mismatch', () => {
-    const { h, g } = room({ knows: id => id !== 'p-2' })
-    h.openTopics()
-    h.lockTopics()
-    g.lockTopics()
-    expect(g.getSnapshot()).toMatchObject({ stage: 'ended', problem: 'version' })
+  it('calls a battle on questions this device doesn’t have a version mismatch', () => {
+    const r = room({ knows: id => id !== 'q-0' })
+    dealt(r)
+    vi.advanceTimersByTime(DEAL_MS + 250)
+    expect(r.g.getSnapshot()).toMatchObject({ stage: 'ended', problem: 'version' })
   })
 
   it('goes back to waiting when the joining player leaves before the battle', () => {
     const { h, g } = room()
-    h.openTopics()
+    h.openDraft()
     g.leave()
     expect(h.getSnapshot()).toMatchObject({ stage: 'waiting', draft: null, players: [{ name: 'Ada' }, null] })
   })

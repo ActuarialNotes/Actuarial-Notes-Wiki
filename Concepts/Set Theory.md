@@ -1,74 +1,65 @@
 ---
 verification:
-  status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a7d58c2e858a7c2eb73a319f2924bfee24fdfeddf0a5714f21df070480def07e
+  content_hash: sha256:d15fc1e2ab3d40aa3c1c5866de4c41dae00d90716a2358b853ac0d95a269bf8f
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Definition 1.1 and events (p.18, PDF p.26), union/intersection/difference/subset/complement and inclusive or (p.21, PDF p.29), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory, fetched 2026-09-27, sha256:709bad215891dbadd495e88c524d42641a53b4a054f2d3c678a39e8a171bd89e — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (incl. De Morgan's law, mutually exclusive), fetched 2026-09-27, sha256:aae5ce2766d2602e6bbdf92038d7bafdceca10b66ead36612dc7c6b31a35e12b — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (sample space, outcome, event), fetched 2026-09-27, sha256:d93c82800caad31da983d799d5444d8627a5423b3338900bf22405af912bc7f4 — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php"
-    - "Encyclopedia of Mathematics (Springer/EMS), article Set function, fetched 2026-09-27, sha256:168f98c55dc240fde7643462ca01950c62077204b0253c44239d8d197c4a469a — https://encyclopediaofmath.org/wiki/Set_function"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.0 Review of Set Theory (equality: A=B iff A⊂B and B⊂A), fetched 2026-10-30, sha256:6749502933aab3a00f75adfda607b430dd991edc1a6d751b1cc1044f30226492 — https://www.probabilitycourse.com/chapter1/1_2_0_review_set_theory.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities (if A⊂B then A∩B=A and P(A)≤P(B); P(A−B)=P(A)−P(A∩B)), fetched 2026-10-30, sha256:984952f1ea762230cb0c228497cb48dced7032a55616e2ef6ca339338bd2fdfb — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, difference rule, proper difference rule, increasing property, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 3 (p.22, PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.0 §1 Sets: universal set, empty set, power set, union/intersection/difference/complement, De Morgan's laws, distributive laws, symmetric difference, Venn diagrams, partitions, read 2026-11-06, sha256:88ae6adae225bb78dcf149c6e9807cc4de3d615bf803a343f73b387d3729824a — https://www.randomservices.org/random/foundations/Sets.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.1 §3 Probability Measure (Kolmogorov axioms a-c, countable additivity; probability as a function on the collection of events), read 2026-11-06, sha256:381bc53d4a8e0bf0259a5ce1093eb2d759a56e205c38c362ddb3b1a03879c7e6 — https://www.randomservices.org/random/prob/Probability.html"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.2.2 Set Operations (union, intersection, complement, difference, mutually exclusive, partitions, De Morgan's law, distributive law), read 2026-11-06, sha256:ad6875e63227a79d1d04f5560bf8509caf6fced03dbdf7091b5a89d2db7f487e — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §1.3.3 Finding Probabilities (complement rule, P(empty)=0, P(A)<=1, P(A-B)=P(A)-P(A∩B), inclusion-exclusion n=2, monotonicity, with proofs from the axioms), read 2026-11-06, sha256:d9bbfac6df61983d64593563b88f919487a03c5ea8c140c3ee3bb97e36ca33ca — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, introduction (calculus incl. series, differentiation, integration assumed, PDF p.1) and Topic 1 General Probability learning objective and outcomes a-g (PDF p.2), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Set Theory.md
 ---
 
-**Set Theory** is the branch of mathematics that studies collections of objects called **sets** and the relationships between them. It supplies the language of [[Probability]]: the [[Sample Space]] $S$ is the set of all outcomes, an [[Event]] is a subset of $S$, and [[Set Operations]] on events (union, intersection, complement) mirror the words "or", "and", and "not".
-
-> $$A \subseteq S \iff (\omega \in A \Rightarrow \omega \in S)$$
-
-- A set is specified by listing its elements, $A = \{1, 2, 3\}$, or by a defining property, $A = \{\, \omega : \omega \text{ satisfies } P \,\}$.
-- $\omega \in A$ means $\omega$ is an element of $A$; $A \subseteq S$ means every element of $A$ also lies in $S$.
-- The empty set $\varnothing$ contains no elements; the complement $A^c = S \setminus A$ is everything in $S$ not in $A$.
-- Sets are the building blocks of a probability space $(S, \mathcal{F}, P)$, in which events are the sets whose probabilities are measured.
-
 ![[Media/Figures/Set_Theory.svg|340]]
 
-### Equal sets and subsets
+**Set Theory** is the branch of mathematics that studies sets, collections of distinct objects called elements. In probability, the [[Sample Space|sample space]] $S$ is a set and an [[Event|event]] is a subset of it.
 
-- Two sets are equal, $A = B$, exactly when they contain the same elements, that is, when $A \subseteq B$ and $B \subseteq A$.
+An element $s$ of a set $E$ is written $s \in E$. A set is written by listing its elements, $\{1, 2, 3\}$, or by a rule, $\{s \in S : s < 4\}$. A set $E$ is a subset of a set $F$ when every element of $E$ is also an element of $F$:
 
-> $$A = B \iff (A \subseteq B \text{ and } B \subseteq A)$$
+> $$E \subseteq F$$
 
-- If $A \subseteq B$ but some outcome of $B$ is not in $A$, then $A$ is a proper subset of $B$ and $A \neq B$: an event defined by a stricter condition is a proper subset of the broader event, not the same event.
-- If $B \subseteq A$, then $A \cup B = A$ and $A \cap B = B$, so $P(A \cup B) = P(A)$ and $P(A \cap B) = P(B)$: the union of an event with a subset of it is the larger event.
-- If $B \subseteq A$, then $P(B) \leq P(A)$, and since $A$ is the disjoint union of $B$ and $A \setminus B$, the difference rule gives $P(A \setminus B) = P(A) - P(B)$.
+The [[Set Operations|set operations]] union, intersection and complement turn the words "or", "and" and "not" into sets.
 
-> $$B \subseteq A \implies P(A \setminus B) = P(A) - P(B)$$
+> [!example]- A fair die is rolled. Which outcomes make up the event "less than 5", and what is its probability? {Example}
+> - The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
+> - "Less than 5" is $E = \{s \in S : s < 5\} = \{1, 2, 3, 4\}$.
+> - The 6 outcomes are equally likely, so the [[Probability|probability]] is $P(E) = \frac{4}{6} = \frac{2}{3}$.
 
-- Containment is the case of largest overlap and smallest union: if $A \subseteq B$, then $P(A \cap B) = P(A)$ and $P(A \cup B) = P(B)$, the most the intersection and the least the union can be.
+## De Morgan's laws
 
-> [!example]- An Event and a Subset of It {Example}
-> A fair die is rolled. Let $A = \{2, 4, 6\}$ (even) and $B = \{6\}$. Find $P(A \cup B)$, $P(A \cap B)$ and $P(A \setminus B)$.
->
-> > [!answer]-
-> > Every outcome of $B$ is in $A$, so $B \subseteq A$ (a proper subset: 2 and 4 are in $A$ but not $B$). Then $A \cup B = A$ and $A \cap B = B$:
-> > $$P(A \cup B) = P(A) = \frac{3}{6}$$
-> > $$P(A \cap B) = P(B) = \frac{1}{6}$$
-> > $$P(A \setminus B) = P(A) - P(B) = \frac{2}{6}$$
-> > Check: $A \setminus B = \{2, 4\}$, which has probability $2/6$.
+The complement of a union is the intersection of the complements:
 
-> [!example]- Union, Intersection, and Difference of Two Sets {Example}
-> Given $A = \{1, 2, 3, 4\}$ and $B = \{3, 4, 5, 6\}$, find $A \cup B$, $A \cap B$, and $A \setminus B$.
->
-> > [!answer]-
-> > $$A \cup B = \{1, 2, 3, 4, 5, 6\}$$
-> > $$A \cap B = \{3, 4\}$$
-> > $$A \setminus B = \{1, 2\}$$
-> > The union collects elements in either set, the intersection those in both, and the difference those in $A$ only.
+> $$(E \cup F)^c = E^c \cap F^c$$
 
-> [!example]- Complement and De Morgan's Law {Example}
-> A [[Sample Space]] for a die roll is $S = \{1, 2, 3, 4, 5, 6\}$. Let $A = \{2, 4, 6\}$ (even) and $B = \{4, 5, 6\}$ (greater than 3). Find $A^c$ and verify $(A \cup B)^c = A^c \cap B^c$.
->
-> > [!answer]-
-> > The complements are $A^c = S \setminus A = \{1, 3, 5\}$ and $B^c = \{1, 2, 3\}$. Then:
-> > $$A \cup B = \{2, 4, 5, 6\} \implies (A \cup B)^c = \{1, 3\}$$
-> > $$A^c \cap B^c = \{1, 3, 5\} \cap \{1, 2, 3\} = \{1, 3\}$$
-> > Both sides equal $\{1, 3\}$, confirming De Morgan's Law.
+The complement of an intersection is the union of the complements:
+
+> $$(E \cap F)^c = E^c \cup F^c$$
+
+"Neither $E$ nor $F$" is the first set. "Not both $E$ and $F$" is the second.
+
+> [!example]- A policyholder has probability 0.80 of no auto claim this year, 0.90 of no home claim and 0.75 of neither. What are the probabilities of at least one claim and of both? {Example}
+> - Let $E$ be "an auto claim" and $F$ be "a home claim", so $P(E) = 0.20$ and $P(F) = 0.10$.
+> - "Neither" is $E^c \cap F^c = (E \cup F)^c$, so at least one claim has probability $P(E \cup F) = 1 - 0.75 = 0.25$.
+> - By the [[Probability Addition Rule|addition rule]], both have probability $P(E \cap F)$, which is $0.20 + 0.10 - 0.25 = 0.05$.
+
+> [!trap] "Neither" versus "not both"
+> "Neither" is the complement of the union, so $P(\text{neither}) = 1 - P(E \cup F)$. Writing $1 - P(E \cap F)$ answers "not both", which is at least as large and usually larger.
+
+## Partitions
+
+Events $E_1, E_2, \ldots, E_n$ form a **partition** of $S$ when they are [[Mutually Exclusive Events|mutually exclusive]] and together make up $S$. Every outcome is then in exactly one of them, and their probabilities add to 1:
+
+> $$P(E_1) + P(E_2) + \cdots + P(E_n) = 1$$
+
+An event $E$ and its complement $E^c$ are the simplest partition. Any other event splits into its pieces in each part of a partition, which leads to [[The Law of Total Probability|the law of total probability]].
+
+> [!example]- Every policyholder is classified as exactly one of low, medium or high risk. 50% are low risk and 30% are medium risk. What is the probability that a policyholder chosen at random is high risk? {Example}
+> - Each policyholder is in exactly one class, so the three classes form a partition.
+> - Their probabilities add to 1, so $P(\text{high})$ is $1 - 0.50 - 0.30 = 0.20$.

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Concept Craft (docs/concept-craft.md): the way in from the Quiz tab onto an
 // empty board, a starter pack added from the + menu, a connection found by dropping one concept on another — new concepts made,
@@ -49,6 +49,19 @@ async function drop(page: Page, from: string, onto: string) {
   await dragBetween(page, centre(a), centre(b))
 }
 
+/**
+ * Drop one card on another and wait for the line between them. On a slow
+ * machine the board can still be settling as the hand lets go, so a drop that
+ * lands beside its target is made again, as a reader would.
+ */
+async function connect(page: Page, from: string, onto: string) {
+  await expect(async () => {
+    if (await strength(page, from, onto).count()) return
+    await drop(page, from, onto)
+    await expect(strength(page, from, onto)).toBeVisible({ timeout: 2000 })
+  }).toPass({ timeout: 15000 })
+}
+
 /** The cards on the board, in the order they came into hand (the deck's order). */
 async function inHand(page: Page) {
   await expect(page.getByTestId('craft-deck-tile').first()).toBeVisible()
@@ -94,7 +107,7 @@ test.describe('concept craft', () => {
     await page.goto(TOPIC)
     const [a, b] = await inHand(page)
     const before = await page.locator('[data-craft-node]').count()
-    await drop(page, a, b)
+    await connect(page, a, b)
 
     await expect(strength(page, a, b)).toHaveText(/^\d+$/)
     await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ key connections$/)
@@ -154,13 +167,13 @@ test.describe('concept craft', () => {
     await page.goto('/craft/exam-pcpa-dealing-with-data')
     await inHand(page)
     const medals = page.getByTestId('craft-medals')
-    await expect(medals).toContainText(/to go\s*in 7 for Gold/)
+    await expect(medals).toContainText(/to Gold\s*7 connections left/)
     await medals.click()
     const panel = page.getByTestId('craft-medals-panel')
     await expect(panel).toContainText('The 9 concepts here make 36 pairs')
     const tiers = panel.getByTestId('craft-medal-tier')
     await expect(tiers).toHaveCount(3)
-    await expect(tiers.nth(0)).toContainText(/Gold80% in 20%.*in your first 7 connections/)
+    await expect(tiers.nth(0)).toContainText(/Gold80% of the score in your first 20% of pairs.*in your first 7 connections/)
     await expect(tiers.nth(1)).toContainText('in your first 10 connections')
     await expect(tiers.nth(2)).toContainText('in your first 14 connections')
     await page.keyboard.press('Escape')
@@ -194,7 +207,7 @@ test.describe('concept craft', () => {
   test('opens a connection: its strength, what it made, and a quiz on its questions', async ({ page }) => {
     await page.goto(TOPIC)
     const [a, b] = await inHand(page)
-    await drop(page, a, b)
+    await connect(page, a, b)
     const made = await page.locator('[data-craft-node][data-new]').first().getAttribute('data-craft-node')
     // Off the cards, so nothing is lit and every strength shows.
     await page.mouse.move(5, 5)

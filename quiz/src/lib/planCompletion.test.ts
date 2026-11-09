@@ -6,6 +6,7 @@ import {
   masteryStatesForSyllabus,
   mergeLevelUps,
   planConceptKeys,
+  planConceptTargets,
   planConceptsToday,
   planDoneConceptSlugs,
   targetStateFor,
@@ -518,5 +519,23 @@ describe('planDoneConceptSlugs', () => {
       today: TODAY,
       now: NOW,
     }).size).toBe(0)
+  })
+})
+
+describe('planConceptTargets', () => {
+  const aliased: WikiExamSyllabus = {
+    ...syllabus(['Bayes Theorem']),
+    topics: [{ name: 'Bonds', concepts: [
+      { name: 'Price', target: 'Concepts/Bond Price.md' },
+      { name: 'Bond Price', target: 'Bond Price' },
+    ] }],
+  }
+
+  it('names an aliased concept by its page, anything else as given, once each', () => {
+    expect(planConceptTargets(['Price', 'Bond Price', 'Duration'], aliased)).toEqual(['Bond Price', 'Duration'])
+  })
+
+  it('keeps the names as given with no syllabus', () => {
+    expect(planConceptTargets(['Price'], null)).toEqual(['Price'])
   })
 })

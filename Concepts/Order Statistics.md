@@ -1,81 +1,109 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b8e54523bdde27072a2ed223a393ea0d854fbee2a8df8576233bcc7c161662ef
+  content_hash: sha256:fcab7a286cb2307356981de0f092f28bac96dceb86815a0058e43dca9c780e4f
   sources:
-    - "Siegrist, Random (randomservices.org), Random Samples > Order Statistics (F_k and f_k for an i.i.d. sample; joint pdf f_jk of two order statistics and f_1n of min and max; standard uniform X_(k) beta(k, n-k+1)), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
-    - "Siegrist, Random (randomservices.org), Distributions > Transformations > Minimum and Maximum (independent X_i with distribution functions F_i: max has F_1...F_n, min has 1 - product of (1 - F_i)), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q249 (min of two independent exponentials by multiplying survival functions, PDF pp.73-74), Q497 (min of three i.i.d. losses, 1 - [1 - F(x)]^3, PDF p.137), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.4 Order Statistics (finite sampling models): P[X_(i) = x] = C(x-1,i-1) C(m-x,n-i)/C(m,n), x in {i,...,m-n+i}, by the multiplication principle (m here is the page's N), HTML fetched 2026-10-30, sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html"
-    - "Sheffield, MIT OCW 18.440 Probability and Random Variables (Spring 2014), Lecture 20 'Exponential random variables', slide 8 (min of independent exponentials has rate the sum of rates), slides 10-11 (memoryless property), slide 15 'Radioactive decay: maximum of independent exponentials' (T1 exponential with parameter n*lambda, T2 with (n-1)*lambda, 'and so forth', E[T] = lambda^-1 sum_{j=1}^n 1/j, Var by independence), PDF sha256:394516321e47a5eae056e929d398075f82956f7711c449c8deca16abb56c175c — https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf"
-    - "Wikipedia, 'Order statistic', section on the exponential distribution: X_(i) =d (1/lambda) sum_{j=1}^i Z_j/(n-j+1), Z_j i.i.d. standard exponential (Rényi) (fetched 2026-10-30) — https://en.wikipedia.org/wiki/Order_statistic"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 6.6 Order Statistics: f_k(x) = n!/((k-1)!(n-k)!) F^(k-1)(1-F)^(n-k) f; joint f_{j,k}; uniform sample X_(k) beta(k, n-k+1) with mean k/(n+1), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 3.7 Transformations, Minimum and Maximum: independent X_i with CDFs F_i, max has F_1...F_n, min has 1 - prod(1 - F_i), sha256:827bba81a7f85933f2ba982a09155f5277f5ec19838e2ffe70ac0563a56aca69 — https://www.randomservices.org/random/dist/Transformations.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.4 Order Statistics: P[X_(i) = x] = C(x-1,i-1)C(m-x,n-i)/C(m,n), sha256:8b4b38e1ca6a79fcc598b1bebf75fc7b9694f0592411d2ef539a6c727f139c77 — https://www.randomservices.org/random/urn/OrderStatistics.html"
+    - "Sheffield, MIT OCW 18.440 (Spring 2014), Lecture 20 Exponential random variables, slide 8 (min of independent exponentials has rate the sum of rates), slide 16 radioactive decay: T1 exponential nλ, T2 (n-1)λ, E[T] = λ^-1 Σ 1/j, sha256:394516321e47a5eae056e929d398075f82956f7711c449c8deca16abb56c175c — https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/9c364e256bcc2b34ba6dd73025e8bcb2_MIT18_440S14_Lecture20.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 2 Univariate Random Variables (PDF p.3); Topic 3 Multivariate Random Variables incl. order statistics (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Order Statistics.md
 ---
 
-**Order Statistics** are the values of a random sample arranged in non-decreasing order. Given a sample $X_1, X_2, \ldots, X_n$, the $k$-th order statistic $X_{(k)}$ is the $k$-th smallest value. The minimum is $X_{(1)}$ and the maximum is $X_{(n)}$.
-
-> $$F_{X_{(k)}}(x) = \sum_{j=k}^{n} \binom{n}{j} [F(x)]^j [1 - F(x)]^{n-j}$$
-
-> $$f_{X_{(k)}}(x) = \frac{n!}{(k-1)!\,(n-k)!} [F(x)]^{k-1} [1 - F(x)]^{n-k} f(x)$$
-
-- The formulas above apply when the observations are i.i.d. with common CDF $F(x)$ and PDF $f(x)$
-- For the $\text{Uniform}(0,1)$ distribution: $E[X_{(k)}] = \dfrac{k}{n+1}$
-- For **independent** $X_1, \ldots, X_n$ that need not share a distribution ($X_i$ with CDF $F_i$), the maximum and minimum still have product forms. They use only distribution functions, so they hold for discrete and continuous variables alike:
-
-> $$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$
-
-> $$P\bigl(X_{(1)} > x\bigr) = \bigl[1 - F_1(x)\bigr]\bigl[1 - F_2(x)\bigr]\cdots\bigl[1 - F_n(x)\bigr]$$
-
-- The **joint** density of two order statistics $X_{(j)} < X_{(k)}$ ($j < k$) of an i.i.d. continuous sample counts the observations below, between and above them; for the minimum and maximum ($j = 1$, $k = n$) it reduces to $f_{1,n}(x,y) = n(n-1)[F(y) - F(x)]^{n-2} f(x) f(y)$:
-
-> $$f_{j,k}(x,y) = \frac{n!}{(j-1)!\,(k-j-1)!\,(n-k)!} [F(x)]^{j-1} [F(y) - F(x)]^{k-j-1} [1 - F(y)]^{n-k} f(x)\, f(y), \quad x < y$$
-
-- **Sampling without replacement.** When $n$ distinct values are drawn without replacement from $\{1, 2, \ldots, N\}$, all $\binom{N}{n}$ subsets are equally likely. $X_{(k)} = x$ exactly when $x$ is chosen, $k - 1$ of the chosen values lie below $x$ and $n - k$ lie above it, so by the multiplication principle fix $x$ in the selection and choose the rest from the $x - 1$ values below it and the $N - x$ values above it:
-
-> $$P\bigl(X_{(k)} = x\bigr) = \frac{\binom{x-1}{k-1}\binom{N-x}{n-k}}{\binom{N}{n}}, \quad k \le x \le N - n + k$$
-
-- The $j$-th largest of the $n$ is $X_{(n-j+1)}$: fix $x$, then choose $j - 1$ values from those greater than $x$ and $n - j$ from those less than $x$.
-- **Exponential samples: spacings.** For $n$ i.i.d. exponentials with rate $\lambda$ (mean $\mu = 1/\lambda$), the minimum is exponential with rate $n\lambda$, and by memorylessness the survivors start afresh after each failure. So the spacing between successive order statistics is exponential with rate equal to the number still surviving times $\lambda$: the gap $X_{(j)} - X_{(j-1)}$ has rate $(n - j + 1)\lambda$, and the gaps are independent (with $X_{(0)} = 0$):
-
-> $$X_{(k)} \overset{d}{=} \frac{1}{\lambda} \sum_{j=1}^{k} \frac{Z_j}{n - j + 1}, \quad Z_j \text{ i.i.d. Exponential}(1)$$
-
-> $$E\bigl[X_{(k)}\bigr] = \mu\left(\frac{1}{n} + \frac{1}{n-1} + \cdots + \frac{1}{n-k+1}\right)$$
-
-- So the expected k-th order statistic of n i.i.d. exponentials is the sum of the mean gaps, each gap's mean being the individual mean divided by the number still surviving. The maximum's mean is $\mu(1/n + \cdots + 1/2 + 1)$.
-
 ![[Media/Figures/Order_Statistics.svg|340]]
 
-> [!example]- Expected Maximum of Three Uniform Observations {Example}
-> Three independent observations are drawn from a $\text{Uniform}(0,1)$ distribution. What is the expected value of the maximum?
->
-> > [!answer]-
-> > The maximum is the $k = 3$ order statistic from a sample of $n = 3$. For i.i.d. $\text{Uniform}(0,1)$ random variables:
-> > $$E[X_{(3)}] = \frac{3}{3+1} = \frac{3}{4} = 0.75$$
+**Order Statistics** are the values of a random sample sorted from smallest to largest. The $k$th order statistic $X_{(k)}$ of a sample $X_1, \ldots, X_n$ is its $k$th smallest value, so
 
-> [!example]- First Failure of Two Different Components {Example}
-> A system fails as soon as either of two independent components fails. Their lifetimes are exponential with means 10 and 15. Find the distribution and mean of the system's lifetime.
->
-> > [!answer]-
-> > The system lifetime is the minimum $X_{(1)}$ of two independent but **not** identically distributed lifetimes, so multiply the survival functions:
-> > $$
-> > \begin{align*}
-> > P\bigl(X_{(1)} > x\bigr) &= e^{-x/10}\, e^{-x/15} \\
-> >                          &= e^{-x/6}
-> > \end{align*}
-> > $$
-> > That is the survival function of an exponential with mean 6, so $E[X_{(1)}] = 6$ — shorter than either component's mean.
+> $$X_{(1)} \le X_{(2)} \le \cdots \le X_{(n)}$$
 
-> [!example]- Joint Distribution of the Low and High Die {Example}
-> Two fair dice are rolled independently. Let $L$ be the smaller number and $H$ the larger. Find the joint probability function of $(L, H)$ and $P(H - L \ge 4)$.
+- $X_{(1)}$ is the minimum and $X_{(n)}$ is the maximum.
+
+> [!idea] The idea
+> The maximum is at most $x$ exactly when every observation is at most $x$, and the minimum is above $x$ exactly when every observation is above $x$.
+
+## The maximum and the minimum
+
+For [[Independent Random Variables|independent]] $X_1, \ldots, X_n$ with CDFs $F_1, \ldots, F_n$, the CDF of the maximum is
+
+> $$P(X_{(n)} \le x) = F_1(x)\,F_2(x) \cdots F_n(x)$$
+
+The minimum is above $x$ with probability
+
+> $$P(X_{(1)} > x) = [1 - F_1(x)] \cdots [1 - F_n(x)]$$
+
+For an i.i.d. sample with CDF $F$, these are $[F(x)]^n$ and $[1 - F(x)]^n$. A system that fails when its first component fails has the minimum lifetime, and one that fails when its last component fails has the maximum.
+
+> [!example]- Two fair dice are rolled. What is the probability that the larger number is 4? {Example}
+> - The larger number is at most 4 when both dice are, so $P(X_{(2)} \le 4)$ is $\left(\frac{4}{6}\right)^2 = \frac{16}{36}$.
+> - In the same way, $P(X_{(2)} \le 3)$ is $\left(\frac{3}{6}\right)^2 = \frac{9}{36}$.
+> - The probability that the larger number is exactly 4 is the difference, $\frac{16}{36} - \frac{9}{36} = \frac{7}{36}$.
+
+> [!trap] Multiplying CDFs for the minimum
+> The minimum multiplies the probabilities $1 - F_i(x)$ of being above $x$, not the CDFs. $P(X_{(1)} \le x)$ is one minus that product.
+
+## The $k$th order statistic
+
+For an i.i.d. sample of $n$ from a continuous distribution, the density of the $k$th order statistic is
+
+> $$
+> \begin{aligned}
+> & f_{X_{(k)}}(x) \\
+> & = \frac{n!}{(k-1)!\,(n-k)!} \\
+> & \quad \times [F(x)]^{k-1}\,[1 - F(x)]^{n-k} \\
+> & \quad \times f(x)
+> \end{aligned}
+> $$
+
+- $f(x)$ and $F(x)$ are the density and CDF of each observation.
+
+The density counts $k - 1$ observations below $x$, one at $x$ and $n - k$ above it. For $k = 1$ it is the density of the minimum, $n f(x) [1 - F(x)]^{n-1}$. For a sample of $n$ from the uniform distribution on $(0, \theta)$, the mean of $X_{(k)}$ is $\frac{k\theta}{n+1}$.
+
+> [!example]- A sample of 4 is drawn from the uniform distribution on $(0, 10)$. What is the expected value of the second smallest? {Example}
+> - Here $n = 4$, $k = 2$, $F(x) = \frac{x}{10}$ and $f(x) = \frac{1}{10}$.
+> - The coefficient is $\frac{4!}{1!\,2!} = 12$, so the density of $X_{(2)}$ is
 >
-> > [!answer]-
-> > Of the 36 equally likely ordered outcomes, $\{L = l, H = h\}$ with $l < h$ is the two outcomes $(l, h)$ and $(h, l)$, while $l = h$ is the single outcome $(l, l)$:
-> > $$p_{L,H}(l, h) = \begin{cases} 2/36, & l < h \\ 1/36, & l = h \end{cases}$$
-> > The pairs with $h - l \ge 4$ are $(1,5)$, $(1,6)$ and $(2,6)$:
-> > $$P(H - L \ge 4) = 3 \cdot \frac{2}{36} = \frac{1}{6}$$
+> $$f_{X_{(2)}}(x) = \frac{12}{10} \cdot \frac{x}{10} \left(1 - \frac{x}{10}\right)^2$$
+>
+> - Integrating $x f_{X_{(2)}}(x)$ from 0 to 10 gives 4, which is $\frac{2 \times 10}{4 + 1}$.
+
+## The minimum of exponential random variables
+
+If $X_1, \ldots, X_n$ are independent [[Exponential Distribution|exponential]] random variables with rates $\lambda_1, \ldots, \lambda_n$, their minimum is exponential with rate $\lambda_1 + \cdots + \lambda_n$:
+
+> $$P(X_{(1)} > x) = e^{-(\lambda_1 + \cdots + \lambda_n)x}$$
+
+- The rate $\lambda_i$ is one over the mean of $X_i$.
+
+The exponential distribution is memoryless, so after the first failure the survivors start afresh. For $n$ i.i.d. lifetimes with mean $\theta$, the gaps between failures are independent, with means $\frac{\theta}{n}$, $\frac{\theta}{n-1}$ and so on, so
+
+> $$E[X_{(k)}] = \theta\left(\frac{1}{n} + \cdots + \frac{1}{n-k+1}\right)$$
+
+> [!example]- A system fails as soon as either of two independent components fails. The lifetimes are exponential with means 10 and 15. What is the mean lifetime of the system? {Example}
+> - The system's lifetime is the minimum of the two lifetimes.
+> - The rates are $\frac{1}{10}$ and $\frac{1}{15}$, which add to $\frac{1}{6}$.
+> - The minimum is exponential with rate $\frac{1}{6}$, so the mean lifetime is 6.
+
+> [!example]- Three components have i.i.d. exponential lifetimes with mean 10. What is the expected time until all three have failed? {Example}
+> - All three have failed at the maximum, $X_{(3)}$.
+> - Three components survive for the first gap, then two, then one.
+> - The expected time is
+>
+> $$E[X_{(3)}] = 10\left(\frac{1}{3} + \frac{1}{2} + 1\right) = 18.33$$
+
+## Draws without replacement
+
+When $n$ distinct numbers are drawn without replacement from $1, 2, \ldots, N$, the $k$th smallest equals $x$ when $x$ is drawn, $k - 1$ draws are below it and $n - k$ are above it:
+
+> $$P(X_{(k)} = x) = \frac{\binom{x-1}{k-1}\binom{N-x}{n-k}}{\binom{N}{n}}$$
+
+> [!example]- Three numbers are drawn without replacement from 1 to 10. What is the probability that the middle one is 5? {Example}
+> - One of the 4 numbers below 5 is drawn, and one of the 5 numbers above it.
+> - There are $\binom{10}{3} = 120$ equally likely draws, so
+>
+> $$P(X_{(2)} = 5) = \frac{4 \times 5}{120} = \frac{1}{6}$$

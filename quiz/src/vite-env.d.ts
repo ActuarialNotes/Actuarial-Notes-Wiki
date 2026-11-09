@@ -8,6 +8,8 @@ interface ImportMetaEnv {
    * See docs/listen-recordings.md.
    */
   readonly VITE_LISTEN_BASE_URL?: string
+  /** Where the daily podcast's clips are served from (lib/podcast.ts); `/podcast` serves public/podcast/ in development. */
+  readonly VITE_PODCAST_BASE_URL?: string
   /**
    * Optional error-monitoring collector endpoint. When set, captured errors are
    * beacon-POSTed here (a Sentry tunnel or any custom collector). See
@@ -30,6 +32,7 @@ interface ImportMetaEnv {
   readonly VITE_ACTUARIA_PREVIEW?: string
   readonly VITE_COWORK_PREVIEW?: string
   readonly VITE_COMMUNITY_PREVIEW?: string
+  readonly VITE_GAMES_PREVIEW?: string
   /**
    * `on` lets a page that asks for it (localStorage `actuarial_tutor_preview`)
    * see the Tutor signed out — the e2e suite's build. See `TUTOR_OPEN_TO_ALL`.
@@ -58,10 +61,24 @@ declare module 'virtual:cowork-vault' {
   export default documents
 }
 
+declare module 'virtual:assumption-bank' {
+  import type { AssumptionSet } from '@/lib/assumptionBank'
+  /** Every `Assumptions/*.md` set, parsed — docs/assumptions-bank.md. */
+  const sets: AssumptionSet[]
+  export default sets
+}
+
 declare module 'virtual:exam-pages' {
   /** Every root `Exam *.md` syllabus page, keyed by file name. */
   const examPages: Record<string, string>
   export default examPages
+}
+
+declare module 'virtual:podcast-scripts' {
+  import type { PodcastScriptHashes } from '@/lib/podcast'
+  /** Every concept page's podcast script hashes, by slug — see lib/podcast.ts. */
+  const hashes: PodcastScriptHashes
+  export default hashes
 }
 
 declare module 'virtual:store-books' {

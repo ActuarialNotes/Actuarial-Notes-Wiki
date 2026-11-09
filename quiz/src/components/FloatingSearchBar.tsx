@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, type Ref } from 'react'
+import { forwardRef, useCallback, useEffect, useRef, type ReactNode, type Ref } from 'react'
 import { ChevronLeft, Hammer, Search, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { MobileNavButton } from '@/components/MobileNavButton'
@@ -6,6 +6,7 @@ import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { backLabel, type Back } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
+import { inkChip } from '@/components/ui/ink'
 import type { ExamStatus } from '@/lib/examStatus'
 
 /**
@@ -57,9 +58,31 @@ export const FloatingSearchBar = forwardRef(function FloatingSearchBar(
   { children, banner, width = 'md', className }: FloatingSearchBarProps,
   ref: Ref<HTMLDivElement>,
 ) {
+  // The bar's height, published as `--floating-search-height` on the root, so
+  // what pins itself below the bar (a concept page's section headings) lines
+  // up with its bottom edge whatever strip or banner the bar carries.
+  const own = useRef<HTMLDivElement | null>(null)
+  const setRef = useCallback((node: HTMLDivElement | null) => {
+    own.current = node
+    if (typeof ref === 'function') ref(node)
+    else if (ref) (ref as { current: HTMLDivElement | null }).current = node
+  }, [ref])
+  useEffect(() => {
+    const node = own.current
+    if (!node || typeof ResizeObserver === 'undefined') return
+    const root = document.documentElement
+    const publish = () => root.style.setProperty('--floating-search-height', `${node.offsetHeight}px`)
+    publish()
+    const observer = new ResizeObserver(publish)
+    observer.observe(node)
+    return () => {
+      observer.disconnect()
+      root.style.removeProperty('--floating-search-height')
+    }
+  }, [])
   return (
     <div
-      ref={ref}
+      ref={setRef}
       data-floating-search
       className={cn('sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md', className)}
     >
@@ -178,14 +201,14 @@ export function ExamStatusBanner({ status }: { status: ExamStatus }) {
     return (
       <div className="flex items-center justify-center gap-1 border-t border-dashed border-muted-foreground/40 py-1.5 text-center text-[11px] font-medium tracking-wide text-muted-foreground">
         <Hammer className="h-3 w-3 shrink-0" aria-hidden />
-        In Development — syllabus outline only, not yet available to study
+        In Development · Syllabus outline only. No practice questions yet.
       </div>
     )
   }
   if (status === 'beta') {
     return (
       <div className="bg-amber-500/15 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
-        Beta
+        Beta · Questions and pages are still being added and checked.
       </div>
     )
   }
@@ -246,10 +269,7 @@ export function SearchScopePill({ active, disabled, onClick, children }: SearchS
       disabled={disabled}
       aria-pressed={active}
       data-sound="select"
-      className={cn(
-        'rounded-full px-3 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40',
-        active ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground hover:bg-accent/80',
-      )}
+      className={inkChip(active, 'h-8 px-3')}
     >
       {children}
     </button>

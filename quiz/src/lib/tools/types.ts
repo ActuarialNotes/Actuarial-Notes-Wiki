@@ -10,7 +10,10 @@
  * serverless functions (`npm run tools:bundle`), outside the app's `@/` alias.
  */
 
-export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
+import type { AssumptionSource } from './bank'
+import type { FiledSource } from './filings'
+
+export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance' | 'capital'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
 export type NumberUnit = 'percent' | 'money' | 'factor' | 'count' | 'years' | 'plain'
@@ -42,6 +45,18 @@ export interface NumberField extends FieldBase {
   zeroLabel?: string
   default: number
   integer?: boolean
+  /**
+   * The Assumptions Bank kinds this field takes a published figure of
+   * (docs/assumptions-bank.md §4.2): its input may then be a reference,
+   * `{ "assumption": "<id>" }`, read in by `normalizeInput` with its source.
+   */
+  bank?: string[]
+  /**
+   * The OSFI filing lines this field takes a filed value of (their addresses,
+   * `P100005001`): its input may then be `{ "filed": "osfi-pc:<quarter>:<id>:<address>" }`,
+   * read in by `normalizeInput` with where it was filed (`filings.ts`).
+   */
+  filed?: string[]
 }
 
 /** A date, held as 'YYYY-MM-DD' (an effective date, a valuation date). */
@@ -63,8 +78,16 @@ export interface TableColumn {
   unit?: NumberUnit
   /** A column that may be left blank (a text one reads as '', a number one as null). */
   optional?: boolean
+  /** A column whose values are a matter of judgment (R3), marked ◆ in its header. */
+  judgment?: boolean
   /** What an empty cell of it shows, faintly: the words it takes ("exclude…"). */
   placeholder?: string
+  /**
+   * A computed column's formula in terms of the table's other columns, each
+   * written `{key}` — the card prints it with the exhibit's column numbers,
+   * `(4) = (1) + (5)` (docs/actuarial-tools.md §19).
+   */
+  formula?: string
 }
 
 /** Rows of named columns: origins with their figures, cash flows with their times. */
@@ -110,6 +133,8 @@ export interface ResultTable {
   rows: TableRow[]
   /** A last row set apart (a total, the averages). */
   footer?: TableRow
+  /** The row the run is about (the line an insurer was asked for), marked where the table is drawn. */
+  highlight?: number
 }
 
 export interface TraceStep {
@@ -125,6 +150,10 @@ export interface Judgment {
   label: string
   value: FieldValue
   default: boolean
+  /** The published figure the value was taken from, when it came from the Assumptions Bank. */
+  source?: AssumptionSource
+  /** The filing the value was read from, when it came from OSFI's returns. */
+  filed?: FiledSource
 }
 
 export interface ToolOutput {
@@ -159,6 +188,12 @@ export interface ToolSpec {
    */
   aka?: string[]
   fields: ToolField[]
+  /**
+   * The choice field that picks which quantity is the answer (Bond Price's
+   * `solve`: price, yield, coupon or term). The template draws it on the
+   * answer card as a "Solve for" strip, not as an input (docs/tool-template-v3.md §3).
+   */
+  solveFor?: string
   /** The formula with live values, under the title. */
   notation: (input: ToolInput) => string
   compute: (input: ToolInput) => ToolOutput
@@ -184,6 +219,21 @@ export interface ToolSpec {
    * the comparison takes the tiles.
    */
   compare?: { key: string; label: string; unit: NumberUnit | 'text' }[]
+  /**
+   * The filed line a tool's answer recomputes (MCT Ratio's line 140). When
+   * every filed input comes from one filing, the run reads that filing's own
+   * figure beside its answer: in `values.filed_answer`, the working, and a
+   * warning when the two differ by more than `tolerance` allows.
+   */
+  filedAnswer?: {
+    /** Which tile the filed figure is the counterpart of. */
+    tile: number
+    address: string
+    /** From the filed unit to the tile's (a ratio filed in % is 0.01). */
+    scale: number
+    /** How far apart the two may be, in the tile's unit, given the filed inputs' precision. */
+    tolerance: (input: ToolInput, filed: number) => number
+  }
 }
 
 /** The result of one run, as every surface receives it (§5). */

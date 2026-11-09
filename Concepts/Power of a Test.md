@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:44acc5a65c120c1c4876ac5c0dfd071210666dd1f1db71699812e0683b406c66
+  content_hash: sha256:880aa8eaac2bd8918f13cf887cce4eefaee200712a1dc7cea139c000459c617c
   sources:
     - "Siegrist, Random, ch.8 Hypothesis Testing §1 Introduction: power = probability of rejecting H0 for a distribution in H1; power function Q(theta) = P_theta(X in R), Q is the type 1 error probability on Theta0, 1 - Q the type 2 probability off it; uniformly most powerful tests, sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html"
     - "Siegrist, Random, ch.8 §2 Tests in the Normal Model: power functions with Q(mu0) = alpha and Q -> 1 away from the null, larger n or smaller sigma gives a uniformly more powerful test, one-sided sample-size formula n = (sigma[z(power) - z(alpha)]/(mu1 - mu0))^2, sha256:fd7bc50171fc51310f41e9132005b66cdbbd31bf507a70a0246394b05a379ab2 — https://www.randomservices.org/random/hypothesis/Normal.html"
@@ -16,33 +16,50 @@ verification:
   log: .verify/Concepts/Power of a Test.md
 ---
 
-The **Power of a Test** is the probability it rejects the null hypothesis when the null is false — the chance of detecting a real effect. Power is the complement of the [[Type II Error]] probability $\beta$, and it is a *function* of the true parameter value, not a single number.
-
-> $$\text{Power}(\theta) = P(\text{reject } H_0 \mid \theta) = 1 - \beta(\theta)$$
-
-> $$\alpha = \text{Power}(\theta_0) = P(\text{reject } H_0 \mid H_0 \text{ true})$$
-
-- Power rises with: a **larger sample** $n$, a **larger true effect** $|\theta - \theta_0|$, a **smaller** $\sigma$, and a **larger** $\alpha$
-- The trade-off with [[Type I Error]] is unavoidable at fixed $n$: lowering $\alpha$ shrinks the rejection region and so lowers power. Only more data improves both
-- The **power function** evaluated at $\theta_0$ equals the significance level $\alpha$; plotted against $\theta$ it rises from $\alpha$ toward $1$ as the truth moves away from $H_0$
-- Among all level-$\alpha$ tests of a simple null against a simple alternative, the [[Likelihood Ratio Test]] has the highest power — the **Neyman–Pearson lemma**
-- "Fail to reject" is not "accept": with low power, a null that is badly wrong still survives most of the time. Reporting a [[Confidence Interval]] shows what the test could and could not have ruled out
-- Power calculations are how sample size gets set in advance — solve $\text{Power}(\theta_1) = 0.80$ for $n$ at the smallest effect worth detecting
-
 ![[Media/Figures/Power_of_a_Test.svg|340]]
 
-> [!example]- Computing Power for a Mean {Example}
-> Test $H_0: \mu = 5{,}000$ vs $H_1: \mu > 5{,}000$ at $\alpha = 0.05$ using $n = 100$ claims with known $\sigma = 800$. Find the power when the true mean is $\mu = 5{,}200$.
->
-> > [!answer]-
-> > The test rejects when $\bar{X} > 5{,}000 + 1.645\dfrac{800}{\sqrt{100}} = 5{,}000 + 131.6 = 5{,}131.6$.
-> > If $\mu = 5{,}200$, then $\bar{X} \sim N(5{,}200, 80^2)$:
-> > $$\text{Power} = P(\bar{X} > 5{,}131.6) = P\!\left(Z > \frac{5{,}131.6 - 5{,}200}{80}\right) = P(Z > -0.855) \approx 0.804$$
-> > So $\beta \approx 0.196$: about one time in five a $200$ shift would be missed.
+The **Power of a Test** is the probability that a [[Hypothesis Testing|hypothesis test]] rejects the null hypothesis $H_0$, as a function of the true value $\theta$ of the parameter. If the test rejects $H_0$ when the sample $\mathbf{X}$ falls in the critical region $C$, its power at $\theta$ is
 
-> [!example]- Sample Size for a Target Power {Example}
-> With $\sigma = 800$ and $\alpha = 0.05$ one-sided, how many claims are needed for $90\%$ power against $\mu = 5{,}200$?
->
-> > [!answer]-
-> > $$n \ge \left(\frac{(z_\alpha + z_\beta)\,\sigma}{\mu_1 - \mu_0}\right)^{2} = \left(\frac{(1.645 + 1.282)(800)}{200}\right)^{2} = (11.71)^2 \approx 137.1$$
-> > Take $n = 138$. Note that raising power from $80\%$ to $90\%$ costs about $38$ extra claims — power is expensive near the top of the curve.
+> $$1 - \beta(\theta) = P(\mathbf{X} \in C \mid \theta)$$
+
+- $\beta(\theta)$ is the probability of a [[Type II Error|Type II error]] at a value $\theta$ under the alternative hypothesis $H_1$.
+
+At the null value $\theta_0$, the power equals the significance level $\alpha$, the probability of a [[Type I Error|Type I error]].
+
+> [!example]- In 10 independent trials with success probability $q$, a test of $H_0: q = 0.5$ against $H_1: q > 0.5$ rejects $H_0$ when there are at least 9 successes. What are the significance level and the power at $q = 0.8$? {Example}
+> - The number of successes $S$ is [[Binomial Distribution|binomial]] with 10 trials.
+> - The significance level is $P(S \ge 9 \mid q = 0.5) = \frac{10 + 1}{1{,}024} = 0.0107$.
+> - The power at $q = 0.8$ is $P(S \ge 9 \mid q = 0.8) = 10(0.8)^9(0.2) + (0.8)^{10} = 0.3758$.
+
+## Power of a test for a mean
+
+An upper-tailed test of $H_0: \mu = \mu_0$ at significance level $\alpha$, for a normal sample with known standard deviation $\sigma$, rejects $H_0$ when $\bar{X} > \mu_0 + z_\alpha \sigma / \sqrt{n}$. If the true mean is $\mu_1 > \mu_0$, the power of the test is
+
+> $$1 - \beta = 1 - \Phi\left(z_\alpha - \frac{\mu_1 - \mu_0}{\sigma / \sqrt{n}}\right)$$
+
+- $\Phi$ is the cdf of the standard normal distribution.
+- $z_\alpha$ is the upper $\alpha$ point of the standard normal distribution.
+
+The power increases as the sample size $n$ grows, as $\sigma$ shrinks, as $\mu_1$ moves further from $\mu_0$, and as $\alpha$ is raised.
+
+> [!example]- Claim sizes are normal with standard deviation 800. A test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ uses 100 claims at significance level 0.05. What is the power of the test when the true mean is 5,200? {Example}
+> - The standard deviation of $\bar{X}$ is $800 / \sqrt{100} = 80$.
+> - The test rejects when $\bar{X} > 5{,}000 + 1.645 \times 80 = 5{,}131.6$.
+> - When $\mu = 5{,}200$, the standardized critical value is $\frac{5{,}131.6 - 5{,}200}{80} = -0.855$.
+> - The power of the test is $P(\bar{X} > 5{,}131.6) = 1 - \Phi(-0.855) = 0.804$.
+
+## Sample size for a required power
+
+For the upper-tailed test of a mean to have significance level $\alpha$ and a probability of a Type II error of at most $\beta$ at $\mu_1 > \mu_0$, the sample size $n$ must satisfy
+
+> $$\sqrt{n} \ge \frac{(z_\alpha + z_\beta)\,\sigma}{\mu_1 - \mu_0}$$
+
+- $z_\beta$ is the upper $\beta$ point of the standard normal distribution.
+
+The smallest sample size is the value from this inequality rounded up to the next whole number, so that the requirement is still met.
+
+> [!example]- Claim sizes are normal with standard deviation 800. How many claims does a test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ at significance level 0.05 need to have power 0.90 when the true mean is 5,200? {Example}
+> - Power 0.90 means $\beta = 0.10$, so $z_\beta = 1.282$, and $z_\alpha = 1.645$.
+> - The sample size must satisfy $\sqrt{n} \ge \frac{(1.645 + 1.282)(800)}{200} = 11.708$.
+> - So $n \ge 11.708^2 = 137.08$.
+> - The test needs 138 claims.

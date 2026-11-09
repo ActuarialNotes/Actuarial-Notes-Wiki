@@ -4,50 +4,24 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2675e86f93176f0dece18e013cfd3dba7fa860df7c7359e152d4ba6f77c0df8d
+  content_hash: sha256:f544a0c55e9c0856f993c18235256b11d33e1eb690a89e7ed87cdafd741d6350
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Associate of the Casualty Actuarial Society (ACAS).md
 ---
 
-## Associate of the Casualty Actuarial Society (ACAS)
-
-**ACAS** is the associateship credential of the **Casualty Actuarial Society (CAS)**, the professional body for actuaries working in property and casualty (general) insurance — auto, home, commercial liability, workers compensation, reinsurance. An Associate has finished the CAS's *basic education*: probability and financial mathematics, modern statistics, ratemaking, estimating claim liabilities, and the regulation and financial reporting of an insurer in one jurisdiction.
-
-It is the first of the two CAS designations. [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] is the second, and an Associate continues straight on to it — every ACAS requirement is also an FCAS requirement.
+An **Associate of the Casualty Actuarial Society (ACAS)** is an actuary who has finished the basic education of the Casualty Actuarial Society (CAS), the professional body for property and casualty (general) insurance actuaries: statistics, ratemaking, reserving, and the regulation and financial reporting of an insurer in one jurisdiction. An ACAS is the first requirement for an [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
 
 %%credential-path ACAS%%
 
-## Requirements
+The CAS's route shares its first two exams with the SOA's, so a candidate can choose between the [[Credential Path|societies' routes]] after starting.
 
-> [!answer]- The ACAS pathway
-> - **VEE — Economics** and **VEE — Accounting and Finance**
->     - University coursework approved in advance, not an exam.
-> - **Exam 1 — [[Exam P-1 (SOA)|Probability]]**
->     - Jointly administered with the Society of Actuaries, where the same paper is called Exam P.
-> - **Exam 2 — [[Exam FM-2 (SOA)|Financial Mathematics]]**
->     - Also joint with the SOA, where it is called Exam FM.
-> - **CAS DISCs** — three online *Data and Insurance Series Courses*, taken through The Institutes
->     - [[Exam DISC-DA (CAS)|Introduction to Data & Analytics (DISC DA)]]; [[Exam DISC-RM (CAS)|Risk Management and Insurance Operations (DISC RM)]]; [[Exam DISC-IA (CAS)|Insurance Accounting, Coverage Analysis, Insurance Law and Insurance Regulation (DISC IA)]].
-> - **[[Exam MAS-I (CAS)|Exam MAS-I]]** — Modern Actuarial Statistics I
->     - [[Stochastic Processes]], [[Survival Model|survival models]], statistics and [[Generalized Linear Model|GLMs]].
-> - **[[Exam MAS-II (CAS)|Exam MAS-II]]** — Modern Actuarial Statistics II
->     - [[Credibility Theory]], [[Linear Mixed Model|linear mixed models]], [[Statistical Learning]] and [[Time Series]].
-> - **[[Exam 5 (CAS)|Exam 5]]** — Basic Techniques for Ratemaking and Estimating Claim Liabilities
->     - The first exam written entirely in the language of the job: [[Ratemaking]] and [[Loss Reserving|reserving]].
-> - **[[Exam PCPA (CAS)|PCPA]]** — Property and Casualty Predictive Analytics
->     - An exam and a project, required of candidates seeking the ACAS from 1 January 2026.
-> - **Exam 6** — Regulation and Financial Reporting
->     - Sat in the jurisdiction you practise in: [[Exam 6C (CAS)|Canada (6C)]], [[Exam 6U (CAS)|United States (6U)]], International, or Taipei.
-> - **Course on Professionalism**
->     - A one-off course on the profession's code of conduct and the obligations that come with the credential.
-
-The CAS restructures this pathway from time to time — PCPA is a recent addition, and the DISCs replaced the older Online Courses 1 and 2 — so check the published requirements and the transition rules before planning a sitting order.
+The CAS changes this route from time to time; PCPA and the DISCs are recent additions. Check its transition rules before you plan a sitting order.
 
 ## What an Associate can do
 
-Membership carries the professional obligations, not the letters. An ACAS is a voting member of the CAS, bound by the profession's code of conduct and standards of practice, and subject to continuing-education requirements. Whether a member may sign a particular [[Statement of Actuarial Opinion]] is set by the regulator of the jurisdiction — in Canada through the [[Canadian Institute of Actuaries (CIA)]] and the [[Appointed Actuary]] regime, in the United States through the applicable qualification standards — not by the designation on its own.
+An ACAS is a voting member of the CAS, bound by the profession's code of conduct and standards of practice, and subject to its continuing-education requirements. Whether a member may sign a particular [[Statement of Actuarial Opinion]] is decided in each jurisdiction. In Canada that is through the [[Canadian Institute of Actuaries (CIA)]] and the [[Appointed Actuary]] rules, and in the United States through the applicable qualification standards.
 
 ## Further Reading
 - [Credential Requirements](https://www.casact.org/credential-requirements) — Casualty Actuarial Society

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f8eb056f0ca51bc7451afb6d8fdda9818eb69bd400ca097eb7a5003a93cf38fd
+  content_hash: sha256:b42fd8ea828ed77699376a2909363aee1b9ebfb3d759f763c6a063fe203c7e7a
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 pp.33-34 (PDF pp.39-40); Ch. 14 pp.329-332 (PDF pp.335-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,59 +12,47 @@ verification:
   log: .verify/Concepts/Recoveries.md
 ---
 
-**Recoveries** are amounts an insurer collects that offset the claims it pays — deductibles billed back to insureds, [[Salvage and Subrogation|salvage and subrogation]], [[Reinsurance Recovery|reinsurance]], and collateral sources. In reserving they are estimated alongside the gross claims, and their unreceived portion (the recoverable) reduces the estimate of net [[Unpaid Claims|unpaid claims]].
+**Recoveries** are amounts an insurer collects that reduce its net cost of claims: [[Deductible Recovery|deductibles]] recovered from insureds, [[Salvage and Subrogation|salvage and subrogation]] (S&S), collateral sources and [[Reinsurance Recovery|reinsurance]]. The part not yet collected, the recoverable, reduces the estimate of net [[Unpaid Claims|unpaid claims]], and is
 
-> $$\begin{aligned} \text{Net Ultimate} &= \text{Gross Ultimate} \\ &\quad - \text{Ultimate Recoveries} \end{aligned}$$
+> $$\text{Recoverable} = \text{Ultimate Recoveries} - \text{Recoveries Received}$$
 
-> $$\begin{aligned} \text{Recoverable} &= \text{Ultimate Recoveries} \\ &\quad - \text{Recoveries Received} \end{aligned}$$
+Insurers record recoveries in one of four ways:
 
-- **Know how the data record them** (Friedland Ch. 3). Some insurers keep separate payment and case-outstanding data by recovery type; others combine them, record payments only, or book recoveries as negative claim payments. [[Deductible Recovery|Deductibles]] differ by line: first-party auto physical damage payments are made *net* of the deductible, while general liability claims are paid in full and the deductible recovered afterwards; case reserves may be set net or gross. A change in any of these conventions is a [[Changing Conditions|changing condition]].
-- **Salvage and subrogation** (Friedland Ch. 14) are projected either by the development technique on reported or received S&S, or by the **ratio approach**: develop the ratio of received S&S to paid claims to an ultimate ratio, and multiply by selected ultimate claims gross of S&S. The ratio's development factors are less leveraged than those of S&S dollars, and the ultimate ratio is easier to select for immature years. Salvage (property) arrives quickly; subrogation (liability) can arrive years after the claim is paid, giving age-to-age factors below $1.000$ at older ages.
-- **Reinsurance.** Analyze gross and ceded and derive net, or gross and net and derive ceded — then test what is implied. Checks: net claims and premium do not exceed gross; a quota share shows up as a stable net-to-gross ratio triangle; large claims are ceded consistently with each year's retention; net development and tail factors are generally no larger than gross; and net IBNR is generally no larger than gross (exceptions include provisions for uncollectible reinsurance and disputed runoff). Aggregate or stop-loss covers are usually applied as a final step. See [[Net of Reinsurance]], [[Ceded Losses]].
-- **Consistency across years.** A change in retention makes historical net data non-comparable; restate history at the current retention where claim-level data allow, or project gross and ceded separately.
-- Recoveries carry **collection risk** — insured insolvency on deductibles, reinsurer insolvency or disputes on cessions — which is why the recoverable is reported and assessed as a separate item rather than netted away silently.
+1. Separate payments and case outstanding for each type of recovery.
+2. All types of recovery combined.
+3. Payments only, with no case outstanding for recoveries.
+4. Recoveries as negative claim payments, with no separate data.
 
-> [!example]- The S&S Ratio Approach {Example}
-> Auto physical damage. Historical ratios of cumulative received S&S to cumulative paid claims settle at $0.108$, having been $0.060$ at $12$ months and $0.095$ at $24$ months.
->
-> - AY $2023$ at $24$ months: paid claims $\$9{,}600{,}000$, received S&S $\$912{,}000$, selected ultimate claims $\$12{,}000{,}000$.
-> - AY $2024$ at $12$ months: paid claims $\$6{,}000{,}000$, received S&S $\$312{,}000$, selected ultimate claims $\$12{,}500{,}000$.
->
-> Estimate ultimate S&S and the S&S recoverable for each year.
->
-> > [!answer]-
-> > Ratio development to ultimate: $0.108 / 0.095 = 1.137$ from $24$ months; $0.108 / 0.060 = 1.800$ from $12$ months.
-> >
-> > $$
-> > \begin{align*}
-> > \text{AY 2023 ratio} &= 912{,}000 / 9{,}600{,}000 = 0.0950 \\
-> > \text{Ultimate ratio} &= 0.0950 \times 1.137 = 0.1080 \\
-> > \text{Ultimate S\&S} &= 0.1080 \times \$12{,}000{,}000 = \$1{,}296{,}000 \\
-> > \text{Recoverable} &= \$1{,}296{,}000 - \$912{,}000 = \$384{,}000
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > \text{AY 2024 ratio} &= 312{,}000 / 6{,}000{,}000 = 0.0520 \\
-> > \text{Developed} &= 0.0520 \times 1.800 = 0.0936
-> > \end{align*}
-> > $$
-> >
-> > AY $2024$'s developed ratio is well below the $0.108$ of every mature year. Before accepting it, ask whether recording or recovery practice changed or one large claim is distorting the ratio. Absent a reason, a selection near the historical level is typical — at $0.107$, ultimate S&S is $\$1{,}337{,}500$ and the recoverable $\$1{,}025{,}500$, against $\$858{,}000$ from the mechanical projection. Friedland makes the same kind of judgmental selection for her most recent year.
+The actuary needs to know which, and whether paid claims are net or gross of recoveries. A change in the recording is a [[Changing Conditions|changing condition]]. A large negative paid claim is not necessarily an error, since it may be a recovery such as salvage and subrogation or a correcting entry, so it is examined before it is deleted.
 
-> [!example]- Gross, Net and Implied Ceded {Example}
-> AY $2024$ under a per-occurrence excess of loss treaty: gross reported $\$8{,}000{,}000$ with a selected gross CDF of $1.50$; net reported $\$6{,}500{,}000$ with a selected net CDF of $1.35$. Derive ceded ultimate and check the result.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Gross ultimate} &= \$8{,}000{,}000 \times 1.50 = \$12{,}000{,}000 \\
-> > \text{Net ultimate} &= \$6{,}500{,}000 \times 1.35 = \$8{,}775{,}000 \\
-> > \text{Ceded ultimate} &= \$12{,}000{,}000 - \$8{,}775{,}000 \\
-> > &= \$3{,}225{,}000 \\
-> > \text{Implied ceded CDF} &= 3{,}225{,}000 / 1{,}500{,}000 = 2.15
-> > \end{align*}
-> > $$
-> >
-> > Net IBNR ($\$2{,}275{,}000$) is below gross IBNR ($\$4{,}000{,}000$), and the ceded layer develops far more than gross ($2.15$ vs. $1.50$) — as expected, since the reinsurer takes the large, late-developing part of claims. Had the retention risen from $\$500{,}000$ to $\$1{,}000{,}000$ for AY $2024$, the net CDF of $1.35$ — selected from years capped at $\$500{,}000$ — would be too low, and net IBNR understated; the net history would need restating at the new retention.
+## The ratio approach to salvage and subrogation
+
+S&S can be projected by applying the [[Chain Ladder Method|development technique]] to the received S&S on its own. In the ratio approach, the ratio developed is instead S&S to claims. At each age it is
+
+> $$\text{S\&S Ratio} = \frac{\text{Received S\&S}}{\text{Paid Claims}}$$
+
+- $\text{Received S\&S}$ and $\text{Paid Claims}$ are cumulative, at the same age, with the paid claims gross of S&S.
+
+The ratios are developed like claims: age-to-age factors of the ratio triangle are selected and multiplied into a CDF for the ratio. An accident year's ultimate S&S is then
+
+> $$\text{Ultimate S\&S} = \text{S\&S Ratio} \times \text{CDF} \times \text{Ultimate Claims}$$
+
+- $\text{S\&S Ratio} \times \text{CDF}$ is the ultimate S&S ratio, the year's latest ratio developed to ultimate.
+- $\text{Ultimate Claims}$ are the selected ultimate claims gross of S&S, from any technique.
+
+> [!example]- The ratios of received S&S to paid claims were $0.060$, $0.095$ and $0.108$ at $12$, $24$ and $36$ months for accident year $2021$, $0.062$, $0.096$ and $0.108$ for $2022$, and $0.058$ and $0.094$ at $12$ and $24$ months for $2023$, with no development after $36$ months. Accident year $2023$ has paid $\$9{,}600{,}000$, and its ultimate claims are $\$12{,}000{,}000$. What are its ultimate S&S and its S&S recoverable? {Example}
+> - The $24$-to-$36$ factors are $0.108/0.095 = 1.137$ and $0.108/0.096 = 1.125$, with average $1.131$.
+> - With no development after $36$ months, the CDF from $24$ months is $1.131$.
+> - The ultimate S&S ratio is $0.094 \times 1.131 = 0.1063$.
+> - The ultimate S&S is $0.1063 \times 12{,}000{,}000 = \$1{,}275{,}600$.
+> - The received S&S is $0.094 \times 9{,}600{,}000 = \$902{,}400$, so the recoverable is $1{,}275{,}600 - 902{,}400 = \$373{,}200$.
+
+The ratio approach has two advantages over developing S&S dollars. Its development factors are less leveraged and less volatile, because the recoveries arise from the paid claims the ratio divides by. Its ratios also serve as a benchmark across accident years, which exposes an unreasonable value and supports the selection for the most recent years. A projected ratio for an immature year that is out of line with consistent mature years is usually random fluctuation or a timing lag, magnified by a large CDF. The actuary then selects a ratio consistent with the mature years, unless a real change, such as in the recording of S&S, supports the different one.
+
+> [!example]- Accident year $2024$, at $12$ months, has paid $\$6{,}000{,}000$ and received $\$312{,}000$ of S&S. Its ultimate claims are $\$12{,}500{,}000$, the ratio CDF from $12$ months is $1.79$, and the mature years' ultimate ratios average $0.108$. What ultimate S&S ratio should be selected? {Example}
+> - The latest ratio is $312{,}000/6{,}000{,}000 = 0.052$.
+> - Developed, it is $0.052 \times 1.79 = 0.0931$, well below every mature year.
+> - A large CDF applied to an unusual early ratio is more likely noise than a new level, so a ratio near the mature years', $0.108$, is selected.
+> - The ultimate S&S is $0.108 \times 12{,}500{,}000 = \$1{,}350{,}000$, and the recoverable is $1{,}350{,}000 - 312{,}000 = \$1{,}038{,}000$.
+
+Ultimate claims net of S&S are the gross ultimate claims minus the ultimate S&S, which is the gross ultimate times one minus the ultimate S&S ratio.

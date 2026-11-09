@@ -258,6 +258,10 @@ Which of the following is NOT required to specify a GLM?
 <!-- rationale: 3: carries over OLS's homoscedasticity assumption, which GLMs specifically relax -->
 ```
 
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. An option is a plain claim, not a joke or a slogan; the rationale comment says why the right answer is right in one or two sentences.
+
 ## When you're stuck
 
 If a concept genuinely resists both a calculation and a clean misconception

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { ChevronDown, Circle } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { useExamVersion } from '@/hooks/useExamVersion'
@@ -10,7 +10,8 @@ import {
   type ExamSitting,
 } from '@/data/examSittings'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
-import { cn } from '@/lib/utils'
+import { INK_MENU, INK_MENU_HEADING, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
+import { examAccentStyle } from '@/lib/examColors'
 
 /**
  * The study guide's **version**: which sitting of the exam the page is being
@@ -27,7 +28,7 @@ import { cn } from '@/lib/utils'
  * An exam with no upcoming sitting on file renders nothing: a version the
  * sittings table doesn't list would be invented.
  *
- * Like `QuizSettingsMenu`, the menu portals to <body> and is placed by
+ * Like `ConceptActionMenu`, the menu portals to <body> and is placed by
  * `placeMenu` — the trigger lives in the sticky header's stacking context.
  */
 export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
@@ -98,15 +99,17 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
     <div
       data-exam-version-menu
       role="listbox"
-      aria-label="Exam version"
-      className="fixed w-64 z-[70] overflow-y-auto rounded-lg border border-border bg-popover py-1 text-popover-foreground shadow-md"
+      aria-label="Sitting"
+      className={`fixed w-64 z-[70] overflow-y-auto ${INK_MENU}`}
       style={{
+        // Portalled out of the strip, so it brings the exam's pick with it.
+        ...examAccentStyle(progressKey),
         left: box.left,
         ...(box.top !== null ? { top: box.top } : { bottom: box.bottom ?? 0 }),
         maxHeight: box.maxHeight,
       }}
     >
-      <p className="px-3 pt-2 pb-1 text-xs font-medium text-muted-foreground">Sitting</p>
+      <p className={INK_MENU_HEADING}>Sitting</p>
       {sittings.map(s => {
         const active = s === selected
         return (
@@ -117,13 +120,12 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
             aria-selected={active}
             data-sound="tick"
             onClick={() => choose(s)}
-            className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+            className={inkMenuItem(active)}
           >
-            {active
-              ? <CheckMark className="h-4 w-4" />
-              : <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" aria-hidden />}
-            <span className="min-w-0 flex-1 font-medium">{formatSittingDate(s)}</span>
-            <span className="shrink-0 text-xs text-muted-foreground">{s.format}</span>
+            <span className="min-w-0 flex-1">{formatSittingDate(s)}</span>
+            <span className={`shrink-0 text-xs font-medium ${active ? 'opacity-75' : 'text-muted-foreground'}`}>{s.format}</span>
+            {/* The pick is solid; its check is the app's one checkmark, in the pick's text colour. */}
+            {active ? <CheckMark className="h-4 w-4 text-current" /> : <span className="h-4 w-4 shrink-0" aria-hidden />}
           </button>
         )
       })}
@@ -141,14 +143,10 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
         aria-label={`Exam version: ${label} sitting`}
         title={`${formatSittingDate(selected)} sitting`}
         onClick={() => setOpen(o => !o)}
-        className={cn(
-          'inline-flex h-8 shrink-0 items-center gap-1 rounded-full bg-muted px-2.5 text-xs font-medium transition-colors hover:bg-accent',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose',
-          open && 'bg-accent',
-        )}
+        className={inkTrigger(open)}
       >
         {label}
-        <ChevronDown className={cn('h-3.5 w-3.5 text-muted-foreground transition-transform', open && 'rotate-180')} aria-hidden />
+        <ChevronDown className={inkChevron(open)} aria-hidden />
       </button>
       {open && menu && <OverlayPortal>{menu}</OverlayPortal>}
     </>

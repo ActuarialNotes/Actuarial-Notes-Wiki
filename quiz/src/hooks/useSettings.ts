@@ -57,7 +57,7 @@ export function useSettings() {
     if (!session) {
       const { error: refreshErr } = await supabase.auth.refreshSession()
       if (refreshErr) {
-        setAccountState({ saving: false, error: 'Session expired. Please sign in again.', success: null })
+        setAccountState({ saving: false, error: 'Your session has ended. Sign in again to continue.', success: null })
         return false
       }
     }
@@ -67,15 +67,15 @@ export function useSettings() {
       password: currentPassword,
     })
     if (signInErr) {
-      setAccountState({ saving: false, error: 'Current password is incorrect.', success: null })
+      setAccountState({ saving: false, error: 'Your current password is wrong.', success: null })
       return false
     }
     const { error } = await supabase.auth.updateUser({ password: newPassword })
     if (error) {
-      setAccountState({ saving: false, error: error.message, success: null })
+      setAccountState({ saving: false, error: "Your password couldn't be changed just now. Try again in a minute.", success: null })
       return false
     }
-    setAccountState({ saving: false, error: null, success: 'Password updated successfully.' })
+    setAccountState({ saving: false, error: null, success: 'Password changed.' })
     return true
   }, [user])
 
@@ -88,7 +88,7 @@ export function useSettings() {
     if (!session) {
       const { error: refreshErr } = await supabase.auth.refreshSession()
       if (refreshErr) {
-        setProfileState({ saving: false, error: 'Session expired. Please refresh the page and sign in again.', success: null })
+        setProfileState({ saving: false, error: 'Your session has ended. Reload the page and sign in again.', success: null })
         return false
       }
     }
@@ -107,7 +107,7 @@ export function useSettings() {
 
     const { error } = await supabase.auth.updateUser(updatePayload)
     if (error) {
-      setProfileState({ saving: false, error: error.message, success: null })
+      setProfileState({ saving: false, error: "Your profile couldn't be saved just now. Try again in a minute.", success: null })
       return false
     }
     const message = data.email && data.email !== user?.email
@@ -154,7 +154,7 @@ export function useSettings() {
     setDataState({ saving: true, error: null, success: null })
     const { error } = await supabase.functions.invoke('delete-account')
     if (error) {
-      setDataState({ saving: false, error: error.message, success: null })
+      setDataState({ saving: false, error: "Your account couldn't be deleted just now. Nothing was removed. Try again in a minute.", success: null })
       return false
     }
     await supabase.auth.signOut()

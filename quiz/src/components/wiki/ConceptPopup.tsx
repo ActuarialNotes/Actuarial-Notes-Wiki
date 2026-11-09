@@ -17,6 +17,7 @@ import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { objectiveMarks } from '@/lib/syllabusChapters'
+import { INK_MENU, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
 
 function pageKey(ref: StackPageRef): string {
   return ref.kind === 'pdf' ? `pdf:${ref.url}` : `${ref.kind}:${ref.name.toLowerCase()}`
@@ -268,7 +269,11 @@ export function ConceptPopup() {
   const isLoggedInPro = !!user && isPro
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
 
-  const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
+  // The footer's syllabus-filter picker. Below `sm` it is wide enough
+  // ("Today's Study Plan") that Previous / Next drop their words and keep
+  // their arrows, or Next is pushed off the right edge of a phone.
+  const showFooterPicker = !focusMode && hasSyllabusToFilter
+  const todayLabel = "Today's Study Plan"
 
   // Focus mode's toggle is the only control that survives it, so there's always
   // a way back out (Esc also works). It rides in the active page's header.
@@ -397,10 +402,11 @@ export function ConceptPopup() {
               disabled={!canPrev}
               data-sound="none"
               onClick={() => turnPage(-1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous"
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
-              <span>Previous</span>
+              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Previous</span>
             </button>
             {/* The syllabus-filter picker — extra information, so focus mode drops
                 it and leaves the footer as just Previous / Next. The position it
@@ -409,25 +415,26 @@ export function ConceptPopup() {
                 A guide walk (an exam's How to Study tips) drops it too: those pages
                 are not a view of the syllabus, so every filter it offers is either
                 a no-op or a lie about what is being read. */}
-            {!focusMode && hasSyllabusToFilter && (
-            <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
-              <div className="relative">
+            {showFooterPicker && (
+            <div className="self-center flex flex-col items-center px-1 sm:px-2 min-w-0" ref={viewingRef}>
+              <div className="relative max-w-full">
                 <button
                   type="button"
                   onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
-                  className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
+                  aria-expanded={viewingDropdownOpen}
+                  className={inkTrigger(viewingDropdownOpen, 'text-[15px] max-w-full shrink')}
                 >
-                  {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
-                  <ChevronDown className="h-6 w-6 shrink-0" />
+                  <span className="truncate">{currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}</span>
+                  <ChevronDown className={inkChevron(viewingDropdownOpen)} />
                 </button>
 
                 {viewingDropdownOpen && (
-                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md bg-popover text-popover-foreground shadow-md py-1">
+                  <div className={`absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 z-50 w-56 ${INK_MENU}`}>
                     {hasStudyPlan ? (
                       <button
                         type="button"
                         onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
-                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
+                        className={inkMenuItem(currentFilter === 'study-plan')}
                       >
                         {todayLabel}
                       </button>
@@ -435,24 +442,24 @@ export function ConceptPopup() {
                       <Link
                         to="/dashboard"
                         onClick={() => { close(); setViewingDropdownOpen(false) }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                        className={inkMenuItem(false)}
                       >
-                        Set up Study Plan →
+                        Set up Today's Study Plan →
                       </Link>
                     ) : (
                       <button
                         type="button"
                         onClick={() => { setShowProInfo(v => !v); setViewingDropdownOpen(false) }}
-                        className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
+                        className={inkMenuItem(false, 'opacity-60')}
                       >
-                        <Lock className="h-3 w-3 shrink-0" />
+                        <Lock className="h-3.5 w-3.5 shrink-0" />
                         {todayLabel}
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
-                      className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+                      className={inkMenuItem(currentFilter === 'entire-syllabus')}
                     >
                       Entire Syllabus
                     </button>
@@ -460,7 +467,7 @@ export function ConceptPopup() {
                       <button
                         type="button"
                         onClick={() => { setDashboardFilter('source-material'); setViewingDropdownOpen(false) }}
-                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'source-material' ? 'font-medium' : ''}`}
+                        className={inkMenuItem(currentFilter === 'source-material')}
                       >
                         Source Material
                       </button>
@@ -477,8 +484,8 @@ export function ConceptPopup() {
                     </div>
                     <p className="text-xs text-muted-foreground mb-2.5">
                       {user
-                        ? 'Upgrade to Pro to access personalised daily Study Plans.'
-                        : 'Sign in and upgrade to Pro to access personalised daily Study Plans.'
+                        ? "Today's Study Plan is part of Pro."
+                        : "Today's Study Plan is part of Pro. Sign in first."
                       }
                     </p>
                     <Link
@@ -498,9 +505,10 @@ export function ConceptPopup() {
               disabled={!canNext}
               data-sound="none"
               onClick={() => turnPage(1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              aria-label="Next"
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <span>Next</span>
+              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Next</span>
               <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
             </button>
           </div>

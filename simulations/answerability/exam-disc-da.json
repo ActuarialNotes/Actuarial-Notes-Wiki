@@ -134,7 +134,15 @@
        "page": "Data Issues",
        "quote": "and how often default values stand in for missing information."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "The definition of each data element is known, rather than assumed from its label, and so are the default values that stand in for missing information.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -151,7 +159,15 @@
        "page": "Data Issues",
        "quote": "*Missing values in disguise:* an impossible zero, such as a zero dimension, is often a missing value coded as zero, which a search for missing values will not find ([[Missing Data]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "A default value written by a system for a blank field, or a spike of records at one round or extreme value such as 0, 99 or 999, is missing data coded as a value ([[Missing Data|missing data]]).",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -210,7 +226,15 @@
        "page": "Data Quality",
        "quote": "ASOP No. 23 defines a review as an examination of the data's obvious characteristics for reasonableness and consistency, which is less detailed than an audit testing accuracy and completeness."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Quality",
+      "quote": "ASOP No. 23 defines a review as an examination of the obvious characteristics of the data for reasonableness and consistency, which is less detailed than an audit of their accuracy and completeness.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r7",
@@ -223,7 +247,15 @@
        "page": "Data Quality",
        "quote": "Finally **disclose**: in summary form, the questionable values found and the steps taken to fix them."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Quality",
+      "quote": "**Disclose** the data's significant limitations and the significant steps taken to adjust or improve them.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -248,10 +280,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Earned Exposure",
-      "quote": "Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]]",
-      "note": "Earned Exposure (linked from tagged Data Documentation) gives claim frequency as claims over earned exposure",
-      "date": "2026-10-30",
-      "run": "g8-discda-sort"
+      "quote": "Earned exposures are the denominator of the [[Pure Premium|pure premium]] and of [[Frequency|frequency]], so they cover the same period as the losses.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -598,7 +630,15 @@
        "page": "Calendar Year",
        "quote": "$\\Delta$ terms are ending balance minus beginning balance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Calendar Year",
+      "quote": "$$\\text{CY Reported Losses} = \\text{Paid Losses} + \\text{Ending Case} - \\text{Beginning Case}$$",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -2052,7 +2092,15 @@
        "page": "Data Issues",
        "quote": "an outlier may be a data entry error, a genuine extreme or a real discovery. Repeat the analysis with and without it; if it changes the result, find its cause before dropping it and disclose the removal."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "An unusual value may be a data entry error, a genuine extreme value or a real discovery, so it is investigated before it is changed or removed.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -2069,7 +2117,15 @@
        "page": "Data Quality",
        "quote": "Values above $110$ are more likely keying errors or dates of birth entered in the wrong format."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "A value that is impossible against known constraints, such as a paid loss far above the policy limit with no other explanation, is a likely keying error.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -2086,7 +2142,15 @@
        "page": "Data Quality",
        "quote": "correct the values from source if practical; otherwise treat them as missing rather than letting a model fit a relativity to \"age 0.\""
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "It is checked against the source record and corrected, and if the true value cannot be found, it is set to missing.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -2116,7 +2180,15 @@
        "page": "Data Issues",
        "quote": "**Drop the value, not the row:** Replacing one impossible value with a missing value keeps the rest of the record's information; deleting the row loses it."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Issues",
+      "quote": "Capping all values at a percentile changes many genuine values without fixing the error.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -4894,7 +4966,15 @@
        "page": "Data Segmentation",
        "quote": "**Clusters are not validated segments:** A clustering algorithm always returns groups. Whether they differ in expected cost is a separate question."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "Clusters formed from the features alone, without loss data, need not differ in expected cost.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r3",
@@ -4907,7 +4987,15 @@
        "page": "Data Segmentation",
        "quote": "fine enough that each group's risks share similar expected costs and emergence patterns ([[Homogeneity|homogeneity]]), yet large and stable enough that each group's own experience can be relied on ([[Credibility|credibility]])."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "A clustering algorithm will find clusters in any data, so a proposed segment is held to the same tests as any other: risks with similar expected costs within it, different expected costs from other segments, enough volume to be credible and stability on other data or time periods.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r4",
@@ -4924,7 +5012,15 @@
        "page": "Clustering",
        "quote": "so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Data Segmentation",
+      "quote": "A clustering algorithm will find clusters in any data, so a proposed segment is held to the same tests as any other: risks with similar expected costs within it, different expected costs from other segments, enough volume to be credible and stability on other data or time periods.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -5587,10 +5683,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Predictive Analytics",
-      "quote": "methods (GLMs, trees) learn from a known target;",
-      "note": "Tagged page: supervised methods learn from a known target, unsupervised find structure with no target",
-      "date": "2026-10-30",
-      "run": "g8-discda-sort"
+      "quote": "**Supervised** methods, such as GLMs and decision trees, learn from a known target.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
      }
     },
     {
@@ -5655,7 +5751,15 @@
        "page": "Predictive Analytics",
        "quote": "The **decision** the model feeds — a rate change, an underwriting referral, a non-renewal — which fixes how the output must be presented and which variables may lawfully be used."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "The **decision** the model feeds, such as a rate change, an underwriting referral or a non-renewal, because it fixes how the output must be presented and which variables may lawfully be used.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   },
@@ -5676,7 +5780,15 @@
        "page": "Predictive Analytics",
        "quote": "The workflow the CAS PCPA requirement is built around: frame the **business problem** → select and review the data ([[Data Quality]])"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "Frame the **business problem**: the target, the unit of analysis and the decision the model feeds.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r2",
@@ -5723,7 +5835,15 @@
        "page": "Predictive Analytics",
        "quote": "The **decision** the model feeds — a rate change, an underwriting referral, a non-renewal — which fixes how the output must be presented and which variables may lawfully be used."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "The **decision** the model feeds, such as a rate change, an underwriting referral or a non-renewal, because it fixes how the output must be presented and which variables may lawfully be used.",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     },
     {
      "id": "r5",
@@ -5736,7 +5856,15 @@
        "page": "Predictive Analytics",
        "quote": "frame the **business problem** → select and review the data ([[Data Quality]]) → … → split off a [[Holdout Sample|hold-out sample]] → fit, diagnose and refine the model"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Predictive Analytics",
+      "quote": "Split off a [[Holdout Sample|hold-out sample]].",
+      "note": "Re-quoted from the page rewritten in the new concept shape (Exam 5 conversion)",
+      "date": "2026-11-07",
+      "run": "claude/epic-goodall-89r4k3"
+     }
     }
    ]
   }

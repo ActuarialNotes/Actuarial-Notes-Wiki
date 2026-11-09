@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d850e583d8aa1087e6e2f81f2b5b30676414fe2677e343da20a503beaf764645
+  content_hash: sha256:62efec6180a7951d98764e58f59d5f113adcabd2f748f4dc0c675bd3dd956653
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 3 p.34 (PDF p.40); Ch. 14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
@@ -12,68 +12,56 @@ verification:
   log: .verify/Concepts/Ceded Losses.md
 ---
 
-**Ceded Losses** are the portion of gross losses transferred to reinsurers. They are the reinsurer's share of claim cost and, from the cedant's balance sheet, a **recoverable asset** rather than a reduction of the underlying claim liability.
-
-> $$\text{Ceded} = \text{Gross} - \text{Net}$$
-
-> $$\text{Ceded}_{\text{XOL}} = \min\!\left(\max(X - R,\, 0),\, L\right)$$
-
-> $$\text{Ceded}_{\text{QS}} = c \times \text{Gross}$$
-
-- Under **quota share**, ceded is a fixed share $c$ of gross, so the ceded triangle is a scalar multiple of the gross one and develops identically. Under **excess of loss**, ceded responds only to claims piercing retention $R$, and the pattern is entirely different — later, steeper, and far more volatile.
-- The ceded triangle is **thin**: a handful of claims in most years, none in some. Development factors estimated from it are unstable, which is why ceded ultimates are often estimated by applying treaty terms to a projected large-claim distribution (exposure rating) instead.
-- Ceded losses are **leveraged by trend**. A $6\%$ increase in ground-up severity produces far more than $6\%$ growth in an excess layer, because claims that previously fell short of the retention now pierce it — the same leverage described under [[Inflation]] and [[Increased Limits]].
-- Ceded history reflects the treaties **as they stood**. A change in attachment point, limit or structure breaks the series and makes prior ceded years non-comparable; the gross history is unaffected. See [[Gross Losses]].
-- Ceded amounts carry **credit risk** — dispute, commutation, insolvency — and a provision for uncollectible reinsurance may be required. The cedant remains liable to its policyholders regardless.
-
 ![[Media/Figures/Ceded_Losses.svg|340]]
 
-> [!example]- Ceding Under Two Structures {Example}
-> Five claims: $\$2{,}600{,}000$, $\$900{,}000$, $\$800{,}000$, $\$500{,}000$, $\$200{,}000$ ($\$5{,}000{,}000$ gross).
->
-> Compute ceded losses under (a) a $30\%$ quota share and (b) a $\$1{,}000{,}000$ excess of $\$500{,}000$ per-risk treaty.
->
-> > [!answer]-
-> > **(a) Quota share:**
-> >
-> > $$\text{Ceded} = 0.30 \times \$5{,}000{,}000 = \$1{,}500{,}000$$
-> >
-> > spread across all five claims in proportion.
-> >
-> > **(b) Excess of loss** — $\min(\max(X-500\text{K},0),\,1\text{M})$:
-> >
-> > | Claim | Gross | Ceded |
-> > |---|---|---|
-> > | 1 | $\$2{,}600$K | $\$1{,}000$K (layer exhausted) |
-> > | 2 | $\$900$K | $\$400$K |
-> > | 3 | $\$800$K | $\$300$K |
-> > | 4 | $\$500$K | $\$0$ |
-> > | 5 | $\$200$K | $\$0$ |
-> > | **Total** | $\$5{,}000$K | $\$1{,}700$K |
-> >
-> > The totals are comparable, the distributions are not. The quota share cedes something on every claim; the excess treaty cedes nothing on two of five and is exhausted on the largest — which means claim 1's excess above $\$1.5$M ($\$1.1$M) comes back to the cedant.
+**Ceded Losses** are the claims an insurer transfers to its reinsurers, the part of [[Gross Losses|gross losses]] the [[Reinsurance|reinsurance]] pays. They are the difference between gross and [[Net Losses|net losses]],
 
-> [!example]- Leveraged Trend in the Ceded Layer {Example}
-> A book's severity distribution produces $\$5{,}000{,}000$ of gross losses and $\$1{,}700{,}000$ ceded to a $\$1$M xs $\$500$K layer. Ground-up severity then trends $10\%$: each of the five claims above grows by $10\%$.
->
-> Compute the trend in the ceded layer.
->
-> > [!answer]-
-> > Trended claims: $\$2{,}860$K, $\$990$K, $\$880$K, $\$550$K, $\$220$K — gross $\$5{,}500$K, up $10\%$ as expected.
-> >
-> > Ceded at $\$1$M xs $\$500$K:
-> >
-> > | Claim | Trended | Ceded |
-> > |---|---|---|
-> > | 1 | $\$2{,}860$K | $\$1{,}000$K |
-> > | 2 | $\$990$K | $\$490$K |
-> > | 3 | $\$880$K | $\$380$K |
-> > | 4 | $\$550$K | $\$50$K |
-> > | 5 | $\$220$K | $\$0$ |
-> > | **Total** | $\$5{,}500$K | $\$1{,}920$K |
-> >
-> > $$\frac{\$1{,}920}{\$1{,}700} - 1 = +12.9\%$$
-> >
-> > A $10\%$ ground-up trend produced a $12.9\%$ trend in the ceded layer — and the effect is concentrated: claim 4 went from ceding nothing to ceding $\$50$K purely by crossing the retention.
-> >
-> > Two consequences. The **net** layer trends by less than $10\%$ ($3{,}580/3{,}300 - 1 = +8.5\%$), so a net analysis understates the ground-up trend. And the reinsurer's own pricing must anticipate this leverage — which is why excess rates move so much more violently than primary rates through an inflationary period.
+> $$\text{Ceded Losses} = \text{Gross Losses} - \text{Net Losses}$$
+
+For the insurer the ceded losses are a recoverable from the reinsurers. The insurer still owes its policyholders the gross claims, so a recoverable that is not collected becomes a retained loss. How much of each claim is ceded depends on whether the reinsurance is quota share or excess of loss.
+
+> [!example]- An accident year's gross reported claims are $\$5{,}000{,}000$ and its net reported claims are $\$3{,}500{,}000$. What are its ceded reported claims? {Example}
+> - The ceded reported claims are $5{,}000{,}000 - 3{,}500{,}000 = \$1{,}500{,}000$.
+> - That is 30% of the gross reported claims.
+
+## Quota share
+
+A [[Quota Share|quota share]] treaty cedes a fixed percentage of every claim, so
+
+> $$\text{Ceded Losses} = c \times \text{Gross Losses}$$
+
+- $c$ is the quota share's ceded percentage.
+
+Because the same proportion of every claim is ceded at every age, the net-to-gross ratio is constant across the development ages of an accident year, though it can differ between accident years when the percentage changes. Gross, ceded and net claims then have the same age-to-age factors and the same tail factor. A triangle of the ratios of net to gross reported claims tests the quota share percentage by year. The ceded IBNR is the ceded percentage times the gross IBNR, applied to the gross amount and not to the net.
+
+> [!example]- In a triangle of net to gross reported claims, every age of accident year 2023 shows 0.80 and every age of accident year 2024 shows 0.70. What reinsurance does the insurer have, and what is 2024's ceded IBNR if its gross IBNR is $\$2{,}000{,}000$? {Example}
+> - The ratio is constant across the ages of each accident year, so the reinsurance is quota share.
+> - The percentage changed between the years, 20% ceded in 2023 and 30% in 2024.
+> - 2024's ceded IBNR is $0.30 \times 2{,}000{,}000 = \$600{,}000$.
+
+## Excess of loss
+
+An [[Excess of Loss|excess of loss]] treaty cedes only the part of each claim above a retention, up to a limit, so for one claim
+
+> $$\text{Ceded Loss} = \min\left(\max(X - R,\, 0),\, L\right)$$
+
+- $X$ is the gross amount of the claim.
+- $R$ is the retention and $L$ is the limit of the layer.
+
+Only large claims reach the layer, so the ceded share grows as large claims develop, and the net-to-gross ratio falls with age. The actuary checks the large claims in the triangles against each year's retentions and limits, since the treatment of large claims decides whether the ceded and net triangles are correct.
+
+> [!example]- Five claims of $\$2{,}600$K, $\$900$K, $\$800$K, $\$500$K and $\$200$K fall under a $\$1{,}000$K excess of $\$500$K treaty. What are the ceded losses? {Example}
+> - The $\$2{,}600$K claim exhausts the layer and cedes $\$1{,}000$K.
+> - The $\$900$K and $\$800$K claims cede $\$400$K and $\$300$K.
+> - The $\$500$K and $\$200$K claims do not exceed the retention and cede nothing.
+> - The ceded losses are $\$1{,}700$K of the $\$5{,}000$K gross.
+
+## Severity trend in an excess layer
+
+A severity trend has a leveraged effect on an excess layer. As every claim grows, claims below the retention cross it and claims in the layer cede more, so the ceded losses grow faster than the gross losses and the net losses slower.
+
+> [!example]- Each of the five claims above grows 10%. What is the trend in the ceded and the net losses? {Example}
+> - The claims become $\$2{,}860$K, $\$990$K, $\$880$K, $\$550$K and $\$220$K, so the gross losses are $\$5{,}500$K.
+> - They cede $\$1{,}000$K, $\$490$K, $\$380$K, $\$50$K and $\$0$, which is $\$1{,}920$K.
+> - The ceded trend is $1{,}920/1{,}700 - 1 = 12.9\%$, above the 10% gross trend.
+> - The net losses go from $\$3{,}300$K to $\$3{,}580$K, a trend of 8.5%.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-13
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ab97b7bfe2128499eba2022c5151e8eb5944f7a345d81c94c7f67b3b624db1b5
+  content_hash: sha256:09d7fbdc781bc5ca8f514b9ecfaa05f480caf0a8bb7f58977b207f651a53b911
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 p.94 and p.117 (PDF pp.106, 129), Ch. 11 p.197 (PDF p.209), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
@@ -12,56 +12,44 @@ verification:
   log: .verify/Concepts/Severity.md
 ---
 
-**Severity** is the average cost per claim — total losses divided by claim count — as distinct from [[Frequency|how often claims occur]].
+![[Media/Figures/Severity.svg|340]]
+
+**Severity** is the average cost per [[Claim|claim]]. The severity of a group of claims is
 
 > $$\text{Severity} = \frac{\text{Total Losses}}{\text{Number of Claims}}$$
 
-> $$\text{Pure Premium} = \text{Frequency} \times \text{Severity}$$
+Severity does not depend on the exposure base, because neither the losses nor the number of claims does. Multiplied by [[Frequency|frequency]], it gives the pure premium, $\text{Pure Premium} = \text{Frequency} \times \text{Severity}$, as in [[Frequency#Pure premium|pure premium]]. In a probability model, the severity of a claim is the random claim amount $X$, described by a [[Severity Distribution|severity distribution]].
 
-- Severity is the **inflation-sensitive** half of the pure premium. Medical costs, wage replacement, repair costs, jury awards and legal expense all feed it, which is why severity trend usually exceeds general inflation in liability lines — the phenomenon called **social inflation**.
-- Severity is far **less credible** than frequency at the same volume, because claim size distributions are heavily skewed: a handful of [[Large Loss|large losses]] can move an average by a wide margin while the underlying cost level is unchanged.
-- For that reason severity is usually studied on **capped** or **basic limits** data, with the excess layer priced separately through [[Increased Limits|increased limits factors]]. Trending unlimited severity mixes a genuine cost trend with the leveraged growth of the excess layer.
-- Severity **develops**, and it develops in two directions at once: upward through IBNER on known claims, downward through the dilution of late-reported small claims. This is why average severity triangles are often built on a [[Report Year]] basis, where the count denominator is fixed.
-- The interaction with fixed policy provisions is **leveraged**: with a fixed deductible or limit, a $10\%$ increase in ground-up loss produces more than $10\%$ increase in the insurer's severity — see [[Inflation]].
+> [!example]- An accident year has 600 reported claims and 4,200,000 of reported losses at 24 months. What is its reported severity at 24 months? {Example}
+> - The reported severity is $4{,}200{,}000/600 = 7{,}000$.
 
-![[Media/Figures/Severity.svg|340]]
+## Severity development
 
-> [!example]- Projecting Ultimate Severity {Example}
-> An accident year has $600$ reported claims and $\$4{,}200{,}000$ of reported losses at $24$ months. The severity development factor to ultimate is $1.20$ and ultimate claim count is projected at $650$.
->
-> Estimate ultimate losses.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Severity at 24 mo} &= \frac{\$4{,}200{,}000}{600} = \$7{,}000 \\[4pt]
-> > \text{Ultimate severity} &= \$7{,}000 \times 1.20 = \$8{,}400 \\[4pt]
-> > \text{Ultimate losses} &= 650 \times \$8{,}400 = \$5{,}460{,}000
-> > \end{align*}$$
-> >
-> > The implied loss development factor is $\$5{,}460{,}000 / \$4{,}200{,}000 = 1.30$ — which decomposes into $1.20$ of severity development and $650/600 = 1.083$ of count development. Splitting the two is the whole point of the [[Frequency-Severity Method|frequency-severity approach]]: the actuary can see whether the development is coming from claims not yet reported or from claims already known getting worse.
+The reported severity at each age is the cumulative reported losses divided by the cumulative reported claim counts at that age. These values form a severity triangle, whose age-to-age factors develop each accident year's latest severity to an ultimate severity. Ultimate losses are then
 
-> [!example]- Capped vs. Unlimited Severity Trend {Example}
-> A liability book's average severity, on both an unlimited and a $\$250{,}000$-capped basis:
->
-> | AY | Unlimited | Capped at $\$250$K |
-> |---|---|---|
-> | $2020$ | $\$21{,}000$ | $\$18{,}500$ |
-> | $2021$ | $\$23{,}500$ | $\$19{,}400$ |
-> | $2022$ | $\$21{,}800$ | $\$20{,}300$ |
-> | $2023$ | $\$29{,}500$ | $\$21{,}300$ |
-> | $2024$ | $\$26{,}000$ | $\$22{,}300$ |
->
-> Which series should be used to select a severity trend?
->
-> > [!answer]-
-> > The **capped** series. Its year-over-year changes are $+4.9\%$, $+4.6\%$, $+4.9\%$, $+4.7\%$ — a clean $4.8\%$ trend that an exponential fit will reproduce with a high $R^2$.
-> >
-> > The unlimited series swings $+11.9\%$, $-7.2\%$, $+35.3\%$, $-11.9\%$. Fitting a trend to that measures the accident of *when the large claims happened to fall*, not the rate at which costs are rising. Two actuaries fitting different windows of the same data would reach materially different answers.
-> >
-> > The correct procedure is:
-> >
-> > 1. Select the trend from capped data — here $4.8\%$.
-> > 2. Price the excess layer separately with [[Increased Limits|ILFs]] or an excess loading, recognizing that the excess layer trends **faster** than the capped layer (leveraged trend).
-> > 3. Recombine.
-> >
-> > Dropping step 2 and simply using the capped trend on unlimited losses understates the projection, because the excess layer's own growth is never picked up.
+> $$\text{Ultimate Losses} = \text{Ultimate Claim Count} \times \text{Ultimate Severity}$$
+
+Severity develops in two directions. It rises as known claims are reserved and paid at higher amounts, and it falls as late-reported small claims enter the average. Severity triangles are often built by [[Report Year|report year]], where the claim count does not develop.
+
+> [!example]- In the accident year above, the severity development factor from 24 months to ultimate is 1.20 and the ultimate claim count is projected at 650. What are the ultimate losses and the [[IBNR]]? {Example}
+> - The ultimate severity is $7{,}000 \times 1.20 = 8{,}400$.
+> - The ultimate losses are $650 \times 8{,}400 = 5{,}460{,}000$.
+> - The IBNR is the ultimate losses minus the reported losses, $5{,}460{,}000 - 4{,}200{,}000 = 1{,}260{,}000$.
+
+## Limited severity
+
+A few [[Large Loss|large losses]] can move an average severity a long way, so severity is less stable than frequency at the same volume of data. Severity is therefore often measured with every claim capped at a basic limit $u$. The limited severity of $n$ claims $x_1, \ldots, x_n$ is
+
+> $$\frac{1}{n}\sum_{i=1}^{n} (x_i \wedge u)$$
+
+- $x_i \wedge u$ is the smaller of $x_i$ and $u$.
+
+The losses above the basic limit are priced separately with [[Increased Limits|increased limits factors]]. Policies with higher limits allow larger claims and so have higher severity.
+
+> [!example]- Four claims are 10,000, 40,000, 150,000 and 400,000. What are the unlimited severity and the severity limited at a basic limit of 100,000? {Example}
+> - The four claims total 600,000, so the unlimited severity is $600{,}000/4 = 150{,}000$.
+> - Capped at 100,000, the claims are 10,000, 40,000, 100,000 and 100,000.
+> - The limited severity is $250{,}000/4 = 62{,}500$.
+
+> [!trap] Applying the inflation rate to severity under a fixed deductible
+> Inflation of $r$ in every loss raises the insurer's severity by more than $r$ under a fixed [[Inflation#Inflation with a fixed deductible|deductible]]. The deductible stays fixed while each loss grows, so the amount above the deductible grows by more than $r$. Under a fixed [[Inflation#Inflation with a fixed limit|limit]], inflation raises the insurer's severity by less than $r$.

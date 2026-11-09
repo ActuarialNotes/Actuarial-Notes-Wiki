@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a8ddbd185af92a572011c752191ce646b3a9ecab882ecc4aa4ba9c0afb35eefc
+  content_hash: sha256:223fc1682b46e3bcec8327eeff7c3df3582a3eb4bae9b361fc42b2b6a905e611
   sources:
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, July 30 2010), Ch.1 p.15 (PDF 21); Ch.5 p.52 (PDF 58); Ch.13; Ch.17 p.392 incl. fn.99 (PDF 398), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 1
@@ -12,60 +12,37 @@ verification:
   log: .verify/Concepts/Incurred Losses.md
 ---
 
-**Incurred Losses** — more precisely **reported losses** — are cumulative [[Paid Losses|payments]] plus [[Case Reserves|case outstanding]] on known claims at a valuation date. They are the insurer's current estimate of what the reported claims will ultimately cost, and they exclude [[IBNR]].
-
-> $$\text{Reported (Incurred)} = \text{Paid} + \text{Case Reserves}$$
-
-> $$\text{Ultimate} = \text{Reported} + \text{IBNR}$$
-
-- The vocabulary matters on the exam. "Incurred" in a **calendar year** context (paid $+ \Delta$ case $+ \Delta$ IBNR) is a different quantity from "reported" in an **accident year** triangle (paid $+$ case). Friedland uses *reported* for the triangle to avoid the ambiguity.
-- Reported triangles emerge **faster and more smoothly** than paid ones, because a case reserve is set as soon as a claim is known. Reported development factors are therefore smaller and the chain ladder is less leveraged.
-- The cost is exposure to adjuster judgment. Reported development mixes genuine emergence with **IBNER** — re-estimation of known claims — so any systematic change in [[Case Adequacy|case adequacy]] corrupts the historical factors. A single strengthening initiative shows up as an elevated diagonal across every accident year at once.
-- Reported losses can develop **downward**. Conservative initial reserving, [[Salvage and Subrogation|salvage and subrogation]] recoveries, and claims closing below their case reserve all produce age-to-age factors under $1.000$; capping factors at $1.000$ on principle is a standard error.
-- At ultimate, case reserves run off to zero and reported losses converge to paid. The gap between reported and ultimate at any maturity is IBNR.
-
 ![[Media/Figures/Incurred_Losses.svg|340]]
 
-> [!example]- Reported Development and IBNR {Example}
-> Accident year $2022$ has reported losses of $\$800{,}000$ at $24$ months. The selected cumulative reported factor to ultimate is $1.35$.
->
-> Estimate ultimate losses and IBNR, and state what the IBNR consists of.
->
-> > [!answer]-
-> > $$\begin{align*}
-> > \text{Ultimate} &= \$800{,}000 \times 1.35 \\
-> > &= \$1{,}080{,}000 \\[4pt]
-> > \text{IBNR} &= \$1{,}080{,}000 - \$800{,}000 \\
-> > &= \$280{,}000
-> > \end{align*}$$
-> >
-> > That $\$280{,}000$ is **broad IBNR** — two components in one number:
-> >
-> > - **Pure IBNR**: claims that occurred in $2022$ and are still unknown to the insurer at $24$ months.
-> > - **IBNER**: expected upward development on the claims already in the $\$800{,}000$, as case reserves move toward settlement values.
-> >
-> > Splitting the two requires a [[Claim Count Triangle|claim count triangle]] — develop counts to ultimate, subtract reported counts, and value the unreported claims at an expected severity. The split matters when reporting patterns and case adequacy are moving in different directions.
+**Incurred Losses**, which Friedland calls **reported claims**, are the cumulative [[Paid Losses|paid claims]] on known claims through a valuation date plus the [[Case Reserves|case outstanding]] on them at that date. They are also called case incurred losses, and they exclude [[IBNR]]. For an accident year at a valuation date they are
 
-> [!example]- A Case Reserve Strengthening in the Triangle {Example}
-> Reported age-to-age factors for a liability line:
->
-> | AY | 12–24 | 24–36 | 36–48 |
-> |---|---|---|---|
-> | $2020$ | $1.48$ | $1.19$ | $1.07$ |
-> | $2021$ | $1.50$ | $1.18$ | **$1.15$** |
-> | $2022$ | $1.47$ | **$1.31$** | |
-> | $2023$ | **$1.66$** | | |
->
-> Average case outstanding per open claim rose $28\%$ during $2023$ across all accident years. What happened, and what should the actuary do?
->
-> > [!answer]-
-> > The bolded figures form the latest **diagonal** — the year ending $12/31/2023$ — and every one of them is above its column's history. Combined with the jump in average case outstanding, this is a **case reserve strengthening**, not a change in the underlying loss cost.
-> >
-> > Selecting factors that include the elevated diagonal would apply a one-time level shift as if it were an ongoing pattern, over-stating every future year's development.
-> >
-> > Two defensible responses:
-> >
-> > 1. **Restate the triangle** with the [[Berquist-Sherman Method|Berquist-Sherman]] case-adequacy adjustment: trend historical average case outstanding up to the current level, rebuild the reported triangle, and select factors from the restated history.
-> > 2. **Lean on paid data**, which is unaffected by case adequacy — provided the [[Settlement Rate|settlement rate]] has been stable, which must be checked separately.
-> >
-> > Doing neither, and simply excluding the latest diagonal, avoids the distortion in the factors but leaves the *diagonal itself* in the data — the strengthened reserves are still on the books, so the ultimate estimate must acknowledge them.
+> $$\text{Reported Claims} = \text{Paid Claims} + \text{Case Outstanding}$$
+
+- $\text{Paid Claims}$ are the cumulative payments on the accident year's claims through the valuation date.
+- $\text{Case Outstanding}$ is the case reserves on its reported claims at the valuation date, which is also the average case outstanding times the number of open claims.
+- Both are net of the same recoveries, such as deductibles.
+
+The ultimate claims are the reported claims plus the IBNR, so the IBNR is
+
+> $$\text{IBNR} = \text{Ultimate Claims} - \text{Reported Claims}$$
+
+This IBNR is the broad one. It is the pure IBNR, or IBNYR, on claims that have occurred but have not yet been reported, plus the IBNER, the future development on claims already reported. A cumulative reported triangle is built by adding each accident year's case outstanding at each valuation date to its cumulative paid claims.
+
+> [!example]- An accident year has $\$450{,}000$ paid and $\$350{,}000$ of case outstanding at 24 months. The reported CDF from 24 months to ultimate is 1.35. What are its reported claims, its ultimate claims and its IBNR? {Example}
+> - The reported claims are $450{,}000 + 350{,}000 = \$800{,}000$.
+> - The ultimate claims are $800{,}000 \times 1.35 = \$1{,}080{,}000$.
+> - The IBNR is $1{,}080{,}000 - 800{,}000 = \$280{,}000$.
+> - It is the pure IBNR on claims not yet reported plus the expected development on the claims already in the $\$800{,}000$.
+
+## Incurred losses in a calendar year
+
+The word *incurred* means different things to different people. To someone in finance, the incurred losses of a calendar year are the payments made in the year plus the change in total unpaid claims, including IBNR. To an actuary building a triangle, incurred losses are cumulative payments plus case outstanding, with no IBNR. Some U.S. triangles, such as Schedule P's incurred losses, do include IBNR. Friedland uses *reported claims* for the triangle to avoid the ambiguity.
+
+## Reported claim development
+
+Reported claims emerge faster than paid claims, because a case reserve is set as soon as a claim is known. The reported CDFs are therefore smaller than the paid CDFs, and reported development is less leveraged. The cost is that reported development mixes new information with re-estimates of known claims, so it assumes that [[Case Adequacy|case adequacy]] has not changed. A strengthening of case outstanding raises the latest diagonal, and applying the historical reported factors to it overstates ultimate claims.
+
+Reported claims can also develop downward, when claims settle for less than their case reserves or when [[Salvage and Subrogation|salvage and subrogation]] recoveries are in the data. Age-to-age factors below 1.000 are then expected.
+
+> [!trap] Subtracting paid claims to get IBNR
+> IBNR is ultimate claims minus reported claims, not minus paid claims. Ultimate claims minus paid claims is everything still to be paid, which also holds the case outstanding.

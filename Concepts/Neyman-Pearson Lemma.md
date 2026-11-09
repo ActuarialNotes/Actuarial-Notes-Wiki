@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:17dcbba3af380d77e784d49d7ba42df1ce8165f7de2302b885302d859ceb4e9c
+  content_hash: sha256:4edc26f68d89eb6f2d798aa9ea1d74f3bb66a71a3683550f8abd80167642a203
   sources:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), ch.8 §5 Likelihood Ratio Tests (fetched 2026-10-05): L = f0/f1, reject iff L <= l; random-sample product form; Neyman-Pearson Lemma (P0(R) >= P0(A) implies P1(R) >= P1(A)); exponential scale and Bernoulli models: tests do not depend on the alternative's value, UMP for the usual one-sided tests; only certain alpha attainable for discrete data; normal-model one-sided tests UMP, none of the two-sided tests UMP; generalised LR = sup over Theta_0 / sup over T, sha256:60b047835a3f644cd2317c8ab984b8d41ae7669f53c1d32a79705942670b9b04 — https://www.randomservices.org/random/hypothesis/Likelihood.html"
     - "CAS Exam MAS-I Tables (version 01/15/2018), p.3 normal table: Phi(0.35) = 0.6368, Phi(0.36) = 0.6406; selected values z = 1.645 at 0.950, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
@@ -16,67 +16,52 @@ verification:
   log: .verify/Concepts/Neyman-Pearson Lemma.md
 ---
 
-The **Neyman-Pearson Lemma** says how to build the **most powerful test** of a simple null hypothesis $H_0: f = f_0$ against a simple alternative $H_1: f = f_1$: reject $H_0$ where the likelihood ratio $L(\mathbf{x}) = f_0(\mathbf{x})/f_1(\mathbf{x})$ is small. Among all tests whose [[Type I Error|Type I error]] probability is at most $\alpha$, this **best critical region** has the greatest [[Power of a Test|power]].
+The **Neyman-Pearson Lemma** states that, for testing a simple null hypothesis $H_0: \theta = \theta_0$ against a simple alternative hypothesis $H_1: \theta = \theta_1$, the critical region of size $\alpha$ with the greatest [[Power of a Test|power]] is the set of samples where the likelihood ratio $L(\theta_0)/L(\theta_1)$ is small. This best critical region is
 
-> $$C = \left\{\mathbf{x} : \frac{f_0(\mathbf{x})}{f_1(\mathbf{x})} \le k\right\}$$
+> $$C = \left\{\mathbf{x} : \frac{L(\theta_0)}{L(\theta_1)} \le k\right\}$$
 
-> $$P(\mathbf{X} \in C \mid H_0) = \alpha$$
+- $L(\theta)$ is the likelihood of $\theta$, the joint pdf or pmf of the sample $\mathbf{x} = (x_1, \ldots, x_n)$ evaluated at $\theta$. For a [[Random Sample|random sample]] it is the product $f(x_1; \theta) \cdots f(x_n; \theta)$.
+- $k > 0$ is the constant for which $P(\mathbf{X} \in C \mid H_0) = \alpha$.
 
-- $f_0$ and $f_1$ are the joint densities (or PMFs) of the sample under each hypothesis; for a [[Random Sample|random sample]] they are products, $f_j(\mathbf{x}) = \prod_i f_j(x_i)$. The constant $k > 0$ is whatever makes the size equal $\alpha$.
-- **The guarantee:** if any other critical region $A$ has $P_0(A) \le P_0(C)$, then $P_1(A) \le P_1(C)$.
-- **In practice** the inequality $L \le k$ simplifies to a condition on a [[Sufficient Statistic|sufficient statistic]], such as $\sum X_i \ge c$, and $c$ is set from that statistic's distribution under $H_0$. With discrete data only certain sizes $\alpha$ can be attained exactly.
-- **Uniformly most powerful (UMP) tests.** If the best critical region for $\theta_0$ against $\theta_1$ is the *same* for every $\theta_1$ in a composite alternative, it is most powerful against each of them, and so is UMP. The one-sided tests for an exponential mean, a binomial $p$, or a normal mean or variance are UMP; the two-sided tests are not, because the best region for $\theta_1 > \theta_0$ is the opposite tail from the best region for $\theta_1 < \theta_0$.
-- **Points the alternative rules out.** Written without the division, the lemma rejects where $f_1(\mathbf{x}) > f_0(\mathbf{x})/k$ and accepts where $f_1(\mathbf{x}) < f_0(\mathbf{x})/k$, with the same $k > 0$. A point with $f_1(\mathbf{x}) = 0 < f_0(\mathbf{x})$, where the ratio $f_0/f_1$ is infinite, is therefore never rejected: such points add Type I error without adding power, so they are excluded from the best critical region.
-- **Ties.** On the set where $f_1(\mathbf{x}) = f_0(\mathbf{x})/k$, the ratio is constant and the lemma leaves the test free there: any test that follows the rule off that set and has size exactly $\alpha$ is most powerful, and, conversely, every most powerful test has this form for some $k$, leaving it free only where the ratio equals that $k$. So where the ratio is constant over a region, any part of the region carrying the required probability under $H_0$ gives the same size and the same power.
-- The [[Likelihood Ratio Test]] generalizes the ratio to composite hypotheses by maximizing each likelihood over its parameter set.
+Every other critical region whose probability of a [[Type I Error|Type I error]] is at most $\alpha$ has power at $\theta_1$ no greater than that of $C$.
 
-> [!example]- Most Powerful Test for an Exponential Claim Size {Example}
-> A single claim $X$ is exponential. Test $H_0$: mean $100$ against $H_1$: mean $200$ with $\alpha = 0.05$. Find the best critical region and its power.
->
-> > [!answer]-
-> > The likelihood ratio is
-> >
-> > $$
-> > \begin{align*}
-> > \frac{f_0(x)}{f_1(x)} &= \frac{\tfrac{1}{100}e^{-x/100}}{\tfrac{1}{200}e^{-x/200}} \\
-> >   &= 2\,e^{-x/200}
-> > \end{align*}
-> > $$
-> >
-> > which decreases in $x$, so $L \le k$ is the same as $X \ge c$. Set the size:
-> >
-> > $$
-> > \begin{align*}
-> > P(X \ge c \mid H_0) &= e^{-c/100} \\
-> >   &= 0.05 \\
-> > c &= 100 \ln 20 \\
-> >   &= 299.57
-> > \end{align*}
-> > $$
-> >
-> > The power is $P(X \ge 299.57 \mid H_1) = e^{-299.57/200} = 0.224$. No other test with a 5% Type I error rate detects the larger mean more often.
+> [!example]- A single claim $X$ is exponential. What is the best critical region of size 0.05 for testing $H_0$: mean 100 against $H_1$: mean 200, and what is its power? {Example}
+> - With $f(x; \theta) = e^{-x/\theta}/\theta$, the likelihood ratio is $\frac{L(100)}{L(200)} = 2e^{-x/200}$.
+> - The ratio decreases as $x$ increases, so the ratio is at most $k$ exactly when $x$ is at least some $c$.
+> - The size is $P(X \ge c \mid H_0) = e^{-c/100} = 0.05$, so $c = 100 \ln 20 = 299.57$.
+> - The power is $P(X \ge 299.57 \mid H_1) = e^{-299.57/200} = 0.224$.
 
-> [!example]- A Uniformly Most Powerful Test for Mean Severity {Example}
-> Claim sizes are normal with $\sigma = 250$. From $n = 25$ claims, test $H_0: \mu = 1{,}000$ against $H_1: \mu = 1{,}100$ at $\alpha = 0.05$. Find the best critical region and its power, and explain why the same test is UMP for $H_1: \mu > 1{,}000$.
->
-> > [!answer]-
-> > For normal data the ratio $f_0/f_1$ is a decreasing function of $\bar{x}$ when $\mu_1 > \mu_0$, so the best region is $\bar{X} \ge c$. Under $H_0$, $\bar{X}$ is normal with standard deviation $250/\sqrt{25} = 50$:
-> >
-> > $$
-> > \begin{align*}
-> > c &= 1{,}000 + 1.645(50) \\
-> >   &= 1{,}082.25
-> > \end{align*}
-> > $$
-> >
-> > Power at $\mu = 1{,}100$:
-> >
-> > $$
-> > \begin{align*}
-> > P(\bar{X} \ge 1{,}082.25 \mid \mu = 1{,}100) &= P\left(Z \ge \frac{1{,}082.25 - 1{,}100}{50}\right) \\
-> >   &= P(Z \ge -0.355) \\
-> >   &= 0.639
-> > \end{align*}
-> > $$
-> >
-> > The cutoff $1{,}082.25$ was fixed by $H_0$ alone and never used the value $1{,}100$, so the same region is most powerful against every $\mu_1 > 1{,}000$ — it is the UMP test of $H_0: \mu = 1{,}000$ against $H_1: \mu > 1{,}000$.
+## Simplifying the best critical region
+
+The inequality $L(\theta_0)/L(\theta_1) \le k$ is reduced to a condition on a [[Sufficient Statistic|sufficient statistic]] in four steps:
+
+1. Write each likelihood as the product of the densities of all the observations. With two independent samples, the product runs over the observations of both samples.
+2. Divide, and cancel the factors that do not depend on the data.
+3. Take the natural log, which keeps the direction of the inequality because it is an increasing function.
+4. Move every constant into the right-hand side, and reverse the inequality if both sides are divided by a negative number.
+
+> [!example]- A random sample $X_1, \ldots, X_n$ has pdf $f(x; \theta) = \theta x^{\theta - 1}$ for $0 < x < 1$. What is the form of the best critical region for $H_0: \theta = 1$ against $H_1: \theta = 2$? {Example}
+> - The likelihoods are $L(1) = 1$ and $L(2) = 2^n x_1 x_2 \cdots x_n$.
+> - The ratio is $\frac{L(1)}{L(2)} = \frac{1}{2^n x_1 x_2 \cdots x_n}$, and it is at most $k$ when $x_1 x_2 \cdots x_n \ge \frac{1}{2^n k}$.
+> - Taking natural logs, the best critical region is $\sum_{i=1}^{n} \ln x_i \ge c$ for a constant $c$.
+
+## Regions where the likelihood ratio is constant
+
+Where $L(\theta_1) = 0$ and $L(\theta_0) > 0$, the ratio is infinite, so such samples are never in the best critical region. They would add to the probability of a Type I error without adding power. Where the ratio is constant over a region, any part of that region with the required probability under $H_0$ gives the same size and the same power.
+
+> [!example]- $H_0$: $X$ is uniform on $[0, 10]$, and $H_1$: $X$ is uniform on $[5, 10]$. A single observation is used with a best critical region whose power is 0.8. What is the probability of a Type I error? {Example}
+> - The densities are $1/10$ under $H_0$ and $1/5$ on $[5, 10]$ under $H_1$.
+> - On $[0, 5)$ the density under $H_1$ is 0, so the ratio is infinite and no point there is in the best critical region.
+> - On $[5, 10]$ the ratio is the constant $\frac{1/10}{1/5} = 0.5$, so the best critical region is any part of $[5, 10]$ with the required power.
+> - Power 0.8 needs a region of length $0.8 \times 5 = 4$ inside $[5, 10]$.
+> - The probability of a Type I error is the probability of that region under $H_0$, $4/10 = 0.4$.
+
+## Uniformly most powerful tests
+
+A test is uniformly most powerful (UMP) against a composite alternative hypothesis if it is the most powerful test against every simple alternative in it. When the best critical region for $\theta_0$ against $\theta_1$ is the same for every $\theta_1 > \theta_0$, that region is the UMP test of $H_0: \theta = \theta_0$ against $H_1: \theta > \theta_0$. One-sided tests of a normal mean, an exponential mean or a binomial probability are UMP. Two-sided tests are not, because the best region against $\theta_1 > \theta_0$ is the upper tail and the best region against $\theta_1 < \theta_0$ is the lower tail.
+
+> [!example]- Claim sizes are normal with standard deviation 250. A sample of 25 claims tests $H_0: \mu = 1{,}000$ against $H_1: \mu = 1{,}100$ at significance level 0.05. What are the best critical region and its power, and why is it UMP for $H_1: \mu > 1{,}000$? {Example}
+> - For normal data with $\mu_1 > \mu_0$, the ratio $L(\mu_0)/L(\mu_1)$ decreases as $\bar{x}$ increases, so the best region is $\bar{X} \ge c$.
+> - Under $H_0$, $\bar{X}$ is normal with mean 1,000 and standard deviation $250 / \sqrt{25} = 50$, so $c = 1{,}000 + 1.645 \times 50 = 1{,}082.25$.
+> - The power at $\mu = 1{,}100$ is $P\left(Z \ge \frac{1{,}082.25 - 1{,}100}{50}\right) = P(Z \ge -0.355) = 0.639$.
+> - The value $c$ was found from $H_0$ alone, so the same region is best against every $\mu_1 > 1{,}000$, and the test is UMP.

@@ -119,7 +119,7 @@ export function ResultsView({
           Submitted {attempt.submittedAt ? new Date(attempt.submittedAt).toLocaleString() : ''}
           {attempt.activeMs > 0 && <> · {formatDuration(attempt.activeMs)} in the workspace (the CAS estimates about 20 hours)</>}.
           The real project is human-scored pass/fail against the rubric, with results six to eight weeks after the window.
-          Here you grade yourself — with the evidence a grader would use.
+          Here you grade yourself, with the evidence a grader would use.
         </p>
       </header>
 
@@ -133,9 +133,9 @@ export function ResultsView({
         ) : (
           <Card className="space-y-4 p-4">
             <ol className="list-decimal space-y-1.5 pl-5 text-sm">
-              <li>In the workspace, read <span className="font-mono">{assessmentPath}</span>. It has the same columns as your data (without the target), already clean of errors — but with missing values, as live data has.</li>
+              <li>In the workspace, read <span className="font-mono">{assessmentPath}</span>. It has the same columns as your data (without the target), already clean of errors but with missing values, as live data has.</li>
               <li>Score every row with your final model: the prediction is {assessment.predictionMeaning}.</li>
-              <li>Write a CSV with two columns, <span className="font-mono">{idCol}</span> and <span className="font-mono">prediction</span>, to <span className="font-mono">output/</span> — e.g.{' '}
+              <li>Write a CSV with two columns, <span className="font-mono">{idCol}</span> and <span className="font-mono">prediction</span>, to <span className="font-mono">output/</span>, e.g.{' '}
                 <span className="font-mono">write.csv(data.frame({idCol} = a${idCol}, prediction = predict(fit, a, type = "response")), "output/predictions.csv", row.names = FALSE)</span>.
               </li>
             </ol>
@@ -186,7 +186,7 @@ export function ResultsView({
               {summary.verdict === 'strong' ? 'Strong: the model ranks risk nearly as well as the process that made the data.'
                 : summary.verdict === 'reasonable' ? 'Reasonable: it finds most of the segmentation there is to find.'
                   : 'Weak: the model misses most of the segmentation in the data.'}
-              {Math.abs(summary.balance - 1) > 0.15 && ' Its overall level is off, too — check the offset, the exposure, or a transformation of the target that wasn\'t reversed.'}
+              {Math.abs(summary.balance - 1) > 0.15 && ' Its overall level is off, too. Check the offset, the exposure, or a transformation of the target that wasn\'t reversed.'}
             </p>
             {score && <LiftChart lift={score.lift} oracle={score.oracleLift} />}
           </Card>
@@ -217,7 +217,7 @@ export function ResultsView({
 
       <Section title="Self-assessment against the rubric">
         <p className="text-sm text-muted-foreground">
-          The criteria are the CAS's. Beside each is what a quick read of your report found — evidence, not a verdict. Rate each honestly.
+          The criteria are the CAS's. Beside each is what a quick read of your report found. It is evidence, not a verdict. Rate each honestly.
         </p>
         {(Object.keys(DOMAINS) as Domain[]).map(domain => (
           <div key={domain} className="space-y-2">
@@ -270,7 +270,7 @@ export function ResultsView({
           </div>
           <p className="min-w-0 flex-1 text-sm">
             {!rubric.complete ? `Rate all ${RUBRIC.length} criteria for a verdict.`
-              : rubric.likelyPass ? 'Likely a pass, on your own ratings: 70% or more overall and no domain below half.'
+              : rubric.likelyPass ? 'Likely a pass on your own ratings, by this simulator’s bar: 70% overall and no domain below half.'
                 : 'Not yet a pass on your own ratings. The CAS publishes no pass mark; this simulator uses 70% overall with no domain below half.'}
           </p>
         </Card>
@@ -331,7 +331,7 @@ export function ResultsView({
             </div>
             <div className="space-y-2">
               <h3 className="text-sm font-semibold">The true effects</h3>
-              <p className="text-xs text-muted-foreground">Multiplicative relativities of the model that generated the data. A fitted GLM lands near these, give or take sampling noise — closer for the large groups, farther for the thin ones.</p>
+              <p className="text-xs text-muted-foreground">Multiplicative relativities of the model that generated the data. A fitted GLM lands near these, give or take sampling noise: closer for the large groups, farther for the thin ones.</p>
               <Card className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-muted/60 text-left text-xs">

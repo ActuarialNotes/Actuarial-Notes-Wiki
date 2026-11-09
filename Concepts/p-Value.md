@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:65f61dd1189fa99d9f7361f15cf300991deaca9bcb0f94023a2787a164135f99
+  content_hash: sha256:c7767b19c24f2a00b499696f5ee3a91c8994b504b701ea490c4602bd6410812f
   sources:
     - "James, Witten, Hastie & Tibshirani, ISLR 2nd ed. (Springer 2021, CAS-hosted copy): §3.1.2 p.67 (PDF p.77) p-value of the coefficient t-statistic; §3.2.2 p.77 (PDF p.87) each coefficient's p-value is 'the partial effect of adding that variable to the model' and with p = 100 null predictors about 5% of p-values fall below 0.05 by chance; §13.1.1 pp.556-558 (PDF pp.562-564) p-value definition, it is NOT the probability that H0 holds, it maps the statistic onto a number between 0 and 1, one- vs two-sided p-values (footnote 8), failing to reject may only reflect a small sample; §13.1.2 p.560 reject when p is below alpha, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Siegrist, Random, ch.8 §1 Introduction (P-value = smallest alpha for which H0 is rejected) and §2 Tests in the Normal Model (P-values 2[1 - Phi(|Z|)], 1 - Phi(Z), Phi(Z)), sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html ; sha256:fd7bc50171fc51310f41e9132005b66cdbbd31bf507a70a0246394b05a379ab2 — https://www.randomservices.org/random/hypothesis/Normal.html"
@@ -16,31 +16,46 @@ verification:
   log: .verify/Concepts/p-Value.md
 ---
 
-A **p-Value** is the probability, computed assuming the null hypothesis is true, of observing a test statistic at least as extreme as the one obtained. It converts any test statistic onto a common $0$–$1$ scale: reject $H_0$ when the p-value falls below the significance level $\alpha$.
-
-> $$p = P(\text{test statistic at least as extreme as observed} \mid H_0)$$
-
-> $$\text{reject } H_0 \iff p < \alpha$$
-
-- "Extreme" is defined by the alternative: a one-sided $H_1: \theta > \theta_0$ uses one tail, a two-sided $H_1: \theta \ne \theta_0$ uses both, so the two-sided p-value is twice the one-sided one for a symmetric [[Sampling Distribution]]
-- The p-value is **not** the probability that $H_0$ is true, and $1 - p$ is not the probability that $H_1$ is true — both are statements about the data given the hypothesis, not the reverse
-- It is the smallest $\alpha$ at which the observed data would reject $H_0$, which is why software reports it instead of a fixed accept/reject verdict
-- A p-value just above $\alpha$ is weak evidence, not evidence of no effect; with low [[Power of a Test|power]] a real effect routinely produces $p > 0.05$
-- Under $H_0$ (continuous test statistic), the p-value is $\text{Uniform}(0,1)$ — so testing many predictors produces small p-values by chance alone, the reason [[Variable Selection]] should not be run on p-values unchecked
-- In [[Parameter Estimate Tables]] each coefficient's p-value tests $H_0: \beta_j = 0$ given the other terms in the model; it says nothing about the variable in isolation
-
 ![[Media/Figures/p-Value.svg|340]]
 
-> [!example]- p-Value for a One-Sided Z-Test {Example}
-> A test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ yields $z = 2.50$. Find the p-value and state the conclusion at $\alpha = 0.05$ and at $\alpha = 0.01$.
->
-> > [!answer]-
-> > $$p = P(Z > 2.50) = 1 - 0.9938 = 0.0062$$
-> > Since $0.0062 < 0.05$ and also $< 0.01$, **reject $H_0$** at both levels. Had the alternative been two-sided, $p = 2(0.0062) = 0.0124$ — still significant at $5\%$ but no longer at $1\%$.
+A **p-Value** is the probability, computed under the null hypothesis $H_0$, that the test statistic of a [[Hypothesis Testing|hypothesis test]] is at least as extreme as the value observed, in the direction of the alternative hypothesis $H_1$. For an upper-tailed test with test statistic $W$ and observed value $w$, the p-value is
 
-> [!example]- Reading a GLM Coefficient's p-Value {Example}
-> A Poisson [[Generalized Linear Model]] reports a territory coefficient $\hat\beta = 0.184$ with standard error $0.101$. Compute the Wald test statistic and the two-sided p-value, and interpret it.
->
-> > [!answer]-
-> > $$z = \frac{0.184}{0.101} = 1.82 \ \Longrightarrow\ p = 2\,P(Z > 1.82) \approx 2(0.0344) = 0.069$$
-> > At $\alpha = 0.05$ this coefficient is not significant, but $p = 0.069$ is far from conclusive evidence that the effect is zero — a multiplicative effect of $e^{0.184} = 1.20$ is still the best estimate. Decide with [[AIC]] or an analysis of [[Deviance]], plus business judgment, rather than on the p-value alone.
+> $$p = P(W \ge w \mid H_0)$$
+
+The p-value is the smallest significance level at which $H_0$ would be rejected. A test at significance level $\alpha$ rejects $H_0$ when $p \le \alpha$, which is exactly when $w$ is beyond the [[Critical Value|critical value]].
+
+> [!example]- A $z$ test of $H_0: \mu = 5{,}000$ against $H_1: \mu > 5{,}000$ gives $z = 2.50$. What is the p-value, and does the test reject $H_0$ at significance level 0.05, and at 0.01? {Example}
+> - The alternative is upper-tailed, so the p-value is $P(Z \ge 2.50) = 0.0062$.
+> - Because $0.0062 < 0.05$ and $0.0062 < 0.01$, the test rejects $H_0$ at both levels.
+
+## p-value of a two-sided test
+
+For a two-sided alternative and a test statistic whose distribution under $H_0$ is symmetric about 0, such as $Z$ or $T$, the p-value counts both tails:
+
+> $$p = 2P(W \ge |w| \mid H_0)$$
+
+The one-sided p-value is half the two-sided p-value when $w$ lies on the side that $H_1$ points to. When a table gives only some percentiles, the p-value is bracketed by the tail areas of the two percentiles on either side of $|w|$.
+
+> [!example]- A $t$ test with 12 degrees of freedom gives $t = 2.30$, and the alternative hypothesis is two-sided. Between which values does the p-value lie? {Example}
+> - The table gives $t_{0.025,12} = 2.179$ and $t_{0.01,12} = 2.681$.
+> - Because $2.179 < 2.30 < 2.681$, the upper tail beyond 2.30 is between 0.01 and 0.025.
+> - The two-sided p-value is twice the upper tail, so it is between 0.02 and 0.05.
+> - The test rejects $H_0$ at significance level 0.05 but not at 0.02.
+
+## p-value of a regression coefficient
+
+In the output of a [[Linear Regression|linear regression]] or a [[Generalized Linear Model|generalized linear model]], the test statistic for a coefficient $\beta_j$ is
+
+> $$z = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}$$
+
+- $\text{SE}(\hat{\beta}_j)$ is the standard error of the estimate $\hat{\beta}_j$.
+
+The p-value beside it tests $H_0: \beta_j = 0$, given the other terms in the model. It does not test any other value, such as $\beta_j = 1$. The predictor is significant at level $\alpha$ when this p-value is less than $\alpha$. A coefficient that is not significant for a numeric predictor shows only that there is no significant linear trend in that predictor on the scale of the linear predictor. It does not show that the predictor has no predictive value.
+
+> [!example]- A Poisson GLM gives a territory coefficient $\hat{\beta} = 0.184$ with standard error 0.101. What is the two-sided p-value, and is the coefficient significant at 0.05? {Example}
+> - The test statistic is $z = \frac{0.184}{0.101} = 1.82$.
+> - The two-sided p-value is $2P(Z \ge 1.82) = 0.069$.
+> - Because $0.069 > 0.05$, the coefficient is not significant at 0.05.
+
+> [!trap] Reading the p-value as the probability that $H_0$ is true
+> The p-value is a probability about the data, computed assuming $H_0$ is true. A p-value of 0.03 does not mean that $H_0$ has probability 0.03 of being true.

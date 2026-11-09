@@ -1,103 +1,71 @@
 ---
 verification:
-  status: verified
-  confidence: high
-  last_checked: 2026-10-30
+  status: stale
+  confidence: null
+  last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8682194bf25ec29d7cbfe9d2d0100f52aa275a78722c4cc8c389c80327c2ab99
+  content_hash: sha256:52b6c1d678f572611d701336afd3c7486654a439e878f23a156c84c6a31155a4
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Definition 1.1 (PDF p.26), Definition 1.2 (PDF p.27), marginal distributions §4.3 (PDF p.151), Theorem 6.1 (PDF p.238), Bernoulli V = pq (PDF p.269), Exercises 6.2.23 and 6.3.17-18 covariance and correlation (PDF pp.275, 289), Definition 7.1 convolution (PDF p.294), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "MIT OCW 18.05 (Orloff & Bloom, Spring 2022), Reading 4a: Discrete Random Variables, §2 definition (PDF p.2), cdf definition (PDF p.3), §2.8 Properties of the cdf (PDF pp.5-6), sha256:ff2a10e7ef1c0f5ef300ed8f73864d365ca5adcdf9775d1c4a6f356ee7687b5d — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class04-prep-a.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §3.2.1 CDF (jump of F at x_k equals P_X(x_k); CDF non-decreasing), sha256:af20b8d628299ce3fe01503e29617951bd45f4292ce46980c319cd3eede2035b — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), solutions 117 (PDF p.36) and 124 (PDF p.37): the sum of independent Poisson variables is Poisson with the means added, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes a, e, f and Topic 3 learning outcomes a-e, g (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §3.2.1 CDF: F_X(x_k) - F_X(x_k - eps) = P_X(x_k), sha256:1684aa6588e7d87737c1d625bd7a606c6f1a6954681ff1a3cd02b084eec1a151 — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-10-30), §1.3.2 Axiom 3 (additivity over disjoint events), sha256:f8ea87ae887db4bef1c3ff1b41879371f1573edb8d70c80df361acd52f45fb1d — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php"
-    - "SOA Exam C Sample Solutions (C-09-15, Society of Actuaries' own file on soa.org), Question #209 solution, PDF p.74: 'For any deductible d ... E[(X-d)+] = E(X) - E(X ∧ d)', sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-10-30), §11.1 Introduction: indicator with P(X=1)=p is Bernoulli(p), X^n = X, E(X)=p, var(X)=p(1-p), sha256:1135f801453ae5f609152fdbe9c858a5b5e49abc9f7ae7277d97d07229333ee7 — https://www.randomservices.org/random/bernoulli/Introduction.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 1.1 p.18 (PDF p.26): discrete = finite or countably infinite sample space, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §3.2.1 CDF: F_X(x)=P(X<=x), defined for discrete, continuous and mixed; discrete CDF a staircase, jump = P(X=x), sha256:ddcdb7ea63d9e918e1d8e69af197212e089af8cf665730306927c861bd3f5f6f — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 7.1 p.286 (PDF p.294): convolution m3(j)=sum_k m1(k)m2(j-k) for independent integer-valued X, Y, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.1 Expected value: definitions (discrete, continuous, mixed), may not exist, change of variables, increasing property P(X<=Y)=1, symmetry -> E(X)=a, independence E(XY)=E(X)E(Y), E(X|A) via conditional density, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.9 Expected value as an integral: E(X)=int_0^inf P(X>x)dx for X>=0; E(X)=sum_{k>=1} P(X>=k) on N; E(X;A)=E(X 1_A), sha256:13db7b0f6f791843abcef65cf16e1214b8e745e3f9eeac74e01cc96fa3a032bc — https://www.randomservices.org/random/expect/Integral.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 14.4 Poisson distribution: M+N Poisson with parameter a+b for independent Poisson M, N, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.5 Covariance and correlation: cov=E(XY)-E(X)E(Y); cor=cov/(sd sd); var(X+Y)=var(X)+var(Y)+2cov(X,Y), sha256:23ef4758146296b9865ca3f82f0e849934a667dcc8643afaa28147ad146feef7 — https://www.randomservices.org/random/expect/Covariance.html"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §5.1.3 conditional PMF P_{X|Y}=P_{XY}/P_Y, sha256:937740fa7d0feecdb1a09585b50e5fc6bea5ed4cfae6425ad7aa56855a0f58e4 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
+    - "SOA, Exam P syllabus, November 2026, Topic 3 Multivariate Random Variables, LOs a)-i), incl. g) linear combinations of independent discrete and of normal random variables (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Discrete Random Variable.md
 ---
 
-A **Discrete Random Variable** $X$ is a [[Random Variable]] whose possible values form a finite or countably infinite set — typically a count, such as the number of claims — so its distribution is given by a [[Probability Mass Function (PMF)|probability mass function]] $p(x) = P(X = x)$.
+A **Discrete Random Variable** is a [[Random Variable|random variable]] whose possible values form a finite or countably infinite set. The probability that a discrete random variable $X$ takes the value $x$ is its [[Probability Mass Function (PMF)|probability mass function]]:
 
-> $$p(x) = P(X = x)$$
+> $$f(x) = P(X = x)$$
 
-> $$F(x) = \sum_{k \le x} p(k)$$
+- $f(x) \ge 0$ for every $x$, and $\sum_x f(x) = 1$.
 
-- A valid PMF has $p(x) \ge 0$ and $\sum_x p(x) = 1$. The [[Cumulative Distribution Function (CDF)|CDF]] is a step function that jumps by $p(x)$ at each possible value. The named families are in [[Discrete Univariate Distributions]].
-- **Endpoints matter.** $P(X \le 3)$ and $P(X < 3)$ differ by $p(3)$ — the most common slip when moving from a [[Continuous Random Variable|continuous]] problem to a discrete one. Expectations are sums: $E[g(X)] = \sum_x g(x)\,p(x)$.
-- With two variables, the [[Joint Probability Function]] $p(x,y)$ is a table. [[Marginal Probability Function|Marginals]] are its row and column totals; a [[Conditional Probability Function|conditional]] PMF is one row divided by its total, $p(y \mid x) = p(x,y)/p_X(x)$.
-- [[Moments for Joint Distributions|Joint moments]], [[Variance for Conditional and Marginal Distributions|conditional and marginal variances]], [[Covariance]] and the [[Correlation Coefficient]] are all sums over the cells of that table.
-- The PMF of a sum of independent discrete variables is a **convolution**, $P(X + Y = s) = \sum_x p_X(x)\,p_Y(s - x)$. Some families are closed under it — independent Poissons sum to a Poisson with mean $\lambda_1 + \lambda_2$. See [[Probabilities for Linear Combinations]].
-- **From tail probabilities.** For $X$ taking values $0, 1, \ldots, n$, the PMF is recovered by differencing tail probabilities, $p(x) = P(X \ge x) - P(X \ge x + 1)$, with $p(n) = P(X \ge n)$ at the largest value.
-- **A capped count.** If $Y = \min(X, n)$, then $P(Y = k) = P(X = k)$ for $k < n$, and all the rest sits on the cap:
+> [!example]- A policyholder's number of claims $X$ in a year is 0, 1, 2 or 3 with probabilities 0.60, 0.25, 0.10 and $f(3)$. What is $f(3)$? {Example}
+> - The probabilities must add to 1.
+> - $f(3)$ is $1 - 0.60 - 0.25 - 0.10$, which is $0.05$.
 
-> $$P(Y = n) = P(X \ge n) = 1 - \sum_{k < n} P(X = k)$$
+## Probabilities of events
 
-- The cap's value covers every outcome that would have gone past it: when trials stop at $n$ whether or not the target was reached, $Y = n$ includes both reaching it on trial $n$ and never reaching it.
-- **The excess over 1.** For a non-negative integer $N$, $N = \min(N, 1) + (N-1)_+$, and $\min(N, 1)$ is the indicator of $N \ge 1$, so its mean is $P(N \ge 1)$:
+The probability of an event is the sum of $f$ over the values in it. The [[Cumulative Distribution Function (CDF)|cumulative distribution function]] is
 
-> $$E[(N-1)_+] = E[N] - E[\min(N, 1)] = E[N] - P(N \ge 1)$$
+> $$F(x) = P(X \le x) = \sum_{k \le x} f(k)$$
 
-- This is the deductible identity $E[(X-d)_+] = E[X] - E[X \wedge d]$ with $d = 1$.
+Each value carries its own probability, so whether an endpoint is included matters: $P(X \le k) = P(X < k) + f(k)$.
 
-The first two examples use one table. A policyholder's annual auto claims $X$ and home claims $Y$ have joint PMF $p(0,0) = 0.40$, $p(0,1) = 0.10$, $p(1,0) = 0.20$, $p(1,1) = 0.15$, $p(2,0) = 0.05$, $p(2,1) = 0.10$.
+> [!example]- For the claim count above, what are the probabilities of fewer than 2 claims and of at least 2 claims? {Example}
+> - "Fewer than 2" is $X \le 1$, so its probability is $F(1) = 0.60 + 0.25$, which is $0.85$.
+> - "At least 2" is its complement, $1 - 0.85 = 0.15$.
 
-> [!example]- Auto Claims Given a Home Claim {Example}
-> Using the joint PMF above, find the conditional PMF of $X$ given $Y = 1$, then $E[X \mid Y = 1]$ and $\text{Var}(X \mid Y = 1)$.
->
-> > [!answer]-
-> > The marginal is $p_Y(1) = 0.10 + 0.15 + 0.10 = 0.35$. Dividing each $Y = 1$ cell by it gives $p(x \mid 1) = \tfrac{2}{7}, \tfrac{3}{7}, \tfrac{2}{7}$ for $x = 0, 1, 2$.
-> > $$
-> > \begin{align*}
-> > E[X \mid Y = 1] &= 0\left(\tfrac{2}{7}\right) + 1\left(\tfrac{3}{7}\right) + 2\left(\tfrac{2}{7}\right) \\
-> >                 &= 1 \\
-> > E[X^2 \mid Y = 1] &= 1\left(\tfrac{3}{7}\right) + 4\left(\tfrac{2}{7}\right) \\
-> >                   &= 11/7 \\
-> > \text{Var}(X \mid Y = 1) &= 11/7 - 1^2 \\
-> >                          &= 4/7 \approx 0.571
-> > \end{align*}
-> > $$
-> > Unconditionally $E[X] = 0.65$; a home claim raises the expected auto count to $1$, so the two lines move together.
+> [!trap] Strict or weak inequality
+> "Fewer than 2 claims" is $P(X \le 1) = 0.85$. Reading it as $P(X \le 2) = 0.95$ adds $f(2) = 0.10$. Write "fewer than", "at most" and "at least" as a set of values before summing.
 
-> [!example]- Covariance and Correlation of Two Lines {Example}
-> Using the same joint PMF, find $\text{Cov}(X, Y)$ and the correlation coefficient $\rho$.
->
-> > [!answer]-
-> > The marginals are $p_X = (0.50, 0.35, 0.15)$ on $\{0,1,2\}$ and $p_Y = (0.65, 0.35)$ on $\{0,1\}$.
-> > $$
-> > \begin{align*}
-> > E[X] &= 0.35 + 2(0.15) \\
-> >      &= 0.65 \\
-> > \text{Var}(X) &= 0.35 + 4(0.15) - 0.65^2 \\
-> >               &= 0.5275
-> > \end{align*}
-> > $$
-> > $Y$ is Bernoulli, so $E[Y] = 0.35$ and $\text{Var}(Y) = 0.35(0.65) = 0.2275$. The only nonzero products $xy$ sit in cells $(1,1)$ and $(2,1)$:
-> > $$
-> > \begin{align*}
-> > E[XY] &= (1)(1)(0.15) + (2)(1)(0.10) \\
-> >       &= 0.35 \\
-> > \text{Cov}(X,Y) &= 0.35 - (0.65)(0.35) \\
-> >                 &= 0.1225 \\
-> > \rho &= \frac{0.1225}{\sqrt{0.5275 \times 0.2275}} \\
-> >      &= \frac{0.1225}{0.3464} \\
-> >      &= 0.354
-> > \end{align*}
-> > $$
-> > A moderate positive correlation — worth knowing before pricing a bundled auto-and-home discount.
+## Expected value of a function
 
-> [!example]- Total Claims from Two Independent Policies {Example}
-> Policy A has claim count $X$ with $P(X = 0, 1, 2) = 0.7, 0.2, 0.1$. Policy B, independent, has $Y$ with $P(Y = 0, 1) = 0.6, 0.4$. Find the PMF of $S = X + Y$ and $P(S \ge 2)$.
->
-> > [!answer]-
-> > Convolve, summing over the ways each total can occur:
-> >
-> > - $P(S = 0)$: $(0.7)(0.6) = 0.42$
-> > - $P(S = 1)$: $(0.7)(0.4) + (0.2)(0.6) = 0.40$
-> > - $P(S = 2)$: $(0.2)(0.4) + (0.1)(0.6) = 0.14$
-> > - $P(S = 3)$: $(0.1)(0.4) = 0.04$
-> >
-> > The four probabilities sum to 1, and $P(S \ge 2) = 0.14 + 0.04 = 0.18$: an 18% chance the pair produces two or more claims in the year.
+The [[Expected Value|expected value]] of a function $g(X)$ weights each value $g(x)$ by its probability:
+
+> $$E[g(X)] = \sum_x g(x)\,f(x)$$
+
+> [!example]- For the claim count above, what are $E[X]$, $E[X^2]$ and the variance? {Example}
+> - $E[X]$ is $1(0.25) + 2(0.10) + 3(0.05)$, which is $0.60$.
+> - With $g(x) = x^2$, $E[X^2]$ is $1(0.25) + 4(0.10) + 9(0.05)$, which is $1.10$.
+> - The [[Variance|variance]] is $E[X^2] - (E[X])^2$, which is $1.10 - 0.60^2 = 0.74$.
+
+## Sum of two independent discrete random variables
+
+The probability that the sum of independent discrete random variables $X$ and $Y$ equals $s$ adds every pair of values that sums to $s$:
+
+> $$P(X + Y = s) = \sum_x P(X = x)\,P(Y = s - x)$$
+
+> [!example]- The claim count $X$ above and an independent count $Y$, with $P(Y = 0) = 0.7$ and $P(Y = 1) = 0.3$, are added. What is the probability that the total is at least 2? {Example}
+> - $P(X + Y = 0) = 0.60(0.7) = 0.420$.
+> - $P(X + Y = 1)$ is $0.25(0.7) + 0.60(0.3)$, which is $0.355$.
+> - $P(X + Y \ge 2)$ is $1 - 0.420 - 0.355$, which is $0.225$.
+
+When $X$ and $Y$ are not independent, each pair's probability comes from their [[Joint Probability Function|joint probability function]] instead of the product.

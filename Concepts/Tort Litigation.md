@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e42575eed60aaf34ff2ae4d440acc232e58633ef8fe98b70fe0428aa5a9608f
+  content_hash: sha256:476d9e1fe19f3f7cfa1feb572a3ce94ed8559a7a8ed561895fe669b822c997b9
   sources:
     - "Davidson, The Cap on Non-Pecuniary General Damages (CAS Exam 6C reading), pp. 1-5 (the 1978 trilogy and the non-pecuniary cap), sha256:9b544951d4a031e08f3c40a9a30b552764f705bc09a7a6ea2af3d57e5907149f — https://www.casact.org/sites/default/files/2021-03/6C_Davidson.pdf"
     - "Cappelletti, Tort Law: Topics for General Insurance Actuaries (SOA GI-201 study note, rev. May 2025), PDF pp. 5, 8, 10-15, 31, 33, 60-66 (printed pp. 3, 6, 8-13, 29, 31, 58-64), sha256:5316698581bb73d51dbcfb9a74ea92254fed6fc2b018253e2b26abc346ca2a6f — https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-tort-law.pdf"
@@ -19,46 +19,35 @@ verification:
   log: .verify/Concepts/Tort Litigation.md
 ---
 
-**Tort Litigation** is the civil action by which an injured person recovers damages from the person whose negligence caused the injury. It is the compensation mechanism that liability insurance responds to, and its cost, duration and unpredictability are the reason Canadian provinces have progressively replaced parts of it with [[No-Fault Insurance|no-fault]] benefits.
-
-> $$\text{Damages} = \underbrace{\text{Pecuniary}}_{\text{income, care, cost}} + \underbrace{\text{Non-pecuniary}}_{\text{pain and suffering}}$$
-
-- **What must be proved:** a duty of care, breach of the standard of care, causation, and damages. Failure on any element defeats the claim entirely.
-- **Contributory negligence** apportions the loss: a plaintiff $30\%$ responsible for their own injury recovers $70\%$ of assessed damages. Canada uses apportionment.
-- **The non-pecuniary cap.** Since the Supreme Court's 1978 trilogy, Canadian awards for pain and suffering are capped at an inflation-indexed ceiling (roughly $\$100{,}000$ in 1978 dollars). This is the structural reason Canadian bodily injury severities are far below American ones, and candidates should cite it whenever asked to compare the two systems.
-- **Costs follow the event** in Canada: the losing party generally pays a portion of the winner's legal costs. This discourages weak claims and weak defences alike, and is another significant difference from the American rule.
-- **Actuarial consequences:** tort claims are **long-tailed** (years from accident to resolution) and sensitive to judicial trend. Development patterns depend on court backlogs, limitation periods and settlement practice.
-- Future losses are converted to present value using court-prescribed or evidence-based discount rates.
-
 ![[Media/Figures/Tort_Litigation.svg|340]]
 
-> [!example]- Building a Bodily Injury Award {Example}
-> A plaintiff aged $40$, earning $\$70{,}000$ per year, is permanently unable to work after a collision. The court assesses $25$ years of future income loss, $\$300{,}000$ of future care, and $\$180{,}000$ for pain and suffering. The plaintiff is found $20\%$ contributorily negligent. Accident benefits of $\$95{,}000$ have been paid for income replacement. Assume future losses are discounted at $2\%$ net of wage inflation.
->
-> Compute the award.
->
-> > [!answer]-
-> > **Future income loss**, as a present value at a net rate of $2\%$ over $25$ years:
-> >
-> > $$\begin{align*}
-> > \text{PV} &= \$70{,}000 \times \frac{1 - 1.02^{-25}}{0.02} \\
-> > &= \$70{,}000 \times 19.523 \\
-> > &= \$1{,}366{,}610
-> > \end{align*}$$
-> >
-> > **Gross damages:**
-> >
-> > $$\begin{align*}
-> > \text{Total} &= \$1{,}366{,}610 + \$300{,}000 + \$180{,}000 \\
-> > &= \$1{,}846{,}610
-> > \end{align*}$$
-> >
-> > **Contributory negligence** of $20\%$:
-> >
-> > $$0.80 \times \$1{,}846{,}610 = \$1{,}477{,}288$$
-> >
-> > **Less collateral benefits** already paid for the same head of loss:
-> >
-> > $$\$1{,}477{,}288 - \$95{,}000 = \$1{,}382{,}288$$
-> >
-> > Observe where the money is: $74\%$ of the award is **future income loss**, a discounted annuity.
+**Tort Litigation** is the civil action by which an injured person recovers damages from the person whose negligence caused the injury. It is the compensation mechanism that liability insurance responds to, and its cost, duration and unpredictability are why Canadian provinces have replaced parts of it with [[No-Fault Insurance|no-fault]] benefits. To recover, the plaintiff must prove four elements, and failure on any one defeats the claim:
+
+1. A duty of care owed to the plaintiff.
+2. A breach of the standard of care.
+3. Causation of the injury by the breach.
+4. Damages.
+
+The damages a court assesses are
+
+> $$\text{Damages} = \text{Pecuniary Damages} + \text{Non-Pecuniary Damages}$$
+
+- $\text{Pecuniary Damages}$ are the plaintiff's financial losses, such as lost income, the cost of future care and other costs.
+- $\text{Non-Pecuniary Damages}$ compensate pain and suffering.
+
+Contributory negligence apportions the loss, so a plaintiff $30\%$ responsible for their own injury recovers $70\%$ of the assessed damages. Future losses are converted to a present value at court-prescribed or evidence-based discount rates.
+
+> [!idea] The idea
+> Since the Supreme Court of Canada's 1978 trilogy, Canadian awards for pain and suffering are capped at an inflation-indexed ceiling, about $\$100{,}000$ in 1978 dollars, which is the structural reason Canadian bodily injury severities are far below American ones.
+
+In Canada costs follow the event: the losing party generally pays a portion of the winner's legal costs, which discourages weak claims and weak defences alike. Tort claims are long-tailed, years from accident to resolution, and sensitive to judicial trends. Their development patterns depend on court backlogs, limitation periods and settlement practice.
+
+> [!example]- A plaintiff earning $\$70{,}000$ a year is permanently unable to work after a collision. The court assesses $25$ years of lost income, $\$300{,}000$ of future care and $\$180{,}000$ for pain and suffering, and finds the plaintiff $20\%$ contributorily negligent. Accident benefits of $\$95{,}000$ have already been paid for income replacement. At a discount rate of $2\%$ net of wage inflation, what is the award? {Example}
+> - The present value of the lost income is $70{,}000 \times 19.5235 = \$1{,}366{,}642$, using the $25$-year annuity factor at $2\%$.
+> - Adding the $\$300{,}000$ of care and $\$180{,}000$ for pain and suffering, the gross damages are $\$1{,}846{,}642$.
+> - With $20\%$ contributory negligence, the plaintiff recovers $0.80 \times 1{,}846{,}642 = \$1{,}477{,}314$.
+> - Less the $\$95{,}000$ of accident benefits already paid for the same loss, the award is $\$1{,}382{,}314$.
+
+## The legal environment in a reserving analysis
+
+A change in the legal environment, such as a court decision, a tort reform or a change in the statute of limitations, is an external [[Changing Conditions|changing condition]]. It can invalidate the development technique's assumption that past development predicts future development, even when the insurer's case reserving and settlement speed are unchanged. The actuary then considers other techniques or adjusts the selected development factors.

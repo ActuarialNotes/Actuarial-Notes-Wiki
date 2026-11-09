@@ -13,8 +13,8 @@
 // computed cell is shaded and bold. The two must never look alike — a grid
 // that is half input and half answer has to say which half is which.
 
-import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent, type ReactNode } from 'react'
-import { ArrowDownToLine, ChevronDown, ChevronUp, ClipboardPaste, Eraser, Minus, Plus, X } from 'lucide-react'
+import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent, type ReactNode, type RefObject } from 'react'
+import { ArrowDownToLine, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardPaste, Eraser, Minus, Plus, X } from 'lucide-react'
 import { formatValue, readNumber, toolById, type NumberUnit, type ResultTable, type TableField } from '@/lib/tools'
 import {
   cellCandidates,
@@ -30,6 +30,7 @@ import {
   type ColumnSource,
 } from '@/lib/toolColumns'
 import { lastRun } from '@/lib/toolRuns'
+import { columnNumbers, formulaLine } from '@/lib/toolTemplate'
 import { fromMode, labelledTriangle, parseClipboardBlock, pastedTriangle, toMode, withoutHeader, type TriangleMode } from '@/lib/toolDraft'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { cn } from '@/lib/utils'
@@ -61,6 +62,8 @@ export function EditableTable({
   toolId,
   onFillFrom,
   linked = false,
+  numbered = false,
+  headerNote,
 }: {
   field: TableField
   rows: DraftRow[]
@@ -72,10 +75,26 @@ export function EditableTable({
   toolId?: string
   /** Open a source tool's card to fill a column from its result. */
   onFillFrom?: (key: string, source: ColumnSource) => void
+  /**
+   * Number the columns as a published exhibit does, and write each computed
+   * column's formula under the grid in those numbers (the tool template, §19).
+   */
+  numbered?: boolean
+  /** Drawn under an input column's name: the template's source tag. */
+  headerNote?: (key: string) => ReactNode
 }) {
   const inputKeys = new Set(field.columns.map(c => c.key))
   const computed = (result?.columns ?? []).filter(c => c.computed && !inputKeys.has(c.key))
+  const numbers = numbered ? columnNumbers(field.columns, computed) : null
+  const numberOf = (key: string) => {
+    const n = numbers?.get(key)
+    return n === undefined ? null : <span className="block font-mono text-[10px] font-normal leading-3 text-muted-foreground">({n})</span>
+  }
+  const formulas = numbers ? computed.filter(c => c.formula) : []
+  const labels = new Map([...field.columns, ...computed].map(c => [c.key, c.label]))
   const tableRef = useRef<HTMLTableElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
+  const offscreen = useOffscreenColumns(scroller, tableRef, computed.length > 0)
   const coarse = useCoarsePointer()
   const [panel, setPanel] = useState<Panel>(null)
   const [focused, setFocused] = useState<{ r: number; key: string } | null>(null)
@@ -148,7 +167,19 @@ export function EditableTable({
 
   return (
     <div className="space-y-1">
-      <div className="overflow-x-auto rounded-lg border border-border">
+      {(offscreen.hidden > 0 || offscreen.scrolled) && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={offscreen.hidden > 0 ? offscreen.next : offscreen.back}
+            className="inline-flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold ring-1 ring-inset ring-border transition-colors hover:bg-muted"
+            data-testid="grid-more-columns"
+          >
+            {offscreen.hidden > 0 ? <>{offscreen.hidden} more {offscreen.hidden === 1 ? 'column' : 'columns'} <ChevronRight className="h-3.5 w-3.5" aria-hidden /></> : <><ChevronLeft className="h-3.5 w-3.5" aria-hidden /> First columns</>}
+          </button>
+        </div>
+      )}
+      <div ref={scroller} className="overflow-x-auto rounded-lg border border-border">
         <table ref={tableRef} className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-border text-xs text-muted-foreground">
@@ -156,8 +187,9 @@ export function EditableTable({
                 <th
                   key={c.key}
                   scope="col"
-                  className={cn('px-2 py-1.5 font-medium', c.kind === 'number' ? 'text-right' : 'text-left', ci === 0 && PIN_LEFT)}
+                  className={cn('px-2 py-1.5 font-medium', numbers && 'align-top', c.kind === 'number' ? 'text-right' : 'text-left', ci === 0 && PIN_LEFT)}
                 >
+                  {numberOf(c.key)}
                   {c.kind === 'number' ? (
                     <button
                       type="button"
@@ -167,15 +199,18 @@ export function EditableTable({
                       className="-mx-1 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 py-0.5 hover:bg-accent hover:text-foreground"
                     >
                       {c.label}
+                      {c.judgment && <span title="A judgment: yours to choose" aria-label="a judgment"> ◆</span>}
                       <ChevronDown className="h-3 w-3" aria-hidden />
                     </button>
                   ) : (
                     c.label
                   )}
+                  {headerNote && c.kind === 'number' && <span className="mt-0.5 flex justify-end">{headerNote(c.key)}</span>}
                 </th>
               ))}
               {computed.map((c, k) => (
-                <th key={c.key} scope="col" style={pinRight(k)} className={cn('px-2 py-1.5 text-right font-semibold text-foreground', SHADED, k === 0 && EDGE)}>
+                <th key={c.key} scope="col" style={pinRight(k)} className={cn('px-2 py-1.5 text-right font-semibold text-foreground', numbers && 'align-top', SHADED, k === 0 && EDGE)}>
+                  {numberOf(c.key)}
                   {c.label}
                 </th>
               ))}
@@ -239,6 +274,14 @@ export function EditableTable({
           )}
         </table>
       </div>
+      {formulas.length > 0 && (
+        // Every column a formula cites is named as well as numbered, so one off screen still reads (v3 §2.7).
+        <div className="space-y-0.5 px-1 text-xs text-muted-foreground" data-testid="grid-formulas">
+          {formulas.map(c => (
+            <p key={c.key}>{formulaLine(c.key, c.formula!, numbers!, labels)}</p>
+          ))}
+        </div>
+      )}
       <GridToolbar
         axes={[{
           name: 'Rows',
@@ -346,13 +389,16 @@ function GridCell({
 }) {
   const [editing, setEditing] = useState(false)
   const raw = asText(value)
+  const shown = number && !editing ? formatCell(value, unit) : raw
   return (
     <input
+      // As wide as what it holds: a clipped cell ("14,000,0", "1.00" for 1.0030) reads as a wrong number (v3 §2.7).
+      style={{ minWidth: `max(4.25rem, calc(${Math.max(3, shown.length)}ch + 1.25rem))` }}
       aria-label={label}
       placeholder={placeholder}
       data-cell={dataCell}
       inputMode={noKeyboard ? 'none' : number ? 'decimal' : 'text'}
-      value={number && !editing ? formatCell(value, unit) : raw}
+      value={shown}
       onChange={e => onChange(e.target.value)}
       onPaste={onPaste}
       onKeyDown={onKeyDown}
@@ -557,48 +603,80 @@ function StepButton({ label, disabled, onClick, children }: { label: string; dis
 }
 
 /** A read-only result table: a tool whose view is its output alone. */
-export function ResultTableView({ table }: { table: ResultTable }) {
+/** Past this many rows a result table folds, showing a window round the row the run is about. */
+const FOLD_AT = 12
+const FOLD_SHOWN = 8
+
+export function ResultTableView({ table, fold = false }: {
+  table: ResultTable
+  /** Fold a long table (Life Table's ages, Price Index's months) to a window, with a way to see it all (v3 §2.5). */
+  fold?: boolean
+}) {
+  const [all, setAll] = useState(false)
+  const n = table.rows.length
+  const mark = table.highlight != null && table.highlight >= 0 ? table.highlight : -1
+  const folded = fold && !all && n > FOLD_AT
+  // The window ends at the marked row when there is one late in the table, else starts at the top.
+  const start = folded ? Math.max(0, Math.min(n - FOLD_SHOWN, mark >= 0 ? mark - FOLD_SHOWN + 2 : 0)) : 0
+  const rows = folded ? table.rows.slice(start, start + FOLD_SHOWN) : table.rows
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full border-collapse text-sm">
-        <thead>
-          <tr className="border-b border-border text-xs text-muted-foreground">
-            {table.columns.map(c => (
-              <th key={c.key} scope="col" className={cn('px-2 py-1.5 font-medium', c.kind === 'number' ? 'text-right' : 'text-left', c.computed && 'text-foreground')}>
-                {c.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {table.rows.map((row, r) => (
-            <tr key={r} className="border-b border-border/60 last:border-0">
-              {table.columns.map(c => {
-                const v = row[c.key]
-                return (
-                  <td key={c.key} className={cn('px-2 py-1.5 tabular-nums', c.kind === 'number' ? 'text-right' : 'text-left', c.computed && 'font-semibold')}>
-                    {typeof v === 'number' ? formatValue(v, c.unit ?? 'plain') : asText(v)}
-                  </td>
-                )
-              })}
+    <div className="overflow-hidden rounded-lg border border-border">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-border text-xs text-muted-foreground">
+              {table.columns.map(c => (
+                <th key={c.key} scope="col" className={cn('px-2 py-1.5 font-medium', c.kind === 'number' ? 'text-right' : 'text-left', c.computed && 'text-foreground')}>
+                  {c.label}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-        {table.footer && (
-          <tfoot>
-            <tr className="border-t border-border bg-muted/50 font-semibold">
-              {table.columns.map(c => {
-                const v = table.footer![c.key]
-                return (
-                  <td key={c.key} className={cn('px-2 py-1.5 tabular-nums', c.kind === 'number' ? 'text-right' : 'text-left')}>
-                    {typeof v === 'number' ? formatValue(v, c.unit ?? 'plain') : asText(v)}
-                  </td>
-                )
-              })}
-            </tr>
-          </tfoot>
-        )}
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row, k) => {
+              const r = start + k
+              return (
+                <tr key={r} className={cn('border-b border-border/60 last:border-0', r === mark && 'bg-[var(--exam-accent-soft,hsl(var(--muted)))] font-semibold')} data-marked={r === mark || undefined}>
+                  {table.columns.map(c => {
+                    const v = row[c.key]
+                    return (
+                      <td key={c.key} className={cn('px-2 py-1.5 tabular-nums', c.kind === 'number' ? 'text-right whitespace-nowrap' : 'text-left', c.computed && 'font-semibold')}>
+                        {typeof v === 'number' ? formatValue(v, c.unit ?? 'plain') : asText(v)}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+          {table.footer && (
+            <tfoot>
+              <tr className="border-t border-border bg-muted/50 font-semibold">
+                {table.columns.map(c => {
+                  const v = table.footer![c.key]
+                  return (
+                    <td key={c.key} className={cn('px-2 py-1.5 tabular-nums', c.kind === 'number' ? 'text-right' : 'text-left')}>
+                      {typeof v === 'number' ? formatValue(v, c.unit ?? 'plain') : asText(v)}
+                    </td>
+                  )
+                })}
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+      {fold && n > FOLD_AT && (
+        <button
+          type="button"
+          onClick={() => setAll(a => !a)}
+          aria-expanded={all}
+          className="flex w-full items-center justify-between border-t border-border px-3 py-2.5 text-left text-sm font-semibold transition-colors hover:bg-muted/60"
+          data-testid="result-fold"
+        >
+          {all ? 'Fewer rows' : `All ${n} rows`}
+          <ChevronDown className={cn('h-4 w-4 text-muted-foreground transition-transform', all && 'rotate-180')} aria-hidden />
+        </button>
+      )}
     </div>
   )
 }
@@ -869,4 +947,48 @@ function GridButton({ label, onClick, icon = false, children }: { label: string;
       {children}
     </button>
   )
+}
+
+/**
+ * How many of a grid's columns are off screen to the right, between the pinned
+ * origin and the pinned answer, and the moves that bring them in: the grid says
+ * it scrolls rather than leaving a reader to find out (v3 §2.7).
+ */
+function useOffscreenColumns(scroller: RefObject<HTMLDivElement | null>, table: RefObject<HTMLTableElement | null>, pinnedRight: boolean) {
+  const [state, setState] = useState({ hidden: 0, scrolled: false })
+  const measure = () => {
+    const box = scroller.current
+    const row = table.current?.tHead?.rows[0]
+    if (!box || !row) return
+    const cells = [...row.cells]
+    const pin = pinnedRight ? cells.find(c => c.style.position === 'sticky') : undefined
+    const right = (pin ? pin.getBoundingClientRect().left : box.getBoundingClientRect().right) + 1
+    const hidden = cells.filter(c => c !== pin && c !== cells[0] && c.getBoundingClientRect().right > right).length
+    setState(s => (s.hidden === hidden && s.scrolled === box.scrollLeft > 0 ? s : { hidden, scrolled: box.scrollLeft > 0 }))
+  }
+  useEffect(() => {
+    const box = scroller.current
+    if (!box) return
+    measure()
+    box.addEventListener('scroll', measure, { passive: true })
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    ro?.observe(box)
+    if (table.current) ro?.observe(table.current)
+    return () => {
+      box.removeEventListener('scroll', measure)
+      ro?.disconnect()
+    }
+  })
+  const next = () => {
+    const box = scroller.current
+    const row = table.current?.tHead?.rows[0]
+    if (!box || !row) return
+    const cells = [...row.cells]
+    const pin = pinnedRight ? cells.find(c => c.style.position === 'sticky') : undefined
+    const right = (pin ? pin.getBoundingClientRect().left : box.getBoundingClientRect().right) + 1
+    const first = cells.find(c => c !== pin && c !== cells[0] && c.getBoundingClientRect().right > right)
+    if (first) box.scrollBy({ left: first.getBoundingClientRect().right - right + 4, behavior: 'smooth' })
+  }
+  const back = () => scroller.current?.scrollTo({ left: 0, behavior: 'smooth' })
+  return { ...state, next, back }
 }

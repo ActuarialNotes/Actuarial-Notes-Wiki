@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Actuarial Tools (docs/actuarial-tools.md): calculators that each do one
 // thing, one live card each. The smoke checks the tab is in the sidebar, the
@@ -32,7 +32,7 @@ test.describe('tools', () => {
 
     // A cell that isn't a number is named, and the last result is kept.
     await card.getByLabel('Latest, row 1').fill('lots')
-    await expect(card.getByRole('alert')).toContainText('"latest" must be a number')
+    await expect(card.getByRole('alert')).toContainText('Latest must be a number')
     await card.getByLabel('Latest, row 1').fill('1700')
     await expect(card.getByRole('alert')).toHaveCount(0)
 
@@ -40,16 +40,16 @@ test.describe('tools', () => {
     await expect(card.getByText('% unreported, 2023')).toBeVisible()
 
     // The menu says what the tool was tested against: Friedland's Chapter 9 exhibit.
-    await page.getByRole('button', { name: 'More' }).click()
-    await expect(page.getByText('Tested against')).toBeVisible()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
+    await expect(page.getByText('Tested against', { exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: /Friedland \(2010\), Ch\. 9, Exhibit I, Sheet 1, p\. 162/ })).toBeVisible()
   })
 
   test('sends age-to-age averages on to Development to Ultimate', async ({ page }) => {
     await page.goto('/tools/age-to-age-factors')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send to Development to Ultimate' }).click()
-    await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
+    await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // The averages arrive as the selected factors: 12–24 is 1,500 + 1,700 + 1,800 over 1,000 + 1,100 + 1,200.
     await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(factor((1500 + 1700 + 1800) / (1000 + 1100 + 1200)))
   })
@@ -86,7 +86,9 @@ test.describe('tools', () => {
     await page.goto('/tools/distribution')
     const card = page.getByTestId('tool-card')
     await expect(card.getByLabel('Mean value')).toBeVisible()
-    await card.getByRole('combobox').selectOption('poisson')
+    // A long choice opens its own sheet of options.
+    await card.getByRole('button', { name: /^Distribution: / }).click()
+    await page.getByTestId('value-sheet').getByRole('radio', { name: 'Poisson' }).click()
     await expect(card.getByLabel('Mean count value')).toBeVisible()
     await expect(card.getByLabel('Mean value')).toHaveCount(0)
   })
@@ -95,19 +97,23 @@ test.describe('tools', () => {
     await page.goto('/tools/trend-factor')
     const card = page.getByTestId('tool-card')
     await card.getByLabel(/Rates effective/).fill('2026-01-01')
-    await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
+    // The trend period is drawn by the figure (the answer card doesn't say it twice).
+    await expect(card.getByTestId('tool-figure')).toContainText('3.5 years')
   })
 
-  test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
+  // R10 under the tool template (§19): the answer card is on the first phone
+  // screen; the inputs may run on below it, and the answer rides in the title
+  // strip once its card scrolls away (its own test is below).
+  test('puts every tool\'s answer on the first phone screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     for (const slug of [
-      'annuity', 'trend-factor', 'bond-price', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
-      'full-credibility-standard', 'limited-expected-value', 'expected-payment', 'permissible-loss-ratio',
-      'loss-ratio-method', 'pure-premium-method', 'interest-converter',
+      'annuity', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
+      'full-credibility-standard', 'expected-payment', 'trend-factor',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter', 'life-table',
     ]) {
       await page.goto(`/tools/${slug}`)
       await expect(page.getByTestId('tool-figure')).toBeVisible()
-      const box = await page.getByTestId('tool-card').boundingBox()
+      const box = await page.getByTestId('tool-answer').boundingBox()
       expect(box, slug).not.toBeNull()
       expect(box!.y + box!.height, slug).toBeLessThanOrEqual(844)
     }
@@ -155,7 +161,7 @@ test.describe('tools', () => {
     const card = page.getByTestId('tool-card')
     // The ultimate column is pinned at the right edge, inside the card.
     const cardBox = (await card.boundingBox())!
-    const ult = (await card.getByRole('columnheader', { name: 'Ultimate' }).boundingBox())!
+    const ult = (await card.getByRole('columnheader', { name: /Ultimate/ }).boundingBox())!
     expect(ult.x + ult.width).toBeLessThanOrEqual(cardBox.x + cardBox.width)
     // A typed amount prints with its separators once the cell is left.
     await card.getByLabel('Latest, row 1').fill('1700*2')
@@ -179,9 +185,9 @@ test.describe('tools', () => {
     await page.goto('/tools/age-to-age-factors')
     await page.getByRole('button', { name: 'Select Simple all at every age' }).click()
     await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send selections to Development to Ultimate' }).click()
-    await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
+    await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // 12–24, the simple mean: (1.5 + 1700/1100 + 1.5) / 3.
     const simple = (1.5 + 1700 / 1100 + 1.5) / 3
     await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(factor(simple))
@@ -209,5 +215,215 @@ test.describe('tools', () => {
     await expect(denominator.getByRole('alert')).toContainText('row 3')
     await denominator.getByRole('button', { name: 'Clear every cell' }).click()
     await expect(denominator.getByLabel('Origin 2021, age 12')).toHaveValue('')
+  })
+  // The Assumptions Bank (docs/assumptions-bank.md): a published figure taken
+  // into a tool, from the shelf or from the field's own From… menu, and the
+  // run saying where it came from.
+  test('takes a published figure from the Assumptions Bank into a tool, with its source', async ({ page }) => {
+    await page.goto('/tools')
+    await page.getByTestId('assumptions-row').click()
+    await expect(page).toHaveURL(/\/tools\/assumptions$/)
+    await expect(page.getByTestId('assumption-set').first()).toBeVisible()
+    await page.getByRole('button', { name: 'Profit provision', exact: true }).click()
+    await expect(page.getByTestId('assumption-set')).toHaveCount(1)
+    await page.getByRole('button', { name: /^Use Profit provision/ }).click()
+    await page.getByRole('link', { name: /Use Profit provision .* as Profit & contingency in Permissible Loss Ratio/ }).click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio#input=/)
+
+    // The template (§19): the value pill, and a source tag naming the document.
+    const card = page.getByTestId('tool-card')
+    const pill = card.getByRole('button', { name: 'Profit & contingency value' })
+    await expect(pill).toHaveText('6%')
+    const row = card.locator('[data-field="profit"]')
+    await expect(row.locator('[data-source="published"]')).toContainText('AIRB, Alberta')
+    // The chip opens the figure's explanation in place, under the row (template v2, §3.5).
+    await row.locator('[data-source="published"]').click()
+    await expect(row.getByTestId('figure-details')).toContainText('maximum profit provision')
+    await expect(row.getByTestId('figure-details')).toContainText('Private passenger vehicles')
+    await expect(row.getByTestId('tool-unchecked')).toBeVisible()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('69%')
+
+    // A number of the reader's own, typed on the sheet's keypad, replaces the figure and its source.
+    await pill.click()
+    const sheet = page.getByTestId('value-sheet')
+    await sheet.getByRole('button', { name: '4', exact: true }).click()
+    await expect(sheet.getByTestId('keypad-entry')).toHaveText('4%')
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(pill).toHaveText('4%')
+    await expect(row.locator('[data-source="yours"]')).toBeVisible()
+    await expect(row.locator('[data-source="published"]')).toHaveCount(0)
+  })
+
+  test('picks a published figure in a template tool\'s edit sheet, and goes back to the default', async ({ page }) => {
+    await page.goto('/tools/permissible-loss-ratio')
+    const card = page.getByTestId('tool-card')
+    await card.getByRole('button', { name: 'Profit & contingency value' }).click()
+    const sheet = page.getByTestId('value-sheet')
+    const figures = sheet.getByTestId('tool-bank-figures')
+    // Level 1, then level 2 in place: what it is, and Use.
+    await figures.getByTestId('figure-line').filter({ hasText: '6.0%' }).click()
+    await expect(figures.getByTestId('figure-details')).toContainText('Your 5% is below this cap.')
+    await figures.getByRole('button', { name: 'Use 6.0%' }).click()
+    await expect(sheet.getByTestId('value-sheet-value')).toHaveText('6%')
+    await expect(figures.getByTestId('figure-in-use')).toBeVisible()
+    await sheet.getByRole('radio', { name: /Back to the default/ }).click()
+    await expect(sheet.getByTestId('value-sheet-value')).toHaveText('5%')
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    // Provenance by exception (v3 §2.4): a value back at its default carries no chip.
+    await expect(card.locator('[data-field="profit"] [data-source]')).toHaveCount(0)
+  })
+
+  // Template v2 (docs/tool-template-v2.md): navigation and connection.
+  test('carries Expense Ratios into Permissible Loss Ratio, arriving linked, and unlinks', async ({ page }) => {
+    await page.goto('/tools/expense-ratios')
+    const card = page.getByTestId('tool-card')
+    // Nothing feeds it; the answer leads with the total, the published total under the bar.
+    await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('28.084%')
+    await expect(card.getByTestId('tool-comparison')).toContainText('27.8%')
+    const gives = card.getByTestId('tool-gives-to')
+    // Two tools: listed open, each with what it would receive.
+    await expect(gives.getByTestId('carried-value').first()).toContainText('F 11.028%')
+    await gives.getByRole('button', { name: 'Open Permissible Loss Ratio' }).click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio\?from=expense-ratios#input=/)
+
+    const plr = page.getByTestId('tool-card')
+    await expect(page.getByTestId('tool-breadcrumb')).toContainText('Expense Ratios')
+    await expect(plr.getByTestId('tool-takes-from')).toContainText('Expense Ratios')
+    const fixed = plr.locator('[data-field="fixed"]')
+    await expect(fixed.locator('[data-source="linked"]')).toContainText('Expense Ratios')
+    await expect(fixed.locator('[data-linked]')).toBeVisible()
+    await fixed.locator('[data-source="linked"]').click()
+    await fixed.getByTestId('link-details').getByRole('button', { name: 'Unlink' }).click()
+    await expect(fixed.locator('[data-source="yours"]')).toBeVisible()
+    // Back through the breadcrumb returns to the tool that sent it.
+    await page.getByTestId('tool-breadcrumb').getByRole('link', { name: 'Expense Ratios' }).click()
+    await expect(page).toHaveURL(/\/tools\/expense-ratios/)
+  })
+
+  test('lists the tools in front of Trend Factor, and the trends the document holds but the bank hasn\'t entered', async ({ page }) => {
+    await page.goto('/tools/trend-factor')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('1.0767')
+    // The three tools are alternatives for the one annual trend: offered on that row, not above the card.
+    await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
+    await expect(card.getByTestId('judgment-legend')).toBeVisible()
+    await expect(card.locator('[data-source="default"]')).toHaveCount(0)
+    await card.getByRole('button', { name: /^Annual trend:/ }).click()
+    await expect(card.getByTestId('take-from').getByRole('button')).toHaveCount(3)
+    await card.getByRole('button', { name: 'Annual trend value' }).click()
+    const sheet = page.getByTestId('value-sheet')
+    await expect(sheet.getByTestId('pending-figure')).toContainText('Loss cost trends, by coverage')
+    await expect(sheet.getByTestId('pending-figure')).toContainText('haven’t been entered here yet')
+  })
+
+  test('opens a long tool\'s inputs in the sheet, and keeps its answer in the title strip once scrolled', async ({ page }) => {
+    // A short phone: every number row is one line until tapped, so the page is short too.
+    await page.setViewportSize({ width: 390, height: 600 })
+    await page.goto('/tools/bond-price')
+    const card = page.getByTestId('tool-card')
+    // Six inputs: no slider until a row is tapped, and then in place; the number opens the keypad.
+    await expect(card.getByRole('slider')).toHaveCount(0)
+    await card.getByRole('button', { name: /^Yield, convertible m-thly: / }).click()
+    await expect(card.getByRole('slider')).toHaveCount(1)
+    await card.getByRole('button', { name: /^Yield, convertible m-thly.* value$/ }).click()
+    const sheet = page.getByTestId('value-sheet')
+    await expect(sheet.getByRole('slider')).toHaveCount(0)
+    for (const k of ['6', 'Point', '5']) await sheet.getByRole('button', { name: k, exact: true }).click()
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(card.getByTestId('tool-tile').first()).not.toHaveText('1,077.95')
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await expect(page.getByTestId('tool-pinned-answer')).toHaveCount(0)
+    await page.mouse.wheel(0, 600)
+    await expect(page.getByTestId('tool-pinned-answer')).toBeVisible()
+  })
+
+  test('offers the bank\'s figures on a field\'s row, and uses one in place', async ({ page }) => {
+    await page.goto('/tools/loss-ratio-method')
+    const card = page.getByTestId('tool-card')
+    const row = card.locator('[data-field="variable"]')
+    await row.getByTestId('published-count').click()
+    const list = row.getByTestId('published-list')
+    await list.getByTestId('figure-line').filter({ hasText: '27.8%' }).click()
+    await list.getByRole('button', { name: 'Use 27.8%' }).click()
+    await expect(card.getByRole('button', { name: /^Variable expense ratio.* value$/ })).toHaveText('27.8%')
+    await expect(row.locator('[data-source="published"]')).toContainText('AIRB, Alberta')
+  })
+
+  test('shows a document\'s figures on its resource page', async ({ page }) => {
+    await page.goto('/tools/assumptions')
+    const set = page.getByTestId('assumption-set').filter({ hasText: 'ULAE factors' })
+    await set.getByRole('button', { name: 'Read the source' }).click()
+    const assumptions = page.getByTestId('resource-assumptions')
+    await expect(assumptions).toBeVisible()
+    await expect(assumptions).toContainText('1.1189')
+  })
+  test('reads an insurer\'s OSFI filing and recomputes its MCT ratio from the filed lines', async ({ page }) => {
+    await page.goto('/tools/insurer-return')
+    const card = page.getByTestId('tool-card')
+    // The insurer is picked from every filer, through the sheet's search.
+    await card.locator('[data-field="insurer"]').click()
+    await page.getByRole('searchbox').fill('intact insurance')
+    await page.getByRole('radio', { name: 'Intact Insurance Company', exact: true }).click()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('191.75%')
+
+    // Its lines go on to MCT Ratio as filed values, and the filing's own ratio sits under the answer.
+    await expect(card.getByTestId('tool-gives-to')).toContainText('MCT Ratio')
+    await card.getByTestId('tool-gives-to').click()
+    await expect(page).toHaveURL(/\/tools\/mct-ratio(\?[^#]*)?#input=/)
+    const mct = page.getByTestId('tool-card')
+    await expect(mct.getByTestId('tool-tile').first()).toHaveText('191.75%')
+    await expect(mct.getByTestId('tool-filed-answer')).toContainText('Filed 191.75% · Intact Insurance Company, Q2 2026')
+    await expect(mct.locator('[data-source="filed"]').first()).toContainText('OSFI · Intact Insurance Company, Q2 2026 · line')
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+
+  // The Ledger template (docs/tool-template-v3.md).
+  test('solves Bond Price for its yield, the price becoming an input', async ({ page }) => {
+    await page.goto('/tools/bond-price')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('1,077.95')
+    await card.getByTestId('tool-solve-for').getByRole('radio', { name: 'Yield' }).click()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('5.348%')
+    await expect(card.locator('[data-field="price"]')).toBeVisible()
+    await expect(card.locator('[data-field="yield"]')).toHaveCount(0)
+    // One line per number, at any count: no slider until a row is tapped.
+    await expect(card.getByRole('slider')).toHaveCount(0)
+  })
+
+  test('shows Bornhuetter-Ferguson in its chain, with its claims choice first and its hidden columns counted', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/tools/bornhuetter-ferguson')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-chain')).toContainText('Development to Ultimate')
+    await expect(card.getByTestId('grid-formulas')).toContainText('(4) Ultimate = (1) Latest + (5) IBNR')
+    const more = card.getByTestId('grid-more-columns')
+    await expect(more).toContainText('more column')
+    // The claims choice comes before the grid it changes the meaning of.
+    const claims = (await card.locator('[data-field="basis"]').boundingBox())!
+    const grid = (await card.getByTestId('grid-formulas').boundingBox())!
+    expect(claims.y).toBeLessThan(grid.y)
+  })
+
+  test('asks Insurer Return its question first, and sets capital against the minimum', async ({ page }) => {
+    await page.goto('/tools/insurer-return')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-data-source')).toContainText('Open Government Licence')
+    const insurer = (await card.locator('[data-field="insurer"]').boundingBox())!
+    const answer = (await card.getByTestId('tool-answer').boundingBox())!
+    expect(insurer.y).toBeLessThan(answer.y)
+    await expect(card.getByTestId('tool-capital')).toContainText('minimum required (line 130)')
+    await expect(card.locator('[data-marked]')).toContainText('140')
+    await expect(card.getByTestId('result-fold')).toContainText('All')
+  })
+
+  test('remembers the tools used last on the catalogue', async ({ page }) => {
+    await page.goto('/tools/bond-price')
+    await expect(page.getByTestId('tool-tile').first()).toHaveText('1,077.95')
+    await page.goto('/tools')
+    await expect(page.getByTestId('tool-recent').first()).toContainText('1,077.95')
+    await page.getByTestId('tool-areas').getByRole('button', { name: 'Credibility' }).click()
+    await expect(page).toHaveURL(/area=credibility/)
+    await expect(page.getByTestId('tool-row')).toHaveCount(3)
   })
 })

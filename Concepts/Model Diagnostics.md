@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b041d91fa93c3e522b4abdda65c507ca444a942beb14eabc65e93f8bf7b946b
+  content_hash: sha256:84dd684dda0d50c62feff9429570007a713bc6ed272a366dad85e3b297c8326b
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.3.3 'Potential Problems' pp.92-99 (PDF 102-109): residual plots, U-shape = non-linearity (Fig 3.9); funnel = heteroscedasticity, log Y remedy (Fig 3.11); outlier with ordinary x has little effect; outlier + high leverage the dangerous combination, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
@@ -23,63 +23,63 @@ verification:
   log: .verify/Concepts/Model Diagnostics.md
 ---
 
-**Model diagnostics** are the plots and statistics used *after* fitting to check whether a model's assumptions hold and, where they fail, how. Summary measures such as [[Deviance]], [[AIC]] and [[R-Squared]] say how well a model fits overall; diagnostics say what is wrong with it — the mean structure, the variance, the distribution, independence, or a few influential points — and so judge its [[Model Fit|quality of fit]].
+**Model Diagnostics** are the plots and statistics used after a model is fitted to check whether its assumptions hold, and which one fails when they do not. They judge the [[Model Fit|quality of fit]] of a model whose overall fit has been measured by [[Deviance|deviance]], [[AIC]] or [[R-Squared|$R^2$]]. A multivariate method such as a [[Generalized Linear Model|GLM]] provides these diagnostics, with standard errors and significance tests, where a one-way analysis provides none. Each assumption has its own diagnostics:
 
-> $$y_i = \hat{y}_i + e_i$$
+| Assumption | Diagnostic | Sign that it fails |
+| --- | --- | --- |
+| Mean structure | Residual plot against the fitted values and against each predictor, marginal model plot, added variable plot | A trend or curvature, or two smooths that separate |
+| Variance | Residual plot against the fitted values, box plots of residuals by group | A spread that changes across the plot |
+| Distribution | QQ plot of the residuals | Points that stray from the straight reference line |
+| Independence | Residuals against time or collection order | Runs of residuals with the same sign |
+| Influence | Leverage, Cook's distance | A record whose removal changes the estimates materially |
 
-- Every observation splits into a [[Fitted Values|fitted value]] and a [[Residual|residual]]. If the model is right, the residuals are structureless noise; diagnostics look for structure left in them, and for observations that bend the fit
-- **Mean structure** (right predictors, right form, right [[Link Function|link]]): a [[Residual Plot]] against the fitted values and against each predictor, where curvature means a missing term or transformation; a [[Marginal Model Plot|marginal model plot]], comparing a smooth of the data with a smooth of the model; an [[Added Variable Plot|added variable plot]], showing one predictor's effect net of all the others
-- **Variance**: a fan in the residuals-versus-fitted plot means the variance changes with the mean. In a GLM, plot Pearson or deviance residuals — if the [[Variance Function|variance function]] is right their spread is roughly constant — and compare the Pearson $\chi^2$ with its degrees of freedom to check the [[Dispersion Parameter|dispersion]]
-- **Distribution**: a [[QQ Plot]] of standardized or deviance residuals; a bent upper tail means the assumed distribution is too light-tailed. Residuals from a count or binary response fall in bands, so they are averaged in bins of fitted value before being read
-- **Independence**: residuals against time or collection order; for a time series, the residual [[Autocorrelation Function|ACF]], which should look like [[White Noise|white noise]]
-- **Influence**: leverage $h_{ii}$ from the [[Hat Matrix|hat matrix]] (flag above about $2(p+1)/n$), studentized residuals (flag beyond about $\pm 3$, see [[Outlier]]), and **Cook's distance**, which combines the two into a scaled measure of how far all the fitted values move when observation $i$ is deleted:
+Each plot has its own page: the [[Residual Plot|residual plot]], the [[Marginal Model Plot|marginal model plot]], the [[Added Variable Plot|added variable plot]] and the [[QQ Plot|QQ plot]]. A plot of [[Pearson Residual|Pearson residuals]] against a candidate variable not in the model shows, by a pattern, that adding the variable would improve the model. An [[Outlier|outlier]] in a residual plot, or residuals that stray from the line of a QQ plot, are signs that the model needs adjusting.
+
+## Remedies for a nonlinear predictor
+
+When a residual plot or a marginal model plot shows that a continuous predictor's effect is not linear, the linear term is replaced by one of three terms:
+
+1. A banded term, which groups the predictor's values into ranges and treats them as levels of a [[Categorical Predictor|categorical predictor]].
+2. A piecewise linear term, which fits a separate slope on each segment of the predictor.
+3. A [[Regression Spline|spline]] term, which fits a smooth curve.
+
+A piecewise linear term with one hinge point $k$ adds to the linear predictor
+
+> $$\beta_1 x + \beta_2 \max(x - k,\, 0)$$
+
+- $x$ is the predictor's value.
+- $\beta_1$ is the slope below $k$, and $\beta_1 + \beta_2$ is the slope above $k$.
+
+> [!example]- A model includes driver age through $\beta_1 x + \beta_2 \max(x - 40, 0)$ with $\hat{\beta}_1 = 0.02$ and $\hat{\beta}_2 = 0.03$. What does the term add to the linear predictor for a driver aged 60? {Example}
+> - The first part is $0.02 \times 60 = 1.2$.
+> - The driver is $60 - 40 = 20$ years past the hinge, so the second part is $0.03 \times 20 = 0.6$.
+> - The term adds $1.2 + 0.6 = 1.8$ to the linear predictor.
+
+## Heteroscedasticity
+
+[[Heteroscedasticity]] is a variance of the errors that is not constant across observations. It is checked by plotting the residuals against the predicted values, against each predictor and by group, for example with side-by-side box plots. When the model's variance function is specified correctly, it absorbs the heteroscedasticity, and the normalized residuals of the refitted model show a roughly constant spread.
+
+## Cook's distance
+
+Cook's distance measures the influence of observation $i$ on the fitted model: how much the parameter estimates change when the observation is removed. For a linear regression with $p$ predictors and an intercept, Cook's distance is
 
 > $$D_i = \frac{r_i^2}{p + 1} \cdot \frac{h_{ii}}{1 - h_{ii}}$$
 
-Here $r_i$ is the standardized residual and $p + 1$ the number of coefficients. A common flag is $D_i > 1$; some texts use $4/n$. Correlated predictors are diagnosed separately, by variance inflation factors ([[Multicollinearity]]).
+- $r_i = \dfrac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}$ is the standardized residual of observation $i$.
+- $h_{ii}$ is the leverage of observation $i$, the $i$th diagonal element of the [[Hat Matrix|hat matrix]] $\mathbf{H}$.
+- $p + 1$ is the number of coefficients, including the intercept.
 
-**Linear mixed models** add diagnostics of their own:
+Written in terms of the residual $e_i$ and the error variance estimate $\hat{\sigma}^2$, Cook's distance is
 
-- **Conditional residuals** (after the [[Best Linear Unbiased Predictor|BLUPs]]) against fitted values and in a QQ plot check the within-group assumptions; side-by-side box plots of residuals by group show whether one residual variance fits every group
-- A **QQ plot of the predicted random effects** checks their assumed normality; a group far off the line is an influential cluster worth investigating
-- Diagnostics are read alongside the fit's [[Summary Statistics|summary statistics]] — likelihood ratio tests, AIC and BIC — to settle the [[Model Structure|model structure]] and [[Variable Selection|variable selection]]
+> $$D_i = \frac{e_i^2}{(p + 1)\,\hat{\sigma}^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2}$$
 
-> [!example]- Outlier or Influential? {Example}
-> A regression with $p + 1 = 5$ coefficients is fitted to $n = 50$ policies. Policy A has leverage $0.30$ and standardized residual $2.1$; policy B has leverage $0.04$ and standardized residual $3.0$. Which one matters more to the fit?
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > D_A &= \frac{2.1^2}{5} \cdot \frac{0.30}{0.70} \\
-> > &= 0.378 \\
-> > D_B &= \frac{3.0^2}{5} \cdot \frac{0.04}{0.96} \\
-> > &= 0.075
-> > \end{align*}
-> > $$
-> > B is the bigger **outlier** — its residual is at the $\pm 3$ flag — but it sits among the other policies' predictor values, so it barely moves the fit. A has triple the average leverage ($5/50 = 0.10$) and a sizeable residual, giving five times B's influence. Neither exceeds $D = 1$, but A exceeds $4/n = 0.08$: refit without it and see whether any coefficient changes enough to matter.
+An observation is classified as influential when $D_i$ exceeds a chosen threshold, often 1. An observation with a leverage near 1 can have a large $D_i$ even with a small residual.
 
-> [!example]- Reading Four Diagnostics for a Severity GLM {Example}
-> A Gamma GLM with a log link models claim severity. What does each finding suggest?
-> 1. Deviance residuals plotted against vehicle age form a U-shape.
-> 2. The marginal model plot for insured value shows the data smooth well above the model smooth for the largest values.
-> 3. The QQ plot of deviance residuals follows the line except for an upper tail bending well above it.
-> 4. The Pearson residuals *narrow* steadily as the fitted values increase.
->
-> > [!answer]-
-> > 1. **Mean structure**: vehicle age enters linearly but its effect is curved. Band it, or add a quadratic term
-> > 2. **Mean structure**: the model under-predicts large risks, so insured value's fitted curve rises too slowly at the top of its range. Give it more flexibility there — a band for the largest values, a polynomial term, or a hinge that lets the slope steepen past a break point — or add an interaction with the variable that separates the large risks. (Logging insured value would trade the raw term's exponential growth for a power curve that rises at a decreasing or only mildly increasing rate — the opposite of what is needed)
-> > 3. **Distribution**: the largest claims are more extreme than a Gamma allows. Check them for data errors, then consider a heavier-tailed response or capping large losses and loading for the excess
-> > 4. **Variance**: Pearson residuals divide by $\sqrt{V(\hat\mu)} = \hat\mu$. If they shrink as $\hat\mu$ grows, the true variance grows *more slowly* than $\mu^2$, so the variance function is too steep for these data
+> [!example]- A regression with 4 predictors and an intercept is fitted to 50 policies. Policy A has leverage 0.30 and standardized residual 2.1. Policy B has leverage 0.04 and standardized residual 3.0. Which policy is more influential? {Example}
+> - For policy A, $D_A = \frac{2.1^2}{5} \times \frac{0.30}{0.70} = 0.378$.
+> - For policy B, $D_B = \frac{3.0^2}{5} \times \frac{0.04}{0.96} = 0.075$.
+> - Policy B has the larger residual, but its low leverage keeps its influence small.
+> - Policy A is more influential, although neither exceeds the threshold of 1.
 
-> [!example]- A Group That Needs Its Own Variance {Example}
-> A random-intercept model of loss ratios has policyholders nested in four regions. Box plots of the conditional residuals by region show one region with roughly twice the spread of the others; the QQ plot of the predicted intercepts is straight. The $-2$ REML log-likelihood is $3{,}412.8$ with one residual variance and $3{,}391.5$ with a separate variance per region. What should be done?
->
-> > [!answer]-
-> > The random intercepts look fine; the problem is a residual variance that is not constant across regions. The two fits have the same fixed effects, so their REML likelihoods can be compared, and the heterogeneous model adds $3$ variance parameters:
-> > $$
-> > \begin{align*}
-> > \text{LRT} &= 3{,}412.8 - 3{,}391.5 \\
-> > &= 21.3
-> > \end{align*}
-> > $$
-> > $21.3 > \chi^2_{0.05,\,3} = 7.81$, so adopt region-specific residual variances. The null hypothesis — equal variances — is not on a boundary, so the ordinary $\chi^2$ reference applies. With the fix, the high-variance region's observations are down-weighted in estimating the fixed effects instead of dominating them.
+> [!trap] Treating a large residual as an influential point
+> A large residual makes an observation an outlier, but its influence also depends on its leverage. An outlier among typical predictor values barely moves the fit, while a high-leverage point with a modest residual can move it a great deal.

@@ -100,7 +100,7 @@ export function QuizResumeButton() {
         >
           <div className="space-y-0.5">
             <h2 id={headingId} className="text-sm font-semibold">
-              {noun === 'exam' ? 'Practice exam in progress' : 'Quiz in progress'}
+              {noun === 'exam' ? 'Practice Exam in progress' : 'Quiz in progress'}
             </h2>
             {consequence && <p className="text-xs text-muted-foreground">{consequence}</p>}
           </div>
@@ -128,25 +128,29 @@ export function QuizResumeButton() {
         aria-haspopup="dialog"
         aria-controls={open ? panelId : undefined}
         className={cn(
-          // A hairline as well as the shadow: it floats over cards of its
-          // own colour, and in the dark theme a shadow alone doesn't part them.
-          'inline-flex h-11 items-center gap-2 rounded-full border border-border bg-card pl-3.5 pr-2 text-sm font-medium text-foreground shadow-lg transition-colors hover:bg-accent',
+          // Ink (style guide §7.0): the one solid object on the page, in the
+          // inverted fill of a committing action — the way back to the quiz.
+          'inline-flex h-12 items-center gap-2.5 rounded-full bg-primary pl-4 pr-2.5 text-[15px] font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
           // Untimed, the count is the last thing in the pill; give it the
           // same breathing room the timer chip has.
-          !timer && 'pr-3.5',
+          !timer && 'pr-5',
         )}
       >
-        <Play className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-        <span>Return to {noun}</span>
-        <span className="tabular-nums text-muted-foreground">
+        <Play className="h-4 w-4 shrink-0 fill-current" aria-hidden />
+        <span>Return to {noun === 'exam' ? 'Practice Exam' : 'quiz'}</span>
+        <span className="h-[18px] w-px bg-primary-foreground/30" aria-hidden />
+        <span className="tabular-nums font-medium opacity-70">
           <span className="sr-only">question </span>
-          {position}
-          <span aria-hidden>/</span>
-          <span className="sr-only"> of </span>
-          {total}
+          {position} of {total}
         </span>
-        {timer && <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />}
+        {/* The timer keeps its own chip, on the page's ground, so its amber and
+            red read in either theme rather than against the inverted fill. */}
+        {timer && (
+          <span className="rounded-full bg-background">
+            <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
+          </span>
+        )}
       </button>
     </div>
   )

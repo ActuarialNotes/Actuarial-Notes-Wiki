@@ -101,10 +101,10 @@ export function ActiveExamCard({
         question: questionMap.get(r.question_id) ?? null,
       }))
       setSessionDetails(prev => new Map(prev).set(sessionId, { loading: false, error: null, items }))
-    } catch (err) {
+    } catch {
       setSessionDetails(prev => new Map(prev).set(sessionId, {
         loading: false,
-        error: err instanceof Error ? err.message : 'Failed to load session details',
+        error: "Couldn't load this quiz's answers. Check your connection and open it again.",
         items: [],
       }))
     }
@@ -220,8 +220,8 @@ export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadE
         <CardContent className="py-8 text-center space-y-3">
           <p className="text-sm font-medium">Couldn&apos;t load the exam list.</p>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            Your progress is safe — the syllabus pages just didn&apos;t come through. Reloading
-            usually fixes it.
+            Your progress is saved. The syllabus pages didn&apos;t load, and reloading usually
+            fixes it.
           </p>
           <Button onClick={() => window.location.reload()}>Reload</Button>
         </CardContent>
@@ -237,10 +237,10 @@ export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadE
             No study material for {unsupportedExams.join(', ')} yet.
           </p>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            {unsupportedExams.length === 1 ? "It's" : "They're"} still tracked on your credential
-            path. Add an exam we cover — P, FM, MAS-I, MAS-II or Exam 5 — to start studying.
+            {unsupportedExams.length === 1 ? "It's" : "They're"} still on your credential track.
+            Add an exam that has study material to start studying.
           </p>
-          <Button onClick={choose}>Add an Exam</Button>
+          <Button onClick={choose}>Add exam</Button>
         </CardContent>
       </Card>
     )
@@ -251,10 +251,9 @@ export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadE
       <CardContent className="py-8 text-center space-y-3">
         <p className="text-sm font-medium">Add the exam you&apos;re studying for.</p>
         <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-          Your concepts, quizzes and progress all hang off it — this dashboard stays empty until
-          there&apos;s one here.
+          The dashboard fills in once you add one.
         </p>
-        <Button onClick={choose}>Add an Exam</Button>
+        <Button onClick={choose}>Add exam</Button>
       </CardContent>
     </Card>
   )

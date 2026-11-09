@@ -1,3 +1,9 @@
+export const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
+
+export function stripFrontmatter(raw: string): string {
+  return raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
+}
+
 export interface WikiConcept {
   name: string     // canonical concept page name (last path segment of target)
   target: string   // raw [[target]] before the | alias

@@ -15,7 +15,7 @@
 // (lib/battleSession.ts); the room carries it (lib/battleRoom.ts). Pure and
 // tested; `battleDraftVault.test.ts` plays it on every raceable exam.
 
-import { otherSeat, type Seat } from './battle'
+import { otherSeat, type BattleConfig, type BattleQuestionKey, type BattleState, type Seat } from './battle'
 import { drawByDifficulty, type DifficultyTarget } from './quizDifficulty'
 import { questionTopics } from './battleTopics'
 export { TOPIC_PICK_MS } from './battleTopics'
@@ -455,6 +455,122 @@ export function dealtOrder(draft: Pick<BattleDraft, 'pairs'>, rounds: number): {
     }))
 }
 
+// ── Running the draft ───────────────────────────────────────────────────────
+// What happens to the draft, as plain functions: the host's session runs them
+// online (lib/battleSession.ts), and a same-screen battle runs them on the one
+// device it is passed around (components/battle/deck/DeckLocal.tsx).
+
+/** A draft with `seat`'s hand locked in. */
+export function withHand(draft: BattleDraft, seat: Seat, hand: string[], levels: number[]): BattleDraft {
+  const hands: BattleDraft['hands'] = [...draft.hands]
+  const levelPair: BattleDraft['levels'] = [...draft.levels]
+  const counts: BattleDraft['counts'] = [...draft.counts]
+  hands[seat] = hand
+  levelPair[seat] = levels
+  counts[seat] = hand.length
+  return { ...draft, hands, levels: levelPair, counts }
+}
+
+/** A draft with `seat`'s count of cards drawn so far. */
+export function withCount(draft: BattleDraft, seat: Seat, count: number): BattleDraft {
+  if (draft.counts[seat] === count) return draft
+  const counts: BattleDraft['counts'] = [...draft.counts]
+  counts[seat] = count
+  return { ...draft, counts }
+}
+
+/** A draft with `seat`'s strike made. */
+export function withStrike(draft: BattleDraft, seat: Seat, topic: string): BattleDraft {
+  const strikes: BattleDraft['strikes'] = [...draft.strikes]
+  strikes[seat] = topic
+  return { ...draft, strikes }
+}
+
+/** One round's question, never one in `used`: on both cards, or on one (see `drawRound`). */
+export type DraftDraw = (cards: readonly [string, string], on: 'both' | string, used: ReadonlySet<string>) =>
+  { key: BattleQuestionKey; basis: RoundBasis; topic: string | null } | null
+
+/**
+ * The deal, once both strikes are in: the six cards left dealt to pairs, each
+ * paired round's question drawn, and a stand-in for each coin round until its
+ * coin is tossed (`settleCoinRound`). The draft comes back in its deal phase,
+ * `DEAL_MS` from `now`, with the battle's questions; null when the bank has
+ * nothing to play on.
+ */
+export function dealDraft(draft: BattleDraft, { rounds: count, read, draw, random, now }: {
+  rounds: number
+  read: ReadPair
+  draw: DraftDraw
+  random: () => number
+  now: number
+}): { draft: BattleDraft; keys: BattleQuestionKey[] } | null {
+  const rows = keptHand(draft, 0)
+  const cols = keptHand(draft, 1)
+  const { grid, pairs } = dealPairs(rows, cols, read, random)
+  const used = new Set<string>()
+  const keys: BattleQuestionKey[] = []
+  const rounds: DraftRound[] = []
+  const plan = roundPairs(pairs.length, count)
+  // Paired rounds first, so no coin round's stand-in can take their question.
+  const paired = new Map<number, NonNullable<ReturnType<DraftDraw>>>()
+  plan.forEach((p, i) => {
+    if (pairs[p].shared === 0) return
+    const drawn = draw(pairs[p].cards, 'both', used)
+    if (!drawn) return
+    used.add(drawn.key.id)
+    paired.set(i, drawn)
+  })
+  for (let i = 0; i < plan.length; i++) {
+    const pair = pairs[plan[i]]
+    const drawn = paired.get(i)
+    if (drawn) {
+      keys.push(drawn.key)
+      rounds.push({ pair: plan[i], paired: true, coin: null, basis: drawn.basis, topic: drawn.topic })
+      continue
+    }
+    // A coin round: a stand-in from the pool until the coin is tossed.
+    const standIn = draw(pair.cards, pair.cards[0], new Set())
+    if (!standIn) break
+    keys.push(standIn.key)
+    rounds.push({ pair: plan[i], paired: false, coin: null, basis: null, topic: null })
+  }
+  if (keys.length === 0) return null
+  return { draft: { ...draft, phase: 'deal', deadline: now + DEAL_MS, rows, cols, grid, pairs, rounds }, keys }
+}
+
+/**
+ * Round `index` has come up: if no question covers its pair, toss the coin
+ * between its two cards, draw the question on the winner, and hold the
+ * count-in back `COIN_MS` so the toss can be watched. Null when there is
+ * nothing to settle (a paired round, or a coin already tossed).
+ */
+export function settleCoinRound(
+  battle: BattleState,
+  draft: BattleDraft,
+  index: number,
+  draw: (config: BattleConfig, cards: readonly [string, string], on: string, used: ReadonlySet<string>) => ReturnType<DraftDraw>,
+  random: () => number,
+): { battle: BattleState; draft: BattleDraft } | null {
+  const round = draft.rounds[index]
+  if (!round || round.paired || round.coin !== null) return null
+  const pair = draft.pairs[round.pair]
+  const coin: Seat = random() < 0.5 ? 0 : 1
+  // Every question already played, and every paired round's still to come.
+  const used = new Set(battle.questions.filter((_, i) => i < index || draft.rounds[i]?.paired).map(q => q.id))
+  const drawn = draw({ ...battle.config }, pair.cards, pair.cards[coin], used)
+  const key = drawn?.key ?? battle.questions[index]
+  const questions = battle.questions.map((q, i) => (i === index ? key : q))
+  const live = battle.rounds[index]
+  const rounds = live
+    ? battle.rounds.map((r, i) => (i === index ? { ...r, questionId: key.id, opensAt: r.opensAt + COIN_MS, deadline: r.deadline + COIN_MS } : r))
+    : battle.rounds
+  const settled: DraftRound = { ...round, coin, basis: drawn?.basis ?? 'any', topic: drawn ? drawn.topic : null }
+  return {
+    battle: { ...battle, questions, rounds },
+    draft: { ...draft, rounds: draft.rounds.map((r, i) => (i === index ? settled : r)) },
+  }
+}
+
 // ── Telling the draft ───────────────────────────────────────────────────────
 
 /** "0 of 4", "3 of 4" — a hand as it is drawn. */
@@ -476,11 +592,13 @@ export function shortTopic(name: string): string {
  * Who struck what, from `viewer`'s seat, the other player first: "Sam struck
  * Pure Premium. You struck Cape Cod Method."
  */
-export function strikeLine(strikes: BattleDraft['strikes'], viewer: Seat, names: readonly [string, string]): string {
+export function strikeLine(strikes: BattleDraft['strikes'], viewer: Seat | null, names: readonly [string, string]): string {
+  // On one screen there is no "you": both players read it, so each is named.
   const other: Seat = viewer === 0 ? 1 : 0
+  const self: Seat = other === 0 ? 1 : 0
   const parts: string[] = []
   if (strikes[other]) parts.push(`${names[other]} struck ${strikes[other]}.`)
-  if (strikes[viewer]) parts.push(`You struck ${strikes[viewer]}.`)
+  if (strikes[self]) parts.push(viewer === null ? `${names[self]} struck ${strikes[self]}.` : `You struck ${strikes[self]}.`)
   return parts.join(' ')
 }
 

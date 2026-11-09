@@ -42,6 +42,8 @@ export function DeckDraftScreen({
   onLock,
   onStrike,
   onLeave,
+  passAndPlay = false,
+  levels: levelsOverride,
 }: {
   snapshot: SessionSnapshot
   catalogue: readonly TopicGroup[]
@@ -49,19 +51,28 @@ export function DeckDraftScreen({
   onLock: () => void
   onStrike: (topic: string) => void
   onLeave: () => void
+  /**
+   * One device passed between the two players (a same-screen battle): each
+   * draws and strikes in turn, so the other player is never "choosing" at the
+   * same time.
+   */
+  passAndPlay?: boolean
+  /** The levels the tiles wear, when they aren't this account's (the second player on one screen). */
+  levels?: ConceptLevels
 }) {
   const draft = snapshot.draft!
-  const levels = useConceptLevels()
+  const accountLevels = useConceptLevels()
+  const levels = levelsOverride ?? accountLevels
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [draft.phase, draft.game])
   return (
     <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 px-5 pb-6 pt-4 lg:min-h-screen">
       <DraftMusic draft={draft} />
       {draft.phase === 'draw' ? (
-        <DrawStep snapshot={snapshot} draft={draft} catalogue={catalogue} levels={levels} onChoose={onChoose} onLock={onLock} onLeave={onLeave} />
+        <DrawStep snapshot={snapshot} draft={draft} catalogue={catalogue} levels={levels} onChoose={onChoose} onLock={onLock} onLeave={onLeave} passAndPlay={passAndPlay} />
       ) : draft.phase === 'strike' ? (
-        <StrikeStep snapshot={snapshot} draft={draft} onStrike={onStrike} onLeave={onLeave} />
+        <StrikeStep snapshot={snapshot} draft={draft} onStrike={onStrike} onLeave={onLeave} passAndPlay={passAndPlay} />
       ) : (
-        <DeckDeal snapshot={snapshot} draft={draft} onLeave={onLeave} />
+        <DeckDeal snapshot={snapshot} draft={draft} onLeave={onLeave} passAndPlay={passAndPlay} />
       )}
     </div>
   )
@@ -132,7 +143,7 @@ function TheirPips({ seat, name, drawn, locked, present }: { seat: Seat; name: s
   )
 }
 
-function DrawStep({ snapshot, draft, catalogue, levels, onChoose, onLock, onLeave }: {
+function DrawStep({ snapshot, draft, catalogue, levels, onChoose, onLock, onLeave, passAndPlay }: {
   snapshot: SessionSnapshot
   draft: BattleDraft
   catalogue: readonly TopicGroup[]
@@ -140,6 +151,7 @@ function DrawStep({ snapshot, draft, catalogue, levels, onChoose, onLock, onLeav
   onChoose: (topics: string[]) => void
   onLock: () => void
   onLeave: () => void
+  passAndPlay: boolean
 }) {
   const me = snapshot.me
   const opp = otherSeat(me)
@@ -184,7 +196,13 @@ function DrawStep({ snapshot, draft, catalogue, levels, onChoose, onLock, onLeav
 
       <div className="flex items-center justify-between gap-3">
         <h1 className="deck-display text-[28px] leading-tight">Draw 4 topics</h1>
-        <TheirPips seat={opp} name={oppName} drawn={draft.counts[opp]} locked={oppLocked} present={snapshot.opponentPresent} />
+        {passAndPlay ? (
+          <span style={playerAccentStyle(me)} className="max-w-[9rem] truncate text-[13px] font-semibold text-[color-mix(in_srgb,var(--player)_40%,white)]" data-testid="battle-turn">
+            {namesOf(snapshot)[me]}’s turn
+          </span>
+        ) : (
+          <TheirPips seat={opp} name={oppName} drawn={draft.counts[opp]} locked={oppLocked} present={snapshot.opponentPresent} />
+        )}
       </div>
 
       <div className="flex flex-col gap-2" style={playerAccentStyle(me)}>
@@ -309,11 +327,12 @@ function TableCard({ seat, name, level, tilt, raised, struck, className, style, 
   )
 }
 
-function StrikeStep({ snapshot, draft, onStrike, onLeave }: {
+function StrikeStep({ snapshot, draft, onStrike, onLeave, passAndPlay }: {
   snapshot: SessionSnapshot
   draft: BattleDraft
   onStrike: (topic: string) => void
   onLeave: () => void
+  passAndPlay: boolean
 }) {
   const me = snapshot.me
   const opp = otherSeat(me)
@@ -442,8 +461,10 @@ function StrikeStep({ snapshot, draft, onStrike, onLeave }: {
         </div>
 
         <span style={playerAccentStyle(opp)} className="mt-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-[color-mix(in_srgb,var(--player)_40%,white)]" aria-live="polite" data-testid="battle-strike-status">
-          {!theyStruck && <span aria-hidden className="deck-blink h-2 w-2 rounded-full bg-[var(--player)]" />}
-          {theyStruck ? `${names[opp]} has struck one of yours` : `${names[opp]} is picking one of yours to strike`}
+          {!theyStruck && !passAndPlay && <span aria-hidden className="deck-blink h-2 w-2 rounded-full bg-[var(--player)]" />}
+          {theyStruck ? `${names[opp]} has struck one of yours`
+            : passAndPlay ? `${names[opp]} strikes one of yours next`
+            : `${names[opp]} is picking one of yours to strike`}
         </span>
 
         <div className="mt-auto flex items-end justify-center gap-1.5 pt-6" aria-label="Your hand">
@@ -461,7 +482,7 @@ function StrikeStep({ snapshot, draft, onStrike, onLeave }: {
             />
           ))}
         </div>
-        <span style={playerAccentStyle(me)} className="text-[13px] font-semibold text-[color-mix(in_srgb,var(--player)_40%,white)]">Your hand</span>
+        <span style={playerAccentStyle(me)} className="text-[13px] font-semibold text-[color-mix(in_srgb,var(--player)_40%,white)]">{passAndPlay ? `${names[me]}’s hand` : 'Your hand'}</span>
       </DeckTable>
 
       <p className="flex h-[58px] items-center justify-center rounded-[18px] border border-[var(--deck-card-edge)] bg-[var(--deck-card)] px-3 text-center text-sm text-[var(--deck-soft)]">
@@ -481,10 +502,12 @@ const BEATS = { pairs: [0.13, 0.22, 0.31], strikes: 0.46, cards: [0.52, 0.55, 0.
  * draft's deadline), and skipped to its last frame with a tap. Held on that
  * frame through the first question's count-in, when `opensAt` is given.
  */
-export function DeckDeal({ snapshot, draft, onLeave, opensAt }: {
+export function DeckDeal({ snapshot, draft, onLeave, opensAt, passAndPlay = false }: {
   snapshot: SessionSnapshot
   draft: BattleDraft
   onLeave: () => void
+  /** Both players reading one screen: each named, nobody "you". */
+  passAndPlay?: boolean
   /** The first question's count-in: the deal stays up, counting it down. */
   opensAt?: number
 }) {
@@ -548,13 +571,13 @@ export function DeckDeal({ snapshot, draft, onLeave, opensAt }: {
         <h1 className="deck-display text-[28px] leading-tight">The deal</h1>
         <div className="relative mt-2 min-h-[60px] text-sm leading-[1.4] text-[var(--deck-soft)]">
           <p className="deal-sub-a absolute inset-x-0 top-0">Each number is how closely the notes connect two of the cards. The three strongest pairs are dealt, and no card is used twice.</p>
-          <p className="deal-sub-b absolute inset-x-0 top-0" data-testid="battle-deal-strikes">{strikeLine(draft.strikes, me, names)}</p>
+          <p className="deal-sub-b absolute inset-x-0 top-0" data-testid="battle-deal-strikes">{strikeLine(draft.strikes, passAndPlay ? null : me, names)}</p>
         </div>
       </div>
 
       <div className="deal-grid flex origin-top flex-col gap-1.5" aria-label="How closely the notes connect each pair of cards" role="table" data-testid="battle-deal-grid">
         <div role="row" className="grid grid-cols-[92px_repeat(3,minmax(0,1fr))] gap-1.5">
-          <span role="columnheader" className="flex items-end text-[11px] font-bold text-[var(--deck-label)]">You ↓ · {names[opp]} →</span>
+          <span role="columnheader" className="flex items-end text-[11px] font-bold text-[var(--deck-label)]">{passAndPlay ? names[me] : 'You'} ↓ · {names[opp]} →</span>
           {cols.map((name, c) => (
             <span key={c} role="columnheader" style={playerAccentStyle(opp)} className="deck-display line-clamp-3 h-14 rounded-[10px] border-2 border-[var(--player)] bg-[var(--player-vivid)] p-[5px] text-[11px] leading-[1.1]">{name}</span>
           ))}

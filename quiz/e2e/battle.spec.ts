@@ -141,6 +141,32 @@ async function draftThrough(a: Page, b: Page) {
   }
 }
 
+/**
+ * The same-screen draft, the phone passed between the two: each draws four
+ * (player 1 from the first tile, player 2 from the fifth), then each strikes
+ * the other's first card, a pass screen between every turn. Returns the hands.
+ */
+async function passAndDraft(page: Page, names: readonly [string, string]): Promise<[string[], string[]]> {
+  const hands: string[][] = []
+  for (const [seat, from] of [[0, 0], [1, 4]] as const) {
+    await expect(page.getByTestId('battle-pass')).toContainText(`Pass to ${names[seat]}`)
+    await page.getByTestId('battle-pass-ready').click()
+    await expect(page.getByTestId('battle-turn')).toHaveText(`${names[seat]}’s turn`)
+    hands.push(await drawHandAndLock(page, { from }))
+  }
+  for (const seat of [0, 1] as const) {
+    await expect(page.getByTestId('battle-pass')).toContainText(`Pass to ${names[seat]}`)
+    await page.getByTestId('battle-pass-ready').click()
+    await expect(page.getByTestId('battle-strike')).toBeVisible()
+    // The other player's hand is on the table; their strike, if made, is not.
+    await expect(page.getByTestId('battle-strike-theirs').getByTestId('battle-strike-card')).toHaveCount(4)
+    await page.getByTestId('battle-strike-card').first().click()
+    await page.getByTestId('battle-discard').click()
+  }
+  await expect(page.getByTestId('battle-deal')).toBeVisible()
+  return [hands[0], hands[1]]
+}
+
 /** Each concept the bank tags, with every concept a question tags it beside — all questions, or only those a battle races. */
 function coTags(raceable: boolean): Map<string, Set<string>> {
   const root = fileURLToPath(new URL('../../questions/exam-fm/', import.meta.url))
@@ -253,10 +279,12 @@ test.describe('quiz battle', () => {
   })
 
   test('plays a same-screen battle to the end: buzz, miss, steal, results, rematch', async ({ page }) => {
+    // Two drafts (each with its deal) and a battle: longer than the default.
+    test.setTimeout(120_000)
     await page.goto('/battle')
     await skipIntro(page)
     await startMode(page, 'local')
-    // The players sit at either end of the phone: player 2's half is turned to face them.
+    // The players' names, one half of the phone each.
     await page.getByTestId('battle-name-0').fill('Ada')
     await page.getByTestId('battle-name-1').fill('Sam')
     await page.getByTestId('battle-settings').click()
@@ -265,7 +293,10 @@ test.describe('quiz battle', () => {
     await page.getByRole('button', { name: 'Done' }).click()
     await page.getByTestId('battle-begin').click()
 
-    await expect(page.getByTestId('battle-countdown')).toBeVisible()
+    // The draft, passed between the two, then the deal shown to both.
+    const [ada, sam] = await passAndDraft(page, ['Ada', 'Sam'])
+    await expect(page.getByTestId('battle-deal-strikes')).toHaveText(`Ada struck ${sam[0]}. Sam struck ${ada[0]}.`)
+    await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
 
     for (let round = 0; round < 3; round++) {
       const { right, wrong } = await currentQuestion(page)
@@ -293,8 +324,11 @@ test.describe('quiz battle', () => {
     await page.getByTestId('battle-review').click()
     await expect(page.getByRole('region', { name: 'Review questions' }).locator('li')).toHaveCount(3)
 
+    // A rematch drafts again.
     await page.getByTestId('battle-rematch').click()
-    await expect(page.getByTestId('battle-countdown')).toBeVisible()
+    await passAndDraft(page, ['Ada', 'Sam'])
+    await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
+    await currentQuestion(page)
     await expect(page.getByTestId('battle-score-0')).toHaveText('0')
   })
 

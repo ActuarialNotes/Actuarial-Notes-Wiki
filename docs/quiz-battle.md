@@ -97,7 +97,7 @@ difficulty, the names and the exam last asked for in the lobby, so the next
 battle opens where the last one left off — and the music switch
 (`actuarial-notes-battle-music`).
 
-## The draft: what an online battle is played on
+## The draft: what a battle is played on
 
 Before an online battle's first question — a room's, a matched one's, and every
 rematch's, on either skin — the two players **draft** (`docs/quiz-battle-redesign.md`
@@ -153,8 +153,17 @@ the draft is `lib/battleDraft.ts`. Both pure and tested.
 How often a coin decides depends on the bank: measured, on random hands, most rounds
 (71% on Exam P, 89% on MAS-I — `docs/quiz-battle-redesign.md` §4).
 
-The **same-screen** battle has no draft (O5): two players at one device would see
-each other's hands, and the buzzer race is drawn from the whole exam as before.
+The **same-screen** battle on the Deck drafts too, with the phone **passed between
+the two** (O5, changed 2026-11-09 at the maintainer's request): player 1 draws, hands
+the phone over, player 2 draws; then player 1 strikes, player 2 strikes, and the deal
+is played to both. A pass screen (*Pass to Sam*, *I'm Sam*) stands between every
+turn and each turn's clock starts only when it is tapped, so neither player sees the
+other's hand or strike before the deal shows them. The rules are the online draft's,
+run on the one device: `dealDraft` and `settleCoinRound` in `lib/battleDraft.ts` are
+the host session's deal and coin toss, shared (`LocalDraft` in `DeckLocal.tsx`).
+Player 2 has no account on the device, so their tiles and cards wear no level. A
+rematch drafts again; a deal with nothing to play on falls back to the whole
+exam's draw. Monte Carlo Station's same-screen battle (`LocalBattle`) has no draft.
 
 ## How it's built
 
@@ -384,12 +393,12 @@ says which.
   fills, then *Start battle*. *Join* is four empty card slots to type the code into,
   and the name to sit under. The friend's view is the room with its settings, waiting
   for the host.
-- **Same screen** (`DeckLocal`): the phone split for two people facing each other —
-  player 2's half turned 180° at the top, player 1's at the foot, each with their card
-  and name — and a middle strip with back, **Deal**, and the settings chip (exam,
-  length, time, difficulty). In the battle each half is that player's buzzer: tap
-  anywhere on it to buzz, and it becomes their answer pad, turned to face them. **A**
-  and **L** still buzz from a keyboard.
+- **Same screen** (`DeckLocal`): the phone split in two, both halves right side up —
+  player 2's at the top, player 1's at the foot, each with their card and name — and
+  a middle strip with back, **Deal**, and the settings chip (exam, length, time,
+  difficulty). **Deal** opens the pass-the-phone draft (above). In the battle each half
+  is that player's buzzer: tap anywhere on it to buzz, and it becomes their answer
+  pad. **A** and **L** still buzz from a keyboard.
 - **Draw 4** (`DeckDraft`): the step header **Draw · Strike · Deal** and the clock;
   *Draw 4 topics* and the other player's hand as face-down pips filling as they draw;
   your hand as four slots (*Your hand · 3 of 4*); the exam's topics as flashcard tiles

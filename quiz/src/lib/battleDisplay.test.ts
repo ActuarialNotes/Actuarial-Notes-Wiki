@@ -155,6 +155,8 @@ describe('the draft', () => {
   it('says who struck what, the other player first', () => {
     expect(strikeLine(['Cape Cod Method', 'Pure Premium'], 0, NAMES)).toBe('Bo struck Pure Premium. You struck Cape Cod Method.')
     expect(strikeLine(['Cape Cod Method', null], 1, NAMES)).toBe('Ada struck Cape Cod Method.')
+    // One screen: both named, no "you".
+    expect(strikeLine(['Cape Cod Method', 'Pure Premium'], null, NAMES)).toBe('Ada struck Cape Cod Method. Bo struck Pure Premium.')
   })
 
   it('names a pair, joined by what settles it', () => {

@@ -110,8 +110,9 @@ seat fills. *Join* is four empty card slots to type into.
 
 ### 3.5 Same screen: seat the players
 
-The phone is split for two people facing each other. The top half is turned 180° for player 2
-(fuchsia) and the bottom half is player 1 (sky). Each half has the player's card, a name field,
+The phone is split in two, both halves right side up (the top half was once turned 180° for
+player 2; changed 2026-11-09): the top half is player 2 (fuchsia) and the bottom half is player 1
+(sky). Each half has the player's card, a name field,
 and *Tap anywhere on this half to buzz*. The middle strip has back, **Deal**, and a settings
 chip (exam, length).
 
@@ -206,7 +207,7 @@ more.* Then **Around you**: the players either side of you, each with their tier
 ## 4. The pairs rules (phase 2)
 
 This replaces today's "pick up to 3, drawn in turns" (`drawFromTopics`) for **online** battles.
-The same-screen battle keeps no draft (O5).
+The same-screen battle drafts with the phone passed between the two (O5, changed 2026-11-09).
 
 1. **Draw.** Each player locks in a hand of exactly 4 topics from `topicCatalogue` within
    `TOPIC_PICK_MS`. If the clock runs out on a short hand, it is topped up at random from the
@@ -403,7 +404,7 @@ Each has a default to build with until the maintainer decides.
 | O2 | Rooms longer than 3 rounds | The pairs repeat, each with a new question |
 | O3 | A strike not made in time | The other player's highest-levelled card |
 | O4 | The same concept in both hands | Allowed; it may pair with itself |
-| O5 | A draft on the same screen | None, as today (each player would see the other's hand) |
+| O5 | A draft on the same screen | Pass the phone between turns, a pass screen between each (decided 2026-11-09; was: none) |
 | O6 | The tier bands | §5.3's placeholders |
 | O7 | *Tap a battle to see its questions* | Phase 3 builds it from the stored question ids; drop the line if it doesn't |
 | O8 | Lobby browsing for signed-out readers | Yes, with no levels shown |

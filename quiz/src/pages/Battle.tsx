@@ -404,7 +404,7 @@ function BattlePage({
   // How closely two topics pair — Concept Craft's strength, read off the
   // pages (fetched once a room is hosted) and the whole bank — and the battle
   // questions that test both. Each pair read once per exam.
-  const conceptPage = useConceptPages(screen.kind === 'host')
+  const conceptPage = useConceptPages(screen.kind === 'host' || (skin.deck && screen.kind === 'local'))
   const playerLevel = usePlayerLevel()
   const pairFor = useMemo(() => {
     const graphQuestions = filterQuestions([...questions], {}).map(q => ({ id: q.id, links: q.wiki_link }))
@@ -437,6 +437,14 @@ function BattlePage({
       level: playerLevel,
     }
   }
+  // One screen's draft keeps one source for the whole battle, so its
+  // callbacks stay put while the questions play.
+  const localDifficulty = screen.kind === 'local' ? screen.difficulty : null
+  const localTopics = useMemo(
+    () => topicsFor(localDifficulty ?? 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [localDifficulty, catalogueFor, pairFor, questions, playerLevel],
+  )
 
   function player(seat: 0 | 1, avatarUrl?: string): BattlePlayer {
     return { name: cleanPlayerName(effectiveSetup.names[seat], DEFAULT_PLAYER_NAMES[seat]), ...(avatarUrl ? { avatarUrl } : {}) }
@@ -509,6 +517,8 @@ function BattlePage({
         config={screen.config}
         players={screen.players}
         draw={drawFor(screen.config, screen.difficulty)}
+        topics={localTopics}
+        catalogue={catalogueFor(screen.config.exam)}
         questionsById={questionsById}
         onSettings={() => setScreen({ kind: 'setup', mode: 'local' })}
         onExit={home}

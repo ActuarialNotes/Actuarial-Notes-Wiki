@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { DeckBackButton, DeckChoice, DeckSheet, ExamDeckIcon, LeaveButton, PlayerCard, DeckPrimaryButton, DeckSecondaryButton } from '@/components/battle/deck/DeckParts'
-import { DeckCountdown, DeckQuestionCard } from '@/components/battle/deck/DeckQuestionCard'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { DeckBackButton, DeckChoice, DeckSheet, ExamDeckIcon, LeaveButton, PlayerCard, DeckPrimaryButton, DeckSecondaryButton, StepHeader } from '@/components/battle/deck/DeckParts'
+import { DeckCountdown, DeckQuestionCard, PairChips } from '@/components/battle/deck/DeckQuestionCard'
+import { DeckCoinFlip } from '@/components/battle/deck/DeckCoinFlip'
+import { DeckDeal, DeckDraftScreen } from '@/components/battle/deck/DeckDraft'
 import { DeckResults } from '@/components/battle/deck/DeckResults'
 import { RoundResult } from '@/components/battle/BattleActionBar'
 import { useBattleMusic, useLocalBattle, useNow } from '@/hooks/useBattle'
@@ -11,6 +13,7 @@ import {
   MAX_NAME_LENGTH,
   ROUND_COUNTS,
   ROUND_TIME_PRESETS,
+  battleReducer,
   createBattle,
   currentRound,
   isFinalRound,
@@ -24,19 +27,46 @@ import {
 import { DEFAULT_PLAYER_NAMES, answerFor, battleExamName, battleMusicIntensity, playerAccentStyle, signedPoints } from '@/lib/battleDisplay'
 import { deckRoundLabel } from '@/lib/battleDeck'
 import { BATTLE_DIFFICULTIES, type BattleSetup } from '@/lib/battleSetup'
-import { questionTopics } from '@/lib/battleTopics'
+import { catalogueTopics, questionTopics, type TopicGroup } from '@/lib/battleTopics'
+import {
+  STRIKE_MS,
+  TOPIC_PICK_MS,
+  autoStrike,
+  cleanHand,
+  cleanLevel,
+  dealDraft,
+  emptyDraft,
+  isCoinRound,
+  redactDraft,
+  roundChips,
+  roundTopics,
+  settleCoinRound,
+  topUpHand,
+  withCount,
+  withHand,
+  withStrike,
+  type BattleDraft,
+} from '@/lib/battleDraft'
+import type { DraftSource, SessionSnapshot } from '@/lib/battleSession'
+import type { ConceptLevels } from '@/hooks/useConceptLevels'
 import type { Question } from '@/lib/parser'
 import { formatClock } from '@/lib/quizTiming'
 import { cn } from '@/lib/utils'
 
-// **Same screen** (docs/quiz-battle-redesign.md §3.5): the phone split for two
-// people facing each other — player 2's half turned 180° at the top, player 1's
-// at the foot — and in the battle each half is that player's buzzer: tap
-// anywhere on it to buzz, and it becomes their answer pad. The **A** and **L**
-// keys still buzz from a keyboard. The rules are the buzzer rules they always
-// were (lib/battle.ts).
+// **Same screen** (docs/quiz-battle-redesign.md §3.5): the phone split in two,
+// both halves right side up — player 2's at the top, player 1's at the foot —
+// and in the battle each half is that player's buzzer: tap anywhere on it to
+// buzz, and it becomes their answer pad. The **A** and **L** keys still buzz
+// from a keyboard. The rules are the buzzer rules they always were
+// (lib/battle.ts).
+//
+// Before the questions comes the draft, as online — passed between the two:
+// player 1 draws four topics, hands the phone over, player 2 draws theirs;
+// then each strikes one of the other's in turn, and the deal is played to
+// both. A pass screen stands between every turn, so neither sees the other's
+// hand or strike before the deal shows them (`LocalDraft`).
 
-/** The half of the phone a player sits at: theirs, in their colour, turned to face them. */
+/** The half of the phone a player sits at: theirs, in their colour. */
 function Half({ seat, children, className, ...button }: {
   seat: Seat
   children: ReactNode
@@ -44,7 +74,7 @@ function Half({ seat, children, className, ...button }: {
 } & ({ onTap?: () => void; disabled?: boolean; label?: string; testid?: string })) {
   const style = playerAccentStyle(seat)
   const body = (
-    <div className={cn('flex h-full w-full flex-col items-center justify-center gap-3 px-5', seat === 1 && 'rotate-180')}>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-5">
       {children}
     </div>
   )
@@ -266,32 +296,206 @@ function PlayerHalf({ battle, seat, onBuzz, onAnswer }: {
   )
 }
 
-/** A battle on one screen, under buzzer rules. */
+// ── The draft, passed between the two ───────────────────────────────────────
+
+/** Where the draft stands: a hand-over between turns, a player's turn, or the deal. */
+type DraftTurn =
+  | { step: 'pass'; seat: Seat; next: 'draw' | 'strike'; draft: BattleDraft }
+  | { step: 'draw'; seat: Seat; draft: BattleDraft; choice: string[] }
+  | { step: 'strike'; seat: Seat; draft: BattleDraft }
+  | { step: 'deal'; draft: BattleDraft; keys: BattleQuestionKey[] }
+
+/** The second player has no account on this device, so their tiles wear no level. */
+const NO_LEVELS: ConceptLevels = { levelOf: () => 'new', isCollected: () => true }
+
+/**
+ * The draft's screens read a room's snapshot; on one screen there is no room,
+ * so this is the same picture drawn for whoever holds the phone.
+ */
+function localSnapshot(me: Seat, players: [BattlePlayer, BattlePlayer], config: BattleConfig, draft: BattleDraft, battle: BattleState | null, topicChoice: string[] = []): SessionSnapshot {
+  return {
+    role: 'host', code: '', me, stage: battle ? 'playing' : 'drafting', connection: 'open',
+    players, config, battle, opponentPresent: true, rematch: [false, false], reactions: [],
+    problem: null, pendingAnswer: null, pendingPower: null, draft, topicChoice,
+  }
+}
+
+/** Between turns: the phone goes to `seat`, who taps once it is theirs. */
+function PassScreen({ seat, players, next, onReady, onLeave }: {
+  seat: Seat
+  players: [BattlePlayer, BattlePlayer]
+  next: 'draw' | 'strike'
+  onReady: () => void
+  onLeave: () => void
+}) {
+  const name = players[seat].name
+  const other = players[seat === 0 ? 1 : 0].name
+  return (
+    <div style={playerAccentStyle(seat)} className="flex h-[calc(100dvh-3.5rem)] flex-col gap-4 bg-[color-mix(in_srgb,var(--player-vivid)_22%,var(--deck-ground))] px-5 pb-6 pt-4 lg:h-screen" data-testid="battle-pass">
+      <StepHeader steps={['Draw', 'Strike', 'Deal']} current={next === 'draw' ? 0 : 1} aside={<LeaveButton onLeave={onLeave} />} />
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
+        <PlayerCard seat={seat} player={players[seat]} style={{ width: 92, height: 128 }} />
+        <h1 className="deck-display text-[28px] leading-tight">Pass to {name}</h1>
+        <p className="max-w-[18rem] text-[15px] text-[color-mix(in_srgb,var(--player)_35%,white)]">
+          {next === 'draw' ? `Draw 4 topics while ${other} looks away.` : `Strike one of ${other}’s cards while ${other} looks away.`}
+        </p>
+      </div>
+      <DeckPrimaryButton onClick={onReady} data-testid="battle-pass-ready">I’m {name}</DeckPrimaryButton>
+    </div>
+  )
+}
+
+/**
+ * The draft on one phone: each player draws in turn, each strikes in turn,
+ * then the deal. The rules and the clocks are the online draft's
+ * (lib/battleDraft.ts); only the turns are taken one after the other.
+ */
+function LocalDraft({ game, config, players, topics, catalogue, onDealt, onLeave }: {
+  game: number
+  config: BattleConfig
+  players: [BattlePlayer, BattlePlayer]
+  topics: DraftSource
+  catalogue: readonly TopicGroup[]
+  /** The deal is over: play these questions on this draft — or, with none, the bank had nothing to deal. */
+  onDealt: (draft: BattleDraft | null, keys: BattleQuestionKey[]) => void
+  onLeave: () => void
+}) {
+  const [turn, setTurn] = useState<DraftTurn>(() => ({ step: 'pass', seat: 0, next: 'draw', draft: emptyDraft(game, 0) }))
+  const offered = useMemo(() => catalogueTopics(catalogue).map(t => t.name), [catalogue])
+
+  const deal = useCallback((draft: BattleDraft) => {
+    const dealt = dealDraft(draft, {
+      rounds: config.rounds,
+      read: topics.pair(config.exam),
+      draw: (cards, on, used) => topics.draw(config, cards, on, used),
+      random: Math.random,
+      now: Date.now(),
+    })
+    if (!dealt) onDealt(null, [])
+    else setTurn({ step: 'deal', draft: dealt.draft, keys: dealt.keys })
+  }, [config, topics, onDealt])
+
+  const lock = useCallback((seat: Seat, draft: BattleDraft, choice: readonly string[]) => {
+    const hand = topUpHand(cleanHand(choice, offered), offered)
+    // The account's levels are player 1's; player 2's cards are held at none.
+    const levels = hand.map(t => (seat === 0 ? cleanLevel(topics.level?.(t)) : 0))
+    const next = withHand(draft, seat, hand, levels)
+    if (seat === 0) setTurn({ step: 'pass', seat: 1, next: 'draw', draft: next })
+    else setTurn({ step: 'pass', seat: 0, next: 'strike', draft: { ...next, phase: 'strike' } })
+  }, [offered, topics])
+
+  const strike = useCallback((seat: Seat, draft: BattleDraft, topic: string) => {
+    const target: Seat = seat === 0 ? 1 : 0
+    const card = draft.hands[target]?.find(t => t.toLowerCase() === topic.trim().toLowerCase())
+    if (!card) return
+    const next = withStrike(draft, seat, card)
+    if (seat === 0) setTurn({ step: 'pass', seat: 1, next: 'strike', draft: next })
+    else deal(next)
+  }, [deal])
+
+  // Out of time: the hand goes in as it stands, topped up; a strike not made
+  // is made for the player, as online (`autoStrike`).
+  const live = turn.step === 'draw' || turn.step === 'strike' || turn.step === 'deal'
+  const now = useNow(live, 250)
+  const timedOut = useRef<DraftTurn | null>(null)
+  useEffect(() => {
+    if (!live || now < turn.draft.deadline || timedOut.current === turn) return
+    timedOut.current = turn
+    if (turn.step === 'draw') lock(turn.seat, turn.draft, turn.choice)
+    else if (turn.step === 'strike') {
+      const target: Seat = turn.seat === 0 ? 1 : 0
+      strike(turn.seat, turn.draft, autoStrike(turn.draft.hands[target] ?? [], turn.draft.levels[target]))
+    } else if (turn.step === 'deal') onDealt(turn.draft, turn.keys)
+  }, [live, now, turn, lock, strike, onDealt])
+
+  if (turn.step === 'pass') {
+    const ready = () => {
+      const ms = turn.next === 'draw' ? TOPIC_PICK_MS : STRIKE_MS
+      const draft = { ...turn.draft, deadline: Date.now() + ms }
+      setTurn(turn.next === 'draw' ? { step: 'draw', seat: turn.seat, draft, choice: [] } : { step: 'strike', seat: turn.seat, draft })
+    }
+    return <PassScreen seat={turn.seat} players={players} next={turn.next} onReady={ready} onLeave={onLeave} />
+  }
+
+  const me: Seat = turn.step === 'deal' ? 0 : turn.seat
+  const shown = turn.step === 'deal' ? turn.draft : redactDraft(turn.draft, me)
+  const snapshot = localSnapshot(me, players, config, shown, null, turn.step === 'draw' ? turn.choice : [])
+  return (
+    <DeckDraftScreen
+      snapshot={snapshot}
+      catalogue={catalogue}
+      passAndPlay
+      levels={me === 1 ? NO_LEVELS : undefined}
+      onChoose={next => {
+        if (turn.step !== 'draw') return
+        const choice = cleanHand(next, offered)
+        setTurn({ ...turn, choice, draft: withCount(turn.draft, turn.seat, choice.length) })
+      }}
+      onLock={() => { if (turn.step === 'draw') lock(turn.seat, turn.draft, turn.choice) }}
+      onStrike={topic => { if (turn.step === 'strike') strike(turn.seat, turn.draft, topic) }}
+      onLeave={onLeave}
+    />
+  )
+}
+
+// ── The battle ──────────────────────────────────────────────────────────────
+
+/** A battle on one screen, under buzzer rules, dealt from a draft passed between the two. */
 export function DeckLocalBattle({
   config,
   players,
   draw,
+  topics,
+  catalogue,
   questionsById,
   onSettings,
   onExit,
 }: {
   config: BattleConfig
   players: [BattlePlayer, BattlePlayer]
+  /** The whole exam's draw — what a battle is played on when the draft has nothing to deal. */
   draw: () => BattleQuestionKey[]
+  /** Where the draft's topics, pairs and questions come from. */
+  topics: DraftSource
+  /** The exam's topics, grouped as its syllabus groups them. */
+  catalogue: readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
   onSettings: () => void
   onExit: () => void
 }) {
   const { battle, dispatch } = useLocalBattle()
-  const start = useCallback(() => {
-    const questions = draw()
-    if (questions.length === 0) return
-    dispatch({ type: 'reset', state: createBattle({ config, players, questions, now: Date.now() }) })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(() => { start() }, [start])
+  // Which draft this is (a rematch drafts again), and the one the battle was dealt from.
+  const [game, setGame] = useState(1)
+  const [drafting, setDrafting] = useState(true)
+  const [draft, setDraft] = useState<BattleDraft | null>(null)
 
-  const round = battle ? currentRound(battle) : null
+  const coinDraw = useCallback(
+    (cfg: BattleConfig, cards: readonly [string, string], on: string, used: ReadonlySet<string>) => topics.draw(cfg, cards, on, used),
+    [topics],
+  )
+
+  const dealt = useCallback((dealtDraft: BattleDraft | null, keys: BattleQuestionKey[]) => {
+    const questions = keys.length > 0 ? keys : draw()
+    if (questions.length === 0) return
+    let state = createBattle({ config, players, questions, now: Date.now() })
+    let used = keys.length > 0 ? dealtDraft : null
+    if (used) {
+      const settled = settleCoinRound(state, used, 0, coinDraw, Math.random)
+      if (settled) { state = settled.battle; used = settled.draft }
+    }
+    setDraft(used)
+    setDrafting(false)
+    dispatch({ type: 'reset', state })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config, players, draw, coinDraw])
+
+  const rematch = () => {
+    setGame(g => g + 1)
+    setDraft(null)
+    setDrafting(true)
+  }
+
+  const round = battle && !drafting ? currentRound(battle) : null
   const phase = round?.phase ?? null
 
   // The cues are the same-screen battle's: `launch` then `go`, the climb on a
@@ -313,7 +517,7 @@ export function DeckLocalBattle({
   }, [round])
 
   const now = useNow(phase === 'open', 500)
-  useBattleMusic(battle && !battle.finished ? battleMusicIntensity(battle, now) : null)
+  useBattleMusic(battle && !drafting && !battle.finished ? battleMusicIntensity(battle, now) : null)
 
   const buzz = (seat: Seat) => {
     if (round?.phase !== 'open' || round.lockedOut.includes(seat)) return
@@ -324,7 +528,17 @@ export function DeckLocalBattle({
     if (!round?.floor) return
     dispatch({ type: 'answer', seat: round.floor.seat, choice, now: Date.now() })
   }
-  const next = () => dispatch({ type: 'next', now: Date.now() })
+  const next = () => {
+    if (!battle) return
+    let state = battleReducer(battle, { type: 'next', now: Date.now() })
+    if (state === battle) return
+    // A new round has come up: a coin round tosses its coin now.
+    if (draft && state.rounds.length > battle.rounds.length) {
+      const settled = settleCoinRound(state, draft, state.rounds.length - 1, coinDraw, Math.random)
+      if (settled) { state = settled.battle; setDraft(settled.draft) }
+    }
+    dispatch({ type: 'reset', state })
+  }
   const optionAt = (i: number) => () => {
     if (!battle || !round || round.phase !== 'buzzed') return
     const option = battle.questions[round.index].options[i]
@@ -338,15 +552,19 @@ export function DeckLocalBattle({
     l: () => buzz(1), L: () => buzz(1),
     '1': optionAt(0), '2': optionAt(1), '3': optionAt(2), '4': optionAt(3), '5': optionAt(4),
     Enter: () => { if (phase === 'revealed') next() },
-  }, !!battle && !battle.finished)
+  }, !!battle && !drafting && !battle.finished)
 
   const topicsOf = useCallback((index: number): string[] => {
+    if (draft) return roundTopics(draft, index)
     const id = battle?.rounds[index]?.questionId
     const q = id ? questionsById.get(id) : undefined
     const first = q ? questionTopics(q)[0] : undefined
     return first ? [first] : []
-  }, [battle, questionsById])
+  }, [battle, draft, questionsById])
 
+  if (drafting) {
+    return <LocalDraft key={game} game={game} config={config} players={players} topics={topics} catalogue={catalogue} onDealt={dealt} onLeave={onExit} />
+  }
   if (!battle || !round) return null
 
   if (battle.finished) {
@@ -356,10 +574,22 @@ export function DeckLocalBattle({
         questionsById={questionsById}
         me={0}
         topicsOf={topicsOf}
-        primary={{ label: 'Rematch', onClick: start, testid: 'battle-rematch' }}
+        primary={{ label: 'Rematch', onClick: rematch, testid: 'battle-rematch' }}
         secondary={{ label: 'Change settings', onClick: onSettings }}
         onLeave={onExit}
       />
+    )
+  }
+
+  const chips = roundChips(draft, round.index, 0)
+  const topicChip = chips ? <PairChips chips={chips} /> : null
+  const coin = phase === 'countdown' && isCoinRound(draft, round.index)
+  // The first question's count-in is the deal's last frame, counting down.
+  if (phase === 'countdown' && round.index === 0 && !coin && draft) {
+    return (
+      <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col gap-4 px-5 pb-6 pt-4 lg:min-h-screen">
+        <DeckDeal snapshot={localSnapshot(0, players, config, draft, battle)} draft={draft} onLeave={onExit} opensAt={round.opensAt} passAndPlay />
+      </div>
     )
   }
 
@@ -377,8 +607,15 @@ export function DeckLocalBattle({
           <LeaveButton onLeave={onExit} />
           <span className="text-xs font-semibold text-[var(--deck-label)]">{battleExamName(battle.config.exam)} · first to buzz answers</span>
         </div>
-        {phase === 'countdown' ? (
-          <DeckCountdown label={label} final={final} opensAt={round.opensAt} />
+        {coin && draft ? (
+          <DeckCoinFlip battle={battle} draft={draft} index={round.index} me={0} opensAt={round.opensAt} />
+        ) : phase === 'countdown' ? (
+          <DeckCountdown
+            label={label}
+            final={final}
+            opensAt={round.opensAt}
+            topic={topicChip ? <span className="flex justify-center" data-testid="battle-countdown-topic">{topicChip}</span> : null}
+          />
         ) : question ? (
           <div className="paper-sheet">
             <DeckQuestionCard
@@ -387,6 +624,7 @@ export function DeckLocalBattle({
               players={battle.players}
               label={label}
               final={final}
+              topic={topicChip}
               clock={phase === 'open' ? { opensAt: round.opensAt, deadline: round.deadline, running: true } : null}
               picker={phase === 'buzzed' ? round.floor?.seat ?? null : null}
               onPick={answer}

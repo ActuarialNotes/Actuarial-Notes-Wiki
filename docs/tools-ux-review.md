@@ -324,3 +324,18 @@ missing `next`s in §3.7; the bank's expense kinds split into fixed / variable /
    tool, a "Solve for" choice), or is each direction its own tool under R9?
 4. **The figure**: may a tool page's figure carry axes and a tap-to-read value (relaxing R11 on the
    page while the miniature stays bare)?
+
+### 7.1 Answers (2026-11-09)
+
+1. **Sliders**: every number row is one line; tapping it opens its slider under it, at any input count.
+2. **Provenance by exception**: yes. Nothing is shown for a default; ◆ stays on judgments.
+3. **Inverse solving**: yes. A tool solves for any one of its unknowns (a "Solve for" choice), as one tool.
+4. **The figure**: yes. A tool page's figure may carry axes and a tap-to-read value; the catalogue miniature stays bare.
+
+Three directions for the redesign were drawn on four pages (Bond Price, Bornhuetter-Ferguson,
+Insurer Return, the catalogue), all following these answers:
+<https://claude.ai/artifact/JvrVpKhnY4aRGgLRcDRt8p>. **A, Ledger**: today's page made steady,
+with a Solve-for strip on the answer card. **B, Sentence**: the inputs are blanks in one sentence
+that reads like the exam question; origin grids become one card per origin. **C, Worksheet**: one
+two-column table of inputs and outputs, the unknown marked in it, the answer in a bar fixed to the
+bottom of the screen.

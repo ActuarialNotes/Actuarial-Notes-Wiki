@@ -163,6 +163,30 @@ export function ToolFigure({
           {!compact && (figure.xTicks ?? []).map(t => (
             <text key={t.label} x={x(t.x)} y={H - 4} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.6}>{t.label}</text>
           ))}
+          {/* Axes a reader can read a value off (docs/tool-template-v3.md §2.6): the
+              x range at the foot where no ticks are given, the y range at the left,
+              and the run's own point in numbers beside it. */}
+          {!compact && !figure.xTicks?.length && (
+            <g fontSize={9} fill="currentColor" fillOpacity={0.6} data-testid="figure-axis">
+              <text x={x(ext.x[0])} y={H - 4} textAnchor="start">{formatValue(ext.x[0], figure.xUnit)}</text>
+              <text x={x(ext.x[1])} y={H - 4} textAnchor="end">{formatValue(ext.x[1], figure.xUnit)}</text>
+            </g>
+          )}
+          {!compact && (
+            <g fontSize={9} fill="currentColor" fillOpacity={0.6}>
+              <text x={pad.l} y={pad.t - 6}>{fy(ext.y[1])}</text>
+            </g>
+          )}
+          {!compact && figure.point && (() => {
+            const px = x(figure.point.x)
+            const right = px < W * 0.6
+            return (
+              <text x={px + (right ? 9 : -9)} y={y(figure.point.y) - 8} textAnchor={right ? 'start' : 'end'} fontSize={10} fontWeight={600} fill="currentColor" data-testid="figure-point-label">
+                {/* On a ticked axis (quarters, ages) the point's own name says where it is. */}
+                {fy(figure.point.y)} at {figure.xTicks?.length ? figure.point.name : formatValue(figure.point.x, figure.xUnit)}
+              </text>
+            )
+          })()}
         </>
       )
       break

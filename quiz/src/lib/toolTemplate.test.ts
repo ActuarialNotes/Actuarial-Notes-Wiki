@@ -3,6 +3,7 @@ import { TOOLS, runTool, toolById } from './tools'
 import {
   columnNumbers,
   columnSource,
+  formulaLine,
   formulaText,
   arrivalOrigins,
   buildSenders,
@@ -18,7 +19,6 @@ import {
   locatorPage,
   ownChip,
   publishedLabel,
-  sharedDefaultLabel,
   takesFrom,
   tilesInOrder,
   keypadValue,
@@ -26,30 +26,21 @@ import {
   pressKey,
   readingLabel,
   scalarSource,
-  slidersInline,
 } from './toolTemplate'
 
-describe('the template', () => {
-  it('keeps sliders open on Permissible Loss Ratio and opens them row by row on Bond Price', () => {
-    const scalars = (id: string) => toolById(id)!.fields.filter(isScalar)
-    expect(slidersInline(scalars('ratemaking.permissible_loss_ratio'))).toBe(true)
-    expect(slidersInline(scalars('finance.bond_price'))).toBe(false)
-  })
-})
-
-describe('inputGroups', () => {
-  it('keeps three inputs or fewer in the formula\'s order, judgments among them', () => {
+describe('inputGroups (the Ledger template)', () => {
+  it('keeps one group in the formula\'s order, judgments among the inputs', () => {
     const plr = toolById('ratemaking.permissible_loss_ratio')!.fields.filter(isScalar)
-    const { judgments, inputs } = inputGroups(plr)
-    expect(judgments).toEqual([])
+    const { choices, inputs } = inputGroups(plr)
+    expect(choices).toEqual([])
     expect(inputs.map(f => f.key)).toEqual(['fixed', 'variable', 'profit'])
   })
 
-  it('puts the judgments first past three inputs, each group in the spec\'s order', () => {
+  it('puts the choices first, whatever the count, and keeps the judgment in place', () => {
     const tf = toolById('ratemaking.trend_factor')!.fields.filter(isScalar)
-    const { judgments, inputs } = inputGroups(tf)
-    expect(judgments.map(f => f.key)).toEqual(['trend'])
-    expect(inputs.map(f => f.key)).toEqual(['basis', 'year', 'effective', 'in_effect', 'term'])
+    const { choices, inputs } = inputGroups(tf)
+    expect(choices.map(f => f.key)).toEqual(['basis'])
+    expect(inputs.map(f => f.key)).toEqual(['trend', 'year', 'effective', 'in_effect', 'term'])
   })
 })
 
@@ -100,13 +91,10 @@ describe('Takes from / Gives to (template v2, §3.3)', () => {
 })
 
 describe('the from chip (template v2, §3.4)', () => {
-  it('is on a judgment and on any changed input; the rest share one line', () => {
-    expect(ownChip(true, { kind: 'default' })).toBe(true)
-    expect(ownChip(false, { kind: 'default' })).toBe(false)
-    expect(ownChip(false, { kind: 'yours' })).toBe(true)
-    expect(sharedDefaultLabel([{ source: { kind: 'default' } }, { source: { kind: 'default' } }])).toBe('All')
-    expect(sharedDefaultLabel([{ source: { kind: 'default' } }, { source: { kind: 'yours' } }])).toBe('The rest')
-    expect(sharedDefaultLabel([{ judgment: true, source: { kind: 'default' } }])).toBeNull()
+  it('is only on a value that is not the default (provenance by exception)', () => {
+    expect(ownChip({ kind: 'default' })).toBe(false)
+    expect(ownChip({ kind: 'yours' })).toBe(true)
+    expect(ownChip({ kind: 'linked', label: 'Expense Ratios' })).toBe(true)
   })
 
   it('names a published figure by its short name and place', () => {
@@ -179,6 +167,8 @@ describe('column numbers and formulas', () => {
     expect([...numbers]).toEqual([['latest', 1], ['cdf', 2], ['expected', 3], ['ultimate', 4], ['reserve', 5]])
     expect(formulaText('{latest} + {reserve}', numbers)).toBe('(1) + (5)')
     expect(formulaText('{nope}', numbers)).toBe('{nope}')
+    const labels = new Map([['latest', 'Latest'], ['reserve', 'IBNR'], ['ultimate', 'Ultimate']])
+    expect(formulaLine('ultimate', '{latest} + {reserve}', numbers, labels)).toBe('(4) Ultimate = (1) Latest + (5) IBNR')
   })
   it('every formula a tool writes names only its own columns', () => {
     for (const spec of TOOLS) {

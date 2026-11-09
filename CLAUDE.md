@@ -600,6 +600,11 @@ before touching that area**:
   figures and links explained in place (`FigureNote.tsx`). Its §8.1 is the simplified card every tool
   now draws: a row's slider opens in place (open at three inputs or fewer), the number alone opens the
   keypad sheet, and several tools able to supply one value are offered on that row as alternatives.
+  **Template v3, the Ledger** (`docs/tool-template-v3.md`) is the pass after a full phone review
+  (`docs/tools-ux-review.md`): every number row one line at any count, choices first, a chip only for
+  a value that isn't the default, a Data Source's inputs above its answer, grids that count their
+  off-screen columns, a **Solve for** strip for a spec naming `solveFor` (Bond Price), the chain strip
+  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the

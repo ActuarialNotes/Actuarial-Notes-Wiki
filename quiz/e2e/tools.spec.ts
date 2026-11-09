@@ -40,14 +40,14 @@ test.describe('tools', () => {
     await expect(card.getByText('% unreported, 2023')).toBeVisible()
 
     // The menu says what the tool was tested against: Friedland's Chapter 9 exhibit.
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await expect(page.getByText('Tested against', { exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: /Friedland \(2010\), Ch\. 9, Exhibit I, Sheet 1, p\. 162/ })).toBeVisible()
   })
 
   test('sends age-to-age averages on to Development to Ultimate', async ({ page }) => {
     await page.goto('/tools/age-to-age-factors')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // The averages arrive as the selected factors: 12–24 is 1,500 + 1,700 + 1,800 over 1,000 + 1,100 + 1,200.
@@ -185,7 +185,7 @@ test.describe('tools', () => {
     await page.goto('/tools/age-to-age-factors')
     await page.getByRole('button', { name: 'Select Simple all at every age' }).click()
     await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
-    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('button', { name: 'More', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Send selections to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate\?from=age-to-age-factors#input=/)
     // 12–24, the simple mean: (1.5 + 1700/1100 + 1.5) / 3.
@@ -269,7 +269,8 @@ test.describe('tools', () => {
     await sheet.getByRole('radio', { name: /Back to the default/ }).click()
     await expect(sheet.getByTestId('value-sheet-value')).toHaveText('5%')
     await sheet.getByRole('button', { name: 'Done' }).click()
-    await expect(card.locator('[data-field="profit"] [data-source="default"]')).toBeVisible()
+    // Provenance by exception (v3 §2.4): a value back at its default carries no chip.
+    await expect(card.locator('[data-field="profit"] [data-source]')).toHaveCount(0)
   })
 
   // Template v2 (docs/tool-template-v2.md): navigation and connection.
@@ -281,7 +282,7 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-tile').first()).toHaveText('28.084%')
     await expect(card.getByTestId('tool-comparison')).toContainText('27.8%')
     const gives = card.getByTestId('tool-gives-to')
-    await gives.getByRole('button', { name: /Gives to/ }).click()
+    // Two tools: listed open, each with what it would receive.
     await expect(gives.getByTestId('carried-value').first()).toContainText('F 11.028%')
     await gives.getByRole('button', { name: 'Open Permissible Loss Ratio' }).click()
     await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio\?from=expense-ratios#input=/)
@@ -306,7 +307,8 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-tile').first()).toHaveText('1.0767')
     // The three tools are alternatives for the one annual trend: offered on that row, not above the card.
     await expect(card.getByTestId('tool-takes-from')).toHaveCount(0)
-    await expect(card.getByTestId('shared-default')).toBeVisible()
+    await expect(card.getByTestId('judgment-legend')).toBeVisible()
+    await expect(card.locator('[data-source="default"]')).toHaveCount(0)
     await card.getByRole('button', { name: /^Annual trend:/ }).click()
     await expect(card.getByTestId('take-from').getByRole('button')).toHaveCount(3)
     await card.getByRole('button', { name: 'Annual trend value' }).click()
@@ -316,7 +318,7 @@ test.describe('tools', () => {
   })
 
   test('opens a long tool\'s inputs in the sheet, and keeps its answer in the title strip once scrolled', async ({ page }) => {
-    // A short phone: the rows still at their default share one chip line, so the page is short too.
+    // A short phone: every number row is one line until tapped, so the page is short too.
     await page.setViewportSize({ width: 390, height: 600 })
     await page.goto('/tools/bond-price')
     const card = page.getByTestId('tool-card')
@@ -374,5 +376,54 @@ test.describe('tools', () => {
     await expect(mct.getByTestId('tool-filed-answer')).toContainText('Filed 191.75% · Intact Insurance Company, Q2 2026')
     await expect(mct.locator('[data-source="filed"]').first()).toContainText('OSFI · Intact Insurance Company, Q2 2026 · line')
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+
+  // The Ledger template (docs/tool-template-v3.md).
+  test('solves Bond Price for its yield, the price becoming an input', async ({ page }) => {
+    await page.goto('/tools/bond-price')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('1,077.95')
+    await card.getByTestId('tool-solve-for').getByRole('radio', { name: 'Yield' }).click()
+    await expect(card.getByTestId('tool-tile').first()).toHaveText('5.348%')
+    await expect(card.locator('[data-field="price"]')).toBeVisible()
+    await expect(card.locator('[data-field="yield"]')).toHaveCount(0)
+    // One line per number, at any count: no slider until a row is tapped.
+    await expect(card.getByRole('slider')).toHaveCount(0)
+  })
+
+  test('shows Bornhuetter-Ferguson in its chain, with its claims choice first and its hidden columns counted', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/tools/bornhuetter-ferguson')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-chain')).toContainText('Development to Ultimate')
+    await expect(card.getByTestId('grid-formulas')).toContainText('(4) Ultimate = (1) Latest + (5) IBNR')
+    const more = card.getByTestId('grid-more-columns')
+    await expect(more).toContainText('more column')
+    // The claims choice comes before the grid it changes the meaning of.
+    const claims = (await card.locator('[data-field="basis"]').boundingBox())!
+    const grid = (await card.getByTestId('grid-formulas').boundingBox())!
+    expect(claims.y).toBeLessThan(grid.y)
+  })
+
+  test('asks Insurer Return its question first, and sets capital against the minimum', async ({ page }) => {
+    await page.goto('/tools/insurer-return')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByTestId('tool-data-source')).toContainText('Open Government Licence')
+    const insurer = (await card.locator('[data-field="insurer"]').boundingBox())!
+    const answer = (await card.getByTestId('tool-answer').boundingBox())!
+    expect(insurer.y).toBeLessThan(answer.y)
+    await expect(card.getByTestId('tool-capital')).toContainText('minimum required (line 130)')
+    await expect(card.locator('[data-marked]')).toContainText('140')
+    await expect(card.getByTestId('result-fold')).toContainText('All')
+  })
+
+  test('remembers the tools used last on the catalogue', async ({ page }) => {
+    await page.goto('/tools/bond-price')
+    await expect(page.getByTestId('tool-tile').first()).toHaveText('1,077.95')
+    await page.goto('/tools')
+    await expect(page.getByTestId('tool-recent').first()).toContainText('1,077.95')
+    await page.getByTestId('tool-areas').getByRole('button', { name: 'Credibility' }).click()
+    await expect(page).toHaveURL(/area=credibility/)
+    await expect(page.getByTestId('tool-row')).toHaveCount(3)
   })
 })

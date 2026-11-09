@@ -80,8 +80,9 @@ export function BottomSheet({ title, symbol, value, onClose, style, children }: 
 /** An input's symbol in its small square — the same square its row leads with. */
 export function Symbol({ children, className }: { children: string; className?: string }) {
   return (
-    <span className={cn('flex h-8 min-w-8 shrink-0 items-center justify-center rounded-lg bg-muted px-1 font-serif text-sm font-semibold italic', className)} aria-hidden>
-      {children}
+    <span className={cn('flex h-8 min-w-8 shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-muted px-1.5 font-serif text-sm font-semibold italic', className)} aria-hidden>
+      {/* An underscore starts a subscript ("t_f"), never printed raw. */}
+      {children.split(/_([A-Za-z0-9]+)/).map((run, k) => (k % 2 ? <sub key={k} className="text-[0.75em]">{run}</sub> : run))}
     </span>
   )
 }

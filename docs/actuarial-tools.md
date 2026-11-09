@@ -1671,3 +1671,12 @@ description above:
 - **The bank** carries each figure's basis, meaning and, for a figure that matches an answer, the
   tool it fits (`docs/assumptions-bank.md` §4.1).
 - **Trend Factor** and **Expense Ratios** moved to the template.
+
+**Template v3, the Ledger (2026-11-09).** After a full phone review (`docs/tools-ux-review.md`)
+the maintainer chose the *Ledger* direction: `docs/tool-template-v3.md`. Every tool page now draws
+its number rows as one line (the slider opens on a tap, at any count), choices first, provenance
+only for a value that isn't the default, a scale on its figure, and grids that count their hidden
+columns and name the columns a formula cites; a Data Source asks its question before it answers.
+Bond Price solves for any of its unknowns (`ToolSpec.solveFor`), Bornhuetter-Ferguson shows the
+reserving chain, Insurer Return sets capital against the minimum, and the catalogue leads with
+area chips and the tools used last.

@@ -412,7 +412,7 @@ before touching that area**:
   `/games` — `pages/Games.tsx`, opened by the one Games row at the top of the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
   opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
   logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
-  (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
+  (`seedConcepts`; 3 to 41 cards, about half of the vault) — and the reader
   drops one card on another: **any two connect** — a line joins them carrying the
   connection's **strength**, 0–100, drawn as its thickness, and what one is to the other in
   1–5 words (`lib/conceptRelations.ts`: a label written for each of the graph's connections in
@@ -1804,6 +1804,12 @@ compile — don't "clean up" the flagged code as dead.
   and Statistics Canada's price indexes, the Treasury's par yield curves, each file's URL, sha256
   and date read recorded with the licence. Downloads cached outside the repo (`--cache`,
   `--offline`); openpyxl for NCHS's `.xlsx`. Tests: `scripts/test_datasets.py`.
+- `osfi_extract.py` — OSFI's insurer filings from the **Open Government Portal's API**
+  (`datastore_search`, OGL-Canada) → `.osfi/<dataset>/<period>/`: one quarter of PC1–PC4 (or the
+  Life returns) paged, cached outside the repo, hashed, labelled with OSFI's own bilingual labels,
+  and checked (each filed MCT ratio recomputed, balance-sheet identities), findings never
+  corrections. Manifests, institutions and checks are committed; labels and values are rebuilt by
+  re-running it. Stdlib. Tests: `scripts/test_osfi_extract.py`. See `docs/osfi-pc-data.md`.
 - `tool_fixtures.py` — published worked examples → **Actuarial Tools** fixtures
   (`quiz/src/lib/tools/fixtures/*.json`): Friedland's and Werner & Modlin's exhibits read off
   the CAS's PDFs, each checked by sha256, with no model retyping a number. PyMuPDF, imported

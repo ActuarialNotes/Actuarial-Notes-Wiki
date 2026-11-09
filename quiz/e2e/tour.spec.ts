@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // The onboarding tour is the first thing a new visitor meets, and it drives the
 // app itself — it navigates routes, spotlights elements and waits for taps on

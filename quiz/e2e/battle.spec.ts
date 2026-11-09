@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Quiz Battle, played to the end both ways (docs/quiz-battle.md). The build
 // runs with VITE_BATTLE_TRANSPORT=local, so the online battle is two pages of

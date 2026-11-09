@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import { BookOpen, BookX, Eye, EyeOff, Play, Timer, TimerOff } from 'lucide-react'
 import type { Difficulty } from '@/lib/parser'
-import { DIFFICULTY_LEVELS } from '@/lib/quizDifficulty'
 import { difficultySummary } from '@/lib/quizSetup'
 import { cn } from '@/lib/utils'
+import { DifficultyBars } from '@/components/QuizSettingsButton'
 
 /** The part of the setup sheet a tap on the card opens to. */
 export type SetupSection = 'topics' | 'count' | 'difficulty' | 'sitting'
@@ -183,30 +183,5 @@ function SettingIcon({
     >
       {children}
     </button>
-  )
-}
-
-/** Three rising bars, one per level, filled where the level is in the draw. */
-function DifficultyBars({ levels }: { levels: Difficulty[] }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden>
-      {DIFFICULTY_LEVELS.map((level, i) => {
-        const h = 6 + i * 5
-        return (
-          <rect
-            key={level}
-            x={2.5 + i * 7}
-            y={19 - h}
-            width={4}
-            height={h}
-            rx={1}
-            fill="currentColor"
-            fillOpacity={levels.includes(level) ? 1 : 0}
-            stroke="currentColor"
-            strokeWidth={1.4}
-          />
-        )
-      })}
-    </svg>
   )
 }

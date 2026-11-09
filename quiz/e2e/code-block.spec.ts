@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // A MAS-II question whose stem carries an R model summary in a fenced block.
 // Its columns are wider than a phone, and an unstyled <pre> overflows `visible`:

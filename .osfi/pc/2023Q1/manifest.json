@@ -1,0 +1,60 @@
+{
+  "dataset": "pc",
+  "title": "Property and casualty companies",
+  "publisher": "Office of the Superintendent of Financial Institutions (OSFI)",
+  "page": "https://open.canada.ca/data/en/dataset/4c6c515f-7c44-4bb6-ab56-c5f79f75f705",
+  "api": "https://open.canada.ca/data/en/api/3/action/datastore_search",
+  "package_last_modified": "2026-10-21T13:51:06.810918",
+  "period": "2023Q1",
+  "units": "$ thousands (ratios in %), as filed",
+  "licence": {
+    "name": "Open Government Licence – Canada",
+    "url": "https://open.canada.ca/en/open-government-licence-canada",
+    "attribution": "Contains information licensed under the Open Government Licence – Canada."
+  },
+  "returns": {
+    "PC1": {
+      "resource_id": "d4c1d98d-c19e-4730-ab2d-6e64160351a7",
+      "resource": "PC1 - P&C Core Financial Statement Return (Active)",
+      "resource_last_modified": "2026-10-09T19:26:50.484740",
+      "rows": 17748,
+      "pages": 18,
+      "read_at": "2026-11-09T04:31:54+00:00",
+      "content_sha256": "sha256:6a0062f33ae6285578337cde6c532c1a64683861d4e2749b98b51b2db546e29a"
+    },
+    "PC4": {
+      "resource_id": "2658af9f-0676-4d61-8e49-fc8fa612bc69",
+      "resource": "PC4 - P&C Minimum Capital Test and Branch Adequacy of Assets Test (Active)",
+      "resource_last_modified": "2026-10-09T19:42:17.166135",
+      "rows": 8503,
+      "pages": 9,
+      "read_at": "2026-11-09T04:32:02+00:00",
+      "content_sha256": "sha256:7b432e72f8fef076faf3430a0bda1d62b1908c6f37e9163cd4d60f5657c13a99"
+    }
+  },
+  "institutions": 136,
+  "aggregates": [
+    "Total Canadian Property & Casualty",
+    "Total Foreign Property & Casualty"
+  ],
+  "checks": {
+    "balance_sheet": {
+      "companies": 136,
+      "balanced": 133,
+      "unbalanced": 3,
+      "lines_sum": 136,
+      "lines_differ": 0
+    },
+    "mct_ratio": {
+      "filed": 135,
+      "exact": 127,
+      "within_rounding": 8,
+      "mismatch": 0,
+      "incomplete": 0
+    },
+    "findings": {
+      "mismatch": 3
+    }
+  },
+  "note": "Only non-zero cells are published. Aggregate rows are OSFI's column sums (they add up ratios too) — never a company, never used for a ratio."
+}

@@ -411,8 +411,10 @@ cards for FM's *Loans* (*Loans*, *Principal*, *Interest*) and *Bonds*, eleven in
 middle, and thirty of Exam 6C's forty-six on regulation, whose pages describe
 institutions and laws more than they derive them. PCPA's *Dealing with Data* deals all
 nine — nothing in it is defined by anything else — and plays as finding connections
-alone. Across the vault a little under two-fifths of the concepts are dealt and the
-rest are made.
+alone. Across the vault about half the concepts are dealt and the rest are made — fewer
+are made than under the older page shape (a little under two-fifths were dealt then),
+because the short definitions the concept pages are now written in (2026-11-06) name
+one ingredient as often as two, and a recipe needs two.
 
 The seeds are dealt in syllabus order, except that the connected pair with the
 best-explained recipe comes first, so the first drop on a fresh board makes something,

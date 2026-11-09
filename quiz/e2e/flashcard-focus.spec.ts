@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Focus mode locks the page behind a black backdrop. The study card used to sit
 // in normal flow under that lock, so a revealed card taller than a phone —
@@ -37,7 +37,7 @@ test.describe('flashcard focus mode on a phone', () => {
     await card.click()
     const gotIt = page.getByRole('button', { name: /Got it/ })
     await expect(gotIt).toBeVisible()
-    await expect(card).toContainText('economic value')
+    await expect(card).toContainText('vertical distance')
 
     // The revealed card runs past the bottom of the screen.
     const before = (await card.boundingBox())!
@@ -54,7 +54,7 @@ test.describe('flashcard focus mode on a phone', () => {
 
     await expect.poll(async () => (await card.boundingBox())!.y).toBeLessThan(before.y - 100)
     // Still the same card, still in focus mode.
-    await expect(card).toContainText('economic value')
+    await expect(card).toContainText('vertical distance')
     const exit = page.getByTitle('Exit focus mode (Esc)')
     await expect(exit).toBeVisible()
 

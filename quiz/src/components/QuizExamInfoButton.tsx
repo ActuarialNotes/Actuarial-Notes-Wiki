@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ExternalLink, Info, X } from 'lucide-react'
+import { ExternalLink, Info, ListChecks, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { examAccentStyle } from '@/lib/examColors'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
 import { InfoSheet } from '@/components/ui/InfoSheet'
-import { GROUP_ACTION_ROW, PublisherChip } from '@/components/ui/infoRows'
+import { GROUP_ACTION_ROW, PublisherChip, RowChevron, RowTile } from '@/components/ui/infoRows'
+import { useOpenQuizSearch } from '@/components/quizSearchContext'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { examAbout } from '@/data/examSittingDetails'
@@ -49,6 +50,7 @@ export function QuizExamInfoButton({
   questions: readonly Question[]
 }) {
   const [open, setOpen] = useState(false)
+  const openSearch = useOpenQuizSearch()
   const triggerRef = useRef<HTMLButtonElement>(null)
   const label = `About the ${examLabel} question bank`
 
@@ -80,6 +82,7 @@ export function QuizExamInfoButton({
           wikiExamId={wikiExamId}
           questions={questions}
           onClose={close}
+          onBrowse={openSearch ? () => { setOpen(false); openSearch() } : undefined}
         />
       )}
     </>
@@ -97,6 +100,7 @@ function QuizExamInfoDialog({
   wikiExamId,
   questions,
   onClose,
+  onBrowse,
 }: {
   exam: string
   examLabel: string
@@ -104,6 +108,8 @@ function QuizExamInfoDialog({
   wikiExamId?: string
   questions: readonly Question[]
   onClose: () => void
+  /** Closes the sheet and opens the question search panel. */
+  onBrowse?: () => void
 }) {
   useSoundOnMount('open')
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -181,6 +187,16 @@ function QuizExamInfoDialog({
           </>
         )}
       </section>
+
+      {onBrowse && info.total > 0 && (
+        <Group>
+          <button type="button" onClick={onBrowse} className={GROUP_ACTION_ROW}>
+            <RowTile><ListChecks className="h-3.5 w-3.5" /></RowTile>
+            <span className="min-w-0 flex-1">Browse questions</span>
+            <RowChevron />
+          </button>
+        </Group>
+      )}
 
       {examRows.length > 0 && (
         <Group label="The exam">

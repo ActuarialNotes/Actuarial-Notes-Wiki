@@ -19,6 +19,15 @@ and the god-component refactors (P3.1) can't silently break them.
 | `actuaria-cohort.spec.ts` | Actuaria's cohorts and raid, **signed in** against a stubbed backend (`fixtures/signedIn.ts`): start a cohort, its pool and members, a nudge, the raid screen, a run at the boss marked by `/api/raid`, and the boss on the map |
 | `battle.spec.ts` | Quiz Battle: a same-screen battle played to the end (buzz, miss, steal, results, rematch), an online battle between two pages over BroadcastChannel (`VITE_BATTLE_TRANSPORT=local`), the empty matchmaking lobby said so, and two strangers matched from the lobby into a battle and back |
 
+## Writing a spec
+
+Import `test` and `expect` from `./test`, not from `@playwright/test`. It is
+Playwright's own `test`, with one change: every `page.goto` and `page.reload`
+waits for the first-load screen (`#boot` in `index.html`) to lift. That screen
+covers the page above everything for a moment after the load event, so a press
+made by coordinates (`page.mouse`) before it lifts lands on the screen and
+does nothing.
+
 ## Running
 
 ```bash

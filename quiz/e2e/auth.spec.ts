@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Auth is the entry to sync/persistence. We don't hit Supabase — just verify the
 // signed-out sign-in form renders and can toggle to the sign-up mode.

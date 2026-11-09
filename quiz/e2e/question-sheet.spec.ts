@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // Open in Spreadsheet (docs/question-spreadsheet.md): a CAS question opens a
 // spreadsheet holding its own tables, docked beside it; a selected cell drops

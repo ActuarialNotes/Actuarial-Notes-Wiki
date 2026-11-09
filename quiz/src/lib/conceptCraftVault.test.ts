@@ -94,7 +94,11 @@ describe('Concept Craft over the vault', () => {
   it('makes most of every topic rather than dealing it', () => {
     const concepts = graphs.reduce((n, [t]) => n + t.concepts.length, 0)
     const dealt = graphs.reduce((n, [, g]) => n + seedConcepts(g).length, 0)
-    expect(dealt / concepts).toBeLessThan(0.45)
+    // Under the short concept shape (2026-11-06) a definition names one of the
+    // topic's concepts as often as two, and a recipe needs two, so about half the
+    // vault is dealt (it was under two-fifths before). This guards against it
+    // slipping further: a new seed here is a definition that names too little.
+    expect(dealt / concepts).toBeLessThan(0.52)
   })
 
   // A medal's target is capped at what a play reaches (lib/craftMedals.ts), so

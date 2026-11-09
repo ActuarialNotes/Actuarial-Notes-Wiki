@@ -410,7 +410,7 @@ before touching that area**:
   `/games` — `pages/Games.tsx`, opened by the one Games row at the top of the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
   opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
   logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
-  (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
+  (`seedConcepts`; 3 to 41 cards, about half of the vault) — and the reader
   drops one card on another: **any two connect** — a line joins them carrying the
   connection's **strength**, 0–100, drawn as its thickness, and what one is to the other in
   1–5 words (`lib/conceptRelations.ts`: a label written for each of the graph's connections in

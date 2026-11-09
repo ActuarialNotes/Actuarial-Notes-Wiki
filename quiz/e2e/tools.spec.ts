@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Actuarial Tools (docs/actuarial-tools.md): calculators that each do one
 // thing, one live card each. The smoke checks the tab is in the sidebar, the

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './test'
 
 // A quiz outlives its page (lib/quizResume.ts): leaving /quiz mid-way keeps the
 // session, a "Return to quiz" pill follows the reader around the app, and it

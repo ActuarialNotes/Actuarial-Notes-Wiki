@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './test'
 
 // Runs the core learning flow end-to-end against a single bundled
 // multiple-choice question (p-004), signed out: skip the concept list, answer,
@@ -171,7 +171,7 @@ test.describe('guest save prompt', () => {
   // The level-up ceremony, the streak flame and any quests play first; the
   // prompt waits for them, so step through each until it is the one open.
   async function pastCelebrations(page: import('@playwright/test').Page, prompt: import('@playwright/test').Locator) {
-    const celebration = page.getByRole('dialog').getByRole('button', { name: /^(Continue|Keep it going|Later|Claim later)$/ }).first()
+    const celebration = page.getByRole('dialog').getByRole('button', { name: /^(Continue|Keep it going|Later|Claim later|Collect later)$/ }).first()
     await expect(async () => {
       if (await prompt.isVisible()) return
       if (await celebration.isVisible()) await celebration.click()

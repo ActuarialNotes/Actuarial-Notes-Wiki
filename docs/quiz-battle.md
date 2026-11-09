@@ -177,7 +177,7 @@ exam's draw. Monte Carlo Station's same-screen battle (`LocalBattle`) has no dra
 | The draft's outside reads: the concept pages a pair's strength is read off (the wiki bundle, fetched when a room is hosted) and the player's own levels | `quiz/src/hooks/useBattleDraft.ts` |
 | Room codes, the wire protocol and its validation — pure, tested | `quiz/src/lib/battleRoom.ts` |
 | The host and guest sessions — framework-free, tested over an in-memory channel | `quiz/src/lib/battleSession.ts` |
-| The channel itself: Supabase Realtime broadcast (and presence, for the lobby), or BroadcastChannel | `quiz/src/lib/battleTransport.ts` |
+| The channel itself: Supabase Realtime broadcast (and presence, for the lobby), or BroadcastChannel. A channel is left with `unsubscribe`, never `removeChannel` (which drops the socket under the next channel), and one reopened under a name still closing waits for it to go | `quiz/src/lib/battleTransport.ts` |
 | The lobby's rules: entries, the queue, the pairing, the handshake messages — pure, tested | `quiz/src/lib/battleLobby.ts` |
 | One player's end of the lobby, and presence over a plain broadcast — framework-free, tested over an in-memory channel | `quiz/src/lib/battleMatchmaking.ts` |
 | The queue away from the lobby: its rules (pure, tested), the store holding the session, and the pill | `quiz/src/lib/battleQueue.ts`, `quiz/src/stores/battleQueueStore.ts`, `quiz/src/components/BattleQueueButton.tsx` |

@@ -24,12 +24,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const APP_URL = 'https://quiz.actuarialnotes.com'
 // Where the preference lives: the Dashboard's bell. `?reminders=1` opens it.
 const PREFS_URL = `${APP_URL}/dashboard?reminders=1`
-// The session link carries UTM parameters: GA4 credits the visit to this email,
+// The session link opens the Dashboard, where Today's session and its Start
+// button are. It carries UTM parameters: GA4 credits the visit to this email,
 // and the app reads `utm_source` on boot to fire `reminder_opened` (roadmap L1).
 // The source must be a key of REMINDER_SOURCES in quiz/src/lib/learningSignals.ts
 // — learningSignals.test.ts reads this file to hold the two together.
 const UTM = 'utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan'
-// With no exam to quiz on (no bank behind it), the button opens the Dashboard.
+// With no exam to quiz on (no bank behind it), the one button opens the
+// Dashboard, where Start runs today's session.
 const SESSION_URL = `${APP_URL}/dashboard?${UTM}`
 
 // Each exam's Start button opens that exam's quiz on today's concepts
@@ -40,19 +42,23 @@ function quizUrl(examId: string, concepts: string[]): string | null {
 }
 const DEFAULT_FROM = 'Actuarial Notes <notifications@actuarialnotes.com>'
 
-// Keyed like EXAM_ID_TO_LABEL in quiz/src/lib/examIds.ts (exam_progress keys),
-// plus PCPA's key from wikiExamIdToProgressKey.
-const EXAM_LABELS: Record<string, string> = {
-  'P': 'Exam P — Probability',
-  'FM': 'Exam FM — Financial Mathematics',
-  'MAS-I': 'Exam MAS-I',
-  'MAS-II': 'Exam MAS-II',
-  'CAS-5': 'Exam 5',
-  'CAS-6': 'Exam 6',
-  'CAS-7': 'Exam 7',
-  'CAS-8': 'Exam 8',
-  'CAS-9': 'Exam 9',
+// An exam_progress key → the exam's name. Derived from the key rather than
+// listed, so an exam added to the app never reaches the email as a bare key:
+// `P` → "Exam P", `CAS-5` → "Exam 5", `CAS-DA` → "Exam DISC-DA". Only the keys
+// that don't read that way are named here (keys: wikiExamIdToProgressKey in
+// quiz/src/lib/wikiParser.ts).
+const EXAM_LABEL_EXCEPTIONS: Record<string, string> = {
   'CAS-PCPA': 'PCPA',
+  'CAS-DA': 'Exam DISC-DA',
+  'CAS-RM': 'Exam DISC-RM',
+  'CAS-IA': 'Exam DISC-IA',
+  'CAS-APC': 'Course on Professionalism',
+}
+
+function examLabel(key: string): string {
+  const named = EXAM_LABEL_EXCEPTIONS[key]
+  if (named) return named
+  return `Exam ${key.replace(/^(CAS|CIA|FSA)-/, '')}`
 }
 
 // ── Mirrored from quiz/src/lib/dailyEmail.ts (tested there) ──────────────────
@@ -92,11 +98,11 @@ function deriveTodaysConcepts(plan: EmailPlanSnapshot, today: string): string[] 
 
 function describePacing(status: string | undefined): string {
   switch (status) {
-    case 'on_track': return "You're on track"
-    case 'ahead': return "You're ahead of schedule"
-    case 'behind': return "You're behind pace — a session today helps you catch up"
-    case 'review_mode': return 'Everything is mastered — keep it fresh with review'
-    case 'target_passed': return 'Your target date has passed — pacing against your exam date'
+    case 'on_track': return 'On track'
+    case 'ahead': return 'Ahead of schedule'
+    case 'behind': return 'Behind schedule'
+    case 'review_mode': return 'Every concept is at Level 3'
+    case 'target_passed': return 'Past your ready date, paced to your exam date'
     default: return ''
   }
 }
@@ -333,26 +339,32 @@ function daysBetweenISO(fromISO: string, toISO: string): number {
 
 function buildSection(examId: string, plan: EmailPlanSnapshot, today: string, clips: PodcastClips): ExamSection | null {
   const concepts = deriveTodaysConcepts(plan, today)
-  const reviewConcepts = (plan.reviewConcepts ?? []).filter(c => typeof c === 'string')
+  // In review mode today's concepts already include the refreshers; list
+  // each concept once.
+  const listed = new Set(concepts.map(c => c.toLowerCase()))
+  const reviewConcepts = (plan.reviewConcepts ?? [])
+    .filter(c => typeof c === 'string' && !listed.has(c.toLowerCase()))
   if (concepts.length === 0 && reviewConcepts.length === 0) return null
 
   const pieces: string[] = []
-  const planStart = plan.config?.planStartDate
-  if (planStart && plan.totalDays && planStart <= today) {
-    pieces.push(`Day ${daysBetweenISO(planStart, today) + 1} of ${plan.totalDays}`)
+  // The plan's own day count, as the app shows it. Review mode has no
+  // schedule (its totalDays is 1), so it has no day line.
+  if (plan.status !== 'review_mode' && plan.dayNumber && plan.totalDays) {
+    pieces.push(`Day ${plan.dayNumber} of ${plan.totalDays}`)
   }
   const pacing = describePacing(plan.status)
   if (pacing) pieces.push(pacing)
   const readyDate = plan.effectiveReadyDate
-  if (readyDate && readyDate >= today && plan.status !== 'review_mode') {
-    pieces.push(`${daysBetweenISO(today, readyDate)} days to your target`)
+  if (readyDate && readyDate >= today && plan.status !== 'review_mode' && plan.status !== 'target_passed') {
+    const days = daysBetweenISO(today, readyDate)
+    pieces.push(days === 0 ? 'Ready date today' : days === 1 ? 'Ready date tomorrow' : `Ready date in ${days} days`)
   }
 
   const episode = planEpisode(concepts, reviewConcepts, plan.status, clips)
 
   return {
     examId,
-    label: EXAM_LABELS[examId] ?? examId,
+    label: examLabel(examId),
     concepts,
     reviewConcepts,
     pacingLine: pieces.join(' · '),
@@ -413,7 +425,7 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px 16px;">
     <h1 style="font-size:20px;color:#111827;margin:0;">Your study plan for ${escapeHtml(friendlyDate)}</h1>
     ${body}
-    ${sections.some(s => s.quizUrl) ? '' : `<a href="${escapeHtml(SESSION_URL)}" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>`}
+    ${sections.some(s => s.quizUrl) ? '' : `<a href="${escapeHtml(SESSION_URL)}" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Open today's session</a>`}
     <p style="margin-top:28px;font-size:12px;color:#9ca3af;">
       You're receiving this because you turned on the daily study plan email.
       You can change the time or turn it off from the bell on your
@@ -441,7 +453,7 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
     if (s.episode) lines.push(`Listen to today's plan (${s.episode.minutes}): ${episodeUrl(s.examId)}`)
     lines.push('')
   }
-  if (!sections.some(s => s.quizUrl)) lines.push(`Start today's session: ${SESSION_URL}`)
+  if (!sections.some(s => s.quizUrl)) lines.push(`Open today's session: ${SESSION_URL}`)
   lines.push(`Change the time or turn this email off: ${PREFS_URL}`)
   return lines.join('\n')
 }

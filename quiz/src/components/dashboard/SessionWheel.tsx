@@ -53,7 +53,7 @@ export function SessionWheel({
   const pad = Math.max(0, Math.ceil(RING_OUTER_R + 6 - RING_VIEWBOX / 2))
   const size = RING_VIEWBOX + 2 * pad
 
-  const label = `Exam readiness ${pct}%${todayCount > 0 ? `, today's ${todayCount} concept${todayCount === 1 ? '' : 's'} outlined` : ''} — open the study guide`
+  const label = `Exam readiness ${pct}%${todayCount > 0 ? `, today's ${todayCount} concept${todayCount === 1 ? '' : 's'} outlined` : ''}. Open the study guide`
 
   return (
     <button

@@ -51,7 +51,7 @@ export function FactCheckBadge({
         type="button"
         onClick={() => setOpen(true)}
         data-sound="tap"
-        title={`${badge.label} — ${badge.detail} Tap to see the fact check.`}
+        title={`${badge.label}. ${badge.detail}`}
         aria-label={`Fact check: ${badge.label}. ${badge.detail}`}
         className={cn(
           'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold',

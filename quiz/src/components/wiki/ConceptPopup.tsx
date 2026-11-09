@@ -270,10 +270,10 @@ export function ConceptPopup() {
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
 
   // The footer's syllabus-filter picker. Below `sm` it is wide enough
-  // ("Study Plan — November 7") that Previous / Next drop their words and keep
+  // ("Today's Study Plan") that Previous / Next drop their words and keep
   // their arrows, or Next is pushed off the right edge of a phone.
   const showFooterPicker = !focusMode && hasSyllabusToFilter
-  const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
+  const todayLabel = "Today's Study Plan"
 
   // Focus mode's toggle is the only control that survives it, so there's always
   // a way back out (Esc also works). It rides in the active page's header.
@@ -444,7 +444,7 @@ export function ConceptPopup() {
                         onClick={() => { close(); setViewingDropdownOpen(false) }}
                         className={inkMenuItem(false)}
                       >
-                        Set up Study Plan →
+                        Set up Today's Study Plan →
                       </Link>
                     ) : (
                       <button
@@ -484,8 +484,8 @@ export function ConceptPopup() {
                     </div>
                     <p className="text-xs text-muted-foreground mb-2.5">
                       {user
-                        ? 'Upgrade to Pro to access personalised daily Study Plans.'
-                        : 'Sign in and upgrade to Pro to access personalised daily Study Plans.'
+                        ? "Today's Study Plan is part of Pro."
+                        : "Today's Study Plan is part of Pro. Sign in first."
                       }
                     </p>
                     <Link

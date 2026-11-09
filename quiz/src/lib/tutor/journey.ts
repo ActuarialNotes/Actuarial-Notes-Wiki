@@ -22,11 +22,11 @@ export interface PhaseInfo {
 export const PHASES: Record<JourneyPhase, PhaseInfo> = {
   setup: { label: 'Set up', purpose: 'Choose your sitting so the Tutor can pace you.', newPerDay: 5 },
   learn: { label: 'Learn', purpose: 'Meet every concept: read it, try its worked example, check yourself.', newPerDay: 5 },
-  consolidate: { label: 'Consolidate', purpose: 'Spaced, mixed review — and the concepts you mix up, side by side.', newPerDay: 2 },
-  rehearse: { label: 'Rehearse', purpose: 'Practise at exam pace. Points per minute, not questions per minute.', newPerDay: 1 },
-  taper: { label: 'Taper', purpose: 'Nothing new. A last look at what is heavy and what you got wrong while sure.', newPerDay: 0 },
-  exam: { label: 'Exam', purpose: 'Good luck. Nothing to do here.', newPerDay: 0 },
-  after: { label: 'After the sitting', purpose: 'Set the next target when you know it.', newPerDay: 5 },
+  consolidate: { label: 'Consolidate', purpose: 'Spaced, mixed review, with the concepts you mix up side by side.', newPerDay: 2 },
+  rehearse: { label: 'Rehearse', purpose: 'One new concept a day. Practise at exam pace.', newPerDay: 1 },
+  taper: { label: 'Taper', purpose: 'Nothing new. A last review of what is due before the exam, and what you got wrong while sure.', newPerDay: 0 },
+  exam: { label: 'Exam', purpose: 'It’s exam day. Nothing new to study. Good luck.', newPerDay: 0 },
+  after: { label: 'After the sitting', purpose: 'That sitting has passed. Set your next one when you know it.', newPerDay: 5 },
 }
 
 /** Days left at which a phase begins. */

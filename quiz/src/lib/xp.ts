@@ -106,7 +106,7 @@ export const DAILY_GOALS: readonly DailyGoalPreset[] = [
   { id: 'casual', label: 'Casual', xp: 50, hint: 'A few questions' },
   { id: 'regular', label: 'Regular', xp: 100, hint: 'A short session' },
   { id: 'serious', label: 'Serious', xp: 200, hint: 'A full session' },
-  { id: 'intense', label: 'Intense', xp: 350, hint: 'A long grind' },
+  { id: 'intense', label: 'Intense', xp: 350, hint: 'A long session' },
 ]
 
 export const DEFAULT_GOAL_ID: DailyGoalId = 'regular'

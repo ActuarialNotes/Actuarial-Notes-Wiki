@@ -32,7 +32,7 @@ export default function Games() {
           data-testid="quiz-battle-entry"
           leading={<BattleLogo size="lg" />}
           title="Quiz Battle"
-          subtitle="Race a friend through the same questions"
+          subtitle="Race another player through the same questions"
         />
         <ListRow
           to="/craft"

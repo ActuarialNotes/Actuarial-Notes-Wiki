@@ -44,7 +44,7 @@ test.describe('the Tutor', () => {
 
     // A brand-new account meets the first concept as a page, not a question.
     await expect(panel.getByText('New concept')).toBeVisible()
-    await panel.getByRole('button', { name: 'I know it — check me' }).click()
+    await panel.getByRole('button', { name: 'I know it, check me' }).click()
 
     // The part: confidence before the reveal.
     const reveal = panel.getByRole('button', { name: /Reveal the answer|Check/ })
@@ -70,9 +70,9 @@ test.describe('the Tutor', () => {
     await page.goto('/wiki/exam/Exam+7+(CAS)')
     await page.getByRole('button', { name: /^Tutor/ }).click()
     const panel = page.getByRole('complementary', { name: 'Tutor' })
-    await expect(panel.getByText('The Tutor covers Exam 5 for now', { exact: false })).toBeVisible()
+    await expect(panel.getByText('The Tutor only covers Exam 5 for now', { exact: false })).toBeVisible()
 
-    await panel.getByRole('radio', { name: 'Journey' }).click()
+    await panel.getByRole('radio', { name: 'Exam' }).click()
     // The Tutor is the reader's own Gem Shop character — the first free one
     // until they pick one.
     await expect(panel.getByText('Your Tutor: Fox')).toBeVisible()

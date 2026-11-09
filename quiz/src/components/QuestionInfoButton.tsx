@@ -40,7 +40,7 @@ export function QuestionInfoButton({
         onClick={() => onOpenChange(!open)}
         aria-label="Question info"
         aria-expanded={open}
-        title="Where this question came from (i)"
+        title="Question info (press I)"
         className={cn(
           'flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors hover:bg-accent sm:px-3',
           open ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',

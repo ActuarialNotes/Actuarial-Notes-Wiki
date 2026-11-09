@@ -52,6 +52,7 @@ import { SpreadsheetButton } from '@/components/quiz/SpreadsheetButton'
 import { spreadsheetProfileFor } from '@/data/examSpreadsheets'
 import { examAccentStyle } from '@/lib/examColors'
 import { lazyRoute } from '@/lib/lazyRoute'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 
 // Open in Spreadsheet (docs/question-spreadsheet.md): Fortune-sheet is the
 // heaviest thing the quiz can show, so the pane is its own chunk.
@@ -556,7 +557,8 @@ export default function Quiz() {
       // the quiz was started, never onto a quiz that is over.
       navigate(`/review?${searchParams.toString()}`, { replace: true, state: REPLACE_AS_PUSH })
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Failed to save quiz. Please try again.')
+      console.error('quiz: completing the quiz failed:', err)
+      setSubmitError('Your answers couldn’t be saved just now. Check your connection and press Finish again.')
       setIsSubmitting(false)
     }
   }
@@ -585,10 +587,10 @@ export default function Quiz() {
       <div className="container max-w-md mx-auto px-4 py-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-destructive">Failed to load questions</CardTitle>
+            <CardTitle className="text-destructive">The questions didn’t load</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">{error}</p>
+            <p className="text-sm text-muted-foreground">Check your connection and try again.</p>
             <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
               Try again
             </Button>
@@ -608,7 +610,7 @@ export default function Quiz() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              No questions match your selected filters. Try different topics or difficulty.
+              No questions match the topics and difficulty you picked. Pick more of either and start again.
             </p>
             <Button onClick={back.go} variant="outline" className="w-full">
               Back to {back.label}
@@ -778,7 +780,7 @@ export default function Quiz() {
           questionId={currentQuestion.id}
           questionStem={currentQuestion.stem}
           isOnlyPart={(currentQuestion.parts ?? []).length === 1}
-          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? 'Exam' : 'Quiz'}` : 'Next Question'}
+          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}` : 'Next Question'}
           onContinue={() => {
             setGradePrompt(null)
             moveOn()
@@ -873,7 +875,7 @@ export default function Quiz() {
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >
                     {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                    Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                    Finish {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
                   </Button>
                 ) : (
                   <Button

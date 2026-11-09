@@ -24,8 +24,8 @@ export function StoreSearchBar({ query, onQuery }: { query: string; onQuery: (q:
           inputRef.current?.blur()
           setFocused(false)
         }}
-        placeholder="Search the Shop"
-        ariaLabel="Search the Shop"
+        placeholder="Search the Store"
+        ariaLabel="Search the Store"
         navCollapsed={focused && query.length > 0}
       />
     </FloatingSearchBar>

@@ -263,7 +263,7 @@ function Route({ onOpen, start, data }: { onOpen: OpenRef; start?: PathPosition;
   return (
     <section
       data-credential-path=""
-      aria-label={`${path.name} path`}
+      aria-label={`${path.name} track`}
       className="not-prose my-6 first:mt-0 rounded-xl border border-border/70 p-4 sm:p-5"
     >
       <div className="mb-4 flex items-center justify-between gap-3">
@@ -286,7 +286,7 @@ function Route({ onOpen, start, data }: { onOpen: OpenRef; start?: PathPosition;
           className="w-40 shrink-0"
         />
       </div>
-      <ol aria-label={`${body} path stages`}>
+      <ol aria-label={`${body} track stages`}>
         {path.stages.map((stage, i) => (
           <Stop
             key={`${body}-${stage.kind}`}

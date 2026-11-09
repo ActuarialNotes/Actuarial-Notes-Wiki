@@ -37,7 +37,7 @@ export function HomePicker({
       },
       () => {
         setLocating(false)
-        setError('Your browser didn’t share a location — pick a city instead.')
+        setError('Your browser didn’t share a location. Pick a city instead.')
       },
       { maximumAge: 3_600_000, timeout: 10_000 },
     )

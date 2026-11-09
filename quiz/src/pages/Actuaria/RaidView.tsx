@@ -44,7 +44,7 @@ export function RaidView({ world }: { world: ActuariaWorld }) {
         )
       ) : raid.status === 'forming' ? (
         <section className="rounded-xl bg-card p-5 text-sm" data-testid="raid-forming">
-          <Term id="boss" /> appears once {sectorName(raid.exam)}’s cohort has {CREW_MIN} members — {raid.needed} to go.
+          The weekly raid boss, <Term id="boss" gloss={false} />, appears once {sectorName(raid.exam)}’s cohort has {CREW_MIN} members. {raid.needed} more needed.
         </section>
       ) : (
         <RaidBoard raid={raid} crewId={crew!.crew.id} />
@@ -114,18 +114,18 @@ function RaidBoard({ raid, crewId }: { raid: Extract<Raid, { status: 'active' | 
           </div>
 
           <ul className="grid gap-2 sm:grid-cols-3">
-            <RuleCard title="Hit" active={phase === 'open'}>A right answer deals 100 + speed on the exam’s pace. A miss costs nothing.</RuleCard>
+            <RuleCard title="Hit" active={phase === 'open'}>A right answer deals 100, plus a speed bonus timed at the exam’s pace. A miss costs nothing.</RuleCard>
             <RuleCard title="Double or nothing" active={phase === 'double' || phase === 'all_in'}>
               At half health: hits deal ×{DOUBLE_MULTIPLIER}, and a miss heals it by {MISS_HEAL}.
             </RuleCard>
-            <RuleCard title="All in" active={phase === 'all_in'}>At a quarter: hard questions only.</RuleCard>
+            <RuleCard title="All in" active={phase === 'all_in'}>At a quarter health: hard questions only.</RuleCard>
           </ul>
         </HudFrame>
 
         {defeated ? (
           <p className="rounded-xl bg-card p-5 text-sm" data-testid="raid-defeated">
-            Gambler’s Ruin is down. Everyone who dealt damage earned the Stop-Loss Shield decal — equip it in the{' '}
-            <Link to="/actuaria/hangar" className="underline">Hangar</Link>. The loot is paid when the week ends.
+            Gambler’s Ruin is down. Everyone who dealt damage earned the Stop-Loss Shield decal. Equip it in the{' '}
+            <Link to="/actuaria/hangar" className="underline">Hangar</Link>. The gem pool is paid out when the week ends.
           </p>
         ) : (
           <div className="space-y-2">
@@ -161,9 +161,9 @@ function RaidBoard({ raid, crewId }: { raid: Extract<Raid, { status: 'active' | 
         </section>
 
         <section className="space-y-3 rounded-xl bg-card p-5" aria-labelledby="raid-weak">
-          <h2 id="raid-weak" className="actuaria-display text-[11px] text-muted-foreground">Weak spots the boss is using</h2>
+          <h2 id="raid-weak" className="actuaria-display text-[11px] text-muted-foreground">Concepts the cohort is weakest on</h2>
           {raid.weakSpots.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Shared when members open the Cohort screen.</p>
+            <p className="text-sm text-muted-foreground">Appears once members open the Cohort screen.</p>
           ) : (
             <ul className="space-y-1.5 text-sm">
               {raid.weakSpots.map((w, i) => (
@@ -175,7 +175,7 @@ function RaidBoard({ raid, crewId }: { raid: Extract<Raid, { status: 'active' | 
                   >
                     {w.concept}
                   </button>
-                  <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">Z {formatZ(w.z)}</span>
+                  <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground" title="The cohort’s average concept level, from 0 to 1">Z {formatZ(w.z)}</span>
                 </li>
               ))}
             </ul>
@@ -183,7 +183,7 @@ function RaidBoard({ raid, crewId }: { raid: Extract<Raid, { status: 'active' | 
         </section>
 
         <section className="space-y-1 rounded-xl bg-card p-5" aria-labelledby="raid-loot">
-          <h2 id="raid-loot" className="actuaria-display text-[11px] text-muted-foreground">Loot pool</h2>
+          <h2 id="raid-loot" className="actuaria-display text-[11px] text-muted-foreground">Gem pool</h2>
           <p className="flex items-center gap-1.5 text-lg font-semibold tabular-nums">{raid.lootPool} <Gem className="h-4 w-4" aria-label="gems" /></p>
           <p className="text-xs text-muted-foreground">Split by damage when the week ends.</p>
         </section>

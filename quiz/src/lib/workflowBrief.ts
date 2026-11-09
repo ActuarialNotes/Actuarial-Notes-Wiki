@@ -58,12 +58,12 @@ function connectionText(wf: Workflow, runs: Map<string, StepRun>, e: WorkflowEdg
 export const HOW_TO_RUN = [
   'Work through the steps in order, with the Actuarial Notes connector:',
   '- Every figure comes from `run_tool`. Never do the arithmetic yourself, not even a sum.',
-  '- Run a step on its current input unless a connection says to pass an earlier result into it. A "linked" connection is already wired: the values it carried are in the input shown. For any other connection between two calculations, read what the earlier step returned and pass what the next tool needs into its input — call `describe_tool` first.',
-  '- For a concept step, `get_concept` and use what the page says — a method\'s steps, a definition, a judgment — in the steps it informs.',
+  '- Run a step on its current input unless a connection says to pass an earlier result into it. A "linked" connection is already wired: the values it carried are in the input shown. For any other connection between two calculations, read what the earlier step returned and pass what the next tool needs into its input. Call `describe_tool` first.',
+  '- For a concept step, `get_concept` and use what the page says (a method\'s steps, a definition, a judgment) in the steps it informs.',
   '- A sub-workflow step is a workflow of its own: run its steps in the order listed under it. What links into it goes into its first steps; its last steps hand on to what follows.',
   '- For data I uploaded, the columns mapped into a tool are already in that tool\'s input; use the rest of the file only as the steps say.',
-  '- A source step is a published document I work from. Its figures are the ones I read off it into the table shown; a blank cell is a figure I have not read yet — ask me for it, never fill it in.',
-  '- A judgment left at its default is my call, not a selection: say which you ran at their defaults.',
+  '- A source step is a published document I work from. Its figures are the ones I read off it into the table shown; a blank cell is a figure I have not read yet. Ask me for it, never fill it in.',
+  '- A judgment left at its default is one I haven\'t made yet. List the ones you ran at their defaults.',
   '- Invent no data. If a step needs figures the workflow does not hold, say exactly what is missing rather than assuming a value.',
   '- Quote every warning a tool returns.',
   '',
@@ -131,7 +131,7 @@ export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resol
   const lines: string[] = []
   lines.push(`# Workflow: ${wf.title}`)
   lines.push('')
-  lines.push(wf.goal.trim() ? `Goal: ${wf.goal.trim()}` : 'Goal: none given — work out what the workflow computes and report that.')
+  lines.push(wf.goal.trim() ? `Goal: ${wf.goal.trim()}` : 'Goal: none given. Work out what the workflow computes and report that.')
   lines.push('')
   lines.push(HOW_TO_RUN)
   lines.push('')
@@ -164,7 +164,7 @@ export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resol
         lines.push(`My data, uploaded as ${node.csv.name} (${node.csv.rows.length} rows):`)
         lines.push('', '```csv', csvText(node.csv), '```')
         lines.push(...mappingLines(wf, node.csv, outOf, label))
-      } else lines.push('My uploaded data — the file was lost. Ask me for it.')
+      } else lines.push('My uploaded data. The file was lost, so ask me for it.')
     } else if (node.kind === 'source') {
       const found = sources?.(node.ref)
       if (found) {
@@ -182,7 +182,7 @@ export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resol
         lines.push(...mappingLines(wf, node.csv, outOf, label))
       }
     } else if (node.ref === CUSTOM_DATA) {
-      lines.push(node.data?.trim() ? `My data:\n\n${node.data.trim()}` : 'My own data — I described none. Say what this step needs and ask me for it.')
+      lines.push(node.data?.trim() ? `My data:\n\n${node.data.trim()}` : 'My own data. I described none, so say what this step needs and ask me for it.')
     } else {
       lines.push(...runLines(runs.get(node.id)))
     }

@@ -228,7 +228,7 @@ function EpisodePanel({ id, episode }: { id: string; episode: PodcastEpisode }) 
 
       {episode.unread.length > 0 && (
         <div className="border-t border-border px-4 py-3 text-xs text-muted-foreground">
-          <span>Also on today's plan: </span>
+          <span>Not in this episode: </span>
           {episode.unread.map((name, i) => (
             <span key={name}>
               {i > 0 && ', '}

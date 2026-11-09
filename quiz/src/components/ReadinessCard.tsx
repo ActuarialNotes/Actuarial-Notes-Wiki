@@ -276,9 +276,9 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
     <div className="rounded-lg border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-        All concepts mastered. Great work!
+        Every concept is at Level 3.
       </div>
-      <p>Today's plan uses spaced repetition to keep your weakest concepts fresh.</p>
+      <p>Today's study plan reviews the ones you answered correctly longest ago.</p>
       {concepts.length > 0 && (
         <p>Reviewing: {concepts.slice(0, 3).join(', ')}{concepts.length > 3 ? ` +${concepts.length - 3} more` : ''}</p>
       )}
@@ -1006,7 +1006,7 @@ export function ReadinessCard({
   const sessionStartLabel = sessionLaunching
     ? 'Get ready…'
     : sessionAction === 'extra'
-      ? 'Extra credit'
+      ? 'Practise more'
       : sessionAction === 'quiz'
         ? 'Start a quiz'
         : stepNow && stepNow.number > 1 && (sessionAction === 'plan' && planStarted)
@@ -1113,11 +1113,11 @@ export function ReadinessCard({
               </div>
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <p className="text-base font-semibold">Today's Study Plan</p>
                   <ProBadge />
                 </div>
                 <p className="text-xs text-muted-foreground max-w-[220px]">
-                  A daily plan tailored to you
+                  The concepts to study each day, paced to your exam date
                 </p>
               </div>
             </div>
@@ -1166,7 +1166,7 @@ export function ReadinessCard({
         {/* The schedule-forming status, while the sweep runs. */}
         <p className="min-w-0 text-xs font-medium text-primary empty:hidden" aria-live="polite">
           {playback.active && (playback.landed && playback.summary
-            ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
+            ? `Schedule set: ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} over ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
             : 'Building your schedule…')}
         </p>
 
@@ -1286,7 +1286,7 @@ export function ReadinessCard({
                 <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
                   {futureConcepts.length === 0 && (
-                    <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing scheduled — review and rest.</p>
+                    <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing new scheduled.</p>
                   )}
                   {futureConcepts.map((a, i) => {
                     const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
@@ -1324,7 +1324,7 @@ export function ReadinessCard({
             if (selectedDayLevelUps.length > 0) {
               return (
                 <div className="border-t pt-3 space-y-1">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Levelled up</p>
                   {selectedDayLevelUps.map(lu => {
                     const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
                     return (
@@ -1355,7 +1355,7 @@ export function ReadinessCard({
             if (isFutureDay) {
               // A future day with a plan already shows "Planned for this day".
               if (isPro && plan) return null
-              return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
+              return <p className="text-sm text-muted-foreground">Nothing recorded yet. This day is still ahead.</p>
             }
             if (displayDay === todayStr) {
               return <p className="text-sm text-muted-foreground">No quizzes finished yet today.</p>
@@ -1394,7 +1394,7 @@ export function ReadinessCard({
             className="group flex min-w-0 items-center gap-1.5 rounded-lg text-left text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label={
               examDate
-                ? `${countdownLabel ? countdownLabel + ', ' : ''}exam date ${formatReadableDate(examDate)} — change it`
+                ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''}. Change it`
                 : 'Set your exam date'
             }
           >
@@ -1500,13 +1500,13 @@ export function ReadinessCard({
           ref={studyGuideCardRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Study Guide"
+          aria-label="Exam Readiness"
           className="relative w-full max-w-2xl rounded-xl bg-card p-6 text-card-foreground shadow-xl"
           onClick={e => e.stopPropagation()}
         >
           <div className="mb-4 flex items-center gap-3">
             <ExamLogo examKey={progressKey} size="md" />
-            <h3 className="min-w-0 flex-1 text-lg font-semibold">Study Guide</h3>
+            <h3 className="min-w-0 flex-1 text-lg font-semibold">Exam Readiness</h3>
             <button
               type="button"
               onClick={() => setRingOpen(false)}
@@ -1708,14 +1708,14 @@ function DayCompleteInfoPanel({
           </button>
         </div>
         <div className="p-5 space-y-4 text-sm leading-relaxed">
-          <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
-            <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
-            <p className="text-cyan-700 dark:text-cyan-300">
-              {bonusClaimed
-                ? <><strong>2× gem bonus applied</strong> — +{bonusAmount} bonus gem{bonusAmount === 1 ? '' : 's'} earned today.</>
-                : <>2× gem bonus is active for the rest of today.</>}
-            </p>
-          </div>
+          {bonusClaimed && (
+            <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
+              <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
+              <p className="text-cyan-700 dark:text-cyan-300">
+                Finishing the plan doubled your gems today (<strong>+{bonusAmount}</strong>).
+              </p>
+            </div>
+          )}
 
           <div>
             <p className="text-xs font-semibold text-muted-foreground mb-1.5">Today's achievements</p>

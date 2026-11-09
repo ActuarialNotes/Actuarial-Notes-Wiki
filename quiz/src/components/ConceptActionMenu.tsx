@@ -494,7 +494,7 @@ function ExamMenuSummary({
         <div
           className="flex items-center gap-1.5 text-xs text-muted-foreground"
           title={`${whose}: ${countdown.dateLabel}`}
-          aria-label={`${whose}, ${countdown.dateLabel} — ${countdown.label}`}
+          aria-label={`${whose}, ${countdown.dateLabel}, ${countdown.label}`}
         >
           <CalendarDays className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           <span className="min-w-0 flex-1 truncate">{countdown.dateLabel}</span>

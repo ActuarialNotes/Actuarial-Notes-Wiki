@@ -117,7 +117,7 @@ describe('daily email: the edge function mirrors lib/dailyEmail.ts', () => {
     for (const status of ['on_track', 'ahead', 'behind', 'review_mode', 'target_passed', 'unknown', undefined]) {
       expect(mirror.describePacing(status)).toBe(describePacing(status))
     }
-    expect(describePacing('on_track')).toBe("You're on track")
+    expect(describePacing('on_track')).toBe('On track')
   })
 
   it('localDateHour: the same local date and hour, bad zones falling back to UTC', () => {

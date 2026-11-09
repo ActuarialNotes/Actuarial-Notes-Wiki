@@ -341,7 +341,7 @@ export default function WikiResources() {
           )
         })}
         <MultiSelectDropdown
-          label="Vintage"
+          label="Syllabus edition"
           options={vintageOptions}
           selected={new Set(vintage ? [vintage.edition.label] : [])}
           onToggle={chooseVintage}

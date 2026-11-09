@@ -56,7 +56,7 @@ export function toolResultSheets(spec: ToolSpec, result: ToolResult): Sheet[] {
       ['Engine version', result.engine],
       ['Input hash', result.inputHash],
       ['Summary', result.summary],
-      ...result.judgments.map(j => [`Judgment: ${j.label}`, `${cell(j.value)}${j.default ? ' (default — not chosen)' : ''}`] as CellValue[]),
+      ...result.judgments.map(j => [`Judgment: ${j.label}`, `${cell(j.value)}${j.default ? ' (default, not chosen)' : ''}`] as CellValue[]),
       ...result.warnings.map(w => ['Warning', w] as CellValue[]),
       ...result.method.concepts.map(c => ['Method', c] as CellValue[]),
       ...result.method.readings.map(r => ['Reading', `${r.resource}, ${r.locator}`] as CellValue[]),

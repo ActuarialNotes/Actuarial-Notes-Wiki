@@ -50,7 +50,7 @@ function ProjectsLocked({ signedIn }: { signedIn: boolean }) {
           <ProBadge />
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Rehearse the PCPA project: a brief, a data set, R and Python in the browser, and a report graded against the true model.
+          Rehearse the PCPA project with R and Python in your browser.
         </p>
       </div>
       {signedIn ? (

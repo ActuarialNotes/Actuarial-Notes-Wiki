@@ -147,7 +147,7 @@ describe('search and fetch — the ChatGPT connector contract', () => {
 describe('list_exams and get_exam', () => {
   it('tabulates the exams', async () => {
     const out = await tool('list_exams', {})
-    expect(out.text).toMatch(/\| P \| Exam P-1 — Probability \| SOA \| complete \| 2 \| 5 \| 4 \|/)
+    expect(out.text).toMatch(/\| P \| Exam P-1 — Probability \| SOA \| ready \| 2 \| 5 \| 4 \|/)
     expect(out.text).toMatch(/\| 5 \| Exam 5 — Basic Techniques \| CAS \| beta \| 1 \| 1 \| 1 \|/)
   })
 

@@ -17,9 +17,9 @@ import type { QuestContext, QuestProgressView } from '@/lib/quests'
 /** Longer, quest-detail copy for what each kind actually counts. */
 const KIND_DETAIL: Record<QuestKind, string> = {
   correct: 'Counts every question you answer correctly today, across any quiz and any difficulty.',
-  hard_correct: 'Counts correct answers on hard-difficulty questions only.',
-  revive: 'Counts correct answers on concepts that had decayed to Forgotten — a great way to shore up fading topics before they slip further.',
-  level_up: 'Counts concepts that climb up the mastery ladder today (e.g. New → L1, L1 → L2, L2 → L3).',
+  hard_correct: 'Counts correct answers on hard questions only.',
+  revive: 'Counts correct answers on concepts at Forgotten.',
+  level_up: 'Counts concepts that go up a level today, such as New to Level 1 or Level 2 to Level 3.',
   perfect_quiz: `Counts a quiz of ${PERFECT_QUIZ_MIN}+ questions where you answered every single one correctly.`,
   concept_correct: 'Counts correct answers on this quest’s concept, pulled from today’s study plan.',
 }
@@ -61,7 +61,7 @@ export function QuestsPanel({ context }: { context?: QuestContext }) {
         </div>
       ) : board.length === 0 ? (
         <p className="py-4 text-center text-sm text-muted-foreground">
-          Today’s quests appear once your study data has loaded.
+          Today’s quests appear once your progress has loaded.
         </p>
       ) : (
         <GroupSurface>

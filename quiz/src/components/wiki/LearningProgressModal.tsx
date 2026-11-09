@@ -35,10 +35,8 @@ export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 
 interface PanelProps {
   /** Hide the internal "Current level" row — used when the level is shown elsewhere (e.g. beside a title). */
   showLevelRow?: boolean
-  /** Hide the "Hover the graph…" hint below the graph. */
-  showHint?: boolean
   /**
-   * Put the legend + graph behind a "Show exam history" toggle, collapsed by
+   * Put the legend + graph behind a "Show history" toggle, collapsed by
    * default. Used where the graph is a secondary detail rather than the point of
    * the view.
    */
@@ -59,7 +57,6 @@ export function LearningProgressPanel({ conceptName, ...props }: PanelProps & { 
 export function LearningProgressPanelView({
   history,
   showLevelRow = true,
-  showHint = true,
   collapsible = false,
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
@@ -137,7 +134,7 @@ export function LearningProgressPanelView({
                 aria-expanded={graphOpen}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-transparent text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
               >
-                {graphOpen ? 'Hide exam history' : 'Show exam history'}
+                {graphOpen ? 'Hide history' : 'Show history'}
                 <ChevronDown
                   className={`h-4 w-4 shrink-0 transition-transform duration-200 ${graphOpen ? '' : '-rotate-90'}`}
                 />
@@ -167,12 +164,6 @@ export function LearningProgressPanelView({
                   onSelectQuestion={setSelectedQuestionId}
                 />
               </div>
-
-              {showHint && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Hover the graph to explore your level at any point in time
-                </p>
-              )}
 
               {/* The questions behind the dots — filtered to one question while
                   a dot is selected. */}
@@ -248,7 +239,6 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
       <LearningProgressPanelView
         history={history}
         showLevelRow={false}
-        showHint={false}
         onLevelChange={setShownLevel}
       />
     </InfoSheet>

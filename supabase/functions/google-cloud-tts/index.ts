@@ -1,6 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
+// What the reader sees when the voice can't play; the cause goes to the log.
+const VOICE_UNAVAILABLE = 'This voice isn’t available right now. Try again later.'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
@@ -39,7 +41,10 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const apiKey = Deno.env.get('GOOGLE_CLOUD_TTS_API_KEY')
-    if (!apiKey) return json({ error: 'Configuration error: GOOGLE_CLOUD_TTS_API_KEY is not set' }, 500)
+    if (!apiKey) {
+      console.error('google-cloud-tts: GOOGLE_CLOUD_TTS_API_KEY is not set')
+      return json({ error: VOICE_UNAVAILABLE }, 500)
+    }
 
     const admin = createClient(supabaseUrl, serviceRoleKey)
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)
@@ -52,7 +57,7 @@ Deno.serve(async (req: Request) => {
       .eq('user_id', user.id)
       .maybeSingle()
     if (!sub || !isActivePro(sub.tier, sub.status, sub.current_period_end)) {
-      return json({ error: 'Pro subscription required' }, 403)
+      return json({ error: 'Read-aloud with this voice is part of Pro.' }, 403)
     }
 
     const { ssml, rate } = await req.json().catch(() => ({}))
@@ -77,7 +82,7 @@ Deno.serve(async (req: Request) => {
     if (!ttsResp.ok) {
       const detail = await ttsResp.text()
       console.error('google-cloud-tts upstream error:', ttsResp.status, detail)
-      return json({ error: 'Text-to-speech provider error' }, 502)
+      return json({ error: VOICE_UNAVAILABLE }, 502)
     }
 
     const result = await ttsResp.json() as {
@@ -91,7 +96,6 @@ Deno.serve(async (req: Request) => {
     })
   } catch (err) {
     console.error('google-cloud-tts error:', err)
-    const message = err instanceof Error ? err.message : 'TTS error'
-    return json({ error: message }, 500)
+    return json({ error: VOICE_UNAVAILABLE }, 500)
   }
 })

@@ -85,8 +85,8 @@ export function StrategyArt() {
       <div className="flex items-center gap-2.5 rounded-md bg-card p-2.5 shadow-sm">
         <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
         <div className="min-w-0 flex-1">
-          <div className="text-[11px] font-medium">Master everything</div>
-          <div className="truncate text-[10px] text-muted-foreground">In the order the syllabus teaches it</div>
+          <div className="text-[11px] font-medium">Syllabus order</div>
+          <div className="truncate text-[10px] text-muted-foreground">Concepts as the syllabus lists them</div>
         </div>
       </div>
       <div className="flex items-center gap-2.5 rounded-md bg-card p-2.5 shadow-sm ring-2 ring-amber-400/70">
@@ -144,9 +144,9 @@ export function PlanQuizArt() {
         <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-0.5 rounded-md bg-muted p-0.5 text-[10px]">
           <div className="flex items-center justify-center gap-1 rounded bg-background px-1.5 py-1 font-medium shadow-sm">
             <CalendarCheck className="h-3 w-3 shrink-0" />
-            <span className="truncate">Today's Plan</span>
+            <span className="truncate">Today's Study Plan</span>
           </div>
-          <div className="truncate px-1.5 py-1 text-center text-muted-foreground">By Topic</div>
+          <div className="truncate px-1.5 py-1 text-center text-muted-foreground">Practice Exam</div>
           <div className="truncate px-1.5 py-1 text-center text-muted-foreground">Past Papers</div>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -220,7 +220,7 @@ export function PodcastArt() {
             <Headphones className="h-3.5 w-3.5" />
           </span>
           <div className="min-w-0 flex-1">
-            <div className="text-[11px] font-medium">Playing today's plan</div>
+            <div className="text-[11px] font-medium">Playing today's study plan</div>
             <div className="text-[10px] text-muted-foreground">4 concepts · 11 min</div>
           </div>
         </div>

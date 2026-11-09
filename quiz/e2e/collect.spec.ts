@@ -37,9 +37,9 @@ test.describe('flashcard collection', () => {
 
     await expect(page).toHaveURL(/\/review/)
     // Both cards land in the grid collected, then the summary recaps them.
-    const ceremony = page.getByRole('dialog', { name: 'Concepts leveled up' })
-    await expect(ceremony.getByText('Collected!')).toHaveCount(2)
-    await expect(ceremony.getByText('2 Concepts Leveled Up!')).toBeVisible()
+    const ceremony = page.getByRole('dialog', { name: 'Concepts levelled up' })
+    await expect(ceremony.getByText('Card collected')).toHaveCount(2)
+    await expect(ceremony.getByText('2 Concepts Levelled Up')).toBeVisible()
     await expect(ceremony.getByTitle('Flashcard collected')).toHaveCount(2)
   })
 })

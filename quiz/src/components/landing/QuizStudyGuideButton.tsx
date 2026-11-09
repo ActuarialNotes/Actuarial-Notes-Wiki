@@ -13,7 +13,7 @@ export function QuizStudyGuideButton({ examFileName }: { examFileName: string })
       to={wikiRoute({ kind: 'exam', name: examFileName })}
       icon={BookOpen}
       label="Study Guide"
-      title="This exam's study guide — its syllabus, concepts and readings"
+      title="This exam's study guide"
     />
   )
 }

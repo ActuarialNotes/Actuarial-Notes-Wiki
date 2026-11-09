@@ -35,9 +35,9 @@ export function AnalyticsLocked() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
             <Lock className="h-5 w-5" aria-hidden="true" />
           </div>
-          <p className="mt-2 text-base font-semibold">See where your marks go</p>
+          <p className="mt-2 text-base font-semibold">Track Accuracy and Pace</p>
           <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-            Your accuracy over time, the sections costing you most, and your pace against the exam's.
+            Your accuracy by day, the sections losing you the most marks, and your pace against the exam's.
           </p>
           <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' mt-6 w-full max-w-xs gap-1.5'}>
             Upgrade

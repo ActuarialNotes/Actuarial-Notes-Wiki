@@ -99,7 +99,7 @@ export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function Today
                 type="button"
                 onClick={onOpenDayComplete}
                 className="inline-flex rounded-full text-green-500 transition-colors hover:text-green-600"
-                aria-label="Today's session complete — view the day's details"
+                aria-label="Today's session complete. See the day's details"
               >
                 <CheckMark className="h-6 w-6 text-current" />
               </button>
@@ -109,7 +109,7 @@ export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function Today
 
           {allDone ? (
             <p className="text-base text-muted-foreground">
-              All done for today{answeredToday > 0 ? ` — ${answeredToday} question${answeredToday === 1 ? '' : 's'} answered` : ''}.
+              All done for today.{answeredToday > 0 ? ` ${answeredToday} question${answeredToday === 1 ? '' : 's'} answered.` : ''}
             </p>
           ) : totalQuestions > 0 && (
             <p className="flex flex-wrap items-baseline gap-x-7 gap-y-1">

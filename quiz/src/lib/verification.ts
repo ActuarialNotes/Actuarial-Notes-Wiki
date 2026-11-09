@@ -193,7 +193,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: 'Known issue',
       short: 'Issue',
       tone: 'red',
-      detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
+      detail: `${v.openCritical} critical issue${v.openCritical === 1 ? '' : 's'} open.`,
     }
   }
   if (!v || v.status === 'unverified') {
@@ -211,7 +211,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: 'Disputed',
       short: 'Disputed',
       tone: 'red',
-      detail: 'Sources disagree, or something critical is unresolved.',
+      detail: 'Sources disagree, or a critical issue is still open.',
     }
   }
   if (v.status === 'stale') {
@@ -239,7 +239,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: 'Known issue',
       short: 'Issue',
       tone: 'red',
-      detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
+      detail: `${v.openCritical} critical issue${v.openCritical === 1 ? '' : 's'} open.`,
     }
   }
   if (v.openFindings > 0) {
@@ -248,7 +248,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: date ? `Fact checked · ${date}` : 'Fact checked',
       short: 'Checked',
       tone: 'amber',
-      detail: `Checked against ${v.sources.length} source${v.sources.length === 1 ? '' : 's'}, with ${v.openFindings} open finding${v.openFindings === 1 ? '' : 's'}.`,
+      detail: `Checked against ${v.sources.length} source${v.sources.length === 1 ? '' : 's'}, with ${v.openFindings} open issue${v.openFindings === 1 ? '' : 's'}.`,
     }
   }
   return {
@@ -286,7 +286,7 @@ export function factCheckOverview(v: Verification | null | undefined): FactCheck
   ].join('')
   switch (badge.kind) {
     case 'unchecked':
-      return { headline: badge.label, sentence: 'No one has checked this page against a source yet.' }
+      return { headline: badge.label, sentence: 'No one has checked this against a source yet.' }
     case 'review':
       return { headline: badge.label, sentence: 'A fact check is under way.' }
     case 'stale':
@@ -297,11 +297,11 @@ export function factCheckOverview(v: Verification | null | undefined): FactCheck
           : 'Edited since its last check, so what is below describes the earlier version.',
       }
     case 'disputed':
-      return { headline: badge.label, sentence: 'Sources disagree, or a critical issue is unresolved.' }
+      return { headline: badge.label, sentence: 'Sources disagree, or a critical issue is still open.' }
     case 'issue':
       return {
         headline: badge.label,
-        sentence: `${plural(v?.openCritical ?? 0, 'critical issue')} open. Read ${(v?.openCritical ?? 0) === 1 ? 'it' : 'them'} before relying on this page.`,
+        sentence: `${plural(v?.openCritical ?? 0, 'critical issue')} open. Read ${(v?.openCritical ?? 0) === 1 ? 'it' : 'them'} before relying on this.`,
       }
     case 'checked-open': {
       const n = v?.openFindings ?? 0

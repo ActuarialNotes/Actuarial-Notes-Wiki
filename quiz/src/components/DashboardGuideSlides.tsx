@@ -70,8 +70,8 @@ const LADDER: { state: MasteryState; desc: string }[] = [
   { state: 'new', desc: 'Not answered yet.' },
   { state: 'level1', desc: 'Your first correct answer. Its flashcard joins your collection.' },
   { state: 'level2', desc: 'Correct again on a later day.' },
-  { state: 'level3', desc: 'Correct on a third day. Mastered.' },
-  { state: 'forgotten', desc: 'Three wrong answers in a row, or left too long. It starts again from New.' },
+  { state: 'level3', desc: 'Correct on a third day.' },
+  { state: 'forgotten', desc: 'Three wrong answers in a row, or left too long. One correct answer brings it back to Level 1.' },
 ]
 
 const DECAY: { from: MasteryState; days: number }[] = [
@@ -149,7 +149,7 @@ export function StudyPlanSlide() {
         ))}
       </div>
       <p className="text-muted-foreground">
-        The plan works back from your target ready date. It brings in up to five new concepts a day and books each
+        The plan works back from your ready date. It brings in up to five new concepts a day and books each
         one's reviews: the next day for Level 2, then two days after that for Level 3. Concepts that are slipping come
         first, and a Level 3 concept gets a refresher before it would step down.
       </p>

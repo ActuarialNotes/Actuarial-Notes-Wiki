@@ -277,7 +277,7 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: LogIn,
     title: 'Log in to keep it all',
-    body: 'Signing in saves your cards, mastery and study history across devices — and unlocks the daily plan, streaks and quests.',
+    body: 'Signing in saves your cards, concept levels and study history to your account, so you can pick them up on any device.',
     advance: 'manual',
     guestOnly: true,
     cta: 'Log in',

@@ -136,7 +136,7 @@ export function roundHeadline(round: RoundState, names: readonly [string, string
   const right = round.answers.filter(a => a.correct)
   if (right.length === 2) {
     const fastest = right.find(a => a.fastest) ?? right[0]
-    return right.every(a => a.fastest) ? 'Both got it — a dead heat' : `Both got it — ${names[fastest.seat]} was faster`
+    return right.every(a => a.fastest) ? 'Both got it at the same time' : `Both got it. ${names[fastest.seat]} was faster`
   }
   if (right.length === 1) {
     const [a] = right
@@ -167,7 +167,7 @@ export function resultHeadline(
   names: readonly [string, string],
 ): string {
   if (winner === null) return "It's a draw"
-  if (forfeit !== null) return `${names[forfeit]} left — ${names[winner]} wins`
+  if (forfeit !== null) return `${names[forfeit]} left. ${names[winner]} wins`
   return `${names[winner]} wins`
 }
 

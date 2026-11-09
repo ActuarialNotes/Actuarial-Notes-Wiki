@@ -62,7 +62,7 @@ export function AbilityButton({
       onClick={onClick}
       disabled={inert}
       aria-pressed={state === 'armed' || selected}
-      title={compact ? `${def.name} — ${def.effect}` : undefined}
+      title={compact ? `${def.name}: ${def.effect}` : undefined}
       data-testid={`ability-${def.id}`}
       data-state={state}
       data-selected={selected || undefined}

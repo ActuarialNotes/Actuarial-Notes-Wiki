@@ -25,7 +25,7 @@ export function SectionLeaksList({ leaks, examLabel }: { leaks: SectionLeak[]; e
     <>
       {judged.length === 0 ? (
         <p className="px-1.5 text-sm text-muted-foreground">
-          Answer three questions in a section to see what it costs you.
+          Answer 3 questions in a section to see the marks it loses you.
         </p>
       ) : (
         <Group>

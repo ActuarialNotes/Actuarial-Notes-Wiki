@@ -98,7 +98,9 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
+  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
+  chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
@@ -154,7 +156,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   SOA's and CAS's fee pages — the info panel's "Fee" row and the Store's registration
   price), `storeCatalog.ts` (the Store's sellers, study materials and calculators — see
   `docs/store.md`),
-  `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
+  `quests.ts` (daily-quest
   catalogue), `examGuides.ts` (the exam-page orientation guide — the tip
   pages themselves live in the vault under `Guides/`, see below), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
@@ -373,6 +375,10 @@ before touching that area**:
   box (`hooks/useSearchTracking.ts`) and `first_interaction`, the human signal. Every
   event is typed in `AnalyticsEventMap`; no personal data in a param. The doc ends with
   the GA4 property settings the code depends on. Read before adding an event.
+- `docs/writing-style.md` — **writing for readers**: the one set of rules for every reader-facing
+  word (true to the code or the source, one name per thing, no code words, say it once, and the
+  table of tells to cut), written from the UI copy review (`docs/ui-copy-review.md`). Every
+  writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1236,7 +1242,7 @@ Other important `lib/` modules:
   (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Today's
   session** wheel (`components/dashboard/SessionWheel.tsx`, `NN%` ready in the middle of the
-  ring, today's concepts outlined on it), the **Study Guide**
+  ring, today's concepts outlined on it), the **Exam Readiness**
   popup the wheel opens (the ring and the
   criterion bar — it sits under the concept popup, ending where that pane begins, so a
   tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
@@ -1253,7 +1259,7 @@ Other important `lib/` modules:
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Study Guide popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
+  Exam Readiness popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
   concepts outlined — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a middle that prints the score until a concept is hovered or
   selected, then that concept's readout) and the exam page's title-row badge
@@ -1315,8 +1321,8 @@ Other important `lib/` modules:
   context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
   `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
   `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
-  `hooks/useQuests.ts` + `components/QuestsCard.tsx` (collapsible Dashboard section)
-  and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  `hooks/useQuests.ts`, the Level badge's Quests tab (`components/QuestsPanel.tsx`, whose
+  Collect button is `QuestsCard.tsx`'s `CollectButton`) and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
   layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
@@ -1975,6 +1981,14 @@ no count: the workflow store reads the tools engine). Populating the corpus more
   imports/vars or `npm run build` will fail.
 - Prefer editing/extending existing `lib/` modules and hooks over introducing new
   abstractions; the codebase favors small, pure, well-tested utility functions.
+- **Every word a reader sees follows `docs/writing-style.md`**: app screens, emails, edge-function
+  errors, the AI connector's descriptions, Fact Check findings, and the vault's own prose. Check
+  each sentence against what the code or the source does, use the app's nouns as the `app-copy`
+  skill's glossary spells them (Store, Today's Study Plan, Practice Exam, Level 1–3, Collect…),
+  and cut the tells it lists (em-dash hinges, rules of three, closing aphorisms, exclamation marks,
+  "No more X", things acting like people). For any UI string, use the `app-copy` skill; its
+  decisions log outranks everything. `quiz/src/lib/copyGuard.test.ts` fails a build on the
+  mechanical tells and holds UI em-dash hinges to a ceiling that only goes down.
 - AI is used for content organization, code, and review — but the README is explicit that
   no wiki content is published 100% AI-written without human review. Keep that in mind if
   asked to generate concept/exam content.

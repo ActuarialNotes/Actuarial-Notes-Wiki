@@ -65,11 +65,11 @@ export function deriveTodaysConcepts(plan: EmailPlanSnapshot, today: string): st
 /** Human phrasing for the plan's pacing status, used as the email's status line. */
 export function describePacing(status: string | undefined): string {
   switch (status) {
-    case 'on_track': return "You're on track"
-    case 'ahead': return "You're ahead of schedule"
-    case 'behind': return "You're behind pace — a session today helps you catch up"
-    case 'review_mode': return 'Everything is mastered — keep it fresh with review'
-    case 'target_passed': return 'Your target date has passed — pacing against your exam date'
+    case 'on_track': return 'On track'
+    case 'ahead': return 'Ahead of schedule'
+    case 'behind': return 'Behind schedule'
+    case 'review_mode': return 'Every concept is at Level 3'
+    case 'target_passed': return 'Past your ready date, paced to your exam date'
     default: return ''
   }
 }

@@ -779,9 +779,9 @@ export function buildKnowledgeBase(sources: KnowledgeBaseSources): KnowledgeBase
 // ── llms.txt ─────────────────────────────────────────────────────────────────
 
 const STATUS_WORD: Record<KbExamStatus, string> = {
-  ready: 'complete',
-  beta: 'beta — still being filled out',
-  development: 'in development — syllabus outline only',
+  ready: 'ready',
+  beta: 'beta (questions and pages still being added and checked)',
+  development: 'in development (syllabus outline only)',
 }
 
 /**
@@ -791,7 +791,7 @@ const STATUS_WORD: Record<KbExamStatus, string> = {
  */
 export function buildLlmsTxt(kb: KnowledgeBase, connectorUrl: string, skillUrl: string): string {
   const exams = kb.exams.map(e => {
-    const bank = e.questionCount > 0 ? `, ${e.questionCount} practice questions` : ''
+    const bank = e.questionCount > 0 ? ` · ${e.questionCount} practice ${e.questionCount === 1 ? 'question' : 'questions'}` : ''
     return `- [${e.name} — ${e.subject}](${e.url}): ${e.body} · ${STATUS_WORD[e.status]}${bank}`
   })
   const general = kb.docs.filter(d => d.kind === 'guide' && d.exams.length === 0)
@@ -800,7 +800,7 @@ export function buildLlmsTxt(kb: KnowledgeBase, connectorUrl: string, skillUrl: 
     '',
     `> Study guides, concept pages and a practice-question bank for the SOA and CAS actuarial exams: ${kb.counts.concepts} concept pages, ${kb.counts.resources} source pages and ${kb.counts.questions} practice questions with worked solutions.`,
     '',
-    'Every page is community-written study material. Each one carries a fact-check status; most have not yet been checked against the source text, and the official syllabus and readings always take precedence.',
+    'This is study material, not the syllabus. Every page and question carries a fact-check status: nearly every question has been checked against its source, most concept and source pages have not yet, and the official syllabus and readings always take precedence.',
     '',
     '## Exams',
     ...exams,
@@ -808,7 +808,7 @@ export function buildLlmsTxt(kb: KnowledgeBase, connectorUrl: string, skillUrl: 
     '',
     '## For AI assistants',
     `- [MCP connector](${connectorUrl}): add this URL as a custom connector in Claude or ChatGPT (no sign-in) to search the notes, read syllabi and concept pages, and practise exam questions with the official solutions.`,
-    `- [Agent skill](${skillUrl}): a SKILL.md package that teaches an assistant to tutor with the connector — upload it in Claude or ChatGPT.`,
+    `- [Agent skill](${skillUrl}): a SKILL.md package that teaches an assistant to tutor with the connector. Upload it in Claude or ChatGPT.`,
     `- [Knowledge base export](${kb.site}/${KNOWLEDGE_BASE_ASSET}): every page and question above as one JSON file.`,
     '',
   ].join('\n')

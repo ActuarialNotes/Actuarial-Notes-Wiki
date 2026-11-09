@@ -71,7 +71,7 @@ export function WindowPill({ attempt, now, compact = false }: { attempt: Project
     )
   }
   if (attempt.deadline === null) {
-    return <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium text-muted-foreground" title="Practice — no deadline"><PenLine className="h-3.5 w-3.5" /> Practice</span>
+    return <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium text-muted-foreground" title="Practice, no deadline"><PenLine className="h-3.5 w-3.5" /> Practice</span>
   }
   const left = timeLeft(attempt.deadline, now)
   return (

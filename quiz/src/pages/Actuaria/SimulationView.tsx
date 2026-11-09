@@ -106,7 +106,7 @@ export function SimulationView({ world }: { world: ActuariaWorld }) {
               data-testid="actuaria-start-simulation"
               data-sound="begin"
             >
-              <Timer className="h-5 w-5" aria-hidden /> Start simulation
+              <Timer className="h-5 w-5" aria-hidden /> Start Practice Exam
             </Button>
             {run && (
               <div className="rounded-lg bg-muted/40 p-3" data-testid="actuaria-last-simulation">
@@ -125,18 +125,18 @@ export function SimulationView({ world }: { world: ActuariaWorld }) {
               <h2 id="sim-readiness" className="actuaria-display text-[11px] text-muted-foreground"><Term id="sectorCredibility" /></h2>
               {readiness && <p className="text-xs text-muted-foreground">{readiness.band.label}</p>}
             </div>
-            <CredibilityBar z={credibility.z} label={credibility.label} ariaLabel={`${sectorName(sector.key)} Credibility`} />
+            <CredibilityBar z={credibility.z} label={credibility.label} percent={credibility.percent} ariaLabel={`${sectorName(sector.key)} Credibility`} />
             <div>
-              <p className="actuaria-display text-[11px] text-muted-foreground">Biggest lifts</p>
+              <p className="actuaria-display text-[11px] text-muted-foreground">Most readiness from one level up</p>
               {lifts.length === 0 ? (
-                <p className="mt-1 text-sm text-muted-foreground">Every {term('region').toLowerCase()} is at the top of the ladder.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Every learning objective is at Level 3.</p>
               ) : (
                 <ul className="mt-1 divide-y divide-border/60" data-testid="actuaria-lifts">
                   {lifts.map(l => (
                     <li key={l.name} className="flex items-center gap-3 py-2">
                       <span className="min-w-0 flex-1 truncate text-sm">{l.name}</span>
-                      <span className="shrink-0 font-mono text-xs tabular-nums text-green-400" title="Readiness points, one level up">
-                        +{l.points.toFixed(1)}
+                      <span className="shrink-0 font-mono text-xs tabular-nums text-green-400" title="Readiness points gained from one level up">
+                        +{l.points.toFixed(1)} pts
                       </span>
                     </li>
                   ))}

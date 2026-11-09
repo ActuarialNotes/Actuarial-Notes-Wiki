@@ -149,7 +149,7 @@ export function formatStepDateShort(step: Pick<SittingMilestone, 'date' | 'endDa
 /**
  * **The headline** — what the status banner says above the ruler: the step
  * happening now or coming next, told as a title, a line under it and a count.
- * "Exam window open · Closes Nov 15 · 7 days"; "Exam window opens in · Dec 3
+ * "Exam window open · Closes Nov 15 · 7 days"; "Exam window opens · Dec 3
  * · 25 days". Null once every date has passed: there is nothing to count to.
  */
 export interface SittingHeadline {
@@ -173,7 +173,7 @@ export function sittingHeadline(steps: readonly SittingStep[], today: string): S
   }
   const ahead = daysBetween(today, step.date)
   return {
-    title: step.endDate ? `${step.label} opens in` : `${step.label} in`,
+    title: step.endDate ? `${step.label} opens` : step.label,
     detail: formatStepDateShort({ date: step.date }, today),
     count: ahead === 1 ? 'Tomorrow' : days(ahead),
     state: 'next',

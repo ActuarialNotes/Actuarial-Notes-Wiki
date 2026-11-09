@@ -325,8 +325,8 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
                             type="button"
                             data-sound="tick"
                             onClick={() => setAttemptStatus(nextAttemptStatus)}
-                            aria-label={`Attempt filter: ${label}. Tap to cycle.`}
-                            title={`Showing ${label.toLowerCase()} questions — tap to cycle`}
+                            aria-label={`Attempt filter: ${label}. Change filter`}
+                            title={`Showing ${label.toLowerCase()} questions`}
                             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                               isActive
                                 ? 'bg-primary/10 text-primary'

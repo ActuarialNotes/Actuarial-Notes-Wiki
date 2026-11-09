@@ -57,6 +57,12 @@ export interface BattleSkin {
    * on a desktop for Quiz Battle; under the Actuaria HUD row at every width.
    */
   scoreboardTop: string
+  /**
+   * Draw the page as the Deck — a card table on a dark ground
+   * (docs/quiz-battle-redesign.md). Quiz Battle's own page; Monte Carlo Station
+   * keeps its station look (§2.6 of the style guide).
+   */
+  deck: boolean
 }
 
 export const PLAIN_SKIN: BattleSkin = {
@@ -77,6 +83,7 @@ export const PLAIN_SKIN: BattleSkin = {
   abilities: false,
   reviewMisses: false,
   scoreboardTop: 'top-14 lg:top-0',
+  deck: true,
 }
 
 export const ACTUARIA_SKIN: BattleSkin = {
@@ -102,6 +109,7 @@ export const ACTUARIA_SKIN: BattleSkin = {
   abilities: true,
   reviewMisses: true,
   scoreboardTop: 'top-14',
+  deck: false,
 }
 
 export function battleSkin(id: BattleSkinId | undefined): BattleSkin {

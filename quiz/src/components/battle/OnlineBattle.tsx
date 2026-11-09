@@ -11,6 +11,10 @@ import { PlayerTile } from '@/components/battle/PlayerTile'
 import { SkinQuestionFrame } from '@/components/battle/SkinParts'
 import { AbilityTray } from '@/components/battle/AbilityTray'
 import { BattleDraftScreen } from '@/components/battle/TopicPick'
+import { DeckDraftScreen } from '@/components/battle/deck/DeckTopicPick'
+import { DeckRound } from '@/components/battle/deck/DeckRound'
+import { DeckResults } from '@/components/battle/deck/DeckResults'
+import { DeckGuestRoom, DeckHostRoom, DeckMatchIntro } from '@/components/battle/deck/DeckRoom'
 import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
@@ -37,7 +41,8 @@ import {
   type SessionSnapshot,
   type TopicSource,
 } from '@/lib/battleSession'
-import type { TopicGroup } from '@/lib/battleTopics'
+import { questionTopics, type TopicGroup } from '@/lib/battleTopics'
+import type { BattleSetup } from '@/lib/battleSetup'
 import { battleTransport } from '@/lib/battleTransport'
 import type { Question } from '@/lib/parser'
 import { formatClock } from '@/lib/quizTiming'
@@ -86,7 +91,7 @@ function ShareButtons({ code }: { code: string }) {
         <Button
           variant="outline"
           className="gap-2"
-          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite} — room ${code}`, url: link }).catch(() => {}) }}
+          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite}, room ${code}`, url: link }).catch(() => {}) }}
         >
           <Share2 className="h-4 w-4" aria-hidden />
           Share
@@ -147,7 +152,7 @@ function Problem({ problem, onRetry, onExit, onFindAnother }: {
   onFindAnother?: () => void
 }) {
   const { title, body } = onFindAnother && problem !== 'version'
-    ? { title: 'Your opponent’s room closed', body: 'They left before the battle could start. Find someone else?' }
+    ? { title: 'Your opponent’s room closed', body: 'They left before the battle could start.' }
     : PROBLEM_TEXT[problem]
   return (
     <div className="mx-auto max-w-md space-y-4 py-12 text-center" data-testid="battle-problem">
@@ -403,7 +408,7 @@ function OnlineMatch({
           />
         ) : canPick ? (
           <div className="space-y-2">
-            <p className="text-center text-xs text-muted-foreground">Tap to lock in — you can’t change it. First right answer scores most.</p>
+            <p className="text-center text-xs text-muted-foreground">Tap to lock in. You can’t change it. The fastest right answer scores most.</p>
             <AnswerPad
               seat={me}
               options={battle.questions[round.index].options}
@@ -418,9 +423,9 @@ function OnlineMatch({
             {phase === 'countdown'
               ? 'Get ready…'
               : phase === 'closing'
-              ? 'Time’s up — revealing…'
+              ? 'Time’s up. Revealing…'
               : lockedChoice
-              ? round.locks[opp] ? 'Both in — revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`
+              ? round.locks[opp] ? 'Both in. Revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`
               : 'Waiting…'}
           </p>
         )}
@@ -450,6 +455,42 @@ function Results({
   const theyAsked = snapshot.rematch[opp]
   const host = snapshot.role === 'host'
   const gone = !snapshot.opponentPresent || battle.forfeit !== null
+  const skin = useBattleSkin()
+  const note = gone ? null
+    : host && theyAsked ? `${oppName} wants a rematch!`
+    : !host && iAsked ? `Waiting for ${oppName} to start it…`
+    : !host ? `${oppName} starts the rematch.`
+    : null
+
+  if (skin.deck) {
+    // The round's topic: the draw's, where it dealt this question, else the question's own first.
+    const topicOf = (index: number): string | null => {
+      const round = battle.rounds[index]
+      const drawn = snapshot.draft?.drawn[index]
+      if (round && drawn && drawn.id === round.questionId && drawn.topic) return drawn.topic
+      const q = round ? questionsById.get(round.questionId) : undefined
+      return q ? questionTopics(q)[0] ?? null : null
+    }
+    return (
+      <DeckResults
+        battle={battle}
+        questionsById={questionsById}
+        me={snapshot.me}
+        topicOf={topicOf}
+        primary={gone ? null : {
+          label: !host && iAsked ? 'Rematch asked for' : `Rematch ${oppName}`,
+          onClick: onRematch,
+          disabled: !host && iAsked,
+          testid: 'battle-rematch',
+        }}
+        secondary={onFindAnother
+          ? { label: 'New opponent', onClick: onFindAnother, testid: 'battle-find-another' }
+          : { label: 'Leave room', onClick: onLeave, testid: 'battle-leave-room' }}
+        note={note}
+        onLeave={onLeave}
+      />
+    )
+  }
 
   return (
     <div className="pt-4">
@@ -468,7 +509,7 @@ function Results({
                 data-testid="battle-rematch"
               >
                 <RotateCcw className="h-4 w-4" aria-hidden />
-                {host ? 'Rematch' : iAsked ? 'Rematch asked for' : 'Ask for a rematch'}
+                {host ? 'Rematch' : iAsked ? 'Rematch requested' : 'Ask for a rematch'}
               </Button>
             )}
             {onFindAnother && <FindAnotherButton onClick={onFindAnother} />}
@@ -477,13 +518,7 @@ function Results({
             </Button>
           </>
         }
-        note={
-          gone ? null
-            : host && theyAsked ? `${oppName} wants a rematch!`
-            : !host && iAsked ? `Waiting for ${oppName} to start it…`
-            : !host ? `${oppName} starts the rematch.`
-            : null
-        }
+        note={note}
       />
     </div>
   )
@@ -508,9 +543,20 @@ export function OnlineHost({
   opponent,
   loadout,
   onRoomOpen,
+  room,
 }: {
   config: BattleConfig
   player: BattlePlayer
+  /**
+   * The Deck's friend room: the setup its settings change, the exams the room
+   * can be on, and the way over to its *Join* tab.
+   */
+  room?: {
+    setup: BattleSetup
+    exams: readonly { exam: string; count: number }[]
+    onSetup: (next: BattleSetup) => void
+    onJoinTab: () => void
+  }
   /** The abilities this player brings — used only if the room has them on. */
   loadout?: AbilityId[]
   /** Told the room's code once it is open (a private room only). */
@@ -579,8 +625,9 @@ export function OnlineHost({
   if (!session || !snapshot) return null
 
   if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
+    const Draft = skin.deck ? DeckDraftScreen : BattleDraftScreen
     return (
-      <BattleDraftScreen
+      <Draft
         snapshot={snapshot}
         catalogue={catalogueFor(snapshot.config.exam)}
         onChoose={t => session.chooseTopics(t)}
@@ -591,8 +638,9 @@ export function OnlineHost({
   }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
+    const Match = skin.deck ? DeckRound : OnlineMatch
     return snapshot.stage === 'playing' && !snapshot.battle.finished ? (
-      <OnlineMatch
+      <Match
         snapshot={snapshot}
         questionsById={questionsById}
         onAnswer={c => session.answer(c)}
@@ -620,7 +668,7 @@ export function OnlineHost({
           <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden />
           <div className="space-y-1">
             <h2 className="text-lg font-semibold">Your opponent didn’t arrive</h2>
-            <p className="text-sm text-muted-foreground">They may have closed the page. Find someone else?</p>
+            <p className="text-sm text-muted-foreground">They may have closed the page.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-2">
             {onFindAnother && <FindAnotherButton onClick={onFindAnother} solid />}
@@ -629,7 +677,22 @@ export function OnlineHost({
         </div>
       )
     }
-    return <MatchIntro snapshot={snapshot} note={guestIn ? 'Starting…' : 'Opening the room…'} opponent={opponent} />
+    const Intro = skin.deck ? DeckMatchIntro : MatchIntro
+    return <Intro snapshot={snapshot} note={guestIn ? 'Starting…' : 'Opening the room…'} opponent={opponent} />
+  }
+
+  if (skin.deck && room) {
+    return (
+      <DeckHostRoom
+        snapshot={snapshot}
+        session={session}
+        setup={room.setup}
+        exams={room.exams}
+        onSetup={room.onSetup}
+        onExit={onExit}
+        onJoinTab={room.onJoinTab}
+      />
+    )
   }
 
   const guest = snapshot.players[1]
@@ -655,19 +718,19 @@ export function OnlineHost({
           >
             Start battle
           </Button>
-          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready — you’ll each pick your topics first.</p>
+          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready. You’ll each pick your topics first.</p>
         </div>
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Send this code to a friend — they open <span className="font-medium text-foreground">{joinHint}</span>.
+            Send this code to a friend. They open <span className="font-medium text-foreground">{joinHint}</span>.
           </p>
           <ShareButtons code={code} />
         </div>
       )}
       {snapshot.connection === 'error' && (
         <p className="flex items-center justify-center gap-2 text-sm text-amber-600 dark:text-amber-400">
-          <WifiOff className="h-4 w-4" aria-hidden /> Trouble reaching the battle server — retrying…
+          <WifiOff className="h-4 w-4" aria-hidden /> Can’t reach the battle server. Retrying…
         </p>
       )}
       <Button variant="ghost" onClick={onExit}>Close room</Button>
@@ -704,6 +767,7 @@ export function OnlineGuest({
   opponent?: BattlePlayer
 }) {
   const [attempt, setAttempt] = useState(0)
+  const skin = useBattleSkin()
   const { session, snapshot } = useBattleSession(
     () => new GuestSession({
       transport: battleTransport(code),
@@ -731,8 +795,9 @@ export function OnlineGuest({
   }
 
   if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
+    const Draft = skin.deck ? DeckDraftScreen : BattleDraftScreen
     return (
-      <BattleDraftScreen
+      <Draft
         snapshot={snapshot}
         catalogue={catalogueFor(snapshot.config.exam)}
         onChoose={t => session.chooseTopics(t)}
@@ -743,8 +808,9 @@ export function OnlineGuest({
   }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
+    const Match = skin.deck ? DeckRound : OnlineMatch
     return snapshot.stage === 'playing' && !snapshot.battle.finished ? (
-      <OnlineMatch
+      <Match
         snapshot={snapshot}
         questionsById={questionsById}
         onAnswer={c => session.answer(c)}
@@ -765,8 +831,11 @@ export function OnlineGuest({
   }
 
   if (matched) {
-    return <MatchIntro snapshot={snapshot} note={snapshot.stage === 'lobby' ? 'Starting…' : 'Joining the room…'} opponent={opponent} />
+    const Intro = skin.deck ? DeckMatchIntro : MatchIntro
+    return <Intro snapshot={snapshot} note={snapshot.stage === 'lobby' ? 'Starting…' : 'Joining the room…'} opponent={opponent} />
   }
+
+  if (skin.deck) return <DeckGuestRoom snapshot={snapshot} onExit={onExit} />
 
   const host = snapshot.players[0]
   return (

@@ -226,7 +226,7 @@ export function WorkflowAddMenu({
           {dataTools.map(toolRow)}
           <Row
             title="Upload a CSV"
-            subtitle="Dates and values to connect to the steps that use them"
+            subtitle="A table of your own, mapped onto the steps that use it"
             icon={FileSpreadsheet}
             onClick={() => fileRef.current?.click()}
             testId="workflow-add-csv"

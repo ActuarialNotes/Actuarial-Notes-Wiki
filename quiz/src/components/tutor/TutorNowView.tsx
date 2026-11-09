@@ -73,7 +73,7 @@ function ConceptCard({ engine, actions, name }: { engine: TutorEngine; actions: 
       {historyLine(history) && <p className="text-sm">{historyLine(history)}</p>}
       {siblings.length > 0 && (
         <p className="text-xs text-muted-foreground">
-          Named on one syllabus line with {siblings.slice(0, 4).join(', ')}{siblings.length > 4 ? '…' : ''} — the exam asks you to tell them apart.
+          Named on one syllabus line with {siblings.slice(0, 4).join(', ')}{siblings.length > 4 ? '…' : ''}. The exam asks you to tell them apart.
         </p>
       )}
       {notes.length > 0 && (
@@ -137,7 +137,7 @@ export function TutorNowView({ engine, actions, place }: Props) {
       {conceptOnScreen && <ConceptCard engine={engine} actions={actions} name={place.concept!} />}
       {(otherExamPage || (place.surface === 'concept' && place.concept && !inSyllabus)) && (
         <p className="rounded-xl bg-muted/60 p-3 text-sm text-muted-foreground">
-          The Tutor covers {engine.exam.label} for now. It follows you here, quietly.
+          The Tutor only covers {engine.exam.label} for now.
         </p>
       )}
 

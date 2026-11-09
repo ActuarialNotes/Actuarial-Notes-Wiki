@@ -1,3 +1,4 @@
+import '@/components/battle/battle.css'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -9,6 +10,15 @@ import { BattleSetupForm } from '@/components/battle/BattleSetupForm'
 import { LocalBattle } from '@/components/battle/LocalBattle'
 import { OnlineGuest, OnlineHost } from '@/components/battle/OnlineBattle'
 import { Matchmaking } from '@/components/battle/Matchmaking'
+import { DeckScope } from '@/components/battle/deck/DeckParts'
+import { DeckIntro } from '@/components/battle/deck/DeckIntro'
+import { DeckHome } from '@/components/battle/deck/DeckHome'
+import { DeckLobby } from '@/components/battle/deck/DeckLobby'
+import { DeckJoin } from '@/components/battle/deck/DeckRoom'
+import { DeckLocalBattle, DeckSeating } from '@/components/battle/deck/DeckLocal'
+import { useBattleIntro } from '@/hooks/useBattleIntro'
+import { ANY_EXAM } from '@/lib/battleLobby'
+import type { DeckMode } from '@/lib/battleDeck'
 import { useAuth } from '@/hooks/useAuth'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useLobbyCount } from '@/hooks/useBattle'
@@ -51,8 +61,11 @@ import {
 import type { MatchFound } from '@/lib/battleMatchmaking'
 import { isQueued } from '@/lib/battleQueue'
 import { useBattleQueueStore } from '@/stores/battleQueueStore'
-import type { TopicSource } from '@/lib/battleSession'
-import { catalogueTopics, drawFromTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
+import type { DraftSource } from '@/lib/battleSession'
+import { catalogueTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
+import { battlePairReader, drawRound, type ReadPair } from '@/lib/battleDraft'
+import { filterQuestions } from '@/lib/parser'
+import { useConceptPages, usePlayerLevel } from '@/hooks/useBattleDraft'
 import { EXAM_LABEL_TO_ID, bankLabelFor } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
 import { trackBattleStarted } from '@/lib/analytics'
@@ -162,13 +175,13 @@ function HowPointsWork() {
   const skin = useBattleSkin()
   const rows: [string, string][] = [
     ['Right answer', `${BASE_POINTS}`],
-    ['Speed', `up to +${SPEED_BONUS_MAX} — the sooner, the more`],
+    ['Speed', `up to +${SPEED_BONUS_MAX}, more for a faster answer`],
     ['Streak', `+${STREAK_STEP} for two in a row, up to +${STREAK_STEP * STREAK_STEPS_MAX}`],
     ['Final question', `×${FINAL_ROUND_MULTIPLIER} everything`],
     [skin.local.title, `${skin.claim} costs ${WRONG_BUZZ_PENALTY} and hands your rival the steal`],
     ['Online', `the first right answer gets +${FASTEST_BONUS}; a wrong one costs nothing`],
     ...(skin.abilities
-      ? [['Abilities', 'a private channel’s host can turn them on — each once per battle, scored on its own line'] as [string, string]]
+      ? [['Abilities', 'a private channel’s host can turn them on. Each is used once per battle and scored on its own line'] as [string, string]]
       : []),
   ]
   return (
@@ -225,7 +238,10 @@ export default function Battle({
   const skin = battleSkin(skinId)
   return (
     <BattleSkinContext.Provider value={skin}>
-      <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} onRoomOpen={onRoomOpen} />
+      {/* The scope the battle's own utilities are generated under (tailwind.battle.config.ts). */}
+      <div className="battle-css" style={{ display: 'contents' }}>
+        <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} onRoomOpen={onRoomOpen} />
+      </div>
     </BattleSkinContext.Provider>
   )
 }
@@ -276,6 +292,9 @@ function BattlePage({
       ? { kind: 'lobby' }
       : { kind: 'home' },
   )
+
+  // The Deck's intro: once per visit, when the visit opens on the start screen.
+  const intro = useBattleIntro(skin.deck && screen.kind === 'home')
 
   // Every screen here is one address, so the router never sees a change of
   // screen: the page draws it, as a sheet laid over going in and swiped off
@@ -368,9 +387,8 @@ function BattlePage({
     return () => drawBattleQuestions(battlePool(questions, config.exam), config.rounds, difficulty).map(questionKey)
   }
 
-  // Online, a battle is drawn from the topics both players pick
-  // (lib/battleTopics.ts): each exam's topics, grouped the way its syllabus
-  // groups them, worked out once per exam.
+  // Online, a battle is dealt from a draft (lib/battleDraft.ts): each exam's
+  // topics, grouped the way its syllabus groups them, worked out once per exam.
   const catalogueFor = useMemo(() => {
     const cache = new Map<string, TopicGroup[]>()
     return (exam: string): TopicGroup[] => {
@@ -383,12 +401,40 @@ function BattlePage({
     }
   }, [questions, syllabi])
 
-  function topicsFor(difficulty: number): TopicSource {
+  // How closely two topics pair — Concept Craft's strength, read off the
+  // pages (fetched once a room is hosted) and the whole bank — and the battle
+  // questions that test both. Each pair read once per exam.
+  const conceptPage = useConceptPages(screen.kind === 'host')
+  const playerLevel = usePlayerLevel()
+  const pairFor = useMemo(() => {
+    const graphQuestions = filterQuestions([...questions], {}).map(q => ({ id: q.id, links: q.wiki_link }))
+    const cache = new Map<string, ReadPair>()
+    return (exam: string): ReadPair => {
+      let read = cache.get(exam)
+      if (!read) {
+        const reader = battlePairReader({ pool: battlePool(questions, exam), graphQuestions, page: conceptPage })
+        const seen = new Map<string, ReturnType<ReadPair>>()
+        read = (a, b) => {
+          const key = `${a}\u0000${b}`
+          let hit = seen.get(key)
+          if (!hit) seen.set(key, (hit = reader(a, b)))
+          return hit
+        }
+        cache.set(exam, read)
+      }
+      return read
+    }
+  }, [questions, conceptPage])
+
+  function topicsFor(difficulty: number): DraftSource {
     return {
       topics: exam => catalogueTopics(catalogueFor(exam)).map(t => t.name),
-      draw: (config, picks) =>
-        drawFromTopics(battlePool(questions, config.exam), picks, config.rounds, difficulty)
-          .map(d => ({ key: questionKey(d.question), topic: d.topic })),
+      pair: pairFor,
+      draw: (config, cards, on, used) => {
+        const drawn = drawRound(battlePool(questions, config.exam), cards, on, used, difficulty)
+        return drawn ? { key: questionKey(drawn.question), basis: drawn.basis, topic: drawn.topic } : null
+      },
+      level: playerLevel,
     }
   }
 
@@ -403,6 +449,24 @@ function BattlePage({
     const difficulty = difficultyTarget(effectiveSetup.difficulty)
     if (mode === 'local') setScreen({ kind: 'local', config, players: [player(0, myAvatar), player(1)], difficulty })
     else setScreen({ kind: 'host', config, player: player(0, myAvatar), difficulty })
+  }
+
+  // The Deck has no room setup screen: a friend room opens at once, and its
+  // settings are on the room itself (a `?host=1` way in lands here too).
+  useEffect(() => {
+    if (skin.deck && screen.kind === 'setup' && screen.mode === 'host' && !loading && exam) begin('host')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skin.deck, screen, loading, exam])
+
+  /** The start screen's button, for whichever card of the hand is raised. */
+  function deckGo(mode: DeckMode) {
+    if (mode === 'lobby') {
+      // The deck the start screen shows is the one the lobby asks for — unless
+      // the player last asked for any exam.
+      setSetup({ ...effectiveSetup, lobbyExam: effectiveSetup.lobbyExam === ANY_EXAM ? ANY_EXAM : exam })
+      enterLobby()
+    } else if (mode === 'local') setScreen({ kind: 'setup', mode: 'local' })
+    else begin('host')
   }
 
   function home() {
@@ -436,9 +500,21 @@ function BattlePage({
 
   // ── The battles ───────────────────────────────────────────────────────────
   const shell = (children: ReactNode) => (
-    <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">{children}</div>
+    skin.deck ? <DeckScope>{children}</DeckScope> : <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">{children}</div>
   )
 
+  if (skin.deck && screen.kind === 'local') {
+    return shell(
+      <DeckLocalBattle
+        config={screen.config}
+        players={screen.players}
+        draw={drawFor(screen.config, screen.difficulty)}
+        questionsById={questionsById}
+        onSettings={() => setScreen({ kind: 'setup', mode: 'local' })}
+        onExit={home}
+      />,
+    )
+  }
   if (screen.kind === 'local') {
     return shell(
       <LocalBattle
@@ -465,6 +541,12 @@ function BattlePage({
         opponent={screen.opponent}
         loadout={screen.code ? undefined : loadout}
         onRoomOpen={screen.code ? undefined : onRoomOpen}
+        room={screen.code ? undefined : {
+          setup: effectiveSetup,
+          exams,
+          onSetup: setSetup,
+          onJoinTab: () => setScreen({ kind: 'join', code: '' }),
+        }}
       />,
     )
   }
@@ -480,11 +562,81 @@ function BattlePage({
         onFindAnother={screen.matched ? findAnother : undefined}
         opponent={screen.opponent}
         loadout={screen.matched ? undefined : loadout}
+        level={playerLevel}
       />,
     )
   }
 
   // ── The way in ────────────────────────────────────────────────────────────
+  if (skin.deck) {
+    return (
+      <DeckScope>
+        {intro.showing && <DeckIntro me={{ name: effectiveSetup.names[0] || myName || DEFAULT_PLAYER_NAMES[0] }} onDone={intro.finish} />}
+        {screen.kind === 'home' && (
+          <DeckHome
+            exams={exams}
+            exam={exam}
+            onExamChange={next => setSetup({ ...effectiveSetup, exam: next })}
+            lobbyCount={lobbyCount}
+            loading={loading}
+            onBack={back.go}
+            backLabel={backName(back)}
+            onGo={deckGo}
+          />
+        )}
+        {screen.kind === 'lobby' && (loading ? (
+          <div className="flex items-center gap-2 px-5 py-8 text-sm text-[var(--deck-soft)]">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading questions…
+          </div>
+        ) : (
+          <DeckLobby
+            key={effectiveSetup.names[0]}
+            player={player(0, myAvatar)}
+            exam={lobbyExam}
+            deckExam={exam}
+            exams={exams}
+            catalogueFor={catalogueFor}
+            signedIn={!!user}
+            onExamChange={next => setSetup({ ...effectiveSetup, lobbyExam: next })}
+            onLeave={home}
+          />
+        ))}
+        {screen.kind === 'setup' && screen.mode === 'local' && (
+          <DeckSeating
+            setup={effectiveSetup}
+            exams={exams}
+            onChange={setSetup}
+            onBack={home}
+            onDeal={() => begin('local')}
+            loading={loading}
+          />
+        )}
+        {screen.kind === 'setup' && screen.mode === 'host' && (
+          <div className="flex items-center gap-2 px-5 py-8 text-sm text-[var(--deck-soft)]">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading questions…
+          </div>
+        )}
+        {screen.kind === 'join' && (
+          <DeckJoin
+            code={screen.code}
+            name={effectiveSetup.names[0]}
+            loading={loading}
+            onBack={home}
+            onHost={() => begin('host')}
+            onJoin={(code, name) => {
+              setSetup({ ...effectiveSetup, names: [name, effectiveSetup.names[1]] })
+              setScreen({
+                kind: 'guest',
+                code,
+                player: { name: cleanPlayerName(name, DEFAULT_PLAYER_NAMES[1]), ...(myAvatar ? { avatarUrl: myAvatar } : {}) },
+              })
+            }}
+          />
+        )}
+      </DeckScope>
+    )
+  }
+
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6">
       {screen.kind === 'home' && (
@@ -496,8 +648,7 @@ function BattlePage({
           <div className="flex items-center gap-3 rounded-xl bg-card p-5">
             <SkinLogo size="lg" />
             <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Two players, the same questions, one scoreboard.</span>{' '}
-              Fast right answers score more, streaks score more again, and the final question counts double.
+              Race another player through the same questions. How each answer scores is under How points work.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
@@ -526,7 +677,7 @@ function BattlePage({
               icon={<Users className="h-5 w-5" />}
               title={skin.local.title}
               plain={skin.local.plain}
-              body="Two players, one device. First to buzz answers — miss, and your rival gets to steal."
+              body="Two players, one device. The first to buzz answers, and a miss lets the other player steal."
             >
               <Button size="lg" variant="outline" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'setup', mode: 'local' })} data-testid="battle-mode-local">
                 <Play className="h-4 w-4" aria-hidden />
@@ -687,7 +838,7 @@ function JoinForm({
             data-testid="battle-join-code"
           />
           {code.length === ROOM_CODE_LENGTH && !valid && (
-            <p className="px-1 text-xs text-red-600 dark:text-red-400">That isn’t a room code — codes use letters and the digits 2–9.</p>
+            <p className="px-1 text-xs text-red-600 dark:text-red-400">That isn’t a room code. Codes use letters and the digits 2–9.</p>
           )}
         </div>
         <div className="space-y-2">

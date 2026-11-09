@@ -272,3 +272,20 @@ export function normalizeInput(spec: ToolSpec, raw: unknown): NormalizedInput {
   }
   return { input, defaulted, notes, sources }
 }
+
+/**
+ * An input error as the card says it: the field and column keys an agent
+ * sends (`"per_year"`, `Row 3 of "points" is missing "value"`) swapped for
+ * the labels the reader sees beside the field (`Points a year`, `Row 3 of
+ * Points is missing Value`). Only keys of the field the error names are
+ * swapped, so a quoted value the reader typed is left as it is. The engine's
+ * own message, which the MCP connector returns, is unchanged.
+ */
+export function readerMessage(spec: ToolSpec, err: ToolInputError): string {
+  const field = spec.fields.find(f => f.key === err.field)
+  if (!field) return err.message
+  const labels = new Map<string, string>([[field.key, field.label]])
+  if (field.kind === 'table') for (const c of field.columns) labels.set(c.key, c.label)
+  const swapped = err.message.replace(/"([^"]+)"/g, (whole, key: string) => labels.get(key) ?? whole)
+  return swapped.charAt(0).toUpperCase() + swapped.slice(1)
+}

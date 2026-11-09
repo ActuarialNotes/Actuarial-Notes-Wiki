@@ -130,7 +130,7 @@ export function TutorPractice({ item, concept, reason, conceptItems, onGraded, o
       ) : (
         <div className="space-y-1.5">
           <label htmlFor={`tutor-scratch-${item.id}`} className="text-xs font-medium text-muted-foreground">
-            Your answer — or work it on paper. Nothing reads it but you.
+            Type your answer, or work it on paper. Nothing reads it but you.
           </label>
           <textarea
             id={`tutor-scratch-${item.id}`}
@@ -182,7 +182,7 @@ export function TutorPractice({ item, concept, reason, conceptItems, onGraded, o
             <SelfGradeButtons
               value={grade}
               onChange={mark}
-              prompt={grade ? 'Marked — change it until you go on.' : 'Mark it against the sample answer'}
+              prompt={grade ? 'Marked. You can change it until you go on.' : 'Mark it against the sample answer'}
             />
           )}
 

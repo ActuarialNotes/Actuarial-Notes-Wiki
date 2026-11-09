@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react'
 import { ActuariaBottomBar } from '@/components/actuaria/ActuariaBottomBar'
 import { ActuariaHud } from '@/components/actuaria/ActuariaHud'
 import { ActuariaScope } from '@/components/actuaria/ActuariaScope'
+import { TermScreen } from '@/components/actuaria/Term'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useActuariaPrefs } from '@/hooks/useActuariaPrefs'
 import { useActuariaWorld } from '@/hooks/useActuariaWorld'
@@ -138,7 +139,7 @@ function InWorld({
   children: ReactNode
 }) {
   return (
-    <>
+    <TermScreen>
       <ActuariaHud leagueExams={leagueExams} />
       <div
         style={{
@@ -150,7 +151,7 @@ function InWorld({
         {children}
       </div>
       {tabBar && <ActuariaBottomBar />}
-    </>
+    </TermScreen>
   )
 }
 

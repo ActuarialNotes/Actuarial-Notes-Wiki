@@ -55,7 +55,7 @@ export function WorkflowClaudePanel({
 
   return (
     <aside
-      aria-label="Run it in Claude"
+      aria-label="Run in Claude or ChatGPT"
       className={cn(
         'flex flex-col bg-card text-card-foreground shadow-2xl',
         layout === 'drawer' ? 'craft-drawer-in h-full w-[26rem] max-w-[calc(100vw-1.5rem)] rounded-xl' : 'craft-sheet-in max-h-[80dvh] w-full rounded-t-2xl',
@@ -64,7 +64,7 @@ export function WorkflowClaudePanel({
     >
       <div className="flex items-start gap-2 px-4 pb-2 pt-4">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Run it in Claude</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Run in Claude or ChatGPT</p>
           <h2 className="truncate text-lg font-semibold leading-snug">{workflow.title}</h2>
         </div>
         <button
@@ -98,7 +98,7 @@ export function WorkflowClaudePanel({
           data-testid="workflow-copy-brief"
         >
           {copied === 'brief' ? <Check className="h-5 w-5" aria-hidden /> : <ClipboardCopy className="h-5 w-5" aria-hidden />}
-          {copied === 'brief' ? 'Copied' : 'Copy for Claude'}
+          {copied === 'brief' ? 'Copied' : 'Copy the workflow'}
         </button>
 
         <ol className="space-y-3 text-sm">
@@ -125,15 +125,15 @@ export function WorkflowClaudePanel({
           <li className="flex gap-3">
             <Num n={2} />
             <p className="min-w-0 flex-1">
-              Paste the workflow into a new chat. Claude runs each step with the same calculators, reads the concept pages, and
-              writes up what it found.
+              Paste the workflow into a new chat. The assistant runs each step on the same calculators and writes up what it
+              found.
             </p>
           </li>
         </ol>
 
         {steps > 0 && (
           <details className="group text-sm">
-            <summary className="cursor-pointer select-none py-1 text-muted-foreground hover:text-foreground">What Claude is given</summary>
+            <summary className="cursor-pointer select-none py-1 text-muted-foreground hover:text-foreground">What the assistant is given</summary>
             <pre className="mt-1 max-h-72 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/60 p-3 font-mono text-[11px] leading-relaxed" data-testid="workflow-brief">
               {brief}
             </pre>

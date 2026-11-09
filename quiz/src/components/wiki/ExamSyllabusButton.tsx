@@ -39,7 +39,7 @@ export function ExamSyllabusButton({
       url={link.url}
       label={link.label}
       subtitle={examLabel}
-      tooltip={`${examLabel} — the published syllabus (PDF)`}
+      tooltip={`${examLabel} syllabus (PDF)`}
       chip={false}
       // An Ink tool tile (style guide §7.0), like Info and Quiz beside it.
       className={inkToolTile(false, 'min-h-0 border-0 bg-transparent py-0 pt-0.5 shadow-none [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:text-current')}

@@ -503,7 +503,7 @@ export function QuestionCard({
 
           {isLocked && onNext && (
             <p className="text-xs text-center text-muted-foreground pt-1 select-none">
-              Tap any answer to continue →
+              Choose any answer to continue
             </p>
           )}
 

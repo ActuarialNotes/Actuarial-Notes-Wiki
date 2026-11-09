@@ -32,7 +32,7 @@ test.describe('tools', () => {
 
     // A cell that isn't a number is named, and the last result is kept.
     await card.getByLabel('Latest, row 1').fill('lots')
-    await expect(card.getByRole('alert')).toContainText('"latest" must be a number')
+    await expect(card.getByRole('alert')).toContainText('Latest must be a number')
     await card.getByLabel('Latest, row 1').fill('1700')
     await expect(card.getByRole('alert')).toHaveCount(0)
 

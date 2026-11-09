@@ -169,7 +169,7 @@ function StepMarker({ state }: { state: SittingStep['state'] }) {
 }
 
 const STATE_SR: Record<SittingStep['state'], string> = {
-  done: ' (passed)',
+  done: ' (over)',
   now: ' (today)',
   next: ' (next)',
   later: '',

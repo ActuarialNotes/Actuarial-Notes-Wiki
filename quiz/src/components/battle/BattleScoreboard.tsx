@@ -272,7 +272,7 @@ function MomentumBar({ scores }: { scores: readonly [number, number] }) {
     <div
       className="relative mt-2.5 flex h-1.5 overflow-hidden rounded-full bg-muted"
       role="img"
-      aria-label={share === 0.5 ? 'Level' : `${Math.round(share * 100)}% of the points to player one`}
+      aria-label={share === 0.5 ? 'Tied' : `${Math.round(share * 100)}% of the points to player one`}
     >
       <div
         style={{ ...playerAccentStyle(0), width: `${share * 100}%` }}

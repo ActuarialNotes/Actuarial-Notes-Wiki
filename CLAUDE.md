@@ -98,7 +98,9 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
+  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
+  chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
@@ -138,7 +140,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
-  tick when picked. The add-flashcards picker, Quiz Battle's topic pick and Concept Craft's deck
+  tick when picked. The add-flashcards picker, Quiz Battle's draw and Concept Craft's deck
   all draw it (levels read through `latestMasteryStates` in `lib/mastery.ts` — for the latter
   two via `hooks/useConceptLevels.ts`), so one concept is the same card in each. The craft deck
   passes `showLock={false}`: every card in hand can be played.
@@ -154,7 +156,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   SOA's and CAS's fee pages — the info panel's "Fee" row and the Store's registration
   price), `storeCatalog.ts` (the Store's sellers, study materials and calculators — see
   `docs/store.md`),
-  `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
+  `quests.ts` (daily-quest
   catalogue), `examGuides.ts` (the exam-page orientation guide — the tip
   pages themselves live in the vault under `Guides/`, see below), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
@@ -373,6 +375,10 @@ before touching that area**:
   box (`hooks/useSearchTracking.ts`) and `first_interaction`, the human signal. Every
   event is typed in `AnalyticsEventMap`; no personal data in a param. The doc ends with
   the GA4 property settings the code depends on. Read before adding an event.
+- `docs/writing-style.md` — **writing for readers**: the one set of rules for every reader-facing
+  word (true to the code or the source, one name per thing, no code words, say it once, and the
+  table of tells to cut), written from the UI copy review (`docs/ui-copy-review.md`). Every
+  writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -475,11 +481,14 @@ before touching that area**:
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
   every message is untrusted and parsed field by field. Before every online battle (a room's,
-  a matched one's, each rematch's) comes a **topic pick** — up to 3 concepts each in 30 s,
-  drawn as flashcard tiles, hidden from the other player until both are in — and a **draw**
-  that deals the questions from both picks, the players taking turns, shown on both screens
-  before the count-in (`lib/battleTopics.ts`, `components/battle/TopicPick.tsx`); same-screen
-  battles have no pick. **Random opponent** is a matchmaking
+  a matched one's, each rematch's, on either skin) comes the **draft** — each player draws
+  4 topics as flashcard tiles in 30 s and strikes 1 of the other's in 15 s, each hidden until
+  both are in; the 3 cards left in each hand are **dealt to pairs** by Concept Craft's strength
+  (`readPair`), the most pairs some question tests both of first, the strongest of those the
+  final; a pair no question covers is settled by a **coin** the host tosses when its round
+  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
+  — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
+  most rounds (measured, `docs/quiz-battle-redesign.md` §4); same-screen battles have no draft. **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
   offer → accept → go handshake seals each match, so nobody ends up in two rooms; a matched
@@ -1241,7 +1250,7 @@ Other important `lib/` modules:
   (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Today's
   session** wheel (`components/dashboard/SessionWheel.tsx`, `NN%` ready in the middle of the
-  ring, today's concepts outlined on it), the **Study Guide**
+  ring, today's concepts outlined on it), the **Exam Readiness**
   popup the wheel opens (the ring and the
   criterion bar — it sits under the concept popup, ending where that pane begins, so a
   tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
@@ -1258,7 +1267,7 @@ Other important `lib/` modules:
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Study Guide popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
+  Exam Readiness popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
   concepts outlined — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a middle that prints the score until a concept is hovered or
   selected, then that concept's readout) and the exam page's title-row badge
@@ -1320,8 +1329,8 @@ Other important `lib/` modules:
   context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
   `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
   `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
-  `hooks/useQuests.ts` + `components/QuestsCard.tsx` (collapsible Dashboard section)
-  and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  `hooks/useQuests.ts`, the Level badge's Quests tab (`components/QuestsPanel.tsx`, whose
+  Collect button is `QuestsCard.tsx`'s `CollectButton`) and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
   layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
@@ -1496,7 +1505,7 @@ Other important `lib/` modules:
   `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
-  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` /
+  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` / `battleDraft.ts` /
   `battleMusic.ts` / `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
   pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
   own time; a disallowed event returns the state by identity), the scoring constants, the
@@ -1509,11 +1518,16 @@ Other important `lib/` modules:
   `battleSession.ts` is `HostSession` (runs the reducer, sends the redacted room on every change
   and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
   framework-free and tested against each other over an in-memory channel — the host also runs
-  the **topic pick** (`openTopics`, the pick's clock and its grace, the draw, then `start`);
-  `battleTopics.ts` is that pick as data: the topics an exam offers (`topicCatalogue`, grouped
-  by the syllabus), the rules a pick is held to (`cleanTopicPick`), the draw from two picks
-  (`drawFromTopics` — turns, every pick before any twice, the whole exam last) and the
-  `BattleDraft` the room carries, hidden per player until the draw; `battleTransport.ts`
+  the **draft** (`openDraft`, the draw's and the strikes' clocks and their grace, the deal, then
+  `start`, and each coin round's toss — `settleCoin`, after the reducer, so its rules are
+  untouched); `battleTopics.ts` is the topics an exam offers (`topicCatalogue`, grouped by the
+  syllabus); `battleDraft.ts` is the draft as data: a hand (`cleanHand`, `topUpHand`), a missed
+  strike (`autoStrike`), the pairing and its order (`dealPairs`, `orderPairs`, `roundPairs`), a
+  round's question and its fallbacks (`drawRound`), the pair reader over Concept Craft's
+  `readPair` (`battlePairReader`), and the `BattleDraft` the room carries, redacted per seat
+  (`redactDraft`) — plus the words the draft is told in, kept out of `battleDisplay.ts` because
+  that module is in the first-paint bundle; `battleDraftVault.test.ts` plays it on the real bank
+  (`BATTLE_DRAFT_MEASURE=1` prints the coin share); `battleTransport.ts`
   is the channel — Supabase Realtime broadcast, or BroadcastChannel with
   `VITE_BATTLE_TRANSPORT=local` (the e2e suite). The **matchmaking lobby**: `battleLobby.ts` is
   its rules as data (entries and handshake messages validated, the queue, `planMatches` — the
@@ -1980,6 +1994,14 @@ no count: the workflow store reads the tools engine). Populating the corpus more
   imports/vars or `npm run build` will fail.
 - Prefer editing/extending existing `lib/` modules and hooks over introducing new
   abstractions; the codebase favors small, pure, well-tested utility functions.
+- **Every word a reader sees follows `docs/writing-style.md`**: app screens, emails, edge-function
+  errors, the AI connector's descriptions, Fact Check findings, and the vault's own prose. Check
+  each sentence against what the code or the source does, use the app's nouns as the `app-copy`
+  skill's glossary spells them (Store, Today's Study Plan, Practice Exam, Level 1–3, Collect…),
+  and cut the tells it lists (em-dash hinges, rules of three, closing aphorisms, exclamation marks,
+  "No more X", things acting like people). For any UI string, use the `app-copy` skill; its
+  decisions log outranks everything. `quiz/src/lib/copyGuard.test.ts` fails a build on the
+  mechanical tells and holds UI em-dash hinges to a ceiling that only goes down.
 - AI is used for content organization, code, and review — but the README is explicit that
   no wiki content is published 100% AI-written without human review. Keep that in mind if
   asked to generate concept/exam content.

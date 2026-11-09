@@ -125,10 +125,10 @@ test.describe('actuaria', () => {
     await expect(page.getByTestId('hangar-part-ship:hull:cobalt')).toHaveAttribute('href', '/auth')
   })
 
-  test('has its own row in the sidebar, under Play', async ({ page }) => {
+  test('has its own row in the sidebar, under Study game', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/wiki')
-    const row = page.getByRole('link', { name: 'Actuaria Live' })
+    const row = page.getByRole('link', { name: 'Actuaria Preview' })
     await expect(row).toBeVisible()
     await row.click()
     await expect(page).toHaveURL(/\/actuaria/)

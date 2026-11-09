@@ -152,6 +152,10 @@ Two consequences for how you write the page:
   cover generator rather than omit.
 
 
+## Writing for readers
+
+Every sentence a reader sees follows `docs/writing-style.md`: true to its source, one name per thing, no code words, things don't act like people, say it once, and none of its tells (an em dash hinging the sentence, a rule of three, a closing aphorism, "not X, it's Y", a colon reveal, inflated words, feelings on the reader's behalf, rhetorical questions, exclamation marks). Read it before writing. On a resource page the first rule does most of the work: the page says only what the document says, so the lead is a plain description of the document (who wrote it, what it covers), never a reason to read it ("essential reading for any reserving actuary").
+
 ## Checklist
 
 - [ ] Written from the extracted document (`scripts/resource_extract.py`), never from memory

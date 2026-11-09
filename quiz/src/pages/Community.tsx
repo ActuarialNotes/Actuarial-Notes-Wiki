@@ -88,7 +88,7 @@ const VIEWS: { value: View; label: string }[] = [
 
 const HEAD: PageHead = {
   title: 'Community | Actuarial Notes',
-  description: 'What actuaries are saying online, the meetings coming up near you, and the forums, societies and clubs where the profession gathers.',
+  description: 'r/actuary’s latest posts, actuarial meetings near you, and the forums and clubs you can join.',
   noindex: true,
 }
 
@@ -268,7 +268,7 @@ export default function Community() {
       {view === 'overview' && (
         <div className="space-y-10">
           {!topic && follows.topics.length === 0 && !query && (
-            <Section icon={Sparkles} hue={48} title="Make it yours" subtitle="Follow a few topics and For you gathers their posts, events and places.">
+            <Section icon={Sparkles} hue={48} title="Follow Topics" subtitle="Follow a few topics and For you shows their posts, events and places.">
               <TopicPicker topics={ROOT_TOPICS} followed={follows.topics} onToggle={follows.toggleTopic} />
             </Section>
           )}
@@ -293,7 +293,7 @@ export default function Community() {
             icon={MessagesSquare}
             hue={topicHue('careers')}
             title="What actuaries are saying"
-            subtitle={feed.status === 'ready' ? 'The most talked-about threads on r/actuary right now.' : undefined}
+            subtitle={feed.status === 'ready' ? 'The most discussed of r/actuary’s latest posts.' : undefined}
             live={feed.status === 'ready'}
             action={<SeeAll onClick={() => set({ view: 'discussions' })} label="All discussions" />}
           >
@@ -342,7 +342,7 @@ export default function Community() {
         <div className="space-y-8">
           {homePicker}
           {follows.home && (
-            <EventMonths title={`Near ${follows.home.label}`} icon={MapPinned} items={eventSplit.near} card={eventCard} empty="Nothing in person within reach — widen the distance, or look online below." />
+            <EventMonths title={`Near ${follows.home.label}`} icon={MapPinned} items={eventSplit.near} card={eventCard} empty="Nothing in person within this distance. Widen it, or look online below." />
           )}
           <EventMonths title="Online" icon={Compass} items={eventSplit.online.map(item => ({ item }))} card={eventCard} empty="No online events coming up." />
           <EventMonths
@@ -353,7 +353,7 @@ export default function Community() {
             empty={follows.home ? 'Nothing farther away.' : 'No in-person events coming up.'}
           />
           <p className="text-xs text-muted-foreground">
-            Every event is transcribed from its organiser’s own page, which the card opens — check the dates there before you go.
+            Every event is transcribed from its organiser’s own page, which the card opens. Check the dates there before you go.
           </p>
         </div>
       )}
@@ -376,7 +376,7 @@ export default function Community() {
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {(follows.home ? placeSplit.near : placeSplit.farther).map((n, i) => placeCard(n.item, i, n.km))}
             </div>
-            {(follows.home ? placeSplit.near : placeSplit.farther).length === 0 && <Empty>Nothing within reach — widen the distance.</Empty>}
+            {(follows.home ? placeSplit.near : placeSplit.farther).length === 0 && <Empty>Nothing within this distance. Widen it to see more.</Empty>}
           </Section>
           <Section
             icon={Users}
@@ -385,7 +385,7 @@ export default function Community() {
             subtitle={
               serving.length
                 ? 'The CAS regional affiliates whose territory includes your province or state.'
-                : 'CAS regional affiliates serve a territory rather than a city — each lists the states or provinces it covers.'
+                : 'CAS regional affiliates serve a territory rather than a city. Each lists the states or provinces it covers.'
             }
           >
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -435,7 +435,7 @@ function Hero({ stats, feedLive }: { stats: { today: number; events: number; pla
           <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">Preview</span>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Community</h1>
           <p className="max-w-md text-[15px] text-muted-foreground">
-            Where actuaries gather — what they’re talking about, where they’re meeting, and how to join in.
+            r/actuary’s latest posts, upcoming meetings, and the forums and clubs you can join.
           </p>
         </div>
         <div className="flex items-center" aria-hidden>

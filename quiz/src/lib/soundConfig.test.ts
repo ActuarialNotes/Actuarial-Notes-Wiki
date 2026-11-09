@@ -834,11 +834,11 @@ describe('sound catalogue', () => {
 describe('the battle cues', () => {
   // Quiz Battle's own sounds (docs/quiz-battle.md): built from the same parts
   // as the rest of the catalogue and held to the same rules.
-  const BATTLE = ['buzz', 'countIn', 'go', 'lockIn', 'opponentIn', 'power', 'steal', 'clockTick', 'matchFound', 'reaction'] as const
+  const BATTLE = ['buzz', 'countIn', 'go', 'lockIn', 'opponentIn', 'power', 'steal', 'clockTick', 'matchFound', 'reaction', 'deal', 'strike', 'coinToss', 'coinLand'] as const
   /** The moments of a game: struck, and in the room. */
   const MOMENTS = ['buzz', 'go', 'steal', 'matchFound'] as const
   /** Timekeeping and the other player's moves: under a right answer, and dry. */
-  const UNDERNEATH = ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick', 'reaction'] as const
+  const UNDERNEATH = ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick', 'reaction', 'deal', 'strike', 'coinToss', 'coinLand'] as const
 
   it('are round and short, like every chime', () => {
     for (const event of BATTLE) {
@@ -864,7 +864,7 @@ describe('the battle cues', () => {
 
   it('rings the moments in the room and keeps the timekeeping dry', () => {
     for (const event of MOMENTS) expect(SOUND_RECIPES[event].space, `${event} is bone dry`).toBeGreaterThan(0)
-    for (const event of ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick'] as const) {
+    for (const event of ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick', 'deal', 'strike', 'coinToss'] as const) {
       expect(SOUND_RECIPES[event].space, `${event} has a tail on it`).toBeUndefined()
     }
   })
@@ -880,6 +880,12 @@ describe('the battle cues', () => {
         expect(note.gain ?? 1, `${event} fades out instead of landing`).toBeLessThanOrEqual(last.gain ?? 1)
       }
     }
+  })
+
+  it('deals and tosses without a note, and lands the coin level rather than as a reward', () => {
+    for (const event of ['deal', 'coinToss'] as const) expect(SOUND_RECIPES[event].tones, `${event} has a pitch`).toBeUndefined()
+    // A coin chooses a topic, not a winner: nothing as loud as a right answer.
+    expect(peakLevel(SOUND_RECIPES.coinLand)).toBeLessThan(peakLevel(SOUND_RECIPES.correct))
   })
 
   it('counts in on one note and says go an octave above it', () => {

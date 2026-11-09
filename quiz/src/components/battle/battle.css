@@ -1,0 +1,327 @@
+/* Quiz Battle's own styles, loaded with the battle page's lazy chunk
+   (pages/Battle.tsx imports this file) rather than with the app's first paint.
+   The confetti the results share with the Pro celebration stays in index.css.
+   The battle screens' Tailwind utilities are generated here too, from their files
+   (tailwind.battle.config.ts), so first paint doesn't carry them either. */
+@config "../../../tailwind.battle.config.ts";
+@tailwind utilities;
+
+/* ── Quiz Battle ─────────────────────────────────────────────────────────────
+   Two players racing, so the moments are louder than a quiz's: a count-in, a
+   buzz, points flying off a score, and confetti for the winner. Each marks a
+   thing that happened and stops (style guide §9); every one has a static end
+   state, so reduced motion loses the movement and none of the information —
+   the scores, the buzz ring and the result are all still drawn. */
+
+/* The 3-2-1 before a question: each number pops in and settles. */
+@keyframes battle-count-pop {
+  0%   { opacity: 0; transform: scale(0.4); }
+  55%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.battle-count-pop {
+  display: inline-block;
+  animation: battle-count-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Points just won or lost rise off the score and fade. */
+@keyframes battle-burst {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.8); }
+  18%  { opacity: 1; transform: translateY(-4px) scale(1.1); }
+  70%  { opacity: 1; transform: translateY(-14px) scale(1); }
+  100% { opacity: 0; transform: translateY(-22px) scale(1); }
+}
+.battle-burst {
+  animation: battle-burst 1300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* A buzz: a ring in the player's colour flares out from the buzzer. */
+@keyframes battle-buzz-flash {
+  0%   { box-shadow: 0 0 0 0 var(--player); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+.battle-buzz-flash {
+  animation: battle-buzz-flash 520ms ease-out 1;
+}
+
+/* A wrong buzz shakes the player's tile — once. */
+@keyframes battle-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  45%      { transform: translateX(4px); }
+  70%      { transform: translateX(-2px); }
+}
+.battle-shake {
+  display: inline-block;
+  animation: battle-shake 360ms cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+
+/* A reaction floats up off its sender's panel, swaying a little, and goes. */
+@keyframes battle-reaction {
+  0%   { opacity: 0; transform: translate(0, 8px) scale(0.6); }
+  15%  { opacity: 1; transform: translate(0, -4px) scale(1.15); }
+  60%  { opacity: 1; transform: translate(-6px, -30px) scale(1); }
+  100% { opacity: 0; transform: translate(4px, -52px) scale(0.95); }
+}
+.battle-reaction {
+  animation: battle-reaction 2400ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
+}
+
+/* The results' trophy row settles in. */
+.battle-trophy {
+  animation: streak-celebrate-card 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Confetti for the winner: paper, falling and turning, once. */
+
+/* The matchmaking lobby's radar: two rings in the player's own colour
+   spreading out from their tile, a beat apart, for as long as they wait. The
+   only looping battle animation, and the one thing that says the page is
+   still looking. */
+@keyframes battle-radar {
+  0%   { opacity: 0.55; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+.battle-radar {
+  border: 2px solid var(--player);
+  animation: battle-radar 2.4s cubic-bezier(0.25, 0.6, 0.3, 1) infinite;
+}
+.battle-radar-late { animation-delay: 1.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .battle-count-pop,
+  .battle-radar,
+  .battle-buzz-flash,
+  .battle-shake,
+  .battle-trophy { animation: none; }
+  .battle-burst { animation: toast-fade-in 160ms ease-out both; }
+  .battle-reaction { animation: toast-fade-in 160ms ease-out both; }
+}
+
+/* ── Quiz Battle: the Deck ──────────────────────────────────────────────────
+   Quiz Battle's own look (docs/quiz-battle-redesign.md §2): a card table on a
+   dark ground. The palette is the redesign's, kept here as tokens on the one
+   scope that draws it (`.battle-deck`, with `dark`, so the app's own tokens —
+   a ConceptTile, a solution's markdown — turn dark inside it too). Player
+   colours stay `playerAccentStyle`'s. Every motion is cards moving on a table
+   and runs once, except the waits (the lobby's shuffle, a blinking seat), which
+   loop for as long as the wait does; reduced motion turns each into a fade or
+   its end state. */
+.battle-deck {
+  --deck-ground: #0C0A10;
+  --deck-table: #14111A;
+  --deck-table-edge: #241F2D;
+  --deck-card: #16131C;
+  --deck-card-edge: #2E2838;
+  --deck-raised: #1D1826;
+  --deck-raised-edge: #3A3445;
+  --deck-icon: #17141D;
+  --deck-label: #B9B1C6;
+  --deck-soft: #D6CFE0;
+  --deck-dim: #8A8296;
+  --deck-gold: #FCD34D;
+  --deck-foil: linear-gradient(135deg, #38BDF8, #E879F9 55%, #FCD34D);
+  background: var(--deck-ground);
+  color: #fff;
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.deck-display {
+  font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+}
+.deck-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--deck-label);
+}
+
+/* A concept tile laid as a Deck card: the name in the display face, set left. */
+.battle-css .deck-tile { align-items: center; justify-content: flex-start; text-align: left; }
+.battle-css .deck-tile > span:first-child {
+  font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.1;
+  color: #fff;
+}
+
+/* The intro: a deck drops and fans, two cards fly up, flip and clash, the title rises. */
+@keyframes deck-fan {
+  0% { transform: translateY(-520px) rotate(0); opacity: 1 }
+  9%, 14% { transform: translateY(0) rotate(0) }
+  26%, 34% { transform: translateY(0) rotate(var(--r)) }
+  40% { transform: translateY(0) rotate(0); opacity: 1 }
+  42%, 100% { transform: translateY(0) rotate(0); opacity: 0 }
+}
+@keyframes deck-card-a {
+  0%, 40% { transform: translate(0, 0) rotate(0) rotateY(180deg); opacity: 0 }
+  41% { opacity: 1 }
+  50% { transform: translate(-84px, -24px) rotate(-8deg) rotateY(0) }
+  55% { transform: translate(-28px, -24px) rotate(6deg) rotateY(0) }
+  60%, 88% { transform: translate(-84px, -24px) rotate(-8deg) rotateY(0); opacity: 1 }
+  100% { opacity: 0; transform: translate(-84px, -60px) rotate(-8deg) rotateY(0) }
+}
+@keyframes deck-card-b {
+  0%, 40% { transform: translate(0, 0) rotate(0) rotateY(180deg); opacity: 0 }
+  41% { opacity: 1 }
+  50% { transform: translate(84px, -24px) rotate(8deg) rotateY(0) }
+  55% { transform: translate(28px, -24px) rotate(-6deg) rotateY(0) }
+  60%, 88% { transform: translate(84px, -24px) rotate(8deg) rotateY(0); opacity: 1 }
+  100% { opacity: 0; transform: translate(84px, -60px) rotate(8deg) rotateY(0) }
+}
+@keyframes deck-spark {
+  0%, 54% { transform: scale(0); opacity: 0 }
+  55% { transform: scale(1); opacity: 1 }
+  62%, 100% { transform: scale(2.2); opacity: 0 }
+}
+@keyframes deck-title {
+  0%, 60% { opacity: 0; transform: translateY(24px) }
+  68%, 88% { opacity: 1; transform: translateY(0) }
+  100% { opacity: 0 }
+}
+.deck-intro-run {
+  animation-duration: 3.1s;
+  animation-timing-function: cubic-bezier(.3, .8, .25, 1);
+  animation-fill-mode: both;
+}
+.deck-intro-fan { animation-name: deck-fan; }
+.deck-intro-a { animation-name: deck-card-a; }
+.deck-intro-b { animation-name: deck-card-b; }
+.deck-intro-spark { animation-name: deck-spark; }
+.deck-intro-title { animation-name: deck-title; }
+.deck-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+@keyframes deck-fade-through {
+  0% { opacity: 0 } 30%, 70% { opacity: 1 } 100% { opacity: 0 }
+}
+
+/* The raised card of a hand floats and catches the light. */
+@keyframes deck-float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+@keyframes deck-sheen {
+  0% { transform: translateX(-200%) rotate(20deg) }
+  60%, 100% { transform: translateX(420%) rotate(20deg) }
+}
+.deck-float { animation: deck-float 3s ease-in-out 1; }
+.deck-sheen { animation: deck-sheen 3.2s ease-in-out 1 both; }
+
+/* A wait: the face-down card shuffling, a seat blinking. */
+@keyframes deck-shuffle {
+  0%, 100% { transform: translateX(0) rotate(-4deg) }
+  25% { transform: translateX(-26px) rotate(-10deg) }
+  50% { transform: translateX(0) rotate(-4deg) }
+  75% { transform: translateX(26px) rotate(2deg) }
+}
+@keyframes deck-shuffle-2 {
+  0%, 100% { transform: translateX(0) rotate(5deg) }
+  25% { transform: translateX(26px) rotate(10deg) }
+  50% { transform: translateX(0) rotate(5deg) }
+  75% { transform: translateX(-26px) rotate(-2deg) }
+}
+@keyframes deck-blink { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+.deck-shuffle { animation: deck-shuffle 1.6s ease-in-out infinite; }
+.deck-shuffle-2 { animation: deck-shuffle-2 1.6s ease-in-out infinite; }
+.deck-blink { animation: deck-blink 1.4s ease-in-out infinite; }
+
+/* A card laid on the table: dropped from a little above, settling. */
+@keyframes deck-deal {
+  from { opacity: 0; transform: translateY(-14px) rotate(-3deg) }
+  to { opacity: 1; transform: none }
+}
+.deck-deal { animation: deck-deal 360ms cubic-bezier(0.25, 0.6, 0.3, 1) both; }
+
+/* The winner's card, tilting in the light. */
+@keyframes deck-tilt { 0%, 100% { transform: rotate(-3deg) } 50% { transform: rotate(2deg) translateY(-6px) } }
+.deck-tilt { animation: deck-tilt 3s ease-in-out 1 both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-intro-run { animation: none; }
+  .deck-intro-fan, .deck-intro-a, .deck-intro-b, .deck-intro-spark { display: none; }
+  .deck-intro-title { animation: deck-fade-through 900ms ease-in-out both; }
+  .deck-float, .deck-sheen, .deck-shuffle, .deck-shuffle-2, .deck-tilt { animation: none; }
+  .deck-sheen { display: none; }
+  .deck-blink { animation: none; opacity: .7; }
+  .deck-deal { animation: toast-fade-in 160ms ease-out both; }
+}
+
+.battle-css .deck-tile.deck-tile-sm > span:first-child { font-size: 12.5px; }
+
+/* ── The draft (docs/quiz-battle-redesign.md §3.6–3.10) ─────────────────────
+   Each piece's resting style is its last frame, and each animation plays from
+   its first frame into it, once — so a tap that skips the deal (`.deck-deal-
+   done`) just takes the animations away. Both screens draw the deal to one
+   clock: `--deal-offset` is how far into it this screen arrived, a negative
+   delay that starts every piece where the other screen already has it. */
+.battle-css .deck-strike-card { transform: rotate(var(--tilt, 0deg)); transition: transform 160ms ease-out; }
+.battle-css .deck-strike-card.deck-strike-raised { transform: translateY(-10px) rotate(-2deg); box-shadow: 0 20px 40px rgba(0,0,0,.6); }
+@keyframes deck-discard-pulse { 0%, 100% { border-color: #4B4258 } 50% { border-color: #fff } }
+.deck-discard-pulse { animation: deck-discard-pulse 1.2s ease-in-out 3; }
+
+.deal-grid, .deal-sub-a, .deal-sub-b, .deal-pick, .deal-badge, .deal-fly, .deal-drop, .deal-late {
+  animation-timing-function: cubic-bezier(.3, .8, .25, 1);
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+.deal-grid {
+  transform: translateY(-10px) scale(.62);
+  margin-bottom: -112px;
+  animation-name: deal-grid-in, deal-grid-shrink;
+  animation-duration: 350ms, 700ms;
+  animation-delay: var(--deal-offset, 0ms), calc(2800ms + var(--deal-offset, 0ms));
+}
+@keyframes deal-grid-in { from { opacity: 0; transform: scale(.96); margin-bottom: 0 } to { opacity: 1; transform: scale(1); margin-bottom: 0 } }
+@keyframes deal-grid-shrink { from { transform: scale(1); margin-bottom: 0 } to { transform: translateY(-10px) scale(.62); margin-bottom: -112px } }
+.deal-sub-a { opacity: 0; animation: deal-out 300ms calc(2800ms + var(--deal-offset, 0ms)) both; }
+.deal-sub-b { animation: deal-in 350ms calc(3220ms + var(--deal-offset, 0ms)) both; }
+@keyframes deal-out { from { opacity: 1 } to { opacity: 0 } }
+@keyframes deal-in { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+.deal-pick { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.25); animation: deal-pick 260ms calc(var(--beat) + var(--deal-offset, 0ms)) both; }
+.deal-pick.deal-pick-final { border-color: var(--deck-gold); box-shadow: 0 0 0 3px rgba(252,211,77,.3); animation-name: deal-pick-final; }
+@keyframes deal-pick { from { border-color: var(--deck-table-edge); box-shadow: none } to { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.25) } }
+@keyframes deal-pick-final { from { border-color: var(--deck-table-edge); box-shadow: none } to { border-color: var(--deck-gold); box-shadow: 0 0 0 3px rgba(252,211,77,.3) } }
+.deal-badge { animation: deal-badge 260ms calc(var(--beat) + var(--deal-offset, 0ms)) both; }
+@keyframes deal-badge { from { opacity: 0; transform: scale(.4) } to { opacity: 1; transform: scale(1) } }
+.deal-fly { transform: rotate(var(--tilt, 0deg)); animation: deal-fly 630ms calc(var(--beat) + var(--deal-offset, 0ms)) both; }
+@keyframes deal-fly {
+  from { opacity: 0; transform: translate(var(--fly-x, 0px), -190px) scale(.3) rotate(0deg) }
+  15% { opacity: 1 }
+  to { opacity: 1; transform: rotate(var(--tilt, 0deg)) }
+}
+.deal-drop { animation: deal-drop 490ms calc(var(--beat) + var(--deal-offset, 0ms)) both; }
+@keyframes deal-drop { from { opacity: 0; transform: translateY(-60px) } 25% { opacity: 1 } to { opacity: 1; transform: none } }
+.deal-late { animation: deal-in 350ms calc(5600ms + var(--deal-offset, 0ms)) both; }
+.deck-deal-done .deal-grid, .deck-deal-done .deal-sub-a, .deck-deal-done .deal-sub-b, .deck-deal-done .deal-pick,
+.deck-deal-done .deal-badge, .deck-deal-done .deal-fly, .deck-deal-done .deal-drop, .deck-deal-done .deal-late { animation: none; }
+
+/* The coin (§3.10): tossed between the two cards, landing on the winner's face.
+   Not skippable — it's short — and drawn to the round's clock on both screens. */
+.coin-spin, .coin-shadow, .coin-win, .coin-lose, .coin-say {
+  animation-timing-function: cubic-bezier(.2, .7, .25, 1);
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+.coin-spin { transform: rotateY(var(--coin-end)); transform-style: preserve-3d; animation-name: coin-toss; animation-duration: 1500ms; animation-delay: var(--coin-offset, 0ms); }
+@keyframes coin-toss {
+  0% { transform: translateY(0) rotateY(0deg) }
+  50% { transform: translateY(-120px) rotateY(calc(var(--coin-end) * .6)) }
+  86% { transform: translateY(0) rotateY(var(--coin-end)) }
+  93% { transform: translateY(-10px) rotateY(var(--coin-end)) }
+  100% { transform: translateY(0) rotateY(var(--coin-end)) }
+}
+.coin-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.coin-shadow { opacity: .5; animation-name: coin-shadow; animation-duration: 1500ms; animation-delay: var(--coin-offset, 0ms); }
+@keyframes coin-shadow { 0%, 86%, 100% { transform: scale(1); opacity: .5 } 50% { transform: scale(.5); opacity: .2 } }
+.coin-win { transform: translateY(-14px) rotate(-3deg); box-shadow: 0 0 0 4px rgba(255,255,255,.25), 0 20px 40px var(--player-muted); animation-name: coin-win; animation-duration: 400ms; animation-delay: calc(1450ms + var(--coin-offset, 0ms)); }
+@keyframes coin-win { from { transform: rotate(var(--tilt)); box-shadow: none } to { transform: translateY(-14px) rotate(-3deg); box-shadow: 0 0 0 4px rgba(255,255,255,.25), 0 20px 40px var(--player-muted) } }
+.coin-lose { opacity: .3; transform: translateY(14px) rotate(var(--tilt-out)); animation-name: coin-lose; animation-duration: 400ms; animation-delay: calc(1450ms + var(--coin-offset, 0ms)); }
+@keyframes coin-lose { from { opacity: 1; transform: rotate(var(--tilt)) } to { opacity: .3; transform: translateY(14px) rotate(var(--tilt-out)) } }
+.coin-say { animation-name: deal-in; animation-duration: 350ms; animation-delay: calc(1750ms + var(--coin-offset, 0ms)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-discard-pulse { animation: none; }
+  .battle-css .deck-strike-card { transition: none; }
+  .deal-sub-a { display: none; }
+  .deal-grid, .deal-sub-b, .deal-pick, .deal-badge, .deal-fly, .deal-drop, .deal-late,
+  .coin-spin, .coin-shadow, .coin-win, .coin-lose, .coin-say { animation: toast-fade-in 200ms ease-out both; }
+}

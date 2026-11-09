@@ -254,6 +254,10 @@ still the scaffold: get the real chapter titles first, then write bullets under 
 each one read from that chapter (`scripts/resource_extract.py` fetches and extracts the
 document when a free copy exists).
 
+## Writing for readers
+
+Chapter and section titles are transcribed verbatim and are outside `docs/writing-style.md`. Anything this skill writes around them (a note on where a title came from, a caveat) follows that page: plain, said once, no tells.
+
 ## When the network is restricted
 
 Some environments (including Claude Code on the web with a restricted network

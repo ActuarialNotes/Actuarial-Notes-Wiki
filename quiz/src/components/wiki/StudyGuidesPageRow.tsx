@@ -12,7 +12,7 @@ import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { RESOURCES_ROUTE, type StudyGuidesSection } from '@/lib/wikiRoutes'
 
 const PAGES: Record<StudyGuidesSection, { to: string; title: string; Icon: typeof GraduationCap; noun: string }> = {
-  exams: { to: '/wiki', title: 'Exam Study Guides', Icon: GraduationCap, noun: 'exam' },
+  exams: { to: '/wiki', title: 'Exams', Icon: GraduationCap, noun: 'exam' },
   resources: { to: RESOURCES_ROUTE, title: 'Resources', Icon: LibraryBig, noun: 'resource' },
 }
 

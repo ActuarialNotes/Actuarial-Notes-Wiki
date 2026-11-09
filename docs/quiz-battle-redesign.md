@@ -1,7 +1,8 @@
 # Quiz Battle redesign: the Deck
 
-**Status:** proposed, design agreed with the maintainer on 2026-11-08. Nothing is built yet.
-Roadmap item **X10** (`docs/roadmap.md` §3.4); the decision it needs is **D36** (§6.1).
+**Status:** design agreed with the maintainer on 2026-11-08. **Phases 1 and 2 are built**
+(2026-11-09, see §6); phase 3 is not. Roadmap item **X10** (`docs/roadmap.md` §3.4); the decision it
+needs is **D36** (§6.1).
 
 **The design:** the canvas *Quiz Battle redesign*,
 <https://claude.ai/artifact/XkurpjUkA3Xx2WPeFuhgcN> (private to the maintainer until shared).
@@ -242,6 +243,38 @@ that need the coin. If it's high, show the strongest pairs on the draw screen.
 Note that the canvas uses Exam 5 for its placeholder hands. Exam 5 has only 6 multiple-choice
 questions, so it isn't raceable today, and the build should test on Exam P or MAS-I.
 
+**Measured, 2026-11-09** (`lib/battleDraftVault.test.ts`, run with `BATTLE_DRAFT_MEASURE=1`;
+400 drafts per exam, the real pairing, strengths read off the concept pages). By then 14 exams
+were raceable (`battleExamCounts`: at least three click-markable questions), Exam 5 among them
+with 18 topics. The share of rounds a coin has to settle:
+
+| Exam | Topics | Coin rounds, random hands | …hands weighted by questions | Drafts with no coin at all (random / weighted) |
+|---|---|---|---|---|
+| Exam P | 88 | 71% | 25% | 2% / 38% |
+| Exam FM | 102 | 66% | 37% | 2% / 22% |
+| Exam MAS-I | 214 | 89% | 70% | 0% / 1% |
+| Exam MAS-II | 141 | 85% | 68% | 0% / 1% |
+| Exam 5 | 18 | 55% | 52% | 6% / 7% |
+| Exam 6C | 53 | 75% | 69% | 0% / 2% |
+| Exam 7 | 18 | 49% | 44% | 6% / 12% |
+| Exam 8 | 25 | 64% | 58% | 2% / 4% |
+| Exam 9 | 28 | 62% | 55% | 3% / 6% |
+| FAM | 160 | 85% | 51% | 0% / 6% |
+| SRM | 69 | 75% | 66% | 1% / 3% |
+| DISC-DA / RM / IA | 63 / 109 / 132 | 85–90% | 77–81% | 0% / 0% |
+
+*Random hands* draw each topic with equal chance; *weighted* hands favour topics with more
+questions, as a player who picks the topics they know is likely to. **The share is high:** on
+random hands a coin settles most rounds everywhere, and on MAS-I, MAS-II, FAM and the DISCs
+nearly every draft has at least one coin round however the hands are drawn. The coin is the
+common case, not the exception the canvas draws it as. The proposal (O9) is to **show the
+strongest pairs on the draw screen**: once a card is in your hand, mark the tiles that share
+a question with it (or with any card in your hand), so a player can draw a hand that pairs
+with itself — a concept in both hands pairs with itself (O4), and the topics a hand shares
+questions among are the likeliest to share them with the other player's. Not built: it changes
+what the draw screen asks of a player, which is the maintainer's call. Built as specified, the
+coin flip carries most rounds and works as the canvas draws it.
+
 ## 5. The record (phase 3)
 
 ### 5.1 What is saved
@@ -297,17 +330,62 @@ exam. That is a later change; `planMatches` stays deterministic either way.
 
 Each phase is one PR off `main`, and each updates `quiz-battle.md` and this doc's status.
 
-1. **The look and the flow, with no rule changes.** The intro, the start screen, the lobby (with
-   browsing), the friend room, same-screen seating, the round, and the results with Practice.
-   The topic pick keeps today's rules but takes the deck look. Mostly `pages/Battle.tsx` and
-   `components/battle/`, plus a hook for the intro's once-per-visit flag. Tests: e2e
-   (`e2e/battle.spec.ts`) through every screen with `VITE_BATTLE_TRANSPORT=local`. The view
-   transitions (`moveScreen`) still apply, and nothing on a page gets a `view-transition-name`.
-2. **The pairs draft.** §4 in `lib/battleTopics.ts` (or a new `lib/battleDraft.ts`): draw,
+1. **The look and the flow, with no rule changes.** ✅ *Built 2026-11-09.* The intro, the start
+   screen, the lobby (with browsing), the friend room, same-screen seating, the round, and the
+   results with Practice. The topic pick keeps today's rules but takes the deck look. Mostly
+   `pages/Battle.tsx` and `components/battle/`, plus a hook for the intro's once-per-visit flag.
+   Tests: e2e (`e2e/battle.spec.ts`) through every screen with `VITE_BATTLE_TRANSPORT=local`. The
+   view transitions (`moveScreen`) still apply, and nothing on a page gets a `view-transition-name`.
+
+   *What shipped, and where it differs from the canvas:* the screens are `components/battle/deck/`
+   under the plain skin only (`BattleSkin.deck`); Monte Carlo Station keeps its look. The trophy
+   and the record are left off the start screen (phase 3). The pick's step header shows one
+   step, **Pick**, and its hand three slots (today's `MAX_TOPICS`); its title is today's *Pick
+   your topics*, since *Draw 4 topics* would describe phase 2. Online, an option is chosen and
+   then locked in (*Lock in A*), where it used to lock on the tap. A round's chip is the one
+   topic it was drawn for, in its picker's colour (split when both picked it), until phase 2
+   pairs them. Entering the lobby is pressing Ready; *Leave the lobby* is Cancel. The intro and
+   the start card still say *Draw four topics and strike one of theirs* and *each pairing a card
+   from your hand with one of theirs*, word for word from the canvas, though phase 1 has no
+   strike and no pairs: phase 2 makes them true. New strings not on the canvas: *Pick an
+   answer* (the lock-in before a choice), *{name} is waiting for {exam}* (the lobby, when
+   someone waits on another exam), the same-screen settings sheet's labels (*Settings*, *Time
+   each*, *Difficulty*), and the buttons reused from today (*Play on this device*, *Create a
+   room*, *Start battle*, *Leave room*, *Change settings*).
+2. **The pairs draft.** ✅ *Built 2026-11-09.* §4 in `lib/battleTopics.ts` (or a new `lib/battleDraft.ts`): draw,
    strike, pair, order and the coin, all pure and tested, plus the vault test that plays random
    drafts on every raceable exam. Session and protocol changes are tested host against guest,
    as `battleSession.ts` is now. The Draw, Strike, Deal and Coin flip screens. Run the
    measurement in §4 first.
+
+   *What shipped, and where it differs from the canvas:* the rules are `lib/battleDraft.ts`
+   (`lib/battleTopics.ts` keeps only the catalogue; the old pick, draw and draft are gone), the
+   strength is Concept Craft's `readPair`, which already existed — `battlePairReader` wraps it
+   with the battle questions both cards share, and a concept paired with itself reads 100.
+   The host deals; it fetches the wiki bundle for the pages when it opens a room, and a pair
+   read before the pages arrive rests on the questions alone. The room's stages are now
+   `lobby → drafting → playing → finished`, the draft (hands, counts, levels, strikes, the grid,
+   the pairs and every round's coin) rides in the room, redacted per seat, and the guest's moves
+   are `hand` (its count while it draws — the pips — and the cards with its levels once locked
+   in) and `strike`; protocol 4. **The coin result is a field of the room, not a message of its
+   own**: the room is sent on every change and every heartbeat, so a separate message would be
+   a second copy the heartbeat already repairs. **The coin is tossed when its round comes up**:
+   the round is created with a stand-in question, and the host swaps in the one drawn on the
+   winner and holds the count-in back `COIN_MS` (2.6 s) for the toss — host-side, after the
+   reducer, so `battleReducer` and its scoring are untouched. Lock in my hand needs four cards;
+   the clock tops a short hand up. **The deal** draws to one clock on both screens and a tap
+   skips it to its last frame, which then holds through Round 1's count-in (*Round 1 in 3*); a
+   coin round's count-in is the coin screen's *Question in 3*. In a room of more than three
+   rounds the deal labels each pair by the round it first plays (`dealtOrder`). A round's chips
+   are the pair (yours first) or the coin's one topic, shortened (*Bornhuetter-Ferguson*, a
+   trailing *Method* dropped — the canvas's *BF* is a hand abbreviation the vault has no source
+   for). The results list each round's pair, and Practice offers whichever card of a lost round
+   the player holds lowest. **Monte Carlo Station** draws the draft with the Deck's screens
+   inside a Deck scope of its own (and the coin flip inside its round), as agreed; its old pick
+   screen (`TopicPick.tsx`) is gone. New cues: `deal`, `strike`, `coinToss`, `coinLand`. New
+   strings not on the canvas: *{name} has struck one of yours* (the strike screen, once theirs
+   is in), *You struck {topic}.* on the strike screen (the deal's own words), and *Tap to skip*
+   under the deal.
 3. **The record.** D36 must be decided first. Then the migration, the RPCs (with a
    `supabase/tests` case), `report_battle` and the agreement check, Elo, the Stats, Your card
    and Leaderboard screens, and the trophy and record on the start screen. Update
@@ -329,6 +407,13 @@ Each has a default to build with until the maintainer decides.
 | O6 | The tier bands | §5.3's placeholders |
 | O7 | *Tap a battle to see its questions* | Phase 3 builds it from the stored question ids; drop the line if it doesn't |
 | O8 | Lobby browsing for signed-out readers | Yes, with no levels shown |
+| O9 | The coin settles most rounds (§4, measured) | Built as specified; proposed: mark on the draw screen the topics that share questions with the cards in hand |
+
+Phase 2 built O1–O5 at their defaults. Two more were settled in the build: **O2's order**, where
+a longer room goes round the pairs in their order and is timed so its last round is the final
+pair (`roundPairs`: five rounds play 2, final, 1, 2, final — never one pair twice running); and
+**a strike not made in time** (O3), made by the host after the grace an answer gets, from the
+levels each player sent with their hand.
 
 ## 8. Copy
 

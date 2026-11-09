@@ -84,7 +84,7 @@ export function AttemptedQuestionsList({
 
       {!selectedQuestionId && (
         <p className="text-xs text-muted-foreground text-center">
-          Click a dot on the graph to see just that question
+          Choose a dot on the graph to see just that question.
         </p>
       )}
     </div>

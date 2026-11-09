@@ -1,5 +1,6 @@
 import { createContext, forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useSubscription } from '@/hooks/useSubscription'
 import {
   CalendarCheck,
   CheckCircle2,
@@ -419,7 +420,7 @@ function ConceptCardGrid({
             data-sound="none"
             onClick={() => toggle(name)}
             aria-pressed={added}
-            title={`${name}${collected ? '' : ' — not collected yet'} — ${added ? 'in your deck (tap to remove)' : 'tap to add to your deck'}`}
+            title={`${name}${collected ? '' : ' (not collected yet)'}${added ? ', in your deck' : ''}`}
             aria-label={added ? `Remove ${name} from your deck` : `Add ${name} to your deck`}
           />
         )
@@ -576,6 +577,7 @@ function TodayStudyPlanSection({
   const { targetDates } = useExamProgress()
   const targetDate = targetDates[wikiExamIdToProgressKey(syllabus.examId)] ?? null
   const { plan, loading: planLoading } = useStudyPlan(syllabus, masteryRecords, targetDate, masteryLoading)
+  const { isPro } = useSubscription()
 
   const concepts = useMemo(() => {
     if (!plan) return []
@@ -593,7 +595,12 @@ function TodayStudyPlanSection({
       onCardsAdded={onCardsAdded}
       emptyHint={
         <p className="text-xs text-muted-foreground py-1">
-          {plan?.config?.targetReadyDate ? (
+          {!isPro ? (
+            <>
+              Today&apos;s Study Plan is part of{' '}
+              <Link to="/upgrade" className="text-primary hover:underline">Pro</Link>.
+            </>
+          ) : plan?.config?.targetReadyDate ? (
             'Nothing scheduled for today.'
           ) : (
             <>
@@ -887,6 +894,7 @@ function AddFlashcardsMenu({
 }) {
   const { addCard, hasCard } = useFlashcards()
   const { names: planNames, loading: planLoading, hasPlan } = useTodayPlanCardNames()
+  const { isPro } = useSubscription()
 
   // What today's plan would actually add — the plan's concepts minus whatever
   // is already in the deck, so the row's count is the number of *new* cards and
@@ -914,7 +922,7 @@ function AddFlashcardsMenu({
     >
       <AddFlashcardsMenuRow
         icon={<CalendarCheck className="h-4 w-4" />}
-        label="Today's study plan"
+        label="Today's Study Plan"
         disabled={planLoading || missing.length === 0}
         sound="none"
         onClick={addToday}
@@ -931,7 +939,7 @@ function AddFlashcardsMenu({
               {missing.length}
             </span>
           ) : (
-            <span className="shrink-0 text-xs">{hasPlan ? 'None today' : 'Not set up'}</span>
+            <span className="shrink-0 text-xs">{!isPro ? 'Pro' : hasPlan ? 'None today' : 'Not set up'}</span>
           )
         }
       />
@@ -1621,7 +1629,7 @@ function SortableCard({
           onClick={e => { e.stopPropagation(); handleFlipOpen() }}
           // The level used to be printed under the name; now that the foil edge
           // carries it, hovering the name is how you put a word to the border.
-          title={!focusMode && collected ? `${card.name} — ${MASTERY_LABEL[masteryState]}` : undefined}
+          title={!focusMode && collected ? `${card.name} · ${MASTERY_LABEL[masteryState]}` : undefined}
           className={`min-w-0 text-center transition-colors ${
             isActive ? 'text-primary' : 'hover:text-primary'
           }`}
@@ -1736,19 +1744,19 @@ function StudySessionSummaryDialog({
           <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-500/15 text-green-500">
             <CheckCircle2 className="h-7 w-7" />
           </span>
-          <h2 className="text-lg font-bold">Deck complete!</h2>
+          <h2 className="text-lg font-bold">Deck complete</h2>
           <p className="text-sm text-muted-foreground">
             {summary.total} card{summary.total === 1 ? '' : 's'} studied
             {summary.struggled.length > 0
               ? `, ${summary.firstTry} on the first try.`
-              : ' — all on the first try.'}
+              : ', all on the first try.'}
           </p>
         </div>
 
         {summary.struggled.length > 0 && (
           <div className="rounded-lg bg-muted/40 p-3 space-y-1.5">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Worth another look
+              Marked Again
             </p>
             <ul className="space-y-1">
               {summary.struggled.slice(0, 5).map(({ name, againCount }) => (
@@ -1772,7 +1780,7 @@ function StudySessionSummaryDialog({
           <button
             type="button"
             onClick={onClearCompleted}
-            title="Move completed cards into a dated pack and clear them from your deck"
+            title="Remove completed cards from your deck"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-[0.98] transition-all"
           >
             <CheckCircle2 className="h-4 w-4" /> Clear Completed Flashcards
@@ -2277,7 +2285,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                   aria-haspopup="menu"
                   aria-expanded={showPlayMenu}
                   className="inline-flex items-center justify-center h-7 w-7 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
-                  title={`${current.name} — actions`}
+                  title={`Actions for ${current.name}`}
                   aria-label={`Actions for ${current.name}`}
                 >
                   <Play className="h-3.5 w-3.5" />

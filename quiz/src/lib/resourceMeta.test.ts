@@ -209,7 +209,7 @@ Body`
 
   it('lists every ISBN search for a book with no authored link', () => {
     const meta = parseResourceMeta('---\nTitle: A First Course in Probability\nISBN: 978-0134753119\n---\nBody')
-    expect(meta.copySources?.map(s => s.label)).toEqual(['WorldCat', 'Amazon'])
+    expect(meta.copySources?.map(s => s.label)).toEqual(['WorldCat (libraries)', 'Amazon'])
     expect(meta.getCopyUrl).toBe(meta.copySources?.[0].url)
   })
 
@@ -277,7 +277,7 @@ Title: Probability Distributions
 describe('copySources', () => {
   it('searches each place on the bare ISBN', () => {
     expect(copySources('978-0134753119').map(({ id, label, url }) => ({ id, label, url }))).toEqual([
-      { id: 'worldcat', label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
+      { id: 'worldcat', label: 'WorldCat (libraries)', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
       { id: 'amazon', label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
     ])
   })

@@ -124,6 +124,14 @@ export type SoundEvent =
   | 'matchFound'
   /** A reaction arriving from the other player. */
   | 'reaction'
+  /** A card dealt onto the table — the draft's deal, one per card. */
+  | 'deal'
+  /** A card struck from a hand onto the discard. */
+  | 'strike'
+  /** A coin round's coin, flicked up. */
+  | 'coinToss'
+  /** …and landing on one card's topic. */
+  | 'coinLand'
 
 export interface ToneSpec {
   /** Start offset from the cue's own start, in seconds. */
@@ -455,7 +463,8 @@ const PRESS_THUD: ToneSpec = { at: 0, dur: 0.035, freq: G3, glide: C3, type: 'si
  * wrong answer is still silent; a race has no buzzer for a miss either.
  */
 const BATTLE_RECIPES: Record<
-  'buzz' | 'countIn' | 'go' | 'lockIn' | 'opponentIn' | 'power' | 'steal' | 'clockTick' | 'matchFound' | 'reaction',
+  'buzz' | 'countIn' | 'go' | 'lockIn' | 'opponentIn' | 'power' | 'steal' | 'clockTick' | 'matchFound' | 'reaction'
+    | 'deal' | 'strike' | 'coinToss' | 'coinLand',
   SoundRecipe
 > = {
   buzz: {
@@ -602,6 +611,56 @@ const BATTLE_RECIPES: Record<
     tones: [
       { at: 0, dur: 0.14, freq: C5, glide: G5, type: 'sine', gain: 0.5, attack: 0.01 },
       { at: 0, dur: 0.16, freq: C2, type: 'sine', gain: 0.08, attack: 0.01 },
+    ],
+  },
+  deal: {
+    // A card dealt onto the table: a flick of paper and the soft knock of it
+    // landing, no note at all — the deal lays half a dozen of these down in a
+    // run, and a pitch would turn the run into a tune that means nothing.
+    gain: 0.26,
+    throttleMs: 60,
+    lowpass: 4200,
+    noise: [
+      { at: 0, dur: 0.07, from: 1200, to: 2600, type: 'bandpass', q: 0.9, gain: 0.22, swell: 0.3 },
+      { at: 0.06, dur: 0.02, from: 900, to: 600, type: 'bandpass', q: 2, gain: 0.32, swell: 0 },
+    ],
+  },
+  strike: {
+    // A card struck onto the discard: paper sliding off the hand, falling in
+    // pitch as it goes, and a low thud where it lands. Not a loss — it's a
+    // move — so it has weight but no fall of a melody, and it stays dry.
+    gain: 0.3,
+    throttleMs: 200,
+    lowpass: 3200,
+    noise: [
+      { at: 0, dur: 0.16, from: 2600, to: 800, type: 'bandpass', q: 0.8, gain: 0.24, swell: 0.2 },
+      mallet(0.14, 0.2),
+    ],
+    tones: [{ at: 0.14, dur: 0.12, freq: G2, type: 'sine', gain: 0.18, attack: 0.004 }],
+  },
+  coinToss: {
+    // The coin flicked up off a thumb: a click and a quick rising brush, then
+    // nothing while it's in the air. The landing is its own cue.
+    gain: 0.24,
+    throttleMs: 400,
+    lowpass: 4600,
+    noise: [
+      { ...CLICK_SNAP, gain: 0.3 },
+      { at: 0.01, dur: 0.12, from: 1400, to: 3400, type: 'bandpass', q: 1.1, gain: 0.16, swell: 0.2 },
+    ],
+  },
+  coinLand: {
+    // The coin landing on the table and settling: a knock and one struck G
+    // with a D above it, quick and level — it tells you what the round is on,
+    // not whether that's good, so it neither climbs to a reward nor falls.
+    gain: 0.3,
+    throttleMs: 400,
+    lowpass: 3400,
+    space: 0.1,
+    noise: [mallet(0, 0.22)],
+    tones: [
+      ...strike(G4, { at: 0, dur: 0.16, gain: 0.46 }),
+      ...strike(D5, { at: 0.07, dur: 0.24, gain: 0.46 }),
     ],
   },
 }

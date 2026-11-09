@@ -201,14 +201,14 @@ export function ExamStatusBanner({ status }: { status: ExamStatus }) {
     return (
       <div className="flex items-center justify-center gap-1 border-t border-dashed border-muted-foreground/40 py-1.5 text-center text-[11px] font-medium tracking-wide text-muted-foreground">
         <Hammer className="h-3 w-3 shrink-0" aria-hidden />
-        In Development — syllabus outline only, not yet available to study
+        In Development · Syllabus outline only. No practice questions yet.
       </div>
     )
   }
   if (status === 'beta') {
     return (
       <div className="bg-amber-500/15 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
-        Beta
+        Beta · Questions and pages are still being added and checked.
       </div>
     )
   }

@@ -8,7 +8,7 @@ test.describe('store', () => {
   test('shelves the aisles and narrows them by exam', async ({ page }) => {
     await page.goto('/store')
 
-    await expect(page.getByRole('heading', { name: 'Shop', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Store', exact: true })).toBeVisible()
     for (const aisle of ['Registration', 'Study materials', 'Calculators', 'Textbooks']) {
       await expect(page.getByRole('heading', { name: aisle, exact: true })).toBeVisible()
     }
@@ -51,7 +51,7 @@ test.describe('store', () => {
     await expect(page.getByRole('radio', { name: 'Exam FAM' })).toHaveCount(0)
 
     // The search bar narrows every aisle at once, and rides the URL.
-    await page.getByRole('textbox', { name: 'Search the Shop' }).fill('Exam 9')
+    await page.getByRole('textbox', { name: 'Search the Store' }).fill('Exam 9')
     await expect(page).toHaveURL(/q=Exam/)
     await expect(page.getByTestId('store-item-register-CAS-9')).toBeVisible()
     await expect(page.getByTestId('store-item-register-CAS-5')).toHaveCount(0)
@@ -108,21 +108,21 @@ test.describe('store', () => {
     await expect(next).toContainText('Register')
     await next.getByRole('button', { name: 'I’ve registered' }).click()
     await expect(next).toContainText('Calculator')
-    await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^1 of 5 steps sorted/)
+    await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^1 of 5 steps done/)
 
     // Undo puts it back, and so does its tick, which stays on the step.
     await page.getByTestId('store-kit-undo').getByRole('button', { name: 'Undo' }).click()
     await expect(page.getByTestId('store-kit-next')).toContainText('Register')
-    await page.getByRole('button', { name: 'Mark Register sorted' }).click()
+    await page.getByRole('button', { name: 'Mark Register done' }).click()
     await expect(page.getByTestId('store-kit-next')).toContainText('Calculator')
-    await page.getByRole('button', { name: /^Register: sorted/ }).click()
+    await page.getByRole('button', { name: /^Register: done/ }).click()
     await expect(page.getByTestId('store-kit-next')).toContainText('Register')
-    await page.getByRole('button', { name: 'Mark Register sorted' }).click()
+    await page.getByRole('button', { name: 'Mark Register done' }).click()
 
     // The calculator step asks which one; the pick names the step.
     await page.getByRole('radio', { name: 'I have BA II Plus', exact: true }).click()
     await expect(page.getByTestId('store-kit-step-calculator')).toContainText('You have the BA II Plus')
-    await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^2 of 5 steps sorted/)
+    await expect(page.getByTestId('store-kit-progress')).toHaveAttribute('aria-label', /^2 of 5 steps done/)
 
     // The picks outlive the visit.
     await page.reload()

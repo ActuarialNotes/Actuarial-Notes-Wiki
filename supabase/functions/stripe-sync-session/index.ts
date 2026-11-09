@@ -5,6 +5,8 @@ import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 // to the app. Bridges the gap when webhooks are slow or not yet configured.
 
 const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
+// What the reader sees when Pro can't be checked; the cause goes to the log.
+const SYNC_FAILED = 'Your subscription couldn’t be checked just now. Try again in a minute.'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
@@ -55,7 +57,10 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')
-    if (!stripeSecret) return json({ error: 'Configuration error: STRIPE_SECRET_KEY is not set' }, 500)
+    if (!stripeSecret) {
+      console.error('stripe-sync-session: STRIPE_SECRET_KEY is not set')
+      return json({ error: SYNC_FAILED }, 500)
+    }
 
     const admin = createClient(supabaseUrl, serviceRoleKey)
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)
@@ -97,7 +102,7 @@ Deno.serve(async (req: Request) => {
 
       if (!ownsSession) {
         console.error('stripe-sync-session: session does not belong to user', user.id)
-        return json({ error: 'Session does not belong to this user' }, 403)
+        return json({ error: 'That checkout belongs to a different account. Sign in with the account you paid with.' }, 403)
       }
 
       if (session.payment_status !== 'paid' || session.mode !== 'subscription' || !session.subscription) {
@@ -146,7 +151,6 @@ Deno.serve(async (req: Request) => {
     return json({ synced: true, tier, status })
   } catch (err) {
     console.error('stripe-sync-session error:', err)
-    const message = err instanceof Error ? err.message : 'Unexpected error'
-    return json({ error: message }, 500)
+    return json({ error: SYNC_FAILED }, 500)
   }
 })

@@ -414,7 +414,7 @@ export function DateControl({ field, value, linked = false, onChange }: { field:
 function DefaultDot({ show }: { show: boolean }) {
   if (!show) return null
   return (
-    <span className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/60 align-middle" title="Default — not yet chosen" aria-label="default, not yet chosen" />
+    <span className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/60 align-middle" title="Default, not yet chosen" aria-label="default, not yet chosen" />
   )
 }
 

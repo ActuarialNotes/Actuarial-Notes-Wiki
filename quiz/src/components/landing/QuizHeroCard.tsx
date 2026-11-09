@@ -115,7 +115,7 @@ export function QuizHeroCard({
           {revealDuring ? <Eye className="h-[22px] w-[22px]" aria-hidden /> : <EyeOff className="h-[22px] w-[22px]" aria-hidden />}
         </SettingIcon>
         <SettingIcon
-          label={conceptLinks ? 'Tap concepts to read them' : 'Concepts not tappable'}
+          label={conceptLinks ? 'Tap concepts to read them' : 'Concept links off'}
           on={conceptLinks}
           onClick={() => onChange('sitting')}
         >

@@ -264,7 +264,7 @@ export function StepPanel({
               value={node.data ?? ''}
               onChange={e => onUpdate({ data: e.target.value })}
               rows={6}
-              placeholder="Describe the data, or paste the figures — a triangle, a premium history, a table of claims."
+              placeholder="Describe the data, or paste the figures: a triangle, a premium history, a table of claims."
               className={cn(textArea, 'font-mono text-xs')}
               data-testid="workflow-data-text"
             />
@@ -309,7 +309,7 @@ export function StepPanel({
           value={node.note ?? ''}
           onChange={e => onUpdate({ note: e.target.value })}
           rows={2}
-          placeholder={node.kind === 'concept' ? 'What it settles — a method, a definition, a judgment.' : 'Why it is here, and what to take from it.'}
+          placeholder={node.kind === 'concept' ? 'What it settles: a method, a definition or a judgment.' : 'Why it is here, and what to take from it.'}
           className={textArea}
           data-testid="workflow-step-note"
         />
@@ -501,7 +501,7 @@ function SourceView({
         <MetaPill>{formatPublished(resource.published)}</MetaPill>
         {resource.sample && (
           <span
-            title="A sample entry: it stands for this kind of document rather than naming one Cowork carries. Cite the real document."
+            title="A stand-in for this kind of document, not a real one"
             className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400"
           >
             Sample
@@ -570,7 +570,7 @@ function SourceTableEditor({
       <p className={fieldLabel}>{locator}</p>
       <p className="text-xs text-muted-foreground">
         {blanks > 0
-          ? `Read ${blanks === 1 ? 'the blank figure' : `the ${blanks} blank figures`} off the document — a rate as it is printed, “8.6%”. Then connect this step to a calculation and choose which cells fill it.`
+          ? `Read ${blanks === 1 ? 'the blank figure' : `the ${blanks} blank figures`} off the document, a rate as it is printed (“8.6%”). Then connect this step to a calculation and choose which cells fill it.`
           : 'Connect this step to a calculation, then choose which cells fill its inputs on the connection.'}
       </p>
       <div className="overflow-x-auto rounded-lg border border-border">
@@ -851,7 +851,7 @@ export function EdgePanel({
       : `${b} is linked to ${a}, once ${a} runs cleanly.`,
     feeds: mapping
       ? `Choose which of ${a}’s columns fill ${b}’s inputs, and the two are linked.`
-      : `${b} uses what ${a} gives. No tool wires these two together, so say what passes along it: Claude carries it across when you run the workflow.`,
+      : `${b} uses what ${a} gives. No tool links these two, so say below what passes from one to the other. The assistant reads it when it runs the workflow.`,
     informs: `${a} is the method or idea ${b} rests on.`,
     applies: `${a} is a worked instance of ${b}.`,
   }[kind]
@@ -864,7 +864,7 @@ export function EdgePanel({
     <PanelShell
       label={`Connection from ${a} to ${b}`}
       layout={layout}
-      kicker={edgeLabel(kind) ? `Connection · ${edgeLabel(kind)}` : kind === 'handoff' ? 'Link' : 'Connection'}
+      kicker={kind === 'handoff' ? 'Link' : 'Connection'}
       title={(
         <span>
           {stepButton(from.id, a)}

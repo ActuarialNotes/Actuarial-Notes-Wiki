@@ -175,7 +175,7 @@ export function canEnterMode(id: AppMode, viewer: ModeViewer): boolean {
  */
 export function modeLockReason(id: AppMode, viewer: ModeViewer): string | null {
   if (canEnterMode(id, viewer)) return null
-  if (!viewer.signedIn) return 'Sign in with Pro to open Cowork'
+  if (!viewer.signedIn) return 'Included with Pro. Sign in first.'
   return 'Included with Pro'
 }
 

@@ -109,7 +109,7 @@ function ProgrammeGroup({
       </div>
       <div className="flex flex-wrap items-center gap-1.5">
         {programme.facts.map(f => <Pill key={f}>{f}</Pill>)}
-        {next && <Pill tone="info">Next real window {formatSpan(next.opens, next.closes)}</Pill>}
+        {next && <Pill tone="info">Next CAS window {formatSpan(next.opens, next.closes)}</Pill>}
       </div>
       <div className="space-y-2">
         {programme.briefs.map(brief => (

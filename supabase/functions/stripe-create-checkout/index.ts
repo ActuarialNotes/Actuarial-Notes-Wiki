@@ -2,6 +2,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 
 const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
+// What the reader sees when checkout can't start; the cause goes to the log.
+const CHECKOUT_UNAVAILABLE = 'Checkout didn’t open. Try again in a minute.'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
@@ -31,8 +33,11 @@ Deno.serve(async (req: Request) => {
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')
     const priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID')
-    if (!stripeSecret) return json({ error: 'Configuration error: STRIPE_SECRET_KEY is not set' }, 500)
-    if (!priceId) return json({ error: 'Configuration error: STRIPE_PREMIUM_PRICE_ID is not set' }, 500)
+    // A missing secret is logged by name and never shown: the reader can't fix it.
+    if (!stripeSecret || !priceId) {
+      console.error('stripe-create-checkout: STRIPE_SECRET_KEY or STRIPE_PREMIUM_PRICE_ID is not set')
+      return json({ error: CHECKOUT_UNAVAILABLE }, 500)
+    }
 
     const admin = createClient(supabaseUrl, serviceRoleKey)
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)
@@ -78,7 +83,6 @@ Deno.serve(async (req: Request) => {
     return json({ url: session.url })
   } catch (err) {
     console.error('stripe-create-checkout error:', err)
-    const message = err instanceof Error ? err.message : 'Stripe error'
-    return json({ error: message }, 500)
+    return json({ error: CHECKOUT_UNAVAILABLE }, 500)
   }
 })

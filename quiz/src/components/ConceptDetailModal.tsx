@@ -238,9 +238,9 @@ export function ConceptDetailModal({
         const all = parseAllQuestions(raw)
         setQuestions(all.filter(q => q.wiki_link.some(link => linkMatchesConcept(link, currentConceptName))))
       })
-      .catch(err => {
+      .catch(() => {
         if (cancelled) return
-        setQuestionsError(err instanceof Error ? err.message : 'Failed to load questions')
+        setQuestionsError("Couldn't load the questions. Check your connection and open this concept again.")
       })
       .finally(() => { if (!cancelled) setQuestionsLoading(false) })
     return () => { cancelled = true }
@@ -370,10 +370,10 @@ export function ConceptDetailModal({
             >
               {studyPlanConcepts && (
                 <option value="study-plan">
-                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                  Today's Study Plan · {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
                 </option>
               )}
-              <option value="entire-syllabus">Entire Syllabus</option>
+              <option value="entire-syllabus">Entire syllabus</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           </div>
@@ -548,7 +548,7 @@ export function ConceptDetailModal({
                   : filter === 'all'
                   ? 'No questions found for this concept.'
                   : filter === 'new'
-                  ? "No new questions — you've attempted all of them."
+                  ? "No new questions. You've answered all of them."
                   : 'No attempted questions yet.'}
               </div>
             )}

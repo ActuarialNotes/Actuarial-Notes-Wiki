@@ -14,6 +14,7 @@ import {
   ToolInputError,
   assumptionRef,
   bankFigure,
+  readerMessage,
   runPath,
   runTool,
   toolById,
@@ -123,7 +124,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
       lastGood.current = result
       return { result, error: null as string | null, errorField: null as string | null }
     } catch (err) {
-      if (err instanceof ToolInputError) return { result: lastGood.current, error: err.message, errorField: err.field }
+      if (err instanceof ToolInputError) return { result: lastGood.current, error: readerMessage(spec, err), errorField: err.field }
       throw err
     }
   }, [spec, draft])
@@ -253,7 +254,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   const menu: ToolMenuItem[] = [
     ...(onOpenMethod ? [{ key: 'method', label: 'Read about the method', icon: 'method' as const, run: onOpenMethod }] : []),
     { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => `${window.location.origin}${runPath(slug, draft)}` },
-    { key: 'ai', label: 'Copy for AI (run_tool call)', icon: 'ai', run: () => runToolCall(spec, draft) },
+    { key: 'ai', label: 'Copy for Claude or ChatGPT', icon: 'ai', run: () => runToolCall(spec, draft) },
     { key: 'json', label: 'Copy result as JSON', icon: 'json', disabled: !result, run: () => JSON.stringify(result, null, 2) },
     { key: 'xlsx', label: 'Download .xlsx', icon: 'download', disabled: !result || stale, run: download },
     ...sends,

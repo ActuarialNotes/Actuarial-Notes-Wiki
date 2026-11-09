@@ -160,6 +160,10 @@ recovered from the PDF, so they never sit inside it.
   sample states a single final figure worth surfacing. Never compute one the
   report does not give.
 
+## Writing for readers
+
+What a paper and its examiner's report print is transcribed as printed and is outside `docs/writing-style.md`: never "improve" it. Any text this skill writes itself (a note, a heading, an added explanation) follows that page: plain, said once, no tells (an em dash hinging the sentence, a rule of three, a closing aphorism, exclamation marks).
+
 ## 5. Check
 
 ```bash

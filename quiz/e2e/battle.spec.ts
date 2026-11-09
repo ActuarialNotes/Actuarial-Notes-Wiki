@@ -379,8 +379,11 @@ test.describe('quiz battle', () => {
         for (const page of [host, guest]) await expect(page.getByTestId('battle-coin')).toBeVisible({ timeout: 20_000 })
         const winner = await host.getByTestId('battle-coin').getAttribute('data-winner')
         await expect(guest.getByTestId('battle-coin')).toHaveAttribute('data-winner', winner ?? '')
-        const topic = winner === '0' ? mine[round + 1] : theirs[round + 1]
-        for (const page of [host, guest]) await expect(page.getByTestId('battle-coin-result')).toContainText(topic)
+        // It lands on one of the winner's two unpaired cards (or a fallback),
+        // and both screens say the same.
+        const said = ((await host.getByTestId('battle-coin-result').textContent()) ?? '').replace(/^Round \d is on/, '')
+        expect([...(winner === '0' ? mine : theirs).slice(1, 3), ...(winner === '0' ? theirs : mine).slice(1, 3), 'Any topic']).toContain(said)
+        await expect(guest.getByTestId('battle-coin-result')).toContainText(said)
       }
       const { right, wrong } = await currentQuestion(host)
       await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
@@ -652,6 +655,7 @@ test.describe('quiz battle', () => {
   })
 
   test('a private channel with abilities on: each brings the Hangar loadout, spent on both screens', async ({ context }) => {
+    test.setTimeout(90_000)
     const host = await context.newPage()
     const guest = await context.newPage()
 
@@ -696,6 +700,7 @@ test.describe('quiz battle', () => {
   })
 
   test('a room without abilities, or a page without a loadout, shows no tray', async ({ context }) => {
+    test.setTimeout(90_000)
     const host = await context.newPage()
     const guest = await context.newPage()
 

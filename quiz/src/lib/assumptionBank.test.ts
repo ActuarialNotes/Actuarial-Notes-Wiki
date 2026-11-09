@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import bank from 'virtual:assumption-bank'
 import {
   ASSUMPTION_KINDS,
+  BASES,
   assumptionById,
   figuresOfKind,
   formatAssumptionValue,
@@ -87,6 +88,24 @@ describe('parseAssumptionSet', () => {
     expect(s.rows[4].id).toBe('Benchmarks#total-expenses-2')
   })
 
+  it('reads the explained table: each row\'s basis, meaning and the answer it fits', () => {
+    const text = SET
+      .replace('Publisher: "A Board"', 'Publisher: "A Board"\nShort name: "AB"')
+      .replace('Jurisdiction: "CA-AB"', 'Jurisdiction: "CA-AB"\nLine: "Private passenger vehicles"')
+      .replace('Read: "2026-11-08"', 'Read: "2026-11-08"\nPage offset: "2"')
+      .replace('| Assumption | Kind | Value | Unit | Locator |\n|---|---|---|---|---|', '| Assumption | Kind | Value | Unit | Locator | Basis | Meaning | Fits |\n|---|---|---|---|---|---|---|---|')
+      .replace('| Total expenses | expense-ratio | 27.8 | % | p. 7 |', '| Total expenses | expense-ratio | 27.8 | % | p. 7 | selected | The board\'s selection. | ratemaking.expense_ratios#total |')
+      .replace(/\| (p\. [578]) \|\n/g, '| $1 | | | |\n')
+    const s = parseAssumptionSet('Assumptions/X.md', text)
+    expect(s.shortName).toBe('AB')
+    expect(s.line).toBe('Private passenger vehicles')
+    expect(s.pageOffset).toBe(2)
+    expect(s.rows[0]).toMatchObject({ basis: 'selected', meaning: 'The board\'s selection.', fits: 'ratemaking.expense_ratios#total' })
+    expect(s.rows[1]).toMatchObject({ basis: '', meaning: '', fits: '' })
+    expect(() => parseAssumptionSet('Assumptions/X.md', text.replace('| selected |', '| guessed |'))).toThrow(/unknown basis/)
+    expect(() => parseAssumptionSet('Assumptions/X.md', text.replace('#total', ''))).toThrow(/tool id/)
+  })
+
   it('refuses what a reader would misread', () => {
     expect(() => parseAssumptionSet('Assumptions/X.md', SET.replace('| 27.8 |', '| 27.8% |'))).toThrow(/plain number/)
     expect(() => parseAssumptionSet('Assumptions/X.md', SET.replace('ulae-factor', 'fudge'))).toThrow(/unknown kind/)
@@ -157,8 +176,9 @@ describe('the bank in the vault', () => {
   const files = readdirSync(join(ROOT, 'Assumptions')).filter(f => f.endsWith('.md')).sort()
 
   it('has the vocabulary the lint has', () => {
-    const vocab = JSON.parse(readFileSync(join(ROOT, 'scripts', 'assumption_vocab.json'), 'utf-8')).kinds
-    expect(ASSUMPTION_KINDS).toEqual(vocab)
+    const vocab = JSON.parse(readFileSync(join(ROOT, 'scripts', 'assumption_vocab.json'), 'utf-8'))
+    expect(ASSUMPTION_KINDS).toEqual(vocab.kinds)
+    expect([...BASES]).toEqual(vocab.bases)
   })
 
   it('bundles every set, parsed', () => {

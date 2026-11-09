@@ -1,50 +1,74 @@
-// The **source tag** every input of the tool template carries
-// (docs/actuarial-tools.md §19): where its value came from — the example's
-// default, the reader's own, a published figure from the Assumptions Bank, or
-// another tool. Colour belongs to the exam a tool is in, so a tag is told by
-// its mark and its words; only "Not fact checked" keeps its amber, because
-// it is a warning.
+// The **from chip** every input of the tool template carries
+// (docs/tool-template-v2.md §3.4): where its value came from, in one shape for
+// every origin — `● Default`, `● Yours`, `▤ AIRB, Alberta` (with *Not fact
+// checked* in amber beside it until it is) and `↳ Trend Fit`. Colour belongs
+// to the exam a tool is in, so a chip is told by its mark and its words; only
+// "Not fact checked" keeps its amber, because it is a warning.
+//
+// Given `onClick`, the chip is a button: a published or linked chip opens its
+// explanation in place, Default and Yours open the edit sheet.
 
-import { BookOpen, CornerDownRight } from 'lucide-react'
+import { BookOpen, ChevronDown, CornerDownRight } from 'lucide-react'
 import type { ValueSource } from '@/lib/toolTemplate'
 import { cn } from '@/lib/utils'
 
 const TAG = 'inline-flex max-w-full items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium leading-4 whitespace-nowrap'
+const CHIP = `${TAG} ring-1 ring-inset ring-border`
 
-export function SourceTag({ source, className }: { source: ValueSource; className?: string }) {
+function ChipFace({ source }: { source: ValueSource }) {
   switch (source.kind) {
     case 'default':
-      return (
-        <span className={cn(TAG, 'text-muted-foreground ring-1 ring-inset ring-border', className)} data-source="default" title="The example's value, not yet chosen">
-          <span className="h-1.5 w-1.5 shrink-0 rounded-full border border-current" aria-hidden />
-          Default
-        </span>
-      )
+      return <><span className="h-1.5 w-1.5 shrink-0 rounded-full border border-current" aria-hidden />Default</>
     case 'yours':
-      return (
-        <span className={cn(TAG, 'bg-muted text-foreground', className)} data-source="yours">
-          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" aria-hidden />
-          Yours
-        </span>
-      )
+      return <><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" aria-hidden />Yours</>
     case 'published':
-      return (
-        <span className="inline-flex max-w-full flex-wrap items-center gap-1">
-          <span className={cn(TAG, 'bg-muted text-foreground', className)} data-source="published" title="A published figure, from the Assumptions Bank">
-            <BookOpen className="h-3 w-3 shrink-0" aria-hidden />
-            <span className="truncate">{source.label}</span>
-          </span>
-          {!source.checked && <UncheckedTag />}
-        </span>
-      )
+      return <><BookOpen className="h-3 w-3 shrink-0" aria-hidden /><span className="truncate">{source.label}</span></>
     case 'linked':
-      return (
-        <span className={cn(TAG, 'bg-muted text-foreground', className)} data-source="linked" title={`Taken from ${source.label}`}>
-          <CornerDownRight className="h-3 w-3 shrink-0" aria-hidden />
-          <span className="truncate">{source.label}</span>
-        </span>
-      )
+      return <><CornerDownRight className="h-3 w-3 shrink-0" aria-hidden /><span className="truncate">{source.label}</span></>
   }
+}
+
+const TITLES: Record<ValueSource['kind'], string> = {
+  default: "The example's value, not yet chosen",
+  yours: 'Your own value',
+  published: 'A published figure, from the Assumptions Bank',
+  linked: 'Taken from another tool',
+}
+
+export function SourceTag({ source, className, onClick, open }: {
+  source: ValueSource
+  className?: string
+  /** Makes the chip a button. */
+  onClick?: () => void
+  /** For a chip that opens its explanation in place: whether it is open. */
+  open?: boolean
+}) {
+  const muted = source.kind === 'default'
+  const cls = cn(CHIP, muted ? 'text-muted-foreground' : 'text-foreground', className)
+  const chip = onClick ? (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(cls, 'transition-colors hover:bg-muted')}
+      data-source={source.kind}
+      title={TITLES[source.kind]}
+      aria-expanded={open}
+    >
+      <ChipFace source={source} />
+      {open !== undefined && <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', open && 'rotate-180')} aria-hidden />}
+    </button>
+  ) : (
+    <span className={cls} data-source={source.kind} title={TITLES[source.kind]}>
+      <ChipFace source={source} />
+    </span>
+  )
+  if (source.kind !== 'published' || source.checked) return chip
+  return (
+    <span className="inline-flex max-w-full flex-wrap items-center gap-1">
+      {chip}
+      <UncheckedTag />
+    </span>
+  )
 }
 
 export function UncheckedTag({ className }: { className?: string }) {

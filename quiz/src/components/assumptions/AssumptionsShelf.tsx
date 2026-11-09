@@ -1,23 +1,25 @@
 // The Assumptions Bank's shelf (`/tools/assumptions`, docs/assumptions-bank.md
-// §4.5), in the tool template's shape (docs/actuarial-tools.md §19): every
-// document a banner — tinted in the exam whose syllabus lists it, neutral when
-// none does — with its figures as rows under it, newest first, filtered by
-// kind. A figure a tool takes opens "Use in…", the tools that take it, each
-// with its exam's logo; a link opens the tool with the figure already in,
-// recorded as its source. The shelf is where a published number starts its
-// way into a model.
+// §4.5), in the tool template's shape (docs/actuarial-tools.md §19,
+// docs/tool-template-v2.md §3.8): every document a banner — tinted in the exam
+// whose syllabus lists it, neutral when none does, no logo — with its figures
+// as rows under it, newest first. A kind filter shows only that kind's rows,
+// the rest of the document folded into one line; a figure not yet entered is
+// never first. Each figure names the tools that take it ("to Permissible Loss
+// Ratio"), the mirror of a tool's "from" chip: one tool opens it with the
+// figure already in, recorded as its source; several open "Use in…". The
+// shelf is where a published number starts its way into a model.
 
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import bank from 'virtual:assumption-bank'
-import { BookMarked, ChevronRight, ExternalLink, CornerDownRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, ExternalLink } from 'lucide-react'
 import { ASSUMPTION_KINDS, effectiveLabel, formatAssumptionValue, kindLabel, type AssumptionRow, type AssumptionSet } from '@/lib/assumptionBank'
-import { figureUses, kindsIn, type FigureUse } from '@/lib/toolBank'
-import { examForConcepts, examForResource } from '@/lib/toolExam'
+import { figureUses, kindsIn, shelfRows, type FigureUse } from '@/lib/toolBank'
+import { examForResource } from '@/lib/toolExam'
+import { contextLine } from '@/lib/toolTemplate'
 import { examAccentStyle } from '@/lib/examColors'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { ExamLogo } from '@/components/ExamLogo'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { EXAM_BANNER, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 import { BottomSheet } from '@/components/tools/ValueSheet'
@@ -65,7 +67,6 @@ export function AssumptionsShelf({ onReadSource }: { onReadSource: (resource: st
       {using && (
         <UseSheet
           {...using}
-          syllabi={syllabi}
           onReadSource={() => { setUsing(null); onReadSource(using.set.source) }}
           onClose={() => setUsing(null)}
         />
@@ -82,10 +83,10 @@ function SetSection({ set, kind, syllabi, onReadSource, onUse }: {
   onUse: (row: AssumptionRow, uses: FigureUse[]) => void
 }) {
   const examKey = useMemo(() => examForResource(set.source, syllabi), [set.source, syllabi])
-  const figureRows = set.rows.filter(r => r.kind !== 'fact')
-  const read = figureRows.filter(r => r.decimal != null).length
-  // With a kind chosen, its rows lead; the rest of the document stays below them.
-  const rows = kind ? [...set.rows.filter(r => r.kind === kind), ...set.rows.filter(r => r.kind !== kind)] : set.rows
+  const toEnter = set.rows.filter(r => r.kind !== 'fact' && r.decimal == null).length
+  const { shown, folded } = shelfRows(set.rows, kind)
+  const [unfolded, setUnfolded] = useState(false)
+  const place = contextLine({ jurisdiction: set.jurisdiction, line: set.line })
   return (
     <section
       aria-label={set.title}
@@ -94,33 +95,31 @@ function SetSection({ set, kind, syllabi, onReadSource, onUse }: {
       style={examKey ? examAccentStyle(examKey) : undefined}
       data-testid="assumption-set"
     >
-      <div className={cn('overflow-hidden rounded-2xl', examKey ? EXAM_BANNER : NEUTRAL_BANNER)}>
-        <header className="flex items-start gap-3 px-3.5 pb-3 pt-3.5">
-          {examKey ? (
-            <ExamLogo examKey={examKey} size="md" />
-          ) : (
-            <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-background/50" aria-hidden>
-              <BookMarked className="h-4 w-4" />
-            </span>
-          )}
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-foreground/75">{set.publisher}</p>
-            <h2 className="text-[17px] font-bold leading-tight">{set.title}</h2>
-          </div>
-        </header>
-        <div className="grid grid-cols-2 border-t border-foreground/10">
-          <div className="px-3.5 pb-3 pt-2.5">
-            <p className="text-lg font-bold leading-tight tabular-nums">{read} of {figureRows.length}</p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">figures read</p>
-          </div>
-          <div className="border-l border-foreground/10 px-3.5 pb-3 pt-2.5">
-            <p className="text-lg font-bold leading-tight">{effectiveLabel(set.effective).replace(/^from /, '')}</p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">effective</p>
-          </div>
-        </div>
+      <div className={cn('overflow-hidden rounded-2xl px-3.5 pb-3 pt-3.5', examKey ? EXAM_BANNER : NEUTRAL_BANNER)}>
+        <p className="text-xs text-foreground/75">{[set.publisher, place].filter(Boolean).join(' · ')}</p>
+        <h2 className="text-[17px] font-bold leading-tight">{set.title}</h2>
+        <p className="mt-1 text-xs text-muted-foreground" data-testid="assumption-set-status">
+          In force {effectiveLabel(set.effective)}
+          {toEnter > 0 && <> · {toEnter} {toEnter === 1 ? 'figure' : 'figures'} still to enter</>}
+        </p>
       </div>
       <ul className="divide-y divide-border/60 overflow-hidden rounded-xl bg-card">
-        {rows.map(row => <FigureRow key={row.id} row={row} dimmed={!!kind && row.kind !== kind} onUse={onUse} />)}
+        {shown.map(row => <FigureRow key={row.id} row={row} onUse={onUse} />)}
+        {unfolded && folded.map(row => <FigureRow key={row.id} row={row} onUse={onUse} />)}
+        {folded.length > 0 && (
+          <li>
+            <button
+              type="button"
+              onClick={() => setUnfolded(u => !u)}
+              aria-expanded={unfolded}
+              className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-muted/60"
+              data-testid="assumption-folded"
+            >
+              {unfolded ? 'Fewer figures' : `${folded.length} other ${folded.length === 1 ? 'figure' : 'figures'} in this document`}
+              <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform', unfolded && 'rotate-180')} aria-hidden />
+            </button>
+          </li>
+        )}
       </ul>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 text-xs">
         <FactCheckBadge verification={set.verification} contentPath={set.path} contentName={set.title} />
@@ -135,52 +134,49 @@ function SetSection({ set, kind, syllabi, onReadSource, onUse }: {
   )
 }
 
-function FigureRow({ row, dimmed, onUse }: { row: AssumptionRow; dimmed: boolean; onUse: (row: AssumptionRow, uses: FigureUse[]) => void }) {
+function FigureRow({ row, onUse }: { row: AssumptionRow; onUse: (row: AssumptionRow, uses: FigureUse[]) => void }) {
   const value = formatAssumptionValue(row)
   const uses = figureUses(row)
-  const tools = new Set(uses.map(u => u.tool.id)).size
-  const body = (
-    <>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold">{row.label}</span>
-        <span className="block text-xs text-muted-foreground">{row.locator}</span>
-      </span>
-      <span
-        className={cn('shrink-0 text-right text-sm tabular-nums', value ? 'font-bold' : 'text-muted-foreground')}
-        title={value ? undefined : 'Not read off the document yet'}
-      >
-        {value || '—'}
-      </span>
-      {tools > 0 && (
-        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-medium" aria-label={`${tools} tools take it`}>
-          <CornerDownRight className="h-3 w-3" aria-hidden />{tools}
-        </span>
-      )}
-    </>
-  )
-  if (!uses.length) {
-    return <li className={cn('flex items-center gap-3 px-3.5 py-2.5', dimmed && 'opacity-50')} data-testid="assumption-row">{body}</li>
-  }
+  const tools = [...new Map(uses.map(u => [u.tool.id, u.tool])).values()]
+  const chip = 'inline-flex max-w-full items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset ring-border transition-colors hover:bg-muted'
   return (
-    <li className={cn(dimmed && 'opacity-50')} data-testid="assumption-row">
-      <button
-        type="button"
-        onClick={() => onUse(row, uses)}
-        className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted/60"
-        aria-label={`Use ${row.label}, ${value}, in a tool`}
-      >
-        {body}
-        <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-      </button>
+    <li className="space-y-1 px-3.5 py-2.5" data-testid="assumption-row">
+      <div className="flex items-center gap-3">
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-semibold">{row.label}</span>
+          <span className="block text-xs text-muted-foreground">{row.locator}</span>
+        </span>
+        <span
+          className={cn('shrink-0 text-right text-sm tabular-nums', value ? 'font-bold' : 'text-muted-foreground')}
+          title={value ? undefined : 'Not entered from the document yet'}
+        >
+          {value || '—'}
+        </span>
+      </div>
+      {tools.length > 0 && (
+        <p className="flex items-center gap-1.5 text-xs">
+          <span className="text-muted-foreground">to</span>
+          {uses.length === 1 ? (
+            <Link to={uses[0].path} className={chip} aria-label={`Use ${row.label}, ${value}, as ${uses[0].field.label} in ${uses[0].tool.name}`}>
+              <span className="truncate">{uses[0].tool.name}</span> <ChevronRight className="h-3 w-3 shrink-0" aria-hidden />
+            </Link>
+          ) : (
+            <button type="button" onClick={() => onUse(row, uses)} className={chip} aria-label={`Use ${row.label}, ${value}, in a tool`}>
+              <span className="truncate">{tools[0].name}</span>
+              {tools.length > 1 && <span className="text-muted-foreground"> + {tools.length - 1} more</span>}
+              <ChevronDown className="h-3 w-3 shrink-0" aria-hidden />
+            </button>
+          )}
+        </p>
+      )}
     </li>
   )
 }
 
-function UseSheet({ set, row, uses, syllabi, onReadSource, onClose }: {
+function UseSheet({ set, row, uses, onReadSource, onClose }: {
   set: AssumptionSet
   row: AssumptionRow
   uses: FigureUse[]
-  syllabi: readonly WikiExamSyllabus[]
   onReadSource: () => void
   onClose: () => void
 }) {
@@ -193,24 +189,20 @@ function UseSheet({ set, row, uses, syllabi, onReadSource, onClose }: {
         {!checked && <UncheckedTag />}
       </p>
       <div className="divide-y divide-border/60 overflow-hidden rounded-xl bg-card" data-testid="assumption-uses">
-        {uses.map(u => {
-          const exam = examForConcepts(u.tool.method.concepts, syllabi)
-          return (
-            <Link
-              key={`${u.tool.id}:${u.field.key}`}
-              to={u.path}
-              aria-label={`Use ${row.label} as ${u.field.label} in ${u.tool.name}`}
-              className="flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-muted/60"
-            >
-              {exam ? <ExamLogo examKey={exam} size="sm" /> : <span className="h-[26px] w-[26px] shrink-0 rounded-[7px] bg-muted" aria-hidden />}
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold">{u.tool.name}</span>
-                <span className="block text-xs text-muted-foreground">as {u.field.symbol ? `${u.field.symbol}, ` : ''}{u.field.label}</span>
-              </span>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-            </Link>
-          )
-        })}
+        {uses.map(u => (
+          <Link
+            key={`${u.tool.id}:${u.field.key}`}
+            to={u.path}
+            aria-label={`Use ${row.label} as ${u.field.label} in ${u.tool.name}`}
+            className="flex items-center gap-3 px-3.5 py-2.5 transition-colors hover:bg-muted/60"
+          >
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-semibold">{u.tool.name}</span>
+              <span className="block text-xs text-muted-foreground">as {u.field.symbol ? `${u.field.symbol}, ` : ''}{u.field.label}</span>
+            </span>
+            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+          </Link>
+        ))}
       </div>
       <button
         type="button"

@@ -18,5 +18,7 @@
     "mortality-ratio": ["%"],
     "cat-load": ["CAD", "USD", "%"],
     "fact": [""]
-  }
+  },
+  "_bases": "What kind of figure a row is, in the optional Basis column (docs/tool-template-v2.md §4): a regulator's cap or minimum, a figure it selected or set as a target, a benchmark, or one observed in experience. Held equal to BASES in quiz/src/lib/assumptionBank.ts.",
+  "bases": ["cap", "selected", "benchmark", "observed", "minimum", "target"]
 }

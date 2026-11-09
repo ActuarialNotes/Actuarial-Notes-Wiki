@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { TOOLS, runTool, toolById } from '@/lib/tools'
-import { figureFor, hasFigure, labelRows, linesExtent, range, scale, sweep, type FigureSpec } from './toolFigures'
+import { fieldQuantities, figureFor, hasFigure, labelRows, linesExtent, quantityStep, range, scale, segmentLabel, sweep, type FigureSpec, type Quantity } from './toolFigures'
 
 /** Every number a figure would draw. */
 function numbers(f: FigureSpec): number[] {
@@ -54,6 +54,49 @@ describe('a figure on every tool (R11)', () => {
     if (fig.kind !== 'lines') throw new Error('lines')
     expect(fig.series[0].points.map(p => p.y)).toEqual((r.values.averages as number[]).filter(v => v != null))
     expect(fig.dots).toHaveLength(6)
+  })
+})
+
+describe('a quantity\'s colour (template v2, §3.1)', () => {
+  const splits = TOOLS.flatMap(t => {
+    const fig = figureFor(runTool(t, {}))
+    return fig?.kind === 'split' ? [[t.id, fig] as const] : []
+  })
+
+  it('finds the split figures', () => {
+    expect(splits.map(([id]) => id)).toEqual(expect.arrayContaining(['ratemaking.permissible_loss_ratio', 'ratemaking.expense_ratios']))
+  })
+
+  it.each(splits)('%s gives no two parts the same step', (_id, fig) => {
+    if (fig.kind !== 'split') throw new Error('split')
+    const steps = fig.bars.flatMap(b => b.parts.map(p => quantityStep(p.quantity)))
+    expect(new Set(steps).size).toBe(steps.length)
+  })
+
+  it('keeps a quantity on one step across tools', () => {
+    const seen = new Map<Quantity, Set<string>>()
+    for (const [id, fig] of splits) {
+      if (fig.kind !== 'split') continue
+      for (const p of fig.bars.flatMap(b => b.parts)) {
+        if (!seen.has(p.quantity)) seen.set(p.quantity, new Set())
+        seen.get(p.quantity)!.add(id)
+      }
+    }
+    // Fixed expense is on Expense Ratios and on Permissible Loss Ratio, and is step 2 on both.
+    expect([...seen.get('fixed-expense')!]).toEqual(expect.arrayContaining(['ratemaking.expense_ratios', 'ratemaking.permissible_loss_ratio']))
+    expect(quantityStep('fixed-expense')).toBe(2)
+    expect(quantityStep('variable-expense')).toBe(3)
+  })
+
+  it('names the inputs a split draws, for their rows\' swatches', () => {
+    const fig = figureFor(runTool(toolById('ratemaking.permissible_loss_ratio')!, {}))
+    expect([...fieldQuantities(fig).entries()]).toEqual([['fixed', 'fixed-expense'], ['variable', 'variable-expense'], ['profit', 'profit']])
+  })
+
+  it('drops a narrow segment\'s value, then its symbol, never truncating a word', () => {
+    expect(segmentLabel('PLR', '51.9', 120)).toBe('PLR 51.9')
+    expect(segmentLabel('PLR', '51.9', 30)).toBe('PLR')
+    expect(segmentLabel('PLR', '51.9', 8)).toBe('')
   })
 })
 

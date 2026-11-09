@@ -4,7 +4,8 @@ import { MarkdownText, MARKDOWN_LIST_CLASS, QUESTION_MD_CLASS } from '@/componen
 import { PlayerCard } from '@/components/battle/deck/DeckParts'
 import { useNow } from '@/hooks/useBattle'
 import { playSound } from '@/lib/soundEngine'
-import { playerAccent, playerAccentStyle } from '@/lib/battleDisplay'
+import { playerAccentStyle, shortTopic } from '@/lib/battleDisplay'
+import type { RoundChip } from '@/lib/battleDraft'
 import type { BattlePlayer, Seat } from '@/lib/battle'
 import type { Question } from '@/lib/parser'
 import { formatClock } from '@/lib/quizTiming'
@@ -43,21 +44,30 @@ export interface DeckPick {
 }
 
 /** A topic chip: whose topic it was, in their colour — both colours, split, when both picked it. */
-export function TopicChip({ name, pickers }: { name: string; pickers: readonly Seat[] }) {
-  const both = pickers.length === 2
-  const seat = pickers[0]
+/**
+ * A round's chips (§3.9): its pair as two chips in the players' colours, the
+ * one topic a coin chose, or *Any topic*.
+ */
+export function PairChips({ chips }: { chips: readonly RoundChip[] }) {
   return (
-    <span
-      style={both ? { background: `linear-gradient(135deg, ${playerAccent(0, 0.28)} 50%, ${playerAccent(1, 0.28)} 50%)` } : seat !== undefined ? playerAccentStyle(seat) : undefined}
-      className={cn(
-        'max-w-[14rem] truncate rounded-lg px-2 py-1 text-xs font-bold',
-        both ? 'text-white'
-          : seat !== undefined ? 'bg-[var(--player-soft)] text-[var(--player)]'
-          : 'bg-[var(--deck-raised-edge)] text-[var(--deck-soft)]',
-      )}
-      data-testid="battle-round-topic"
-    >
-      {name}
+    <span className="flex min-w-0 items-center gap-1" data-testid="battle-round-topic" data-chips={chips.length}>
+      {chips.map((chip, i) => (
+        <span key={`${chip.name}-${i}`} className="flex min-w-0 items-center gap-1">
+          {i > 0 && <span aria-hidden className="text-[var(--deck-dim)]">×</span>}
+          <span
+            style={chip.seat !== null ? playerAccentStyle(chip.seat) : undefined}
+            className={cn(
+              'max-w-[9rem] truncate rounded-lg px-2 py-1 text-xs font-bold',
+              chip.seat !== null
+                ? 'bg-[color-mix(in_srgb,var(--player-vivid)_25%,var(--deck-ground))] text-[color-mix(in_srgb,var(--player)_40%,white)]'
+                : 'bg-[var(--deck-raised-edge)] text-[var(--deck-soft)]',
+            )}
+            title={chip.name}
+          >
+            {shortTopic(chip.name)}
+          </span>
+        </span>
+      ))}
     </span>
   )
 }

@@ -32,15 +32,18 @@ import {
   type RoundState,
   type Seat,
 } from './battle'
-import { MAX_TOPICS, type BattleDraft, type DraftPhase } from './battleTopics'
+import { HAND_SIZE, KEPT, type BattleDraft, type DealtPair, type DraftPhase, type DraftRound, type RoundBasis } from './battleDraft'
 
 /**
  * Bumped whenever a message changes shape. Two versions don't play each other.
  * 2: the topic pick and the draw (a room's `draft`, the `topics` move).
  * 3: abilities (a room setting, the `power` move, each seat's loadout and what
  * it has spent, a round's armed abilities and struck options).
+ * 4: the pairs draft (lib/battleDraft.ts) in place of the topic pick — the
+ * `hand` and `strike` moves, and a draft carrying hands, strikes, the deal and
+ * each round's coin.
  */
-export const PROTOCOL_VERSION = 3
+export const PROTOCOL_VERSION = 4
 
 // ── Room codes ──────────────────────────────────────────────────────────────
 
@@ -91,20 +94,27 @@ export function isReaction(value: unknown): value is Reaction {
 // ── Messages ────────────────────────────────────────────────────────────────
 
 /**
- * Where a room is between battles, and during one: the lobby, the topic pick
- * and the draw from it (lib/battleTopics.ts), the battle, its results.
+ * Where a room is between battles, and during one: the lobby, the draft
+ * before a battle (lib/battleDraft.ts — the draw, the strikes, the deal), the
+ * battle, its results.
  */
-export type RoomStage = 'lobby' | 'picking' | 'drawing' | 'playing' | 'finished'
+export type RoomStage = 'lobby' | 'drafting' | 'playing' | 'finished'
 
-const ROOM_STAGES: readonly RoomStage[] = ['lobby', 'picking', 'drawing', 'playing', 'finished']
+const ROOM_STAGES: readonly RoomStage[] = ['lobby', 'drafting', 'playing', 'finished']
 
 /** What the joining player may ask the host to do. */
 export type GuestAction =
   | { kind: 'answer'; round: number; choice: string; elapsedMs: number }
   | { kind: 'ready'; round: number }
   | { kind: 'rematch' }
-  /** The joining player's topics, locked in for the `game`th battle in the room. */
-  | { kind: 'topics'; game: number; topics: string[] }
+  /**
+   * The joining player's hand for the `game`th battle in the room: how many
+   * cards they have drawn so far (the other player's pips), and once locked
+   * in, the cards themselves with the player's level on each.
+   */
+  | { kind: 'hand'; game: number; count: number; topics?: string[]; levels?: number[] }
+  /** The card the joining player strikes from the host's hand. */
+  | { kind: 'strike'; game: number; topic: string }
   /** Use an ability (a room with abilities on). */
   | { kind: 'power'; round: number; ability: AbilityId }
 
@@ -131,7 +141,7 @@ export type BattleMessage =
       host: BattlePlayer
       guest: BattlePlayer
       config: BattleConfig
-      /** The topic pick and the draw — kept through the battle it drew, for the topic each question was drawn for. */
+      /** The draft — kept through the battle it dealt, for each round's pair and its coin. */
       draft: BattleDraft | null
       battle: BattleState | null
       rematch: [boolean, boolean]
@@ -349,29 +359,80 @@ export function parseBattleState(x: unknown): BattleState | null {
   }
 }
 
-function topicList(x: unknown): string[] {
-  return arr(x, MAX_TOPICS, v => str(v, TOPIC_MAX))
+function topicList(x: unknown, max = HAND_SIZE): string[] {
+  return arr(x, max, v => str(v, TOPIC_MAX))
+}
+
+function levelList(x: unknown): number[] {
+  return arr(x, HAND_SIZE, v => int(v, 0, 3))
+}
+
+function dealtPair(x: unknown): DealtPair {
+  const o = obj(x)
+  return {
+    cards: pair(o.cards, v => str(v, TOPIC_MAX)),
+    strength: int(o.strength, 0, 100),
+    shared: int(o.shared, 0, 100_000),
+    cell: pair(o.cell, v => int(v, 0, KEPT - 1)),
+  }
+}
+
+function draftRound(x: unknown): DraftRound {
+  const o = obj(x)
+  return {
+    pair: int(o.pair, 0, KEPT - 1),
+    paired: bool(o.paired),
+    coin: nullable(o.coin, seat),
+    basis: nullable(o.basis, v => oneOf<RoundBasis>(v, ['both', 'one', 'any'])),
+    topic: nullable(o.topic, v => str(v, TOPIC_MAX)),
+  }
 }
 
 /**
- * A draft from the wire, or null. Beyond the shapes: nothing drawn until the
- * picks have closed, and no more questions drawn than a battle can have.
+ * A draft from the wire, or null. Beyond the shapes it holds the pieces
+ * together: a locked hand is a full one, levels sit beside their cards, the
+ * deal is only there once dealing (a grid as big as the hands kept, a round on
+ * each pair it names), and a strike only once striking.
  */
 export function parseDraft(x: unknown): BattleDraft | null {
   try {
     const o = obj(x)
-    const phase = oneOf<DraftPhase>(o.phase, ['picking', 'drawing'])
-    const drawn = arr(o.drawn, MAX_ROUNDS, v => {
-      const d = obj(v)
-      return { id: str(d.id, ID_MAX), topic: nullable(d.topic, t => str(t, TOPIC_MAX)) }
+    const phase = oneOf<DraftPhase>(o.phase, ['draw', 'strike', 'deal'])
+    const hands = pair(o.hands, v => nullable(v, h => topicList(h)))
+    const levels = pair(o.levels, v => nullable(v, levelList))
+    const strikes = pair(o.strikes, v => nullable(v, t => str(t, TOPIC_MAX)))
+    const rows = topicList(o.rows, KEPT)
+    const cols = topicList(o.cols, KEPT)
+    const grid = arr(o.grid, KEPT, row => arr(row, KEPT, v => int(v, 0, 100)))
+    const pairs = arr(o.pairs, KEPT, dealtPair)
+    const rounds = arr(o.rounds, MAX_ROUNDS, draftRound)
+    // A hand is shown either whole, or as an empty "locked in" while hidden.
+    hands.forEach((h, i) => {
+      if (h && h.length !== 0 && h.length !== HAND_SIZE) fail()
+      if (h && levels[i] && levels[i]!.length !== h.length) fail()
     })
-    if (phase === 'picking' ? drawn.length > 0 : drawn.length === 0) fail()
+    if (phase !== 'draw' && (hands.some(h => !h || h.length !== HAND_SIZE))) fail()
+    if (phase === 'draw' && strikes.some(Boolean)) fail()
+    if (phase === 'deal') {
+      if (rows.length !== KEPT || cols.length !== KEPT || grid.length !== KEPT || grid.some(r => r.length !== KEPT)) fail()
+      if (pairs.length !== KEPT || rounds.length === 0) fail()
+    } else if (rows.length || cols.length || grid.length || pairs.length || rounds.length) {
+      fail()
+    }
+    if (rounds.some(r => r.pair >= pairs.length)) fail()
     return {
       game: int(o.game, 0, MAX_GAMES),
       phase,
       deadline: num(o.deadline),
-      picks: pair(o.picks, v => nullable(v, topicList)),
-      drawn,
+      counts: pair(o.counts, v => int(v, 0, HAND_SIZE)),
+      hands,
+      levels,
+      strikes,
+      rows,
+      cols,
+      grid,
+      pairs,
+      rounds,
     }
   } catch (e) {
     if (e instanceof Invalid) return null
@@ -393,8 +454,20 @@ function action(x: unknown): GuestAction {
       return { kind: 'ready', round: int(o.round, 0, MAX_ROUNDS - 1) }
     case 'rematch':
       return { kind: 'rematch' }
-    case 'topics':
-      return { kind: 'topics', game: int(o.game, 0, MAX_GAMES), topics: topicList(o.topics) }
+    case 'hand': {
+      const topics = o.topics === undefined || o.topics === null ? undefined : topicList(o.topics)
+      const levels = o.levels === undefined || o.levels === null ? undefined : levelList(o.levels)
+      if (levels && (!topics || levels.length !== topics.length)) fail()
+      return {
+        kind: 'hand',
+        game: int(o.game, 0, MAX_GAMES),
+        count: int(o.count, 0, HAND_SIZE),
+        ...(topics ? { topics } : {}),
+        ...(levels ? { levels } : {}),
+      }
+    }
+    case 'strike':
+      return { kind: 'strike', game: int(o.game, 0, MAX_GAMES), topic: str(o.topic, TOPIC_MAX) }
     case 'power':
       return { kind: 'power', round: int(o.round, 0, MAX_ROUNDS - 1), ability: ability(o.ability) }
     default:

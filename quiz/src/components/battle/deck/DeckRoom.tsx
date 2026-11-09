@@ -218,7 +218,7 @@ export function DeckHostRoom({
       <DeckPrimaryButton
         className="mt-auto"
         disabled={!guest}
-        onClick={() => session.openTopics()}
+        onClick={() => session.openDraft()}
         data-sound="begin"
         data-testid="battle-start-online"
       >

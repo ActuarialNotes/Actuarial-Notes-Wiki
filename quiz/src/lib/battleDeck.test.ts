@@ -50,7 +50,7 @@ function played(): BattleState {
 }
 
 const TOPICS = ['Bayes Theorem', 'Poisson Distribution', 'Variance']
-const topicOf = (i: number) => TOPICS[i] ?? null
+const topicOf = (i: number) => (TOPICS[i] ? [TOPICS[i]] : [])
 
 describe('the hand of modes', () => {
   it('rests with Random opponent raised in the middle', () => {
@@ -74,7 +74,7 @@ describe('the hand of modes', () => {
 describe('the results', () => {
   it('tells each round with what it was worth to each player', () => {
     const rows = roundRows(played(), topicOf)
-    expect(rows.map(r => r.topic)).toEqual(TOPICS)
+    expect(rows.map(r => r.topics)).toEqual(TOPICS.map(t => [t]))
     expect(rows.map(r => r.final)).toEqual([false, false, true])
     expect(rows[0].points[0]).toBeGreaterThan(0)
     expect(rows[0].points[1]).toBe(0)
@@ -95,7 +95,10 @@ describe('the results', () => {
     expect(weakestLostTopic(s, 0, topicOf, t => levels[t] ?? 'new')).toBe('Variance')
     // A tie goes to the earlier round.
     expect(weakestLostTopic(s, 0, topicOf, () => 'level1')).toBe('Poisson Distribution')
-    expect(weakestLostTopic(s, 0, () => null, () => 'new')).toBeNull()
+    expect(weakestLostTopic(s, 0, () => [], () => 'new')).toBeNull()
+    // A paired round offers whichever of its two cards is held lower.
+    const paired = (i: number) => (i === 1 ? ['Poisson Distribution', 'Bayes Theorem'] : topicOf(i))
+    expect(weakestLostTopic(s, 0, paired, t => (t === 'Bayes Theorem' ? 'new' : 'level2'))).toBe('Bayes Theorem')
   })
 
   it('opens Practice as the quiz builder’s concept launch', () => {

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { DeckBackButton, DeckChoice, DeckSheet, ExamDeckIcon, PlayerCard, DeckPrimaryButton, DeckSecondaryButton } from '@/components/battle/deck/DeckParts'
+import { DeckBackButton, DeckChoice, DeckSheet, ExamDeckIcon, LeaveButton, PlayerCard, DeckPrimaryButton, DeckSecondaryButton } from '@/components/battle/deck/DeckParts'
 import { DeckCountdown, DeckQuestionCard } from '@/components/battle/deck/DeckQuestionCard'
 import { DeckResults } from '@/components/battle/deck/DeckResults'
-import { LeaveButton } from '@/components/battle/deck/DeckRound'
 import { RoundResult } from '@/components/battle/BattleActionBar'
 import { useBattleMusic, useLocalBattle, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
@@ -341,10 +340,11 @@ export function DeckLocalBattle({
     Enter: () => { if (phase === 'revealed') next() },
   }, !!battle && !battle.finished)
 
-  const topicOf = useCallback((index: number) => {
+  const topicsOf = useCallback((index: number): string[] => {
     const id = battle?.rounds[index]?.questionId
     const q = id ? questionsById.get(id) : undefined
-    return q ? questionTopics(q)[0] ?? null : null
+    const first = q ? questionTopics(q)[0] : undefined
+    return first ? [first] : []
   }, [battle, questionsById])
 
   if (!battle || !round) return null
@@ -355,7 +355,7 @@ export function DeckLocalBattle({
         battle={battle}
         questionsById={questionsById}
         me={0}
-        topicOf={topicOf}
+        topicsOf={topicsOf}
         primary={{ label: 'Rematch', onClick: start, testid: 'battle-rematch' }}
         secondary={{ label: 'Change settings', onClick: onSettings }}
         onLeave={onExit}

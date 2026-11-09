@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1147dc3a5f5f3cade75c5aa0dddba4e3caf66bbd1bad941d7a4ca755e2759502
+  content_hash: sha256:a9011558f17ab467bedbe5444694364c008bbf33fb780250ff3c28251a4fc5b6
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fellow of the Canadian Institute of Actuaries (FCIA).md
 ---
 
-A **Fellow of the Canadian Institute of Actuaries (FCIA)** is an actuary who has met the fellowship requirements of the [[Canadian Institute of Actuaries (CIA)]], and may fulfil certain roles reserved in Canada. The CIA describes a Fellow as able to apply the Canadian practice-specific standards, legislation, concepts and techniques its syllabuses define, and says the route takes seven to nine years on average including university, or one to three years after another recognised fellow-level credential.
+A **Fellow of the Canadian Institute of Actuaries (FCIA)** is an actuary who has met the fellowship requirements of the [[Canadian Institute of Actuaries (CIA)]], Some roles in Canada, such as the [[Appointed Actuary]], require it. The CIA describes a Fellow as able to apply the Canadian practice-specific standards, legislation, concepts and techniques its syllabuses define. It says the route takes seven to nine years on average including university, or one to three years after another recognised fellow-level credential.
 
 %%credential-path FCIA%%
 
@@ -32,7 +32,7 @@ Pathway 3 is for a fellow of a recognised organization (ASSA, CAS, DAV, IAAust, 
 - **3A (experience):** FCIA Module 2 of a track, the APLC, and three years of Canadian experience in the last four, after the first fellow-level designation.
 - **3B (fast track):** FCIA Module 2, the APLC, one track-specific FCIA exam in some cases (F1GB, F2PC, F1ILA, F2FIE, or a retirement exam that depends on the SOA exams credited), and three years of experience in the last six, including 12 months in Canada, after the first fellow-level designation.
 
-The [[Credential Path|three societies' routes]] show where each credential carries credit.
+The [[Credential Path|three societies' routes]] show which credentials count toward which.
 
 ## Further Reading
 - [Becoming a Fellow](https://www.cia-ica.ca/becoming-a-member/becoming-a-fellow/) — Canadian Institute of Actuaries

@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3527adff87e8a2f14738707364fe2133e64a990cf1e0b02e84d10c5e0424f1fd
+  content_hash: sha256:f544a0c55e9c0856f993c18235256b11d33e1eb690a89e7ed87cdafd741d6350
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Associate of the Casualty Actuarial Society (ACAS).md
 ---
 
-An **Associate of the Casualty Actuarial Society (ACAS)** is an actuary who has finished the basic education of the Casualty Actuarial Society (CAS), the professional body for property and casualty (general) insurance actuaries: statistics, ratemaking, reserving, and the regulation and financial reporting of an insurer in one jurisdiction. It is the first of the CAS's two designations, and every ACAS requirement is also a requirement of the [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
+An **Associate of the Casualty Actuarial Society (ACAS)** is an actuary who has finished the basic education of the Casualty Actuarial Society (CAS), the professional body for property and casualty (general) insurance actuaries: statistics, ratemaking, reserving, and the regulation and financial reporting of an insurer in one jurisdiction. An ACAS is the first requirement for an [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
 
 %%credential-path ACAS%%
 

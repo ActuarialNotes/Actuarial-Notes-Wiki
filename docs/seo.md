@@ -126,15 +126,38 @@ Question 4* (named by the paper it was sat on, `originally_exam` included),
 vault's own — with its topic in the title when it fits, and its description is
 the stem's own opening (`questionPreview`, read to text, display math dropped).
 
-**The page is the question, never its answer.** It shows the stem, the options
-and each part with its points, the concepts it is tagged with, and the questions
-either side of it on its paper (`questionRuns` — one paper in paper order, a
-sample set in its numbering), and one button: *Answer this question*, a
-one-question quiz (`/quiz?ids=<id>`) that marks the answer and then shows the
-solution. Neither the static file nor `pages/wiki/WikiQuestion.tsx` carries the
+**The static file is the question, never its answer.** It carries the stem, the
+options and each part with its points, the concepts it is tagged with, and the
+questions either side of it on its paper (`questionRuns` — one paper in paper
+order, a sample set in its numbering), and the line *Answer the question to see
+the worked solution*. Neither the static file nor its structured data carries the
 answer key, the explanation or the examiner's report — `seoQuestions.test.ts`
-holds every question in the bank to that. `robots.txt` disallows `/quiz?`, so a
-crawler indexes the page rather than the quiz behind it.
+holds every question in the bank to that.
+
+**In the app the page is the quiz** (`pages/wiki/WikiQuestion.tsx`): a reader who
+lands from a search answers the question right there, on the quiz's own
+`QuestionCard`, with no setup screen and no pre-quiz concept list. Pick, Confirm
+Answer (or tap the picked option again), and the solution opens in place; a
+written part is graded against the sample answer. The card runs on the page's own
+state, never `quizStore`, so it can't replace a quiz the reader has open. The
+answer is banked through `recordReviewAnswers` when the reader leaves the question
+(another page, the next question, the tab closing), so it counts toward mastery
+and the attempt history like any quiz answer, self-grades included. A quiet *Show
+solution* shows the key, the worked solution and the examiners' report without an
+answer, and banks nothing: a skip is not a miss. Once answered or shown, **Next**
+goes to the next question on the paper at its own page, **Practise <concept>**
+starts a quiz on the first concept it tests (`conceptQuizUrl`), and a reader who
+isn't signed in is told their answers are only saved in this browser.
+
+**Getting crawled.** A question is reached from the pages about it, not only from
+the sitemap: each concept page's static file lists the questions that test it
+(`questionPagesByConcept`, up to `CONCEPT_QUESTION_LINKS`, in paper order), and
+each exam page's lists a way into every paper and set in its bank
+(`bankRunOpenings`, named by `runName`, newest paper first). The structured data
+marks a question page as a schema.org `Quiz` whose `hasPart` is the `Question`,
+with no `acceptedAnswer` — so it earns no answer-bearing rich result, by design.
+`robots.txt` disallows `/quiz?`, so a crawler indexes the question's page and
+never a quiz address (Practise's included).
 
 A question with an open **critical** finding has no page, as it has no quiz
 (`hasQuestionPage` → `hasCriticalFinding`): its URL is a 404.

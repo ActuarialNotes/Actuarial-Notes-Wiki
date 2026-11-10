@@ -810,9 +810,15 @@ function pageJsonLd(page: SeoPage, url: string): object[] {
     page.kind === 'concept' ? { '@type': 'DefinedTerm', name: page.name }
       : page.kind === 'resource' ? workJsonLd(page)
         : undefined
+  // A question page is also a schema.org Quiz of one Question — the shape
+  // practice problems are described in. Never with its answer: the markup
+  // says no more than the page's static file does (docs/seo.md).
+  const quiz = page.kind === 'question'
+    ? { hasPart: { '@type': 'Question', name: page.name, text: page.description } }
+    : {}
   const main = {
     '@context': context,
-    '@type': 'LearningResource',
+    '@type': page.kind === 'question' ? ['LearningResource', 'Quiz'] : 'LearningResource',
     name: page.kind === 'exam' ? `${page.name} study guide` : page.name,
     description: page.description,
     url,
@@ -820,6 +826,7 @@ function pageJsonLd(page: SeoPage, url: string): object[] {
     ...(page.kind === 'exam' ? { learningResourceType: 'Study guide', educationalUse: 'Exam preparation' } : {}),
     ...(page.kind === 'question' ? { learningResourceType: 'Practice problem', educationalUse: 'Exam preparation' } : {}),
     ...(about ? { about } : {}),
+    ...quiz,
     isPartOf: website,
     publisher: ORGANIZATION,
   }

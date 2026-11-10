@@ -4,9 +4,11 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { parseAllQuestions, parseQuestion, type Question } from './parser'
 import { hasCriticalFinding } from './verification'
-import { DESCRIPTION_MAX } from './seo'
+import { DESCRIPTION_MAX, pageHead } from './seo'
 import {
+  bankRunOpenings,
   buildQuestionSeoPages,
+  conceptQuizUrl,
   hasQuestionPage,
   questionConcepts,
   questionExamName,
@@ -14,8 +16,11 @@ import {
   questionName,
   questionNeighbours,
   questionNumber,
+  questionPagesByConcept,
   questionRoute,
+  questionSeo,
   questionRuns,
+  runName,
 } from './seoQuestions'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
@@ -58,7 +63,8 @@ describe('question pages', () => {
     const md = questionMarkdown(question({}))
     expect(md).toContain('A die is rolled.')
     expect(md).toContain('**C)** 1/2')
-    expect(md).toContain('/quiz?ids=p-004')
+    expect(md).toContain('worked solution')
+    expect(md).not.toContain('/quiz?')
     expect(md).toContain('[[Bayes Theorem]]')
     expect(md).not.toContain('SECRET')
   })
@@ -96,6 +102,41 @@ describe('question pages', () => {
     expect(paths.size).toBe(pages.length)
     // Withheld questions have no page, as they have no quiz.
     for (const q of questions.filter(q => hasCriticalFinding(q.verification))) expect(hasQuestionPage(q)).toBe(false)
+  })
+
+  it('opens every paper and set in an exam\'s bank, newest paper first', () => {
+    const qs = [
+      question({ id: 'cas5-2013f-002', exam: 'Exam 5', year: 2013, session: 'Fall' }),
+      question({ id: 'cas5-2013f-001', exam: 'Exam 5', year: 2013, session: 'Fall' }),
+      question({ id: 'cas5-2014s-001', exam: 'Exam 5', year: 2014, session: 'Spring' }),
+      question({ id: 'p-004' }),
+    ]
+    const openings = bankRunOpenings(questionRuns(qs), 'Exam 5')
+    expect(openings.map(o => [o.name, o.question.id])).toEqual([
+      ['CAS Exam 5 Spring 2014', 'cas5-2014s-001'],
+      ['CAS Exam 5 Fall 2013', 'cas5-2013f-001'],
+    ])
+    expect(runName(question({}))).toBe('SOA Exam P Sample Questions')
+  })
+
+  it('lists the questions each concept is tested by', () => {
+    const a = { question: question({ id: 'p-1', wiki_link: ['Concepts/Bayes+Theorem', 'Concepts/Probability'] }) }
+    const b = { question: question({ id: 'p-2', wiki_link: ['Concepts/Bayes+Theorem'] }) }
+    const index = questionPagesByConcept([a, b])
+    expect(index.get('bayes theorem')).toEqual([a, b])
+    expect(index.get('probability')).toEqual([a])
+  })
+
+  it('marks a question page up as a Quiz without its answer', () => {
+    const head = pageHead(questionSeo(question({ explanation: 'SECRET EXPLANATION' })))
+    const main = head.jsonLd?.[0] as { '@type': string[]; hasPart: { '@type': string } }
+    expect(main['@type']).toContain('Quiz')
+    expect(main.hasPart['@type']).toBe('Question')
+    expect(JSON.stringify(head.jsonLd)).not.toMatch(/SECRET|acceptedAnswer|suggestedAnswer/)
+  })
+
+  it('puts a concept quiz behind "Practise"', () => {
+    expect(conceptQuizUrl('Bayes Theorem')).toBe('/quiz?concept=Bayes+Theorem&mode=quiz&reveal=during')
   })
 
   it('reads a wiki_link entry back into its concept name', () => {

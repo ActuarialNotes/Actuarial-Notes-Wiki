@@ -5,10 +5,10 @@
 // search for exactly these — "SOA Exam P sample question 123", "CAS Exam 5
 // Fall 2013 question 4" — so every question in the bank gets a page: its stem,
 // its options and its parts, the concepts it tests, and the questions either
-// side of it on its paper. **Never its answer.** The solution stays behind a
-// click into the quiz (`/quiz?ids=<id>`), where it is marked the way any quiz
-// answer is; neither the static file nor the app's page carries the answer,
-// the explanation or the examiner's report.
+// side of it on its paper. **The static file never carries its answer**, the
+// explanation or the examiner's report: the app's page is the question
+// answered in place, the quiz's own card, and the solution opens there once
+// the reader answers (or asks for it).
 //
 // A question the fact check holds an open critical finding against gets no
 // page at all — the same rule that keeps it out of every quiz
@@ -35,9 +35,9 @@ export function questionRoute(id: string): string {
   return `${QUESTION_ROUTE_PREFIX}${encodeURIComponent(id)}`
 }
 
-/** Where its "Answer this question" button goes: a one-question quiz, which reveals the solution once answered. */
-export function questionQuizUrl(id: string): string {
-  return `/quiz?ids=${encodeURIComponent(id)}`
+/** A quiz on one concept — where a question page's "Practise …" goes once it is answered. */
+export function conceptQuizUrl(concept: string): string {
+  return `/quiz?${new URLSearchParams({ concept, mode: 'quiz', reveal: 'during' }).toString()}`
 }
 
 /** Whether a question may have a page — what may be served in a quiz may be shown. */
@@ -167,6 +167,55 @@ export function questionRuns(questions: readonly Question[]): Map<string, Questi
   return runs
 }
 
+/**
+ * What a run is called — the paper or the set a reader would look for:
+ * "CAS Exam 5 Fall 2013", "SOA Exam P Sample Questions", "Exam MAS-I Practice
+ * Questions". The exam page's static file links each run by it.
+ */
+export function runName(q: Question): string {
+  const kind = questionPageKind(q)
+  if (kind === 'vault') return `${questionExamName(q.exam)} Practice Questions`
+  const body = questionPublisher(q)
+  const prefix = body && body !== 'Actuarial Notes' ? `${body} ` : ''
+  if (kind === 'paper') return `${prefix}${questionExamName(q.originally_exam?.trim() || q.exam)} ${sittingName(q)}`
+  return `${prefix}${questionExamName(q.exam)} Sample Questions`
+}
+
+/**
+ * The first question of each run in one exam's bank (its `exam:` label), with
+ * the run's name — a way into every paper and set from the exam's page, newest
+ * paper first, then the sets.
+ */
+export function bankRunOpenings(runs: Map<string, Question[]>, bank: string): { name: string; question: Question }[] {
+  return [...runs.values()]
+    .filter(run => run[0]?.exam === bank)
+    .map(run => ({ name: runName(run[0]!), question: run[0]!, year: run[0]!.year ?? 0 }))
+    .sort((a, b) => b.year - a.year || byNumber.compare(a.name, b.name))
+    .map(({ name, question }) => ({ name, question }))
+}
+
+/** How many question links a concept page's static file lists. */
+export const CONCEPT_QUESTION_LINKS = 50
+
+/**
+ * The question pages each concept is tested by, keyed by the concept's name in
+ * lower case, in the order given (the build passes them in run order). The
+ * concept page's static file links them, so a crawler reaches a question from
+ * the page about what it tests, not only from the sitemap.
+ */
+export function questionPagesByConcept<T extends { question: Question }>(pages: readonly T[]): Map<string, T[]> {
+  const byConcept = new Map<string, T[]>()
+  for (const entry of pages) {
+    for (const name of questionConcepts(entry.question)) {
+      const key = name.toLowerCase()
+      const list = byConcept.get(key)
+      if (list) list.push(entry)
+      else byConcept.set(key, [entry])
+    }
+  }
+  return byConcept
+}
+
 /** The questions before and after `q` in its run. */
 export function questionNeighbours(runs: Map<string, Question[]>, q: Question): { previous?: Question; next?: Question } {
   const run = runs.get(runKey(q)) ?? []
@@ -204,7 +253,7 @@ export function questionMarkdown(q: Question): string {
     if (part.options.length) blocks.push(optionLines(part.options))
   }
   if (q.off_syllabus) blocks.push('*No current syllabus covers this question; it is kept for the record.*')
-  blocks.push(`[Answer this question and see the worked solution](${questionQuizUrl(q.id)})`)
+  blocks.push('*Answer the question to see the worked solution.*')
   const concepts = questionConcepts(q)
   if (concepts.length) blocks.push(`## Concepts tested\n\n${concepts.map(c => `- [[${c}]]`).join('\n')}`)
   return blocks.join('\n\n')

@@ -84,7 +84,6 @@ export function QuestionInfoDialog({
   const showFactCheckRow = FACT_CHECK_UI_ENABLED && !!factCheckPath
   const examKey = EXAM_LABEL_TO_ID[question.exam]
   const figures = questionFigures(question)
-  const hasRows = !!source.document || showFactCheckRow || question.wiki_link.length > 0
 
   return (
     <InfoSheet
@@ -111,46 +110,47 @@ export function QuestionInfoDialog({
         ))}
       />
 
-      {hasRows && (
-        <Group footer={source.movedTo ? <p>Now on the {source.movedTo} syllabus.</p> : undefined}>
-          {source.document && (
-            // The publisher's own paper, read in the app like every other PDF.
-            // This panel closes as it hands over: once the document is up, the
-            // only thing behind it worth returning to is the question.
-            <PdfLinkButton
-              variant="row"
-              url={source.document.url}
-              label={source.document.label}
-              subtitle={source.label}
-              onOpen={onClose}
-            />
-          )}
-          {showFactCheckRow && (
-            <button
-              type="button"
-              onClick={() => setShowFactCheck(true)}
-              data-sound="tap"
-              aria-label={`Fact check: ${factCheck.label}. ${factCheck.detail}`}
-              className={GROUP_ACTION_ROW}
-            >
-              <RowTile className={FACT_CHECK_TONE_CLASSES[factCheck.tone]}>
-                <FactCheckIcon className="h-3.5 w-3.5" />
-              </RowTile>
-              <span className="min-w-0 flex-1">{factCheckRowLabel(factCheck.label)}</span>
-              {factCheckDate(question) && (
-                <span className="shrink-0 tabular-nums text-muted-foreground">{factCheckDate(question)}</span>
-              )}
-              <RowChevron />
-            </button>
-          )}
-          <QuestionConcepts
-            links={question.wiki_link}
-            exam={examKey}
+      <Group footer={source.movedTo ? <p>Now on the {source.movedTo} syllabus.</p> : undefined}>
+        {/* Where the question came from: the paper it was sat on, the
+            publisher's sample set, or the vault's own. */}
+        <GroupRow label="Source" detail={source.origin} />
+        {source.document && (
+          // The publisher's own paper, read in the app like every other PDF.
+          // This panel closes as it hands over: once the document is up, the
+          // only thing behind it worth returning to is the question.
+          <PdfLinkButton
+            variant="row"
+            url={source.document.url}
+            label={source.document.label}
+            subtitle={source.label}
             onOpen={onClose}
-            onRead={onOpenConcept && ((i: number) => { onClose(); onOpenConcept(question.wiki_link, i) })}
           />
-        </Group>
-      )}
+        )}
+        {showFactCheckRow && (
+          <button
+            type="button"
+            onClick={() => setShowFactCheck(true)}
+            data-sound="tap"
+            aria-label={`Fact check: ${factCheck.label}. ${factCheck.detail}`}
+            className={GROUP_ACTION_ROW}
+          >
+            <RowTile className={FACT_CHECK_TONE_CLASSES[factCheck.tone]}>
+              <FactCheckIcon className="h-3.5 w-3.5" />
+            </RowTile>
+            <span className="min-w-0 flex-1">{factCheckRowLabel(factCheck.label)}</span>
+            {factCheckDate(question) && (
+              <span className="shrink-0 tabular-nums text-muted-foreground">{factCheckDate(question)}</span>
+            )}
+            <RowChevron />
+          </button>
+        )}
+        <QuestionConcepts
+          links={question.wiki_link}
+          exam={examKey}
+          onOpen={onClose}
+          onRead={onOpenConcept && ((i: number) => { onClose(); onOpenConcept(question.wiki_link, i) })}
+        />
+      </Group>
 
       {showStudyMeta && (
         // Topic, objective and difficulty wait for the answer (`showMeta`).

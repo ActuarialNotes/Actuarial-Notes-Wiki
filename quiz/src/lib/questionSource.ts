@@ -62,6 +62,12 @@ export interface QuestionSource {
   /** One sentence saying where the question came from. */
   detail: string
   /**
+   * The same, as a short name for the Info sheet's **Source** row:
+   * `"Exam 5 paper, Fall 2013"`, `"SOA sample questions"`, `"Written for
+   * Actuarial Notes"`.
+   */
+  origin: string
+  /**
    * The exam the question now counts towards, when its paper belonged to a
    * different one — null in the ordinary case where they are the same exam.
    */
@@ -86,17 +92,24 @@ export function questionSource(question: Question): QuestionSource {
   const path = contentPathFromVerification(question.verification)
 
   let detail: string
+  let origin: string
+  const publisher = questionPublisher(question)
   if (sitting) {
     detail = `Sat on the ${exam} paper in ${sitting}.`
     if (movedTo) detail += ` The material is now on the ${movedTo} syllabus.`
-  } else {
+    origin = publisher && publisher !== 'Actuarial Notes'
+      ? `${publisher} ${exam} paper, ${sitting}`
+      : `${exam} paper, ${sitting}`
+  } else if (publisher === 'Actuarial Notes') {
     // No sitting: say who wrote it rather than attributing it to a paper.
-    const publisher = questionPublisher(question)
-    detail = publisher === 'Actuarial Notes'
-      ? `Written for Actuarial Notes. It isn’t from a past ${exam} paper.`
-      : publisher === 'SOA'
-        ? `From the SOA’s sample questions for ${exam}. It isn’t from a past paper.`
-        : `A practice question for ${exam}. It isn’t from a past paper.`
+    detail = `Written for Actuarial Notes. It isn’t from a past ${exam} paper.`
+    origin = 'Written for Actuarial Notes'
+  } else if (publisher === 'SOA') {
+    detail = `From the SOA’s sample questions for ${exam}. It isn’t from a past paper.`
+    origin = `SOA sample questions for ${exam}`
+  } else {
+    detail = `A practice question for ${exam}. It isn’t from a past paper.`
+    origin = publisher ? `${publisher} practice question` : 'Practice question'
   }
 
   return {
@@ -104,6 +117,7 @@ export function questionSource(question: Question): QuestionSource {
     sitting,
     label: sitting ? `${exam} · ${sitting}` : exam,
     detail,
+    origin,
     movedTo,
     path,
     fileName: path ? (path.split('/').pop() ?? null) : null,

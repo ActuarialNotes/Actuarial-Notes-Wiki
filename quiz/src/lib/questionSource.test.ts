@@ -40,6 +40,7 @@ describe('questionSource', () => {
     expect(source.sitting).toBe('Fall 2013')
     expect(source.label).toBe('Exam 5 · Fall 2013')
     expect(source.detail).toBe('Sat on the Exam 5 paper in Fall 2013.')
+    expect(source.origin).toBe('CAS Exam 5 paper, Fall 2013')
     expect(source.movedTo).toBeNull()
   })
 
@@ -48,7 +49,13 @@ describe('questionSource', () => {
     expect(source.sitting).toBeNull()
     expect(source.label).toBe('Exam P')
     expect(source.detail).toBe('From the SOA’s sample questions for Exam P. It isn’t from a past paper.')
+    expect(source.origin).toBe('SOA sample questions for Exam P')
     expect(source.document).toBeNull()
+  })
+
+  it('names the vault as the source of its own questions', () => {
+    const source = questionSource(q({ id: 'p-an-010', exam: 'Probability' }))
+    expect(source.origin).toBe('Written for Actuarial Notes')
   })
 
   it('credits the paper to the exam it was actually sat on', () => {

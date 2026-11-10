@@ -649,7 +649,11 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   order it recommends:
   1. **L18, ask how the exam went** (S). After a sitting's results date, once, opt-in
      (D34). The app has no record of whether anyone passed, so nothing below can be checked.
-     Its data takes longest to accumulate, so it starts first.
+     Its data takes longest to accumulate, so it starts first. **Built 2026-11-10**: the
+     Dashboard's *How did Exam X go?* card (`lib/examOutcome.ts`, `exam_outcomes`), asked
+     about the sitting the reader's exam date fell in, from its transcribed results date (or
+     CAS's candidate-guide rule, 8 weeks after the window, where CAS publishes none). Needs the
+     migration `20261110_exam_outcomes.sql` applied to production.
   2. **L12, count new questions, not remembered ones** (M). Weight mastery evidence by
      novelty (a first attempt counts fully, a spaced repeat less), unseen-first draws from
      `question_responses` across devices, and a held-out set per exam for practice exams
@@ -793,7 +797,7 @@ Shipped:
 | L15 | Pacing report, triage, fluency sets | ⬜ | Proposed | `learning-review.md` §3.5. The data is already in `quiz_sessions`. |
 | L16 | Completion problems (faded worked examples) | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L17 | Placement check when an exam is added | ⬜ | Proposed | `learning-review.md` §3.7. |
-| L18 | Ask how the exam went | ⬜ | Proposed | `learning-review.md` §3.8; D34. The outcome metric in §7. |
+| L18 | Ask how the exam went | ✅ 2026-11-10 | Built | `learning-review.md` §3.8; D34 (built with its default). The outcome metric in §7. `lib/examOutcome.ts`, `exam_outcomes`. Left: apply the migration in production; an aggregate query once the first answers arrive. |
 | — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
 | — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
 | — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
@@ -1032,7 +1036,7 @@ Where a default is given, sessions build with it until the decision is made.
 | Learning | Per-concept retention: correct on revisit after the decay window | Instrumented (`concept_retention`, L1) |
 | Re-engagement | Daily email → session conversion | Instrumented (`reminder_opened` → `reminder_session`, L1); needs G1 live |
 | Calibration | The gap between confidence and accuracy | ⬜ L2 |
-| **Outcome** | Pass rate of readers who sat; forecast (L11) against result | ⬜ L18. The goal itself; every other row is a proxy for it |
+| **Outcome** | Pass rate of readers who sat; forecast (L11) against result | 🟡 L18 collects it (`exam_outcomes`, from 2026-11-10); no aggregate read yet. The goal itself; every other row is a proxy for it |
 | Economy | Gems earned vs spent; quest-vs-plan adherence | 🟡 `quest_claimed` only |
 | Social | League retention by final rank | ⬜ needs a rollover query |
 | Content trust | % of files verified (48.6%); open critical findings (2); stale files (21) | Measured (`Validation Status.md`) |
@@ -1169,6 +1173,10 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-10, L18 built.** After a sitting's results, the Dashboard asks once how the exam went
+  (passed / didn't pass / didn't sit / rather not say, no score: D34's default), stored privately in
+  `exam_outcomes`. §7's Outcome row now has data coming in.
 
 - **2026-11-08, the Quiz Battle redesign (X10).** A card-game redesign of Quiz Battle, agreed on
   a canvas with the maintainer: `docs/quiz-battle-redesign.md`. It is proposed in §3.4, with

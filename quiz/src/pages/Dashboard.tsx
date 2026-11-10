@@ -54,6 +54,8 @@ const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
+// Lazy: asked a few times a year, after a sitting's results are out.
+const ExamOutcomePrompt = lazy(() => import('@/components/ExamOutcomePrompt'))
 // Lazy too: below the fold, and drawn only once there are answers to draw.
 const AnalyticsLocked = lazy(() => import('@/components/analytics/AnalyticsLocked').then(m => ({ default: m.AnalyticsLocked })))
 const AnalyticsSection = lazy(() => import('@/components/analytics/AnalyticsSection').then(m => ({ default: m.AnalyticsSection })))
@@ -789,6 +791,11 @@ export default function Dashboard() {
       {/* The week and Today's session — portaled here by ReadinessCard (below)
           so they lead the dashboard: when the exam is and what has been done
           about it, then the wheel and the day's work with its one Start. */}
+      {!isGuest && (
+        <Suspense fallback={null}>
+          <ExamOutcomePrompt />
+        </Suspense>
+      )}
       {!isGuest && activeProgressKey && (
         <Suspense fallback={null}>
           <RegistrationNudge examKey={activeProgressKey} />

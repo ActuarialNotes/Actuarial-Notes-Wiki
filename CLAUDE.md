@@ -1401,6 +1401,15 @@ Other important `lib/` modules:
   the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed
   sittings tables, dismissed per sitting in localStorage. Pure and tested; flows in
   `e2e/accuracy.spec.ts`.
+- `examOutcome.ts` — **how did the exam go?** (roadmap L18, D34): after a sitting's results
+  are out, the Dashboard asks once (`components/ExamOutcomePrompt.tsx`, lazy, signed-in only)
+  about the sitting the reader's exam date fell in — passed / didn't pass / didn't sit / rather
+  not say, no score. When results are out is transcribed: the sitting's `results` milestone in
+  `data/examSittingDetails.ts`, or for CAS, which publishes none, the far end of its candidate
+  guide's "6–8 weeks after the window closes"; an SOA sitting with no published date isn't asked
+  about. Answers are `exam_outcomes` (own rows only, used only in aggregate), read through
+  `hooks/useExamOutcomes.ts` only when something could be asked; closing and *No results yet*
+  are localStorage. Pure and tested; the test holds the outcomes to the table's CHECK.
 - `learningSignals.ts` — the **learning instrumentation** (roadmap L1): whether studying
   *worked*, as pure functions `lib/analytics.ts` sends. `concept_retention` — a concept
   answered for the first time after its decay window (`decayIfStale` steps it down), with

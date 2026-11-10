@@ -225,6 +225,19 @@ validates L11's forecast, gives a candidate who didn't pass a way into the comeb
 (Pro proposal), and turns §7 into a measure of the goal. **This is the cheapest item here
 and the one to start first**, because its data takes longest to accumulate.
 
+**Built (2026-11-10).** `lib/examOutcome.ts` decides what to ask and when:
+the sitting the reader's recorded exam date falls in (`exam_progress.target_date`), from that
+sitting's first transcribed `results` date in `data/examSittingDetails.ts`, or, for a CAS
+sitting (CAS publishes none), eight weeks after the window closes, the far end of the "6–8
+weeks" in CAS's candidate guide. An SOA sitting with no published results date isn't asked
+about until one is transcribed. The question stays up for 90 days. *No results yet* puts it
+away for 14 days; closing it puts it away for good on that device. Answers go to
+`exam_outcomes` (`supabase/migrations/20261110_exam_outcomes.sql`): own rows only, keyed by
+exam and sitting, so an answered sitting isn't asked again on another device. The card is
+`components/ExamOutcomePrompt.tsx`, lazy on the Dashboard, signed-in readers only. No score is
+asked (D34's default) and nothing is sent to analytics. One limit: a reader who moves their
+exam date to the next sitting before the results arrive isn't asked about the one they left.
+
 ---
 
 ## 4. Smaller observations

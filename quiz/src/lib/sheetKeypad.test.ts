@@ -63,6 +63,8 @@ describe('entering', () => {
     expect(cellContent('=A1*2', 4)).toBe('=A1*2')
     expect(cellContent(undefined, 4)).toBe('4')
     expect(cellContent(undefined, null)).toBe('')
+    // An erroring formula still shows its formula, not its error.
+    expect(cellContent('<span class="a">=</span><span class="b">LN</span><span>(</span><span>A6</span><span>)</span>', '#NUM!')).toBe('=LN(A6)')
   })
 })
 

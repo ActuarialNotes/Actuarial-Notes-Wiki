@@ -25,6 +25,8 @@ import {
   valueAsFormula, type Entry, type KeypadKey,
 } from '@/lib/sheetKeypad'
 import SheetKeypad from './SheetKeypad'
+import FormulaRefBoxes from './FormulaRefBoxes'
+import { formulaRefs } from '@/lib/formulaRefs'
 
 /**
  * **Open in Spreadsheet** — the question's spreadsheet, beside it
@@ -644,6 +646,9 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
           hooks={hooks as never}
           onChange={onChange}
         />
+        {keypadOn && entry.mode === 'edit' && (
+          <FormulaRefBoxes refs={formulaRefs(entry.text)} grid={gridRef} api={api} />
+        )}
       </div>
 
       {keypadOn && notice && (

@@ -168,12 +168,28 @@ test.describe('question spreadsheet on a phone', () => {
     await press('Equals')
     await page.touchscreen.tap(p.x, p.y)
     await expect(entry).toHaveValue(`=${x}`)
+    // The cell it names is outlined on the grid in the reference's colour.
+    const boxes = sheet.getByTestId('formula-ref-boxes').locator('div')
+    await expect(boxes).toHaveCount(1)
+    const outline = (await boxes.first().boundingBox())!
+    expect(p.x).toBeGreaterThan(outline.x)
+    expect(p.x).toBeLessThan(outline.x + outline.width)
+    expect(p.y).toBeGreaterThan(outline.y)
+    expect(p.y).toBeLessThan(outline.y + outline.height)
     await press('Plus', '1', 'Enter and move down')
 
     // Change the number: the formula follows it.
     await page.touchscreen.tap(p.x, p.y)
     await expect(entry).toHaveValue('42')
     await press('1', '0', 'Enter and move down')
+    // The formula's cell shows its formula, not its value.
+    await expect(entry).toHaveValue(`=${x}+1`)
+
+    // Swiping along the function row scrolls it and types nothing (a tap
+    // on a function would start a new formula here).
+    const row = (await keypad.getByRole('button', { name: 'SUM', exact: true }).boundingBox())!
+    await swipe(page, { x: row.x + 200, y: row.y + row.height / 2 }, { x: row.x + 20, y: row.y + row.height / 2 })
+    await expect(entry).toHaveValue(`=${x}+1`)
     await keypad.getByRole('button', { name: 'Hide keypad' }).click()
     await expect(sheet.locator('footer')).toContainText('· 11')
 

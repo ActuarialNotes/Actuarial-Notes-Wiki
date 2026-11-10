@@ -2,6 +2,7 @@ import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from 'react
 import { ChevronDown, Keyboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { KEYPAD_ROWS, type Entry, type KeypadKey } from '@/lib/sheetKeypad'
+import { formulaRuns } from '@/lib/formulaRefs'
 
 /**
  * **The spreadsheet keypad** (lib/sheetKeypad.ts): on a phone, the cell's
@@ -12,7 +13,12 @@ import { KEYPAD_ROWS, type Entry, type KeypadKey } from '@/lib/sheetKeypad'
  * which a phone zooms in on a field it focuses.
  *
  * Keys act on pointer down and keep the focus where it was, so a key never
- * steals the caret or raises the keyboard.
+ * steals the caret or raises the keyboard. The function row scrolls, so its
+ * keys act on a tap instead: a finger that swipes along it types nothing.
+ *
+ * While a formula is edited, each cell reference in it takes its own colour
+ * (lib/formulaRefs.ts), the same colour its cells are outlined in on the grid.
+ * The field's own text is transparent over a copy that carries the colours.
  */
 
 export interface SheetKeypadProps {
@@ -40,16 +46,34 @@ function press(fn: () => void) {
   }
 }
 
+/** Keep the focus where it is; the key acts on its click. */
+function keepFocus(e: ReactPointerEvent) {
+  e.preventDefault()
+}
+
 export default function SheetKeypad({
   address, entry, functions, typing, onType, onFunction, onKey, onEntry, onTyping, onHide,
 }: SheetKeypadProps) {
   const input = useRef<HTMLInputElement>(null)
+  const mirror = useRef<HTMLDivElement>(null)
+  const colored = entry.mode === 'edit' && entry.text.startsWith('=')
 
-  // Keep the field's caret where the entry says it is.
+  const syncScroll = () => {
+    if (input.current && mirror.current) mirror.current.scrollLeft = input.current.scrollLeft
+  }
+
+  // Keep the field's caret where the entry says it is, and in view: a field
+  // without the focus doesn't scroll to its caret, so the end of a long
+  // formula being typed on the keys would run off its right edge.
   useEffect(() => {
     const el = input.current
-    if (!el || document.activeElement !== el) return
-    if (el.selectionStart !== entry.caret || el.selectionEnd !== entry.caret) el.setSelectionRange(entry.caret, entry.caret)
+    if (!el) return
+    if (document.activeElement === el) {
+      if (el.selectionStart !== entry.caret || el.selectionEnd !== entry.caret) el.setSelectionRange(entry.caret, entry.caret)
+    } else if (entry.caret >= entry.text.length) {
+      el.scrollLeft = el.scrollWidth
+    }
+    syncScroll()
   }, [entry])
 
   // Raising or lowering the phone's keyboard needs the field refocused.
@@ -69,6 +93,22 @@ export default function SheetKeypad({
     <div className="shrink-0 border-t border-border bg-muted/60 px-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] pt-1.5" data-sound="none" aria-label="Keypad" role="group">
       <div className="flex items-center gap-1.5">
         <span className="w-12 shrink-0 text-center text-sm font-semibold tabular-nums">{address ?? '—'}</span>
+        <div className={cn(
+          'relative h-10 min-w-0 flex-1 rounded-lg border border-border bg-background focus-within:border-[var(--exam-accent,hsl(var(--primary)))]',
+        )}>
+        {colored && (
+          <div
+            ref={mirror}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex items-center overflow-hidden whitespace-pre px-2.5 font-mono text-[18px]"
+          >
+            {formulaRuns(entry.text).map((run, i) => (
+              <span key={i} style={run.color ? { color: run.color } : undefined}>{run.text}</span>
+            ))}
+            {/* Room to scroll the copy as far as the field scrolls. */}
+            <span className="pr-2.5" />
+          </div>
+        )}
         <input
           ref={input}
           aria-label={address ? `Contents of ${address}` : 'Cell contents'}
@@ -80,6 +120,7 @@ export default function SheetKeypad({
           enterKeyHint="enter"
           value={entry.text}
           onChange={e => onEntry(e.target.value, e.target.selectionStart ?? e.target.value.length)}
+          onScroll={syncScroll}
           onSelect={e => {
             const el = e.currentTarget
             if (el.selectionStart !== null && el.selectionStart !== entry.caret) onEntry(el.value, el.selectionStart)
@@ -89,10 +130,12 @@ export default function SheetKeypad({
             else if (e.key === 'Tab') { e.preventDefault(); onKey('right') }
           }}
           className={cn(
-            'h-10 min-w-0 flex-1 rounded-lg border border-border bg-background px-2.5 font-mono text-[18px] outline-none focus:border-[var(--exam-accent,hsl(var(--primary)))]',
+            'relative h-full w-full rounded-lg bg-transparent px-2.5 font-mono text-[18px] outline-none',
             entry.mode === 'ready' && 'text-muted-foreground',
+            colored && 'text-transparent caret-foreground [-webkit-text-fill-color:transparent]',
           )}
         />
+        </div>
         <button
           type="button"
           aria-label={typing ? 'Number pad' : 'Keyboard'}
@@ -119,7 +162,8 @@ export default function SheetKeypad({
               <button
                 key={name}
                 type="button"
-                onPointerDown={press(() => onFunction(name))}
+                onPointerDown={keepFocus}
+                onClick={() => onFunction(name)}
                 className="h-8 shrink-0 rounded-full border border-border bg-background px-3 font-mono text-[13px] font-semibold active:bg-muted"
               >
                 {name}

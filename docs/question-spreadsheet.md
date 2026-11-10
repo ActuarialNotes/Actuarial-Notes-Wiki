@@ -41,7 +41,11 @@ in that environment is part of preparing for the exam.
   again. Like a desktop spreadsheet a cell is *ready* (the first key replaces it) or *edited*
   (keys go in at the caret); ↵ enters and moves down, → enters and moves right, and open brackets
   are closed. While a formula waits for an argument, tapping a cell types its address, and another
-  tap swaps it. Values are entered through Fortune-sheet's own API, so the exam-day rules and
+  tap swaps it. While a formula is edited, each cell reference in it takes a colour, and the
+  cells it names are outlined in that colour on the grid, as a desktop spreadsheet does
+  (`lib/formulaRefs.ts`, `components/quiz/FormulaRefBoxes.tsx`). The function row scrolls, so its
+  keys act on a tap, never on a swipe along it. A formula cell shows its formula in the entry
+  line even when it evaluates to an error. Values are entered through Fortune-sheet's own API, so the exam-day rules and
   recalculation apply as if typed. The keyboard button raises the phone’s keyboard for a label (the pane then
   sits on top of it). The grid's toolbar and formula bar are hidden while the keypad is open.
 - **A second tap edits.** Tapping the selected cell again opens it for editing: in the keypad on a
@@ -128,6 +132,8 @@ Sources, read 2026-11-08:
 | The phone keypad's entry rules: ready / edit, pointing, brackets, values as formulas (pure, tested) | `quiz/src/lib/sheetKeypad.ts` |
 | The phone keypad | `quiz/src/components/quiz/SheetKeypad.tsx` |
 | Touch scrolling, and touches kept off the page (pure maths tested) | `quiz/src/hooks/useSheetTouchScroll.ts`, `quiz/src/lib/touchScroll.ts` |
+| A formula's references and their colours, and its text out of Fortune-sheet's HTML (pure, tested) | `quiz/src/lib/formulaRefs.ts` |
+| The references outlined on the grid | `quiz/src/components/quiz/FormulaRefBoxes.tsx` |
 | A range `setSelection` can be given safely (tested) | `quiz/src/lib/sheetSelection.ts` |
 | The question bar's toggle | `quiz/src/components/quiz/SpreadsheetButton.tsx` |
 | Insert | `quiz/src/components/quiz/InsertCellButton.tsx`, wired in `QuestionCard.tsx` |
@@ -142,13 +148,15 @@ Two details hold the feature together:
   confirming the answer, and a digit or `f` doesn't pick an option or flag the question.
 - **Fortune-sheet measures itself on a window resize only**, so the pane's `ResizeObserver` sends
   one when it is dragged, docked or popped out.
-- **Fortune-sheet's API has three traps the keypad works around.** Toggling the Workbook's
+- **Fortune-sheet’s API has traps the keypad works around.** Toggling the Workbook's
   `showToolbar` or `showFormulaBar` hangs it, so the keypad hides those bars with CSS
   (`.question-sheet-keypad` in `index.css`). `setSelection` writes onto the range it is given,
   which throws once Immer has frozen it and React runs the update again (always under Strict Mode,
   sometimes in production), so every call goes through `cellSelection`. And `setCellValue`
   recalculates the formulas that use a cell only for a formula, so a plain value is entered as
-  the formula that gives it first (`valueAsFormula`), then as itself.
+  the formula that gives it first (`valueAsFormula`), then as itself. (A fourth:
+  `getCellValue(…, { type: 'f' })` returns the formula as HTML, one span per token, so it is read
+  back through `formulaText`.)
 
 ## Not yet
 

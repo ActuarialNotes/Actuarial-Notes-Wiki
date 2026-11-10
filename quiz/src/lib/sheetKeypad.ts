@@ -12,6 +12,8 @@
  * that address for the new one.
  */
 
+import { formulaText } from './formulaRefs'
+
 /** The functions offered as keys, in the order they are shown. */
 export const KEYPAD_FUNCTIONS = [
   'SUM', 'AVERAGE', 'ROUND', 'SQRT', 'EXP', 'LN', 'POWER', 'SUMPRODUCT', 'PRODUCT', 'MIN', 'MAX', 'ABS', 'COUNT',
@@ -109,9 +111,14 @@ export function closeBrackets(text: string): string {
   return text + ')'.repeat(depth)
 }
 
-/** What a cell holds, as the entry line shows it: its formula, else its value. */
+/**
+ * What a cell holds, as the entry line shows it: its formula, else its value.
+ * `formula` is what Fortune-sheet's `getCellValue(…, { type: 'f' })` returns:
+ * the formula as HTML, or the value when there is none.
+ */
 export function cellContent(formula: unknown, value: unknown): string {
-  if (typeof formula === 'string' && formula.startsWith('=')) return formula
+  const text = typeof formula === 'string' ? formulaText(formula) : null
+  if (text?.startsWith('=')) return text
   if (value === null || value === undefined) return ''
   return String(value)
 }

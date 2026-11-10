@@ -336,7 +336,8 @@ before touching that area**:
   adding a `text-xs text-muted-foreground` line under anything.
 - `docs/seo.md` — **how each page is found**: one record per exam, concept and resource
   page — and per practice question (`lib/seoQuestions.ts`, `/wiki/question/<id>`: the
-  question, never its answer, which is behind a click into the quiz) — (`lib/seo.ts` — its title, and a description derived from the page itself: a
+  quiz's own card, answered in place with no setup screen — its static file and structured
+  data the question, never its answer; concept and exam pages' static files link to it) — (`lib/seo.ts` — its title, and a description derived from the page itself: a
   concept's opening definition, an exam's counts, a textbook's facts and chapters),
   used three ways — the live head (`hooks/useWikiPageHead.ts`), a static
   `dist/wiki/<kind>/<slug>/index.html` per page with that head and a crawlable copy of

@@ -24,10 +24,10 @@ import {
 import { PUBLIC_SITE_URL, SKILL_ASSET, connectorUrl, skillUrl } from './src/lib/aiConnector'
 import { buildZip } from './src/lib/xlsx'
 import { VAULT_MEDIA_DIR, vaultMediaUrl } from './src/lib/vaultAssets'
-import { buildSeoPages, countQuestionsByExam, lastModifiedFromGitLog, NOT_FOUND_HEAD, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
+import { buildSeoPages, countQuestionsByExam, lastModifiedFromGitLog, NOT_FOUND_HEAD, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoCrumb, type SeoPage } from './src/lib/seo'
 import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
-import { buildQuestionSeoPages, questionMarkdown, questionNeighbours, questionRuns } from './src/lib/seoQuestions'
-import { parseAllQuestions } from './src/lib/parser'
+import { bankRunOpenings, buildQuestionSeoPages, CONCEPT_QUESTION_LINKS, questionMarkdown, questionNeighbours, questionPagesByConcept, questionRuns } from './src/lib/seoQuestions'
+import { parseAllQuestions, type Question } from './src/lib/parser'
 import { contentPathFromVerification } from './src/lib/verification'
 import { buildScriptHashes } from './src/lib/podcastScripts'
 
@@ -929,20 +929,6 @@ function seoPagesPlugin(): Plugin {
         { heading: 'Exams', links: pages.filter(p => p.kind === 'exam').map(crumb) },
         { heading: 'Syllabus readings', links: indexable.filter(p => p.kind === 'resource').map(crumb) },
       ]
-      for (const page of pages) {
-        const body = staticBody({
-          page,
-          markdown: page.source ? files[page.source] : undefined,
-          resolve,
-          sections: page.kind === 'hub' ? hubSections : [],
-        })
-        // The route is `toSlug` output; on disk it is the decoded path, which is
-        // what Vercel matches a request against (it decodes before it looks).
-        const file = path.join(outDir, ...decodeURIComponent(page.path).split('/'), 'index.html')
-        if (!file.startsWith(outDir + path.sep)) throw new Error(`SEO page would be written outside dist: ${page.path}`)
-        await mkdir(path.dirname(file), { recursive: true })
-        await writeFile(file, renderStaticPage(template, pageHead(page), body))
-      }
       // A page per practice question — stem, options and parts, never the
       // answer (lib/seoQuestions.ts) — each linking the questions either side
       // of it on its paper, so a crawler can walk a whole paper from one.
@@ -955,6 +941,41 @@ function seoPagesPlugin(): Plugin {
       })
       const questionPath = new Map(questionPages.map(({ question, page }) => [question.id, page]))
       const runs = questionRuns(questions)
+      // Each concept page links the questions that test it, and each exam page
+      // a way into every paper and set in its bank, so a crawler reaches a
+      // question from the pages about it, not only from the sitemap.
+      const ordered = [...runs.values()].flat()
+        .map(q => questionPath.get(q.id) && { question: q, page: questionPath.get(q.id)! })
+        .filter((e): e is { question: Question; page: SeoPage } => Boolean(e))
+      const byConcept = questionPagesByConcept(ordered)
+      const sectionsFor = (page: SeoPage) => {
+        if (page.kind === 'hub') return hubSections
+        if (page.kind === 'concept' && page.source) {
+          const tested = byConcept.get(path.basename(page.source, '.md').toLowerCase()) ?? []
+          return [{ heading: 'Practice questions', links: tested.slice(0, CONCEPT_QUESTION_LINKS).map(e => crumb(e.page)) }]
+        }
+        if (page.kind === 'exam' && page.bank) {
+          const openings = bankRunOpenings(runs, page.bank)
+            .map(({ name, question }) => ({ name, path: questionPath.get(question.id)?.path }))
+            .filter((l): l is SeoCrumb => Boolean(l.path))
+          return [{ heading: 'Past papers and practice questions', links: openings }]
+        }
+        return []
+      }
+      for (const page of pages) {
+        const body = staticBody({
+          page,
+          markdown: page.source ? files[page.source] : undefined,
+          resolve,
+          sections: sectionsFor(page),
+        })
+        // The route is `toSlug` output; on disk it is the decoded path, which is
+        // what Vercel matches a request against (it decodes before it looks).
+        const file = path.join(outDir, ...decodeURIComponent(page.path).split('/'), 'index.html')
+        if (!file.startsWith(outDir + path.sep)) throw new Error(`SEO page would be written outside dist: ${page.path}`)
+        await mkdir(path.dirname(file), { recursive: true })
+        await writeFile(file, renderStaticPage(template, pageHead(page), body))
+      }
       for (const { question, page } of questionPages) {
         const { previous, next } = questionNeighbours(runs, question)
         const either = [previous, next]

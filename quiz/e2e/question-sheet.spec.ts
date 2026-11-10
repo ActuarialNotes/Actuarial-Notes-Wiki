@@ -98,3 +98,93 @@ test.describe('question spreadsheet', () => {
     await expect(page.getByRole('button', { name: 'Open in spreadsheet' })).toHaveCount(0)
   })
 })
+
+test.describe('question spreadsheet on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+
+  /** A one-finger drag, as the browser's touch events. */
+  async function swipe(page: Page, from: { x: number; y: number }, to: { x: number; y: number }) {
+    const cdp = await page.context().newCDPSession(page)
+    const steps = 12
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [from] })
+    for (let i = 1; i <= steps; i++) {
+      const x = from.x + ((to.x - from.x) * i) / steps
+      const y = from.y + ((to.y - from.y) * i) / steps
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y }] })
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+  }
+
+  test('a drag scrolls the grid and leaves the question where it was', async ({ page }) => {
+    const grid = await openQuestion(page, 'cas5-2013f-q21')
+    const box = (await grid.boundingBox())!
+    const pageScroll = await page.evaluate(() => window.scrollY)
+    const scrollTop = () => page.locator('.question-sheet-grid .luckysheet-scrollbar-y').evaluate(el => el.scrollTop)
+    const scrollLeft = () => page.locator('.question-sheet-grid .luckysheet-scrollbar-x').evaluate(el => el.scrollLeft)
+
+    const mid = { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+    await swipe(page, { x: mid.x, y: mid.y + 80 }, { x: mid.x + 4, y: mid.y - 80 })
+    await expect.poll(scrollTop).toBeGreaterThan(100)
+    // A mostly vertical drag stays vertical.
+    expect(await scrollLeft()).toBe(0)
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageScroll)
+
+    await swipe(page, { x: mid.x + 100, y: mid.y }, { x: mid.x - 100, y: mid.y })
+    await expect.poll(scrollLeft).toBeGreaterThan(100)
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageScroll)
+
+    // A tap still selects the cell under it.
+    const footer = page.getByRole('dialog', { name: 'Spreadsheet for this question' }).locator('footer')
+    const before = await footer.textContent()
+    await page.touchscreen.tap(mid.x, mid.y)
+    await expect(footer).not.toHaveText(before ?? '')
+  })
+
+  test('the keypad enters numbers and formulas, and a second tap edits a cell', async ({ page }) => {
+    const grid = await openQuestion(page, 'cas5-2013f-q21')
+    const sheet = page.getByRole('dialog', { name: 'Spreadsheet for this question' })
+    await sheet.getByRole('button', { name: 'Keypad' }).click()
+    const keypad = sheet.getByRole('group', { name: 'Keypad' })
+    await expect(keypad).toBeVisible()
+    const entry = keypad.getByRole('textbox')
+    // No zoom on focus: the field is past 16px.
+    expect(parseFloat(await entry.evaluate(el => getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16)
+
+    const key = (name: string) => keypad.getByRole('button', { name, exact: true })
+    const press = async (...names: string[]) => { for (const n of names) await key(n).click() }
+    const box = (await grid.boundingBox())!
+    const p = { x: box.x + 130, y: box.y + 62 }
+
+    await page.touchscreen.tap(p.x, p.y)
+    const label = await entry.getAttribute('aria-label')
+    const x = label!.replace('Contents of ', '')
+    expect(x).toMatch(/^[A-Z]+\d+$/)
+
+    // A number, entered with ↵, which moves down.
+    await press('4', '2', 'Enter and move down')
+    await expect(entry).not.toHaveAttribute('aria-label', label!)
+
+    // A formula, its argument typed by tapping the cell above.
+    await press('Equals')
+    await page.touchscreen.tap(p.x, p.y)
+    await expect(entry).toHaveValue(`=${x}`)
+    await press('Plus', '1', 'Enter and move down')
+
+    // Change the number: the formula follows it.
+    await page.touchscreen.tap(p.x, p.y)
+    await expect(entry).toHaveValue('42')
+    await press('1', '0', 'Enter and move down')
+    await keypad.getByRole('button', { name: 'Hide keypad' }).click()
+    await expect(sheet.locator('footer')).toContainText('· 11')
+
+    // Tap a cell, then tap it again: the keypad opens on what is in it. (The
+    // grid has moved with the keypad gone; the cell is where it was in it.)
+    const shifted = (await grid.boundingBox())!
+    const q = { x: p.x, y: p.y + shifted.y - box.y }
+    await page.touchscreen.tap(q.x, q.y)
+    await expect(sheet.locator('footer')).toContainText(`${x} · 10`)
+    await page.touchscreen.tap(q.x, q.y)
+    await expect(keypad).toBeVisible()
+    await expect(entry).toHaveValue('10')
+  })
+})

@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { Workbook, type WorkbookInstance } from '@fortune-sheet/react'
 import '@fortune-sheet/react/dist/index.css'
-import { AlertTriangle, ChevronDown, Download, ExternalLink, PanelRight, RotateCcw, Sheet as SheetIcon, X } from 'lucide-react'
+import { AlertTriangle, Calculator, ChevronDown, Download, ExternalLink, PanelRight, RotateCcw, Sheet as SheetIcon, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { INK_MENU, INK_MENU_HEADING, inkMenuItem } from '@/components/ui/ink'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import { useContainTouches, useSheetTouchScroll } from '@/hooks/useSheetTouchScroll'
 import { useQuestionSheetStore } from '@/stores/questionSheetStore'
 import { fromFortune, parseSheetFile, toFortune, toXlsxSheets, type FortuneSheet, type SheetFile } from '@/lib/project/sheetFile'
 import { downloadWorkbook } from '@/lib/xlsx'
+import { cellSelection } from '@/lib/sheetSelection'
 import {
   cellAddress, clampDockHeight, columnWidths, clampDockWidth, clampWindowRect, defaultDockWidth, defaultWindowRect,
   offListCells, offListFunctions, questionMarkdown, questionWorkbook, shownValue, type WindowRect,
@@ -18,6 +20,11 @@ import {
 import type { SpreadsheetProfile } from '@/data/examSpreadsheets'
 import type { Question, QuizMode } from '@/lib/parser'
 import pearsonVue from '@/data/pearsonVueFunctions.json'
+import {
+  KEYPAD_FUNCTIONS, backspace, cellContent, closeBrackets, editEntry, isPointing, pointAt, readyEntry, typeFunction, typeInto,
+  valueAsFormula, type Entry, type KeypadKey,
+} from '@/lib/sheetKeypad'
+import SheetKeypad from './SheetKeypad'
 
 /**
  * **Open in Spreadsheet** — the question's spreadsheet, beside it
@@ -119,6 +126,11 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
   const [confirmReset, setConfirmReset] = useState(false)
   const [resetCount, setResetCount] = useState(0)
   const [notice, setNotice] = useState<string | null>(null)
+  // The phone's keypad (SheetKeypad): open, and whether the phone's own
+  // keyboard is up in its place.
+  const [keypad, setKeypad] = useState(false)
+  const [typing, setTyping] = useState(false)
+  const keypadOn = narrow && keypad
   const allowed = FUNCTION_LISTS[profile.id]
 
   // The workbook the grid opens with: the reader's working, else the question's tables.
@@ -186,6 +198,9 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
     observer.observe(el)
     return () => { observer.disconnect(); cancelAnimationFrame(frame) }
   }, [])
+  // A finger on the grid scrolls the grid, and nowhere on the pane pans the
+  // quiz underneath (Fortune-sheet's own touch scrolling did both badly).
+  useSheetTouchScroll(gridRef, () => { tappedOn.current = focus.current })
 
   // ── The grid ──────────────────────────────────────────────────────────────
   const api = useRef<WorkbookInstance | null>(null)
@@ -221,9 +236,156 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
       if (row === undefined || column === undefined || !api.current) return
       const m = api.current.getCellValue(row, column, { type: 'm' })
       const v = api.current.getCellValue(row, column, { type: 'v' })
+      if (onSelect.current(row, column) === 'pointed') return
       publishSelection(row, column, { m, v })
     },
   }), [allowed, profile.name, publishSelection, say])
+
+  // ── The keypad ────────────────────────────────────────────────────────────
+  // What the entry line holds, and the cell it belongs to. Fortune-sheet's
+  // hooks read these, so they are refs as well as state.
+  const [entry, setEntryState] = useState<Entry>(() => readyEntry(''))
+  const entryRef = useRef(entry)
+  const editCell = useRef<{ row: number; column: number } | null>(null)
+  const keypadRef = useRef(keypadOn)
+  keypadRef.current = keypadOn
+  /** The selected cell when a tap began, to tell a tap on it from one elsewhere. */
+  const tappedOn = useRef<{ row: number; column: number } | null>(null)
+
+  const setEntry = useCallback((next: Entry) => {
+    entryRef.current = next
+    setEntryState(next)
+  }, [])
+
+  const contentOf = useCallback((row: number, column: number) => {
+    const a = api.current
+    return a ? cellContent(a.getCellValue(row, column, { type: 'f' }), a.getCellValue(row, column, { type: 'v' })) : ''
+  }, [])
+
+  /** Put what the entry line holds into its cell. */
+  const enter = useCallback((e: Entry, cell: { row: number; column: number }) => {
+    const a = api.current
+    if (!a || e.mode !== 'edit') return
+    const text = closeBrackets(e.text.trim())
+    if (text === cellContent(a.getCellValue(cell.row, cell.column, { type: 'f' }), a.getCellValue(cell.row, cell.column, { type: 'v' }))) return
+    if (text === '') { a.clearCell(cell.row, cell.column); return }
+    if (text.startsWith('=')) { a.setCellValue(cell.row, cell.column, text); return }
+    // A plain value. Fortune-sheet recalculates the formulas that use a cell
+    // only when it is entered as a formula, so it goes in as one first.
+    a.clearCell(cell.row, cell.column)
+    a.setCellValue(cell.row, cell.column, valueAsFormula(text))
+    a.clearCell(cell.row, cell.column)
+    a.setCellValue(cell.row, cell.column, text)
+  }, [])
+
+  // A cell selected while the keypad is open: a formula waiting for an
+  // argument takes its address; otherwise what was typed is entered and the
+  // new cell is ready.
+  const onSelect = useRef<(row: number, column: number) => 'pointed' | void>(() => {})
+  onSelect.current = (row, column) => {
+    if (!keypadRef.current) return
+    const cell = editCell.current
+    const e = entryRef.current
+    const moved = !cell || cell.row !== row || cell.column !== column
+    if (!moved) return
+    if (cell && isPointing(e)) {
+      setEntry(pointAt(e, cellAddress(row, column)))
+      // Fortune-sheet is mid-update here; put the selection back after it.
+      setTimeout(() => api.current?.setSelection(cellSelection(cell.row, cell.column)))
+      return 'pointed'
+    }
+    if (cell && e.mode === 'edit') setTimeout(() => enter(e, cell))
+    editCell.current = { row, column }
+    setEntry(readyEntry(contentOf(row, column)))
+  }
+
+  /** Open the keypad on the selected cell, editing what is in it. */
+  const editSelected = useCallback(() => {
+    const cell = focus.current
+    if (!cell) return
+    editCell.current = { ...cell }
+    setEntry(editEntry(contentOf(cell.row, cell.column)))
+    setKeypad(true)
+  }, [contentOf, setEntry])
+
+  // A second tap on the selected cell edits it — on a phone in the keypad,
+  // on a wider touch screen in the grid's own editor.
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+    function onClick(e: MouseEvent) {
+      const before = tappedOn.current
+      tappedOn.current = null
+      const now = focus.current
+      if (!before || !now || before.row !== now.row || before.column !== now.column) return
+      if (!(e.target as Element).closest('.fortune-cell-area')) return
+      if (narrow) {
+        const cell = editCell.current
+        const editingHere = keypadRef.current && entryRef.current.mode === 'edit' && cell?.row === now.row && cell?.column === now.column
+        if (!editingHere) editSelected()
+      } else {
+        e.target?.dispatchEvent(new MouseEvent('dblclick', { bubbles: true, clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY }))
+      }
+    }
+    el.addEventListener('click', onClick)
+    return () => el.removeEventListener('click', onClick)
+  }, [narrow, editSelected])
+
+  function keypadType(text: string) {
+    if (!editCell.current) editCell.current = focus.current && { ...focus.current }
+    if (!editCell.current) return
+    setEntry(typeInto(entryRef.current, text))
+  }
+
+  function keypadFunction(name: string) {
+    if (!editCell.current) editCell.current = focus.current && { ...focus.current }
+    if (!editCell.current) return
+    setEntry(typeFunction(entryRef.current, name))
+  }
+
+  function keypadKey(action: NonNullable<KeypadKey['action']>) {
+    const cell = editCell.current ?? focus.current
+    if (!cell) return
+    if (action === 'backspace') {
+      editCell.current = { ...cell }
+      setEntry(backspace(entryRef.current))
+      return
+    }
+    enter(entryRef.current, cell)
+    // Ready before the move, so the move enters nothing twice.
+    setEntry(readyEntry(''))
+    const next = action === 'down' ? { row: cell.row + 1, column: cell.column } : { row: cell.row, column: cell.column + 1 }
+    api.current?.setSelection(cellSelection(next.row, next.column))
+  }
+
+  function hideKeypad() {
+    const cell = editCell.current
+    if (cell) enter(entryRef.current, cell)
+    setEntry(readyEntry(''))
+    editCell.current = null
+    setTyping(false)
+    setKeypad(false)
+  }
+
+  // The keypad trades the grid's toolbar and formula bar for its entry line
+  // (index.css — hidden, not unmounted: toggling Workbook's showToolbar or
+  // showFormulaBar hangs Fortune-sheet). It re-measures only on a resize.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => window.dispatchEvent(new Event('resize')))
+    return () => cancelAnimationFrame(frame)
+  }, [keypadOn, typing])
+
+  // With the phone's keyboard up, sit the pane on top of it rather than under it.
+  const [keyboardInset, setKeyboardInset] = useState(0)
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!keypadOn || !typing || !vv) { setKeyboardInset(0); return }
+    const measure = () => setKeyboardInset(Math.max(0, window.innerHeight - vv.height - vv.offsetTop))
+    measure()
+    vv.addEventListener('resize', measure)
+    vv.addEventListener('scroll', measure)
+    return () => { vv.removeEventListener('resize', measure); vv.removeEventListener('scroll', measure) }
+  }, [keypadOn, typing])
 
   // Flush the last edit when the question changes or the pane closes.
   useEffect(() => () => {
@@ -235,7 +397,9 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
   useEffect(() => {
     setSelected(null)
     focus.current = null
-  }, [question.id, resetCount, setSelected])
+    editCell.current = null
+    setEntry(readyEntry(''))
+  }, [question.id, resetCount, setSelected, setEntry])
 
   function onChange(sheets: unknown) {
     pending.current = sheets as FortuneSheet[]
@@ -255,6 +419,7 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
 
   // Enforce: the function keys do nothing, as on exam day.
   const paneRef = useRef<HTMLDivElement>(null)
+  useContainTouches(paneRef)
   useEffect(() => {
     if (rules !== 'enforce' || profile.functionKeys) return
     function onKey(e: KeyboardEvent) {
@@ -277,7 +442,7 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
   function showFlagged() {
     if (!flagged.length || !api.current) return
     const cell = flagged[flagIndex % flagged.length]
-    api.current.setSelection([{ row: [cell.row, cell.row], column: [cell.column, cell.column] }])
+    api.current.setSelection(cellSelection(cell.row, cell.column))
     setFlagIndex(i => i + 1)
   }
 
@@ -309,7 +474,11 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
   const frameStyle = view === 'popped'
     ? { left: rect.x, top: rect.y, width: rect.width, height: rect.height }
     : narrow
-      ? { height: dockHeight }
+      ? {
+          // The keypad needs room above it for the grid.
+          height: keypadOn ? Math.max(dockHeight, Math.min(Math.round(window.innerHeight * 0.75), 580)) : dockHeight,
+          bottom: keyboardInset || undefined,
+        }
       : { width: dockWidth }
 
   function dragWindow(e: ReactPointerEvent) {
@@ -355,7 +524,7 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
       data-image-zoom="none"
       data-own-keys
       className={cn(
-        'fixed z-40 flex flex-col bg-background text-foreground',
+        'fixed z-40 flex flex-col overscroll-contain bg-background text-foreground',
         view === 'popped'
           ? 'rounded-xl border border-border shadow-2xl'
           : narrow
@@ -460,7 +629,11 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
         )}
       </header>
 
-      <div ref={gridRef} className="question-sheet-grid relative min-h-0 flex-1 overflow-hidden" style={{ colorScheme: 'light' }}>
+      <div
+        ref={gridRef}
+        className={cn('question-sheet-grid relative min-h-0 flex-1 overflow-hidden', keypadOn && 'question-sheet-keypad')}
+        style={{ colorScheme: 'light' }}
+      >
         <Workbook
           key={`${question.id}:${resetCount}`}
           ref={api}
@@ -473,6 +646,30 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
         />
       </div>
 
+      {keypadOn && notice && (
+        <p className="flex shrink-0 items-center gap-1.5 border-t border-border px-3 py-1.5 text-xs" aria-live="polite">
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" aria-hidden="true" />
+          <span className="truncate">{notice}</span>
+        </p>
+      )}
+
+      {keypadOn ? (
+        <SheetKeypad
+          address={editCell.current ? cellAddress(editCell.current.row, editCell.current.column) : mine?.address ?? null}
+          entry={entry}
+          functions={KEYPAD_FUNCTIONS.filter(name => rules === 'off' || allowed.has(name))}
+          typing={typing}
+          onType={keypadType}
+          onFunction={keypadFunction}
+          onKey={keypadKey}
+          onEntry={(text, caret) => {
+            if (!editCell.current) editCell.current = focus.current && { ...focus.current }
+            setEntry({ text, caret, mode: 'edit', pointedAt: null })
+          }}
+          onTyping={setTyping}
+          onHide={hideKeypad}
+        />
+      ) : (
       <footer className={cn('flex min-h-9 shrink-0 items-center justify-between gap-3 border-t border-border px-3 text-xs', view === 'popped' && 'rounded-b-xl')}>
         <span className="truncate text-muted-foreground">
           {mine ? <><span className="font-semibold text-foreground">{mine.address}</span>{mine.value && <> · {mine.value}</>}</> : 'Select a cell to insert it into your answer'}
@@ -498,8 +695,19 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
           ) : rules === 'off' ? (
             <span className="text-muted-foreground">Exam-day checks off</span>
           ) : null}
+          {narrow && (
+            <button
+              type="button"
+              onClick={() => { editCell.current = focus.current && { ...focus.current }; setEntry(readyEntry(editCell.current ? contentOf(editCell.current.row, editCell.current.column) : '')); setKeypad(true) }}
+              className="-mr-1.5 flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2 font-semibold hover:bg-muted"
+            >
+              <Calculator className="h-4 w-4" aria-hidden="true" />
+              Keypad
+            </button>
+          )}
         </span>
       </footer>
+      )}
 
       {view === 'popped' && (
         <div

@@ -2265,6 +2265,20 @@ summary .katex-display,
    takes the right of a wide screen or the bottom of a narrow one, and the quiz
    moves out from under it; popped out, it floats and the page is left alone. */
 .question-sheet-grid > div { height: 100%; }
+/* The browser pans nothing on the grid: useSheetTouchScroll scrolls it. */
+.question-sheet-grid .fortune-sheet-overlay,
+.pcpa-sheet .fortune-sheet-overlay { touch-action: none; }
+/* The keypad (SheetKeypad) stands in for the grid's toolbar, formula bar and
+   sheet tabs. */
+.question-sheet-keypad :is(.fortune-toolbar, .fortune-fx-editor, .luckysheet-sheet-area) { display: none !important; }
+/* A phone zooms in on a field it focuses whose type is under 16px. The grid's
+   own cell editor, formula bar and name box are smaller, so a tap into one
+   zoomed the page; on a touch screen they are 16px. */
+@media (pointer: coarse) {
+  :is(.question-sheet-grid, .pcpa-sheet) :is(.luckysheet-cell-input, .luckysheet-cell-input *, .fortune-fx-input, .fortune-fx-input *, .fortune-name-box, input, textarea) {
+    font-size: 16px !important;
+  }
+}
 @media (min-width: 1024px) {
   html[data-question-sheet='docked'] .question-sheet-host { padding-right: var(--question-sheet-width, 0px); }
 }

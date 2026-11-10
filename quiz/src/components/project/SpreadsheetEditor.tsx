@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { Workbook } from '@fortune-sheet/react'
 import '@fortune-sheet/react/dist/index.css'
+import { useSheetTouchScroll } from '@/hooks/useSheetTouchScroll'
 import { fromFortune, parseSheetFile, toFortune, type FortuneSheet } from '@/lib/project/sheetFile'
 
 /**
@@ -33,6 +34,8 @@ export default function SpreadsheetEditor({
   const latest = useRef<FortuneSheet[] | null>(null)
   const save = useRef(onChange)
   save.current = onChange
+  const gridRef = useRef<HTMLDivElement>(null)
+  useSheetTouchScroll(gridRef)
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current)
@@ -40,7 +43,7 @@ export default function SpreadsheetEditor({
   }, [])
 
   return (
-    <div className="pcpa-sheet h-full min-h-0 w-full" data-math-magnify="none">
+    <div ref={gridRef} className="pcpa-sheet h-full min-h-0 w-full" data-math-magnify="none">
       <Workbook
         data={initial as never}
         lang="en"

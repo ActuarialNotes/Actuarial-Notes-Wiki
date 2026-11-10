@@ -28,6 +28,12 @@ in that environment is part of preparing for the exam.
   moves out from under it (`html[data-question-sheet='docked'] .question-sheet-host` in
   `index.css`). The left edge drags to resize. On a narrow screen it is a sheet up from the bottom,
   its top edge the handle. Sizes are remembered in localStorage.
+- **A finger scrolls the grid.** Fortune-sheet's own touch scrolling jumped further the longer the
+  finger moved and let the quiz behind pan with it, so `hooks/useSheetTouchScroll.ts` takes the
+  grid's touches first: the grid follows the finger, a drag mostly along one axis keeps to it, a
+  flick carries on and slows (`lib/touchScroll.ts`), and a tap still selects the cell.
+  `useContainTouches` keeps a drag anywhere else on the pane from panning the page. The Projects
+  tab's spreadsheet uses the same hook.
 - **Pop out.** On a wide screen the header's pop-out button lifts the sheet into a window of its own,
   over the question, moved by its title bar and sized by its corner, kept on screen
   (`clampWindowRect`). The window's place is remembered. Its dock button puts it back. A phone only

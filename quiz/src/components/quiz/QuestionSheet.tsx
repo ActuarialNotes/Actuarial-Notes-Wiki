@@ -5,6 +5,7 @@ import { AlertTriangle, ChevronDown, Download, ExternalLink, PanelRight, RotateC
 import { cn } from '@/lib/utils'
 import { INK_MENU, INK_MENU_HEADING, inkMenuItem } from '@/components/ui/ink'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import { useContainTouches, useSheetTouchScroll } from '@/hooks/useSheetTouchScroll'
 import { useQuestionSheetStore } from '@/stores/questionSheetStore'
 import { fromFortune, parseSheetFile, toFortune, toXlsxSheets, type FortuneSheet, type SheetFile } from '@/lib/project/sheetFile'
 import { downloadWorkbook } from '@/lib/xlsx'
@@ -186,6 +187,9 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
     observer.observe(el)
     return () => { observer.disconnect(); cancelAnimationFrame(frame) }
   }, [])
+  // A finger on the grid scrolls the grid, and nowhere on the pane pans the
+  // quiz underneath (Fortune-sheet's own touch scrolling did both badly).
+  useSheetTouchScroll(gridRef)
 
   // ── The grid ──────────────────────────────────────────────────────────────
   const api = useRef<WorkbookInstance | null>(null)
@@ -255,6 +259,7 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
 
   // Enforce: the function keys do nothing, as on exam day.
   const paneRef = useRef<HTMLDivElement>(null)
+  useContainTouches(paneRef)
   useEffect(() => {
     if (rules !== 'enforce' || profile.functionKeys) return
     function onKey(e: KeyboardEvent) {
@@ -355,7 +360,7 @@ export default function QuestionSheet({ question, mode, profile, workbook, onWor
       data-image-zoom="none"
       data-own-keys
       className={cn(
-        'fixed z-40 flex flex-col bg-background text-foreground',
+        'fixed z-40 flex flex-col overscroll-contain bg-background text-foreground',
         view === 'popped'
           ? 'rounded-xl border border-border shadow-2xl'
           : narrow

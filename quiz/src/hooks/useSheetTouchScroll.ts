@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 import { dragAxis, momentumStep, onAxis, releaseVelocity, type ScrollAxis, type TouchSample } from '@/lib/touchScroll'
 
 /**
@@ -10,9 +10,12 @@ import { dragAxis, momentumStep, onAxis, releaseVelocity, type ScrollAxis, type 
  * two scrollbar elements at most once a frame, and carries a flick on with
  * momentum. A tap is left alone, so it still selects the cell.
  *
- * `root` is the element the Workbook is mounted in.
+ * `root` is the element the Workbook is mounted in. `onTap` hears a tap on
+ * the grid as the finger lifts — before the cell under it is selected.
  */
-export function useSheetTouchScroll(root: RefObject<HTMLElement | null>): void {
+export function useSheetTouchScroll(root: RefObject<HTMLElement | null>, onTap?: () => void): void {
+  const tap = useRef(onTap)
+  tap.current = onTap
   useEffect(() => {
     const el = root.current
     if (!el) return
@@ -96,7 +99,7 @@ export function useSheetTouchScroll(root: RefObject<HTMLElement | null>): void {
       if (!tracking) return
       tracking = false
       e.stopPropagation()
-      if (!axis) return // a tap: let it select the cell
+      if (!axis) { tap.current?.(); return } // a tap: let it select the cell
       if (e.cancelable) e.preventDefault()
       if (frame) { cancelAnimationFrame(frame); flush() }
       const v = releaseVelocity(samples, e.timeStamp)

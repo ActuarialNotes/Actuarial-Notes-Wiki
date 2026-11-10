@@ -139,4 +139,52 @@ test.describe('question spreadsheet on a phone', () => {
     await page.touchscreen.tap(mid.x, mid.y)
     await expect(footer).not.toHaveText(before ?? '')
   })
+
+  test('the keypad enters numbers and formulas, and a second tap edits a cell', async ({ page }) => {
+    const grid = await openQuestion(page, 'cas5-2013f-q21')
+    const sheet = page.getByRole('dialog', { name: 'Spreadsheet for this question' })
+    await sheet.getByRole('button', { name: 'Keypad' }).click()
+    const keypad = sheet.getByRole('group', { name: 'Keypad' })
+    await expect(keypad).toBeVisible()
+    const entry = keypad.getByRole('textbox')
+    // No zoom on focus: the field is past 16px.
+    expect(parseFloat(await entry.evaluate(el => getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16)
+
+    const key = (name: string) => keypad.getByRole('button', { name, exact: true })
+    const press = async (...names: string[]) => { for (const n of names) await key(n).click() }
+    const box = (await grid.boundingBox())!
+    const p = { x: box.x + 130, y: box.y + 62 }
+
+    await page.touchscreen.tap(p.x, p.y)
+    const label = await entry.getAttribute('aria-label')
+    const x = label!.replace('Contents of ', '')
+    expect(x).toMatch(/^[A-Z]+\d+$/)
+
+    // A number, entered with ↵, which moves down.
+    await press('4', '2', 'Enter and move down')
+    await expect(entry).not.toHaveAttribute('aria-label', label!)
+
+    // A formula, its argument typed by tapping the cell above.
+    await press('Equals')
+    await page.touchscreen.tap(p.x, p.y)
+    await expect(entry).toHaveValue(`=${x}`)
+    await press('Plus', '1', 'Enter and move down')
+
+    // Change the number: the formula follows it.
+    await page.touchscreen.tap(p.x, p.y)
+    await expect(entry).toHaveValue('42')
+    await press('1', '0', 'Enter and move down')
+    await keypad.getByRole('button', { name: 'Hide keypad' }).click()
+    await expect(sheet.locator('footer')).toContainText('· 11')
+
+    // Tap a cell, then tap it again: the keypad opens on what is in it. (The
+    // grid has moved with the keypad gone; the cell is where it was in it.)
+    const shifted = (await grid.boundingBox())!
+    const q = { x: p.x, y: p.y + shifted.y - box.y }
+    await page.touchscreen.tap(q.x, q.y)
+    await expect(sheet.locator('footer')).toContainText(`${x} · 10`)
+    await page.touchscreen.tap(q.x, q.y)
+    await expect(keypad).toBeVisible()
+    await expect(entry).toHaveValue('10')
+  })
 })

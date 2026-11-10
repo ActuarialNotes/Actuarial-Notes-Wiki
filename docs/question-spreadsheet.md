@@ -34,6 +34,21 @@ in that environment is part of preparing for the exam.
   flick carries on and slows (`lib/touchScroll.ts`), and a tap still selects the cell.
   `useContainTouches` keeps a drag anywhere else on the pane from panning the page. The Projects
   tab's spreadsheet uses the same hook.
+- **The keypad, on a phone.** A phone's own keyboard covers half the sheet and hides the
+  operators, so the narrow pane has a keypad (`components/quiz/SheetKeypad.tsx`, its rules
+  `lib/sheetKeypad.ts`): an entry line, a row of functions (only those on the exam-day list) and
+  a number pad. It opens from the footer's **Keypad** button, or by tapping the selected cell
+  again. Like a desktop spreadsheet a cell is *ready* (the first key replaces it) or *edited*
+  (keys go in at the caret); ↵ enters and moves down, → enters and moves right, and open brackets
+  are closed. While a formula waits for an argument, tapping a cell types its address, and another
+  tap swaps it. Values are entered through Fortune-sheet's own API, so the exam-day rules and
+  recalculation apply as if typed. The keyboard button raises the phone’s keyboard for a label (the pane then
+  sits on top of it). The grid's toolbar and formula bar are hidden while the keypad is open.
+- **A second tap edits.** Tapping the selected cell again opens it for editing: in the keypad on a
+  phone, in the grid's own editor on a wider touch screen.
+- **No zoom.** A phone zooms in on a field under 16px when it is focused, so the entry line is
+  18px and, on a touch screen, the grid's cell editor, formula bar and name box are 16px
+  (`index.css`).
 - **Pop out.** On a wide screen the header's pop-out button lifts the sheet into a window of its own,
   over the question, moved by its title bar and sized by its corner, kept on screen
   (`clampWindowRect`). The window's place is remembered. Its dock button puts it back. A phone only
@@ -110,6 +125,10 @@ Sources, read 2026-11-08:
 | Profiles and their sources | `quiz/src/data/examSpreadsheets.ts` |
 | The function list (generated) | `quiz/src/data/pearsonVueFunctions.json`, `scripts/spreadsheet_functions.py` |
 | The pane: docked / popped, header, grid, footer (lazy chunk) | `quiz/src/components/quiz/QuestionSheet.tsx` |
+| The phone keypad's entry rules: ready / edit, pointing, brackets, values as formulas (pure, tested) | `quiz/src/lib/sheetKeypad.ts` |
+| The phone keypad | `quiz/src/components/quiz/SheetKeypad.tsx` |
+| Touch scrolling, and touches kept off the page (pure maths tested) | `quiz/src/hooks/useSheetTouchScroll.ts`, `quiz/src/lib/touchScroll.ts` |
+| A range `setSelection` can be given safely (tested) | `quiz/src/lib/sheetSelection.ts` |
 | The question bar's toggle | `quiz/src/components/quiz/SpreadsheetButton.tsx` |
 | Insert | `quiz/src/components/quiz/InsertCellButton.tsx`, wired in `QuestionCard.tsx` |
 | Working per question, open/closed | `quizStore.sheets`, `quizStore.sheetOpen` |
@@ -123,6 +142,13 @@ Two details hold the feature together:
   confirming the answer, and a digit or `f` doesn't pick an option or flag the question.
 - **Fortune-sheet measures itself on a window resize only**, so the pane's `ResizeObserver` sends
   one when it is dragged, docked or popped out.
+- **Fortune-sheet's API has three traps the keypad works around.** Toggling the Workbook's
+  `showToolbar` or `showFormulaBar` hangs it, so the keypad hides those bars with CSS
+  (`.question-sheet-keypad` in `index.css`). `setSelection` writes onto the range it is given,
+  which throws once Immer has frozen it and React runs the update again (always under Strict Mode,
+  sometimes in production), so every call goes through `cellSelection`. And `setCellValue`
+  recalculates the formulas that use a cell only for a formula, so a plain value is entered as
+  the formula that gives it first (`valueAsFormula`), then as itself.
 
 ## Not yet
 

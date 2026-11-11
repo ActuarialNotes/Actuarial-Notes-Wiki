@@ -105,6 +105,7 @@ export function ResourceReferenceCard({
               verification={verification}
               contentPath={contentPath}
               contentName={contentName}
+              undated
               className="min-h-[36px] px-3 text-sm"
             />
           )}

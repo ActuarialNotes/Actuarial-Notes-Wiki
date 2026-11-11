@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ResourceReferenceCard } from './ResourceReferenceCard'
 import { extractSyllabusAssignments, parseResourceMeta, resourceFacts } from '@/lib/resourceMeta'
+import { parseVerification } from '@/lib/verification'
 
 vi.mock('@/lib/supabase', () => ({ supabase: {} }))
 
@@ -92,5 +93,36 @@ describe('ResourceReferenceCard', () => {
   it('puts the way to get the document first: a PDF is read, a book has a menu', () => {
     expect(render(ASOP, 'ASOP No. 43')).toContain('Read PDF')
     expect(render(ROSS, 'Ross')).toContain('Get a copy')
+  })
+
+  // The date would wrap the pill under "Get a copy" on a phone; it stays in the
+  // tooltip and the panel instead.
+  it('leaves the date off the Fact Check pill, keeping it in the tooltip', () => {
+    const checked = ROSS.replace('ISBN: "978-0-13-475311-9"\n', `ISBN: "978-0-13-475311-9"
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:00
+  sources:
+    - "Ross, front matter — https://example.org/ross.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Ross.md
+`)
+    const html = renderToStaticMarkup(
+      <ResourceReferenceCard
+        meta={parseResourceMeta(checked)}
+        assignments={[]}
+        verification={parseVerification(checked)}
+        contentPath="Resources/Books/Ross.md"
+        contentName="Ross"
+        onOpen={() => {}}
+      />,
+    )
+    expect(html).toContain('>Fact checked</span>')
+    expect(html).not.toContain('>Fact checked · 9 Oct 2026<')
+    expect(html).toContain('title="Fact checked · 9 Oct 2026.')
   })
 })

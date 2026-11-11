@@ -30,6 +30,12 @@ interface FactCheckBadgeProps {
   className?: string
   /** Hide the label and show only the icon — for dense rows. */
   compact?: boolean
+  /**
+   * Leave the date off the pill ("Fact checked", not "Fact checked · 9 Oct
+   * 2026"), for a row it would wrap — the resource page's actions. The date
+   * stays in the tooltip, the accessible name and the panel the pill opens.
+   */
+  undated?: boolean
 }
 
 export function FactCheckBadge({
@@ -38,6 +44,7 @@ export function FactCheckBadge({
   contentName,
   className,
   compact = false,
+  undated = false,
 }: FactCheckBadgeProps) {
   const [open, setOpen] = useState(false)
   if (!FACT_CHECK_UI_ENABLED) return null
@@ -61,7 +68,7 @@ export function FactCheckBadge({
         )}
       >
         <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        {!compact && <span className="truncate">{badge.label}</span>}
+        {!compact && <span className="truncate">{undated ? undatedLabel(badge.label) : badge.label}</span>}
       </button>
 
       <FactCheckDialog
@@ -178,4 +185,9 @@ const STAT_TONE: Record<FactCheckTone, string> = {
   amber: 'text-amber-700 dark:text-amber-400',
   red: 'text-red-700 dark:text-red-400',
   grey: '',
+}
+
+/** A verdict's label without its date: "Fact checked · 9 Oct 2026" → "Fact checked". */
+function undatedLabel(label: string): string {
+  return label.split(' · ')[0]
 }

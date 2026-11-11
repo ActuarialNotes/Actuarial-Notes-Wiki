@@ -422,6 +422,14 @@ order below stands.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11).** A phone review of the
+  Ross page found the syllabus assignment written as a block of text, an outline that doesn't
+  say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the
+  build plan: a grouped facts list with a syllabus row per exam, folded contents, "Where it's
+  used" from a build-time backlinks index, an optional "New in this edition" callout, and the
+  syllabus assignment marked on the contents (`lib/readingAssignment.ts`, held to every exam's
+  Source Material by a coverage test). Four phases; decisions D-RP1 to D-RP4 there.
+
 - **C-EX: split long example titles (proposed 2026-11-09).** 748 worked examples on 368 concept
   pages carry their whole setup in the card's title. The `actuarial-concept-definitions` skill now
   splits any title over 25 words: the question alone in the title, the setup in the card, the
@@ -1052,6 +1060,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
+| `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Proposed | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |
 | `docs/verification-plan.md` | Method: fact-check packets, tooling, sizing | V5 | Reference. Its waves and decisions moved to the content plan | 2026-10-18 |

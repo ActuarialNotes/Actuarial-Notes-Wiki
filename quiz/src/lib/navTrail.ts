@@ -195,12 +195,6 @@ const STATIC_LABELS: Record<string, string> = {
   '/cowork/sources': 'Sources',
   '/cowork/resources': 'Resources',
   '/cowork/workflows': 'Workflows',
-  '/actuaria': 'Actuaria',
-  '/actuaria/map': 'Star map',
-  '/actuaria/battle': 'Monte Carlo Station',
-  '/actuaria/daily': 'Daily',
-  '/actuaria/cohort': 'Cohort',
-  '/actuaria/hangar': 'Hangar',
 }
 
 /** What a place is called, read off its path alone. */
@@ -223,10 +217,6 @@ export function placeLabel(path: string): string {
   if (pathname.startsWith('/cowork/sources/')) return 'Source'
   if (pathname.startsWith('/tools/')) return 'Tools'
   if (pathname.startsWith('/community/')) return 'Community'
-  if (pathname.startsWith('/actuaria/sector')) return 'Sector'
-  if (pathname.startsWith('/actuaria/simulation')) return 'Simulation'
-  if (pathname.startsWith('/actuaria/raid')) return 'Raid'
-  if (pathname.startsWith('/actuaria/')) return 'Actuaria'
   if (pathname.startsWith('/research/')) return 'Research'
   // Read as "Back to the previous page", never "Back to Back".
   return 'the previous page'

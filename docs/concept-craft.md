@@ -518,8 +518,8 @@ stay, unlabelled.
 
 ### Always dark
 
-The board is, with Actuaria, the one place drawn dark whatever the reader's theme,
-scoped like Actuaria's (style guide §2.6): the screen carries `.dark` and
+The board is drawn dark whatever the reader's theme (style guide §2.7): the screen
+carries `.dark` and
 `color-scheme: dark`, so the sidebar and anything portalled to the body keep the
 reader's own theme. Its floor is a dot grid (`.craft-floor`) whose spacing and offset
 follow the camera, the one cue a blank canvas has that it was panned or zoomed. The

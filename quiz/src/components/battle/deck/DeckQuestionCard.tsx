@@ -93,7 +93,6 @@ export function DeckQuestionCard({
   onPick,
   picks,
   revealed,
-  struck = null,
   ruledOut = [],
   pickSound = 'select',
   footer,
@@ -116,8 +115,6 @@ export function DeckQuestionCard({
   /** Answers already public. */
   picks: DeckPick[]
   revealed: boolean
-  /** Bayesian Update's strike on this player's screen. */
-  struck?: string | null
   /** Options already tried and missed (one screen). */
   ruledOut?: readonly string[]
   pickSound?: 'select' | 'none'
@@ -165,10 +162,9 @@ export function DeckQuestionCard({
           const isAnswer = option.key === question.answer
           const pickedBy = picks.filter(p => p.choice === option.key)
           const missed = pickedBy.some(p => !p.correct) || (!revealed && ruledOut.includes(option.key))
-          const struckOut = !revealed && !missed && struck === option.key
           const isLocked = locked?.choice === option.key
           const isSelected = !locked && selected === option.key
-          const pickable = picker !== null && !revealed && !missed && !struckOut && !locked
+          const pickable = picker !== null && !revealed && !missed && !locked
           return (
             <div
               key={option.key}
@@ -180,7 +176,6 @@ export function DeckQuestionCard({
               data-sound={pickable ? pickSound : 'none'}
               data-math-magnify="none"
               data-testid={`battle-option-${option.key}`}
-              data-struck={struckOut || undefined}
               onPointerDown={e => { pointerStart.current = e.clientY; scrolled.current = false }}
               onPointerMove={e => {
                 if (pointerStart.current !== null && Math.abs(e.clientY - pointerStart.current) > 8) scrolled.current = true
@@ -200,9 +195,8 @@ export function DeckQuestionCard({
                 revealed && !isAnswer && missed && 'border-red-500/70 bg-red-950 text-red-50',
                 !revealed && missed && 'border-red-500/50 bg-red-950/60 text-red-100',
                 revealed && !isAnswer && !missed && 'border-[var(--deck-card-edge)] bg-[var(--deck-card)] opacity-50',
-                struckOut && 'border-[var(--deck-card-edge)] bg-[var(--deck-card)] opacity-40',
-                !revealed && !missed && !struckOut && (isLocked || isSelected) && 'border-[var(--player)] bg-[var(--player-soft)]',
-                !revealed && !missed && !struckOut && !isLocked && !isSelected && 'border-[var(--deck-card-edge)] bg-[var(--deck-card)]',
+                !revealed && !missed && (isLocked || isSelected) && 'border-[var(--player)] bg-[var(--player-soft)]',
+                !revealed && !missed && !isLocked && !isSelected && 'border-[var(--deck-card-edge)] bg-[var(--deck-card)]',
                 pickable && !isSelected && 'cursor-pointer hover:border-[var(--player-muted)]',
                 !revealed && locked && !isLocked && 'opacity-50',
               )}
@@ -216,7 +210,7 @@ export function DeckQuestionCard({
               >
                 {option.key}
               </span>
-              <span className={cn('min-w-0 flex-1', (missed || struckOut) && !revealed && 'line-through decoration-2 opacity-70')}>
+              <span className={cn('min-w-0 flex-1', missed && !revealed && 'line-through decoration-2 opacity-70')}>
                 <OptionText text={option.text} />
               </span>
               {pickedBy.length > 0 && (

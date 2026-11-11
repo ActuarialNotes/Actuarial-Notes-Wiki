@@ -10,7 +10,7 @@ describe('setupFromStored', () => {
 
   it('keeps what is still valid and drops the rest', () => {
     const raw = JSON.stringify({ exam: 'Probability', rounds: 7, time: 'exam', difficulty: 'hard', names: ['Ada', 'x'.repeat(99)], lobbyExam: 'Exam MAS-I' })
-    expect(setupFromStored(raw)).toEqual({ exam: 'Probability', rounds: 7, time: 'exam', difficulty: 'hard', names: ['Ada', 'x'.repeat(20)], lobbyExam: 'Exam MAS-I', abilities: false })
+    expect(setupFromStored(raw)).toEqual({ exam: 'Probability', rounds: 7, time: 'exam', difficulty: 'hard', names: ['Ada', 'x'.repeat(20)], lobbyExam: 'Exam MAS-I' })
     const bad = JSON.stringify({ rounds: 6, time: 'slow', difficulty: 'brutal', names: 'Ada' })
     expect(setupFromStored(bad)).toEqual(DEFAULT_SETUP)
   })
@@ -52,22 +52,8 @@ describe('matched battles', () => {
   })
 })
 
-describe('abilities — a private room’s setting (docs/actuaria-online.md §7.2)', () => {
-  const setup = { ...DEFAULT_SETUP, exam: 'Probability', abilities: true }
-
-  it('is off by default, and remembered when turned on', () => {
-    expect(DEFAULT_SETUP.abilities).toBe(false)
-    expect(setupFromStored(JSON.stringify(setup)).abilities).toBe(true)
-    expect(setupFromStored(JSON.stringify({ ...setup, abilities: 'yes' })).abilities).toBe(false)
-  })
-
-  it('turns a room’s abilities on only where they are offered', () => {
-    expect(roomConfig(setup, true)).toMatchObject({ rules: 'simultaneous', abilities: true })
-    expect(roomConfig(setup, false).abilities).toBe(false)
-    expect(roomConfig({ ...setup, abilities: false }, true).abilities).toBe(false)
-  })
-
-  it('never enables them for two strangers the lobby matched', () => {
-    expect(matchSettings('Probability').config.abilities).toBeFalsy()
+describe('roomConfig', () => {
+  it('is the setup under simultaneous rules', () => {
+    expect(roomConfig({ ...DEFAULT_SETUP, exam: 'Probability' })).toMatchObject({ rules: 'simultaneous', exam: 'Probability' })
   })
 })

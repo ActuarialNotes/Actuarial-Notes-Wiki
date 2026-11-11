@@ -7,10 +7,10 @@ the page where each is sold. **Nothing is sold on Actuarial Notes.** Every produ
 a sheet of what its seller says about it, and the sheet's one button goes to the seller,
 in a new tab.
 
-The **Gem Shop** (`/store/gems`) is a corner of it: the characters, skins, banners and
-Actuaria ships bought with the gems earned for correct answers. It is the one place in
+The **Gem Shop** (`/store/gems`) is a corner of it: the characters, skins and banners
+bought with the gems earned for correct answers. It is the one place in
 the Store where anything is bought in the app. Before the Store existed it *was* `/store`;
-the old `?tab=` links (`/store?tab=ships`, the Hangar's) are sent on to it.
+the old `?tab=` links are sent on to it.
 
 **Pro** is listed beside it, in the panel at the foot of the shelf: one row to `/upgrade`,
 where the subscription is taken through Stripe. It reads *Active* for a reader who has it.

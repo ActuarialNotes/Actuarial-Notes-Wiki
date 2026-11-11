@@ -22,8 +22,6 @@ import { StickyGroupHeading, TrackHeading } from '@/components/TrackHeading'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus, type ExamStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { ActuariaHubCard } from '@/components/actuaria/ActuariaHubCard'
-import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
 
 function examNameToTrackKey(name: string): string {
   const cleaned = name
@@ -347,9 +345,6 @@ export default function WikiHome() {
             </ListPanel>
           ))}
           <StudyGuidesPageRow page="resources" count={resourceCount} />
-          {/* Actuaria Online — a way of studying rather than a guide, in the
-              same row so the exam lists below still line up (§6.2). */}
-          {ACTUARIA_ENABLED && <ActuariaHubCard />}
         </div>
       </section>
 

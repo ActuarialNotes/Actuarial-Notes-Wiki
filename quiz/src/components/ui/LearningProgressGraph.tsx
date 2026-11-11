@@ -19,18 +19,6 @@ import {
 import type { AttemptDot } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 
-// ─── Labels ───────────────────────────────────────────────────────────────────
-
-/**
- * The same rows read as Credibility, for Actuaria (docs/actuaria-online.md §6.5):
- * a level's Z. Forgotten and New are both 0 — Forgotten keeps an F so the two
- * rows stay told apart.
- */
-const Y_LABELS_Z = ['F', '0', '0.33', '0.67', '1.00']
-
-/** How the graph labels itself: the app's level names, or Actuaria's Z. */
-export type GraphPresentation = 'app' | 'actuaria'
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export interface GraphProps {
@@ -41,8 +29,6 @@ export interface GraphProps {
   selectedQuestionId?: string | null
   /** Set to make the dots clickable — each one toggles the filter to its question. */
   onSelectQuestion?: (questionId: string | null) => void
-  /** `actuaria` labels the y-axis in Credibility (Z) rather than level names. */
-  presentation?: GraphPresentation
   /**
    * Projected decay — the steps still to come if nothing is reviewed
    * (`syntheticDecayEvents` run forward), drawn dashed on from today.
@@ -56,14 +42,13 @@ export function ProgressGraph({
   onHoverLevel,
   selectedQuestionId = null,
   onSelectQuestion,
-  presentation = 'app',
   projection = [],
 }: GraphProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [cursorX, setCursorX] = useState<number | null>(null)
   const until = projection.length > 0 ? projection[projection.length - 1].at : null
   const { xScale, xInverse, yScale, buildXLabels, buildStepPath, buildProjectionPath } = makeScales(levelEvents, attemptDots, until)
-  const yLabels = presentation === 'actuaria' ? Y_LABELS_Z : Y_LABELS
+  const yLabels = Y_LABELS
 
   function getHoveredLevel(clientX: number): MasteryState {
     const rect = svgRef.current!.getBoundingClientRect()

@@ -5,9 +5,8 @@ import { test, expect } from './test'
  *
  * Cowork is open only to approved accounts while it is in Preview; the suite's
  * build opens it to every viewer (`VITE_COWORK_PREVIEW=on` in
- * playwright.config.ts, `COWORK_OPEN_TO_ALL`), the way Actuaria's is, so its
- * two places can be exercised without one. The lock itself is pinned by
- * `src/lib/appMode.test.ts`.
+ * playwright.config.ts, `COWORK_OPEN_TO_ALL`), so its two places can be
+ * exercised without one. The lock itself is pinned by `src/lib/appMode.test.ts`.
  */
 test.describe('cowork mode', () => {
   test('offers the mode from the pill beside the wordmark, marked Preview', async ({ page }) => {

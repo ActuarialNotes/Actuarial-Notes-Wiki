@@ -30,10 +30,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { ProCelebration } from '@/components/ProCelebration'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
-import { actuariaDestination } from '@/lib/actuaria/access'
-import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
-import { ACTUARIA_ENABLED, COMMUNITY_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { COMMUNITY_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -72,9 +70,6 @@ const { Component: WorkflowBuilder, preload: loadWorkflowBuilder } = lazyRoute((
 // how they connect. Lazy: its graph, its physics and the wiki bundle it reads
 // the graph from are for the readers who open it.
 const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages/Craft'))
-// Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
-// so its display face, its star map and its screens never reach Study Mode.
-const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
 // Settings, Search, the Gem Shop and the Upgrade page — opened on purpose,
 // never the first screen, so they wait for the click (first-paint budget, E3).
 const { Component: GemShop, preload: loadGemShop } = lazyRoute(() => import('@/pages/GemShop'))
@@ -115,7 +110,6 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/search') return loadSearch()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
-  if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route === '/wiki/resources') return Promise.all([loadWikiLayout(), loadWikiResources()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
@@ -339,24 +333,6 @@ function CraftRoute() {
   )
 }
 
-function ActuariaRoute() {
-  const location = useLocation()
-  const { allowed, viewer } = useActuariaAccess()
-  if (!ACTUARIA_ENABLED) return <Navigate to="/wiki" replace />
-  // Approved accounts only (lib/actuaria/access.ts): send anyone else to sign
-  // in, or — signed in and not approved — back to the dashboard.
-  if (!allowed) {
-    return <Navigate to={actuariaDestination(viewer)} replace state={{ from: location.pathname + location.search }} />
-  }
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<WikiFallback />}>
-        <Actuaria />
-      </Suspense>
-    </ErrorBoundary>
-  )
-}
-
 function StoreRoute() {
   return (
     <ErrorBoundary>
@@ -444,10 +420,6 @@ export default function App({ initialSession }: { initialSession: Session | null
                 {/* Concept Craft: the board, and a link adding one topic's pack to it. */}
                 <Route path="/craft" element={<CraftRoute />} />
                 <Route path="/craft/:topicId" element={<CraftRoute />} />
-                {/* Actuaria Online: the title, the star map, the sectors, the
-                    Daily Transmission, the Hangar and Monte Carlo Station —
-                    its own routes, inside its own scope (pages/Actuaria). */}
-                <Route path="/actuaria/*" element={<ActuariaRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Suspense fallback={<WikiFallback />}><Search /></Suspense>} />

@@ -6,7 +6,6 @@ import { DeckCoinFlip } from '@/components/battle/deck/DeckCoinFlip'
 import { DeckDeal } from '@/components/battle/deck/DeckDraft'
 import { DeckMusicButton } from '@/components/battle/deck/DeckLobby'
 import { ReactionRow, RoundResult } from '@/components/battle/BattleActionBar'
-import { AbilityTray } from '@/components/battle/AbilityTray'
 import { useBattleMusic, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
@@ -15,7 +14,6 @@ import {
   currentRound,
   isFinalRound,
   otherSeat,
-  type AbilityId,
   type Seat,
 } from '@/lib/battle'
 import { answerFor, battleExamName, battleMusicIntensity, playerAccentStyle } from '@/lib/battleDisplay'
@@ -83,7 +81,6 @@ export function DeckRound({
   onReact,
   onLeave,
   onEndForAbsent,
-  onPower,
 }: {
   snapshot: SessionSnapshot
   questionsById: ReadonlyMap<string, Question>
@@ -92,11 +89,6 @@ export function DeckRound({
   onReact: (emoji: Parameters<HostSession['react']>[0]) => void
   onLeave: () => void
   onEndForAbsent?: () => void
-  /**
-   * Abilities are Monte Carlo Station's; the Deck never turns them on, but a
-   * station's room can be joined from here, and its tray comes with it.
-   */
-  onPower?: (ability: AbilityId) => void
 }) {
   const battle = snapshot.battle!
   const me = snapshot.me
@@ -150,7 +142,7 @@ export function DeckRound({
 
   const optionAt = (i: number) => () => {
     const option = battle.questions[round.index].options[i]
-    if (option && canPick && round.struck[me] !== option) setSelected(option)
+    if (option && canPick) setSelected(option)
   }
   usePageKeyboard({
     '1': optionAt(0), '2': optionAt(1), '3': optionAt(2), '4': optionAt(3), '5': optionAt(4),
@@ -248,7 +240,6 @@ export function DeckRound({
               pickSound="select"
               picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
               revealed={phase === 'revealed'}
-              struck={round.struck[me]}
             />
           </div>
         ) : null}
@@ -259,10 +250,6 @@ export function DeckRound({
           <RoundResult battle={battle} action={null} />
           <div className="mt-2"><ReactionRow onReact={onReact} /></div>
         </div>
-      )}
-
-      {battle.config.abilities && onPower && (
-        <AbilityTray battle={battle} me={me} pending={snapshot.pendingPower?.ability ?? null} onUse={a => { playSound('power'); onPower?.(a) }} />
       )}
 
       {/* This player's strip and the lock-in stay in reach under a long question. */}

@@ -338,8 +338,8 @@ Each phase is one PR off `main`, and each updates `quiz-battle.md` and this doc'
    Tests: e2e (`e2e/battle.spec.ts`) through every screen with `VITE_BATTLE_TRANSPORT=local`. The
    view transitions (`moveScreen`) still apply, and nothing on a page gets a `view-transition-name`.
 
-   *What shipped, and where it differs from the canvas:* the screens are `components/battle/deck/`
-   under the plain skin only (`BattleSkin.deck`); Monte Carlo Station keeps its look. The trophy
+   *What shipped, and where it differs from the canvas:* the screens are `components/battle/deck/`,
+   now Quiz Battle's only look (the Monte Carlo Station skin was removed 2026-11-11). The trophy
    and the record are left off the start screen (phase 3). The pick's step header shows one
    step, **Pick**, and its hand three slots (today's `MAX_TOPICS`); its title is today's *Pick
    your topics*, since *Draw 4 topics* would describe phase 2. Online, an option is chosen and
@@ -381,8 +381,7 @@ Each phase is one PR off `main`, and each updates `quiz-battle.md` and this doc'
    are the pair (yours first) or the coin's one topic, shortened (*Bornhuetter-Ferguson*, a
    trailing *Method* dropped — the canvas's *BF* is a hand abbreviation the vault has no source
    for). The results list each round's pair, and Practice offers whichever card of a lost round
-   the player holds lowest. **Monte Carlo Station** draws the draft with the Deck's screens
-   inside a Deck scope of its own (and the coin flip inside its round), as agreed; its old pick
+   the player holds lowest. The old pick
    screen (`TopicPick.tsx`) is gone. New cues: `deal`, `strike`, `coinToss`, `coinLand`. New
    strings not on the canvas: *{name} has struck one of yours* (the strike screen, once theirs
    is in), *You struck {topic}.* on the strike screen (the deal's own words), and *Tap to skip*
@@ -391,8 +390,7 @@ Each phase is one PR off `main`, and each updates `quiz-battle.md` and this doc'
    `supabase/tests` case), `report_battle` and the agreement check, Elo, the Stats, Your card
    and Leaderboard screens, and the trophy and record on the start screen. Update
    `quiz-battle.md` *Nothing is saved* and *Next*, and the roadmap's §6.2 line *"Quiz Battle
-   saves nothing."* Actuaria shares the battle engine, so check `docs/actuaria-online.md` §2's
-   ground rules too.
+   saves nothing."*
 
 ## 7. Open questions
 

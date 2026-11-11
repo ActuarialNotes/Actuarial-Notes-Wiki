@@ -82,7 +82,7 @@ tail. A tool call fixes all three, and every number becomes something the human 
 ## 3. Ground rules
 
 These hold up the whole section. Each is enforced in code and pinned by a test, as in
-`docs/ai-connector.md` and `docs/actuaria-online.md` §2.
+`docs/ai-connector.md`.
 
 - **R1 — One engine, two front doors.** A tool is a pure function in `quiz/src/lib/tools/`.
   The tool card, the MCP connector and the HTTP endpoint all call that function. Nothing is

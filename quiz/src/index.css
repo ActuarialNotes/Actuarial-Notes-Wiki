@@ -1699,8 +1699,7 @@ summary .katex-display,
    The board (docs/concept-craft.md). Its floor is a dot grid, drawn here and
    sized and offset from the board's own camera inline, so the dots travel and
    scale with a pan or a zoom — the one cue a blank canvas has that it moved.
-   Not `.actuaria-grid`, which is Actuaria's in-world floor and never a study
-   surface; this one is functional, and it lives only under the board.
+   It is functional, and it lives only under the board.
    Everything else marks a thing that happened — a card put down, a connection
    found, a pair tried again — and stops; reduced motion keeps every end state. */
 .craft-floor {
@@ -1827,39 +1826,6 @@ summary .katex-display,
   .craft-edge-in path { animation: none; stroke-dasharray: none; }
   .craft-drawer-in,
   .craft-sheet-in { animation: toast-fade-in 160ms ease-out both; }
-}
-
-/* ── Actuaria Online ─────────────────────────────────────────────────────────
-   The game layer's scope (docs/actuaria-online.md, style guide §2.6). Every
-   /actuaria route renders inside `<div class="actuaria dark">`: in-world
-   screens are always dark (it is space), so the scope pulls the `.dark` token
-   block whatever the app's theme, and everything inside — Quiz Battle's player
-   colours and motion included — keeps working because it reads the same
-   tokens. `.actuaria` on its own (the Study Guides hub card's tile) only
-   defines the signal and otherwise follows the app theme.
-
-   The signal is Actuaria's one accent and it is chrome only: the logo's ring,
-   a live indicator, a HUD panel's corner ticks, the "you are here" marker.
-   Never a verdict, a mastery readout or a battle player's element. */
-.actuaria {
-  --actuaria-signal: 173 80% 40%;
-  --actuaria-signal-soft: hsl(var(--actuaria-signal) / 0.18);
-}
-
-/* The in-world floor — the page canvas of an in-world screen, never a study
-   page or a card. */
-.actuaria-grid {
-  background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-/* In-world display labels: screen titles, sector names, HUD section headers.
-   Oxanium, uppercase, a little open — never body text (style guide §2.6). */
-.actuaria-display {
-  font-family: 'Oxanium', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 /* Toast confirmation pill: rises into place with a small overshoot. Brief UI

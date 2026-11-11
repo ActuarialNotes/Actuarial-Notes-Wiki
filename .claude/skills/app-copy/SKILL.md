@@ -121,8 +121,8 @@ One thing, one name. Use these exactly.
 | A syllabus change | **Added** | New in |
 | Spelling | British: practise (verb), levelled, personalised | practice (verb), leveled |
 
-Inside a game (Quiz Battle, Concept Craft, Actuaria), keep the game's own nouns (card,
-hand, steal, sector) and the figures as the screen shows them (3, 2:00), and put an
+Inside a game (Quiz Battle, Concept Craft), keep the game's own nouns (card,
+hand, steal) and the figures as the screen shows them (3, 2:00), and put an
 in-world word's plain meaning beside it the first time it appears on a screen.
 
 ## Shapes

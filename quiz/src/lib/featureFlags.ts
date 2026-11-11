@@ -240,36 +240,6 @@ export const COWORK_OPEN_TO_ALL: boolean = import.meta.env.VITE_COWORK_PREVIEW =
 export const TOOLS_ENABLED: boolean = true
 
 /**
- * **Actuaria Online** — the game layer over Study Mode (docs/actuaria-online.md).
- *
- * ON, and open to **approved accounts** alone: a signed-in account on
- * `ACTUARIA_APPROVED_EMAILS` (`lib/actuaria/access.ts`) sees a **PLAY** group
- * in the sidebar with the *Actuaria* row, the *Actuaria Online* card on the
- * Study Guides home page, the
- * Store's *Ships* tab, and the `/actuaria/*` route tree (the star map, a
- * sector's landmarks, the Daily Transmission, the Hangar, Monte Carlo Station,
- * cohorts and the weekly raid). Anyone else sees none of it, and `/actuaria/*`
- * sends them to sign in or back to the dashboard. Actuaria is a skin and a social
- * layer over systems the app already has — Credibility is the mastery ladder and
- * the readiness score, Coverage is the streak, a duel is a Quiz Battle — so
- * nothing behind the flag keeps a number of its own.
- *
- * Off, `/actuaria/*` redirects to the Study Guides and every surface above is
- * gone. The world is one lazy chunk either way, so it never weighs on Study
- * Mode's bundle.
- */
-export const ACTUARIA_ENABLED: boolean = true
-
-/**
- * The preview override: Actuaria open to every viewer, signed out included,
- * rather than to the approved accounts alone. Only the e2e suite's build sets
- * `VITE_ACTUARIA_PREVIEW=on` (playwright.config.ts), so the world is exercised
- * without an approved account; no deployed build does, and there the comparison is a
- * constant `false`.
- */
-export const ACTUARIA_OPEN_TO_ALL: boolean = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'
-
-/**
  * **The Tutor** (docs/tutor.md) — the reader's own Gem Shop character as a
  * quiet companion that walks a candidate
  * through their exam: it serves a past-paper part at the moment it is worth

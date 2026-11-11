@@ -13,8 +13,7 @@ is Pro-only.
 
 The one exception is the e2e suite's build: `VITE_COWORK_PREVIEW=on` (playwright.config.ts)
 sets `COWORK_OPEN_TO_ALL`, which passes `previewOpen` to every mode check, so Sources and
-Workflows are tested from a signed-out browser — Actuaria's preview override, for Cowork. No
-deployed build sets it.
+Workflows are tested from a signed-out browser. No deployed build sets it.
 
 ---
 

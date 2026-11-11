@@ -37,6 +37,8 @@ import { ACTUARIA_ENABLED, COMMUNITY_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
+import { buttonVariants } from '@/components/ui/buttonVariants'
+import { RotateCw } from 'lucide-react'
 
 // Each lazy page is a `lazyRoute`, which hands back its preloader beside the
 // component. `React.lazy` alone suspends on a page's first render even when
@@ -177,29 +179,54 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.error) {
       if (this.props.fallback !== undefined) return this.props.fallback
-      return (
-        <div className="container max-w-2xl mx-auto px-4 py-16 space-y-4">
-          <h1 className="text-2xl font-bold text-destructive">Something went wrong</h1>
-          <p className="text-sm text-muted-foreground">
-            The dashboard crashed with the following error. Please report this to the team.
-          </p>
-          <pre className="text-xs bg-muted rounded p-4 overflow-auto whitespace-pre-wrap break-all">
-            {this.state.error.message}
-            {'\n\n'}
-            {this.state.error.stack}
-          </pre>
-          <button
-            type="button"
-            onClick={() => this.setState({ error: null })}
-            className="text-sm text-primary hover:underline"
-          >
-            Try again
-          </button>
-        </div>
-      )
+      return <CrashScreen error={this.state.error} onRetry={() => this.setState({ error: null })} />
     }
     return this.props.children
   }
+}
+
+/**
+ * The page an ErrorBoundary draws when what it wraps crashes. Nearly every crash
+ * a reader meets is cured by reloading (most often a page chunk from a build
+ * that has since been replaced), so Refresh is the one solid button. The error
+ * itself is folded away for anyone reporting it.
+ */
+function CrashScreen({ error, onRetry }: { error: Error; onRetry: () => void }) {
+  return (
+    <div className="container max-w-md mx-auto px-4 py-20 text-center">
+      <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
+        <RotateCw className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
+      </div>
+      <h1 className="text-xl font-semibold">This page didn't load</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Something went wrong on our end. Refreshing the page usually fixes it.
+      </p>
+      <div className="mt-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className={buttonVariants({ variant: 'default' })}
+        >
+          <RotateCw className="mr-2 h-4 w-4" aria-hidden="true" />
+          Refresh
+        </button>
+        <button type="button" onClick={onRetry} className={buttonVariants({ variant: 'ghost' })}>
+          Try again
+        </button>
+        <a href="/" className={buttonVariants({ variant: 'ghost' })}>
+          Go home
+        </a>
+      </div>
+      <details className="mt-10 text-left">
+        <summary className="cursor-pointer text-center text-xs text-muted-foreground">Error details</summary>
+        <pre className="mt-3 max-h-64 overflow-auto whitespace-pre-wrap break-all rounded-lg bg-muted p-4 text-xs">
+          {error.message}
+          {'\n\n'}
+          {error.stack}
+        </pre>
+      </details>
+    </div>
+  )
 }
 
 function NotFound() {

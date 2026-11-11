@@ -193,6 +193,37 @@ export function parseResourceMeta(raw: string): ResourceMeta {
   }
 }
 
+/** Whether the resource's own link is a PDF, read in the app's reader. */
+export function isPdfSource(meta: ResourceMeta): boolean {
+  return meta.getCopyUrl ? /\.pdf$/i.test(meta.getCopyUrl) : false
+}
+
+/** One bibliographic fact on a resource page's reference card. */
+export interface ResourceFact {
+  label: string
+  value: string
+}
+
+/**
+ * The bibliographic facts the reference card lists, in citation order:
+ * edition (with its year), publisher, code, ISBN. Only what the frontmatter
+ * holds — a page that names no edition shows its year alone, and a standard
+ * whose publisher is its author says the body once.
+ */
+export function resourceFacts(meta: ResourceMeta): ResourceFact[] {
+  const facts: ResourceFact[] = []
+  if (meta.edition) {
+    const withYear = meta.year && !meta.edition.includes(meta.year) ? `${meta.edition}, ${meta.year}` : meta.edition
+    facts.push({ label: 'Edition', value: withYear })
+  } else if (meta.year) {
+    facts.push({ label: 'Year', value: meta.year })
+  }
+  if (meta.publisher && meta.publisher !== meta.author) facts.push({ label: 'Publisher', value: meta.publisher })
+  if (meta.code) facts.push({ label: 'Code', value: meta.code })
+  if (meta.isbn) facts.push({ label: 'ISBN', value: meta.isbn })
+  return facts
+}
+
 // Remove the first cover image embed — it is shown in the metadata card instead.
 export function stripFirstCoverImage(md: string): string {
   return md.replace(/!\[\[[^\]|]+\.(png|jpe?g|gif|svg|webp|avif)\]\][ \t]*\n?/i, '')

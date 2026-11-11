@@ -3,7 +3,7 @@ import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { GetCopyMenu } from '@/components/wiki/GetCopyMenu'
-import type { ResourceMeta } from '@/lib/resourceMeta'
+import { isPdfSource, type ResourceMeta } from '@/lib/resourceMeta'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import type { WikiTitleAction } from '@/components/wiki/WikiArticle'
 
@@ -58,13 +58,6 @@ export function ResourceMetaCard({
 }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
-  // A source document that is a PDF is *read*, here, in the same reader every
-  // other PDF in the app opens in, rather than handed to a browser tab the
-  // reader then has to find their way back from. Every PDF a resource page
-  // links is on a publisher the proxy serves (`examPdf.test.ts` holds the vault
-  // to it), so the button never offers a download instead. A non-PDF link — a
-  // library catalogue, a publisher's shop page — stays an ordinary out-link.
-  const isPdf = meta.getCopyUrl ? /\.pdf$/i.test(meta.getCopyUrl) : false
   // Standards pages name the same body as both author and publisher — say it once.
   const publisher = meta.publisher === meta.author ? undefined : meta.publisher
   // Reads left to right like a citation, with the identifiers last.
@@ -75,7 +68,6 @@ export function ResourceMetaCard({
     meta.code,
     meta.isbn && `ISBN ${meta.isbn}`,
   ].filter((f): f is string => Boolean(f))
-  const copyLabel = isPdf ? 'Read PDF' : 'Get a copy'
   const heading = compact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
 
   return (
@@ -155,50 +147,77 @@ export function ResourceMetaCard({
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{note}</p>
         )}
 
-        {meta.getCopyUrl && (
-          // A control, not fine print: getting hold of the source is the one
-          // action this card offers, so it takes the same shape as every other
-          // PDF button in the app — a thumb-sized filled target with the file
-          // type spelled out — rather than a text link the eye slides past.
-          //
-          // A PDF is read in the app (`PdfLinkButton`); everything else — a
-          // library catalogue, a publisher's shop page — is a link out, and
-          // says so. A book found by its ISBN has several places to look, so
-          // its button opens a menu of them instead of picking one.
-          isPdf ? (
-            <PdfLinkButton
-              url={meta.getCopyUrl}
-              label={copyLabel}
-              title={meta.title ?? 'Source document'}
-              subtitle={[meta.author, meta.year].filter(Boolean).join(' · ') || undefined}
-              onRead={onReadPdf}
-              icon={FileText}
-              // The label already says PDF — a chip saying it again reads "Read PDF PDF".
-              chip={false}
-              ariaLabel={`Read ${meta.title ?? 'this resource'} (PDF)`}
-              className="mt-3 self-start bg-muted"
-            />
-          ) : meta.copySources && meta.copySources.length > 0 ? (
-            <GetCopyMenu
-              sources={meta.copySources}
-              isbn={meta.isbn}
-              title={meta.title}
-              className="mt-3 self-start"
-            />
-          ) : (
-            <a
-              href={meta.getCopyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Get a copy of ${meta.title ?? 'this resource'}`}
-              className="mt-3 inline-flex min-h-[36px] items-center gap-2 self-start rounded-md border border-border bg-muted px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <ExternalLink className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              {copyLabel}
-            </a>
-          )
-        )}
+        <ResourceCopyAction meta={meta} onReadPdf={onReadPdf} className="mt-3 self-start" />
       </div>
     </div>
+  )
+}
+
+/**
+ * The one way to get hold of the source: *Read PDF* when its link is a PDF,
+ * the *Get a copy* menu for a book found by its ISBN, else a plain out-link.
+ * Drawn by this card and by the resource page's reference card.
+ *
+ * A source document that is a PDF is *read*, here, in the same reader every
+ * other PDF in the app opens in, rather than handed to a browser tab the
+ * reader then has to find their way back from. Every PDF a resource page
+ * links is on a publisher the proxy serves (`examPdf.test.ts` holds the vault
+ * to it), so the button never offers a download instead. A non-PDF link — a
+ * library catalogue, a publisher's shop page — stays an ordinary out-link.
+ */
+export function ResourceCopyAction({
+  meta,
+  onReadPdf,
+  className,
+}: {
+  meta: ResourceMeta
+  onReadPdf?: (doc: PdfReaderDoc) => void
+  className?: string
+}) {
+  if (!meta.getCopyUrl) return null
+  const isPdf = isPdfSource(meta)
+  const copyLabel = isPdf ? 'Read PDF' : 'Get a copy'
+  return (
+    // A control, not fine print: getting hold of the source is the one
+    // action this card offers, so it takes the same shape as every other
+    // PDF button in the app — a thumb-sized filled target with the file
+    // type spelled out — rather than a text link the eye slides past.
+    //
+    // A PDF is read in the app (`PdfLinkButton`); everything else — a
+    // library catalogue, a publisher's shop page — is a link out, and
+    // says so. A book found by its ISBN has several places to look, so
+    // its button opens a menu of them instead of picking one.
+    isPdf ? (
+      <PdfLinkButton
+        url={meta.getCopyUrl}
+        label={copyLabel}
+        title={meta.title ?? 'Source document'}
+        subtitle={[meta.author, meta.year].filter(Boolean).join(' · ') || undefined}
+        onRead={onReadPdf}
+        icon={FileText}
+        // The label already says PDF — a chip saying it again reads "Read PDF PDF".
+        chip={false}
+        ariaLabel={`Read ${meta.title ?? 'this resource'} (PDF)`}
+        className={cn('bg-muted', className)}
+      />
+    ) : meta.copySources && meta.copySources.length > 0 ? (
+      <GetCopyMenu
+        sources={meta.copySources}
+        isbn={meta.isbn}
+        title={meta.title}
+        className={className}
+      />
+    ) : (
+      <a
+        href={meta.getCopyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Get a copy of ${meta.title ?? 'this resource'}`}
+        className={cn('inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', className)}
+      >
+        <ExternalLink className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+        {copyLabel}
+      </a>
+    )
   )
 }

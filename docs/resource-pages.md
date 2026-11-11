@@ -127,6 +127,11 @@ kept as stages of the pipeline below.
 
 ## 2. The standard
 
+How the app draws a page of this shape (the reference card at the top, the document's divisions
+gathered under **Contents** and folded when long, front and back matter in one line) is
+`docs/resource-page-v2.md`. Nothing about the drawing changes what a page holds: write every
+division, Preface and Index included, as a `##` heading, as below.
+
 ### 2.1 Frontmatter
 
 Keys in this order, **every value double-quoted**, then the `verification:` block last

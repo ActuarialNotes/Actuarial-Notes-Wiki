@@ -9,13 +9,11 @@ import { useWikiPage } from '@/hooks/useWikiPage'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useStandalonePage } from '@/hooks/useStandalonePage'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
-import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
+import { ResourceReferenceCard } from '@/components/wiki/ResourceReferenceCard'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { extractSyllabusAssignments, parseResourceMeta, RESOURCE_ARTICLE_CLASS, preprocessResourceMarkdown } from '@/lib/resourceMeta'
-import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 import { ResourceAssumptionsCard } from '@/components/wiki/ResourceAssumptionsCard'
 
 export default function WikiResource() {
@@ -91,19 +89,23 @@ export default function WikiResource() {
         <p className="text-sm text-muted-foreground">Couldn't load {resourceName}.</p>
       )}
 
-      {/* The citation block: the metadata card, and under it the exams it is
-          a reading for — one column, the page's width. */}
+      {/* The reference card: what the document is, how to get it, its Fact
+          Check verdict, and the exams it is a reading for. */}
       {meta && (
-        <div className="flex flex-col gap-3">
-          <ResourceMetaCard meta={meta} className="mb-0" titleAction={standalonePage.titleAction} />
-          {standalonePage.menu}
-          <ResourceSyllabusCard
+        <>
+          <ResourceReferenceCard
+            meta={meta}
             assignments={syllabusAssignments}
+            verification={content ? parseVerification(content) : null}
+            contentPath={resourceRepoPath(resourceName)}
+            contentName={resourceName}
             onOpen={ref => navigate(wikiRoute(ref))}
-            className="mb-0"
-          />
-          <ResourceAssumptionsCard resource={resourceName} />
-        </div>
+            titleAction={standalonePage.titleAction}
+          >
+            <ResourceAssumptionsCard resource={resourceName} />
+          </ResourceReferenceCard>
+          {standalonePage.menu}
+        </>
       )}
 
       {processedContent !== null && (
@@ -112,15 +114,6 @@ export default function WikiResource() {
           className={RESOURCE_ARTICLE_CLASS}
           outlineItems
           sourcePath={resourceRepoPath(resourceName)}
-          titleBadge={
-            content && (
-              <FactCheckBadge
-                verification={parseVerification(content)}
-                contentPath={resourceRepoPath(resourceName)}
-                contentName={resourceName}
-              />
-            )
-          }
           onWikiLink={standalonePage.onWikiLink}
         />
       )}

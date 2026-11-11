@@ -671,6 +671,15 @@ before touching that area**:
   `scripts/resource_lint.py` holds every page to the shape in CI. Also the review that
   led to it — commentary sections and a page written without reading its (scanned)
   paper. Read before writing or editing a resource page.
+- `docs/resource-page-v2.md` — **how a resource page is drawn**, the Reference Card: the cover,
+  title and authors, *Read PDF* / *Get a copy* beside the Fact Check pill, the facts as one
+  grouped list with a row per exam on the syllabus (`components/wiki/ResourceReferenceCard.tsx`,
+  `resourceFacts`), then the lead and the document's divisions gathered under **Contents** —
+  folded into one `<details>` per chapter past 12 rows, with front and back matter named on a
+  list (Preface, Index, References…) put on one "Also included" line (`lib/resourceContents.ts`,
+  a rehype plugin on the one article, so anchors and highlights still land — they open a folded
+  chapter first). Phase 1 is built; "Where it's used", "New in this edition" and the syllabus
+  marked on the contents are the open phases. Read before touching either file.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real

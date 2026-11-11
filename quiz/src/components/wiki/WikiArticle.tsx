@@ -26,6 +26,7 @@ import { isInWikiIndex } from '@/lib/wikiIndex'
 import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
 import { rehypeOutlineItems } from '@/lib/resourceMeta'
+import { rehypeResourceContents } from '@/lib/resourceContents'
 import { rehypeArticleSections } from '@/lib/articleSections'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
@@ -54,7 +55,9 @@ export interface WikiArticleProps {
   titleAction?: WikiTitleAction
   /**
    * A resource page: mark the list rows that number themselves, so the
-   * page's class can draw them without markers (`rehypeOutlineItems`).
+   * page's class can draw them without markers (`rehypeOutlineItems`), and
+   * gather the document's divisions into its Contents, folded when long
+   * (`rehypeResourceContents`).
    */
   outlineItems?: boolean
   /**
@@ -99,7 +102,7 @@ function hastText(node: HastLike | undefined): string {
 // Formula boxes (`> $$…$$`) typeset at display size — see lib/displayMath.ts.
 const REMARK_PLUGINS = [remarkGfm, remarkMath, remarkDisplayFormulaBoxes]
 const REHYPE_PLUGINS = [rehypeKatex]
-const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems]
+const OUTLINE_REHYPE_PLUGINS = [rehypeKatex, rehypeOutlineItems, rehypeResourceContents]
 const SECTION_REHYPE_PLUGINS = [rehypeKatex, rehypeArticleSections]
 
 const TitleActionContext = createContext<WikiTitleAction | null>(null)

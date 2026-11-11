@@ -147,3 +147,31 @@ test.describe('exam sitting info', () => {
     await expect(info).toBeFocused()
   })
 })
+
+// docs/resource-page-v2.md, phase 1: a resource page leads with what the
+// document is, and a long table of contents folds into one row per chapter.
+test.describe('resource page', () => {
+  test('folds a textbook\'s contents into chapters that open one at a time', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/wiki/resource/' + encodeURIComponent('A First Course in Probability (Ross - 2019)'))
+
+    await expect(page.getByRole('heading', { level: 2, name: 'A First Course in Probability' })).toBeVisible()
+    await expect(page.getByText('10th, 2019')).toBeVisible()
+
+    const contents = page.getByRole('region', { name: /Contents/ })
+    await expect(contents.getByText('10 chapters')).toBeVisible()
+    await expect(contents.getByText(/^Also included: Preface/)).toBeVisible()
+    // Folded: the section rows are out of sight until their chapter is opened.
+    const row = contents.getByText('5.6.5 The Pareto Distribution')
+    await expect(row).toBeHidden()
+    await contents.getByText('5 Continuous Random Variables').click()
+    await expect(row).toBeVisible()
+  })
+
+  test('leaves a short outline open', async ({ page }) => {
+    await page.goto('/wiki/resource/' + encodeURIComponent('ALM Strategies for General Insurers (SOA - 2025)'))
+    const contents = page.getByRole('region', { name: /Contents/ })
+    await expect(contents).toBeVisible()
+    await expect(contents.locator('details')).toHaveCount(0)
+  })
+})

@@ -76,6 +76,8 @@ export function useConceptHighlight(rootRef: RefObject<HTMLElement>, sourcePath?
     // Expand any collapsed callout ancestors so the target becomes visible.
     let node: HTMLElement | null = target.parentElement
     while (node && node !== root) {
+      // A resource's folded chapter (lib/resourceContents.ts).
+      if (node instanceof HTMLDetailsElement && !node.open) node.open = true
       if (node.dataset.calloutBody !== undefined && node.hidden) {
         const toggle = node.parentElement?.querySelector<HTMLButtonElement>('[data-callout-toggle]')
         toggle?.click()

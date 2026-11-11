@@ -5,9 +5,10 @@ import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { extractImages } from '@/lib/wikiMarkdown'
-import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
+import { ResourceReferenceCard } from '@/components/wiki/ResourceReferenceCard'
+import { openAncestorDetails } from '@/lib/resourceContents'
+import { parseVerification } from '@/lib/verification'
 import { extractSyllabusAssignments, parseResourceMeta, RESOURCE_ARTICLE_CLASS, preprocessResourceMarkdown } from '@/lib/resourceMeta'
-import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 import { ListenView } from '@/components/wiki/ListenView'
 import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
@@ -154,6 +155,8 @@ export function ConceptPagePanel({
       const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
         const body = bodyRef.current
         const target = body?.querySelector<HTMLElement>(`[id="${CSS.escape(heading)}"]`)
+        // A resource's chapter may be folded (lib/resourceContents.ts): open it first.
+        if (target) openAncestorDetails(target, body)
         if (body && target) {
           body.scrollTop += target.getBoundingClientRect().top - body.getBoundingClientRect().top - 8
         }
@@ -186,6 +189,11 @@ export function ConceptPagePanel({
     [content, entry.kind],
   )
 
+  const resourceVerification = useMemo(
+    () => (content && entry.kind === 'resource' ? parseVerification(content) : null),
+    [content, entry.kind],
+  )
+
   const processedContent = useMemo(() => {
     if (!content) return content
     if (entry.kind !== 'resource') return content
@@ -193,6 +201,10 @@ export function ConceptPagePanel({
   }, [content, entry.kind])
 
   const sourcePath = entryRefToRepoPath(entry)
+  // A resource's header names the document by its own title, not the vault's
+  // file name ("A First Course in Probability (Ross - 2019)" was cut off at the
+  // bracket on a phone).
+  const headerTitle = resourceMeta?.title ?? entry.name
 
   // A guide page (an exam's "How to Study" tip) has no action menu at all:
   // quizzing, keeping a card and tracking mastery are all about a concept being
@@ -233,11 +245,11 @@ export function ConceptPagePanel({
               aria-label={`Actions for ${entry.name}`}
               className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
             >
-              {entry.name}
+              {headerTitle}
             </button>
           ) : (
             <span className="truncate font-semibold text-lg sm:text-xl min-w-0">
-              {entry.name}
+              {headerTitle}
             </span>
           )}
           {hasActions && (
@@ -332,30 +344,28 @@ export function ConceptPagePanel({
                 images={images}
                 onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
               />
-              {/* The citation block: the metadata card, and under it the
-                  exams it is a reading for — one column, the pane's width. */}
+              {/* The reference card: what the document is, how to get it, and the
+                  exams it is a reading for (docs/resource-page-v2.md). */}
               {resourceMeta && (
-                <div className="mb-4 flex flex-col gap-3">
-                  <ResourceMetaCard
-                    meta={resourceMeta}
-                    compact
-                    className="mb-0"
-                    // Its document opens as the next page of the stack, with
-                    // this one folded into a bar above it — a link, not a lid.
-                    onReadPdf={onOpenPdf}
-                  />
-                  <ResourceSyllabusCard
-                    assignments={syllabusAssignments}
-                    onOpen={onOpenLink}
-                    compact
-                    className="mb-0"
-                  />
+                <ResourceReferenceCard
+                  meta={resourceMeta}
+                  assignments={syllabusAssignments}
+                  verification={resourceVerification}
+                  contentPath={sourcePath}
+                  contentName={entry.name}
+                  onOpen={onOpenLink}
+                  // Its document opens as the next page of the stack, with
+                  // this one folded into a bar above it — a link, not a lid.
+                  onReadPdf={onOpenPdf}
+                  compact
+                  className="mb-4"
+                >
                   {entry.kind === 'resource' && (
                     <Suspense fallback={null}>
                       <ResourceAssumptionsCard resource={entry.name} compact />
                     </Suspense>
                   )}
-                </div>
+                </ResourceReferenceCard>
               )}
               <WikiArticle
                 markdown={processedContent ?? content}

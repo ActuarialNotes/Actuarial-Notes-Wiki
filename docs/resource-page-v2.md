@@ -1,6 +1,7 @@
 # Resource page v2: the Reference Card
 
-Status: **proposed 2026-11-11** (roadmap §3.4, *C-RP2*). This is the build plan for the
+Status: **phase 1 built 2026-11-11**; phases 2–4 proposed (roadmap §3.4, *C-RP2*). Decisions
+D-RP1 to D-RP4 settled with their defaults. This is the build plan for the
 resource-page redesign chosen from three mock-ups (the canvas *Resource page redesigns*, frames
 3 and 3b). It changes how a resource page is **drawn**, and adds two things the page can
 **say**. The standard in `docs/resource-pages.md` still holds: a resource page says only what its
@@ -49,43 +50,47 @@ The SEO static page (`lib/seoPrerender.ts`) and the AI connector's export keep t
 outline. Folding is a choice made on screen; crawlers and assistants still read every heading.
 The Listen view reads the article as it does now.
 
-## 3. Phase 1: the layout (no new data)
+## 3. Phase 1: the layout (built 2026-11-11)
 
 **Goal:** blocks 1–4, 7 and 8 drawn from what the page and its frontmatter already hold.
 
-- `lib/resourceMeta.ts`
-  - `splitResourceBody(md)` (pure): cuts the preprocessed body into `lead`, `divisions` (every
-    `##` before `## Related readings` / `## Sources`), `related` and `sources`. Tested against
-    every resource page: the parts joined back together give the input, so nothing is lost.
-  - `outlineChapters(divisions)`: the `##` headings with how many items each holds. Used for
-    the folded view and the "10 chapters" row.
-  - `matterHeadings(divisions)`: **unnumbered** headings with nothing under them (*Preface*,
-    *Index*, *Answers to Selected Problems*). These are drawn as one line, "Also in the book: …",
-    **only** on a page whose other headings are numbered. A paper whose sections are unnumbered
-    and empty keeps them as rows, because there they are the document's divisions.
-- `components/wiki/ResourceReferenceCard.tsx` (new): header, actions and facts. It replaces
-  `ResourceMetaCard`'s pill row with a `GroupedList` (`components/ui/GroupedList.tsx`, the
-  sitting panel's list). `ResourceMetaCard` stays as it is for the shelves and the Fact Check
-  panel's *Checked against* cards, which draw a resource as a card.
-- `ResourceSyllabusCard` becomes rows **inside** the facts list: the exam's logo, "Suggested ·
-  Ch. 1–8 in part" (§6's summary, or the first clause of the wording until §6 lands), and a
-  chevron. The row opens the Contents with that exam's marks (§6). Until §6 lands, it opens the
-  wording as it does today.
-- `components/wiki/ResourceContents.tsx` (new): the divisions in a disclosure. It is **open** when
-  the outline is short (12 items or fewer, about an ASOP's size) and **folded** otherwise. When
-  folded it lists the chapters, and a chapter opens on its own. Open state rides the URL hash
-  (`#contents`), so the scroll memory in `routeScrollMemory.ts` brings a reader back to it.
-- Popup title bar: `meta.title` instead of the file name, in `ConceptPagePanel`'s header (the
-  file name stays the route and the `aria` label's fallback).
-- The Fact Check pill moves up next to the primary action. It uses `factCheckBadge` as today,
-  so *stale*, *Known issue* and *Disputed* still show as such (`lib/factCheckTone.ts`).
+What was built, and where it departs from the first plan:
 
-**Tests:** `resourceMeta.test.ts` (the split, chapters, front and back matter, over the vault),
-`ResourceReferenceCard.test.tsx`, and `e2e/wiki.spec.ts` (open the Ross page and the ASOP 43
-page; Contents is folded on one and open on the other; opening a chapter works).
+- **Contents are folded in the rendering, not cut out of the markdown.** `lib/resourceContents.ts`
+  is a rehype plugin (`rehypeResourceContents`, run by `WikiArticle` on every resource page, after
+  `rehypeOutlineItems`). It gathers the `##` divisions before `## Related readings` / `## Sources`
+  into one `<section class="resource-contents">`. When the outline holds more than 12 rows
+  (list items, paragraphs and empty headings; `CONTENTS_FOLD_AT`, decision D-RP1), each chapter
+  becomes a native `<details>`, which opens on its own. Keeping one article, rather than
+  splitting the page into several, keeps the heading anchors, the concept highlight, math focus
+  and the article's link handling as they were. Both places that scroll to something inside the
+  article now open a folded chapter first (`openAncestorDetails` in `ConceptPagePanel`, and
+  `useConceptHighlight`).
+- **Front and back matter is folded by name, not by shape.** A survey of the vault showed that
+  "empty and unnumbered" also catches real divisions (*Executive Summary*, *Appendix D The
+  Marriage of ERM and DFA*, *Exhibit 1 …*). Only headings named on a list (`isMatterHeading`:
+  Preface, Foreword, Index, References, Bibliography, Acknowledgements, Glossary, Answers to
+  Selected Problems, …) are folded into "Also included: …". They must also be empty, sit before
+  the first numbered division or after the last one, and be on a page with numbered chapters
+  (`isChapterHeading`: an appendix label alone doesn't count).
+- **The count says chapters only when they are numbered**, and counts only those: the Ross page
+  reads "10 chapters", with its two endpaper tables as rows beside them.
+- **The fold falls where the rule puts it.** Of the 808 resource pages, 505 fold, 129 stay open,
+  and 174 have no divisions at all. Most ASOPs fold: their sections hold more than 12
+  paragraphs and items.
+- `components/wiki/ResourceReferenceCard.tsx`: the header (cover, `Type`, `Title`, authors), the
+  actions (`ResourceCopyAction`, now exported from `ResourceMetaCard.tsx`, and the Fact Check
+  pill, D-RP3), and one grouped list of the facts (`resourceFacts` in `lib/resourceMeta.ts`) with
+  a row per exam at its foot. `ResourceMetaCard` stays as the card the shelves and the Fact
+  Check panel draw.
+- `ResourceSyllabusCard` became `SyllabusAssignmentRow`, a row of that list. It still opens to
+  the syllabus wording and the study guide, until phase 4 marks the contents.
+- The popup's title bar shows the document's `Title`, not its file name.
 
-**Docs:** `docs/resource-pages.md` §2 (how the shape is drawn), style guide §7 (the reference
-card), and this file's status.
+**Tests:** `lib/resourceContents.test.ts` (the fold, the matter list and the count, and every
+resource page in the vault keeping every heading and every word),
+`components/wiki/ResourceReferenceCard.test.tsx`, and `e2e/wiki.spec.ts` (*resource page*: the
+Ross page folds and a chapter opens; a short outline stays open).
 
 ## 4. Phase 2: "Where it's used"
 
@@ -178,7 +183,7 @@ open the same page in `ConceptPopup` and so inherit the change without their own
 
 | Id | Question | Default if not answered |
 |---|---|---|
-| D-RP1 | How long an outline is before Contents starts folded | More than 12 items |
-| D-RP2 | For an official document with a PDF, is *Read PDF* the primary action and *Get a copy* hidden? | Yes: *Read PDF* primary; *Get a copy* only with an ISBN |
-| D-RP3 | Does the Fact Check pill sit in the actions row (as in the mock-up) or stay at the article's foot? | Actions row |
-| D-RP4 | Does an exam page's Source Material card link open the resource already marked (`?exam=`)? | Yes |
+| D-RP1 | How long an outline is before Contents starts folded | More than 12 items. **Settled 2026-11-11: default.** |
+| D-RP2 | For an official document with a PDF, is *Read PDF* the primary action and *Get a copy* hidden? | Yes: *Read PDF* primary; *Get a copy* only with an ISBN. **Settled: default.** |
+| D-RP3 | Does the Fact Check pill sit in the actions row (as in the mock-up) or stay at the article's foot? | Actions row. **Settled: default.** |
+| D-RP4 | Does an exam page's Source Material card link open the resource already marked (`?exam=`)? | Yes. **Settled: default.** |

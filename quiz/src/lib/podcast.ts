@@ -49,8 +49,13 @@ export type PodcastScriptHashes = Record<string, [string | null, string | null]>
 // isn't there. Compact on purpose — the Dashboard reads it to put the
 // episode's length on its button:
 //
-//   { "v": 1, "voices": [["af_heart", "kokoro-82m"]],
-//     "clips": { "brief/bayes-theorem": ["1x2y3z", 71.4, 571392, 0], … } }
+//   { "v": 1, "voices": [["af_heart", "kokoro-82m", "48k"]],
+//     "clips": { "brief/bayes-theorem": ["1x2y3z", 71.4, 428544, 0], … } }
+//
+// A voice's third element is the clip's encoding, and it is part of the file's
+// name: clips are cached for a year by name, so re-encoded audio needs a new
+// URL. A voice with no third element is the first encoding, 64 kb/s, whose
+// files carry no suffix.
 
 export interface PodcastClip {
   /** Hash of the script the clip was recorded from. */
@@ -59,16 +64,18 @@ export interface PodcastClip {
   a: string
   /** Seconds. */
   d: number
-  /** Bytes (every clip is CBR 64 kb/s mono MP3, so clips join byte for byte). */
+  /** Bytes (every clip in an index is CBR mono MP3 at one bitrate, so clips join byte for byte). */
   b: number
   /** Voice and engine, e.g. `af_heart` / `kokoro-82m`. */
   voice: string
   model: string
+  /** Encoding, e.g. `48k`; absent for the first, 64 kb/s files. */
+  enc?: string
 }
 
 export interface PodcastIndexFile {
   v: 1
-  voices: Array<[string, string]>
+  voices: Array<[string, string] | [string, string, string]>
   clips: Record<string, [string, number, number, number]>
 }
 
@@ -85,27 +92,28 @@ export function parsePodcastIndex(raw: unknown): Record<string, PodcastClip> | n
     if (typeof h !== 'string' || !/^[a-z0-9]+$/.test(h)) continue
     if (typeof d !== 'number' || !(d > 0) || typeof b !== 'number' || !(b > 0)) continue
     if (!Array.isArray(voice) || typeof voice[0] !== 'string' || !voice[0]) continue
-    clips[key] = { h, d, b, a: clipAudioFile(key, h, voice[0]), voice: voice[0], model: String(voice[1] ?? '') }
+    const enc = typeof voice[2] === 'string' && /^[a-z0-9]+$/.test(voice[2]) ? voice[2] : undefined
+    clips[key] = { h, d, b, a: clipAudioFile(key, h, voice[0], enc), voice: voice[0], model: String(voice[1] ?? ''), ...(enc ? { enc } : {}) }
   }
   return clips
 }
 
 /** The index file for a set of clips — what the recorder writes. */
 export function podcastIndexFile(clips: Record<string, PodcastClip>): PodcastIndexFile {
-  const voices: Array<[string, string]> = []
+  const voices: PodcastIndexFile['voices'] = []
   const out: PodcastIndexFile['clips'] = {}
   for (const key of Object.keys(clips).sort()) {
     const c = clips[key]
-    let v = voices.findIndex(([voice, model]) => voice === c.voice && model === c.model)
-    if (v < 0) v = voices.push([c.voice, c.model]) - 1
+    let v = voices.findIndex(([voice, model, enc]) => voice === c.voice && model === c.model && enc === c.enc)
+    if (v < 0) v = voices.push(c.enc ? [c.voice, c.model, c.enc] : [c.voice, c.model]) - 1
     out[key] = [c.h, Math.round(c.d * 100) / 100, c.b, v]
   }
   return { v: 1, voices, clips: out }
 }
 
-/** `brief/bayes-theorem-<hash>-af-heart.mp3` — a new script or voice is a new URL. */
-export function clipAudioFile(key: string, hash: string, voice: string): string {
-  return `${key}-${hash}-${podcastSlug(voice)}.mp3`
+/** `brief/bayes-theorem-<hash>-af-heart-48k.mp3` — a new script, voice or encoding is a new URL. */
+export function clipAudioFile(key: string, hash: string, voice: string, enc?: string): string {
+  return `${key}-${hash}-${podcastSlug(voice)}${enc ? `-${enc}` : ''}.mp3`
 }
 
 /** Whether a recording was made from the script the vault has now. */

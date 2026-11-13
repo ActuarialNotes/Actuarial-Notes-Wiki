@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0889eaaf54f385d95954b7318b717f615ee9ff4012ec9aa26bfdbc5c417e138c
+  content_hash: sha256:bcf2b66f05ac39a98b0bc8a550bb97c51f0afa4d75fcd97a9f3ce9d23bcf7315
   sources:
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 5.6 The Normal Distribution: phi'(z)=-z phi(z); Phi and Phi^-1 have no closed form; Phi(-z)=1-Phi(z); location-scale family, quantile mu + sigma Phi^-1(p); sum of independent normals normal, linear transformations (HTML fetched 2026-11-06), sha256:f4e2fe70308bf064dc44f62716075c9be463a2de262cb0aca8de1d6a0c6ffc84 — https://www.randomservices.org/random/special/Normal.html"
     - "SOA, Exam P normal distribution table (rev. 4/29/21), standard normal table rows z=0.7-2.0 and selected-percentile row (0.90 1.2816, 0.95 1.6449, 0.975 1.9600, 0.99 2.3263), PDF p.2, read 2026-11-06, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
@@ -25,7 +25,7 @@ A **Normal Distribution** is a symmetric, bell-shaped continuous distribution on
 - $\sigma$ is the standard deviation.
 - $-\infty < x < \infty$.
 
-The density has no closed-form integral, so a normal probability is found by standardizing:
+The density has no closed-form integral, so a normal probability is found by [[Transformations of Random Variables#Linear transformations|standardizing]]:
 
 > $$P(X \le x) = \Phi\!\left(\frac{x - \mu}{\sigma}\right)$$
 

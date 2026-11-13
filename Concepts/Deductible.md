@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:35791f138fdc6097ae5f6ab99c6ce7118220c4f8d12b097f46e89251c61b2a31
+  content_hash: sha256:613c58be69a15b05a5984c26c5299cee9959a56ed4d9f094ec54eb737b9089be
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VI Deductibles: losses below 500 pay nothing, 2000 loss pays 1500 (PDF p.7), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.4.1 ordinary deductible Y^L, Y^P, E(Y^L) = int_d^inf S(x) dx, E(Y^P) = E(Y^L)/(1 - F(d)), LER, exponential memoryless per payment, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -32,7 +32,7 @@ A **Deductible** is the initial amount of a loss that the policyholder must pay 
 
 - $X$ is the ground-up [[Loss Random Variable|loss]].
 
-If the loss is at most $d$, the insurer pays nothing, and above $d$ it pays the excess $X - d$. The policyholder keeps the rest of the loss, $\min(X, d)$, written $X \wedge d$.
+If the loss is at most $d$, the insurer pays nothing, and above $d$ it pays the excess $X - d$. The policyholder keeps the rest of the loss, $\min(X, d)$, written $X \wedge d$. The payment is a [[Transformations of Random Variables|function of the loss]], so its distribution and moments are found from those of $X$.
 
 > [!idea] The idea
 > Small losses never reach the insurer, and large ones reach it $d$ smaller.

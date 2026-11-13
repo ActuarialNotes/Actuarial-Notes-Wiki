@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c9488742b8f6bfa364cb1f9676e775b384830787b87920c1b9b00e6c31023b9
+  content_hash: sha256:a1ec85f796374683da7a215218fa1e348d9f6f6f760b8dc13a6c782057388a22
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Poisson as limit of binomial with np = lambda, b(n,p,k)/b(n,p,k-1) ~ lambda/k, eq. 5.2 p.189 (PDF p.197); §6.2 Poisson variance lambda p.263 (PDF p.271), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 13.4 The Poisson Distribution: P(N_t=n) = e^{-rt}(rt)^n/n!; modes at a-1 and a for integer a; sum of independent Poissons; N_s given N_t = n is binomial(n, s/t), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
@@ -17,7 +17,7 @@ verification:
 
 ![[Media/Figures/Poisson_Distribution.svg|340]]
 
-A **Poisson Distribution** is the distribution of the number of events in a fixed interval, when events occur independently at a constant average rate. If the number of events $X$ has mean $\lambda$, the probability of $k$ events is
+A **Poisson Distribution** is the distribution of the number of events in a fixed interval, when events occur independently at a [[Poisson Process|constant average rate]]. If the number of events $X$ has mean $\lambda$, the probability of $k$ events is
 
 > $$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$
 
@@ -99,6 +99,8 @@ Given their sum $y$, the count $X_1$ is [[Binomial Distribution|binomial]] with 
 - $k = 0, 1, \ldots, y$.
 
 So given that $n$ independent Poisson counts with a common mean add to $y$, each count is binomial with $y$ trials and probability $1/n$.
+
+A Poisson count also splits into Poisson counts. If each of the $X$ events is, independently, of a given type with probability $p$, the number of events of that type is Poisson with mean $\lambda p$. This is [[Poisson Thinning|Poisson thinning]].
 
 > [!example]- A driver has claims at a Poisson rate of 0.2 per year. What is the probability of no claims in 5 years? {Example}
 > - The 5-year count is Poisson with mean $0.2 \times 5 = 1$.

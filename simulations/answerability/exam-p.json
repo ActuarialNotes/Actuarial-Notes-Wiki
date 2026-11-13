@@ -3765,7 +3765,15 @@
        "page": "Geometric Distribution",
        "quote": "$$P(X = k) = (1-p)^{k-1}p, \\quad k = 1, 2, 3, \\ldots$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Distribution",
+      "quote": "A life with a constant probability $q$ of dying each year, given survival to the start of it, dies in year $k$",
+      "note": "Re-quoted after a link edit nearby",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r3",
@@ -4219,7 +4227,15 @@
        "page": "Continuous Random Variable",
        "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Expected Value",
+      "quote": "- For a continuous $X$, the sum is the integral $\\int g(x)\\,f(x)\\,dx$.",
+      "note": "Re-quoted from the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -15046,7 +15062,15 @@
        "page": "Discrete Random Variable",
        "quote": "- $P(S = 1)$: $(0.7)(0.4) + (0.2)(0.6) = 0.40$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Probability Function",
+      "quote": "The probability that $X + Y$ equals $s$ adds the pairs whose values add to $s$:",
+      "note": "Re-quoted after a link edit nearby",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r2",
@@ -15313,10 +15337,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Joint Probability Function",
-      "quote": "Conditioning on the sum then divides by this total: $P(X = x \\mid X + Y = s) = p(x, s - x) / P(X + Y = s)$.",
-      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum over (x_i,y_j) in A of P_XY; R_XY subset of R_X x R_Y with some P_XY zero; marginal eq. (5.1) — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_{X|A}(x) = f_X(x)/P(A) on A, E[X|A] = integral x f_{X|A}(x) dx; independent X,Y give E[g(X)h(Y)] = E[g(X)]E[h(Y)] — https://www.probabilitycourse.com/c",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w6"
+      "quote": "The probability that $X + Y$ equals $s$ adds the pairs whose values add to $s$:",
+      "note": "Re-quoted after a link edit nearby",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -15393,7 +15417,15 @@
        "page": "The Law of Total Probability",
        "quote": "$$P(B) = \\sum_{i=1}^{n} P(B \\mid A_i)\\,P(A_i)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance for Conditional and Marginal Distributions",
+      "quote": "Any probability or moment of a member chosen at random is the average of the types' values, weighted by the types' probabilities",
+      "note": "Added the mixture sentence on a page Variance links to",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r2",
@@ -17835,11 +17867,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Claim",
-      "quote": "The number of payments is a thinned count: if losses are Poisson with rate $\\lambda$, payments are Poisson with rate $\\lambda\\,P(X > d)$",
-      "note": "passage on Claim (syllabus page): Poisson thinning stated — each event independently kept with probability p gives Poisson(λp); the check's miss",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "page": "Poisson Distribution",
+      "quote": "If each of the $X$ events is, independently, of a given type with probability $p$, the number of events of that type is Poisson with mean $\\lambda p$.",
+      "note": "Added the thinning sentence to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -23937,10 +23969,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expected Value",
-      "quote": "$E[\\min(N, m)] = \\sum_{k=0}^{m-1} P(N > k)$",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.2 Additional Properties: N on N has E(N) = sum_{n>=0} P(N>n) = sum_{n>=1} P(N>=n) — https://www.randomservices.org/random/expect/Properties2.html; checked in the w6 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w6"
+      "quote": "The [[Limited Expected Value|limited expected value]] of $N$ at $d$ is $E[\\min(N, d)] = \\sum_{k=0}^{d-1} P(N > k)$.",
+      "note": "Added to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -25757,7 +25789,15 @@
        "page": "Frequency Distribution",
        "quote": "| Poisson $(\\lambda)$ | $e^{-\\lambda}$ | $0$ | $\\lambda$ |"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "The probability of no events is $P(X = 0) = e^{-\\lambda}$.",
+      "note": "Re-quoted from the tagged page; solving it for the mean is algebra",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r3",
@@ -27393,7 +27433,15 @@
        "page": "Guaranteed Minimum Death Benefit",
        "quote": "Death in year $t$ has probability ${}_{t-1|}q_x = {}_{t-1}p_x\\,q_{x+t-1}$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Distribution",
+      "quote": "A life with a constant probability $q$ of dying each year, given survival to the start of it, dies in year $k$",
+      "note": "Re-quoted after a link edit nearby",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r3",
@@ -32408,7 +32456,15 @@
        "page": "Transformations of Random Variables",
        "quote": "$g(x) = x^2$ is not monotone on $(-1,1)$, so the shortcut does not apply. Use the CDF method, keeping **both** branches of $X$ that produce $Y \\leq y$:"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Transformations of Random Variables",
+      "quote": "For an inequality that is quadratic in $X$, the roots of the quadratic split the values of $X$ into intervals",
+      "note": "Re-quoted; the page is now linked from Normal Distribution and Continuous Univariate Distributions",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r2",
@@ -48444,7 +48500,15 @@
        "page": "Geometric Distribution",
        "quote": "$$P(X = k) = (1-p)^{k-1}p, \\quad k = 1, 2, 3, \\ldots$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Geometric Distribution",
+      "quote": "A life with a constant probability $q$ of dying each year, given survival to the start of it, dies in year $k$",
+      "note": "Re-quoted after a link edit nearby",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -64948,11 +65012,11 @@
      ],
      "resolution": {
       "kind": "taught",
-      "page": "Claim",
-      "quote": "for a compound Poisson $S$, $\\text{Var}(S) = \\lambda\\,E[X^2]$.",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §13.6 Compound Poisson Processes: var(V_t) = (μ² + σ²) r t, E(N_t) = var(N_t) = r t; compound Poisson variable with parameter a — https://www.randomservices.org/random/poisson/Compound.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), §3.7 Conditional Expected Value, Random Sums of Random Variables: E(Y_N|N) = Nμ, var(Y_N|N) = Nσ², var(Y_N) = E(N)σ² + var(N)μ² — https://www.randomservices.org/random/expect/Conditional.html; checked in th",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w5"
+      "page": "Variance for Conditional and Marginal Distributions",
+      "quote": "so the variance of this [[Compound Poisson Process|compound Poisson]] sum is $\\text{Var}(S) = \\lambda\\,E[X^2]$",
+      "note": "Added the compound Poisson case to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -65197,10 +65261,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Expected Value",
-      "quote": "is the probability-weighted average of all values a [[Random Variable]] $X$ can take",
-      "note": "passage on Expected Value (syllabus page): a payment worth its present value with the survival probability and 0 otherwise has mean PV x probability; in reach by D30",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "quote": "A payment of $c$ made only if an event occurs has expected value $c$ times the probability of the event. With interest, $c$ is the payment's present value",
+      "note": "Added to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -65652,10 +65716,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Variance for Conditional and Marginal Distributions",
-      "quote": "$$E[X] = E\\bigl[E[X \\mid Y]\\bigr]$$",
-      "note": "passage on Variance for Conditional and Marginal Distributions: the law of total expectation applied to X^2 gives E[X^2] = Σ P(group) E[X^2 | group]; the find pass proposed a link to Mixture Distribution, not needed",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "quote": "Any probability or moment of a member chosen at random is the average of the types' values, weighted by the types' probabilities",
+      "note": "Added the mixture sentence to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {

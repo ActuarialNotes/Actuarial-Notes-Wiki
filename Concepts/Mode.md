@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3ef2bcee56e7f37d216b682ca9e407a4cc3f34db574005c27313a1fc207b0ac1
+  content_hash: sha256:c06ec5e808b70d19478e0ca9e261c49a0dbff0fbc3685a61caec1a398316bfd2
   sources:
     - "SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), gamma mode = theta(alpha-1) (PDF p.9), exponential mode = 0 and lognormal mode = exp(mu - sigma^2) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Exam P Sample Solutions (2026-05 file), Q137 (PDF p.40: integer Poisson parameter gives equal modes at the parameter and one less; P(N<=4)=0.815 first above 0.75), Q143-Q144 (PDF pp.40-41: constant of proportionality not needed for the mode), Q176 (PDF p.41), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"

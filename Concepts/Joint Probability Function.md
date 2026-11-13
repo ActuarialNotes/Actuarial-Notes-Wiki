@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:540b27ad0ee6a33b66f738e05ff0b8ad4c81c9b1bbacb81f67c008498f5fc714
+  content_hash: sha256:1cc885d754310654676e021b9ced55c04d1a845f33f9772ec0a57a676194895d
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.1.1 Joint PMF: P((X,Y) in A) = sum of P_XY over A; marginal PMFs by summing, HTML fetched 2026-11-06, sha256:25ee67175334059751c65c27c7c49c0d7bbd0d30063358dd957815fe58fa6779 — https://www.probabilitycourse.com/chapter5/5_1_1_joint_pmf.php"
     - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.1 joint pmf properties p.2; §3.7 marginal pmf by summing rows/columns p.7; §4 independence cell by cell, Ex. 12 pp.9-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
@@ -64,6 +64,8 @@ The probability of an event about $X$ and $Y$ is
 The probability that $X + Y$ equals $s$ adds the pairs whose values add to $s$:
 
 > $$P(X + Y = s) = \sum_x f(x, s - x)$$
+
+An [[Aggregate Loss Model|aggregate loss]] is such a sum, with one term for each claim.
 
 > [!example]- For the auto and home claims above, what is the probability of exactly two claims in total? {Example}
 > - The pairs that add to 2 are $(0, 2)$ and $(1, 1)$.

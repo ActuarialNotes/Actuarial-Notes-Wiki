@@ -18507,11 +18507,11 @@
      "places": [],
      "resolution": {
       "kind": "taught",
-      "page": "Covariance and Correlation Coefficient",
-      "quote": "Covariance is bilinear: $\\text{Cov}(aX + bY,\\, Z) = a\\,\\text{Cov}(X, Z) + b\\,\\text{Cov}(Y, Z)$, adding a constant to either variable leaves it unchanged, and $\\text{Cov}(X, X) = \\text{Var}(X)$",
-      "note": "passage on Covariance and Correlation Coefficient (linked): bilinearity, constants drop out and Cov(X, X) = Var(X) give Cov(X, n - X) = -Var(X); Y = n - X is the stem's own setup; the check's miss.",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "page": "Covariance",
+      "quote": "When $X + Y$ is a constant, such as the numbers of successes and failures in $n$ trials, $\\text{Cov}(X, Y) = -\\text{Var}(X)$ and their [[Covariance and Correlation Coefficient|correlation]] is $-1$.",
+      "note": "Added to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -22050,7 +22050,15 @@
        "page": "Response Variable",
        "quote": "Gamma with a log link, weighted by the number of claims behind each average — an average of many claims is less variable than one claim"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Regression",
+      "quote": "A weight changes only how variable each record's response is taken to be, $\\text{Var}(Y_i) = \\phi\\,V(\\mu_i)/w_i$, and not its mean, so a weight cannot take an effect out of the mean the way an offset or a covariate can.",
+      "note": "Added to the tagged page",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     }
    ],
    "relocated": "relocate-20261113-mas-i"

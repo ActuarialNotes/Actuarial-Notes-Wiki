@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:efd0cdf8159e8ac4112911769f3433c2423065007f13811a9de7e7cae8f4e2bb
+  content_hash: sha256:37a716cd31131c8db64509ec1d23cbcb9bc39c3d75b5c643859dbc017b6aaf1a
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), §VII Inflation: fixed deductibles and limits; deductible 500 table 650 -> 998 (+54%) vs losses 750 -> 1098 (+46%) PDF p.10; maximum 12,500 table 610 -> 819 (+34%) PDF p.11, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
     - "Frees et al., Loss Data Analytics (open text), Ch.3 Modeling Loss Severity, §3.3.1 scale distributions and inflation (lognormal mu + log 1.3, sigma unchanged); §3.4.3 inflated loss (1 + r)X with d and u unchanged, E(Y^L) = alpha(1 + r)[E(X^(u/(1+r))) - E(X^(d/(1+r)))], sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -45,7 +45,7 @@ The inflated loss is at most $x$ exactly when the original loss is at most $x/(1
 
 > $$F_{X'}(x) = F_X\!\left(\frac{x}{1 + r}\right)$$
 
-Each cumulative probability stays the same, and the loss amount it belongs to is scaled up by $1 + r$. A family with a scale parameter $\theta$ stays in the family, with $\theta$ replaced by $(1 + r)\theta$:
+Each cumulative probability stays the same, and the loss amount it belongs to is scaled up by $1 + r$. A family with a [[Scale and Shape Parameters|scale parameter]] $\theta$ stays in the family, with $\theta$ replaced by $(1 + r)\theta$:
 
 - an [[Exponential Distribution|exponential]] with mean $\theta$ becomes an exponential with mean $(1 + r)\theta$,
 - a [[Pareto Distribution|Pareto]] or a [[Gamma|gamma]] keeps its shape $\alpha$, and its $\theta$ becomes $(1 + r)\theta$,

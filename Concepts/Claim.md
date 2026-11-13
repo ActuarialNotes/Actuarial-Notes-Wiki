@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a2083102c3c8db247730bdb283fccc4b269b7dee55a629607478dc4949d3c873
+  content_hash: sha256:656d0e3b0c1ac167ba88a348160dc3e39bc9d3e5f1fecf9ed6b4bc0b54fd56ec
   sources:
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.1 claim, claimant (insured or third party), accident date/occurrence date PDF p.14; IBNR, reported, open, closed, re-opened, loss = compensation paid or payable, losses and claims used interchangeably, case reserve PDF p.15, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS), diagonals = valuation dates PDF p.59; claim counts closed without payment PDF p.58; reported claim count triangle PDF pp.66-67, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"

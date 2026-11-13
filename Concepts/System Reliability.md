@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eeec824fc1d09d64e579310bad7c00e19c078a2d304a56e7625b730bcf6a672f
+  content_hash: sha256:ed0d37f98545215289882576ffb63deca7309243aa4ba1f409b6a6f17633d561
   sources:
     - "Jensen & Bard, Operations Research Models and Methods (Univ. of Texas at Austin ORMM supplement), Ch. 26 'Reliability' (5/28/02): structure function and R = P{phi(X)=1} = E[phi(X)] with independent components PDF p.2; series and parallel structure functions and reliabilities eqs (2)-(5) PDF pp.3-4; k-out-of-n eq. (6) and binomial reliability eq. (7), 2-of-3 with p = 0.9 -> 0.972 PDF pp.4-5; minimal paths/cuts and structure functions from them eqs (9)-(11) PDF pp.8-9; bounds R_U = 1 - prod_j(1 - prod_{i in P_j} p_i), R_L = prod_j(1 - prod_{i in C_j} q_i), Example 4 (2-of-3 minimal paths and cuts are the three pairs) and 'lower bound better when reliabilities are high' PDF pp.15-16, sha256:4dc0c5592ed88249e31a90b2dedc12b9bfc355cba4262dc36ee757daa4d67a3d - https://utw11041.utweb.utexas.edu/ORMM/supplements/units/reliability/reliability.pdf"
     - "Rausand, System Reliability Theory (Wiley 2004) course slides, NTNU RAMS Group, Ch. 3 'Structure Analysis': k-out-of-n structure, noon = series, 1oon = parallel PDF pp.8-9; minimal path and cut sets of the bridge {1,4},{2,5},{1,3,5},{2,3,4} / {1,2},{4,5},{1,3,5},{2,3,4} PDF pp.14-17; pivotal decomposition phi(x) = x_i phi(1_i,x) + (1-x_i) phi(0_i,x) PDF p.25, sha256:e7e0e27e5ba2e4647b0280b7650cc6f8ce06f5a1cad591bc036ce9a818adc624 - https://www.ntnu.edu/documents/624876/1277590549/chapt03-structure.pdf/ce525e3b-3f22-43c8-9ed3-d1dcba174742"

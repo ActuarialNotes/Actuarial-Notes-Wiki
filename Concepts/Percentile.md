@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:286bd71c19c0201775b385bf3d722259de060859395ccc79774b92cdec1e9253
+  content_hash: sha256:9fde842befe89af57f9b1dbc6f1b86cca8c85dc9a84c0c4e9512df69a0348949
   sources:
     - "Siegrist, 2.7 Distribution and Quantile Functions: quantile of order p, F(x-) <= p <= F(x); F^-1(p) = min{x: F(x) >= p}; continuous F -> F(x) = p; quartiles, HTML fetched 2026-11-06, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
     - "Siegrist, Location-Scale Families: X = a + bZ, b > 0, a + bz is a quantile of order p of X, HTML fetched 2026-11-06, sha256:d9bc65924c926bd13e91d33c7f63a368fff73aa005bddc1aeb595de5d0fbc738 — https://www.randomservices.org/random/special/LocationScale.html"

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:655b0f0214d7792f6140a93e892c82b612643d78c7327d9e623bdbbd46d34410
+  content_hash: sha256:9f4fe5e5f676ae7fd20391e08bc2a017e6d0713ee323f712f014b84b1858db67
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.1 Expected value: definitions (discrete, continuous, mixed), may not exist, change of variables, increasing property P(X<=Y)=1, symmetry -> E(X)=a, independence E(XY)=E(X)E(Y), E(X|A) via conditional density, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
@@ -66,6 +66,8 @@ The expected value of a function $g(X)$ weights each value of $g$ by the probabi
 
 - For a continuous $X$, the sum is the integral $\int g(x)\,f(x)\,dx$.
 
+The distribution of $g(X)$ itself is found by [[Transformations of Random Variables|transforming]] $X$, but its expected value needs only the distribution of $X$. A payment of $c$ made only if an event occurs has expected value $c$ times the probability of the event. With interest, $c$ is the payment's present value, which is how each payment of a [[Life Annuity|life annuity]] is valued.
+
 > [!example]- A claim costs 0, 100 or 500 with probabilities 0.5, 0.3 and 0.2. A policy pays the claim less a deductible of 50, or nothing. What is the expected payment? {Example}
 > - The payment $g(X) = \max(X - 50, 0)$ is 0, 50 or 450.
 > - Each payment is weighted by the probability of its claim: $0(0.5) + 50(0.3) + 450(0.2)$.
@@ -126,6 +128,8 @@ For a count $N$ on $0, 1, 2, \ldots$, the expected excess over 1 is
 > $$E[\max(N - 1, 0)] = E[N] - 1 + P(N = 0)$$
 
 Extending the sum of $(n - 1)\,P(N = n)$ over $n \ge 1$ to include $n = 0$ gives $E[N - 1] = E[N] - 1$. That adds the term $-P(N = 0)$, which the excess never pays, so $P(N = 0)$ is added back.
+
+In general $\max(N - d, 0) = N - \min(N, d)$. The [[Limited Expected Value|limited expected value]] of $N$ at $d$ is $E[\min(N, d)] = \sum_{k=0}^{d-1} P(N > k)$.
 
 > [!example]- A count $N$ is Poisson with mean 2. What is $E[\max(N - 1, 0)]$? {Example}
 > - $E[N] = 2$ and $P(N = 0) = e^{-2} = 0.1353$.

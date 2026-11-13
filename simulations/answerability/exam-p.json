@@ -2311,7 +2311,16 @@
      "statement": "Find the largest payment amount by computing cumulative probabilities P[X ≤ k] and finding the smallest integer k whose tail P[X > k] is below the threshold, then setting C = fund/k.",
      "concept": "Cumulative Distribution Function",
      "status": "missing",
-     "places": [],
+     "places": [
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "For a count on $0, 1, 2, \\ldots$, $P(X = k) = F(k) - F(k - 1)$, and \"at most $k$\" is $F(k)$, the sum of the probabilities of $0$ through $k$."
+      },
+      {
+       "page": "Cumulative Distribution Function (CDF)",
+       "quote": "The probability that $X$ exceeds $x$ is $1 - F(x)$, called the survival function $S(x)$."
+      }
+     ],
      "resolution": {
       "kind": "taught",
       "page": "Percentile",
@@ -2347,7 +2356,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-031": {
    "path": "questions/exam-p/p-031.md",
@@ -4133,6 +4142,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Limited Expected Value",
+       "quote": "the expected value of the limited loss $X \\wedge u = \\min(X, u)$, which equals $X$ when $X \\le u$ and $u$ when $X > u$"
+      },
+      {
+       "page": "Policy Limit",
+       "quote": "Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not, so the payment is the limited loss variable $X \\wedge u$"
+      },
+      {
        "page": "Policy Limit",
        "quote": "Under a limit $u$ and no other modification, the insurer pays the whole loss $X$ when it is below $u$ and pays $u$ when it is not, so the payment is the limited loss variable $X \\wedge u$, whose mean is the [[Limited Expected Value|limited expected value]]."
       },
@@ -4222,7 +4239,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-051": {
    "path": "questions/exam-p/p-051.md",
@@ -7585,6 +7602,14 @@
      "places": [
       {
        "page": "Transformations of Random Variables",
+       "quote": "The mean of $Y = g(X)$ does not need the distribution of $Y$. For a continuous random variable $X$ with density $f(x)$, it is"
+      },
+      {
+       "page": "Transformations of Random Variables",
+       "quote": "The variance of $Y$ is $E[g(X)^2] - \\bigl(E[g(X)]\\bigr)^2$, with $E[g(X)^2]$ found by the same integral."
+      },
+      {
+       "page": "Transformations of Random Variables",
        "quote": "$$E[g(X)] = \\int_{-\\infty}^{\\infty} g(x)\\,f(x)\\,dx$$"
       }
      ],
@@ -7699,7 +7724,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-087": {
    "path": "questions/exam-p/p-087.md",
@@ -8175,6 +8200,14 @@
      "status": "missing",
      "places": [
       {
+       "page": "Conditional Probability",
+       "quote": "$$P(X > b \\mid X > a) = \\frac{P(X > b)}{P(X > a)}$$"
+      },
+      {
+       "page": "Conditional Probability",
+       "quote": "The complement rule still holds inside the condition: $P(X \\le b \\mid X > a) = 1 - P(X > b \\mid X > a)$."
+      },
+      {
        "page": "Survival Model",
        "quote": "A life aged $x$, written $(x)$, is known to have survived to age $x$. Its future lifetime is $T_x = X - x$, given $X > x$."
       }
@@ -8210,7 +8243,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-092": {
    "path": "questions/exam-p/p-092.md",
@@ -8359,6 +8392,10 @@
      "places": [
       {
        "page": "Uniform Continuous Distribution",
+       "quote": "$$\\text{Var}(X) = \\frac{(b - a)^2}{12}$$"
+      },
+      {
+       "page": "Uniform Continuous Distribution",
        "quote": "$E[X] = (a+b)/2$, $\\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
      ]
@@ -8389,7 +8426,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-094": {
    "path": "questions/exam-p/p-094.md",
@@ -9721,6 +9758,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Covariance",
+       "quote": "\\text{Var}(X + Y) &= \\text{Var}(X) + \\text{Var}(Y) \\\\… &\\quad + 2\\,\\text{Cov}(X, Y)"
+      },
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "The variance of $aX + bY + c$ is… &\\quad + 2ab\\,\\text{Cov}(X, Y)"
+      },
+      {
        "page": "Variance and Standard Deviation",
        "quote": "For a sum, $\\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y) + 2\\,\\text{Cov}(X,Y)$"
       },
@@ -9760,7 +9805,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-115": {
    "path": "questions/exam-p/p-115.md",
@@ -10977,6 +11022,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Expected Value",
+       "quote": "- For a continuous $X$, the sum is the integral $\\int g(x)\\,f(x)\\,dx$."
+      },
+      {
        "page": "Continuous Random Variable",
        "quote": "Expectations replace sums with integrals: $E[g(X)] = \\int g(x)\\,f(x)\\,dx$"
       },
@@ -11024,7 +11073,8 @@
       }
      ]
     }
-   ]
+   ],
+   "relocated": "relocate-20261113-p-2"
   },
   "p-130": {
    "path": "questions/exam-p/p-130.md",
@@ -14164,6 +14214,10 @@
      "places": [
       {
        "page": "Limited Expected Value",
+       "quote": "For a non-negative integer-valued $N$ and an integer $m$, the integral becomes a sum, $E[N \\wedge m] = \\sum_{k=0}^{m-1} P(N > k)$.… $$E[(X - d)_+] = E[X] - E[X \\wedge d]$$"
+      },
+      {
+       "page": "Limited Expected Value",
        "quote": "$$E[(X - d)_+] = E[X] - E[X \\wedge d]$$"
       },
       {
@@ -14181,7 +14235,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-163": {
    "path": "questions/exam-p/p-163.md",
@@ -15309,6 +15363,10 @@
      "places": [
       {
        "page": "Mixture Distribution",
+       "quote": "A probability under a mixture is therefore the weighted average of the probabilities under the components."
+      },
+      {
+       "page": "Mixture Distribution",
        "quote": "The density, the survival function, the raw moments and the moment generating function mix with the same weights. A probability under a mixture is therefore the weighted average of the probabilities under the components."
       },
       {
@@ -15393,7 +15451,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-175": {
    "path": "questions/exam-p/p-175.md",
@@ -19100,6 +19158,10 @@
      "status": "missing",
      "places": [
       {
+       "page": "Expected Value",
+       "quote": "$$E[g(X)] = \\sum_x g(x)\\,f(x)$$"
+      },
+      {
        "page": "Limited Expected Value",
        "quote": "For a non-negative integer-valued $N$ and an integer $m$, the integral becomes a sum, $E[N \\wedge m] = \\sum_{k=0}^{m-1} P(N > k)$."
       }
@@ -19131,7 +19193,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-217": {
    "path": "questions/exam-p/p-217.md",
@@ -19146,6 +19208,10 @@
      "concept": "Stop-Loss Insurance (Deductibles and Limits)",
      "status": "elsewhere",
      "places": [
+      {
+       "page": "Limited Expected Value",
+       "quote": "Under an ordinary [[Deductible|deductible]] $d$ the insured retains $X \\wedge d$, and the expected payment per loss is"
+      },
       {
        "page": "Limited Expected Value",
        "quote": "A **Limited Expected Value** of a loss $X$ at a limit $u$ is the expected value of the limited loss $X \\wedge u = \\min(X, u)$, which equals $X$ when $X \\le u$ and $u$ when $X > u$."
@@ -19224,7 +19290,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-218": {
    "path": "questions/exam-p/p-218.md",
@@ -20110,6 +20176,18 @@
      "places": [
       {
        "page": "Variance",
+       "quote": "$$\\text{Var}(X) = E[X^2] - (E[X])^2$$"
+      },
+      {
+       "page": "Moment",
+       "quote": "$$\\text{Var}(X) = E[X^2] - \\mu^2$$"
+      },
+      {
+       "page": "Standard Deviation",
+       "quote": "The variance is the second moment less the square of the mean:"
+      },
+      {
+       "page": "Variance",
        "quote": "Efficient computation formula: $\\text{Var}(X) = E[X^2] - \\mu^2$ where $\\mu = E[X]$"
       },
       {
@@ -20119,7 +20197,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-227": {
    "path": "questions/exam-p/p-227.md",
@@ -22564,6 +22642,14 @@
      "places": [
       {
        "page": "Moments for Linear Combinations",
+       "quote": "For constants $a$, $b$ and $c$, the variance of $aX + bY + c$ is"
+      },
+      {
+       "page": "Linear Combinations of Random Variables",
+       "quote": "The variance of $aX + bY + c$ is"
+      },
+      {
+       "page": "Moments for Linear Combinations",
        "quote": "$$\\text{Var}(W) = \\sum_{i=1}^n a_i^2 \\,\\text{Var}(X_i) + 2\\sum_{i < j} a_i a_j \\,\\text{Cov}(X_i, X_j)$$"
       },
       {
@@ -22615,7 +22701,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-254": {
    "path": "questions/exam-p/p-254.md",
@@ -23816,6 +23902,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Future Lifetime Random Variable",
+       "quote": "Capping the lifetime at $n$ years gives the term expectations $\\mathring{e}_{x:\\overline{n}|} = \\int_0^n {}_tp_x\\,dt$ and $e_{x:\\overline{n}|} = \\sum_{k=1}^n {}_kp_x$."
+      },
+      {
        "page": "Limited Expected Value",
        "quote": "$$E[X \\wedge u] = \\int_0^u [1 - F(x)]\\,dx \\quad \\text{(for non-negative } X\\text{)}$$"
       }
@@ -23847,7 +23937,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-269": {
    "path": "questions/exam-p/p-269.md",
@@ -25590,12 +25680,16 @@
      "places": [
       {
        "page": "Normal Approximation",
+       "quote": "The total must stay within $0.1n\\mu$ of its mean, which is 1.645 standard deviations."
+      },
+      {
+       "page": "Normal Approximation",
        "quote": "How many i.i.d. policies are needed so that total losses exceed 110% of expected with probability at most 5%?"
       }
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-299": {
    "path": "questions/exam-p/p-299.md",
@@ -28256,6 +28350,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Variance",
+       "quote": "- The new claim is $1.1X + 20$."
+      },
+      {
        "page": "Transformations of Random Variables",
        "quote": "A percentage increase $r$ on a random amount $X$ multiplies it by $1 + r$, and a flat amount $c$ adds to it, so the result is the linear transformation $Y = aX + b$."
       },
@@ -28320,7 +28418,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-329": {
    "path": "questions/exam-p/p-329.md",
@@ -29425,6 +29523,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Probability Density Function (PDF)",
+       "quote": "$$P(a \\leq X \\leq b) = \\int_a^b f(x)\\,dx$$"
+      },
+      {
+       "page": "Continuous Random Variable",
+       "quote": "$$P(a \\le X \\le b) = \\int_a^b f(x)\\,dx$$"
+      },
+      {
        "page": "Future Lifetime Random Variable",
        "quote": "${}_{u|t}q_x$ is the probability that $(x)$ survives $u$ years and then dies within the following $t$ years."
       },
@@ -29443,7 +29549,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-342": {
    "path": "questions/exam-p/p-342.md",
@@ -31546,6 +31652,14 @@
      "status": "missing",
      "places": [
       {
+       "page": "Conditional Probability",
+       "quote": "$P(E \\cap F) = \\frac{60}{1{,}000} = 0.06$ and $P(F) = \\frac{300}{1{,}000} = 0.30$."
+      },
+      {
+       "page": "Probability",
+       "quote": "If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $E$ is"
+      },
+      {
        "page": "Naive Bayes",
        "quote": "$\\pi_k$ is the prior probability of class $k$, estimated as the proportion of training observations in class $k$."
       }
@@ -31581,7 +31695,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-364": {
    "path": "questions/exam-p/p-364.md",
@@ -32260,6 +32374,10 @@
      "places": [
       {
        "page": "Quadratic Discriminant Analysis",
+       "quote": "Setting $\\delta_{\\text{A}}(x) = \\delta_{\\text{C}}(x)$ gives a quadratic equation in $x$.…Its roots are $x = 6.46$ and $x = 9.29$.…A claim is classified as attritional between 6.46 and 9.29, and as complex below 6.46 or above 9.29"
+      },
+      {
+       "page": "Quadratic Discriminant Analysis",
        "quote": "Setting $\\delta_{\\text{A}}(x) = \\delta_{\\text{C}}(x)$ gives a quadratic equation in $x$. … A claim is classified as attritional between 6.46 and 9.29, and as complex below 6.46 or above 9.29"
       },
       {
@@ -32357,7 +32475,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-372": {
    "path": "questions/exam-p/p-372.md",
@@ -34233,6 +34351,14 @@
      "status": "tagged",
      "places": [
       {
+       "page": "Permutation",
+       "quote": "When all $n$ objects are arranged, $k = n$ and the number of permutations is…$${}_{n}P_{n} = n!$$"
+      },
+      {
+       "page": "Probability",
+       "quote": "If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $E$ is…$$P(E) = \\frac{|E|}{|S|}$$"
+      },
+      {
        "page": "Combinatorics",
        "quote": "In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = |A| / |S|$ for uniform experiments"
       }
@@ -34301,7 +34427,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-390": {
    "path": "questions/exam-p/p-390.md",
@@ -36093,6 +36219,10 @@
      "places": [
       {
        "page": "Exponential Distribution",
+       "quote": "So the cumulative distribution function is $F(x) = 1 - e^{-x/\\theta}$, and $P(a < X < b) = e^{-a/\\theta} - e^{-b/\\theta}$."
+      },
+      {
+       "page": "Exponential Distribution",
        "quote": "Work from the survival function $S(x) = e^{-x/\\theta}$ rather than the CDF; almost every exponential question is a tail probability"
       }
      ]
@@ -36145,7 +36275,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-408": {
    "path": "questions/exam-p/p-408.md",
@@ -39893,6 +40023,14 @@
      "places": [
       {
        "page": "Deductible",
+       "quote": "If the loss is at most $d$, the insurer pays nothing, and above $d$ it pays the excess $X - d$."
+      },
+      {
+       "page": "Loss Random Variable",
+       "quote": "Losses at or below the deductible produce no payment, and larger losses are reduced by $d$."
+      },
+      {
+       "page": "Deductible",
        "quote": "If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$"
       }
      ]
@@ -39904,6 +40042,10 @@
      "concept": "Order Statistics",
      "status": "tagged",
      "places": [
+      {
+       "page": "Order Statistics",
+       "quote": "The maximum is at most $x$ exactly when every observation is at most $x$, and the minimum is above $x$ exactly when every observation is above $x$."
+      },
       {
        "page": "Order Statistics",
        "quote": "P\\bigl(X_{(n)} \\le x\\bigr) = F_1(x)\\,F_2(x)\\cdots F_n(x)"
@@ -39923,6 +40065,14 @@
      "places": [
       {
        "page": "Order Statistics",
+       "quote": "$$P(X_{(n)} \\le x) = F_1(x)\\,F_2(x) \\cdots F_n(x)$$"
+      },
+      {
+       "page": "Independent Random Variables",
+       "quote": "Then the probability that a condition on $X$ and a condition on $Y$ both hold is the product of their probabilities, such as $P(X \\le 1)\\,P(Y > 2)$."
+      },
+      {
+       "page": "Order Statistics",
        "quote": "$$P\\bigl(X_{(n)} \\le x\\bigr) = F_1(x)\\,F_2(x)\\cdots F_n(x)$$"
       },
       {
@@ -39937,7 +40087,12 @@
      "statement": "A payment after a deductible has a point mass at zero equal to P[X ≤ d], so its distribution is mixed, and for t ≥ 0 the event {payment ≤ t} equals {X ≤ d + t}.",
      "concept": "Ordinary Deductible",
      "status": "missing",
-     "places": [],
+     "places": [
+      {
+       "page": "Loss Random Variable",
+       "quote": "the payment exceeds $t$ exactly when the loss exceeds $d + t/\\alpha$:"
+      }
+     ],
      "resolution": {
       "kind": "taught",
       "page": "Payment Random Variable",
@@ -39956,11 +40111,16 @@
      "places": [
       {
        "page": "Uniform Continuous Distribution",
+       "quote": "The cumulative distribution function is $F(x) = (x - a)/(b - a)$ for $a < x < b$."
+      },
+      {
+       "page": "Uniform Continuous Distribution",
        "quote": "$F(x) = (x-a)/(b-a)$ for $a < x < b$"
       }
      ]
     }
-   ]
+   ],
+   "relocated": "relocate-20261113-p-2"
   },
   "p-449": {
    "path": "questions/exam-p/p-449.md",
@@ -40378,6 +40538,10 @@
      "places": [
       {
        "page": "Transformations of Random Variables",
+       "quote": "The event $g(X) \\le y$ is rewritten as a set of values of $X$ by inverting $g$, and its probability is found from the cdf $F_X$ of $X$. When $g$ is decreasing, inverting it reverses the inequality. The [[Probability Density Function (PDF)|density]] of $Y$ is the derivative of its cdf, $f_Y(y) = F_Y'(y)$."
+      },
+      {
+       "page": "Transformations of Random Variables",
        "quote": "The event $g(X) \\le y$ is rewritten as a set of values of $X$ by inverting $g$, and its probability is found from the cdf $F_X$ of $X$."
       },
       {
@@ -40462,7 +40626,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-454": {
    "path": "questions/exam-p/p-454.md",
@@ -44928,6 +45092,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Event",
+       "quote": "\"At least 4\" is $\\{4, 5, 6\\}$, but \"more than 4\" is $\\{5, 6\\}$."
+      },
+      {
+       "page": "Discrete Univariate Distributions",
+       "quote": "- 3 is the largest value, so $f(3) = P(X \\ge 3) = 0.10$."
+      },
+      {
        "page": "Predictive Distribution",
        "quote": "$P(N \\ge 2) = 1 - 0.4019 - 0.3349 = 0.2632$."
       },
@@ -44942,7 +45114,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-502": {
    "path": "questions/exam-p/p-502.md",
@@ -45002,7 +45174,16 @@
      "statement": "For an exponential distribution, the survival probability over a multiple of a length equals the survival probability over that length raised to that multiple, since e^{-kλx} = (e^{-λx})^k (memoryless property).",
      "concept": "Exponential Distribution",
      "status": "missing",
-     "places": [],
+     "places": [
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$P(X > x) = e^{-x/\\theta}$$"
+      },
+      {
+       "page": "Exponential Distribution",
+       "quote": "$$P(X > s + t \\mid X > s) = P(X > t)$$"
+      }
+     ],
      "resolution": {
       "kind": "taught",
       "page": "Exponential Distribution",
@@ -45013,7 +45194,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-503": {
    "path": "questions/exam-p/p-503.md",
@@ -45100,6 +45281,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Coinsurance Percentage",
+       "quote": "The insured pays the deductible and the remaining share $1 - \\alpha$ of the excess."
+      },
+      {
        "page": "Coinsurance",
        "quote": "the insurer pays a fixed percentage $c$ ($0 < c \\leq 1$) of the covered loss, with the policyholder responsible for the remaining fraction $1 - c$."
       },
@@ -45173,7 +45358,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-505": {
    "path": "questions/exam-p/p-505.md",
@@ -46219,6 +46404,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Probability Density Function (PDF)",
+       "quote": "A density given up to a constant, $f(x) = c\\,g(x)$, is completed by solving this equation for $c$."
+      },
+      {
        "page": "Joint Probability Density Function",
        "quote": "A valid joint density satisfies"
       },
@@ -46300,7 +46489,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-516": {
    "path": "questions/exam-p/p-516.md",
@@ -48263,6 +48452,10 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Coinsurance Percentage",
+       "quote": "The insured pays the deductible and the remaining share $1 - \\alpha$ of the excess."
+      },
+      {
        "page": "Coinsurance",
        "quote": "**Coinsurance** is a policy provision under which the insurer pays a fixed percentage $c$ ($0 < c \\leq 1$) of the covered loss, with the policyholder responsible for the remaining fraction $1 - c$."
       }
@@ -48315,7 +48508,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-536": {
    "path": "questions/exam-p/p-536.md",
@@ -51303,6 +51496,10 @@
      "places": [
       {
        "page": "Variance",
+       "quote": "Rearranged, the second moment is the variance plus the square of the mean."
+      },
+      {
+       "page": "Variance",
        "quote": "Efficient computation formula: $\\text{Var}(X) = E[X^2] - \\mu^2$ where $\\mu = E[X]$"
       }
      ]
@@ -51325,7 +51522,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-568": {
    "path": "questions/exam-p/p-568.md",
@@ -52443,6 +52640,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Conditional Probability",
+       "quote": "The complement rule still holds inside the condition: $P(X \\le b \\mid X > a) = 1 - P(X > b \\mid X > a)$."
+      },
+      {
+       "page": "Survival Model",
+       "quote": "The probability that the lifetime ends in an interval $(a, b]$ is $P(a < X \\le b) = S(a) - S(b)$."
+      },
+      {
        "page": "Survival Model",
        "quote": "$$P(a < X \\le b \\mid X > x) = \\frac{S(a) - S(b)}{S(x)}$$"
       },
@@ -52503,7 +52708,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-580": {
    "path": "questions/exam-p/p-580.md",
@@ -56875,6 +57080,14 @@
      "status": "elsewhere",
      "places": [
       {
+       "page": "Conditional Probability",
+       "quote": "When $P(E \\mid F) = P(E)$, knowing $F$ changes nothing, and $E$ and $F$ are [[Independent Events|independent]]."
+      },
+      {
+       "page": "Independent Events",
+       "quote": "**Independent Events** are [[Event|events]] for which knowing that one occurred does not change the [[Probability|probability]] of the other."
+      },
+      {
        "page": "Predictive Distribution",
        "quote": "Verrall (2007) calls loss reserving a predictive process"
       },
@@ -56968,7 +57181,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-626": {
    "path": "questions/exam-p/p-626.md",
@@ -61732,6 +61945,14 @@
      "status": "tagged",
      "places": [
       {
+       "page": "Poisson Distribution",
+       "quote": "The mean and the variance of a Poisson random variable are both $\\lambda$:"
+      },
+      {
+       "page": "Poisson Distribution",
+       "quote": "$$E[X] = \\text{Var}(X) = \\lambda$$"
+      },
+      {
        "page": "Frequency Distribution",
        "quote": "Every member has $E[N] = (a+b)/(1-a)$ and $\\text{Var}(N) = (a+b)/(1-a)^2$, which give $\\lambda$ and $\\lambda$ for the Poisson"
       },
@@ -61763,7 +61984,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-676": {
    "path": "questions/exam-p/p-676.md",
@@ -62180,6 +62401,10 @@
      "status": "tagged",
      "places": [
       {
+       "page": "Exponential Distribution",
+       "quote": "So the cumulative distribution function is $F(x) = 1 - e^{-x/\\theta}$, and $P(a < X < b) = e^{-a/\\theta} - e^{-b/\\theta}$.…So given $X > d$, the excess $X - d$ is again exponential with mean $\\theta$."
+      },
+      {
        "page": "Percentile",
        "quote": "1 - e^{-(y + 1{,}000)/5{,}000} &= 0.90"
       }
@@ -62232,7 +62457,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-901": {
    "path": "questions/exam-p/p-901.md",
@@ -64296,6 +64521,10 @@
      "status": "linked",
      "places": [
       {
+       "page": "Combination",
+       "quote": "$\\binom{8}{3} = \\frac{8!}{3!\\,5!} = \\frac{8 \\times 7 \\times 6}{3 \\times 2 \\times 1} = 56$"
+      },
+      {
        "page": "Permutation",
        "quote": "$$= n \\times (n-1) \\times \\cdots \\times (n-k+1)$$"
       }
@@ -64350,7 +64579,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-930": {
    "path": "questions/exam-p/p-930.md",
@@ -64658,6 +64887,10 @@
      "places": [
       {
        "page": "Compound Poisson Process",
+       "quote": "Because $E[N(t)] = \\text{Var}(N(t)) = \\lambda t$, the variance of a compound Poisson process simplifies to"
+      },
+      {
+       "page": "Compound Poisson Process",
        "quote": "$$\\text{Var}(S(t)) = \\lambda t\\, E[X^2]$$"
       },
       {
@@ -64742,7 +64975,7 @@
      ]
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-934": {
    "path": "questions/exam-p/p-934.md",
@@ -64873,6 +65106,10 @@
      "places": [
       {
        "page": "Survival Model",
+       "quote": "Survival probabilities over consecutive periods multiply. The probability that $(x)$ survives $s + t$ years is"
+      },
+      {
+       "page": "Survival Model",
        "quote": "$${}_{s+t}p_x = {}_sp_x \\; {}_tp_{x+s}$$"
       }
      ],
@@ -64892,6 +65129,14 @@
      "concept": "Expected Present Value of a Life Annuity",
      "status": "elsewhere",
      "places": [
+      {
+       "page": "Life Annuity",
+       "quote": "$$\\ddot{a}_x = \\sum_{k=0}^{\\infty} v^k\\,{}_kp_x$$"
+      },
+      {
+       "page": "Life Annuity",
+       "quote": "A deferred annuity pays only if $(x)$ survives to the deferral age, so it carries the survival probability as well as the discount."
+      },
       {
        "page": "Life Annuity",
        "quote": "${}_kp_x$ is the probability that $(x)$ survives $k$ years, when the payment at time $k$ is made."
@@ -64951,7 +65196,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-936": {
    "path": "questions/exam-p/p-936.md",
@@ -65345,6 +65590,10 @@
      "places": [
       {
        "page": "Mixture Distribution",
+       "quote": "The second moment is $E[X^2] = 0.7 \\times 2{,}000{,}000 + 0.3 \\times 16{,}000{,}000 = 6{,}200{,}000$."
+      },
+      {
+       "page": "Mixture Distribution",
        "quote": "The $k$th raw moment of a mixture is the weighted average of the components' raw moments:"
       },
       {
@@ -65391,7 +65640,7 @@
      }
     }
    ],
-   "relocated": "relocate-20261113-p"
+   "relocated": "relocate-20261113-p-2"
   },
   "p-941": {
    "path": "questions/exam-p/p-941.md",

@@ -18,6 +18,14 @@
 //       A clip is out of date when its page's script has changed, or it was
 //       made with another voice. The index lists only clips current with the
 //       vault this runs on, so a page's old recording drops out of it.
+//       Then prunes (below) — skipped with --no-prune or --dry-run.
+//
+//   node scripts/podcast-segments.mjs prune [--grace-hours 24] [--local] [--dry-run]
+//       Delete the audio the index no longer names. A clip outside the index
+//       is first marked in retired.json with the time it was seen there, and
+//       deleted by a later run once it has been out for the grace period, so a
+//       reader whose episode was planned off a recent index still gets every
+//       clip it names. A clip back in the index is unmarked.
 //
 // Providers:
 //   kokoro      Kokoro-82M via scripts/podcast_tts_kokoro.py (kokoro-onnx on the
@@ -51,6 +59,8 @@ const VAULT = path.resolve(ROOT, '..')
 const LOCAL_DIR = path.join(ROOT, 'public', 'podcast')
 const BUCKET = 'podcast'
 const PLAN_DAYS_AHEAD = 7
+const RETIRED = 'retired.json'
+const DEFAULT_GRACE_HOURS = 24
 
 // ── The app's own code ──────────────────────────────────────────────────────
 
@@ -139,6 +149,16 @@ function storage(local) {
         await mkdir(path.dirname(target), { recursive: true })
         await writeFile(target, body)
       },
+      async readJson(file) {
+        return JSON.parse(await readFile(path.join(LOCAL_DIR, file), 'utf8').catch(() => 'null'))
+      },
+      async listAudio() {
+        const files = await readdir(LOCAL_DIR, { recursive: true }).catch(() => [])
+        return files.map(f => f.split(path.sep).join('/')).filter(f => f.endsWith('.mp3'))
+      },
+      async remove(files) {
+        for (const f of files) await rm(path.join(LOCAL_DIR, f), { force: true })
+      },
     }
   }
   const base = (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '').replace(/\/+$/, '')
@@ -166,7 +186,78 @@ function storage(local) {
       })
       if (!res.ok) throw new Error(`Upload of ${file} failed: ${res.status} ${await res.text()}`)
     },
+    async readJson(file) {
+      const res = await fetch(`${base}/storage/v1/object/${BUCKET}/${file}?t=${Date.now()}`, { headers: authHeaders(key) })
+      return res.ok ? res.json() : null
+    },
+    // Storage lists one folder at a time; a folder comes back with no id.
+    async listAudio(prefix = '') {
+      const files = []
+      for (let offset = 0; ; offset += 1000) {
+        const res = await fetch(`${base}/storage/v1/object/list/${BUCKET}`, {
+          method: 'POST',
+          headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prefix, limit: 1000, offset, sortBy: { column: 'name', order: 'asc' } }),
+        })
+        if (!res.ok) throw new Error(`Listing ${prefix || 'the bucket'} failed: ${res.status} ${await res.text()}`)
+        const page = await res.json()
+        for (const item of page) {
+          const full = prefix ? `${prefix}/${item.name}` : item.name
+          if (item.id == null) files.push(...await this.listAudio(full))
+          else if (full.endsWith('.mp3')) files.push(full)
+        }
+        if (page.length < 1000) return files
+      }
+    },
+    async remove(files) {
+      for (let i = 0; i < files.length; i += 500) {
+        const res = await fetch(`${base}/storage/v1/object/${BUCKET}`, {
+          method: 'DELETE',
+          headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prefixes: files.slice(i, i + 500) }),
+        })
+        if (!res.ok) throw new Error(`Delete failed: ${res.status} ${await res.text()}`)
+      }
+    },
   }
+}
+
+/**
+ * Which audio files to delete, and the retired list to keep: a file outside
+ * `live` is marked at `now` the first time it is seen, and deleted once it
+ * has been marked for `graceMs`. Marks for files back in `live`, or gone, drop.
+ */
+export function planPrune(files, live, retired, now, graceMs) {
+  const keep = {}
+  const remove = []
+  for (const file of files) {
+    if (live.has(file)) continue
+    const since = Date.parse(retired?.[file] ?? '')
+    if (Number.isNaN(since)) keep[file] = new Date(now).toISOString()
+    else if (now - since >= graceMs) remove.push(file)
+    else keep[file] = retired[file]
+  }
+  return { remove, retired: keep }
+}
+
+async function prune(app, flags, store = storage(Boolean(flags.local))) {
+  const graceHours = Number(flags['grace-hours'] ?? DEFAULT_GRACE_HOURS)
+  if (!(graceHours >= 0)) throw new Error('--grace-hours must be a number of hours.')
+  const index = app.parsePodcastIndex(await store.readIndex())
+  // No index read means nothing can be called live — never prune blind.
+  if (!index) { console.log('Prune: no index to prune against; skipped.'); return }
+  const live = new Set(Object.values(index).map(clip => clip.a))
+  const files = await store.listAudio()
+  const { remove, retired } = planPrune(files, live, await store.readJson(RETIRED), Date.now(), graceHours * 3_600_000)
+  const waiting = Object.keys(retired).length
+  console.log(`Prune: ${files.length} audio file(s), ${live.size} in the index, ${remove.length} to delete, ${waiting} waiting out the ${graceHours} h grace.`)
+  if (flags['dry-run']) {
+    for (const f of remove) console.log(`  ${f}`)
+    return
+  }
+  // Mark before deleting, so a failed delete is retried rather than re-marked.
+  await store.put(RETIRED, JSON.stringify(retired) + '\n', 'application/json')
+  if (remove.length) await store.remove(remove)
 }
 
 // ── What the plans need ─────────────────────────────────────────────────────
@@ -331,7 +422,11 @@ async function sync(app, flags) {
   const writeIndex = async () => {
     await store.put('index.json', JSON.stringify(app.podcastIndexFile(kept)) + '\n', 'application/json')
   }
-  if (todo.length === 0) { if (dropped) await writeIndex(); return }
+  if (todo.length === 0) {
+    if (dropped) await writeIndex()
+    if (!flags['no-prune']) await prune(app, flags, store)
+    return
+  }
 
   const voice = provider === 'kokoro' ? await kokoroVoice() : elevenLabsVoice(modelName)
   const tmp = await mkdtemp(path.join(os.tmpdir(), 'podcast-clip-'))
@@ -367,6 +462,7 @@ async function sync(app, flags) {
   }
   console.log(`Recorded ${made} clip(s) into ${store.where}${failed ? `, ${failed} failed` : ''}; the index lists ${Object.keys(kept).length}.`)
   if (failed && made === 0) process.exitCode = 1
+  if (!flags['no-prune']) await prune(app, flags, store)
 }
 
 async function main() {
@@ -383,11 +479,12 @@ async function main() {
     return
   }
   if (command === 'sync') return sync(app, flags)
-  console.log('Usage: podcast-segments.mjs script "<Concept>" [--refresher] | sync [--plans] [--concepts "A,B"] [--all] [--local] [--dry-run]')
+  if (command === 'prune') return prune(app, flags)
+  console.log('Usage: podcast-segments.mjs script "<Concept>" [--refresher] | sync [--plans] [--concepts "A,B"] [--all] [--local] [--dry-run] [--no-prune] | prune [--grace-hours 24] [--local] [--dry-run]')
   process.exitCode = 1
 }
 
-main().catch(err => {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(err => {
   console.error(err.message ?? err)
   process.exitCode = 1
 })

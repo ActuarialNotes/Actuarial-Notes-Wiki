@@ -81,6 +81,12 @@ Listen's rule, kept twice over:
 - **The index lists only current clips.** Each `sync` drops from `index.json` every clip whose
   page's script has changed, whose page is gone, or that was made in another voice, before
   recording anything. The email reads the index alone, so it never counts a stale clip.
+- **What the index drops is deleted a day later.** A clip's name holds its script's hash, so an
+  edited page leaves its old recording behind. Each `sync` ends with a prune (`prune` runs it on
+  its own; `--no-prune` skips it): audio the index doesn't name is marked in the bucket's
+  `retired.json` the first time it is seen there, and deleted by a later run once it has been out
+  for 24 hours (`--grace-hours`), so an episode planned off a recent index still finds every clip.
+  Without it the bucket outgrew Supabase's free 1 GB on old clips alone.
 - **The app checks again.** The build carries every page's script hashes
   (`virtual:podcast-scripts`, ~60 KB, its own chunk), and `isCurrentClip` rejects a clip made
   from any other script — so a deploy that edits a page silences that concept's clip at once,

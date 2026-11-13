@@ -57,3 +57,25 @@ then the total number of outcomes is
 
 > [!example]- If you have 5 shirts and 4 pairs of pants, how many outfits can you create? {Example}
 > - There are $5 \times 4 = 20$ different outfits.
+
+## Derangements
+
+A **derangement** is a permutation of $n$ items with no fixed point: no item stays in its original position. The number of derangements of $n$ items is written $D_n$. By [[Inclusion-Exclusion Principle|inclusion-exclusion]] over the items that stay in place, it is
+
+> $$D_n = n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}$$
+
+The probability that a random permutation of $n$ items has no fixed point is $D_n/n!$.
+
+> [!example]- Four letters are put at random into their four addressed envelopes. What is the probability that no letter is in its own envelope? {Example}
+> - The number of derangements is $D_4 = 4!\left(1 - 1 + \tfrac{1}{2} - \tfrac{1}{6} + \tfrac{1}{24}\right) = 9$.
+> - There are $4! = 24$ ways to fill the envelopes.
+> - The probability is $9/24 = 0.375$.
+
+## Symmetry in a random arrangement
+
+In a uniformly random seating or ordering, each person is equally likely to be in any position. So one person's position can be fixed without loss of generality; another given person is then equally likely to occupy each of the remaining positions.
+
+> [!example]- Five people sit at random in a row of five seats. What is the probability that Ann and Bob sit next to each other? {Example}
+> - Fix Ann's seat. Bob is equally likely to be in each of the other 4 seats.
+> - If Ann is at an end (probability $\tfrac{2}{5}$), 1 of Bob's 4 seats is next to her. If Ann is in the middle three (probability $\tfrac{3}{5}$), 2 of them are.
+> - The probability is $\tfrac{2}{5} \times \tfrac{1}{4} + \tfrac{3}{5} \times \tfrac{2}{4} = \tfrac{8}{20} = 0.4$.

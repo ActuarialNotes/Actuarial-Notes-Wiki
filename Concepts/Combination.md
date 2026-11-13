@@ -69,5 +69,21 @@ Adding $\binom{n}{k}$ over every size $k$ counts every subset of $n$ objects, be
 > - Each subset of the 10 predictors is one model, including the model with none of them.
 > - There are $2^{10} = 1{,}024$ models.
 
+## Pascal's rule
+
+Choosing $k$ objects from $n + 1$ either leaves out one fixed object or includes it. For $1 \le k \le n$, the number of combinations is therefore
+
+> $$\binom{n+1}{k} = \binom{n}{k} + \binom{n}{k-1}$$
+
+## The hockey-stick identity
+
+Pascal's rule written as $\binom{m}{k} = \binom{m+1}{k+1} - \binom{m}{k+1}$ makes a sum of combinations with the same $k$ telescope, since $\binom{k}{k+1} = 0$. For $k \le n$, the sum is
+
+> $$\sum_{m=k}^{n}\binom{m}{k} = \binom{n+1}{k+1}$$
+
+> [!example]- What is $\binom{2}{2} + \binom{3}{2} + \binom{4}{2} + \binom{5}{2} + \binom{6}{2}$? {Example}
+> - The terms are $1 + 3 + 6 + 10 + 15 = 35$.
+> - By the identity with $k = 2$ and $n = 6$, the sum is $\binom{7}{3} = 35$.
+
 > [!trap] Roles make it a permutation
 > When the selected objects get distinct roles, the order matters. Choosing a president, a secretary and a treasurer from 8 people is ${}_{8}P_{3} = 336$, not $\binom{8}{3} = 56$.

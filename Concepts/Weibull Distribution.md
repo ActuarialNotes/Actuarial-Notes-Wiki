@@ -69,6 +69,14 @@ Setting $F(x) = U$ for a uniform random number $U$ and solving for $x$ gives the
 > - $-\ln(1 - 0.6) = 0.9163$.
 > - $x = 2{,}000 \times 0.9163^{2} = 1{,}679.18$.
 
+## Checking a Weibull fit graphically
+
+Taking logarithms of the survival function $S(x) = e^{-(x/\theta)^{\tau}}$ twice gives a straight line in $\ln x$:
+
+> $$\ln[-\ln S(x)] = \tau\ln x - \tau\ln\theta$$
+
+To check a Weibull fit graphically, plot $\ln[-\ln S_n(x)]$ against $\ln x$, where $S_n$ is the empirical survival function. Data from a Weibull distribution lie close to a straight line whose slope estimates the shape $\tau$ and whose intercept is $-\tau\ln\theta$. A slope near 1 points to the exponential.
+
 ## Minimum of independent Weibull random variables
 
 If $X_1, \ldots, X_n$ are independent and each is Weibull with parameters $\theta$ and $\tau$, then $P(\min X_i > x) = e^{-n(x/\theta)^{\tau}}$. The minimum is Weibull with shape $\tau$ and scale

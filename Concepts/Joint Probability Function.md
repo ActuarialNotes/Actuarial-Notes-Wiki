@@ -69,6 +69,8 @@ The probability that $X + Y$ equals $s$ adds the pairs whose values add to $s$:
 > - The pairs that add to 2 are $(0, 2)$ and $(1, 1)$.
 > - $P(X + Y = 2) = 0.05 + 0.20 = 0.25$.
 
+The distribution of a difference is found the same way: list every pair, and add the probabilities of the pairs whose values differ by $d$. For independent $X$ and $Y$, each pair's probability is the product $f(x, y) = P(X = x)\,P(Y = y)$.
+
 ## A joint probability function given by a formula
 
 When $f(x, y)$ is a formula with an unknown constant, the constant makes the values over the support add to 1. Only the pairs in the support are added.

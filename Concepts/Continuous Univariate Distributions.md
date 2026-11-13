@@ -48,6 +48,18 @@ The [[Cumulative Distribution Function (CDF)|cumulative distribution function]] 
 > - $F(3) = \frac{9}{16} = 0.5625$.
 > - $S(3) = 1 - 0.5625 = 0.4375$.
 
+## Symmetric densities
+
+A density symmetric about $m$ satisfies
+
+> $$f(m + x) = f(m - x)$$
+
+So the density on one side of $m$ is the mirror image of the density on the other. Exactly half the probability lies on each side, $P(X \le m) = P(X \ge m) = \tfrac{1}{2}$, so $m$ is the median.
+
+> [!example]- $X$ has a density symmetric about 4, and $P(4 < X \le 5) = 0.3$. What is the 80th percentile of $X$? {Example}
+> - Half the probability lies below 4, so $P(X \le 5) = 0.5 + 0.3 = 0.8$.
+> - The 80th percentile is 5.
+
 ## Named continuous distributions
 
 Each named distribution fits a different kind of quantity:

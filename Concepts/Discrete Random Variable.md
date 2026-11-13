@@ -39,6 +39,8 @@ The probability of an event is the sum of $f$ over the values in it. The [[Cumul
 
 Each value carries its own probability, so whether an endpoint is included matters: $P(X \le k) = P(X < k) + f(k)$.
 
+For an integer-valued $X$ and a number $x$ that is not an integer, $P(X > x) = P(X \ge \lceil x \rceil)$, where $\lceil x \rceil$ is the next integer above $x$. More claims than a mean of 0.6 means at least 1 claim.
+
 > [!example]- For the claim count above, what are the probabilities of fewer than 2 claims and of at least 2 claims? {Example}
 > - "Fewer than 2" is $X \le 1$, so its probability is $F(1) = 0.60 + 0.25$, which is $0.85$.
 > - "At least 2" is its complement, $1 - 0.85 = 0.15$.

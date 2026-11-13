@@ -819,10 +819,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Joint Probability Function",
-      "quote": "The probability of any event about the pair is the sum of the joint PMF over every pair",
-      "note": "passage on Joint Probability Function (Exam P prerequisite): an event about (X, Y) has probability the sum of the joint PMF over its pairs, with the joint PMF the product of marginals under independence (Independent Random Variables); the check's miss.",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "The distribution of a difference is found the same way: list every pair, and add the probabilities of the pairs whose values differ by $d$. For independent $X$ and $Y$, each pair's probability is the product $f(x, y) = P(X = x)\\,P(Y = y)$.",
+      "note": "Added to The distribution of a sum",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -1817,7 +1817,15 @@
        "page": "Bias",
        "quote": "**Bias** is the systematic error of an estimator: the difference between its expected value and the parameter it estimates."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bias",
+      "quote": "\\text{Bias}(\\hat{\\theta}) = E[\\hat{\\theta}] - \\theta",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     }
    ]
   },
@@ -7370,7 +7378,15 @@
        "page": "Joint Life",
        "quote": "Relationship: $T_{xy} + T_{\\overline{xy}} = T_x + T_y$, so $\\mathring{e}_{xy} + \\mathring{e}_{\\overline{xy}} = \\mathring{e}_x + \\mathring{e}_y$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Joint Life",
+      "quote": "For any two lifetimes, $\\min(T_x, T_y) + \\max(T_x, T_y) = T_x + T_y$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r5",
@@ -9179,7 +9195,15 @@
        "page": "Bias",
        "quote": "$$\\text{Bias}(\\hat\\theta) = E[\\hat\\theta] - \\theta$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Bias",
+      "quote": "\\text{Bias}(\\hat{\\theta}) = E[\\hat{\\theta}] - \\theta",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     }
    ],
    "relocated": "relocate-20261113-mas-i"
@@ -20787,10 +20811,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Weibull Distribution",
-      "quote": "To check a Weibull fit graphically, plot $\\ln[-\\ln S_n(x)]$ against $\\ln x$",
-      "note": "written from NIST/SEMATECH e-Handbook 8.2.2.1 Weibull probability plotting, https://www.itl.nist.gov/div898/handbook/apr/section2/apr221.htm; checked by g8-masi-check-A1-2026-10-30",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "To check a Weibull fit graphically, plot $\\ln[-\\ln S_n(x)]$ against $\\ln x$, where $S_n$ is the empirical survival function. Data from a Weibull distribution lie close to a straight line whose slope estimates the shape $\\tau$ and whose intercept is $-\\tau\\ln\\theta$.",
+      "note": "Restored: new Checking a Weibull fit graphically section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],

@@ -49,8 +49,21 @@ export type PodcastScriptHashes = Record<string, [string | null, string | null]>
 // isn't there. Compact on purpose — the Dashboard reads it to put the
 // episode's length on its button:
 //
-//   { "v": 1, "voices": [["af_heart", "kokoro-82m"]],
-//     "clips": { "brief/bayes-theorem": ["1x2y3z", 71.4, 571392, 0], … } }
+//   { "v": 1, "format": "mp3-24k-32k", "voices": [["af_heart", "kokoro-82m"]],
+//     "clips": { "brief/bayes-theorem": ["1x2y3z", 71.4, 285600, 0], … } }
+//
+// `format` is how every clip is encoded. An index in another format names
+// files this app can't join with the rest, so it reads as no index at all —
+// and the recorder, finding it, records everything again in the new format.
+
+/**
+ * Every clip: CBR MP3, mono, 24 kHz (Kokoro's own rate), 32 kb/s — clear for
+ * speech at half the size of 64 kb/s. No ID3 tag and no Xing header, so clips
+ * join byte for byte, and a clip's length is exact from its size: at 24 kHz
+ * and 32 kb/s every frame is 96 bytes with no padding.
+ */
+export const PODCAST_AUDIO_FORMAT = 'mp3-24k-32k'
+export const PODCAST_AUDIO_BITRATE = 32_000
 
 export interface PodcastClip {
   /** Hash of the script the clip was recorded from. */
@@ -59,7 +72,7 @@ export interface PodcastClip {
   a: string
   /** Seconds. */
   d: number
-  /** Bytes (every clip is CBR 64 kb/s mono MP3, so clips join byte for byte). */
+  /** Bytes (every clip is PODCAST_AUDIO_FORMAT, so clips join byte for byte). */
   b: number
   /** Voice and engine, e.g. `af_heart` / `kokoro-82m`. */
   voice: string
@@ -68,14 +81,15 @@ export interface PodcastClip {
 
 export interface PodcastIndexFile {
   v: 1
+  format: string
   voices: Array<[string, string]>
   clips: Record<string, [string, number, number, number]>
 }
 
 export function parsePodcastIndex(raw: unknown): Record<string, PodcastClip> | null {
   if (!raw || typeof raw !== 'object') return null
-  const r = raw as { v?: unknown; voices?: unknown; clips?: unknown }
-  if (r.v !== 1 || !Array.isArray(r.voices) || !r.clips || typeof r.clips !== 'object') return null
+  const r = raw as { v?: unknown; format?: unknown; voices?: unknown; clips?: unknown }
+  if (r.v !== 1 || r.format !== PODCAST_AUDIO_FORMAT || !Array.isArray(r.voices) || !r.clips || typeof r.clips !== 'object') return null
   const voices = r.voices as unknown[]
   const clips: Record<string, PodcastClip> = {}
   for (const [key, value] of Object.entries(r.clips as Record<string, unknown>)) {
@@ -100,12 +114,15 @@ export function podcastIndexFile(clips: Record<string, PodcastClip>): PodcastInd
     if (v < 0) v = voices.push([c.voice, c.model]) - 1
     out[key] = [c.h, Math.round(c.d * 100) / 100, c.b, v]
   }
-  return { v: 1, voices, clips: out }
+  return { v: 1, format: PODCAST_AUDIO_FORMAT, voices, clips: out }
 }
 
-/** `brief/bayes-theorem-<hash>-af-heart.mp3` — a new script or voice is a new URL. */
+/**
+ * `brief/bayes-theorem-<hash>-af-heart-32k.mp3` — a new script, voice or
+ * format is a new URL (audio is cached for a year under its name).
+ */
 export function clipAudioFile(key: string, hash: string, voice: string): string {
-  return `${key}-${hash}-${podcastSlug(voice)}.mp3`
+  return `${key}-${hash}-${podcastSlug(voice)}-${PODCAST_AUDIO_BITRATE / 1000}k.mp3`
 }
 
 /** Whether a recording was made from the script the vault has now. */

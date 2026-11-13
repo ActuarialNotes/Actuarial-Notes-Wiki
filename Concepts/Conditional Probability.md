@@ -56,6 +56,16 @@ If every outcome of $E$ is also in $F$, $E \subseteq F$, then $E \cap F = E$, an
 > - Let $E = \{6\}$ and $F = \{4, 5, 6\}$, so $E \subseteq F$.
 > - $P(E \mid F) = \frac{1/6}{3/6} = \frac{1}{3}$.
 
+## The rules of probability given an event
+
+Given $F$, conditional probabilities follow the same rules as probabilities. For [[Mutually Exclusive Events|mutually exclusive]] events $E_1$ and $E_2$, the probability of their union given $F$ is the sum of their conditional probabilities given $F$:
+
+> $$P(E_1 \cup E_2 \mid F) = P(E_1 \mid F) + P(E_2 \mid F)$$
+
+> [!example]- Among policyholders with a claim, 30% are young, 50% are middle-aged and 20% are older. What is the probability that a policyholder with a claim is not middle-aged? {Example}
+> - The age classes are mutually exclusive.
+> - $P(\text{young or older} \mid \text{claim}) = 0.30 + 0.20 = 0.50$.
+
 ## Conditioning on a random variable
 
 A condition on a [[Random Variable|random variable]] $X$ is an event such as $\{X > a\}$. For $b > a$, the event $\{X > b\}$ is contained in $\{X > a\}$, so

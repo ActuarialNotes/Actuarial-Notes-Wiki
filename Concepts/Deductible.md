@@ -102,6 +102,14 @@ Every loss of $d$ or more is kept at $d$.
 > - The policyholder keeps 100 on the loss of 100, and 200 on each larger loss, so it expects $0.3(100) + 0.3(200) = 90$.
 > - The two add to the expected loss, $E[X] = 210$.
 
+To find the deductible that gives a target expected payment on a discrete loss, solve piecewise: assume $d$ lies between two consecutive loss amounts, keep only the losses above it, solve for $d$, and check that the answer lies in the assumed range. If it doesn't, reject that case and try the next range.
+
+> [!example]- A loss is 0, 100, 400 or 1,000 with probabilities 0.4, 0.3, 0.2 and 0.1. What deductible makes the expected payment per loss 100? {Example}
+> - If $0 \le d < 100$, the losses of 100, 400 and 1,000 pay, so $0.3(100 - d) + 0.2(400 - d) + 0.1(1{,}000 - d) = 210 - 0.6d$.
+> - Setting $210 - 0.6d = 100$ gives $d = 183.33$, which is not below 100, so this case is rejected.
+> - If $100 \le d < 400$, only the losses of 400 and 1,000 pay, so $0.2(400 - d) + 0.1(1{,}000 - d) = 180 - 0.3d$.
+> - Setting $180 - 0.3d = 100$ gives $d = 266.67$, which lies in the range, so the deductible is 266.67.
+
 ## A deductible under inflation
 
 When every loss rises by a rate $r$ and the deductible stays at $d$, the payment is

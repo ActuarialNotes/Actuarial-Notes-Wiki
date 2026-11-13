@@ -97,6 +97,20 @@ If $X_1, \ldots, X_n$ are independent with $X_i \sim N(\mu_i, \sigma_i^2)$, a li
 > [!trap] Subtracting the variances of a difference
 > For $X - Y$, the coefficient on $Y$ is $-1$, and $(-1)^2 = 1$. Means subtract, but variances add. Subtracting them understates the spread.
 
+## The expected excess over a threshold
+
+For a threshold $c$, the expected amount by which $X$ exceeds $c$ is
+
+> $$E\left[(X - c)_+\right] = (\mu - c)\,\Phi\!\left(\frac{\mu - c}{\sigma}\right) + \sigma\,\phi\!\left(\frac{\mu - c}{\sigma}\right)$$
+
+- $(X - c)_+$ is $X - c$ when $X > c$, and 0 otherwise.
+- $\phi(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}$ is the standard normal density.
+
+> [!example]- Losses are normal with mean 100 and standard deviation 20. What is the expected excess over 100? {Example}
+> - $\frac{\mu - c}{\sigma} = 0$, so the first term is 0.
+> - $\phi(0) = \frac{1}{\sqrt{2\pi}} = 0.3989$.
+> - The expected excess is $20 \times 0.3989 = 7.98$.
+
 ## Approximating a count
 
 By the [[Central Limit Theorem|central limit theorem]], a sum of many independent variables is approximately normal ([[Normal Approximation|normal approximation]]). For a count $X$ that takes whole-number values, add half a unit, the continuity correction:

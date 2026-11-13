@@ -91,9 +91,32 @@ If $X_1$ and $X_2$ are independent Poisson counts with means $\lambda_1$ and $\l
 
 A count over $t$ units of time, at a rate of $\lambda$ per unit, is Poisson with mean $\lambda t$.
 
+Given their sum $y$, the count $X_1$ is [[Binomial Distribution|binomial]] with $y$ trials:
+
+> $$P(X_1 = k \mid X_1 + X_2 = y) = \binom{y}{k}\,p^k(1 - p)^{y - k}$$
+
+- $p = \lambda_1/(\lambda_1 + \lambda_2)$.
+- $k = 0, 1, \ldots, y$.
+
+So given that $n$ independent Poisson counts with a common mean add to $y$, each count is binomial with $y$ trials and probability $1/n$.
+
 > [!example]- A driver has claims at a Poisson rate of 0.2 per year. What is the probability of no claims in 5 years? {Example}
 > - The 5-year count is Poisson with mean $0.2 \times 5 = 1$.
 > - $P(X = 0) = e^{-1} = 0.3679$.
+
+## Even and odd counts
+
+Adding the series $e^{\lambda} = \sum_n \lambda^n/n!$ and $e^{-\lambda} = \sum_n (-\lambda)^n/n!$ cancels the odd terms, so the even terms sum to $\sum_k \lambda^{2k}/(2k)! = (e^{\lambda} + e^{-\lambda})/2 = \cosh\lambda$. Summing the pmf over even $n$ then gives the probability of an even count:
+
+> $$P(X \text{ even}) = e^{-\lambda}\cosh\lambda$$
+
+> $$P(X \text{ even}) = \frac{1 + e^{-2\lambda}}{2}$$
+
+The probability of an odd count is $1 - P(X \text{ even}) = \frac{1 - e^{-2\lambda}}{2}$.
+
+> [!example]- Claims are Poisson with mean 1. What is the probability of an even number of claims? {Example}
+> - $P(X \text{ even}) = \frac{1 + e^{-2}}{2} = 0.5677$.
+> - Zero claims counts as even, and it alone has probability $e^{-1} = 0.3679$.
 
 ## Approximating a binomial count
 

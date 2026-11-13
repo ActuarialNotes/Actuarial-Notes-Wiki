@@ -36,6 +36,8 @@ For a [[Continuous Random Variable|continuous]] $X$ with [[Probability Density F
 
 The sum or integral must converge, or $X$ has no expected value.
 
+If a density is symmetric about a point $c$, that is $f(c + t) = f(c - t)$ for all $t$, and $E[X]$ exists, then $E[X] = c$.
+
 > [!idea] The idea
 > The expected value is the balance point of a distribution, the level the average of many independent repetitions settles at.
 
@@ -116,3 +118,15 @@ For a count $N$ on $0, 1, 2, \ldots$, the integral becomes a sum:
 > - $1 - F(x) = 0.5$ for $0 \leq x < 100$, because only claims of 100 or 500 exceed $x$.
 > - $1 - F(x) = 0.2$ for $100 \leq x < 500$, and 0 from 500 on.
 > - The area is $0.5(100) + 0.2(400) = 130$, the same as before.
+
+## The expected excess of a count
+
+For a count $N$ on $0, 1, 2, \ldots$, the expected excess over 1 is
+
+> $$E[\max(N - 1, 0)] = E[N] - 1 + P(N = 0)$$
+
+Extending the sum of $(n - 1)\,P(N = n)$ over $n \ge 1$ to include $n = 0$ gives $E[N - 1] = E[N] - 1$. That adds the term $-P(N = 0)$, which the excess never pays, so $P(N = 0)$ is added back.
+
+> [!example]- A count $N$ is Poisson with mean 2. What is $E[\max(N - 1, 0)]$? {Example}
+> - $E[N] = 2$ and $P(N = 0) = e^{-2} = 0.1353$.
+> - $E[\max(N - 1, 0)] = 2 - 1 + 0.1353 = 1.1353$.

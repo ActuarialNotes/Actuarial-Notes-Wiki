@@ -63,3 +63,16 @@ An event $E$ and its complement $E^c$ are the simplest partition. Any other even
 > [!example]- Every policyholder is classified as exactly one of low, medium or high risk. 50% are low risk and 30% are medium risk. What is the probability that a policyholder chosen at random is high risk? {Example}
 > - Each policyholder is in exactly one class, so the three classes form a partition.
 > - Their probabilities add to 1, so $P(\text{high})$ is $1 - 0.50 - 0.30 = 0.20$.
+
+## An event inside another
+
+If $F \subseteq E$, then $P(F) \le P(E)$. Since $E$ is the disjoint union of $F$ and $E \setminus F$, the probability of the outcomes in $E$ but not in $F$ is
+
+> $$P(E \setminus F) = P(E) - P(F)$$
+
+- $E \setminus F$ is the set of outcomes in $E$ that are not in $F$.
+
+Containment is the case of largest overlap and smallest union. If $F \subseteq E$, then $P(E \cap F) = P(F)$ and $P(E \cup F) = P(E)$, the most the intersection and the least the union can be.
+
+> [!trap] Subtracting without containment
+> $P(E \setminus F) = P(E) - P(F)$ only when $F \subseteq E$. Otherwise it is $P(E) - P(E \cap F)$.

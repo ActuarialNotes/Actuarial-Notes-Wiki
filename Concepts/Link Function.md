@@ -82,7 +82,9 @@ When the link is canonical and the model has an intercept, the maximum likelihoo
 
 > $$\sum_{i=1}^{n} \hat{\mu}_i = \sum_{i=1}^{n} y_i$$
 
-The fitted totals then also equal the observed totals within each level of a categorical predictor in the model. A non-canonical link, such as the log link for a gamma, carries no such guarantee.
+The fitted totals then also equal the observed totals within each level of a categorical predictor in the model.
+
+In a Poisson GLM with a log link and an exposure [[Offset Variable|offset]], a single categorical predictor makes each level's fitted claims equal its observed claims on the same exposure. So each level's fitted frequency equals its observed frequency, claims divided by exposure, and the relativities are the ratios of the levels' observed frequencies. A non-canonical link, such as the log link for a gamma, carries no such guarantee.
 
 > [!example]- An actuary models a non-negative response and wants the fitted values to reproduce the observed total. Which distribution and link should be used? {Example}
 > - The fitted values reproduce the observed total when the link is canonical and the model has an intercept.

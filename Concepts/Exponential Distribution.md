@@ -72,6 +72,10 @@ Solving $F(x) = p$ gives the $100p$th [[Percentile|percentile]]:
 
 The [[Median|median]] is $\theta \ln 2$.
 
+Because $e^{-x/\theta} = \left(e^{-x_0/\theta}\right)^{x/x_0}$, a tail probability known at one point $x_0$ gives the tail probability at any other point without solving for $\theta$:
+
+> $$P(X > x) = P(X > x_0)^{x/x_0}$$
+
 > [!example]- A waiting time is exponential, and 25% of waits end within 20 minutes. What is the median wait? {Example}
 > - "25% end within 20 minutes" says $P(X > 20) = 0.75$, so $e^{-20/\theta} = 0.75$.
 > - $\theta = \dfrac{-20}{\ln 0.75} = 69.52$.
@@ -88,6 +92,21 @@ So given $X > d$, the excess $X - d$ is again exponential with mean $\theta$. Th
 > [!example]- A machine's lifetime is exponential with mean 10 years. It has already worked for 4 years. What is the probability that it works at least 5 more? {Example}
 > - By memorylessness, the 4 years already worked don't matter.
 > - $P(X > 9 \mid X > 4) = P(X > 5) = e^{-0.5} = 0.6065$.
+
+## A shifted exponential
+
+If $W$ is exponential with mean $\theta$ and $a$ is a constant, then $X = a + W$ has density
+
+> $$f(x) = \frac{1}{\theta}\,e^{-(x-a)/\theta}$$
+
+- $x > a$.
+
+So a density of this form describes $X = a + W$. Its mean is $a + \theta$, and its variance is $\theta^2$, the same as the variance of $W$.
+
+> [!example]- A value has density $f(x) = \frac{1}{5}e^{-(x-5)/5}$ for $x > 5$. What are its mean and variance? {Example}
+> - This is $X = 5 + W$, with $W$ exponential with mean 5.
+> - The mean is $5 + 5 = 10$.
+> - The shift does not change the spread, so the variance is $5^2 = 25$.
 
 ## Deductibles and limits
 

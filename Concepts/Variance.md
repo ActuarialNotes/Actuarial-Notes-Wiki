@@ -54,6 +54,10 @@ Expanding the square gives the variance from the first two [[Moment|moments]] of
 
 Rearranged, the second moment is the variance plus the square of the mean.
 
+For $X$ [[Uniform Continuous Distribution|uniform]] on $(a, b)$, the second moment is
+
+> $$E[X^2] = \frac{a^2 + ab + b^2}{3}$$
+
 > [!example]- A loss $X$ is uniform on $(0, 1000)$. What is $\text{Var}(X)$? {Example}
 > - The density is $f(x) = \frac{1}{1000}$ on $(0, 1000)$, and the mean is $E[X] = 500$.
 > - The second moment and the variance are

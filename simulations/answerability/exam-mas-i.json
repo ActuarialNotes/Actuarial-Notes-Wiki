@@ -4358,7 +4358,15 @@
        "page": "Life Table",
        "quote": "$_{t|}q_x = {}_{t}p_x \\cdot q_{x+t}$ is the probability of dying in the year *after* surviving $t$ years (a deferred death probability)"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Life Table",
+      "quote": "When $t = 1$ it is written ${}_{u|}q_x$, and it equals ${}_up_x\\, q_{x+u}$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -19780,7 +19788,15 @@
        "page": "Poisson Thinning",
        "quote": "Contrast conditioning on the total: given $N(t) = n$, $N_1(t)$ is [[Binomial Distribution|binomial]]$(n, p)$ and the two counts are negatively dependent."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Poisson Distribution",
+      "quote": "So given that $n$ independent Poisson counts with a common mean add to $y$, each count is binomial with $y$ trials and probability $1/n$.",
+      "note": "Added to Sums of independent Poisson counts",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r7",
@@ -22763,10 +22779,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Link Function",
-      "quote": "With a single categorical predictor, each level's fitted claims equal its observed claims on the same exposure, so each level's fitted frequency equals its observed frequency (claims divided by exposure)",
-      "note": "written from Rodriguez, GLM notes Ch.4, PDF pp.6-7 (factor marginals reproduced) and §4.3 PDF p.10 (log of exposure as an offset in the linear predictor) — https://grodri.github.io/glms/notes/c4.pdf; Goldburd et al., CAS Monograph 5, §2.6 Offsets (coefficient constrained to 1, ln(exposure) in a claim-count model); checked by 2026-10-30T22:10Z/g8C-chk",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "a single categorical predictor makes each level's fitted claims equal its observed claims on the same exposure. So each level's fitted frequency equals its observed frequency, claims divided by exposure, and the relativities are the ratios of the levels' observed frequencies.",
+      "note": "Restored under The canonical link",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {

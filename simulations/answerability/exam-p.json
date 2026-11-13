@@ -9501,7 +9501,15 @@
        "page": "Moment",
        "quote": "A heavy-tailed Pareto with shape $\\alpha$ has $E[X^n]$ finite only for $n < \\alpha$, so a fitted $\\alpha \\le 2$ means an infinite variance."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Moment",
+      "quote": "An integral of $x^{-k}$ from 1 to $\\infty$ converges only when…A heavy-tailed [[Pareto Distribution|Pareto]] with shape $\\alpha$ has $E[X^n]$ finite only for $n < \\alpha$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r3",
@@ -22064,10 +22072,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Calculus",
-      "quote": "a function monotone on the interval (such as an increasing linear one) has its minimum and maximum at the endpoints",
-      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w4"
+      "quote": "A function monotone on the interval, such as an increasing linear one, has its minimum and maximum at the endpoints.…When the parameter is a probability, the feasible interval is where every probability in the model stays in $[0, 1]$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -32494,7 +32502,15 @@
        "page": "Median",
        "quote": "For a continuous distribution that is the point where $F(m) = 0.5$, splitting the probability in half."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Median",
+      "quote": "For a [[Continuous Random Variable|continuous]] $X$ with [[Cumulative Distribution Function (CDF)|CDF]] $F$, the median $m$ solves",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r2",
@@ -34420,10 +34436,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Permutation",
-      "quote": "the number of permutations of $n$ distinct items that leave a specified set of $k$ items in their original positions is $(n-k)!$, since the remaining $n-k$ items can be arranged arbitrarily",
-      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Finite Sampling Models §5 The Matching Problem ('if J subset D_n with #(J)=j then #{X_i=i for all i in J} = (n-j)!'; number of such J is C(n,j)) sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version) §3.2 Ex. 3.12 p.105 (PDF p.113), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w2"
+      "quote": "The number of permutations of $n$ distinct objects that leave a specified set of $k$ objects in their original positions is…The other $n-k$ objects can be arranged in any order.",
+      "note": "Restored: new Permutations that leave some objects in place section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -41054,10 +41070,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Calculus",
-      "quote": "With a constraint (a budget or a fixed total), substitute it first, so the objective is a function of one variable, then differentiate",
-      "note": "written from OpenStax Calculus Volume 1, 4.3 Maxima and Minima (Locating Absolute Extrema over a Closed Interval), 4.5 Derivatives and the Shape of a Graph (Second Derivative Test), 4.7 Applied Optimization Problems (Problem-Solving Strategy: use the constraint to write the objective as a function of one variable) — https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima ; .../4-5-derivatives-and-the-shape-of-a-graph ; .../4-7-applied-optimization-problems; checked in the w4 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w4"
+      "quote": "With a constraint, such as a budget or a fixed total, substitute it first, so the objective is a function of one variable, then differentiate.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -49850,10 +49866,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Permutation",
-      "quote": "the number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is $(n-1)!$",
-      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures, Arrangements exercise ('n people ... seated at a round table ... (n-1)!. Seat one, distinguished person arbitrarily') sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; checked in the w2 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w2"
+      "quote": "The number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is",
+      "note": "Restored: new Arrangements around a circle section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -49866,10 +49882,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Permutation",
-      "quote": "glue them into a single block, count the arrangements of the block together with the other items, and multiply by the number of orderings inside the block",
-      "note": "written from K. Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), fetched 2026-10-30, Foundations, Combinatorial Structures, Arrangements exercises (four couples in a row, 'the men must sit together': 2880 = 5!·4!; twelve books, 'the math books must be together': 4,838,400 = 8!·5!) sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html; checked in the w2 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w2"
+      "quote": "When $k$ particular objects must be adjacent, glue them into a single block.…(n-k+1)! \\times k!",
+      "note": "Restored: new Objects that must be adjacent section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {

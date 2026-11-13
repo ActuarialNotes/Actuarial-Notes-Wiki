@@ -133,7 +133,15 @@
        "page": "Independent Random Variables",
        "quote": "For independent random variables: $E[XY] = E[X]\\,E[Y]$ and $\\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y)$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Independent Random Variables",
+      "quote": "For independent $X$ and $Y$, the expected value of their product is…E[XY] = E[X]\\,E[Y]",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     }
    ],
    "relocated": "relocate-20261113-mas-i"
@@ -1774,7 +1782,15 @@
        "page": "Order Statistics",
        "quote": "the $k$-th order statistic $X_{(k)}$ is the $k$-th smallest value."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "The $k$th order statistic $X_{(k)}$ of a sample $X_1, \\ldots, X_n$ is its $k$th smallest value",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r2",
@@ -1787,7 +1803,15 @@
        "page": "Order Statistics",
        "quote": "For the $\\text{Uniform}(0,1)$ distribution: $E[X_{(k)}] = \\dfrac{k}{n+1}$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Order Statistics",
+      "quote": "For a sample of $n$ from the uniform distribution on $(0, \\theta)$, the mean of $X_{(k)}$ is $\\frac{k\\theta}{n+1}$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r3",
@@ -7213,10 +7237,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Fisher Information",
-      "quote": "measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood",
-      "note": "passage on Fisher Information: information is the curvature of the log-likelihood, i.e. the precision of the estimate, not the location of its maximum (unlike the score's zero or the deviance's minimum); the check's miss.",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "The score is 0 at the maximum likelihood estimate, but the information has no special feature there, such as a zero or a minimum, so a plot of $I(\\theta)$ cannot locate the estimate.",
+      "note": "Added a sentence after the curvature paragraph",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -18232,10 +18256,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Claim",
-      "quote": "conditioning on the count gives $E[S \\mid N] = N\\,E[X]$",
-      "note": "passage on Claim (MAS-I syllabus): given N = n, S is a sum of n iid claims, so E[S | N] = N E[X]; the check's miss.",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "Given the number of claims, the expected aggregate claims are $E[S \\mid N] = N\\,E[X]$.",
+      "note": "Added a sentence in Aggregate claims",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -20753,10 +20777,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Gamma",
-      "quote": "A gamma with shape $\\alpha > 1$ has an increasing hazard rate bounded above by $1/\\theta$",
-      "note": "written from Brunner, STA312 'Exploring the hazard function of the gamma distribution' p.12, https://utstat.utoronto.ca/~brunner/oldclass/312f23/lectures/312f23Hazardplots.pdf, and Bassan, Kochar & Spizzichino (2002) p.535 (IFR implies DMRL); checked by g8-masi-check-A1-2026-10-30",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "A gamma with shape $\\alpha > 1$ has an increasing hazard rate bounded above by $1/\\theta$…so for $\\alpha > 1$ the mean excess loss falls as the threshold rises and approaches $\\theta$.",
+      "note": "Restored: new Hazard rate and mean excess loss section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -20799,7 +20823,15 @@
        "page": "Severity Distribution",
        "quote": "The [[Lognormal Distribution|lognormal]] has every moment but no moment generating function, which makes it heavy-tailed under the more common MGF criterion."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Severity Distribution",
+      "quote": "At large thresholds the lognormal's mean excess loss rises too, but more slowly than a straight line, and its [[Hazard Rate|hazard rate]] rises at first and then falls toward 0.",
+      "note": "Added a paragraph in Common severity distributions",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r7",
@@ -20857,10 +20889,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Gamma",
-      "quote": "The gamma MGF is $M(t) = (1 - \\theta t)^{-\\alpha}$ for $t < 1/\\theta$, for every shape $\\alpha > 0$",
-      "note": "written from Siegrist 5.8 The Gamma Distribution (MGF), https://www.randomservices.org/random/special/Gamma.html, and SOA Tables for Exam C A.3.2.1; checked by g8-masi-check-A1-2026-10-30",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "For every shape $\\alpha > 0$, whole number or not, the moment generating function of $X$ is…M_X(t) = (1 - \\theta t)^{-\\alpha}",
+      "note": "Restored: new Moment generating function section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {

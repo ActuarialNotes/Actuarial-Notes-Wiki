@@ -55,3 +55,25 @@ When the $n$ objects are not all distinct, arranging identical objects among the
 > - There are $n = 4$ letters: one L, one O and two S's.
 > - Swapping the two S's gives the same arrangement, so divide the $4!$ arrangements by $2!$.
 > - There are $\frac{4!}{1!\,1!\,2!} = \frac{24}{2} = 12$ distinct arrangements.
+
+## Permutations that leave some objects in place
+
+The number of permutations of $n$ distinct objects that leave a specified set of $k$ objects in their original positions is
+
+> $$(n-k)!$$
+
+The other $n-k$ objects can be arranged in any order.
+
+## Arrangements around a circle
+
+The number of distinct arrangements of $n$ distinct objects around a circle, counting arrangements that differ only by a rotation as the same, is
+
+> $$(n-1)!$$
+
+Seat one object anywhere, then arrange the other $n-1$ relative to it.
+
+## Objects that must be adjacent
+
+When $k$ particular objects must be adjacent, glue them into a single block. The block and the other $n-k$ objects are $n-k+1$ units to arrange, and the objects inside the block can be ordered in $k!$ ways, so the number of arrangements is
+
+> $$(n-k+1)! \times k!$$

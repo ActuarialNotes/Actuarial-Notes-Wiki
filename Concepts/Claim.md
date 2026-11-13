@@ -48,7 +48,7 @@ The total of a period's claims, the aggregate claims, is
 - $N$ is the number of claims, its [[Frequency|frequency]].
 - $X_i$ is the size of the $i$th claim, its [[Severity|severity]].
 
-The claim sizes are independent and identically distributed, and independent of $N$. This is the collective risk model of the [[Aggregate Loss Model|aggregate loss model]]. The expected aggregate claims is
+The claim sizes are independent and identically distributed, and independent of $N$. This is the collective risk model of the [[Aggregate Loss Model|aggregate loss model]]. Given the number of claims, the expected aggregate claims are $E[S \mid N] = N\,E[X]$. The expected aggregate claims is
 
 > $$E[S] = E[N]\,E[X]$$
 

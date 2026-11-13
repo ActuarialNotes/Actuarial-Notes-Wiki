@@ -94,6 +94,20 @@ $X$ exceeds $x$ exactly when fewer than $\alpha$ events of a Poisson process wit
 > \end{aligned}
 > $$
 
+## Moment generating function
+
+For every shape $\alpha > 0$, whole number or not, the moment generating function of $X$ is
+
+> $$M_X(t) = (1 - \theta t)^{-\alpha}$$
+
+- $t < 1/\theta$.
+
+With $\alpha = 1$ it is the exponential's $(1 - \theta t)^{-1}$.
+
+## Hazard rate and mean excess loss
+
+The [[Hazard Rate|hazard rate]] $h(x) = f(x)/P(X > x)$ is constant at $1/\theta$ when $\alpha = 1$. A gamma with shape $\alpha > 1$ has an increasing hazard rate bounded above by $1/\theta$, and one with $\alpha < 1$ has a decreasing hazard rate bounded below by $1/\theta$. In both cases the hazard rate levels off at $1/\theta$ as $x$ grows. An increasing hazard rate implies a decreasing [[Mean Excess Loss|mean excess loss]], so for $\alpha > 1$ the mean excess loss falls as the threshold rises and approaches $\theta$.
+
 ## On later exams
 
 MAS-II uses the gamma as the [[Conjugate Prior|conjugate prior]] for a Poisson mean. MAS-I uses it to model claim severity, which is positive and skewed right.

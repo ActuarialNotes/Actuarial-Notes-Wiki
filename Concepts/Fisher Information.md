@@ -28,7 +28,7 @@ Under regularity conditions, which include that the support of $f$ does not depe
 
 > $$I(\theta) = E\left[\left(\frac{\partial}{\partial \theta} \ln f(X \mid \theta)\right)^2\right]$$
 
-A large $I(\theta)$ means a sharply peaked log-likelihood and a precisely estimated parameter. A small $I(\theta)$ means a flat log-likelihood.
+A large $I(\theta)$ means a sharply peaked log-likelihood and a precisely estimated parameter. A small $I(\theta)$ means a flat log-likelihood. The score is 0 at the maximum likelihood estimate, but the information has no special feature there, such as a zero or a minimum, so a plot of $I(\theta)$ cannot locate the estimate.
 
 > [!example]- Claim counts follow a [[Poisson Distribution|Poisson distribution]] with mean $\lambda$. What is the Fisher information of $\lambda$ for one observation? {Example}
 > - The log-density is $\ln f(x \mid \lambda) = -\lambda + x\ln\lambda - \ln x!$.

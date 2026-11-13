@@ -46,6 +46,8 @@ The severity distributions of the MAS-I reading are the [[Exponential Distributi
 
 From the lightest [[Tail Weight|tail]] to the heaviest, the order is the Weibull with $\tau > 1$, the exponential, the lognormal and the Pareto. The lognormal has every moment but no moment generating function. A heavier-tailed distribution places more of the expected loss in the excess layers.
 
+The tail also shows in the [[Mean Excess Loss|mean excess loss]] $e(d)$, the expected amount by which a loss above $d$ exceeds it. It is constant for the exponential and rises in a straight line for the Pareto. At large thresholds the lognormal's mean excess loss rises too, but more slowly than a straight line, and its [[Hazard Rate|hazard rate]] rises at first and then falls toward 0.
+
 ## Scaling and inflation
 
 Each distribution in the table has a scale parameter $\theta$, or $e^\mu$ for the lognormal. Multiplying the losses by a constant $c$ keeps the family and multiplies the scale parameter by $c$. If losses inflate at the rate $r$, the scale parameter becomes

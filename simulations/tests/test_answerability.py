@@ -14,7 +14,8 @@ sys.path.insert(0, SIM_DIR)
 
 import learner_sim  # noqa: E402
 from learner_sim.answerability import (LOCATE_SYSTEM, REQUIREMENTS_SYSTEM, Candidates, PageIndex,  # noqa: E402
-                                       check_question, home_page, input_hash, locate_prompt, merge_found, read_results, report,
+                                       check_question, home_page, input_hash, locate_prompt, merge_found, merge_relocated,
+                                       read_results, relocate_question, report,
                                        run_check, served_questions, verdict, verify_locations)
 from learner_sim.backends import BackendError, ScriptedOneShot  # noqa: E402
 from learner_sim.content_loader import ContentLoader  # noqa: E402
@@ -129,6 +130,25 @@ class VerifyLocationsTests(unittest.TestCase):
         merged = merge_found([{"id": "r1", "places": [{"page": "A", "quote": "x"}]}],
                              [{"id": "r1", "places": [{"page": "B", "quote": "y"}]}, {"id": "r2", "places": []}])
         self.assertEqual({m["id"]: len(m["places"]) for m in merged}, {"r1": 2, "r2": 0})
+
+    def test_merge_relocated_adds_places_and_keeps_the_rest(self):
+        record = {"questions": {"q1": {"requirements": [
+            {"id": "r1", "statement": "s1", "places": [{"page": "Old", "quote": "gone"}],
+             "resolution": {"kind": "not-required", "note": "n"}},
+            {"id": "r2", "statement": "s2", "places": []}]}}}
+        relocated = {"q1": {"requirements": [
+            {"id": "r1", "status": "tagged", "places": [{"page": "New", "quote": "here", "collapsed": False}]},
+            {"id": "r2", "status": "missing", "places": []}]},
+            "q2": {"error": "boom"}}
+        self.assertEqual(merge_relocated(record, relocated, "run-x"), 1)
+        q1 = record["questions"]["q1"]
+        r1 = q1["requirements"][0]
+        self.assertEqual(r1["places"], [{"page": "New", "quote": "here"}, {"page": "Old", "quote": "gone"}])
+        self.assertEqual((r1["statement"], r1["resolution"]["kind"]), ("s1", "not-required"))
+        self.assertEqual(q1["requirements"][1]["places"], [])
+        self.assertEqual(q1["relocated"], "run-x")
+        # merging the same run again adds nothing
+        self.assertEqual(merge_relocated(record, relocated, "run-x"), 0)
 
     def test_verdicts(self):
         self.assertEqual(verdict([{"status": "tagged"}, {"status": "linked"}]), "answerable")
@@ -249,6 +269,16 @@ class RealQuestionTests(unittest.TestCase):
             self.assertIn("Bühlmann-Straub Credibility.md` — 1 question(s)", md)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_relocate_question_keeps_the_requirements_and_asks_only_the_locator(self):
+        sid = self.SID
+        q = self.bank[sid]
+        reqs = [{"id": "r1", "kind": "fact", "statement": "something", "concept": "", "places": []}]
+        locate = ScriptedOneShot(lambda system, prompt: json.dumps({"found": [{"id": "r1", "places": []}]}))
+        out = relocate_question(q, reqs, self.loader, lambda: locate)
+        self.assertEqual(out["source_id"], sid)
+        self.assertEqual([(r["id"], r["status"]) for r in out["requirements"]], [("r1", "missing")])
+        self.assertTrue(all(system == LOCATE_SYSTEM for system, _ in locate.calls))
 
     def test_a_usage_limit_stops_the_run(self):
         tmp = tempfile.mkdtemp(prefix="answerability-")

@@ -375,6 +375,116 @@ def check_question(q: RawQuestion, loader: ContentLoader, solution: str,
     return record
 
 
+def relocate_question(q: RawQuestion, reqs: list[dict], loader: ContentLoader,
+                      locate_factory: Callable[[], OneShot],
+                      recheck_factory: Callable[[], OneShot] | None = None) -> dict:
+    """Look again for the passages that teach requirements already recorded — after the pages were rewritten,
+    say — without asking for the requirements again. The same locator, second look and check in code as
+    `check_question`; only the extraction call is skipped, so the list the gate holds the pages to is unchanged."""
+    locate = locate_factory()
+    recheck = recheck_factory() if recheck_factory else locate
+    reqs = [{"id": r["id"], "kind": r.get("kind") or "fact", "statement": r["statement"],
+             "concept": r.get("concept") or "", "search": []} for r in reqs]
+    out: dict = {"source_id": q.source_id}
+    try:
+        cands = candidate_pages(q, reqs, loader)
+        found = _ask_json(locate, LOCATE_SYSTEM, locate_prompt(q, reqs, cands.shown, loader), "found")
+        indexes = {t: PageIndex.build(loader.source(t)) for t in cands.shown}
+        checked = verify_locations(reqs, found, cands, indexes)
+        missing = [r for r in reqs if next(c for c in checked if c["id"] == r["id"])["status"] == "missing"]
+        if missing:
+            if recheck is locate and getattr(locate, "continues", False):
+                prompt = RECHECK_FOLLOW_UP + "\n".join(requirement_lines(missing))
+            else:
+                prompt = locate_prompt(q, missing, cands.shown, loader, note=RECHECK_NOTE)
+            again = _ask_json(recheck, LOCATE_SYSTEM, prompt, "found")
+            checked = verify_locations(reqs, merge_found(found, again), cands, indexes)
+        out["requirements"] = [{"id": c["id"], "status": c["status"], "places": c["places"]} for c in checked]
+    except Exception as e:  # noqa: BLE001 — one question's failure is recorded, not fatal to the run
+        out["error"] = f"{type(e).__name__}: {e}"
+    agents = [locate] + ([recheck] if recheck is not locate else [])
+    usage = Usage()
+    for agent in agents:
+        if hasattr(agent, "close"):
+            agent.close()
+        if getattr(agent, "usage", None):
+            usage.add(agent.usage)
+    out["cost_usd"] = round(usage.cost_usd, 5)
+    return out
+
+
+def relocate_open(exam_catalog: dict, loader: ContentLoader, bank: dict[str, RawQuestion], out_dir: str,
+                  locate_factory: Callable[[], OneShot], recheck_factory: Callable[[], OneShot] | None = None,
+                  parallel: int = 1, max_cost: float | None = None, limit: int | None = None,
+                  progress: Callable[[str], None] = print) -> dict[str, dict]:
+    """Every question whose recorded requirements G8 holds open (a quote gone, or out of reach), re-located.
+    Results go to `relocate.jsonl` in the run directory, so a run can be continued."""
+    import answerability_lib as AL
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, "relocate.jsonl")
+    done = read_results(path)
+    record = AL.load_record(exam_catalog["bank"])
+    status = AL.assess_bank(exam_catalog, record=record)
+    open_ids: dict[str, set[str]] = defaultdict(set)
+    for item in status["open"]:
+        open_ids[item["question"]].add(item["item"].partition(":")[2])
+    todo = [sid for sid in sorted(open_ids) if sid in bank and (sid not in done or done[sid].get("error"))]
+    if limit is not None:
+        todo = todo[:limit]
+    warm(loader)
+    lock = threading.Lock()
+    spent = [sum(r.get("cost_usd") or 0 for r in done.values())]
+    progress(f"{exam_catalog['page'][:-3]}: {len(open_ids)} questions with open items, {len(todo)} to re-locate")
+    limited: list[str] = []
+
+    def one(sid: str) -> None:
+        if limited or (max_cost is not None and spent[0] >= max_cost):
+            return
+        reqs = [r for r in record["questions"][sid]["requirements"] if r["id"] in open_ids[sid]]
+        rec = relocate_question(bank[sid], reqs, loader, locate_factory, recheck_factory)
+        with lock:
+            if rec.get("error") and USAGE_LIMIT.search(rec["error"]):
+                if not limited:
+                    progress(f"  stopped at {sid}: {rec['error']} — continue the run with --run-id once it resets")
+                limited.append(sid)
+                return
+            spent[0] += rec.get("cost_usd") or 0
+            done[sid] = rec
+            with open(path, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            found = sum(1 for r in rec.get("requirements") or [] if r["places"])
+            progress(f"  {sid}: {found}/{len(reqs)} found  (${spent[0]:.2f} so far)")
+
+    with ThreadPoolExecutor(max_workers=max(1, parallel)) as pool:
+        list(pool.map(one, todo))
+    return done
+
+
+def merge_relocated(record: dict, relocated: dict[str, dict], run: str) -> int:
+    """Lay re-located places onto the record: each requirement keeps the places that still hold and gains the
+    new ones; its status, statement and any resolution stay. Returns how many requirements gained a place."""
+    n = 0
+    for sid, rec in relocated.items():
+        entry = record["questions"].get(sid)
+        if not entry or rec.get("error"):
+            continue
+        by_id = {r["id"]: r for r in entry.get("requirements") or []}
+        changed = False
+        for r in rec.get("requirements") or []:
+            req = by_id.get(r["id"])
+            if not req or not r["places"]:
+                continue
+            have = {(p["page"], p["quote"]) for p in req.get("places") or []}
+            new = [{"page": p["page"], "quote": p["quote"]} for p in r["places"] if (p["page"], p["quote"]) not in have]
+            if new:
+                req["places"] = new + list(req.get("places") or [])
+                n += 1
+                changed = True
+        if changed:
+            entry["relocated"] = run
+    return n
+
+
 # ── a run ──────────────────────────────────────────────────────────────────
 
 

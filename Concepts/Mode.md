@@ -28,7 +28,7 @@ A **Mode** of a [[Random Variable|random variable]] $X$ is a value at which its 
 
 - The maximum is taken over the support of $X$, where $f(x) > 0$.
 
-For a [[Discrete Random Variable|discrete]] $X$, the mode is the most likely value. For a [[Continuous Random Variable|continuous]] $X$, it is the peak of the density. A distribution or data set with two equal peaks has two modes.
+For a [[Discrete Random Variable|discrete]] $X$, the mode is the most likely value. For a [[Continuous Random Variable|continuous]] $X$, it is the peak of the density. A distribution or data set with two equal peaks has two modes. No value of a data set occurs more often than its modes, so the frequency at a mode is the largest frequency in the data set.
 
 > [!example]- A fleet's claim counts for twelve months were 1, 2, 3, 3, 3, 4, 4, 4, 5, 2, 6 and 0. What is the mode? {Example}
 > - The mode of a data set is its most frequent value.
@@ -53,6 +53,8 @@ For a [[Binomial Distribution|binomial]] with $n$ trials and success probability
 > $$\lfloor (n + 1)p \rfloor$$
 
 - When $(n + 1)p$ is a whole number, $(n + 1)p - 1$ is a mode as well.
+
+For a [[Geometric Distribution|geometric]] distribution, each probability is $1 - p$ times the one before it, so the probabilities only decrease. Its mode is the smallest value in its support, whatever $p$ is.
 
 > [!example]- A fleet's monthly claim count $N$ is Poisson with mean 3.4. What is the most likely number of claims? {Example}
 > Each probability is the one before it times $\frac{3.4}{k}$:
@@ -80,6 +82,10 @@ Maximizing $\ln f(x)$ gives the same point, and is often easier. A constant in f
 > - Its derivative is $\frac{2}{x} - \frac{1}{500}$, which is 0 at $x = 1{,}000$.
 > - The second derivative, $-\frac{2}{x^2}$, is negative, so this point is a maximum.
 > - The mode is 1,000. This is a [[Gamma|gamma]] density with $\alpha = 3$ and $\theta = 500$, whose mode is $(\alpha - 1)\theta$.
+
+## The mode of a scaled variable
+
+For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$. The value $cx$ of $Y$ has the probability of the value $x$ of $X$, and a density only picks up the constant factor $\frac{1}{c}$, so the largest value moves from $x$ to $cx$.
 
 ## Mode, median and mean
 

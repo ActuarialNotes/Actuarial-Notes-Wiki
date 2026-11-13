@@ -25,6 +25,10 @@ A **Linear Combination of Random Variables** is a weighted sum of [[Random Varia
 
 This holds whether or not $X$ and $Y$ are independent. The mean of a sum of any number of random variables is the sum of their means.
 
+The same rule applies to a sum of functions of one random variable. Since $X(X + 1) = X^2 + X$, the second moment can be found from $E[X(X + 1)]$ as
+
+> $$E[X^2] = E[X(X + 1)] - E[X]$$
+
 > [!example]- Each auto claim costs 10 and each home claim costs 5. The numbers of claims $X$ and $Y$ have means 0.4 and 0.7. What is the expected total cost? {Example}
 > - The total cost is $10X + 5Y$.
 > - Its mean is $10(0.4) + 5(0.7) = 7.5$.
@@ -44,6 +48,12 @@ The variance of $aX + bY + c$ is
 
 - $\text{Cov}(X, Y)$ is the [[Covariance|covariance]] of $X$ and $Y$.
 - The constant $c$ shifts the mean but adds nothing to the variance.
+
+For one random variable multiplied by a constant $a$, the mean is $a\,E[X]$ and the variance is
+
+> $$\text{Var}(aX) = a^2\,\text{Var}(X)$$
+
+So dividing a random variable by a constant divides its mean by that constant and its variance by the constant's square.
 
 The weights enter squared, so a negative weight still adds variance. Only the sign of the covariance term changes:
 

@@ -1824,7 +1824,15 @@
        "page": "Parameter Estimation",
        "quote": "$E[X] = \\theta/2$, so $\\tilde{\\theta} = 2\\bar{x} = 2(5) = 10$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Parameter Estimation",
+      "quote": "The mean of a uniform distribution on $(0, \\theta)$ is $\\theta/2$, so $E[\\bar{X}] = \\theta/2$.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -3604,10 +3612,10 @@
      "resolution": {
       "kind": "taught",
       "page": "System Reliability",
-      "quote": "The reliability (Birnbaum) importance of component $i$ is the probability that it is critical",
-      "note": "written from Huseby & Dahl, STK3405 Lecture 8 slides 3, 12-14, 21-22, https://www.uio.no/studier/emner/matnat/math/STK3405/h21/forelesningsnotater/lecture-8.pdf; checked by 2026-10-30T21:37Z/a2ck",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "The reliability (Birnbaum) importance of component $i$ is the change in system reliability per unit change in $p_i$.",
+      "note": "Restored: new Reliability importance of a component section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -3620,10 +3628,10 @@
      "resolution": {
       "kind": "taught",
       "page": "System Reliability",
-      "quote": "raising component $i$'s reliability by $\\Delta$ raises system reliability by exactly $I_i \\Delta$",
-      "note": "written from Huseby & Dahl, STK3405 Lecture 8 slides 3, 12-14, 21-22, https://www.uio.no/studier/emner/matnat/math/STK3405/h21/forelesningsnotater/lecture-8.pdf; checked by 2026-10-30T21:37Z/a2ck",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "To choose which component to improve, compare $I_i \\Delta$ across the candidates, or recompute $r$ with each candidate's new reliability and take the largest increase.",
+      "note": "Restored in the Reliability importance of a component section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -15261,7 +15269,15 @@
        "page": "Linear Combinations of Random Variables",
        "quote": "$$\\text{Var}(L) = \\sum_{i=1}^{n} c_i^2\\,\\text{Var}(X_i) + 2\\sum_{i < j} c_i c_j\\,\\text{Cov}(X_i, X_j)$$"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Linear Combinations of Random Variables",
+      "quote": "\\text{Var}(aX) = a^2\\,\\text{Var}(X) … So dividing a random variable by a constant divides its mean by that constant and its variance by the constant's square.",
+      "note": "Added to Variance of a linear combination",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -18218,10 +18234,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Unbiasedness",
-      "quote": "Bias does not average away, so an unbiased estimator is wanted when estimates from many small samples are averaged or pooled",
-      "note": "written from Siegrist, Random, §5.3 The Law of Large Numbers, Moments (E(M) = mu, var(M) = sigma^2/n) and weak law — https://www.randomservices.org/random/sample/LLN.html (applied to k independent estimates as the sample); Siegrist §5.8 Special Properties of Normal Samples, 'The Sample Variance' ((n-1)S^2/sigma^2 chi-square n-1) and 'The T Variable' (t with n-1) — https://www.randomservices.org/random/sample/N; checked by 2026-10-30T22:00Z/chkB",
-      "date": "2026-10-30",
-      "run": "g8-exam-mas-i-2026-10-30"
+      "quote": "Bias does not average away, so an unbiased estimator is wanted when estimates from many small samples are averaged or pooled.",
+      "note": "Restored: new When unbiasedness matters section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -22253,7 +22269,15 @@
        "page": "p-Value",
        "quote": "A p-value just above $\\alpha$ is weak evidence, not evidence of no effect"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "p-Value",
+      "quote": "A coefficient that is not significant for a numeric predictor shows only that there is no significant linear trend in that predictor on the scale of the linear predictor. … It does not show that the predictor has no predictive value.",
+      "note": "Re-quoted: taught in the rewritten page's wording",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r5",

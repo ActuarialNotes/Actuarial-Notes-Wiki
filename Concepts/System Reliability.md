@@ -104,6 +104,21 @@ In the bridge system, components 1 and 2 leave the input, component 5 joins comp
 > \end{aligned}
 > $$
 
+## Reliability importance of a component
+
+Conditioning on whether component $i$ functions splits the reliability into two cases:
+
+> $$r(\mathbf{p}) = p_i\, r(1_i, \mathbf{p}) + (1 - p_i)\, r(0_i, \mathbf{p})$$
+
+- $r(1_i, \mathbf{p})$ is the reliability of the system when component $i$ functions.
+- $r(0_i, \mathbf{p})$ is the reliability of the system when component $i$ fails.
+
+The reliability (Birnbaum) importance of component $i$ is the change in system reliability per unit change in $p_i$. It is the difference between the system reliability when component $i$ functions and when it fails:
+
+> $$I_i = \frac{\partial r(\mathbf{p})}{\partial p_i} = r(1_i, \mathbf{p}) - r(0_i, \mathbf{p})$$
+
+Neither $r(1_i, \mathbf{p})$ nor $r(0_i, \mathbf{p})$ involves $p_i$, so raising component $i$'s reliability by $\Delta$ raises system reliability by exactly $I_i \Delta$. To choose which component to improve, compare $I_i \Delta$ across the candidates, or recompute $r$ with each candidate's new reliability and take the largest increase.
+
 ## System lifetime
 
 If component $i$ has lifetime distribution $F_i$, it functions at time $t$ with probability $\bar{F}_i(t) = 1 - F_i(t)$. With independent components, the probability that the system is still functioning at time $t$ is the reliability function evaluated at these probabilities:

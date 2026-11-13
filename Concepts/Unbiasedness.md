@@ -66,3 +66,7 @@ Dividing by $n$ instead gives a [[Bias#Bias of the variance estimator that divid
 > - The sample mean is $\bar{x} = 15/3 = 5$.
 > - The squared deviations are 9, 1 and 16, which sum to 26.
 > - Dividing by $n - 1 = 2$ gives the unbiased estimate $26/2 = 13$.
+
+## When unbiasedness matters
+
+The average of $k$ independent estimates of $\theta$, each with bias $b$ and variance $v$, has bias $b$ and variance $v/k$. Bias does not average away, so an unbiased estimator is wanted when estimates from many small samples are averaged or pooled. Unbiasedness also matters when the estimate feeds a procedure built on the unbiased sample variance $S^2$. For a normal sample, $(n-1)S^2/\sigma^2$ has a [[Chi-Squared Distribution|chi-square distribution]] and $(\bar{X} - \mu)/(S/\sqrt{n})$ a [[Student's t-Distribution|$t$ distribution]], each with $n - 1$ degrees of freedom. Neither holds for the estimator that divides by $n$.

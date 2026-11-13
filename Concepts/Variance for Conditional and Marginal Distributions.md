@@ -31,6 +31,10 @@ verification:
 - $E[Y \mid X = x]$ and $E[Y^2 \mid X = x]$ are the mean and second moment of the conditional distribution.
 - They are calculated with the conditional probabilities $P(Y = y \mid X = x)$ in place of $P(Y = y)$.
 
+If $Y$ takes only the values 0 and 1, then $Y^2 = Y$. Its second moment, conditional or not, equals its mean:
+
+> $$E[Y^2] = E[Y] = P(Y = 1)$$
+
 > [!example]- A policyholder's numbers of auto claims $X$ and home claims $Y$ in a year have the joint probabilities below. What is $\text{Var}(Y \mid X = 1)$? {Example}
 > | $X$ \ $Y$ | 0 | 1 | 2 |
 > | --- | --- | --- | --- |

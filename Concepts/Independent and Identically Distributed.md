@@ -74,3 +74,9 @@ Swapping two i.i.d. random variables doesn't change their joint distribution. So
 > - The three lifetimes are i.i.d. and continuous, so ties have probability 0.
 > - Each of the three is equally likely to be the smallest.
 > - The probability is $\frac{1}{3}$.
+
+The symmetry holds after conditioning on an event $G$ that treats the items alike, such as "at least one item is of a given type". Every item then has the same conditional probability of having a property. Writing the number of items with the property as a sum of indicators, linearity gives its conditional mean:
+
+> $$E[N \mid G] = n \cdot P(\text{item 1 has the property} \mid G)$$
+
+- $N$ is the number of the $n$ items with the property.

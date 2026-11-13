@@ -45,6 +45,7 @@ The 50th percentile is the [[Median|median]]. Value at Risk at level $p$ is the 
 > [!example]- Losses are exponential with mean 1,000, so $F(x) = 1 - e^{-x/1000}$. What is the 90th percentile? {Example}
 > - Setting the CDF to 0.9 gives $e^{-x/1000} = 0.1$.
 > - Taking logarithms, $x_{0.9} = -1000 \ln 0.1 \approx 2{,}303$.
+> - Since $-\ln a = \ln \frac{1}{a}$, this is $1000 \ln 10$.
 > - In general an [[Exponential Distribution|exponential]] with mean $\theta$ has $x_p = -\theta \ln(1 - p)$.
 
 For a density in pieces, evaluate $F$ at each break first to find which piece holds $x_p$, then solve within that piece.

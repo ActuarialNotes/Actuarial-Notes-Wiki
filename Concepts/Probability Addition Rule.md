@@ -58,5 +58,29 @@ When the union is known, the rule gives the probability that both events occur:
 
 For three or more events, the rule extends to the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]].
 
+## Exactly one of two events
+
+The event that exactly one of $E$ and $F$ occurs is the union with the intersection taken out. Its probability is
+
+> $$P(E \cup F) - P(E \cap F)$$
+
+By the addition rule, this is $P(E) + P(F) - 2P(E \cap F)$.
+
+## Exactly two of three events
+
+For three events $E$, $F$ and $G$, each region where exactly two occur is a pairwise intersection less the triple intersection. The probability that exactly two occur is
+
+> $$P(E \cap F) + P(E \cap G) + P(F \cap G) - 3P(E \cap F \cap G)$$
+
+When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.
+
+## When the overlap is not given
+
+If $P(E \cap F)$ is not given, it is only bounded. The intersection lies inside both events, so its probability is at most the smaller of $P(E)$ and $P(F)$. Since $P(E \cup F) \leq 1$, the addition rule forces $P(E \cap F) \geq P(E) + P(F) - 1$. The bounds are
+
+> $$\max(0,\ P(E) + P(F) - 1) \leq P(E \cap F) \leq \min(P(E),\ P(F))$$
+
+So $P(E \cup F)$ ranges from $\max(P(E), P(F))$, when one event contains the other, up to $\min(1, P(E) + P(F))$.
+
 > [!trap] Independent read as mutually exclusive
 > [[Independent Events|Independent]] events with positive probabilities overlap, with $P(E \cap F) = P(E)\,P(F)$. If property and liability claims were independent, the overlap would be $0.30 \times 0.20 = 0.06$ and the union $0.30 + 0.20 - 0.06 = 0.44$. The plain sum, $0.50$, is wrong.

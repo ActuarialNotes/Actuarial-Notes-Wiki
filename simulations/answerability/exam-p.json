@@ -7810,9 +7810,9 @@
       "kind": "taught",
       "page": "Probability Addition Rule",
       "quote": "When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, three-event exercise (exactly two = (A∩B∩C^c)∪(A∩B^c∩C)∪(A^c∩B∩C)), difference rule — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w0"
+      "note": "Restored: new Exactly two of three events section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -15918,10 +15918,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Independent and Identically Distributed",
-      "quote": "linearity gives $E[\\text{count} \\mid C] = n \\cdot P(\\text{item 1 has } A \\mid C)$.",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.1 Definitions and Basic Properties: Symmetry ('If E(X) exists, then E(X) = a'; f(a+x)=f(a-x)), Linearity, Extensions (conditional expected value E(X|A) given event A), E(1_A)=P(A) — https://www.randomservices.org/random/expect/Properties.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: if {X_i} independent then {g_i(X_i)} independent; i.i.d. indicator sequence exchangeable (permuting does not change the probability)",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w6"
+      "quote": "E[N \\mid G] = n \\cdot P(\\text{item 1 has the property} \\mid G)",
+      "note": "Restored at the end of Symmetry",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -21511,7 +21511,15 @@
        "page": "Variance for Conditional and Marginal Distributions",
        "quote": "Then $E[X \\mid Y=2] = 0(0.2)+1(0.8) = 0.8$ and $E[X^2 \\mid Y=2] = 0.8$."
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Variance for Conditional and Marginal Distributions",
+      "quote": "If $Y$ takes only the values 0 and 1, then $Y^2 = Y$.",
+      "note": "Added after the opening bullets",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     },
     {
      "id": "r4",
@@ -26972,10 +26980,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Probability Addition Rule",
-      "quote": "Equivalently, the probability that exactly one of $A$ or $B$ occurs is $P(A \\cup B) - P(A \\cap B)$: the union with the intersection taken out.",
-      "note": "written from Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.3 Finding Probabilities, Example 1.11 (rain today or tomorrow but not both = P(A−B)+P(B−A); P(A−B)=P(A)−P(A∩B)) — https://www.probabilitycourse.com/chapter1/1_3_3_finding_probabilities.php; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL), Thm 1.4 (p.24, PDF p.32) — https://math.dartmouth.edu/~prob/prob/prob.pdf; checked in the w0 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w0"
+      "quote": "The event that exactly one of $E$ and $F$ occurs is the union with the intersection taken out.",
+      "note": "Restored: new Exactly one of two events section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -34851,10 +34859,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Mode",
-      "quote": "For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$",
-      "note": "written from Pishro-Nik §4.1.3 Functions of continuous random variables, Theorem: for strictly monotonic g, f_Y(y) = f_X(x1)/|g'(x1)| where g(x1)=y — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php; checked in the w3 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w3"
+      "quote": "For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$.",
+      "note": "Restored: new The mode of a scaled variable section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -35215,10 +35223,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Mode",
-      "quote": "$$\\text{mode} = \\arg\\max_{x}\\, f(x)$$",
-      "note": "tagged page: the mode is where the frequency is largest, so no level exceeds the modal frequency; the cap by the combined frequency is reading the stem's table; check's miss",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "quote": "No value of a data set occurs more often than its modes, so the frequency at a mode is the largest frequency in the data set.",
+      "note": "Added a sentence in the opening",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -48807,10 +48815,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Mode",
-      "quote": "**Endpoint peak:** a density that only decreases, such as the [[Exponential Distribution|exponential]], has its mode at the left end of the support.",
-      "note": "passage on Mode (with 'compare neighbouring probabilities' for discrete): the geometric pmf (1−p)^{k−1}p only decreases, so its mode is the smallest support value; the check's miss",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "quote": "Its mode is the smallest value in its support, whatever $p$ is.",
+      "note": "Added the geometric case under The mode of a discrete distribution",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],
@@ -50233,7 +50241,15 @@
        "page": "Percentile",
        "quote": "x_{0.90} &= -10 \\ln(0.10) \\\\ &= 10 \\ln(10) \\approx 23.03"
       }
-     ]
+     ],
+     "resolution": {
+      "kind": "taught",
+      "page": "Percentile",
+      "quote": "Since $-\\ln a = \\ln \\frac{1}{a}$, this is $1000 \\ln 10$.",
+      "note": "Added a step to the exponential percentile example",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
+     }
     }
    ],
    "relocated": "relocate-20261113-p"
@@ -60281,10 +60297,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Probability Addition Rule",
-      "quote": "$$\\max(0,\\ P(A) + P(B) - 1) \\leq P(A \\cap B) \\leq \\min(P(A),\\ P(B))$$ … So $P(A \\cup B)$ ranges from $\\max(P(A), P(B))$, when one event contains the other, up to $\\min(1, P(A) + P(B))$",
-      "note": "written from Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §2.3 Probability Measures, increasing property and Bonferroni's inequality (P(∩A_i) ≥ 1 − Σ[1 − P(A_i)]), inclusion-exclusion for two events — https://www.randomservices.org/random/prob/Probability.html; checked in the w0 fact check",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30/w0"
+      "quote": "\\max(0,\\ P(E) + P(F) - 1) \\leq P(E \\cap F) \\leq \\min(P(E),\\ P(F)) … So $P(E \\cup F)$ ranges from $\\max(P(E), P(F))$, when one event contains the other, up to $\\min(1, P(E) + P(F))$.",
+      "note": "Restored: new When the overlap is not given section",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     },
     {
@@ -64604,10 +64620,10 @@
      "resolution": {
       "kind": "taught",
       "page": "Linear Combinations of Random Variables",
-      "quote": "**Expectation is always linear** — $E[L]$ needs no independence assumption at all.",
-      "note": "passage on Linear Combinations of Random Variables (syllabus page): E[X(X+1)] = E[X^2] + E[X] by linearity; the check's miss",
-      "date": "2026-10-30",
-      "run": "g8-exam-p-2026-10-30"
+      "quote": "E[X^2] = E[X(X + 1)] - E[X]",
+      "note": "Added under the opening linearity paragraph",
+      "date": "2026-11-13",
+      "run": "claude/bold-gauss-49szop"
      }
     }
    ],

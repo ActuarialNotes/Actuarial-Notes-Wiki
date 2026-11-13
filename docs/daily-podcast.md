@@ -94,19 +94,27 @@ Listen's rule, kept twice over:
 
 ### Joining clips
 
-Every clip is CBR 64 kb/s mono MP3 at 44.1 kHz with **no ID3 tag and no Xing header**
+Every clip is CBR 48 kb/s mono MP3 at 44.1 kHz with **no ID3 tag and no Xing header**
 (`ffmpeg -write_xing 0 -id3v2_version 0 -write_id3v1 0 -map_metadata -1`). That lets the player
 join clips byte for byte (`joinClips`) into one track the browser measures by its bitrate — one
 track to scrub, and one track a phone keeps playing with the screen locked (a playlist of
 separate files stalls between tracks in a background tab on iOS). A clip's length is exact from
-its size: `bytes × 8 / 64000`.
+its size: `bytes × 8 / 48000`.
+
+The bitrate is `CLIP_KBPS` in `podcast-segments.mjs`, and it is part of each clip's name (the
+`48k` in `…-af-heart-48k.mp3`), carried in the index as the voice entry's third element. The
+first clips were 64 kb/s and carry no suffix. Changing the bitrate is a new encoding: the next
+`sync` re-encodes every clip from its own audio under the new name, all before it writes the
+index (one index never mixes bitrates, which would break the joined track's length), and the
+prune deletes the old files a day later. The move to 48 kb/s took the bucket from about 1 GB to
+about 760 MB.
 
 ### The index
 
 `podcast/index.json`, compact because the Dashboard reads it (cached a minute; audio a year):
 
 ```json
-{ "v": 1, "voices": [["af_heart", "kokoro-82m"]],
+{ "v": 1, "voices": [["af_heart", "kokoro-82m", "48k"]],
   "clips": { "brief/bayes-theorem": ["22q9qqw6i92", 52.17, 417332, 0], … } }
 ```
 

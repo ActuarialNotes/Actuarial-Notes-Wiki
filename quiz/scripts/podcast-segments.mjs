@@ -18,6 +18,9 @@
 //       A clip is out of date when its page's script has changed, or it was
 //       made with another voice. The index lists only clips current with the
 //       vault this runs on, so a page's old recording drops out of it.
+//       A current clip in an older encoding is re-encoded from its own audio
+//       first (no voice needed), all of them before the index is written, so
+//       an index never mixes encodings.
 //       Then prunes (below) — skipped with --no-prune or --dry-run.
 //
 //   node scripts/podcast-segments.mjs prune [--grace-hours 24] [--local] [--dry-run]
@@ -35,7 +38,7 @@
 //               ELEVENLABS_API_KEY; --voice is a voice id, --model a model id
 //               (default eleven_multilingual_v2). Untested until there's a key.
 //
-// Every clip is written as CBR 64 kb/s mono MP3 at 44.1 kHz with no ID3 tag
+// Every clip is written as CBR 48 kb/s mono MP3 at 44.1 kHz with no ID3 tag
 // and no Xing header (ffmpeg), so the app can join clips byte for byte into
 // one track (lib/podcast.ts, joinClips).
 //
@@ -61,6 +64,11 @@ const BUCKET = 'podcast'
 const PLAN_DAYS_AHEAD = 7
 const RETIRED = 'retired.json'
 const DEFAULT_GRACE_HOURS = 24
+// The clips' bitrate, and the encoding the index and the file names carry
+// (lib/podcast.ts, clipAudioFile). Changing it is a new encoding: the next
+// sync re-encodes every clip under new names and the prune clears the old.
+const CLIP_KBPS = 48
+const CLIP_ENCODING = `${CLIP_KBPS}k`
 
 // ── The app's own code ──────────────────────────────────────────────────────
 
@@ -152,6 +160,9 @@ function storage(local) {
       async readJson(file) {
         return JSON.parse(await readFile(path.join(LOCAL_DIR, file), 'utf8').catch(() => 'null'))
       },
+      async get(file) {
+        return readFile(path.join(LOCAL_DIR, file))
+      },
       async listAudio() {
         const files = await readdir(LOCAL_DIR, { recursive: true }).catch(() => [])
         return files.map(f => f.split(path.sep).join('/')).filter(f => f.endsWith('.mp3'))
@@ -189,6 +200,11 @@ function storage(local) {
     async readJson(file) {
       const res = await fetch(`${base}/storage/v1/object/${BUCKET}/${file}?t=${Date.now()}`, { headers: authHeaders(key) })
       return res.ok ? res.json() : null
+    },
+    async get(file) {
+      const res = await fetch(`${base}/storage/v1/object/${BUCKET}/${file}`, { headers: authHeaders(key) })
+      if (!res.ok) throw new Error(`Download of ${file} failed: ${res.status}`)
+      return Buffer.from(await res.arrayBuffer())
     },
     // Storage lists one folder at a time; a folder comes back with no id.
     async listAudio(prefix = '') {
@@ -360,16 +376,16 @@ function elevenLabsVoice(modelId) {
   }
 }
 
-/** Any audio → CBR 64 kb/s mono 44.1 kHz MP3, no tags, no Xing header — joinable byte for byte. */
+/** Any audio → CBR 48 kb/s mono 44.1 kHz MP3, no tags, no Xing header — joinable byte for byte. */
 async function toClipMp3(input, output) {
   await run('ffmpeg', [
     '-loglevel', 'error', '-y', '-i', input,
-    '-ar', '44100', '-ac', '1', '-c:a', 'libmp3lame', '-b:a', '64k',
+    '-ar', '44100', '-ac', '1', '-c:a', 'libmp3lame', '-b:a', `${CLIP_KBPS}k`,
     '-write_xing', '0', '-id3v2_version', '0', '-write_id3v1', '0', '-map_metadata', '-1',
     output,
   ])
   const bytes = (await stat(output)).size
-  return { bytes, seconds: (bytes * 8) / 64000 }
+  return { bytes, seconds: (bytes * 8) / (CLIP_KBPS * 1000) }
 }
 
 // ── Commands ────────────────────────────────────────────────────────────────
@@ -388,9 +404,12 @@ async function sync(app, flags) {
   // Keep only what is still current: a changed page, a deleted page or a
   // switched voice drops a clip from the index (its audio stays, unnamed).
   const kept = {}
+  const reencode = []
   for (const [key, clip] of Object.entries(index)) {
     const now = scripts.get(key)
-    if (now && now.hash === clip.h && clip.voice === voiceId && clip.model === modelName) kept[key] = clip
+    if (!(now && now.hash === clip.h && clip.voice === voiceId && clip.model === modelName)) continue
+    kept[key] = clip
+    if (clip.enc !== CLIP_ENCODING) reencode.push(key)
   }
 
   const wanted = []
@@ -413,7 +432,7 @@ async function sync(app, flags) {
   }
   const todo = wanted.filter(key => !kept[key])
   const dropped = Object.keys(index).length - Object.keys(kept).length
-  console.log(`${Object.keys(kept).length} clip(s) current, ${dropped} dropped as out of date, ${todo.length} to record (${provider}, ${voiceId}).`)
+  console.log(`${Object.keys(kept).length} clip(s) current, ${dropped} dropped as out of date, ${reencode.length} to re-encode at ${CLIP_ENCODING}, ${todo.length} to record (${provider}, ${voiceId}).`)
   if (flags['dry-run']) {
     for (const key of todo) console.log(`  ${key}`)
     return
@@ -422,6 +441,38 @@ async function sync(app, flags) {
   const writeIndex = async () => {
     await store.put('index.json', JSON.stringify(app.podcastIndexFile(kept)) + '\n', 'application/json')
   }
+
+  // Re-encode before anything is recorded or the index is written, so every
+  // index this run writes is in one encoding. A clip that fails is dropped
+  // from the index (and recorded again below if it is wanted).
+  if (reencode.length) {
+    const tmp = await mkdtemp(path.join(os.tmpdir(), 'podcast-reencode-'))
+    let done = 0
+    try {
+      for (const key of reencode) {
+        const clip = kept[key]
+        try {
+          const input = path.join(tmp, 'in.mp3')
+          const out = path.join(tmp, 'out.mp3')
+          await writeFile(input, await store.get(clip.a))
+          const { bytes, seconds } = await toClipMp3(input, out)
+          const audio = app.clipAudioFile(key, clip.h, voiceId, CLIP_ENCODING)
+          await store.put(audio, await readFile(out), 'audio/mpeg')
+          kept[key] = { h: clip.h, a: audio, d: seconds, b: bytes, voice: clip.voice, model: clip.model, enc: CLIP_ENCODING }
+          if (++done % 250 === 0) console.log(`  re-encoded ${done} of ${reencode.length}`)
+        } catch (err) {
+          delete kept[key]
+          console.error(`  ${key} could not be re-encoded: ${err.message}`)
+        }
+      }
+    } finally {
+      await rm(tmp, { recursive: true, force: true })
+    }
+    console.log(`Re-encoded ${done} clip(s) at ${CLIP_ENCODING}.`)
+    for (const key of wanted) if (!kept[key] && !todo.includes(key)) todo.push(key)
+    await writeIndex()
+  }
+
   if (todo.length === 0) {
     if (dropped) await writeIndex()
     if (!flags['no-prune']) await prune(app, flags, store)
@@ -443,10 +494,10 @@ async function sync(app, flags) {
         const raw = await voice.speak(text, voiceId, path.join(tmp, 'clip.wav'), path.join(tmp, 'clip-raw.mp3'))
         const out = path.join(tmp, 'clip.mp3')
         const { bytes, seconds } = await toClipMp3(raw, out)
-        const audio = app.clipAudioFile(key, hash, voiceId)
+        const audio = app.clipAudioFile(key, hash, voiceId, CLIP_ENCODING)
         // Audio first: the index must never name a file that isn't there.
         await store.put(audio, await readFile(out), 'audio/mpeg')
-        kept[key] = { h: hash, a: audio, d: seconds, b: bytes, voice: voiceId, model: voice.model }
+        kept[key] = { h: hash, a: audio, d: seconds, b: bytes, voice: voiceId, model: voice.model, enc: CLIP_ENCODING }
         made++
         console.log(`  ${label} — ${seconds.toFixed(1)} s`)
         if (made % 25 === 0) await writeIndex()

@@ -161,8 +161,21 @@ describe('the recordings index', () => {
     expect(Object.keys(parsed)).toEqual(['brief/ok'])
   })
 
-  it('names audio by key, hash and voice', () => {
+  it('names audio by key, hash, voice and encoding', () => {
     expect(clipAudioFile('brief/x', 'h1', 'af_heart')).toBe('brief/x-h1-af-heart.mp3')
+    expect(clipAudioFile('brief/x', 'h1', 'af_heart', '48k')).toBe('brief/x-h1-af-heart-48k.mp3')
+  })
+
+  it('carries the encoding through the voice entry, and keeps the old one apart', () => {
+    const file = podcastIndexFile({
+      'brief/a': { ...clip('abc', 70), enc: '48k' },
+      'brief/b': clip('def', 5),
+    })
+    expect(file.voices).toEqual([['af_heart', 'kokoro-82m', '48k'], ['af_heart', 'kokoro-82m']])
+    const parsed = parsePodcastIndex(JSON.parse(JSON.stringify(file)))!
+    expect(parsed['brief/a']).toMatchObject({ a: 'brief/a-abc-af-heart-48k.mp3', enc: '48k' })
+    expect(parsed['brief/b'].a).toBe('brief/b-def-af-heart.mp3')
+    expect(parsed['brief/b'].enc).toBeUndefined()
   })
 
   it('a clip is current only when made from the script the vault has now', () => {

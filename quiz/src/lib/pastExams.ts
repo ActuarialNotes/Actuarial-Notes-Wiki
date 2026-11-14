@@ -225,8 +225,7 @@ export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
 /**
  * A practice exam's length on `exam` (a bank label): the paper's question
  * count where its pace is per question, else the table above, 30 where
- * nothing says. Read by the quiz builder's Practice Exam and by Actuaria's
- * Simulation (docs/actuaria-online.md §6.10), so the two can't disagree.
+ * nothing says. Read by the quiz builder's Practice Exam.
  */
 export function practiceExamQuestions(exam: string): number {
   const pace = paceForExam(exam)

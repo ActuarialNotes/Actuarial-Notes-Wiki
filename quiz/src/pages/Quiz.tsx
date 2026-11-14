@@ -35,9 +35,6 @@ import { DIFFICULTY_LEVELS, difficultyFromParam, difficultyLevelsFromParam } fro
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
 import { QuizSettingsButton, QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
-import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
-import { reportRaidHit } from '@/lib/actuaria/raidClient'
-import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
 import { moveScreen, REPLACE_AS_PUSH } from '@/lib/viewTransition'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
@@ -88,10 +85,6 @@ export default function Quiz() {
   // (lib/quizConceptLinks.ts) — the builder says so in the URL, anything else
   // falls back to the reader's saved choice for this mode.
   const linkConcepts = parseConceptLinksParam(searchParams.get('links')) ?? loadConceptLinks(mode)
-  // A raid run (Actuaria, docs/actuaria-online.md §7.7): an ordinary quiz whose
-  // first answer to each question is also handed to the cohort's boss, which
-  // the server marks — `raid` is the draw quiz/api/raid.js served it as.
-  const raidDraw = ACTUARIA_ENABLED ? searchParams.get('raid') : null
 
   const filters: QuestionFilter = useMemo(() => {
     const topicsParam = searchParams.get('topics')
@@ -527,7 +520,6 @@ export default function Quiz() {
       resetSoundCombo('correct')
     }
     answerQuestion(currentQuestion.id, answer)
-    if (ACTUARIA_ENABLED && raidDraw && !isChangingAnswer) void reportRaidHit(raidDraw, currentQuestion.id, answer)
     setIsChangingAnswer(false)
     trackQuestionAnswered({ question_id: currentQuestion.id, is_correct: correct, exam: currentQuestion.exam, mode })
     if (correct) trackFirstCorrect({ mode, exam: currentQuestion.exam })
@@ -689,7 +681,6 @@ export default function Quiz() {
       // and its buttons scrollable out from under it, as the study guide does.
       style={conceptPopupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
-      {ACTUARIA_ENABLED && raidDraw && <RaidHitChip />}
       <div className="flex items-center justify-between gap-3">
         <Button
           variant="ghost"

@@ -126,7 +126,6 @@ describe('contentGroup', () => {
     ['/store/gems', 'Gem Shop'],
     ['/project/pcpa/p-abc', 'Projects'],
     ['/cowork/sources/osfi', 'Cowork'],
-    ['/actuaria/sector/P', 'Actuaria'],
     ['/auth/callback', 'Account'],
     ['/no-such-page', 'Other'],
     // `/` is only ever itself.

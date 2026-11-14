@@ -30,9 +30,6 @@ export function pageHostsNavButton(pathname: string): boolean {
   if (pathname === '/store') return true
   // The Tools tab (ToolsSearchBar) — the catalogue and every tool under it.
   if (isUnder(pathname, '/tools')) return true
-  // Actuaria (its HUD row, and the title screen's own top line) — every
-  // in-world screen, which stays in space rather than under the app header.
-  if (isUnder(pathname, '/actuaria')) return true
   // The wiki (WikiFloatingSearch), the flag-gated research tab
   // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
   // page under them.

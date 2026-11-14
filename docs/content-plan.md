@@ -444,7 +444,7 @@ Before the first conversion (step 4) a bank has to exist for the exam: a prefix 
 (`SOA_PREFIX` / `SOA_BANK` in `scripts/pdf_extract.py`), a `bank` in `scripts/exam_catalog.json`,
 a label in `EXAM_LABEL_TO_ID` (`lib/examIds.ts`, which `bankLabelFor` reads), a row in the quiz
 builder's `QUIZ_EXAMS`, the body in `EXAM_BODIES`, and the paper's length and pace
-(`PRACTICE_EXAM_QUESTIONS`, `EXAM_PACE`, and Actuaria's raid mirror in `quiz/api/_raid/rules.js`).
+(`PRACTICE_EXAM_QUESTIONS`, `EXAM_PACE`).
 SRM has all of them (18 Oct). Promoting an exam to beta also makes its objectives Concept Craft
 boards, whose connections want written labels (`data/craftRelations.json`), and puts it on the
 DEFAULT track.

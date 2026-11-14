@@ -316,7 +316,7 @@ function localSnapshot(me: Seat, players: [BattlePlayer, BattlePlayer], config: 
   return {
     role: 'host', code: '', me, stage: battle ? 'playing' : 'drafting', connection: 'open',
     players, config, battle, opponentPresent: true, rematch: [false, false], reactions: [],
-    problem: null, pendingAnswer: null, pendingPower: null, draft, topicChoice,
+    problem: null, pendingAnswer: null, draft, topicChoice,
   }
 }
 

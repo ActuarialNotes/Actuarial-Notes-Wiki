@@ -142,7 +142,6 @@ const CONTENT_GROUPS: ReadonlyArray<readonly [prefix: string, group: string]> = 
   ['/upgrade', 'Upgrade'],
   ['/settings', 'Settings'],
   ['/auth', 'Account'],
-  ['/actuaria', 'Actuaria'],
   ['/cowork', 'Cowork'],
   ['/research', 'Research'],
 ]

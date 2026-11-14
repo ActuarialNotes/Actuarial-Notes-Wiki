@@ -14,8 +14,6 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/craft/exam-p-general-probability')).toBe(true)
     expect(pageHostsNavButton('/dashboard')).toBe(true)
     expect(pageHostsNavButton('/flashcards')).toBe(true)
-    expect(pageHostsNavButton('/actuaria')).toBe(true)
-    expect(pageHostsNavButton('/actuaria/sector/CAS-5')).toBe(true)
     expect(pageHostsNavButton('/tools')).toBe(true)
     expect(pageHostsNavButton('/tools/bornhuetter-ferguson')).toBe(true)
     expect(pageHostsNavButton('/store')).toBe(true)

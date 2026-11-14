@@ -19,7 +19,7 @@ const FONT_HREF = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:
 /**
  * The Deck's fonts, loaded from Google Fonts the first time a reader opens
  * Quiz Battle — a `<link>` from this lazy chunk, so the rest of the app never
- * pays for them (the Actuaria scope does the same for Oxanium).
+ * pays for them.
  */
 function useDeckFont() {
   useEffect(() => {

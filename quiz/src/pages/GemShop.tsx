@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Calculator, Check, ChevronLeft, Gem, Loader2, Lock, Star } from 'lucide-react'
+import { Check, ChevronLeft, Gem, Loader2, Lock, Star } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -24,12 +24,8 @@ import {
   type BannerEquip,
 } from '@/lib/banners'
 import { Button } from '@/components/ui/button'
-import { buttonVariants } from '@/components/ui/buttonVariants'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
-import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
-import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { cn } from '@/lib/utils'
@@ -39,12 +35,9 @@ import { cn } from '@/lib/utils'
 // nowhere. Put it back once a surface shows it.
 const SHOP_COSMETICS = COSMETICS.filter(c => c.type !== 'badge')
 
-type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
+type StoreTab = 'characters' | 'skins' | 'banners'
 
-// Ships are Actuaria's (docs/actuaria-online.md §7.3): sold here with the
-// other cosmetics, equipped in the Hangar. The tab is shown only to a viewer
-// who may enter Actuaria — Pro (lib/actuaria/access.ts).
-const STORE_TABS: StoreTab[] = ['characters', 'skins', 'banners', 'ships']
+const STORE_TABS: StoreTab[] = ['characters', 'skins', 'banners']
 
 function tabFromParam(value: string | null): StoreTab {
   return STORE_TABS.find(t => t === value) ?? 'characters'
@@ -70,7 +63,7 @@ function RarityBadge({ rarity }: { rarity: AnyRarity }) {
 
 /**
  * The **Gem Shop** — where the gems earned for correct answers are spent on
- * characters, skins, banners and Actuaria's ships. It is a corner of the Store
+ * characters, skins and banners. It is a corner of the Store
  * (`/store/gems`): the Store itself is real products, bought from their
  * sellers (`pages/Store.tsx`); this is the one place in it where something is
  * bought here, with gems.
@@ -84,12 +77,7 @@ export default function GemShop() {
   const { progress } = useExamProgress()
   const [searchParams] = useSearchParams()
 
-  const [activeTab, setActiveTab] = useState<StoreTab>(() => tabFromParam(searchParams.get('tab')))
-  // Ships are Actuaria's, so only a viewer who may enter it sees the tab.
-  const { allowed: showShips } = useActuariaAccess()
-  const tabs = showShips ? STORE_TABS : STORE_TABS.filter(t => t !== 'ships')
-  // `?tab=ships` from a viewer who can't see ships shows the first tab.
-  const shownTab: StoreTab = activeTab === 'ships' && !showShips ? 'characters' : activeTab
+  const [shownTab, setActiveTab] = useState<StoreTab>(() => tabFromParam(searchParams.get('tab')))
   const [skinAnimalFilter, setSkinAnimalFilter] = useState<AnimalType | null>(null)
 
   // All owned IDs from user_cosmetics (characters + paints + banner:custom)
@@ -201,21 +189,6 @@ export default function GemShop() {
     setBusyId(null)
   }
 
-  // ── Ship actions (Actuaria) ────────────────────────────────────────────────
-
-  async function handleBuyShip(item: ShipCosmetic) {
-    if (!userId) { navigate('/auth', { state: { from: '/store/gems?tab=ships' } }); return }
-    setBusyId(item.id); setError(null)
-    const { error: rpcError } = await supabase.rpc('purchase_cosmetic', {
-      p_cosmetic_id: item.id,
-      p_price: item.priceGems,
-    })
-    if (rpcError) { setError(rpcError.message); setBusyId(null); return }
-    playSound('reward')
-    await Promise.all([refreshGems(), fetchOwned()])
-    setBusyId(null)
-  }
-
   // ── Banner actions ─────────────────────────────────────────────────────────
 
   async function handleEquipBanner(equip: BannerEquip) {
@@ -309,7 +282,7 @@ export default function GemShop() {
 
       {/* Tab bar */}
       <div className="flex border-b border-border">
-        {tabs.map(tab => (
+        {STORE_TABS.map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -507,64 +480,6 @@ export default function GemShop() {
                   </Card>
                 )
               })}
-          </div>
-        </div>
-      )}
-
-      {/* ── Ships (Actuaria) ─────────────────────────────────────────────────── */}
-      {showShips && shownTab === 'ships' && (
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Parts for your ship in Actuaria. Equip them in the <Link to="/actuaria/hangar" className="underline">Hangar</Link>.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {storeShips().map(item => {
-              const isOwned = ownedIds.has(item.id)
-              const isBusy = busyId === item.id
-              const canAfford = balance >= item.priceGems
-              return (
-                <Card key={item.id} data-testid={`store-ship-${item.id}`}>
-                  <CardContent className="p-4 flex flex-col items-center gap-3">
-                    <div className="flex h-[72px] items-center justify-center">
-                      {item.slot === 'calculator'
-                        ? <Calculator className="h-10 w-10 text-muted-foreground" aria-hidden />
-                        : <ShipGlyph look={{ hull: item.hull ?? null, trail: item.trail ?? null }} size={72} />}
-                    </div>
-                    <div className="text-center space-y-1.5">
-                      <p className="text-sm font-semibold">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">{SHIP_SLOT_LABEL[item.slot]}</p>
-                      <RarityBadge rarity={item.rarity} />
-                    </div>
-                    {isOwned ? (
-                      <Link
-                        to="/actuaria/hangar"
-                        className={buttonVariants({ variant: 'outline', size: 'sm', className: 'w-full gap-1.5' })}
-                      >
-                        <Check className="h-4 w-4" />Owned · Equip in Hangar
-                      </Link>
-                    ) : !actionsReady ? (
-                      <Button size="sm" variant="outline" disabled className="w-full">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      </Button>
-                    ) : !user ? (
-                      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store/gems?tab=ships' } })} className="w-full gap-1.5">
-                        <Lock className="h-3.5 w-3.5" />Sign in to buy
-                      </Button>
-                    ) : canAfford ? (
-                      <Button size="sm" onClick={() => handleBuyShip(item)} disabled={isBusy} className="w-full gap-1.5">
-                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                          <>{item.priceGems} <Gem className="h-3.5 w-3.5" /></>
-                        )}
-                      </Button>
-                    ) : (
-                      <Button size="sm" disabled className="w-full gap-1.5 opacity-35">
-                        {item.priceGems} <Gem className="h-3.5 w-3.5" />
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              )
-            })}
           </div>
         </div>
       )}

@@ -98,9 +98,10 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
-  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
-  chunk), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, its one look, and the few shared pieces beside it
+  (`OnlineBattle.tsx` the online sessions, `BattleActionBar.tsx`'s round result and reactions,
+  `BattleResults.tsx`'s review row); their styles and Tailwind utilities are `battle.css`, in the
+  lazy chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
@@ -135,8 +136,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
   Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
   It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
-  "tap to go there" entry on those two pages uses (Games, the general guide,
-  Actuaria).
+  "tap to go there" entry on those two pages uses (Games, the general guide).
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
@@ -493,13 +493,13 @@ before touching that area**:
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
   every message is untrusted and parsed field by field. Before every online battle (a room's,
-  a matched one's, each rematch's, on either skin) comes the **draft** — each player draws
+  a matched one's, each rematch's) comes the **draft** — each player draws
   4 topics as flashcard tiles in 30 s and strikes 1 of the other's in 15 s, each hidden until
   both are in; the 3 cards left in each hand are **dealt to pairs** by Concept Craft's strength
   (`readPair`), the most pairs some question tests both of first, the strongest of those the
   final; a pair no question covers is settled by a **coin** the host tosses when its round
-  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
-  — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
+  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`).
+  On random hands a coin settles
   most rounds (measured, `docs/quiz-battle-redesign.md` §4); a same-screen battle drafts with the phone passed between turns (`LocalDraft` in `DeckLocal.tsx`). **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
@@ -510,7 +510,7 @@ before touching that area**:
   keep: **nothing is saved** (no mastery, XP, streak or attempts — the other player's answers
   are not the account's; the lobby pairs on the exam alone, since a rating would have to be
   stored), and only click-markable multiple choice is raced. Read before touching anything
-  named `battle*` or `Matchmaking`.
+  named `battle*` or `Deck*`.
 - `docs/tutor.md` — **the Tutor**, the plan and the build spec: the learning science it is
   built on (retrieval, spacing, successive relearning, interleaving, calibration, worked
   examples), the walk through the exam (phases from the exam date and the syllabus met), the
@@ -519,18 +519,6 @@ before touching that area**:
   (FSRS-4.5, gaps capped by the days left), the diagnosis of what is confusing, and who can
   use it (`TUTOR_STAGE`: preview → beta for Pro → open). Read before touching anything under
   `lib/tutor/`, `components/tutor/` or `tutorStore`.
-- `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
-  `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
-  `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
-  same list): each exam a *sector* of a star system, each concept a *landmark*,
-  Credibility = the mastery ladder and the readiness score, Coverage = the streak, a duel = a
-  Quiz Battle. It is the build spec, phase by phase, and its §2 ground rules are the part to
-  keep — one mastery ladder, one readiness number, one currency/streak/XP, **one battle engine**
-  (extend `battleReducer`, never fork it), exam hues from `examAccentStyle`, player colours only
-  inside a battle, and the game never gates study content. In-world words come from
-  `lib/actuaria/lexicon.ts`; the look is style guide §2.6 (`.actuaria dark` scope, the signal
-  teal as chrome only, Oxanium for display labels). Read before touching anything under
-  `actuaria/` or `Actuaria`.
 - `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), its
   two places — Sources and Workflows (Workflows replaced Deliverables) — and how they meet (a
   document as a workflow's source step), and the two rules that hold the whole thing up —
@@ -923,7 +911,7 @@ Other important `lib/` modules:
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
   ticked). The module also keeps the older weighted *lean* (`drawByDifficulty` /
-  `orderByDifficulty`, a 0–1 target) that Quiz Battle and Actuaria draw with, and that an old
+  `orderByDifficulty`, a 0–1 target) that Quiz Battle draws with, and that an old
   `level=0–100` link still applies. Pure and tested.
 - `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
   `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
@@ -1576,7 +1564,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1940,14 +1928,11 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
-- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` / `20261001_actuaria_pro.sql` /
-  `20261002_actuaria_approved.sql` — **Actuaria Online** (approved accounts only): a player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
-  `award_gems`), guides, nudges, Cohort Clash challenges and the weekly raid — leagues' privacy
-  model, RPC-only, with `actuaria_raid_hit` callable by the service role alone (`quiz/api/raid.js`),
-  and starting or joining a cohort held to the approved emails (`actuaria_is_approved`, the
-  same list as `ACTUARIA_APPROVED_EMAILS` — `access.test.ts` holds them equal).
-  `supabase/tests/run.sh` runs `supabase/tests/actuaria_crews.sql` against a throwaway local
-  Postgres; CI doesn't, so run it after touching that migration. See `docs/actuaria-online.md`.
+- `20261111_drop_actuaria.sql` — removed **Actuaria Online**, the game layer that the four
+  `*_actuaria*.sql` migrations before it added: every `actuaria_*` table and function is
+  dropped and `award_gems` is back to its plain form (no risk-pool multiplier).
+  `supabase/tests/run.sh` runs `supabase/tests/drop_actuaria.sql` against a throwaway local
+  Postgres (the Actuaria migrations, then the drop); CI doesn't.
 - `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's
   "Report an issue". Insert/select own rows only; **no** UPDATE or DELETE policy, so only the
   service-role `scripts/sync_reports.py` can mark a report synced.
@@ -1965,9 +1950,8 @@ headers for the serverless functions — `chat.js` and the flag-gated `research*
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above. Functions that must share the app's origin live in
 `quiz/api/` (`exam-pdf.js`, `amazon-price.js`, `mcp.js` — the AI connector, which reads
-the knowledge-base export from its own deployment — and `raid.js`, Actuaria's raid marking, which
-reads the same export and needs `SUPABASE_SERVICE_ROLE_KEY`); `quiz/api/_mcp/` and `quiz/api/_raid/`
-are `_`-prefixed so Vercel doesn't route them.
+the knowledge-base export from its own deployment); `quiz/api/_mcp/` and `quiz/api/_tools/` are
+`_`-prefixed so Vercel doesn't route them.
 
 ## Cowork (the second product)
 

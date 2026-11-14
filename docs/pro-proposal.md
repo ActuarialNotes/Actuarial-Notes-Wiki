@@ -81,10 +81,8 @@ This is the answer to "I'm doing this alone," in place of the Tutor. Proposed sh
   for exam candidates will attract cheating, answer-sharing and harassment.
 
 *Answers:* company, and the sense of a cohort. *Promise:* "Your exam has people on it right now."
-*Overlaps:* `Actuaria` cohorts (`docs/actuaria-online.md`) already put people into groups by
-approved accounts, and G6 in the roadmap names study-group leagues as the model to copy. Build it
-as its own surface first, and decide with the maintainer whether cohorts and study groups are one
-mechanism (§6, D-P4). **Note on ranking:** under `roadmap.md` §0.3 a new surface is Later until
+*Overlaps:* G6 in the roadmap names study-group leagues. Build it as its own surface first (§6,
+D-P4). **Note on ranking:** under `roadmap.md` §0.3 a new surface is Later until
 rules 1–3 are clear for its lane. It is ranked here as a conversion lever, so it should be proposed
 for Next only with a privacy and moderation design attached.
 
@@ -181,7 +179,7 @@ last column applies.
 | D-P1 | Headline and the outcome-first copy on `/upgrade` | **Decided 2026-10-31:** the §3 headline, levels free, no funding card |
 | D-P2 | Trial length and whether it is offered to every account that sets an exam date | Not offered |
 | D-P3 | The Sitting Pass: price, duration and whether it replaces or sits beside monthly | Not offered |
-| D-P4 | Study Group: separate from Actuaria cohorts, or the same mechanism | Separate |
+| D-P4 | Study Group: separate from Actuaria cohorts, or the same mechanism | Moot: Actuaria, cohorts included, was removed 2026-11-11 |
 | D-P5 | Study Group privacy: anonymous by default, and whether members can ever be named | Anonymous, not nameable |
 | D-P6 | Pass promise: what "Ready" means, what is refunded or re-offered, and when it goes live | Not shown |
 | D-P7 | Whether Listen is Pro (D12) | Free |

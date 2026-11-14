@@ -4,37 +4,58 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:de3f2a1db044faf5fb36848f263c70e8da60c92e40c451ca0693e0d45c38d80a
+  content_hash: sha256:c89a09ef82480a765e0b60c5db7a2931e0e6abed613fc7274cdd85b1ba2aab06
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Corporate Governance.md
 ---
 
-**Corporate Governance** is the system by which an insurer is directed and controlled — the board's composition and responsibilities, the independence and authority of the oversight functions, and the reporting that makes accountability real. [[OSFI]]'s Corporate Governance Guideline sets the expectations for federally regulated insurers, and it is the framework within which the [[Appointed Actuary]]'s role operates.
-
-- **The board's responsibilities** under the guideline: approve the business strategy and the [[Risk Appetite|risk appetite framework]]; oversee senior management; ensure the **oversight functions** (risk management, compliance, internal audit, and the actuarial function) are independent, resourced and heard; approve the [[ORSA]] and the [[Internal Target Capital Ratio|internal capital target]]; and review the [[FCT]] report.
-- **Board composition** expectations: a majority of independent directors, a chair independent of management, collective competence appropriate to the business, and a formal effectiveness assessment.
-- **The three lines model:** the business owns and manages its risks; the oversight functions independently challenge and monitor; internal audit provides independent assurance to the board. Independence of the second and third lines is what makes the model work, and its absence is a standard supervisory finding.
-- **The [[Appointed Actuary]] is a governance construct.** The [[Insurance Companies Act]] gives the appointment to the **directors**, not management, and gives the actuary a reporting line to the board and ultimately to OSFI — see [[Duty to Report]]. That structure is meaningless unless the board actually engages with the reports.
-- **The failure mode is passivity.** A board that receives reports and does not challenge them satisfies the form and not the substance. Supervisors test governance by looking at minutes: were the actuary's findings discussed, was a dissent recorded, did a limit breach produce an action?
-- **Culture is supervised too.** OSFI examines whether risk-taking incentives, remuneration and tone from the top are consistent with the stated appetite — and a mismatch between what the framework says and what the incentives reward is one of the most reliable predictors of trouble.
-
 ![[Media/Figures/Corporate_Governance.svg|340]]
 
-> [!example]- A Governance Failure in Slow Motion {Example}
-> An insurer's Appointed Actuary reports for three consecutive years that reserves are at the low end of the reasonable range and that the [[FCT]] adverse scenarios show the [[MCT]] ratio approaching the supervisory target. Each year the board receives the report and the audit committee notes it. No action is taken. In year four the insurer strengthens reserves by $\$70$ million and the ratio falls below $150\%$.
->
-> Identify the governance failures.
+**Corporate Governance** is the system by which an insurer is directed and controlled: the board's composition and responsibilities, the independence and authority of the oversight functions, and the reporting that holds management to account. [[OSFI]]'s Corporate Governance Guideline sets the expectations for federally regulated insurers, and the [[Appointed Actuary]]'s role operates within it.
+
+Under the guideline, the board's responsibilities are to:
+
+1. approve the business strategy and the [[Risk Appetite|risk appetite framework]];
+2. oversee senior management;
+3. ensure the oversight functions (risk management, compliance, internal audit and the actuarial function) are independent, resourced and heard;
+4. approve the [[ORSA]] and the [[Internal Target Capital Ratio|internal capital target]];
+5. review the [[FCT]] report.
+
+The guideline expects a majority of independent directors, a chair independent of management, collective competence appropriate to the business, and a formal assessment of the board's effectiveness.
+
+## The three lines model
+
+The oversight of risk is divided into three lines:
+
+1. The business owns and manages its risks.
+2. The oversight functions independently challenge and monitor them.
+3. Internal audit provides independent assurance to the board.
+
+The model works only if the second and third lines are independent, and their lack of independence is a standard supervisory finding.
+
+## The Appointed Actuary
+
+The [[Insurance Companies Act]] gives the appointment of the [[Appointed Actuary]] to the directors, not management, and gives the actuary a reporting line to the board and ultimately to OSFI under the [[Duty to Report|duty to report]]. That structure works only if the board engages with the reports.
+
+## Supervision of governance
+
+A board that receives reports and does not challenge them satisfies the form of governance and not the substance. Supervisors test governance by reading the minutes: whether the actuary's findings were discussed, whether a dissent was recorded, and whether a limit breach led to an action.
+
+OSFI also examines culture: whether risk-taking incentives, remuneration and the tone set by senior management are consistent with the stated risk appetite. A mismatch between what the framework says and what the incentives reward is one of the most reliable predictors of trouble.
+
+> [!example]- What governance failures does this case show? {Example}
+> An insurer's Appointed Actuary reports for three consecutive years that reserves are at the low end of the reasonable range, and that the [[FCT]] adverse scenarios show the [[MCT]] ratio approaching the supervisory target. Each year the board receives the report and the audit committee notes it. No action is taken. In year four the insurer strengthens reserves by $\$70$ million and the ratio falls below $150\%$.
 >
 > > [!answer]-
-> > **Several, and the actuarial reporting was not one of them** — the actuary did their job three times.
-> >
-> > 1. **The board received information and did not act on it.** "Noted" is not oversight. Three consecutive warnings on the same subject required a decision: strengthen reserves, raise capital, reduce writings, or record a reasoned conclusion that no action was needed. The minutes will show none of these.
-> > 2. **The [[Risk Appetite]] framework was not enforced.** If the framework contained an internal capital target, the FCT projections approaching the supervisory target should have triggered escalation. If it did not contain one, the framework was deficient.
-> > 3. **The oversight function was not effective.** The actuary reported and was heard, but nothing followed — which means the second line's challenge had no consequence, and the three lines model was formal only.
-> > 4. **[[ORSA]] failed its purpose.** ORSA is supposed to translate identified risks into a capital target management operates to. A three-year-old identified risk that never reached the capital plan means the process ran and produced nothing.
-> >
-> > **What the actuary should have done in year three**, having seen no response to two prior reports: escalate explicitly. The [[Insurance Companies Act]] path — CEO and CFO, then the **directors**, then [[OSFI]] — is available for a matter with material adverse effects on financial condition, and a reserve position at the low end of the range with adverse scenarios threatening the supervisory target qualifies. Section 361 protects the actuary who makes that report in good faith.
-> >
-> > **What OSFI will conclude.** The reserve deficiency is the symptom; the finding will be a governance one, and it will attach to the board and the risk committee rather than to the actuarial function.
+> > - The actuarial reporting did not fail: the actuary reported the problem three times.
+> > - The board received information and did not act on it. Three warnings on the same subject called for a decision: strengthen reserves, raise capital, reduce writings, or record a reasoned conclusion that no action was needed.
+> > - The [[Risk Appetite|risk appetite framework]] was not enforced. An internal capital target should have triggered escalation as the projections approached the supervisory target, and a framework without one was deficient.
+> > - The oversight function was heard but nothing followed, so the three lines model was a formality.
+> > - The [[ORSA]] failed its purpose, because a risk identified three years earlier never reached the capital plan.
+> > - By year three the actuary should have escalated under the [[Insurance Companies Act]]: to the CEO and CFO, then the directors, then [[OSFI]], for a matter with material adverse effects on financial condition. Section 361 protects an actuary who makes that report in good faith.
+> > - OSFI's finding would be a governance one, attached to the board and the risk committee rather than to the actuarial function.
+
+> [!trap] Treating a noted report as oversight
+> A board that minutes "noted" against a repeated warning has received the report but not overseen the risk. Oversight shows in a decision recorded in the minutes, including a reasoned decision to take no action.

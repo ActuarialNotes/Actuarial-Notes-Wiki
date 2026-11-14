@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a66b2344582d8c84f4bfeb89802bbab9615e7627467371145f47287548e0d17c
+  content_hash: sha256:ddcd50a8469f37ce5ad300c8fcd75398fe3d4f2284eeb20b2d3b086fc366c819
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §6.3 Maximum Likelihood (likelihood = pdf with roles reversed; log-likelihood; interior vs boundary maxima; invariance; Bernoulli/Poisson/normal/gamma MLEs; Uniform[0,h]: MLE X_(n), mse 2h²/((n+1)(n+2)), (n+1)X_(n)/n unbiased with var h²/(n(n+2)); Uniform[a,a+1]: MLE not unique), sha256:f8c94e3de84f7a025fd32395169938f37e7fd7958d5a8be9d56b54ed307d6ffd — https://www.randomservices.org/random/point/Likelihood.html"
@@ -28,11 +28,11 @@ A **Sufficient Statistic** for a parameter $\theta$ is a statistic $T = T(X_1, \
 
 Two samples with the same value of $T$ lead to the same inference about $\theta$. They give the same [[Maximum Likelihood Estimation|maximum likelihood estimate]] and the same posterior distribution. When observations are independent with a common parameter, a breakdown of the sample into subgroups adds no information once $T$ is known.
 
-> [!example]- Five policies each have a claim with probability $p$, independently. Two policies have a claim. Show that $T = \sum X_i$ is sufficient for $p$. {Example}
-> - Each sample with two claims has probability $p^2(1-p)^3$.
+> [!example]- Five policies each have a claim with probability $p$, independently. Is the number of claims $T = \sum X_i$ sufficient for $p$? {Example}
+> - Take $T = 2$. Each sample with two claims has probability $p^2(1-p)^3$.
 > - $T = 2$ has probability $\binom{5}{2}p^2(1-p)^3$, since 10 samples have two claims.
 > - The conditional probability of each sample given $T = 2$ is $1/10$.
-> - It does not involve $p$, so $T$ is sufficient for $p$.
+> - It does not involve $p$, and the same holds for every value of $T$, so $T$ is sufficient for $p$.
 
 ## The factorization theorem
 
@@ -53,7 +53,7 @@ The statistic $T$ is sufficient for $\theta$ if and only if the joint pmf or pdf
 | Normal | $\mu$ and $\sigma^2$ | $\sum X_i$ and $\sum X_i^2$ |
 | Uniform on $(0, \theta)$ | $\theta$ | $X_{(n)}$ |
 
-> [!example]- Losses are uniform on $(0, \theta)$. Show that the sample maximum $X_{(n)}$ is sufficient for $\theta$. {Example}
+> [!example]- Losses are uniform on $(0, \theta)$. Is the sample maximum $X_{(n)}$ sufficient for $\theta$? {Example}
 > - Each loss has density $1/\theta$ on $(0, \theta)$, so the joint density is $\theta^{-n}$ when every loss is between 0 and $\theta$, and 0 otherwise.
 > - Every loss is below $\theta$ exactly when $X_{(n)} \le \theta$.
 > - The joint density is $g = \theta^{-n}\,\mathbf{1}\{x_{(n)} \le \theta\}$ times $h = \mathbf{1}\{x_{(1)} \ge 0\}$.
@@ -69,6 +69,8 @@ A distribution belongs to the regular [[Exponential Family|exponential family]] 
 - $K(x)$ and $H(x)$ are functions of $x$ only.
 
 For such a distribution, $\sum K(X_i)$ is a [[Rao-Blackwell Theorem#Completeness|complete]] sufficient statistic for $\theta$. With two parameters, the exponent has two terms $p_1(\theta)K_1(x) + p_2(\theta)K_2(x)$, and the pair $\sum K_1(X_i)$ and $\sum K_2(X_i)$ is complete and sufficient. The Poisson, with $K(x) = x$, has the complete sufficient statistic $\sum X_i$.
+
+By the [[Rao-Blackwell Theorem#The Lehmann–Scheffé theorem|Lehmann–Scheffé theorem]], an unbiased estimator that is a function of a complete sufficient statistic is the [[Minimum Variance|minimum variance unbiased estimator]] (UMVUE).
 
 > [!example]- What is a complete sufficient statistic for a normal sample with unknown mean $\mu$ and unknown variance $\sigma^2$? {Example}
 > - The log of the density is $-\frac{x^2}{2\sigma^2} + \frac{\mu x}{\sigma^2} - \frac{\mu^2}{2\sigma^2} - \ln\left(\sigma\sqrt{2\pi}\right)$.

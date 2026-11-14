@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ecc038cc1de6a999d96b681caff60944694cccfe313f146e42e5276a5812d205
+  content_hash: sha256:e5c14e7a33643651aaeb6cdd4b84b9efe9c9fef56f8eedb453bdc49c97300105
   sources:
     - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.33-34 (AAD, phi_AAD, Table M analogy), pp.36 and 41-43 (aggregate models, collective risk cautions), p.42 (stop loss), p.43 (aggregate limit with reinstatements), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
@@ -13,69 +13,90 @@ verification:
   log: .verify/Concepts/Aggregate Excess of Loss.md
 ---
 
-**Aggregate Excess of Loss** reinsurance responds to the **total** of the cedant's losses over a period, usually a year, rather than to any single loss. The reinsurer pays the aggregate in excess of an aggregate retention $A$, up to an aggregate limit $L_A$. It is also called **aggregate stop-loss** reinsurance, and the threshold can be a percentage of premium (a loss ratio) or a fixed amount. Applied to the losses in an excess layer, the retention is an **annual aggregate deductible** (AAD).
+**Aggregate Excess of Loss** reinsurance responds to the **total** of the cedant's losses over a period, usually a year, rather than to any single loss. It is also called **aggregate stop-loss** reinsurance, and it is one of the [[Types of Reinsurance|types of reinsurance]].
+
+The reinsurer pays the aggregate in excess of an aggregate retention $A$, up to an aggregate limit $L_A$. If $S$ is the aggregate loss for the period, the reinsurer's payment is
 
 > $$Y = \min\left(\max(S - A,\, 0),\; L_A\right)$$
 
+- $S$ is the total of all subject losses for the period.
+
+The retention can be a fixed amount or a loss ratio applied to subject premium. Per-risk and per-occurrence covers miss a year of many medium-sized losses, and an aggregate cover protects the year's result against that accumulation.
+
+The reinsurer's expected loss is
+
 > $$E[Y] = E[S \wedge (A + L_A)] - E[S \wedge A]$$
+
+- $E[S \wedge x]$ is the [[Limited Expected Value|limited expected value]] of $S$ at $x$.
+
+$E[Y]$ depends on the whole distribution of $S$, not only on its mean. A stop loss usually attaches above the expected loss ratio, so the expected loss ratio plugged into $Y$ gives zero.
+
+> [!example]- What is the reinsurer's expected loss on this stop loss? {Example}
+> A stop loss covers 25 points of loss ratio in excess of a 75% loss ratio on $\$100$ million of subject premium. The cedant's loss ratio has this distribution:
+>
+> | Loss ratio | Probability |
+> | ---: | ---: |
+> | 60% | 0.30 |
+> | 70% | 0.35 |
+> | 80% | 0.20 |
+> | 95% | 0.10 |
+> | 115% | 0.05 |
+>
+> > [!answer]-
+> > - Each loss ratio times its probability gives 18, 24.5, 16, 9.5 and 5.75 points.
+> > - Their sum, the expected loss ratio, is 73.75%, below the 75% attachment.
+> > - The points ceded in each outcome are $\min(\max(\text{LR} - 75, 0), 25)$, which are 0, 0, 5, 20 and 25.
+> > - The expected points ceded are $0.20(5) + 0.10(20) + 0.05(25)$, which is 4.25.
+> > - The reinsurer's expected loss is $0.0425 \times \$100$ million $= \$4.25$ million.
+> > - In the 115% year the cover exhausts, and the cedant's net loss ratio is $115 - 25 = 90\%$.
+
+## Annual aggregate deductible
+
+Applied to the losses in an excess layer, the retention is an **annual aggregate deductible** (AAD). The cedant keeps the first layer losses each year but stays protected if there are more than expected. Here $S$ is the annual total of the per-occurrence layer losses. Clark's **excess charge factor**, the share of expected aggregate loss above $A$, is
 
 > $$\phi(A) = \frac{E\left[(S - A)_+\right]}{E[S]}$$
 
-- $S$ is the aggregate loss for the period: all subject losses for a stop loss, or the per-occurrence layer losses for an AAD. $\phi(A)$ is Clark's **excess charge factor**, the share of expected aggregate loss above $A$. It is the reinsurance analogue of a Table M insurance charge in [[Retrospective Rating|retrospective rating]].
-- **The expected value is not enough.** $E[Y]$ depends on the whole distribution of $S$. Plugging in the expected loss ratio usually gives zero, because stop losses attach above it. Clark regards the collective risk model — an [[Aggregate Loss Model|aggregate loss model]] of frequency and severity — as generally the best tool for these covers.
-- **Clark's cautions on aggregate models:** don't treat the model as a black box — check its CV and percentiles against the data; occurrences, and frequency and severity, are assumed independent; numerical methods can err at low frequencies; and the model captures process variance but not parameter variance or model risk.
-- **AAD on a working layer.** The cedant keeps the first layer losses each year but stays protected if there are more than expected. The net loss cost is the layer's loss cost gross of the AAD times $\phi_{\text{AAD}}$.
-- **Why buy it.** Per-risk and per-occurrence covers miss a year of many medium-sized losses; an aggregate cover protects the year's result against that frequency accumulation. Aggregate limits appear inside other contracts too: a catastrophe layer with $n$ [[Reinstatements]] has aggregate limit $(1+n)L$.
-- **Risk transfer.** Aggregate structures are the building blocks of [[Finite Reinsurance]]. An attachment far above the expected loss ratio or a thin limit invites [[Risk Transfer]] scrutiny. See [[Types of Reinsurance]].
+- $(S - A)_+$ is $\max(S - A,\, 0)$.
 
-> [!example]- Pricing a Stop Loss {Example}
-> A stop loss covers $25$ points of loss ratio in excess of a $75\%$ loss ratio on $\$100$M of subject premium. The cedant's loss ratio distribution: $60\%$ ($p = 0.30$), $70\%$ ($0.35$), $80\%$ ($0.20$), $95\%$ ($0.10$), $115\%$ ($0.05$). Find the expected loss ratio and the reinsurer's expected loss.
+It is the reinsurance analogue of the [[Table M]] insurance charge in [[Retrospective Rating|retrospective rating]]. For a discrete distribution of $S$, $E[(S - A)_+]$ is the probability-weighted sum of the amounts by which each outcome exceeds $A$. The net loss cost of the layer is
+
+> $$\text{Net Loss Cost} = \phi_{\text{AAD}} \times \text{Layer Loss Cost}$$
+
+- $\phi_{\text{AAD}}$ is the excess charge factor at the AAD.
+- $\text{Layer Loss Cost}$ is the layer's loss cost gross of the AAD.
+
+> [!example]- What are $\phi_{\text{AAD}}$ and the net loss cost of this layer? {Example}
+> A $\$500$K xs $\$500$K per-occurrence layer has $\$10$M of subject premium, and the cedant proposes an AAD of $\$750$K. The layer's annual aggregate losses are:
+>
+> | Layer losses | Probability |
+> | ---: | ---: |
+> | $\$0$ | 0.20 |
+> | $\$500$K | 0.30 |
+> | $\$1{,}000$K | 0.25 |
+> | $\$1{,}500$K | 0.15 |
+> | $\$2{,}500$K | 0.10 |
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[\text{LR}] &= 0.30(60) + 0.35(70) + 0.20(80) \\
-> > &\quad + 0.10(95) + 0.05(115) \\
-> > &= 73.75\%
-> > \end{align*}
-> > $$
-> >
-> > Points ceded, $\min(\max(\text{LR} - 75, 0), 25)$: $0, 0, 5, 20, 25$.
-> >
-> > $$
-> > \begin{align*}
-> > E[Y] &= 0.20(5) + 0.10(20) + 0.05(25) \\
-> > &= 4.25 \text{ points}
-> > \end{align*}
-> > $$
-> >
-> > Expected ceded loss is $0.0425 \times \$100\text{M} = \$4.25$ million. The expected loss ratio of $73.75\%$ is below the attachment, so a plug-in estimate would price this cover at zero. The whole cost comes from the tail. The cedant is still exposed above the exit: in the $115\%$ year its net loss ratio is $90\%$.
+> > - Each outcome times its probability gives $\$0$, $\$150$K, $\$250$K, $\$225$K and $\$250$K, so the expected layer loss is $E[S] = \$875$K.
+> > - The outcomes above the AAD exceed it by $\$250$K, $\$750$K and $\$1{,}750$K.
+> > - The expected excess is $0.25(250) + 0.15(750) + 0.10(1{,}750)$, which is $E[(S - 750)_+] = \$350$K.
+> > - The excess charge factor is $\phi_{\text{AAD}} = 350/875 = 0.40$.
+> > - The layer's loss cost gross of the AAD is $875/10{,}000 = 8.75\%$ of subject premium.
+> > - The net loss cost is $0.40 \times 8.75\% = 3.50\%$ of subject premium.
+> > - The cedant expects to retain $875 - 350 = \$525$K, less than the AAD, because in some years the layer losses fall short of it.
 
-> [!example]- Annual Aggregate Deductible on a Working Layer {Example}
-> A $\$500$K xs $\$500$K per-occurrence layer has annual aggregate layer losses of $\$0$ ($p = 0.20$), $\$500$K ($0.30$), $\$1{,}000$K ($0.25$), $\$1{,}500$K ($0.15$) and $\$2{,}500$K ($0.10$). Subject premium is $\$10$M. The cedant proposes an AAD of $\$750$K. Find $\phi_{\text{AAD}}$ and the net loss cost.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[S] &= 0.30(500) + 0.25(1{,}000) \\
-> > &\quad + 0.15(1{,}500) + 0.10(2{,}500) \\
-> > &= 875
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > E[(S - 750)_+] &= 0.25(250) + 0.15(750) + 0.10(1{,}750) \\
-> > &= 62.5 + 112.5 + 175 \\
-> > &= 350
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > \phi_{\text{AAD}} &= \frac{350}{875} \\
-> > &= 0.40
-> > \end{align*}
-> > $$
-> >
-> > The layer's loss cost falls from $875/10{,}000 = 8.75\%$ to $0.40 \times 8.75\% = 3.50\%$. The cedant expects to retain $875 - 350 = \$525$K, less than the $\$750$K AAD because in some years the layer losses fall short of it. It gives up $60\%$ of the expected layer loss but keeps protection against the bad years.
+## Aggregate limits in other contracts
+
+Aggregate limits appear inside other contracts too. A catastrophe layer with occurrence limit $L$ and $n$ [[Reinstatements|reinstatements]] has an aggregate limit of $(1+n)L$. Aggregate structures are also the building blocks of [[Finite Reinsurance|finite reinsurance]], and an attachment far above the expected loss ratio or a thin limit invites [[Risk Transfer|risk transfer]] scrutiny.
+
+## Pricing with an aggregate loss model
+
+Clark regards the collective risk model, an [[Aggregate Loss Model|aggregate loss model]] of frequency and severity, as generally the best tool for pricing aggregate covers. He gives four cautions:
+
+1. The model is not a black box. Check its CV and percentiles against the data.
+2. Occurrences are assumed independent, and so are frequency and severity.
+3. Numerical methods can err at low frequencies.
+4. The model captures process variance but not parameter variance or model risk.
+
+> [!trap] Pricing at the expected loss ratio
+> Putting the expected loss ratio into $Y$ prices most stop losses at zero, because they attach above it. In the stop loss example the expected loss ratio is 73.75%, below the 75% attachment, yet the reinsurer's expected loss is $\$4.25$ million. Price from the whole distribution of $S$.

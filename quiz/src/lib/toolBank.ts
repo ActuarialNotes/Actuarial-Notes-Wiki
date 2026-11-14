@@ -67,7 +67,7 @@ export function figureUses(row: Pick<AssumptionRow, 'id' | 'kind' | 'unit' | 'de
   return TOOLS.flatMap(tool =>
     tool.fields
       .filter((f): f is NumberField => f.kind === 'number' && !!f.bank?.includes(row.kind) && unitFits(row.unit, f.unit))
-      .map(field => ({ tool, field, path: runPath(toolSlug(tool), { [field.key]: { assumption: row.id } }) })),
+      .map(field => ({ tool, field, path: runPath(toolSlug(tool), { [field.key]: { assumption: row.id } }, tool.area) })),
   )
 }
 

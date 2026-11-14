@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
  * One assumption set (docs/assumptions-bank.md): what it is, whose and which
  * edition, its fact check, and its rows — each figure with where in the
  * document it is printed, a blank row saying it hasn't been read yet. Drawn
- * by the Assumptions Bank shelf (`/tools/assumptions`, with each figure's
+ * by the Assumptions Bank shelf (`/data-sources/assumptions`, with each figure's
  * "Use in" links as `rowAction`) and on the resource page it was read from.
  * The surface is `ResourceMetaCard`'s, so it reads as part of the citation.
  */

@@ -10,7 +10,7 @@ import {
   SearchScopePill,
 } from '@/components/FloatingSearchBar'
 import { highlightMatch } from '@/components/SearchHighlight'
-import { AREAS, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
+import { AREAS, toolPath, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { areaCounts, searchTools } from '@/lib/toolSearch'
 import type { Back } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
@@ -137,7 +137,7 @@ function ToolPageBar({ title, back, pinned, crumbs }: { title: string; back: Bac
 
   const open = (spec: ToolSpec) => {
     dismiss()
-    navigate(`/tools/${toolSlug(spec)}`)
+    navigate(toolPath(spec))
   }
 
   return (

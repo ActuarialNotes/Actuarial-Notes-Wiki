@@ -39,6 +39,7 @@ import {
   filedPlace,
   formatValue,
   periodLabel,
+  toolPath,
   toolSlug,
   type BankFigure,
   type ChoiceField,
@@ -201,7 +202,7 @@ export function ToolTemplate({
     })
   }
 
-  const openTool = (n: Neighbour) => navigate(`/tools/${toolSlug(n.tool)}`)
+  const openTool = (n: Neighbour) => navigate(toolPath(n.tool))
   const rowFor = (f: ScalarField) => (
     <InputRow
       key={f.key}

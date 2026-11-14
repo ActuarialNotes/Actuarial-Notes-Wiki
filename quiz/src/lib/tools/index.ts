@@ -5,14 +5,14 @@
  * agent run the same code (R1).
  */
 
-export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSearchText, toolSlug } from './registry'
+export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolPath, toolSearchText, toolSlug } from './registry'
 export { MAX_BATCH_RUNS, runBatch, runTool, type BatchResult, type BatchRunResult } from './run'
 export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
 export { CHECKS, FILED_CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'
 export { QUESTION_CHECKS, type QuestionCheck } from './questionChecks'
 export { defaultInput, evaluateArithmetic, normalizeInput, readNumber, readerMessage } from './input'
 export { formatValue } from './format'
-export { decodeRunInput, encodeRunInput, runPath } from './share'
+export { decodeRunInput, encodeRunInput, runPath, toolBasePath } from './share'
 export { ToolInputError } from './types'
 export type * from './types'
 export { DATASETS, datasetsFor, type Dataset } from './data/datasets'

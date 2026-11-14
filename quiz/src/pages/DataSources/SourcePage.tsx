@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * One **source**, as its own page — the publisher, and everything of theirs
- * Cowork carries.
+ * the Data Sources page carries.
  *
  * It is the shape an exam's study guide has: the thing itself gets a page with
  * its own address, its logo in the sticky header, and its contents below as
@@ -33,7 +33,7 @@ export interface SourcePageProps {
   backLabel?: string
 }
 
-export default function SourcePage({ entityId, onOpenResource, onBack, backLabel = 'Sources' }: SourcePageProps) {
+export default function SourcePage({ entityId, onOpenResource, onBack, backLabel = 'Publishers' }: SourcePageProps) {
   const library = useCoworkLibrary()
   const covers = useCoworkCovers()
   const entity = useMemo(() => entityById(COWORK_ENTITIES, entityId), [entityId])

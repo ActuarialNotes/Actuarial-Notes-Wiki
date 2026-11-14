@@ -138,7 +138,7 @@ describe('placeLabel', () => {
     expect(placeLabel('/store/gems')).toBe('Gem Shop')
     expect(placeLabel('/project/pcpa/p-1?view=report')).toBe('Project')
     expect(placeLabel('/store')).toBe('Store')
-    expect(placeLabel('/cowork/resources')).toBe('Resources')
+    expect(placeLabel('/data-sources/documents')).toBe('Documents')
     expect(placeLabel('/tools/chain-ladder')).toBe('Tools')
   })
 
@@ -152,8 +152,8 @@ describe('placeLabel', () => {
   })
 
   it('prefers the name a page gave itself', () => {
-    expect(entryLabel({ key: 'a', path: '/cowork/sources/osfi', label: 'OSFI' })).toBe('OSFI')
-    expect(entryLabel({ key: 'a', path: '/cowork/sources/osfi' })).toBe('Source')
+    expect(entryLabel({ key: 'a', path: '/data-sources/osfi', label: 'OSFI' })).toBe('OSFI')
+    expect(entryLabel({ key: 'a', path: '/data-sources/osfi' })).toBe('Data Sources')
   })
 })
 

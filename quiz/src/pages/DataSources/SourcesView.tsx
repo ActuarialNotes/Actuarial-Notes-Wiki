@@ -9,19 +9,16 @@ import {
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { EntityCard } from '@/components/cowork/EntityCard'
-import { CoworkPageRow } from '@/components/cowork/CoworkPageRow'
 import { LibraryPill } from '@/components/cowork/LibraryPill'
 import { cn } from '@/lib/utils'
 
 /**
- * The **Sources** shelf (`/cowork`): every publisher Cowork follows, as a grid
- * of cards each opening that publisher's own page
- * (`components/cowork/EntityCard.tsx`).
+ * The **Publishers** section of Data Sources (`/data-sources/publishers`):
+ * every publisher a reader can follow, as a grid of cards each opening that
+ * publisher's own page (`components/cowork/EntityCard.tsx`).
  *
- * What they publish is the other shelf, **Resources** (`ResourcesView.tsx`,
- * `/cowork/resources`). The two used to be one page with a Sources / Documents
- * toggle; they are two pages now, each carrying a row to the other — the way
- * the Study Guides tab's exam ladder and Resources shelf do — because a
+ * What they publish is the **Documents** section (`ResourcesView.tsx`,
+ * `/data-sources/documents`). The two are separate sections because a
  * publisher and a document are different questions with different filters.
  *
  * The filter row is led by **My Library** (the publishers the reader follows),
@@ -98,12 +95,6 @@ export default function SourcesView() {
         )}
       </div>
 
-      {/* The way across to the other shelf. Half the width from sm up, as the
-          Study Guides tab's row is. */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <CoworkPageRow page="resources" count={COWORK_RESOURCES.length} />
-      </div>
-
       {groups.length === 0 ? (
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           {libraryOnly && libraryCount === 0
@@ -118,7 +109,7 @@ export default function SourcesView() {
               group={group}
               followed={library.entityIds.includes(group.entity.id)}
               onToggleFollow={toggleEntity}
-              href={`/cowork/sources/${group.entity.id}`}
+              href={`/data-sources/${group.entity.id}`}
             />
           ))}
         </div>

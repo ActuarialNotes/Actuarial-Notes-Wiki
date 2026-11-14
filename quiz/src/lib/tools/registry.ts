@@ -1,4 +1,5 @@
 import type { PracticeArea, ToolSpec } from './types'
+import { runPath } from './share'
 import { interestConverter } from './finance/interestConverter'
 import { annuity } from './finance/annuity'
 import { presentValue } from './finance/presentValue'
@@ -106,6 +107,11 @@ export function toolById(id: string): ToolSpec | undefined {
 /** The route segment for a tool: `reserving.chain_ladder` → `chain-ladder`. */
 export function toolSlug(spec: ToolSpec): string {
   return spec.id.split('.')[1].replace(/_/g, '-')
+}
+
+/** The app path of a tool's own page: `/tools/<slug>`, or `/data-sources/<slug>` for a data tool. */
+export function toolPath(spec: ToolSpec): string {
+  return runPath(toolSlug(spec), undefined, spec.area)
 }
 
 export function toolBySlug(slug: string): ToolSpec | undefined {

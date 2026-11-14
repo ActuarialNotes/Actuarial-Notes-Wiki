@@ -347,7 +347,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   /** Open the next tool with what this one gives it, naming this one as the sender so the values arrive linked. */
   const sendTo = (n: Neighbour) => {
     const built = buildFor(n.handoff)
-    if (built) navigate(handoffPath(runPath(toolSlug(n.tool), built), slug))
+    if (built) navigate(handoffPath(runPath(toolSlug(n.tool), built, n.tool.area), slug))
   }
   const neighbours = useMemo(() => (embedded ? { before: [], after: [] } : { before: takesFrom(spec.id), after: givesTo(spec) }), [embedded, spec])
   // Once a link has been made, Takes from names only the tool it came from.
@@ -366,7 +366,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
     ...(onOpenMethod ? [{ key: 'method', label: 'Read about the method', icon: 'method' as const, run: onOpenMethod }] : []),
     { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => {
       const extra = selecting ? picksFragment(picks) : null
-      return `${window.location.origin}${runPath(slug, draft)}${extra ? `&${extra}` : ''}`
+      return `${window.location.origin}${runPath(slug, draft, spec.area)}${extra ? `&${extra}` : ''}`
     } },
     { key: 'ai', label: 'Copy for Claude or ChatGPT', icon: 'ai', run: () => runToolCall(spec, draft) },
     { key: 'json', label: 'Copy result as JSON', icon: 'json', disabled: !result, run: () => JSON.stringify(result, null, 2) },

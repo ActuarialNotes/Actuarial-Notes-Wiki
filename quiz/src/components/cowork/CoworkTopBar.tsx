@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, FileText, Gavel, Landmark, Newspaper, Scale, ScrollText, Table2 } from 'lucide-react'
+import { BookMarked, BookOpen, FileText, Gavel, Landmark, Newspaper, Scale, ScrollText, Table2 } from 'lucide-react'
 import {
   FloatingSearchBar,
   FloatingSearchInput,
@@ -21,15 +21,15 @@ import {
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 
 /**
- * Cowork's top bar — the search, the page strip, and (below `lg`) the way into
- * the sidebar drawer.
+ * The **Data Sources** page's top bar — the search, the page strip, and (below
+ * `lg`) the way into the sidebar drawer.
  *
  * It is the wiki's floating search, built from the same parts
  * (`components/FloatingSearchBar.tsx`): the same sticky blurred bar, the same
  * input line with the hamburger folding away as you type, the same dimmed
  * backdrop, the same scope pills, the same result rows. Cowork is a second
  * product, not a second design system, and searching should not feel like a
- * different app one mode over.
+ * different app on another page.
  *
  * It behaves like it too, which is the part that had been missing. A query is
  * **a question with answers**, not a filter that quietly thins the page behind
@@ -37,12 +37,9 @@ import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
  * publisher to their page, a document into the reader (`ConceptPopup`, the one
  * viewer). The two kinds are listed apart because they are answers to different
  * questions, and a publisher's row is not a heading over their documents: it is
- * the way to the page those documents are on.
- *
- * There are **no tabs here**. Sources and Workflows are the mode's two
- * places and the sidebar is where a place is chosen, the same as every route in
- * Study mode; a second row of tabs restating the nav cost a phone a row of
- * chrome to say what the drawer already says.
+ * the way to the page those documents are on. The published tables and the
+ * Assumptions Bank are answers too (`places`), listed first; for a reader who
+ * can't see the publishers (`catalogue` off) they are the only ones.
  */
 
 const KIND_ICON: Record<ResourceKind, typeof FileText> = {
@@ -56,6 +53,14 @@ const KIND_ICON: Record<ResourceKind, typeof FileText> = {
   paper: ScrollText,
   news: Newspaper,
   dataset: Table2,
+}
+
+/** A place on the page the search can go to: a published table, the Assumptions Bank. */
+export interface TopBarPlace {
+  name: string
+  subtitle: string
+  to: string
+  kind: 'table' | 'bank'
 }
 
 /** Where the query is being asked. */
@@ -73,6 +78,10 @@ export interface CoworkTopBarProps {
   entityId?: string | null
   /** Opens a document in the one viewer. */
   onOpenResource: (resource: SourceResource) => void
+  /** The tables and the bank, matched on their names and what they hold. */
+  places?: TopBarPlace[]
+  /** Whether the publishers and their documents are searched (approved accounts only). */
+  catalogue?: boolean
 }
 
 export function CoworkTopBar({
@@ -82,6 +91,8 @@ export function CoworkTopBar({
   backLink,
   entityId,
   onOpenResource,
+  places = [],
+  catalogue = true,
 }: CoworkTopBarProps) {
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('all')
@@ -120,20 +131,36 @@ export function CoworkTopBar({
   const inSource = scope === 'source' && Boolean(entityId)
 
   const results = useMemo(() => {
+    if (!catalogue) return { entities: [], resources: [] }
     const entities = inSource ? COWORK_ENTITIES.filter(e => e.id === entityId) : COWORK_ENTITIES
     const resources = inSource ? COWORK_RESOURCES.filter(r => r.entityId === entityId) : COWORK_RESOURCES
     return searchSources(entities, resources, query)
-  }, [query, inSource, entityId])
+  }, [query, inSource, entityId, catalogue])
+
+  const placeHits = useMemo(() => {
+    if (inSource) return []
+    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
+    if (!words.length) return []
+    return places.filter(p => {
+      const text = `${p.name} ${p.subtitle}`.toLowerCase()
+      return words.every(w => text.includes(w))
+    })
+  }, [query, inSource, places])
 
   const publishers = useMemo(() => new Map(COWORK_ENTITIES.map(e => [e.id, e] as const)), [])
 
   const hasQuery = query.trim().length > 0
   const isExpanded = active && hasQuery
-  const found = results.entities.length + results.resources.length
+  const found = placeHits.length + results.entities.length + results.resources.length
 
   function openEntity(entity: SourceEntity) {
     dismiss()
-    navigate(`/cowork/sources/${entity.id}`)
+    navigate(`/data-sources/${entity.id}`)
+  }
+
+  function openPlace(place: TopBarPlace) {
+    dismiss()
+    navigate(place.to)
   }
 
   function openResource(resource: SourceResource) {
@@ -162,20 +189,43 @@ export function CoworkTopBar({
 
           {isExpanded && (
             <div className="pb-3">
-              <div className="flex flex-wrap gap-1.5 py-2.5">
-                <SearchScopePill active={inSource} disabled={!entityId} onClick={() => setScope('source')}>
-                  This source
-                </SearchScopePill>
-                <SearchScopePill active={!inSource} onClick={() => setScope('all')}>
-                  Everywhere
-                </SearchScopePill>
-              </div>
+              {entityId ? (
+                <div className="flex flex-wrap gap-1.5 py-2.5">
+                  <SearchScopePill active={inSource} onClick={() => setScope('source')}>
+                    This publisher
+                  </SearchScopePill>
+                  <SearchScopePill active={!inSource} onClick={() => setScope('all')}>
+                    Everywhere
+                  </SearchScopePill>
+                </div>
+              ) : (
+                <div className="h-2" />
+              )}
 
               <ul className="max-h-[50vh] space-y-0.5 overflow-y-auto">
                 {found === 0 ? (
                   <li className="px-2 py-2 text-xs text-muted-foreground">No matches.</li>
                 ) : (
                   <>
+                    {placeHits.map(place => {
+                      const Icon = place.kind === 'bank' ? BookMarked : Table2
+                      return (
+                        <li key={`place:${place.to}`}>
+                          <button
+                            type="button"
+                            onClick={() => openPlace(place)}
+                            data-sound="open"
+                            className="flex w-full min-w-0 items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
+                          >
+                            <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-sm">{highlightMatch(place.name, query)}</span>
+                              <span className="block truncate text-[11px] text-muted-foreground">{place.subtitle}</span>
+                            </span>
+                          </button>
+                        </li>
+                      )
+                    })}
                     {results.entities.map(entity => (
                       <li key={`entity:${entity.id}`}>
                         <button

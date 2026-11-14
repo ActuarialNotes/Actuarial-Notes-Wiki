@@ -864,6 +864,8 @@ const STATIC_TITLES: Record<string, string> = {
   '/store': `Actuarial Exam Store | ${SITE_NAME}`,
   '/store/gems': `Gem Shop | ${SITE_NAME}`,
   '/tools': `Actuarial Tools | ${SITE_NAME}`,
+  '/data-sources': `Actuarial Data Sources | ${SITE_NAME}`,
+  '/workflows': `Workflows | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
   '/wiki/resources': `Actuarial Exam Syllabus Readings & Resources | ${SITE_NAME}`,
 }
@@ -931,12 +933,26 @@ export const TOOLS_HEAD: PageHead = {
   canonical: absoluteUrl('/tools'),
 }
 
-/** One tool's head: its name, and the question it answers. */
-export function toolHead(name: string, answers: string, slug: string): PageHead {
+/** The Data Sources page's head: the published tables and figures. */
+export const DATA_SOURCES_HEAD: PageHead = {
+  title: STATIC_TITLES['/data-sources']!,
+  description:
+    'Published actuarial data read from the publisher: US and Canadian life tables, price indexes, Treasury yield curves, insurer filings, and the figures documents state, each with its page.',
+  canonical: absoluteUrl('/data-sources'),
+}
+
+/**
+ * One tool's head: its name, and the question it answers. `path` is its page
+ * (`toolPath`): `/tools/<slug>`, or `/data-sources/<slug>` for a published table.
+ */
+export function toolHead(name: string, answers: string, path: string): PageHead {
+  const table = path.startsWith('/data-sources/')
   return {
-    title: `${name} Calculator | ${SITE_NAME}`,
-    description: `${answers} A live ${name.toLowerCase()} calculator with the working shown, the method linked and an export to Excel.`,
-    canonical: absoluteUrl(`/tools/${slug}`),
+    title: `${name}${table ? '' : ' Calculator'} | ${SITE_NAME}`,
+    description: table
+      ? `${answers} Read from the publisher's own table, with its edition and licence.`
+      : `${answers} A live ${name.toLowerCase()} calculator with the working shown, the method linked and an export to Excel.`,
+    canonical: absoluteUrl(path),
   }
 }
 

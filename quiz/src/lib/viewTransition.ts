@@ -85,18 +85,18 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
   // The Store, listed after Projects; the gem shop is a sheet laid over it.
   { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
-  // Tools, listed between Projects and the Shop; a tool's card is a sheet laid
-  // over the catalogue.
+  // Workflows, listed after Projects, with Tools and Data Sources under it
+  // and the Store after them. A workflow's board is a sheet laid over the
+  // library, a tool's card over the catalogue, and a table or a publisher
+  // over Data Sources.
+  { prefix: '/workflows', tab: 4.05, depth: 0, below: 1 },
   { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
+  { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
   // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
   { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
   { prefix: '/settings', tab: 8, depth: 0 },
-  // Cowork's two places are two tabs of their own, and a source opens as a
-  // sheet over its shelf.
-  { prefix: '/cowork', tab: 9, depth: 0, below: 1 },
-  { prefix: '/cowork/workflows', tab: 10, depth: 0 },
   { prefix: '/auth', tab: 11, depth: 0 },
 ]
 

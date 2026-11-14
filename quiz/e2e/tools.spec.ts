@@ -18,6 +18,28 @@ test.describe('tools', () => {
       await expect(page.getByRole('heading', { name: area, exact: true })).toBeVisible()
     }
     await expect(page.getByTestId('tool-row').first()).toBeVisible()
+    // The published tables are on Data Sources, reached from one row at the foot.
+    await expect(page.getByRole('heading', { name: 'Data Sources', exact: true })).toHaveCount(0)
+    await expect(page.getByTestId('data-sources-row')).toBeVisible()
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+
+  test('lists the published tables and the Assumptions Bank on Data Sources, and sends old links there', async ({ page }) => {
+    await page.goto('/tools')
+    await page.getByTestId('data-sources-row').click()
+    await expect(page).toHaveURL(/\/data-sources$/)
+    await expect(page.getByRole('heading', { name: 'Data Sources', exact: true })).toBeVisible()
+    await expect(page.getByTestId('data-table-row')).toHaveCount(4)
+    await page.getByTestId('data-table-row').filter({ hasText: 'Yield Curve' }).click()
+    await expect(page).toHaveURL(/\/data-sources\/yield-curve$/)
+    await expect(page.getByTestId('tool-card')).toBeVisible()
+
+    // An old address — a share link, an agent's app_url — lands on the new one with its run.
+    await page.goto('/tools/life-table#input=e30')
+    await expect(page).toHaveURL(/\/data-sources\/life-table#input=e30$/)
+    await page.goto('/tools/assumptions')
+    await expect(page).toHaveURL(/\/data-sources\/assumptions$/)
+    await expect(page.getByTestId('assumption-set').first()).toBeVisible()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 
@@ -109,9 +131,9 @@ test.describe('tools', () => {
     for (const slug of [
       'annuity', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
       'full-credibility-standard', 'expected-payment', 'trend-factor',
-      'loss-ratio-method', 'pure-premium-method', 'interest-converter', 'life-table',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter', 'data-sources/life-table',
     ]) {
-      await page.goto(`/tools/${slug}`)
+      await page.goto(slug.includes('/') ? `/${slug}` : `/tools/${slug}`)
       await expect(page.getByTestId('tool-figure')).toBeVisible()
       const box = await page.getByTestId('tool-answer').boundingBox()
       expect(box, slug).not.toBeNull()
@@ -220,9 +242,9 @@ test.describe('tools', () => {
   // into a tool, from the shelf or from the field's own From… menu, and the
   // run saying where it came from.
   test('takes a published figure from the Assumptions Bank into a tool, with its source', async ({ page }) => {
-    await page.goto('/tools')
-    await page.getByTestId('assumptions-row').click()
-    await expect(page).toHaveURL(/\/tools\/assumptions$/)
+    await page.goto('/data-sources')
+    await page.getByTestId('data-section-assumptions').click()
+    await expect(page).toHaveURL(/\/data-sources\/assumptions$/)
     await expect(page.getByTestId('assumption-set').first()).toBeVisible()
     await page.getByRole('button', { name: 'Profit provision', exact: true }).click()
     await expect(page.getByTestId('assumption-set')).toHaveCount(1)
@@ -354,7 +376,7 @@ test.describe('tools', () => {
   })
 
   test('shows a document\'s figures on its resource page', async ({ page }) => {
-    await page.goto('/tools/assumptions')
+    await page.goto('/data-sources/assumptions')
     const set = page.getByTestId('assumption-set').filter({ hasText: 'ULAE factors' })
     await set.getByRole('button', { name: 'Read the source' }).click()
     const assumptions = page.getByTestId('resource-assumptions')
@@ -362,7 +384,7 @@ test.describe('tools', () => {
     await expect(assumptions).toContainText('1.1189')
   })
   test('reads an insurer\'s OSFI filing and recomputes its MCT ratio from the filed lines', async ({ page }) => {
-    await page.goto('/tools/insurer-return')
+    await page.goto('/data-sources/insurer-return')
     const card = page.getByTestId('tool-card')
     // The insurer is picked from every filer, through the sheet's search.
     await card.locator('[data-field="insurer"]').click()
@@ -409,7 +431,7 @@ test.describe('tools', () => {
   })
 
   test('asks Insurer Return its question first, and sets capital against the minimum', async ({ page }) => {
-    await page.goto('/tools/insurer-return')
+    await page.goto('/data-sources/insurer-return')
     const card = page.getByTestId('tool-card')
     await expect(card.getByTestId('tool-data-source')).toContainText('Open Government Licence')
     const insurer = (await card.locator('[data-field="insurer"]').boundingBox())!

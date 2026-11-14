@@ -52,7 +52,17 @@ export function decodeRunInput(hash: string): unknown {
   }
 }
 
-/** The app path that opens a run: `/tools/<slug>#input=…`. */
-export function runPath(slug: string, input?: unknown): string {
-  return input === undefined ? `/tools/${slug}` : `/tools/${slug}#${INPUT_FRAGMENT}=${encodeRunInput(input)}`
+/**
+ * Where a tool's page lives. A calculator is on the Tools tab; a Data Sources
+ * tool (area `data` — a published table) is on the Data Sources page, beside
+ * the Assumptions Bank and the publishers.
+ */
+export function toolBasePath(area?: string): string {
+  return area === 'data' ? '/data-sources' : '/tools'
+}
+
+/** The app path that opens a run: `/tools/<slug>#input=…` (`/data-sources/<slug>` for a data tool). */
+export function runPath(slug: string, input?: unknown, area?: string): string {
+  const path = `${toolBasePath(area)}/${slug}`
+  return input === undefined ? path : `${path}#${INPUT_FRAGMENT}=${encodeRunInput(input)}`
 }

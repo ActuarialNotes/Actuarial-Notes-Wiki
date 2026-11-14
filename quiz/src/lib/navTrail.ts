@@ -184,17 +184,17 @@ const STATIC_LABELS: Record<string, string> = {
   '/craft': 'Concept Craft',
   '/project': 'Projects',
   '/tools': 'Tools',
-  '/tools/assumptions': 'Assumptions Bank',
+  '/data-sources': 'Data Sources',
+  '/data-sources/assumptions': 'Assumptions Bank',
+  '/data-sources/publishers': 'Publishers',
+  '/data-sources/documents': 'Documents',
   '/community': 'Community',
   '/store': 'Store',
   '/store/gems': 'Gem Shop',
   '/settings': 'Settings',
   '/upgrade': 'Upgrade',
   '/research': 'Research',
-  '/cowork': 'Sources',
-  '/cowork/sources': 'Sources',
-  '/cowork/resources': 'Resources',
-  '/cowork/workflows': 'Workflows',
+  '/workflows': 'Workflows',
 }
 
 /** What a place is called, read off its path alone. */
@@ -214,7 +214,8 @@ export function placeLabel(path: string): string {
   if (pathname.startsWith('/wiki/question/')) return 'Question'
   if (pathname.startsWith('/project/')) return 'Project'
   if (pathname.startsWith('/craft/')) return 'Concept Craft'
-  if (pathname.startsWith('/cowork/sources/')) return 'Source'
+  if (pathname.startsWith('/workflows/')) return 'Workflow'
+  if (pathname.startsWith('/data-sources/')) return 'Data Sources'
   if (pathname.startsWith('/tools/')) return 'Tools'
   if (pathname.startsWith('/community/')) return 'Community'
   if (pathname.startsWith('/research/')) return 'Research'

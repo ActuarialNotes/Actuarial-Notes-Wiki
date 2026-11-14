@@ -407,8 +407,10 @@ What Phase 0 left for later, and why:
   checked*, and **Read the source**, which opens the resource page in the concept popup. The
   card leaves the run's unchecked-figure warning out of its own warning list, since the line
   under the field says it.
-- **The shelf** is `/tools/assumptions` (`components/assumptions/AssumptionsShelf.tsx`), a row
-  under Data Sources in the catalogue (D-AB2). It shows every current set, newest first,
+- **The shelf** is `/data-sources/assumptions` (`components/assumptions/AssumptionsShelf.tsx`),
+  a section of the Data Sources page beside the published tables (D-AB2; it was
+  `/tools/assumptions`, a row in the Tools catalogue, until 2026-11-14, and that address
+  redirects). It shows every current set, newest first,
   filtered by kind (`?kind=`). Each set is an `AssumptionSetCard`: its Fact Check badge, its
   rows with their locators, **Read the source** and the publisher's copy. Each figure has a
   *Use in a tool* toggle, whose links open a tool with the figure already in it. *(Template v2,
@@ -456,7 +458,7 @@ connector installs the bank too, so it lands with the connector.
 | ID | Question | Decision |
 |---|---|---|
 | D-AB1 | A folder of its own, or a section on each resource page? | **`Assumptions/`**, one structured markdown file per set (§4.1) |
-| D-AB2 | Where the shelf lives | **Under Tools**, beside Data Sources |
+| D-AB2 | Where the shelf lives | **Under Tools**, beside Data Sources — then, 2026-11-14, a section of the Data Sources page (`/data-sources/assumptions`) |
 | D-AB3 | Which documents may have figures transcribed, and which only blank rows with locators? | **Case by case.** A set's optional `Licence` key records the terms when they bear on it. The first three (OSFI, GISA's free high-level exhibit, the AIRB) are public regulators' and a statistical agency's free publications |
 | D-AB4 | May an unverified figure be offered to a tool? | **Yes, with a warning** (and its verdict pill). A critical finding withholds it |
 | D-AB5 | Open to everyone, or Pro? | **Open to everyone.** The bank makes public data easier to reach. It isn't a reason to gate it. Cowork's own gate (A4, D13) is unchanged |

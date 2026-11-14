@@ -21,6 +21,7 @@ import {
 import { formatValue } from '@/lib/tools'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
 import type { ConceptLevels } from '@/hooks/useConceptLevels'
+import { KIND_TINT } from './kindTint'
 import { cn } from '@/lib/utils'
 
 /**
@@ -86,14 +87,6 @@ const LABEL_ZOOM = 0.6
 const LINE_HIT = 14
 
 const KIND_ICON: Record<StepKind, LucideIcon> = { source: Library, data: Database, tool: Calculator, concept: BookOpen, workflow: WorkflowIcon }
-/** Each kind's stripe down the card's left edge. */
-const KIND_TINT: Record<StepKind, string> = {
-  source: 'hsl(160 70% 48%)',
-  data: 'hsl(199 89% 56%)',
-  tool: 'hsl(var(--primary))',
-  concept: 'hsl(38 92% 56%)',
-  workflow: 'hsl(262 83% 70%)',
-}
 const ACCENT = 'hsl(var(--primary))'
 
 /** A source table's figures still to be read off the document: its blank cells, past the label column. */

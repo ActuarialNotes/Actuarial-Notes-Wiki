@@ -125,7 +125,8 @@ describe('contentGroup', () => {
     ['/craft/exam-5-ratemaking', 'Concept Craft'],
     ['/store/gems', 'Gem Shop'],
     ['/project/pcpa/p-abc', 'Projects'],
-    ['/cowork/sources/osfi', 'Cowork'],
+    ['/data-sources/osfi', 'Data Sources'],
+    ['/workflows/wf-1', 'Workflows'],
     ['/auth/callback', 'Account'],
     ['/no-such-page', 'Other'],
     // `/` is only ever itself.

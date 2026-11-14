@@ -1,18 +1,19 @@
 # Workflows
 
-`/cowork/workflows`, **Cowork**'s second place — the sidebar lists it under Sources
-(docs/cowork.md). It was the *Workflow Builder* under the Tools tab; it moved to Cowork,
-renamed, when it replaced Cowork's Deliverables, and `/tools/workflow` and
+`/workflows` — a row of the sidebar, with **Tools** and **Data Sources** under it
+(docs/cowork.md). It was the *Workflow Builder* under the Tools tab, then Cowork's second
+place at `/cowork/workflows`; `/tools/workflow`, `/cowork/workflows` and
 `/cowork/deliverables` now redirect here. A reader lays out an actuarial workflow —
-**sources** (documents from Cowork's Sources, and the tables they publish), **data**
+**sources** (documents from Data Sources' publishers, and the tables they publish), **data**
 (published tables, or a **CSV** of their own), **calculations**, **concepts** and whole
 **sub-workflows** as steps on a grid, joined by **directed connections** — watches it run
-live on the Actuarial Tools engine, keeps the ones worth keeping in a **library**, and
+live on the Actuarial Tools engine, finds every one they have built in the **library** it opens on, and
 **runs it in Claude** by copying it as a brief for the Actuarial Notes connector.
 
-Because it is Cowork's, it is behind Cowork's gate: `RequireMode mode="cowork"` in `App.tsx`
-(approved accounts while Cowork is in Preview), and `TOOLS_ENABLED` too, since it runs the
-tools engine. The e2e build opens it to every viewer with `VITE_COWORK_PREVIEW=on`.
+It is in Preview: `WorkflowRoute` in `App.tsx` admits the accounts `lib/workflowsAccess.ts`
+approves (`hooks/useWorkflowsAccess.ts`, which also needs `COWORK_ENABLED` and `TOOLS_ENABLED`,
+since it runs the tools engine) and sends anyone else to the dashboard. The e2e build opens it
+to every viewer with `VITE_COWORK_PREVIEW=on`.
 
 It is Concept Craft's board (docs/concept-craft.md) with the physics taken out. Concept
 Craft is a map to be discovered, so its cards float on a force simulation; a workflow is a
@@ -25,8 +26,10 @@ anywhere on an unbounded board.
 | The grid: snapping, the gutter between cards, placement, the line between two cards | `quiz/src/lib/workflowGrid.ts` |
 | An uploaded CSV: reading it, and mapping its columns onto a tool's inputs | `quiz/src/lib/workflowCsv.ts` |
 | The brief *Copy for Claude* writes | `quiz/src/lib/workflowBrief.ts` |
-| The reader's workflows and library (localStorage), and the sub-workflow resolver | `quiz/src/hooks/useWorkflows.ts` |
-| The page | `quiz/src/pages/WorkflowBuilder.tsx` |
+| The reader's workflows (localStorage), and the sub-workflow resolver | `quiz/src/hooks/useWorkflows.ts` |
+| The library: which workflows it lists, a card's drawing of its board, copying one | `quiz/src/lib/workflowLibrary.ts` |
+| The library page | `quiz/src/components/workflow/WorkflowLibrary.tsx` |
+| The page: the library at `/workflows`, a board at `/workflows/:id` | `quiz/src/pages/WorkflowBuilder.tsx` |
 | A source step's document and table | `SourceResource.table` in `quiz/src/lib/coworkSources.ts`, authored in `quiz/src/data/coworkSources.ts` |
 | The board | `quiz/src/components/workflow/WorkflowBoard.tsx` |
 | The **+** menu | `quiz/src/components/workflow/WorkflowAddMenu.tsx` |
@@ -42,7 +45,7 @@ All four `lib/` modules are pure and tested (`workflow*.test.ts`); the flows are
 
 | Kind | What it is | `ref` |
 | --- | --- | --- |
-| **Source** | A document from Cowork's Sources — and, when it publishes one, its table as data | the resource's id (`fsra-ppa-loss-trend-benchmarks`) |
+| **Source** | A document from a publisher under Data Sources — and, when it publishes one, its table as data | the resource's id (`fsra-ppa-loss-trend-benchmarks`) |
 | **Data** | A Data Sources tool (life table, price index, yield curve), a **CSV** the reader uploaded, or their **own data** named and described or pasted in | the tool id, `csv`, or `custom` |
 | **Calculation** | Any other Actuarial Tool | the tool id (`reserving.chain_ladder`) |
 | **Concept** | A vault concept page: the method, definition or judgment a step rests on | the page name |
@@ -136,12 +139,27 @@ data is included verbatim.
 
 ## The library
 
-**Save** (the bookmark in the header) puts the open workflow in the reader's **library**
-(`Workflow.saved`); tapping it again takes it out. The library is what the **starting
-screen** — the board of an empty workflow — lists above the templates, each opening the
-workflow it names (an empty, unsaved draft is let go as it does), and what the + menu's
-*Workflow* page offers as sub-workflows. The title's menu lists the library and the drafts
-(workflows not saved, with steps on them) apart.
+Workflows opens on the **library** (`/workflows`), the way a design tool opens on its files
+rather than on a blank canvas. First **Start a workflow**: a **New workflow** tile and a tile
+per template, each drawn as its board. Then **Your workflows**: every workflow the reader has
+built, as a grid of cards, the most recently edited first (`libraryWorkflows`). A card is a
+drawing of the board — each step a block where it sits, in its kind's colour, each connection a
+line (`workflowThumbnail`, read off the saved layout, never a screenshot) — then the title, the
+number of steps and when it was last edited (`editedLabel`). Its ⋯ menu renames it in place,
+duplicates it (`duplicateWorkflow`, the copy leading the grid as the newest edit) or deletes it
+(a second tap confirms). Past eight workflows the header offers a search over titles and goals.
+
+**There is no Save.** Every change is kept as it is made, so every workflow with a step is in
+the library and is what the + menu's *Workflow* page offers as a sub-workflow
+(`subWorkflowChoices`). A workflow started and left empty is let go the next time the library
+opens — on arriving there rather than on leaving a board, so a board is never pulled out from
+under the reader. The old `Workflow.saved` mark is still read from storage and decides nothing.
+
+**Each workflow is an address**, `/workflows/<id>`: the board takes its workflow from the URL
+(`BoardPage`, which makes it the store's open one), an id that names none goes back to the
+library, and the header's back arrow goes back to wherever the board was opened from
+(`useBack`, falling back to the library). The title's menu renames, duplicates or deletes the
+workflow; opening another one is the library's job.
 
 ## Sub-workflows
 
@@ -160,9 +178,9 @@ rate indication as one card in a pricing review, or opened up into its six steps
   (`StepRun.inner`), and its card shows its last calculation's headline figure (`StepRun.exits`),
   or how many of its steps need input (`innerErrors`). Its panel lists its steps in run order
   with their figures, and what links into it ("Trend Fit: points linked to cpi.csv").
-- **Open this workflow** goes into it, on the same board; the header shows the workflow it was
-  opened from, and tapping that goes back up. A **template** opens as a copy of the reader's
-  own, saved to their library, and the step is pointed at the copy — so what is changed inside
+- **Open this workflow** goes into it, at its own address, so the header's back arrow (or the
+  browser's Back) comes back up to the workflow it is a step of. A **template** opens as a copy
+  of the reader's own, added to their library, and the step is pointed at the copy — so what is changed inside
   is what the step runs. A sub-workflow is resolved by id each time (`resolverFor`, over the
   library and the templates), so editing a library workflow changes every board it is on, and
   its card reads under its current title (`withResolvedLabels`).
@@ -172,13 +190,13 @@ rate indication as one card in a pricing review, or opened up into its six steps
 
 ## Sources
 
-The + menu's first page is **Source**: the reader's library from Sources first, then every
+The + menu's first page is **Source**: the documents the reader has taken first, then every
 publisher's catalogue, or a search over document titles (`searchSources`). A source step is a
 document the work rests on, named — its panel shows the publisher (a tap goes to their page in
-Sources), the document's kind and date, **Read the document** (the concept popup, the same
-reader Sources opens it in, walking the workflow's documents in run order), and what it
+Data Sources), the document's kind and date, **Read the document** (the concept popup, the same
+reader Data Sources opens it in, walking the workflow's documents in run order), and what it
 supplies (`SourceResource.assumptions`, each with its locator). A document goes on a board
-once, and putting it there adds it to the reader's library in Sources, as **Add** does.
+once, and putting it there adds it to the reader's library in Data Sources, as **Add** does.
 
 A document that **publishes a table** carries its shape in the catalogue
 (`SourceResource.table`: the publisher's columns, its row labels, and a locator). On the board
@@ -239,5 +257,5 @@ concepts to `Concepts/`, and runs each one cleanly.
 
 localStorage only (`actuarial_workflows_v1`), every workflow and which is open, read back
 field by field (`parseWorkflow` drops a step it can't place and any connection that would
-loop). The title opens a menu to rename the workflow, open another, start a new one (empty or
-from a template) or delete it.
+loop). Which is open follows the address; the store's `currentId` is what its `update`
+edits.

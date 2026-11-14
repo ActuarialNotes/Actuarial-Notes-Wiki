@@ -2,6 +2,56 @@
 // The Actuarial Tools engine, bundled for the serverless functions (docs/actuarial-tools.md §8.2).
 
 
+// src/lib/tools/share.ts
+var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+function toBase64Url(bytes) {
+  let out = "";
+  for (let i = 0; i < bytes.length; i += 3) {
+    const n = bytes[i] << 16 | (bytes[i + 1] ?? 0) << 8 | (bytes[i + 2] ?? 0);
+    const chars = i + 2 < bytes.length ? 4 : i + 1 < bytes.length ? 3 : 2;
+    for (let k = 0; k < chars; k++) out += ALPHABET[n >> 18 - 6 * k & 63];
+  }
+  return out;
+}
+function fromBase64Url(text) {
+  const bytes = [];
+  let buffer = 0;
+  let bits = 0;
+  for (const ch of text) {
+    const v = ALPHABET.indexOf(ch);
+    if (v < 0) return null;
+    buffer = buffer << 6 | v;
+    bits += 6;
+    if (bits >= 8) {
+      bits -= 8;
+      bytes.push(buffer >> bits & 255);
+    }
+  }
+  return new Uint8Array(bytes);
+}
+var INPUT_FRAGMENT = "input";
+function encodeRunInput(input) {
+  return toBase64Url(new TextEncoder().encode(JSON.stringify(input)));
+}
+function decodeRunInput(hash) {
+  const match = new RegExp(`(?:^#?|&)${INPUT_FRAGMENT}=([A-Za-z0-9_-]+)`).exec(hash);
+  if (!match) return null;
+  const bytes = fromBase64Url(match[1]);
+  if (!bytes) return null;
+  try {
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}
+function toolBasePath(area) {
+  return area === "data" ? "/data-sources" : "/tools";
+}
+function runPath(slug, input, area) {
+  const path = `${toolBasePath(area)}/${slug}`;
+  return input === void 0 ? path : `${path}#${INPUT_FRAGMENT}=${encodeRunInput(input)}`;
+}
+
 // src/lib/tools/types.ts
 var ToolInputError = class extends Error {
   constructor(field, message) {
@@ -4982,6 +5032,9 @@ function toolById(id) {
 }
 function toolSlug(spec) {
   return spec.id.split(".")[1].replace(/_/g, "-");
+}
+function toolPath(spec) {
+  return runPath(toolSlug(spec), void 0, spec.area);
 }
 function toolBySlug(slug) {
   return TOOLS.find((t) => toolSlug(t) === slug) ?? BY_ID.get(slug);
@@ -11204,52 +11257,6 @@ function describeTool(spec) {
     next: (spec.next ?? []).map((n) => n.tool)
   };
 }
-
-// src/lib/tools/share.ts
-var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-function toBase64Url(bytes) {
-  let out = "";
-  for (let i = 0; i < bytes.length; i += 3) {
-    const n = bytes[i] << 16 | (bytes[i + 1] ?? 0) << 8 | (bytes[i + 2] ?? 0);
-    const chars = i + 2 < bytes.length ? 4 : i + 1 < bytes.length ? 3 : 2;
-    for (let k = 0; k < chars; k++) out += ALPHABET[n >> 18 - 6 * k & 63];
-  }
-  return out;
-}
-function fromBase64Url(text) {
-  const bytes = [];
-  let buffer = 0;
-  let bits = 0;
-  for (const ch of text) {
-    const v = ALPHABET.indexOf(ch);
-    if (v < 0) return null;
-    buffer = buffer << 6 | v;
-    bits += 6;
-    if (bits >= 8) {
-      bits -= 8;
-      bytes.push(buffer >> bits & 255);
-    }
-  }
-  return new Uint8Array(bytes);
-}
-var INPUT_FRAGMENT = "input";
-function encodeRunInput(input) {
-  return toBase64Url(new TextEncoder().encode(JSON.stringify(input)));
-}
-function decodeRunInput(hash) {
-  const match = new RegExp(`(?:^#?|&)${INPUT_FRAGMENT}=([A-Za-z0-9_-]+)`).exec(hash);
-  if (!match) return null;
-  const bytes = fromBase64Url(match[1]);
-  if (!bytes) return null;
-  try {
-    return JSON.parse(new TextDecoder().decode(bytes));
-  } catch {
-    return null;
-  }
-}
-function runPath(slug, input) {
-  return input === void 0 ? `/tools/${slug}` : `/tools/${slug}#${INPUT_FRAGMENT}=${encodeRunInput(input)}`;
-}
 export {
   AREAS,
   CHECKS,
@@ -11302,8 +11309,10 @@ export {
   runTool,
   sourceLine,
   sourceOf,
+  toolBasePath,
   toolById,
   toolBySlug,
+  toolPath,
   toolSearchText,
   toolSlug,
   toolSummary,

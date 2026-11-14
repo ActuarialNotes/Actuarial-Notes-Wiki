@@ -12,6 +12,11 @@ one says what it supplies, and a document that publishes a table brings it as da
 
 Read `docs/cowork.md` once for the design. This file is the operating procedure.
 
+"Cowork" is the catalogue's name in code only. In the app (since 2026-11-14) a publisher is a
+card in **Data Sources → Publishers** with its page at `/data-sources/<entity id>`, and a
+document a card in **Data Sources → Documents**; an entity id must not collide with a Data
+Sources section or a table slug (`lib/dataSources.test.ts` checks).
+
 The catalogue is authored seed data, not vault content:
 
 ```

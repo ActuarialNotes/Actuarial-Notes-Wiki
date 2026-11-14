@@ -24,7 +24,6 @@ import {
 } from '@/lib/resourceFilters'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { ResourceCard, ResourceCardGrid } from '@/components/cowork/ResourceCard'
-import { CoworkPageRow } from '@/components/cowork/CoworkPageRow'
 import { LibraryPill } from '@/components/cowork/LibraryPill'
 
 const EMPTY_TITLE: Record<ResourceFacet, string> = {
@@ -34,10 +33,11 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
 }
 
 /**
- * The **Resources** shelf (`/cowork/resources`): everything Cowork's sources
- * publish, as document cards (`components/cowork/ResourceCard.tsx`), newest
- * first. Its other half is the **Sources** shelf (`SourcesView.tsx`), and each
- * carries a row leading to the other.
+ * The **Documents** section of Data Sources (`/data-sources/documents`):
+ * everything the publishers publish, as document cards
+ * (`components/cowork/ResourceCard.tsx`), newest first. Its neighbour is the
+ * **Publishers** section (`SourcesView.tsx`); the page's section chips lead
+ * between them.
  *
  * The filters are the Study Guides tab's Resources page's — **Exam**,
  * **Publisher** and **Year**, OR within one and AND across them, each option
@@ -49,7 +49,7 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
  * The study page's Vintage filter is an edition of one exam's syllabus, so it
  * has nothing to say about a publisher's documents and isn't offered.
  *
- * **My Library** leads the row, as it does on Sources: here it is the
+ * **My Library** leads the row, as it does on Publishers: here it is the
  * resources the reader has taken.
  */
 export default function ResourcesView({ onOpenResource }: { onOpenResource: (resource: SourceResource) => void }) {
@@ -143,12 +143,6 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
             Clear
           </button>
         )}
-      </div>
-
-      {/* The way back across to the publishers — the row Sources carries to
-          here, pointing the other way. */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <CoworkPageRow page="sources" count={COWORK_ENTITIES.length} />
       </div>
 
       {shown.length === 0 ? (

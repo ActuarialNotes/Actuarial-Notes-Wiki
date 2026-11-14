@@ -9,7 +9,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import { formatValue, runTool, toolSlug, type NumberField, type ToolInput } from '@/lib/tools'
+import { formatValue, runTool, toolPath, toolSlug, type NumberField, type ToolInput } from '@/lib/tools'
 import { carried, type Neighbour } from '@/lib/toolTemplate'
 import { fieldQuantities, figureFor, quantityStep, stepBackground } from '@/lib/toolFigures'
 import { cn } from '@/lib/utils'
@@ -54,7 +54,7 @@ export function TakesFrom({ neighbours, linked }: {
         <ul className="divide-y divide-border/60 border-t border-border/60">
           {list.map(n => (
             <li key={n.tool.id}>
-              <Link to={`/tools/${toolSlug(n.tool)}`} className="flex items-center gap-2 px-3.5 py-2.5 text-sm transition-colors hover:bg-muted/60">
+              <Link to={toolPath(n.tool)} className="flex items-center gap-2 px-3.5 py-2.5 text-sm transition-colors hover:bg-muted/60">
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold">{n.tool.name}</span>
                   <span className="block truncate text-xs text-muted-foreground">{n.tool.answers}</span>

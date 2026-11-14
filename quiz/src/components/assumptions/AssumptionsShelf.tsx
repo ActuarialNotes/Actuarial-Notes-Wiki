@@ -1,4 +1,4 @@
-// The Assumptions Bank's shelf (`/tools/assumptions`, docs/assumptions-bank.md
+// The Assumptions Bank's shelf (`/data-sources/assumptions`, docs/assumptions-bank.md
 // §4.5), in the tool template's shape (docs/actuarial-tools.md §19,
 // docs/tool-template-v2.md §3.8): every document a banner — tinted in the exam
 // whose syllabus lists it, neutral when none does, no logo — with its figures

@@ -473,7 +473,7 @@ function SourceView({
   if (!source) {
     return (
       <p className="rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-600 dark:text-amber-400">
-        This document is no longer in Sources.
+        This document is no longer in Data Sources.
       </p>
     )
   }

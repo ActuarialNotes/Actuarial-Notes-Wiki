@@ -18,7 +18,7 @@ export function ResourceAssumptionsCard({ resource, compact = false, className }
     <section aria-label="Assumptions" className={cn('not-prose space-y-2', className)} data-testid="resource-assumptions">
       <div className="flex items-baseline justify-between gap-3 px-1">
         <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Assumptions</h2>
-        <Link to="/tools/assumptions" className="text-xs font-medium underline underline-offset-2 hover:no-underline">
+        <Link to="/data-sources/assumptions" className="text-xs font-medium underline underline-offset-2 hover:no-underline">
           Use them in a tool
         </Link>
       </div>

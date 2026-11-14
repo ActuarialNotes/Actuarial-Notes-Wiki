@@ -4,60 +4,71 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6e3705fd9fd6685f3b370554ec0bd4525493c9c607ee27648d8af87350297b29
+  content_hash: sha256:cd1f8d24e0460a76db51d1004c943584d4d70460764baab842c4f6076d405f60
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Adjustment for Non-Financial Risk.md
 ---
 
-**The Risk Adjustment for Non-Financial Risk** (RA) is the compensation an insurer requires for bearing the **uncertainty in the amount and timing** of cash flows arising from non-financial risk — insurance risk, lapse risk and expense risk. It is an entity-specific measure under [[IFRS 17]], and its **confidence level must be disclosed**, whatever technique was used to set it.
-
-> $$\text{RA} = \text{Value placed on bearing uncertainty in non-financial cash flows}$$
-
-- **What it is not.** It is not a prudential margin set by a regulator, not a provision for adverse deviations at a prescribed level, and not compensation for *financial* risk — interest rate and market risk are captured in the [[IFRS 17 Discount Rates|discount rate]], not here.
-- **It is entity-specific.** Two insurers with identical liabilities may hold different risk adjustments because they have different degrees of risk aversion, different diversification, and different views of the uncertainty. This is a deliberate departure from a market-consistent measure and it is why the confidence-level disclosure exists — it makes the difference comparable.
-- **Common techniques:** the **confidence level (VaR)** approach, translating a chosen percentile of the liability distribution into an amount; the **cost of capital** approach, charging a rate on the capital required to run off the liabilities; and the **conditional tail expectation (CTE/TVaR)** approach. Whichever is used, the equivalent confidence level must be disclosed.
-- **The five characteristics** IFRS 17 says a risk adjustment should exhibit: low-frequency/high-severity risks attract higher adjustments than high-frequency/low-severity ones; longer-duration contracts attract higher adjustments than shorter ones; wider probability distributions attract higher adjustments than narrower ones; the less that is known about the estimate and its trend, the higher the adjustment; and emerging experience that reduces uncertainty reduces the adjustment.
-- **Diversification.** The RA reflects diversification only to the extent the *entity* benefits from it, and the level at which diversification is recognised (entity or group) must be disclosed — a significant judgement, because entity-level diversification can substantially lower the number.
-- **Release pattern.** The RA is released to [[Insurance Service Expenses|profit]] as risk expires, so a long-tail line releases it slowly. Under the [[Reinsurance Contracts Held|reinsurance held]] measurement the sign flips: the RA on reinsurance held represents risk **transferred away**, and it increases the reinsurance asset.
-
 ![[Media/Figures/Risk_Adjustment_for_Non-Financial_Risk.svg|340]]
 
-> [!example]- Setting the Risk Adjustment Two Ways {Example}
-> An insurer's discounted fulfilment cash flows for incurred claims are $\$250$ million. The liability distribution is approximately lognormal with a coefficient of variation of $12\%$. The insurer targets the $75\text{th}$ percentile.
->
-> Alternatively, the capital required to run off the liabilities is $\$95$ million in year 1, declining $30\%$ per year, and the cost of capital rate is $6\%$.
->
-> Compute the RA under each and compare.
+The **Risk Adjustment for Non-Financial Risk** (RA) is the compensation an insurer requires for bearing the uncertainty in the amount and timing of cash flows that arises from non-financial risk: insurance risk, lapse risk and expense risk. It is an entity-specific measure under [[IFRS 17]], and its confidence level must be disclosed, whatever technique was used to set it.
+
+IFRS 17 says a risk adjustment should have five characteristics:
+
+1. Low-frequency, high-severity risks attract a higher RA than high-frequency, low-severity ones.
+2. Longer-duration contracts attract a higher RA than shorter ones.
+3. Risks with a wider probability distribution attract a higher RA than those with a narrower one.
+4. The less that is known about the current estimate and its trend, the higher the RA.
+5. Emerging experience that reduces uncertainty reduces the RA.
+
+The RA is not a prudential margin set by a regulator, nor a provision for adverse deviations at a prescribed level. It does not compensate for financial risk either, since interest rate and market risk are captured in the [[IFRS 17 Discount Rates|discount rate]].
+
+Because it is entity-specific, two insurers with identical liabilities may hold different risk adjustments. They can differ in risk aversion, in diversification and in their view of the uncertainty. This departure from a market-consistent measure is why the confidence level is disclosed, which makes the two comparable.
+
+## The confidence level approach
+
+The confidence level (VaR) approach sets the RA at a chosen percentile of the liability distribution. At confidence level $\alpha$, the risk adjustment is
+
+> $$\text{RA} = x_{\alpha} - \mathrm{E}[X]$$
+
+- $X$ is the liability, with mean $\mathrm{E}[X]$ equal to the discounted [[Fulfilment Cash Flows|fulfilment cash flows]].
+- $x_{\alpha}$ is the $\alpha$ percentile of $X$.
+
+A third technique is the conditional tail expectation (CTE, or TVaR) approach.
+
+> [!example]- Discounted cash flows for incurred claims are $\$250$ million, lognormal with a $12\%$ coefficient of variation. What is the RA at the 75th percentile? {Example}
+> - The lognormal's parameters are $\sigma^2 = \ln(1 + 0.12^2) = 0.014297$, so $\sigma = 0.11957$.
+> - Its location is $\mu = \ln 250 - \tfrac{1}{2}(0.014297) = 5.51431$.
+> - With $z_{0.75} = 0.6745$, the 75th percentile is $e^{5.51431 + 0.6745 \times 0.11957} = \$269.1$ million.
+> - The RA is $\$269.1\text{M} - \$250\text{M} = \$19.1$ million.
+
+## The cost of capital approach
+
+The cost of capital approach charges a rate on the capital required to run off the liabilities. With the charge on each year's capital discounted from the start of that year, the risk adjustment is
+
+> $$\text{RA} = r \sum_{t=0}^{\infty} \frac{C_t}{(1+i)^t}$$
+
+- $r$ is the cost of capital rate.
+- $C_t$ is the capital required at the start of year $t+1$.
+- $i$ is the discount rate.
+
+> [!example]- What is the RA on these liabilities by cost of capital, and its equivalent confidence level? {Example}
+> The liabilities are those of the confidence level example: $\$250$ million, lognormal with a $12\%$ coefficient of variation. The capital required to run them off is $\$95$ million in year 1, declining $30\%$ a year. The cost of capital rate is $6\%$, and the discount rate is $4\%$.
 >
 > > [!answer]-
-> > **Confidence level approach.** For a lognormal with mean $\mu_X = 250$ and $CV = 0.12$:
-> >
-> > $$\begin{align*}
-> > \sigma^2 &= \ln(1 + 0.12^2) = 0.014286 \\
-> > \sigma &= 0.11952 \\
-> > \mu &= \ln(250) - \tfrac{1}{2}(0.014286) = 5.51930
-> > \end{align*}$$
-> >
-> > The $75\text{th}$ percentile uses $z_{0.75} = 0.6745$:
-> >
-> > $$\begin{align*}
-> > x_{0.75} &= e^{5.51930 + 0.6745(0.11952)} \\
-> > &= e^{5.59991} \\
-> > &= \$270.4\text{M}
-> > \end{align*}$$
-> >
-> > $$\text{RA} = \$270.4\text{M} - \$250\text{M} = \$20.4\text{M}$$
-> >
-> > **Cost of capital approach.** Capital of $95, 66.5, 46.55, 32.59, \ldots$ million, charged at $6\%$ and discounted (at $4\%$, say) is approximately:
-> >
-> > $$\begin{align*}
-> > \text{RA} &\approx 0.06 \times \frac{\$95\text{M}}{1 - 0.70/1.04} \\
-> > &= 0.06 \times \$290.6\text{M} \\
-> > &= \$17.4\text{M}
-> > \end{align*}$$
-> >
-> > **Comparison.** The two techniques give $\$20.4$ million and $\$17.4$ million — an $\$3$ million difference on the same liability, driven entirely by methodology and parameter choice.
-> >
-> > This is exactly why IFRS 17 requires the **confidence level** disclosure rather than the technique: an insurer using the cost of capital approach must still translate $\$17.4$ million into an equivalent percentile (here, roughly the $71\text{st}$) so a reader can compare it with the first insurer's $75\text{th}$. Without that translation, "we hold a risk adjustment" would convey nothing.
+> > - The capital runs $\$95$, $\$66.5$, $\$46.55$, … million, a geometric series with ratio $0.70/1.04$ once discounted.
+> > - Its present value is $\$95\text{M} / (1 - 0.70/1.04) = \$290.6$ million.
+> > - The RA is $0.06 \times \$290.6\text{M} = \$17.4$ million.
+> > - A liability of $\$267.4$ million sits at about the 73rd percentile of the lognormal, so the equivalent confidence level is about $73\%$.
+> > - The two techniques give $\$19.1$ million and $\$17.4$ million on the same liability, which is why IFRS 17 requires the confidence level to be disclosed whatever the technique.
+
+## Diversification and release
+
+The RA reflects diversification only to the extent the entity benefits from it. The level at which diversification is recognised, entity or group, must be disclosed. It is a significant judgement, because entity-level diversification can lower the RA substantially.
+
+The RA is released to profit as risk expires, so a long-tail line releases it slowly. On [[Reinsurance Contracts Held|reinsurance contracts held]] the RA represents risk transferred away, and it increases the reinsurance asset.
+
+> [!trap] Putting financial risk in the risk adjustment
+> Interest rate and market risk belong in the discount rate. The RA covers only non-financial risk: insurance, lapse and expense risk.

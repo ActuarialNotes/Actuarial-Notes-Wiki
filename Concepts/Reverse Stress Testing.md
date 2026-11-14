@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:316a80ca1b2cf308e480dff325c88e8095788b3501252b597ffa08874bcab91a
+  content_hash: sha256:8c8b98a1237808e77099863a246ea459ee0699778e4b7a497d4d2acfc83ca047
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -13,37 +13,33 @@ verification:
   log: .verify/Concepts/Reverse Stress Testing.md
 ---
 
-**Reverse Stress Testing** starts from failure and works backwards: instead of asking "what happens if X occurs?", it asks **"what would have to occur for this insurer to become non-viable?"** It is a required element of [[FCT]] and a standard tool in [[ORSA]], and its value is that it finds vulnerabilities that forward scenarios — anchored on the risks management already has in mind — systematically miss.
-
-- **Non-viability, not merely a bad year.** The endpoint is the point at which the business model fails: capital below the minimum, an inability to meet obligations, or a loss of market access from which the insurer cannot recover.
-- **Why it finds different things.** Forward [[Stress Testing|stress tests]] test the risks management chose to test. A reverse test starts from an outcome and searches over all combinations that could produce it, so it surfaces the exposure nobody was watching — a single reinsurer, a single distribution channel, a single jurisdiction's regulatory decision.
-- **The output is a description of failure modes**, and it is qualitative as much as quantitative. Naming the combination is often more valuable than pricing its probability, because the response — a limit, a diversification requirement, a contingency plan — follows from the naming.
-- **Plausibility is assessed afterwards.** The exercise deliberately does not begin with a probability constraint; a scenario is first identified as a failure mode and then judged for how plausible it is. Filtering for plausibility first defeats the purpose.
-- **It feeds the [[Internal Target Capital Ratio|internal target]] and the recovery plan.** If the identified failure mode is credible, the insurer must either hold capital against it, reduce the exposure that creates it, or have a documented plan for responding to it.
-- The technique is used across financial regulation — banking supervisors and [[Solvency II]] both require it — and the Canadian application is through FCT's requirement that the actuary consider what would render the insurer non-viable.
-
 ![[Media/Figures/Reverse_Stress_Testing.svg|340]]
 
-> [!example]- Working Backwards From Failure {Example}
-> An insurer with a $185\%$ MCT ratio, capital available of $\$370$ million and minimum capital required of $\$200$ million asks what would make it non-viable.
->
-> Conduct the reverse stress test.
+**Reverse Stress Testing** is a stress test that starts from the insurer becoming non-viable and works backwards to the events that would cause it. It asks "what would have to occur for this insurer to become non-viable?" rather than "what happens if this occurs?". It is a required element of [[FCT]] and a standard tool in [[ORSA]].
+
+A reverse stress test has four steps:
+
+1. **Define non-viability.** The endpoint is the point at which the business model fails: capital below the minimum, an inability to meet obligations, or a loss of market access from which the insurer cannot recover. A bad year is not enough.
+2. **Search for the combinations that reach it.** The search runs over every combination of events that could produce the endpoint, not only the risks management already has in mind.
+3. **Judge plausibility afterwards.** A scenario is first identified as a failure mode and only then judged for how plausible it is. Filtering for plausibility first defeats the purpose.
+4. **Respond.** If a failure mode is credible, the insurer holds capital against it, reduces the exposure that creates it, or documents a plan for responding to it. The results feed the [[Internal Target Capital Ratio|internal target]] and the recovery plan.
+
+The output is a description of failure modes, qualitative as much as quantitative. Naming the combination is often worth more than pricing its probability, because the response (a limit, a diversification requirement, a contingency plan) follows from the naming.
+
+## Reverse and forward stress tests
+
+Forward [[Stress Testing|stress tests]] test the risks management chose to test. A reverse test starts from an outcome, so it surfaces the exposure nobody was watching: a single reinsurer, a single distribution channel, a single jurisdiction's regulatory decision.
+
+> [!example]- What would make this insurer non-viable? {Example}
+> An insurer has an [[MCT]] ratio of $185\%$, with capital available of $\$370$ million and minimum capital required of $\$200$ million. Its tax rate is $27\%$, and it has $\$900$ million of claim liabilities and $\$500$ million of annual premium. Its bond-dominated portfolio would lose $\$233$ million only in a market event more severe than 2008.
 >
 > > [!answer]-
-> > **The target.** Non-viability requires the ratio below $100\%$, so capital available below $\$200$ million — a loss of **$\$170$ million after tax**, or roughly $\$233$ million pre-tax. (Minimum capital required would also move, generally upward in stress, so this is conservative in the insurer's favour.)
-> >
-> > **What combinations reach $\$233$ million?**
-> >
-> > - **Catastrophe plus reinsurer failure.** A $1$-in-$250$ event costing $\$310$ million gross, with $\$270$ million reinsured — of which $60\%$ sits with one reinsurer who fails. Retained: $\$40$M plus $\$162$M uncollected $= \$202$M, plus reinstatement costs. **Close to sufficient on its own.**
-> > - **Reserve deterioration plus rate suppression.** A $12\%$ deficiency on $\$900$ million of liabilities is $\$108$ million, and three years of suppressed rates at a $107\%$ combined ratio on $\$500$ million of premium adds roughly $\$105$ million. **Together, sufficient.**
-> > - **Investment collapse alone.** With a bond-dominated portfolio, reaching $\$233$ million requires a market event more severe than $2008$. **Not sufficient alone** — which is itself a useful finding.
-> >
-> > **What the exercise reveals.** The failure modes are **reinsurer concentration** and **the combination of reserve error with rate suppression** — neither of which is the risk an investment committee spends its time on, and the first of which the [[MCT]] does not charge for at all.
-> >
-> > **The actions that follow:**
-> >
-> > - Cap any single reinsurer's share of the catastrophe programme, and require collateral or [[Registered Reinsurance|registered]] status.
-> > - Set the [[Internal Target Capital Ratio|internal target]] above the level implied by the second combination, not merely above the supervisory target.
-> > - Build the first combination into the [[FCT]] adverse scenarios so it is tested annually rather than once.
-> >
-> > **The general point:** the reverse test converted an abstract $185\%$ ratio into two named, addressable exposures. That translation is what makes it worth doing.
+> > - Non-viability means capital available below $\$200$ million, a loss of $\$370\text{M} - \$200\text{M} = \$170$ million after tax.
+> > - Before tax that is $\$170\text{M} / 0.73 = \$233$ million.
+> > - A 1-in-250 catastrophe costing $\$310$ million gross, with $\$270$ million reinsured and $60\%$ of that with one reinsurer that fails, leaves $\$40\text{M} + 0.6 \times \$270\text{M} = \$202$ million, close to the target before reinstatement costs.
+> > - A $15\%$ reserve deficiency on $\$900$ million is $\$135$ million, and three years at a $107\%$ combined ratio on $\$500$ million of premium add $3 \times 0.07 \times \$500\text{M} = \$105$ million, together $\$240$ million, which is enough.
+> > - The investment portfolio alone is not enough, which is itself a finding.
+> > - The failure modes are reinsurer concentration and reserve error combined with rate suppression. The insurer responds by capping any one reinsurer's share of the catastrophe program, setting its internal target above what the second combination implies, and adding the first combination to its FCT adverse scenarios.
+
+> [!trap] Starting with a plausibility filter
+> Screening scenarios for plausibility before searching for failure modes keeps the test on the risks management already expects. Find what breaks the insurer first, then judge how plausible it is.

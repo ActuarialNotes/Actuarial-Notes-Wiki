@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d2f315ccb8e950ece10fbbb9efd0ecc11db6a6bb13ee97d7d05558ce424f5d79
+  content_hash: sha256:08a70dd434affab03973a64313ff38ddc7d7e925f19a046d284a7444741452e6
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -13,45 +13,40 @@ verification:
   log: .verify/Concepts/Ripple Effect.md
 ---
 
-**A Ripple Effect** is a second-order consequence that follows from an adverse scenario, beyond its direct financial impact. [[FCT]] requires the [[Appointed Actuary]] to model them: a scenario examined only for its immediate effect understates its severity, sometimes by a wide margin.
-
-- **Typical ripples following a catastrophe:** reinstatement premium payable immediately; reinsurance renewal at much higher cost or reduced capacity; a [[Rating Agency|rating]] downgrade; higher borrowing costs and impaired access to capital markets; reduced new business as the rating falls; and, if the event affected the insurer's own region, operational disruption.
-- **Ripples following reserve deterioration:** loss of regulatory and market confidence; a [[Rating Agency]] downgrade; the need to re-price, which loses business; increased [[OSFI]] scrutiny and possible restrictions on dividends and growth; and — since inadequate reserves usually mean inadequate rates — continued losses on business still being written.
-- **Ripples following an investment loss:** reduced [[Capital Available]], which raises the cost of writing business; forced asset sales realising further losses; and a [[Market Risk Margin|market risk]] profile that may worsen if the remaining portfolio is less liquid.
-- **The compounding is the point.** A $\$50$ million catastrophe that triggers a downgrade, a $30\%$ reinsurance cost increase and a $10\%$ loss of business is not a $\$50$ million event. Modelling only the direct loss produces a scenario the insurer comfortably survives on paper and would not survive in fact.
-- **Management actions are the counterpart.** FCT requires both: the ripples that worsen the scenario, and the realistic responses that mitigate it. The discipline is to be equally honest about both — and to recognise that some actions available in normal conditions (raising capital, buying reinsurance) are unavailable in the scenario that created the need.
-- The most commonly omitted ripple is the **feedback into pricing**: the events that damage capital usually also mean the business currently being written is underpriced.
-
 ![[Media/Figures/Ripple_Effect.svg|340]]
 
-> [!example]- A Catastrophe With and Without Ripples {Example}
-> An insurer suffers a $\$60$ million net catastrophe loss. Capital available before the event is $\$340$ million and minimum capital required under the [[MCT]] is $\$200$ million.
+A **Ripple Effect** is a second-order consequence that follows from an adverse scenario, beyond its direct financial impact. [[FCT]] requires the [[Appointed Actuary]] to model ripple effects, because a scenario examined only for its immediate effect understates its severity, sometimes by a wide margin.
+
+The typical ripple effects depend on the scenario:
+
+| Scenario | Typical ripple effects |
+| :--- | :--- |
+| Catastrophe | Reinstatement premium payable immediately. Reinsurance renewal at much higher cost or reduced capacity. A [[Rating Agency]] downgrade, then higher borrowing costs, impaired access to capital markets and less new business. Operational disruption if the event hit the insurer's own region. |
+| Reserve deterioration | Loss of regulatory and market confidence. A rating downgrade. Re-pricing that loses business. More [[OSFI]] scrutiny and possible limits on dividends and growth. Continued losses on business still being written, since inadequate reserves usually mean inadequate rates. |
+| Investment loss | Less [[Capital Available]], which raises the cost of writing business. Forced asset sales that realise further losses. A market risk profile that may worsen if the remaining portfolio is less liquid. |
+
+The effects compound. A $\$50$ million catastrophe that triggers a downgrade, a $30\%$ rise in reinsurance cost and a $10\%$ loss of business is not a $\$50$ million event.
+
+> [!example]- How does this catastrophe move the MCT ratio, with and without ripple effects? {Example}
+> An insurer suffers a $\$60$ million net catastrophe loss. Its capital available before the event is $\$340$ million, its minimum capital required under the [[MCT]] is $\$200$ million, and its tax rate is $27\%$. The ripple effects are:
 >
-> Model the effect with direct impact only, then with ripple effects: reinstatement premium $\$8$ million; reinsurance renewal cost rising $\$12$ million annually; a downgrade causing a $9\%$ loss of commercial business worth $\$14$ million of annual underwriting contribution; and borrowing costs rising $\$3$ million annually.
+> | Ripple effect | Cost |
+> | :--- | ---: |
+> | Reinstatement premium (year 1) | $\$8$ million |
+> | Higher reinsurance renewal cost | $\$12$ million a year |
+> | Lost underwriting contribution after a downgrade | $\$14$ million a year |
+> | Higher borrowing costs | $\$3$ million a year |
 >
 > > [!answer]-
-> > **Direct impact only**, after tax at $27\%$:
-> >
-> > $$\begin{align*}
-> > \text{Capital available} &= \$340\text{M} - 0.73(\$60\text{M}) \\
-> > &= \$296.2\text{M} \\[4pt]
-> > \text{MCT} &= \frac{\$296.2\text{M}}{\$200\text{M}} = 148\%
-> > \end{align*}$$
-> >
-> > Marginally below the supervisory target. A board shown this number would find it uncomfortable but manageable.
-> >
-> > **With ripple effects.** Year 1 adds the reinstatement premium; the ongoing items affect year 2 onward:
-> >
-> > $$\begin{align*}
-> > \text{Year 1} &= \$340\text{M} - 0.73(\$60\text{M} + \$8\text{M}) \\
-> > &= \$290.4\text{M} \quad (145\%) \\[6pt]
-> > \text{Year 2 drag} &= 0.73(\$12\text{M} + \$14\text{M} + \$3\text{M}) \\
-> > &= \$21.2\text{M} \\[4pt]
-> > \text{Year 2} &= \$290.4\text{M} - \$21.2\text{M} \\
-> > &= \$269.2\text{M} \quad (135\%) \\[6pt]
-> > \text{Year 3} &= \$248\text{M} \quad (124\%)
-> > \end{align*}$$
-> >
-> > **The difference is the whole point.** The direct-impact view shows a one-time dip to $148\%$ followed by recovery. The ripple view shows a **continuing decline** to $124\%$ over three years, because the event permanently raised the cost of doing business and permanently reduced the business being done.
-> >
-> > **What changes as a result.** The direct view suggests no action is needed. The ripple view requires a capital plan, and it identifies the actionable items: the reinsurance cost increase and the downgrade-driven business loss are both larger than the reinstatement premium, and both are addressable — by pre-negotiating multi-year reinsurance terms, and by holding a higher [[Internal Target Capital Ratio|internal target]] so that a $\$60$ million event does not threaten the rating in the first place.
+> > - With the direct loss only, capital available is $\$340\text{M} - 0.73 \times \$60\text{M} = \$296.2$ million, an MCT ratio of $148\%$, just below the supervisory target.
+> > - With ripple effects, year 1 also pays the reinstatement premium: $\$340\text{M} - 0.73 \times \$68\text{M} = \$290.4$ million, or $145\%$.
+> > - From year 2 the recurring costs take $0.73 \times (\$12\text{M} + \$14\text{M} + \$3\text{M}) = \$21.2$ million a year.
+> > - Capital available falls to $\$269.2$ million ($135\%$) in year 2 and $\$248.0$ million ($124\%$) in year 3.
+> > - The direct view shows a one-time dip to $148\%$. The ripple view shows a continuing decline to $124\%$ that calls for a capital plan, such as multi-year reinsurance terms and a higher [[Internal Target Capital Ratio|internal target]].
+
+## Management actions
+
+FCT requires both sides of a scenario: the ripple effects that worsen it and the realistic management actions that mitigate it. Some actions available in normal conditions, such as raising capital or buying reinsurance, are unavailable in the scenario that created the need for them.
+
+> [!trap] Leaving out the feedback into pricing
+> The most commonly omitted ripple effect is the feedback into pricing. The events that damage capital usually also mean that the business currently being written is underpriced, so losses continue after the event.

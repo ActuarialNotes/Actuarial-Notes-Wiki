@@ -6,17 +6,16 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  Database,
   FlaskConical,
   Gem,
   GraduationCap,
   Layers,
   LayoutDashboard,
-  Library,
   LibraryBig,
   LogOut,
   Microscope,
   Moon,
-  Orbit,
   Play,
   Settings2,
   ShoppingBag,
@@ -42,13 +41,9 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge, NAME_PILL } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
-import { useActuariaAccess } from '@/hooks/useActuariaAccess'
+import { RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
-import { StatusChip } from '@/components/actuaria/StatusChip'
-import { ModeSwitcher } from '@/components/ModeSwitcher'
-import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
-import { modeForPath } from '@/lib/appMode'
+import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
 import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
@@ -214,55 +209,64 @@ function SidebarGroup({
   )
 }
 
+function isUnder(pathname: string, route: string): boolean {
+  return pathname === route || pathname.startsWith(`${route}/`)
+}
+
 /**
- * The nav rows of **Cowork** mode — its shelves, Sources and Resources, and
- * Workflows.
- * The workflow count is deliberately not a badge here: reading the workflow
- * store would pull the tools engine into the main bundle with the sidebar.
- * Study's rows are not hidden behind a flag here; they are simply not this
- * mode's rows (see `lib/appMode.ts`).
+ * The **Workflows** row and the two places a workflow is built from under it:
+ * **Tools** (the calculators) and **Data Sources** (the published tables, the
+ * Assumptions Bank, the publishers and their documents). Unlike Study Guides'
+ * pages, the two are always listed — they are destinations in their own right,
+ * not views of an open workflow. For a reader without Workflows (it is in
+ * Preview, `lib/workflowsAccess.ts`), Tools and Data Sources stand as rows of
+ * their own instead (`ToolsNav`).
  */
-function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  const followed = useCoworkLibrary(s => s.entityIds.length)
-  const taken = useCoworkLibrary(s => s.resourceIds.length)
-  // A source has its own page under /cowork/sources, and the nav is the only
-  // thing saying which of Cowork's places you are in (the page carries no
-  // tabs), so the Sources row has to stay lit while you are reading one.
+function WorkflowsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
   const { pathname } = useLocation()
-  const onSourcePage = pathname.startsWith('/cowork/sources')
-  const countBadge = (n: number) =>
-    n > 0 ? (
-      <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
-        {n}
-      </span>
-    ) : undefined
+  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
+  const inWorkflows = isUnder(pathname, '/workflows')
+  const inTools = isUnder(pathname, '/tools')
+  const inData = isUnder(pathname, '/data-sources')
 
   return (
     <>
       <SidebarItem
-        to="/cowork"
-        label="Sources"
-        icon={<Library className="h-5 w-5 lg:h-4 lg:w-4" />}
-        collapsed={collapsed}
-        end
-        forceActive={onSourcePage}
-        onNavigate={onNavigate}
-        badge={countBadge(followed)}
-      />
-      <SidebarItem
-        to="/cowork/resources"
-        label="Resources"
-        icon={<LibraryBig className="h-5 w-5 lg:h-4 lg:w-4" />}
-        collapsed={collapsed}
-        onNavigate={onNavigate}
-        badge={countBadge(taken)}
-      />
-      <SidebarItem
-        to="/cowork/workflows"
+        to="/workflows"
         label="Workflows"
-        icon={<Workflow className="h-5 w-5 lg:h-4 lg:w-4" />}
+        icon={<Workflow className={iconClass} />}
         collapsed={collapsed}
         onNavigate={onNavigate}
+        state={inWorkflows ? 'active' : inTools || inData ? 'within' : 'idle'}
+      />
+      <SubRows collapsed={collapsed}>
+        <ToolsNav collapsed={collapsed} onNavigate={onNavigate} />
+      </SubRows>
+    </>
+  )
+}
+
+/** The Tools and Data Sources rows: under Workflows, or on their own for a reader without it. */
+function ToolsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+  const { pathname } = useLocation()
+  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
+  return (
+    <>
+      <SidebarItem
+        to="/tools"
+        label="Tools"
+        icon={<Calculator className={iconClass} />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        state={isUnder(pathname, '/tools') ? 'active' : 'idle'}
+      />
+      <SidebarItem
+        to="/data-sources"
+        label="Data Sources"
+        icon={<Database className={iconClass} />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        state={isUnder(pathname, '/data-sources') ? 'active' : 'idle'}
       />
     </>
   )
@@ -380,56 +384,16 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
   )
 }
 
-/**
- * The **PLAY** group: Actuaria Online, under a label of its own below the study
- * tabs (docs/actuaria-online.md §5). Actuaria is part of Study Mode — a way of
- * studying — not a third product on the mode pill (D6). Its `live` chip is
- * Actuaria's signal, so it carries the `.actuaria` class that defines it.
- */
-function PlayNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  return (
-    <>
-      <div role="separator" className="!my-3 border-t border-border" />
-      <p
-        className={cn(
-          'px-3 pb-1 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground',
-          collapsed && 'lg:hidden',
-        )}
-      >
-        Study game
-      </p>
-      <SidebarItem
-        to="/actuaria"
-        label="Actuaria"
-        icon={<Orbit className="h-5 w-5 lg:h-4 lg:w-4" />}
-        collapsed={collapsed}
-        onNavigate={onNavigate}
-        badge={
-          <span className="actuaria">
-            <StatusChip variant="beta" size="sm">Preview</StatusChip>
-          </span>
-        }
-      />
-    </>
-  )
-}
-
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
   const { isPro, isBetaTester } = useSubscription()
-  // Actuaria is open to approved accounts alone (lib/actuaria/access.ts): no
-  // one else sees its row.
-  const { allowed: showActuaria } = useActuariaAccess()
   const showCommunity = useCommunityAccess()
+  const showWorkflows = useWorkflowsAccess()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
   const { cards } = useFlashcards()
-  // Which product the current route belongs to. In Cowork the nav is Cowork's
-  // own rows — the two modes are places, not tabs of each other — while the
-  // footer (theme, sound, account) stays put because it belongs to neither.
-  const appMode = modeForPath(location.pathname)
   const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   // Lights up the Flashcards item whenever a card is collected.
@@ -587,7 +551,6 @@ export default function Sidebar() {
               <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
               <span className="truncate">Actuarial Notes</span>
             </Link>
-            {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
           </div>
         </header>
       )}
@@ -636,7 +599,6 @@ export default function Sidebar() {
               <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
               Actuarial Notes
             </Link>
-            {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
           </div>
           {/* Desktop: collapse/expand toggle */}
           <button
@@ -660,10 +622,6 @@ export default function Sidebar() {
         </div>
 
         <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
-          {appMode === 'cowork' ? (
-            <CoworkNav collapsed={collapsed} onNavigate={closeMobile} />
-          ) : (
-            <>
 
           {user && (
             <SidebarItem
@@ -770,17 +728,13 @@ export default function Sidebar() {
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
           <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
-          {/* Calculators that each do one thing — the same engine an AI agent
-              runs through the connector (docs/actuarial-tools.md). */}
-          {TOOLS_ENABLED && (
-            <SidebarItem
-              to="/tools"
-              label="Tools"
-              icon={<Calculator className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
-          )}
+          {/* Workflows, built from the calculators (docs/actuarial-tools.md —
+              the same engine an AI agent runs through the connector) and the
+              published data. Workflows is in Preview; without it, Tools and
+              Data Sources are rows of their own. */}
+          {TOOLS_ENABLED && (showWorkflows
+            ? <WorkflowsNav collapsed={collapsed} onNavigate={closeMobile} />
+            : <ToolsNav collapsed={collapsed} onNavigate={closeMobile} />)}
           {/* Real products — registration, study materials, calculators and
               textbooks — each bought on its seller's own page (docs/store.md).
               The gem shop is a corner of it, so this row stays lit there. */}
@@ -801,9 +755,6 @@ export default function Sidebar() {
               collapsed={collapsed}
               onNavigate={closeMobile}
             />
-          )}
-          {showActuaria && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
-            </>
           )}
         </nav>
 

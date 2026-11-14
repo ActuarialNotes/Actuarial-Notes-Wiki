@@ -1,43 +1,17 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { AlertCircle, Check, Copy, Loader2, RotateCcw, Share2, Shuffle, WifiOff } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { AlertCircle, Shuffle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { BattleScoreboard, type PlayerStatus } from '@/components/battle/BattleScoreboard'
-import { BattleQuestionCard } from '@/components/battle/BattleQuestionCard'
-import { BattleCountdown } from '@/components/battle/BattleCountdown'
-import { AnswerPad, BattleActionBar, NextButton, ReactionRow, RoundResult } from '@/components/battle/BattleActionBar'
-import { BattleResults } from '@/components/battle/BattleResults'
-import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
-import { PlayerTile } from '@/components/battle/PlayerTile'
-import { SkinQuestionFrame } from '@/components/battle/SkinParts'
-import { AbilityTray } from '@/components/battle/AbilityTray'
 import { DeckDraftScreen } from '@/components/battle/deck/DeckDraft'
-import { DeckCoinFlip } from '@/components/battle/deck/DeckCoinFlip'
-import { DeckScope } from '@/components/battle/deck/DeckParts'
 import { DeckRound } from '@/components/battle/deck/DeckRound'
 import { DeckResults } from '@/components/battle/deck/DeckResults'
 import { DeckGuestRoom, DeckHostRoom, DeckMatchIntro } from '@/components/battle/deck/DeckRoom'
-import { useBattleSkin } from '@/hooks/useBattleSkin'
-import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
-import { usePageKeyboard } from '@/hooks/useKeyboard'
-import { playSound, resetSoundCombo } from '@/lib/soundEngine'
-import {
-  SEATS,
-  currentRound,
-  isFinalRound,
-  otherSeat,
-  type AbilityId,
-  type BattleConfig,
-  type BattlePlayer,
-  type Seat,
-} from '@/lib/battle'
-import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
-import { isCoinRound, roundChips, roundTopics, shortTopic } from '@/lib/battleDraft'
+import { useBattleSession } from '@/hooks/useBattle'
+import { otherSeat, type BattleConfig, type BattlePlayer } from '@/lib/battle'
+import { roundTopics } from '@/lib/battleDraft'
 import { generateRoomCode } from '@/lib/battleRoom'
-import { skinJoinPath } from '@/lib/battleSkin'
 import {
   GuestSession,
   HostSession,
-  displayPhase,
   tabClientId,
   type SessionProblem,
   type DraftSource,
@@ -47,96 +21,8 @@ import { questionTopics, type TopicGroup } from '@/lib/battleTopics'
 import type { BattleSetup } from '@/lib/battleSetup'
 import { battleTransport } from '@/lib/battleTransport'
 import type { Question } from '@/lib/parser'
-import { formatClock } from '@/lib/quizTiming'
 
 // ── The room, before and after ──────────────────────────────────────────────
-
-/** The code, as tiles big enough to read across a table. */
-function RoomCode({ code }: { code: string }) {
-  return (
-    <div className="flex justify-center gap-2" aria-label={`Room code ${code.split('').join(' ')}`} data-testid="battle-room-code">
-      {code.split('').map((c, i) => (
-        <span
-          key={i}
-          aria-hidden
-          className="flex h-16 w-14 items-center justify-center rounded-xl bg-card font-mono text-4xl font-bold shadow-sm"
-        >
-          {c}
-        </span>
-      ))}
-    </div>
-  )
-}
-
-function ShareButtons({ code }: { code: string }) {
-  const [copied, setCopied] = useState(false)
-  const skin = useBattleSkin()
-  // The page the room was made on — the code is the same room from either.
-  const link = `${window.location.origin}${skinJoinPath(skin, code)}`
-  const canShare = typeof navigator.share === 'function'
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(link)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 2000)
-    } catch { /* the link is on screen to copy by hand */ }
-  }
-
-  return (
-    <div className="flex flex-wrap justify-center gap-2">
-      <Button variant="outline" onClick={copy} className="gap-2">
-        {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
-        {copied ? 'Link copied' : 'Copy invite link'}
-      </Button>
-      {canShare && (
-        <Button
-          variant="outline"
-          className="gap-2"
-          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite}, room ${code}`, url: link }).catch(() => {}) }}
-        >
-          <Share2 className="h-4 w-4" aria-hidden />
-          Share
-        </Button>
-      )}
-    </div>
-  )
-}
-
-function ConfigSummary({ config }: { config: BattleConfig }) {
-  return (
-    <p className="text-center text-sm text-muted-foreground">
-      {battleExamName(config.exam)} · {config.rounds} questions · {formatClock(config.roundSeconds)} each
-      {config.abilities && ' · abilities on'}
-    </p>
-  )
-}
-
-/** Both players, face to face — or one, and an empty seat. */
-function Versus({ players, me }: { players: SessionSnapshot['players']; me: Seat }) {
-  return (
-    <div className="flex items-center justify-center gap-4 sm:gap-8">
-      {SEATS.map(seat => {
-        const player = players[seat]
-        return (
-          <div key={seat} className="flex w-28 flex-col items-center gap-2 text-center">
-            {player ? (
-              <PlayerTile seat={seat} player={player} size={56} className="battle-count-pop" />
-            ) : (
-              <span className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-border" aria-hidden>
-                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              </span>
-            )}
-            <span className="w-full truncate text-sm font-medium">
-              {player ? player.name : 'Waiting…'}
-              {player && seat === me && <span className="text-muted-foreground"> (you)</span>}
-            </span>
-          </div>
-        )
-      }).reduce<ReactNode[]>((out, el, i) => (i === 0 ? [el] : [...out, <span key="vs" className="text-lg font-bold text-muted-foreground">vs</span>, el]), [])}
-    </div>
-  )
-}
 
 const PROBLEM_TEXT: Record<SessionProblem, { title: string; body: string }> = {
   'not-found': { title: 'No battle found', body: 'Nobody is hosting a room with that code. Check it with the host and try again.' },
@@ -188,259 +74,6 @@ function FindAnotherButton({ onClick, solid }: { onClick: () => void; solid?: bo
   )
 }
 
-/** Calm music under whatever screen mounts it — a room's lobby, the match intro. */
-function CalmMusic() {
-  useBattleMusic(0)
-  return null
-}
-
-/**
- * The lobby paired two players: both of them, face to face, while the room
- * opens and the second player walks into it.
- */
-function MatchIntro({ snapshot, note, opponent }: { snapshot: SessionSnapshot; note: string; opponent?: BattlePlayer }) {
-  // The lobby already said who the opponent is; show them before the room does.
-  const opp = otherSeat(snapshot.me)
-  const players = snapshot.players.map((p, seat) => p ?? (seat === opp ? opponent ?? null : null)) as SessionSnapshot['players']
-  return (
-    <div className="mx-auto max-w-lg space-y-8 py-10 text-center" data-testid="battle-match-intro">
-      <CalmMusic />
-      <div className="space-y-2">
-        <p className="battle-count-pop text-3xl font-bold tracking-tight">Match found!</p>
-        {snapshot.config.exam && <ConfigSummary config={snapshot.config} />}
-      </div>
-      <Versus players={players} me={snapshot.me} />
-      <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground" aria-live="polite">
-        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-        {note}
-      </p>
-    </div>
-  )
-}
-
-// ── The battle itself ───────────────────────────────────────────────────────
-
-function OnlineMatch({
-  snapshot,
-  questionsById,
-  onAnswer,
-  onReady,
-  onReact,
-  onLeave,
-  onEndForAbsent,
-  onPower,
-}: {
-  snapshot: SessionSnapshot
-  questionsById: ReadonlyMap<string, Question>
-  onAnswer: (choice: string) => void
-  onReady: () => void
-  onReact: (emoji: Parameters<HostSession['react']>[0]) => void
-  onLeave: () => void
-  onEndForAbsent?: () => void
-  /** Use an ability — a room with abilities on (docs/actuaria-online.md §7.2). */
-  onPower: (ability: AbilityId) => void
-}) {
-  const battle = snapshot.battle!
-  const me = snapshot.me
-  const opp = otherSeat(me)
-  const round = currentRound(battle)
-  // Redrawn four times a second: this device opens a question when its own
-  // countdown is up, and closes it on its own clock (lib/battleSession.ts,
-  // `displayPhase`). The question's text is memoised below this.
-  const now = useNow(!battle.finished, 250)
-  const phase = displayPhase(battle, now)
-
-  const myLock = round.locks[me]
-  const pending = snapshot.pendingAnswer?.round === round.index ? snapshot.pendingAnswer : null
-  const lockedChoice = pending?.choice ?? myLock?.choice ?? null
-  const canPick = phase === 'open' && !lockedChoice
-  const oppLocked = !!round.locks[opp]
-
-  useBattleMusic(battleMusicIntensity(battle, now, phase))
-
-  // Sounds: the first question finishes the Start button's phrase and every
-  // one after lands with `go`; the other player's lock-in is two soft knocks;
-  // and at the reveal, the climb on a right answer of this player's own — a
-  // miss only ends the climb.
-  const heard = useRef({ index: -1, opened: false, revealed: false, oppIn: false })
-  useEffect(() => {
-    if (heard.current.index !== round.index) {
-      heard.current = { index: round.index, opened: false, revealed: false, oppIn: false }
-    }
-    const cur = heard.current
-    if (phase === 'open' && !cur.opened) {
-      cur.opened = true
-      playSound(round.index === 0 ? 'launch' : 'go')
-    }
-    if (oppLocked && !cur.oppIn && phase !== 'revealed') {
-      cur.oppIn = true
-      playSound('opponentIn')
-    }
-    if (phase === 'revealed' && !cur.revealed) {
-      cur.revealed = true
-      const mine = answerFor(round, me)
-      if (mine?.correct) playSound('correct')
-      else resetSoundCombo('correct')
-    }
-  }, [phase, round, me, oppLocked])
-
-  // A reaction from the other player pops as it arrives.
-  const heardReactions = useRef(new Set<string>())
-  useEffect(() => {
-    for (const r of snapshot.reactions) {
-      if (heardReactions.current.has(r.id)) continue
-      heardReactions.current.add(r.id)
-      if (r.seat === opp) playSound('reaction')
-    }
-  }, [snapshot.reactions, opp])
-
-  /** An ability armed — a rising latch, softer than a lock-in. */
-  function armAbility(ability: AbilityId) {
-    playSound('power')
-    onPower(ability)
-  }
-
-  /** This player's answer, locked in — heard as a latch, not as a verdict. */
-  function lockIn(choice: string) {
-    if (!canPick) return
-    playSound('lockIn')
-    onAnswer(choice)
-  }
-
-  // Each question starts at the top of the page.
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [round.index])
-
-  const optionAt = (i: number) => () => {
-    const option = battle.questions[round.index].options[i]
-    if (option) lockIn(option)
-  }
-  usePageKeyboard({
-    '1': optionAt(0), '2': optionAt(1), '3': optionAt(2), '4': optionAt(3), '5': optionAt(4),
-    Enter: () => { if (phase === 'revealed' && !round.ready.includes(me)) onReady() },
-  }, !battle.finished)
-
-  const question = questionsById.get(round.questionId)
-  const names = [battle.players[0].name, battle.players[1].name] as const
-
-  const status = SEATS.map((seat): PlayerStatus | null => {
-    if (seat === opp && !snapshot.opponentPresent) return { text: 'Reconnecting…', tone: 'caution' }
-    if (phase === 'countdown') return null
-    if (phase === 'revealed') {
-      if (round.ready.includes(seat)) return { text: 'Ready', tone: 'muted' }
-      const a = answerFor(round, seat)
-      if (!a) return { text: 'No answer', tone: 'muted' }
-      return a.correct ? { text: a.fastest ? 'Fastest!' : 'Got it', tone: 'player' } : { text: 'Missed', tone: 'muted' }
-    }
-    const inAlready = seat === me ? !!lockedChoice : !!round.locks[seat]
-    if (inAlready) return { text: 'Locked in', tone: 'player' }
-    if (phase === 'closing') return { text: "Time's up", tone: 'muted' }
-    return { text: 'Thinking…', tone: 'muted' }
-  }) as [PlayerStatus | null, PlayerStatus | null]
-
-  const isLast = round.index + 1 >= battle.config.rounds
-  const waiting = round.ready.includes(me) ? `Waiting for ${names[opp]}…` : null
-  // What this round is on, from the deal: its pair, or the topic its coin chose.
-  const chips = roundChips(snapshot.draft, round.index, me)
-  const topic = chips
-    ? { name: chips.map(c => shortTopic(c.name)).join(' × '), credit: chips.length === 2 ? 'tests both' : isCoinRound(snapshot.draft, round.index) ? 'by the coin' : 'from the whole exam' }
-    : null
-  const coin = phase === 'countdown' && isCoinRound(snapshot.draft, round.index)
-
-  return (
-    <div style={{ paddingBottom: 'calc(var(--action-bar-height, 7rem) + 1.5rem)' }}>
-      <BattleTopRow onLeave={onLeave} leaveLabel="Leave">
-        <span className="truncate">{battleExamName(battle.config.exam)} · room {snapshot.code}</span>
-      </BattleTopRow>
-      <BattleScoreboard battle={battle} me={me} status={status} reactions={snapshot.reactions} closing={phase === 'closing'} />
-
-      {!snapshot.opponentPresent && snapshot.role === 'host' && onEndForAbsent && (
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-          <span className="flex items-center gap-2">
-            <WifiOff className="h-4 w-4 shrink-0" aria-hidden />
-            {names[opp]} has dropped out. Wait for them, or end the battle.
-          </span>
-          <Button size="sm" variant="outline" onClick={onEndForAbsent}>End battle</Button>
-        </div>
-      )}
-
-      <div className="mt-4">
-        {coin ? (
-          <DeckScope className="rounded-[28px] px-5 py-4">
-            <DeckCoinFlip battle={battle} draft={snapshot.draft!} index={round.index} me={me} opensAt={round.opensAt} />
-          </DeckScope>
-        ) : phase === 'countdown' ? (
-          <BattleCountdown battle={battle} topic={topic} />
-        ) : question ? (
-          <div className="paper-sheet">
-            <SkinQuestionFrame>
-              <BattleQuestionCard
-                key={question.id}
-                question={question}
-                players={battle.players}
-                picker={canPick ? me : null}
-                onPick={lockIn}
-                pickSound="none"
-                locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
-                picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
-                revealed={phase === 'revealed'}
-                struck={round.struck[me]}
-              />
-            </SkinQuestionFrame>
-          </div>
-        ) : null}
-      </div>
-
-      <BattleActionBar
-        above={
-          <>
-            {battle.config.abilities && (
-              <AbilityTray battle={battle} me={me} pending={snapshot.pendingPower?.ability ?? null} onUse={armAbility} />
-            )}
-            <ReactionRow onReact={onReact} />
-          </>
-        }
-      >
-        {phase === 'revealed' ? (
-          <RoundResult
-            battle={battle}
-            action={
-              <NextButton
-                label={isLast ? 'See results' : isFinalRound(battle, round.index + 1) ? 'Final question' : 'Next question'}
-                onClick={onReady}
-                waiting={waiting}
-              />
-            }
-          />
-        ) : canPick ? (
-          <div className="space-y-2">
-            <p className="text-center text-xs text-muted-foreground">Tap to lock in. You can’t change it. The fastest right answer scores most.</p>
-            <AnswerPad
-              seat={me}
-              options={battle.questions[round.index].options}
-              onPick={lockIn}
-              ruledOut={round.struck[me] ? [round.struck[me]!] : []}
-              label="Your answer"
-              sound="none"
-            />
-          </div>
-        ) : (
-          <p className="py-2 text-center text-sm text-muted-foreground" aria-live="polite">
-            {phase === 'countdown'
-              ? 'Get ready…'
-              : phase === 'closing'
-              ? 'Time’s up. Revealing…'
-              : lockedChoice
-              ? round.locks[opp] ? 'Both in. Revealing…' : `Locked in ${lockedChoice}. Waiting for ${names[opp]}…`
-              : 'Waiting…'}
-          </p>
-        )}
-      </BattleActionBar>
-    </div>
-  )
-}
-
 function Results({
   snapshot,
   questionsById,
@@ -462,82 +95,40 @@ function Results({
   const theyAsked = snapshot.rematch[opp]
   const host = snapshot.role === 'host'
   const gone = !snapshot.opponentPresent || battle.forfeit !== null
-  const skin = useBattleSkin()
   const note = gone ? null
     : host && theyAsked ? `${oppName} wants a rematch!`
     : !host && iAsked ? `Waiting for ${oppName} to start it…`
     : !host ? `${oppName} starts the rematch.`
     : null
 
-  if (skin.deck) {
-    // What the round was on: the deal's pair or coin, else the question's own first topic.
-    const topicsOf = (index: number): string[] => {
-      const dealt = roundTopics(snapshot.draft, index)
-      if (dealt.length > 0) return dealt
-      const round = battle.rounds[index]
-      const q = round ? questionsById.get(round.questionId) : undefined
-      const first = q ? questionTopics(q)[0] : undefined
-      return first ? [first] : []
-    }
-    return (
-      <DeckResults
-        battle={battle}
-        questionsById={questionsById}
-        me={snapshot.me}
-        topicsOf={topicsOf}
-        primary={gone ? null : {
-          label: !host && iAsked ? 'Rematch asked for' : `Rematch ${oppName}`,
-          onClick: onRematch,
-          disabled: !host && iAsked,
-          testid: 'battle-rematch',
-        }}
-        secondary={onFindAnother
-          ? { label: 'New opponent', onClick: onFindAnother, testid: 'battle-find-another' }
-          : { label: 'Leave room', onClick: onLeave, testid: 'battle-leave-room' }}
-        note={note}
-        onLeave={onLeave}
-      />
-    )
+  // What the round was on: the deal's pair or coin, else the question's own first topic.
+  const topicsOf = (index: number): string[] => {
+    const dealt = roundTopics(snapshot.draft, index)
+    if (dealt.length > 0) return dealt
+    const round = battle.rounds[index]
+    const q = round ? questionsById.get(round.questionId) : undefined
+    const first = q ? questionTopics(q)[0] : undefined
+    return first ? [first] : []
   }
-
   return (
-    <div className="pt-4">
-      <BattleResults
-        battle={battle}
-        questionsById={questionsById}
-        me={snapshot.me}
-        actions={
-          <>
-            {!gone && (
-              <Button
-                size="lg"
-                onClick={onRematch}
-                disabled={!host && iAsked}
-                className="h-12 gap-2 rounded-xl"
-                data-testid="battle-rematch"
-              >
-                <RotateCcw className="h-4 w-4" aria-hidden />
-                {host ? 'Rematch' : iAsked ? 'Rematch requested' : 'Ask for a rematch'}
-              </Button>
-            )}
-            {onFindAnother && <FindAnotherButton onClick={onFindAnother} />}
-            <Button size="lg" variant="outline" onClick={onLeave} className="h-12 rounded-xl">
-              Leave room
-            </Button>
-          </>
-        }
-        note={note}
-      />
-    </div>
+    <DeckResults
+      battle={battle}
+      questionsById={questionsById}
+      me={snapshot.me}
+      topicsOf={topicsOf}
+      primary={gone ? null : {
+        label: !host && iAsked ? 'Rematch asked for' : `Rematch ${oppName}`,
+        onClick: onRematch,
+        disabled: !host && iAsked,
+        testid: 'battle-rematch',
+      }}
+      secondary={onFindAnother
+        ? { label: 'New opponent', onClick: onFindAnother, testid: 'battle-find-another' }
+        : { label: 'Leave room', onClick: onLeave, testid: 'battle-leave-room' }}
+      note={note}
+      onLeave={onLeave}
+    />
   )
-}
-
-/**
- * The draft is drawn with the Deck's screens on every skin. Quiz Battle's own
- * page is already on the table; Monte Carlo Station lays one down for it.
- */
-function DraftOnTable({ deck, children }: { deck: boolean; children: ReactNode }) {
-  return deck ? <>{children}</> : <DeckScope className="-mx-4 rounded-[28px] lg:mx-0">{children}</DeckScope>
 }
 
 // ── Hosting ─────────────────────────────────────────────────────────────────
@@ -557,7 +148,6 @@ export function OnlineHost({
   code: givenCode,
   onFindAnother,
   opponent,
-  loadout,
   onRoomOpen,
   room,
 }: {
@@ -573,8 +163,6 @@ export function OnlineHost({
     onSetup: (next: BattleSetup) => void
     onJoinTab: () => void
   }
-  /** The abilities this player brings — used only if the room has them on. */
-  loadout?: AbilityId[]
   /** Told the room's code once it is open (a private room only). */
   onRoomOpen?: (code: string) => void
   /** The draft's topics, pairs and questions — for the first battle and every rematch. */
@@ -591,7 +179,6 @@ export function OnlineHost({
   opponent?: BattlePlayer
 }) {
   const matched = !!givenCode
-  const skin = useBattleSkin()
   const [code] = useState(() => givenCode ?? generateRoomCode())
   const { session, snapshot } = useBattleSession(
     () => new HostSession({
@@ -601,7 +188,6 @@ export function OnlineHost({
       config: { ...config, rules: 'simultaneous' },
       // A fresh id per room: two tabs of one browser can host and join.
       clientId: tabClientId(null),
-      loadout,
       topics,
     }),
     code,
@@ -642,23 +228,20 @@ export function OnlineHost({
 
   if (snapshot.stage === 'drafting' && snapshot.draft) {
     return (
-      <DraftOnTable deck={skin.deck}>
-        <DeckDraftScreen
-          snapshot={snapshot}
-          catalogue={catalogueFor(snapshot.config.exam)}
-          onChoose={t => session.chooseHand(t)}
-          onLock={() => session.lockHand()}
-          onStrike={t => session.strike(t)}
-          onLeave={onExit}
-        />
-      </DraftOnTable>
+      <DeckDraftScreen
+        snapshot={snapshot}
+        catalogue={catalogueFor(snapshot.config.exam)}
+        onChoose={t => session.chooseHand(t)}
+        onLock={() => session.lockHand()}
+        onStrike={t => session.strike(t)}
+        onLeave={onExit}
+      />
     )
   }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
-    const Match = skin.deck ? DeckRound : OnlineMatch
     return snapshot.stage === 'playing' && !snapshot.battle.finished ? (
-      <Match
+      <DeckRound
         snapshot={snapshot}
         questionsById={questionsById}
         onAnswer={c => session.answer(c)}
@@ -666,7 +249,6 @@ export function OnlineHost({
         onReact={e => session.react(e)}
         onLeave={onExit}
         onEndForAbsent={() => session.endForAbsentGuest()}
-        onPower={a => session.power(a)}
       />
     ) : (
       <Results
@@ -695,64 +277,21 @@ export function OnlineHost({
         </div>
       )
     }
-    const Intro = skin.deck ? DeckMatchIntro : MatchIntro
-    return <Intro snapshot={snapshot} note={guestIn ? 'Starting…' : 'Opening the room…'} opponent={opponent} />
+    return <DeckMatchIntro snapshot={snapshot} note={guestIn ? 'Starting…' : 'Opening the room…'} opponent={opponent} />
   }
 
-  if (skin.deck && room) {
-    return (
-      <DeckHostRoom
-        snapshot={snapshot}
-        session={session}
-        setup={room.setup}
-        exams={room.exams}
-        onSetup={room.onSetup}
-        onExit={onExit}
-        onJoinTab={room.onJoinTab}
-      />
-    )
-  }
-
-  const guest = snapshot.players[1]
-  const joinHint = skin.joinHint
+  // Matched rooms never get here; a friend's room always brings its setup.
+  if (!room) return null
   return (
-    <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
-      <CalmMusic />
-      <div className="flex justify-end"><MusicToggle /></div>
-      <div className="space-y-3">
-        <p className="text-sm font-medium text-muted-foreground">Room code</p>
-        <RoomCode code={code} />
-        <ConfigSummary config={snapshot.config} />
-      </div>
-      <Versus players={snapshot.players} me={0} />
-      {guest ? (
-        <div className="space-y-2">
-          <Button
-            size="lg"
-            onClick={() => session.openDraft()}
-            className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
-            data-sound="begin"
-            data-testid="battle-start-online"
-          >
-            Start battle
-          </Button>
-          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready. You’ll each pick your topics first.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Send this code to a friend. They open <span className="font-medium text-foreground">{joinHint}</span>.
-          </p>
-          <ShareButtons code={code} />
-        </div>
-      )}
-      {snapshot.connection === 'error' && (
-        <p className="flex items-center justify-center gap-2 text-sm text-amber-600 dark:text-amber-400">
-          <WifiOff className="h-4 w-4" aria-hidden /> Can’t reach the battle server. Retrying…
-        </p>
-      )}
-      <Button variant="ghost" onClick={onExit}>Close room</Button>
-    </div>
+    <DeckHostRoom
+      snapshot={snapshot}
+      session={session}
+      setup={room.setup}
+      exams={room.exams}
+      onSetup={room.onSetup}
+      onExit={onExit}
+      onJoinTab={room.onJoinTab}
+    />
   )
 }
 
@@ -767,13 +306,10 @@ export function OnlineGuest({
   matched = false,
   onFindAnother,
   opponent,
-  loadout,
   level,
 }: {
   code: string
   player: BattlePlayer
-  /** The abilities this player declares on joining. */
-  loadout?: AbilityId[]
   /** This player's own level on a topic, 0–3, sent with their hand. */
   level?: (topic: string) => number
   /** The topics an exam offers, grouped for the picker. */
@@ -788,7 +324,6 @@ export function OnlineGuest({
   opponent?: BattlePlayer
 }) {
   const [attempt, setAttempt] = useState(0)
-  const skin = useBattleSkin()
   const { session, snapshot } = useBattleSession(
     () => new GuestSession({
       transport: battleTransport(code),
@@ -796,7 +331,6 @@ export function OnlineGuest({
       me: player,
       clientId: tabClientId(typeof sessionStorage === 'undefined' ? null : sessionStorage),
       knows: id => questionsById.has(id),
-      loadout,
       level,
     }),
     `${code}:${attempt}`,
@@ -818,30 +352,26 @@ export function OnlineGuest({
 
   if (snapshot.stage === 'drafting' && snapshot.draft) {
     return (
-      <DraftOnTable deck={skin.deck}>
-        <DeckDraftScreen
-          snapshot={snapshot}
-          catalogue={catalogueFor(snapshot.config.exam)}
-          onChoose={t => session.chooseHand(t)}
-          onLock={() => session.lockHand()}
-          onStrike={t => session.strike(t)}
-          onLeave={onExit}
-        />
-      </DraftOnTable>
+      <DeckDraftScreen
+        snapshot={snapshot}
+        catalogue={catalogueFor(snapshot.config.exam)}
+        onChoose={t => session.chooseHand(t)}
+        onLock={() => session.lockHand()}
+        onStrike={t => session.strike(t)}
+        onLeave={onExit}
+      />
     )
   }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
-    const Match = skin.deck ? DeckRound : OnlineMatch
     return snapshot.stage === 'playing' && !snapshot.battle.finished ? (
-      <Match
+      <DeckRound
         snapshot={snapshot}
         questionsById={questionsById}
         onAnswer={c => session.answer(c)}
         onReady={() => session.ready()}
         onReact={e => session.react(e)}
         onLeave={onExit}
-        onPower={a => session.power(a)}
       />
     ) : (
       <Results
@@ -855,28 +385,8 @@ export function OnlineGuest({
   }
 
   if (matched) {
-    const Intro = skin.deck ? DeckMatchIntro : MatchIntro
-    return <Intro snapshot={snapshot} note={snapshot.stage === 'lobby' ? 'Starting…' : 'Joining the room…'} opponent={opponent} />
+    return <DeckMatchIntro snapshot={snapshot} note={snapshot.stage === 'lobby' ? 'Starting…' : 'Joining the room…'} opponent={opponent} />
   }
 
-  if (skin.deck) return <DeckGuestRoom snapshot={snapshot} onExit={onExit} />
-
-  const host = snapshot.players[0]
-  return (
-    <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
-      <CalmMusic />
-      <div className="flex justify-end"><MusicToggle /></div>
-      <div className="space-y-3">
-        <p className="text-sm font-medium text-muted-foreground">Room code</p>
-        <RoomCode code={code} />
-        {snapshot.stage === 'lobby' && <ConfigSummary config={snapshot.config} />}
-      </div>
-      <Versus players={snapshot.players} me={1} />
-      <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground" aria-live="polite">
-        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-        {snapshot.stage === 'lobby' && host ? `Waiting for ${host.name} to start…` : 'Joining…'}
-      </p>
-      <Button variant="ghost" onClick={onExit}>Leave</Button>
-    </div>
-  )
+  return <DeckGuestRoom snapshot={snapshot} onExit={onExit} />
 }

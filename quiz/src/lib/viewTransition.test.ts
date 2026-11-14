@@ -267,10 +267,12 @@ describe('deskPlace', () => {
     expect(deskPlace('/nowhere').tab).not.toBe(deskPlace('/').tab)
   })
 
-  it('reads Cowork as two tabs, with a source a sheet over its shelf', () => {
-    expect(deskPlace('/cowork').tab).not.toBe(deskPlace('/cowork/workflows').tab)
-    expect(deskPlace('/cowork/sources/osfi')).toEqual({ tab: deskPlace('/cowork').tab, depth: 1 })
-    expect(deskPlace('/cowork/workflows')).toEqual({ tab: deskPlace('/cowork/workflows').tab, depth: 0 })
+  it('lays Workflows, Tools and Data Sources side by side, in sidebar order, each page a sheet over its list', () => {
+    expect(deskPlace('/workflows').tab).toBeLessThan(deskPlace('/tools').tab)
+    expect(deskPlace('/tools').tab).toBeLessThan(deskPlace('/data-sources').tab)
+    expect(deskPlace('/data-sources').tab).toBeLessThan(deskPlace('/store').tab)
+    expect(deskPlace('/workflows/wf-1')).toEqual({ tab: deskPlace('/workflows').tab, depth: 1 })
+    expect(deskPlace('/data-sources/osfi')).toEqual({ tab: deskPlace('/data-sources').tab, depth: 1 })
   })
 })
 

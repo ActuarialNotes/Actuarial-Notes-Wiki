@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { create } from 'zustand'
 import {
+  EMPTY_TITLE,
   fromTemplate,
   newWorkflow,
   parseWorkflow,
@@ -9,11 +10,15 @@ import {
   type WorkflowResolver,
   type WorkflowTemplate,
 } from '@/lib/workflow'
+import { duplicateWorkflow } from '@/lib/workflowLibrary'
 
 /**
- * The reader's workflows (docs/workflows.md): every one they have
- * built, which is open, and which are in their **library** (`saved`) — the
- * ones the starting screen lists, and the + menu offers as sub-workflows. localStorage only, like Concept Craft's board —
+ * The reader's workflows (docs/workflows.md): every one they have built, and
+ * which is open. Every workflow with a step is in the **library** — the grid
+ * `/workflows` opens on, and what the + menu offers as sub-workflows
+ * (`lib/workflowLibrary.ts`); there is no separate Save, since every change is
+ * kept as it is made. Which is open follows the address (`/workflows/:id`).
+ * The old `saved` mark is still read, and decides nothing. localStorage only, like Concept Craft's board —
  * a workflow is a plan for a calculation, not a record anyone else needs —
  * and read back field by field (`parseWorkflow`), so a page always opens.
  *
@@ -81,8 +86,10 @@ interface WorkflowsState extends Saved {
   remove: (id: string) => void
   /** Change the open workflow. `change` is one of `lib/workflow.ts`'s reducers. */
   update: (change: (wf: Workflow, now: number) => Workflow) => void
-  /** Put a workflow in the library, or take it out. */
-  setSaved: (id: string, saved: boolean) => void
+  /** Copy a workflow, without opening the copy. */
+  duplicate: (id: string) => string | null
+  /** Name a workflow. A blank name is taken as the default. */
+  rename: (id: string, title: string) => void
   /** A template, copied into the library as a workflow of the reader's own, without opening it. */
   saveTemplate: (template: WorkflowTemplate) => string
 }
@@ -109,22 +116,21 @@ export const useWorkflows = create<WorkflowsState>((set, get) => {
       const currentId = get().currentId === id ? workflows[0]?.id ?? null : get().currentId
       commit({ workflows, currentId })
     },
-    setSaved: (id, saved) => {
+    duplicate: id => {
+      const original = get().workflows.find(w => w.id === id)
+      if (!original) return null
+      const copy = duplicateWorkflow(original, makeId(), Date.now())
+      commit({ workflows: [copy, ...get().workflows], currentId: get().currentId })
+      return copy.id
+    },
+    rename: (id, title) => {
       const { workflows, currentId } = get()
-      commit({
-        workflows: workflows.map(w => {
-          if (w.id !== id) return w
-          const next = { ...w, updatedAt: Date.now() }
-          if (saved) next.saved = true
-          else delete next.saved
-          return next
-        }),
-        currentId,
-      })
+      const name = title.trim() || EMPTY_TITLE
+      commit({ workflows: workflows.map(w => (w.id === id ? { ...w, title: name, updatedAt: Date.now() } : w)), currentId })
     },
     saveTemplate: template => {
       const id = makeId()
-      const wf = { ...fromTemplate(template, id, Date.now()), saved: true }
+      const wf = fromTemplate(template, id, Date.now())
       commit({ workflows: [wf, ...get().workflows], currentId: get().currentId })
       return id
     },

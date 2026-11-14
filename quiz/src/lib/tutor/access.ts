@@ -1,6 +1,5 @@
-// **Who may use the Tutor** (docs/tutor.md §10). Pure, like Actuaria's
-// `canEnterActuaria`: the host that decides whether the Tutor is drawn at all
-// reads this one rule, so no surface decides it for itself. To everyone the
+// **Who may use the Tutor** (docs/tutor.md §10). Pure: the host that decides
+// whether the Tutor is drawn at all reads this one rule, so no surface decides it for itself. To everyone the
 // stage leaves out the Tutor doesn't exist — no character, no setting, and its
 // code is a lazy chunk they never download.
 //

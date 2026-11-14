@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e617002a35400eef0ff4b4b5e39fe725bf6019986efc9b0f0b6c505c02e99a05
+  content_hash: sha256:56a99ef7b72047d1532df2ea4aa56d69f6eec87325dd68b47058dd11fc435491
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 Example 2.17 p.68 (PDF p.76): 'The only continuous density function with this property is the exponential density'; §5.1 geometric memoryless (PDF p.194); §5.2 uniform density 1/(b-a) and exponential density (PDF pp.213-216), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 p.60 (PDF p.68: point probability 0, f(x) not a probability, f(3/4)=3/2 > 1); Definition 2.2 and Theorem 2.1 (PDF p.69: F = integral of f, F' = f); §4 Beta density on [0,1] (PDF p.176), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -43,10 +43,24 @@ The [[Cumulative Distribution Function (CDF)|cumulative distribution function]] 
 
 - The density is the derivative of the CDF, $f(x) = F'(x)$.
 
+The distribution of a function of $X$, such as $cX$ or $X^2$, is found from $F$ by the [[Transformations of Random Variables#Events about a transformed random variable|CDF method]].
+
 > [!example]- For the repair cost with density $\frac{x}{8}$ on $(0, 4)$, what is the probability that it exceeds 3? {Example}
 > - $F(x) = \int_0^x \frac{t}{8}\,dt = \frac{x^2}{16}$.
 > - $F(3) = \frac{9}{16} = 0.5625$.
 > - $S(3) = 1 - 0.5625 = 0.4375$.
+
+## Symmetric densities
+
+A density symmetric about $m$ satisfies
+
+> $$f(m + x) = f(m - x)$$
+
+So the density on one side of $m$ is the mirror image of the density on the other. Exactly half the probability lies on each side, $P(X \le m) = P(X \ge m) = \tfrac{1}{2}$, so $m$ is the median.
+
+> [!example]- $X$ has a density symmetric about 4, and $P(4 < X \le 5) = 0.3$. What is the 80th percentile of $X$? {Example}
+> - Half the probability lies below 4, so $P(X \le 5) = 0.5 + 0.3 = 0.8$.
+> - The 80th percentile is 5.
 
 ## Named continuous distributions
 

@@ -85,33 +85,18 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
   // The Store, listed after Projects; the gem shop is a sheet laid over it.
   { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
-  // Tools, listed between Projects and the Shop; a tool's card is a sheet laid
-  // over the catalogue.
+  // Workflows, listed after Projects, with Tools and Data Sources under it
+  // and the Store after them. A workflow's board is a sheet laid over the
+  // library, a tool's card over the catalogue, and a table or a publisher
+  // over Data Sources.
+  { prefix: '/workflows', tab: 4.05, depth: 0, below: 1 },
   { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
+  { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
   // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
-  // Actuaria Online, under the sidebar's PLAY label after Projects. Its own
-  // tabs, in the order its tab bar lists them (lib/actuaria/nav.ts), so an
-  // in-world move slides the way the tabs read and never borrows the Quiz tab's
-  // motion — `/actuaria/battle` is not `/battle`. The title screen lies where
-  // the map does; a sector is a sheet over the map, the Simulation one over
-  // Monte Carlo Station, a raid one over the Cohort.
-  { prefix: '/actuaria', tab: 4.5, depth: 0, below: 1 },
-  { prefix: '/actuaria/map', tab: 4.5, depth: 0 },
-  { prefix: '/actuaria/sector', tab: 4.5, depth: 1 },
-  { prefix: '/actuaria/battle', tab: 4.6, depth: 0 },
-  { prefix: '/actuaria/simulation', tab: 4.6, depth: 1 },
-  { prefix: '/actuaria/daily', tab: 4.7, depth: 0 },
-  { prefix: '/actuaria/cohort', tab: 4.8, depth: 0 },
-  { prefix: '/actuaria/raid', tab: 4.8, depth: 1 },
-  { prefix: '/actuaria/hangar', tab: 4.9, depth: 0 },
   { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
   { prefix: '/settings', tab: 8, depth: 0 },
-  // Cowork's two places are two tabs of their own, and a source opens as a
-  // sheet over its shelf.
-  { prefix: '/cowork', tab: 9, depth: 0, below: 1 },
-  { prefix: '/cowork/workflows', tab: 10, depth: 0 },
   { prefix: '/auth', tab: 11, depth: 0 },
 ]
 

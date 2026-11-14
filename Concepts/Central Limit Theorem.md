@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:856684371da2d8328558c5fbc8c2e4a10bca728ed23e448bb62659ab684bb90b
+  content_hash: sha256:123611113014239e71806346a7fb81ad7d2b03f4c1f96226838c79dcf17d72c4
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.4 and Thm 9.6 Central Limit Theorem (PDF pp.351, 365), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 6.4 The Central Limit Theorem: standard score Z_n of the partial sum converges to standard normal; mean mu, variance sigma^2 in (0, infinity); the more abnormal the basic distribution the larger n must be; continuity correction; binomial and Poisson as sums (HTML fetched 2026-11-06), sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
@@ -36,6 +36,8 @@ For large $n$, the sum $S_n$ is therefore approximately normal with mean $n\mu$ 
 > - Its standard deviation is $400\sqrt{100} = 4{,}000$.
 > - The standardized value of 92,000 is $\frac{92{,}000 - 100{,}000}{4{,}000} = -2$.
 > - The probability is $\Phi(-2) = 0.0228$.
+
+An insurer that collects a [[Insurance Policy|premium]] on each of $n$ policies finds the probability that total claims exceed total premium the same way, with the premium times $n$ in place of 92,000.
 
 ## The sample mean
 

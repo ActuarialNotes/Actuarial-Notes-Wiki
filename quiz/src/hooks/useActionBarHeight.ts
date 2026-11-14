@@ -20,8 +20,7 @@ import { useEffect, type RefObject } from 'react'
  */
 /**
  * The bar whose height the variable holds now. Two bars can be up at once for
- * a moment — Actuaria's tab bar standing down as a battle's action bar takes the
- * foot of the screen — and the one leaving must not clear the one arriving.
+ * a moment, and the one leaving must not clear the one arriving.
  */
 let owner: object | null = null
 

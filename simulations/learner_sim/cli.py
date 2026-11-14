@@ -160,6 +160,9 @@ def check_answerable(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default=os.path.join(SIM_DIR, "runs"))
     ap.add_argument("--run-id", help="run directory name (reuse one to continue it)")
     ap.add_argument("--report-only", action="store_true", help="rewrite report.md from results.jsonl, no model calls")
+    ap.add_argument("--relocate", action="store_true",
+                    help="keep each question's recorded requirements and look again only for the passages of the "
+                         "ones G8 holds open (after pages were rewritten); merges new places into the record")
     ap.add_argument("--no-record", action="store_true",
                     help="don't merge the results into simulations/answerability/<bank>.json, the record G8 reads")
     args = ap.parse_args(argv)
@@ -170,6 +173,23 @@ def check_answerable(argv: list[str] | None = None) -> int:
     loader = ContentLoader(exam)
     bank = load_bank(REPO_ROOT, exam.bank)
     _, left_out = served_questions(bank)
+    if args.relocate:
+        import answerability_lib as AL
+        from .answerability import merge_relocated, relocate_open
+        catalog_exam = {"page": exam.page, "bank": exam.bank, "wiki_id": exam.wiki_id}
+        if args.recheck_model == args.locate_model:
+            locate_factory, recheck_factory = (lambda: ClaudeCodeConversation(args.locate_model)), None
+        else:
+            locate_factory = lambda: ClaudeCodeOneShot(args.locate_model)  # noqa: E731
+            recheck_factory = lambda: ClaudeCodeOneShot(args.recheck_model)  # noqa: E731
+        relocated = relocate_open(catalog_exam, loader, bank, out_dir, locate_factory, recheck_factory,
+                                  parallel=args.parallel, max_cost=args.max_cost, limit=args.limit)
+        if not args.no_record:
+            record = AL.load_record(exam.bank)
+            n = merge_relocated(record, relocated, run_id)
+            print(f"{n} requirement(s) gained a place → {AL.save_record(record)}  "
+                  f"(python3 scripts/answerability_lib.py status --exam {exam.key})")
+        return 0
     if args.report_only:
         results = read_results(os.path.join(out_dir, "results.jsonl"))
     else:

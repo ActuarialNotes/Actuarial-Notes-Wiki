@@ -3,13 +3,11 @@ import { Loader2, Share, WifiOff } from 'lucide-react'
 import { DeckBackButton, DeckPrimaryButton, DeckTable, ExamSheet, PlayerCard } from '@/components/battle/deck/DeckParts'
 import { DeckMusicButton } from '@/components/battle/deck/DeckLobby'
 import { useBattleMusic } from '@/hooks/useBattle'
-import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { ROUND_COUNTS, ROUND_TIME_PRESETS, roundSecondsFor, type BattlePlayer, type Seat } from '@/lib/battle'
 import { DEFAULT_PLAYER_NAMES, battleExamName } from '@/lib/battleDisplay'
 import { nextInCycle } from '@/lib/battleDeck'
-import { ROOM_CODE_LENGTH, isRoomCode, normalizeRoomCode } from '@/lib/battleRoom'
+import { ROOM_CODE_LENGTH, isRoomCode, joinPath, normalizeRoomCode } from '@/lib/battleRoom'
 import { roomConfig, type BattleSetup } from '@/lib/battleSetup'
-import { skinJoinPath } from '@/lib/battleSkin'
 import type { HostSession, SessionSnapshot } from '@/lib/battleSession'
 import { formatClock } from '@/lib/quizTiming'
 import { cn } from '@/lib/utils'
@@ -77,12 +75,11 @@ function RoomCodeCards({ code }: { code: string }) {
 
 /** *Send the code*: the share sheet where there is one, the invite link copied where there isn't. */
 function SendCode({ code }: { code: string }) {
-  const skin = useBattleSkin()
   const [copied, setCopied] = useState(false)
-  const link = `${window.location.origin}${skinJoinPath(skin, code)}`
+  const link = `${window.location.origin}${joinPath(code)}`
   async function send() {
     if (typeof navigator.share === 'function') {
-      navigator.share({ title: skin.title, text: `${skin.invite} — room ${code}`, url: link }).catch(() => {})
+      navigator.share({ title: 'Quiz Battle', text: `Join my Quiz Battle, room ${code}`, url: link }).catch(() => {})
       return
     }
     try {
@@ -175,7 +172,7 @@ export function DeckHostRoom({
 
   function change(next: BattleSetup) {
     onSetup(next)
-    session.setConfig(roomConfig(next, false))
+    session.setConfig(roomConfig(next))
   }
 
   const timeLabel = ROUND_TIME_PRESETS.find(p => p.id === setup.time)

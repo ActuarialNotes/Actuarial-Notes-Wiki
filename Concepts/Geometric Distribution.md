@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9554a9fe9d22763ce3c96de233574c4e6a2b6befa21fc788414ee15611a46091
+  content_hash: sha256:18f2272b0d1bab03a271e0aeae6ccb7b93be6cb72a087c3ee1ef7d11b02331fc
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 geometric P(T=j) = q^(j-1)p p.185 (PDF p.193); P(T>k) = q^k and memoryless P(T>r+s|T>r) = q^s, also obeyed by the exponential, p.186 (PDF p.194); §6.2 Example 6.19 E(T)=1/p, V(T)=q/p^2 p.262 (PDF p.270), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "CAS, Tables for Exam MAS-I (version date 01/15/2018, linked from the CAS MAS-I exam page), p.1 (tables used when writing MAS-I questions); p.15 Appendix B.2 (a,b,0) class: B.2.1.1 Poisson, B.2.1.2 geometric-beta, B.2.1.3 binomial-q,m, B.2.1.4 negative binomial-beta,r, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
@@ -97,7 +97,7 @@ Its mean is $(1-p)/p$, one less than the mean of $X$, and its variance is the sa
 
 ## The first event in a sequence of periods
 
-When each period, such as a year, independently has the same probability $q$ of an event, the period of the first event is geometric with $p = q$. A life with a constant probability $q$ of dying each year, given survival to the start of it, dies in year $k$ with probability $(1-q)^{k-1}q$.
+When each period, such as a year, independently has the same probability $q$ of an event, the period of the first event is geometric with $p = q$. A life with a constant probability $q$ of dying each year, given survival to the start of it, dies in year $k$ with probability $(1-q)^{k-1}q$. The probability of being alive at the start of year $k$ is the product of the one-year [[Survival Model|survival]] probabilities before it.
 
 > [!example]- A driver's accidents each year are Poisson with mean 0.2, independently from year to year. What is the probability that the first accident is in year 4? {Example}
 > - A year has an accident with probability $1 - e^{-0.2}$.

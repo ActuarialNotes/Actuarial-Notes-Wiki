@@ -6,7 +6,7 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Database } from 'lucide-react'
-import { datasetsFor, formatValue, toolById, toolSlug, type ToolResult } from '@/lib/tools'
+import { datasetsFor, formatValue, toolById, toolPath, type ToolResult } from '@/lib/tools'
 import { chainPlace } from '@/lib/toolChains'
 
 /** Where the tool sits in its chain: the steps before it, then it, then its alternatives. */
@@ -17,7 +17,7 @@ export function ChainStrip({ toolId }: { toolId: string }) {
   const link = (id: string) => {
     const spec = toolById(id)
     return spec ? (
-      <Link to={`/tools/${toolSlug(spec)}`} className="underline-offset-2 hover:text-foreground hover:underline">{spec.name}</Link>
+      <Link to={toolPath(spec)} className="underline-offset-2 hover:text-foreground hover:underline">{spec.name}</Link>
     ) : id
   }
   // Two steps back is enough to say where the tool is; earlier ones fold into "…".

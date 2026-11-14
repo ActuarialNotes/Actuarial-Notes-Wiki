@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3662606678df73b385760a0416a6acb3c2d9f89804d3865e27f6b7d05c10d658
+  content_hash: sha256:429fc20293d512a91c700752b54549ae49e327bf6eefcdcc61877ab00de4cb69
   sources:
     - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge UP 2009; MAS-I reading) — publisher preview: §1.1 p.4 (PDF 22: 'the monetary amount of each claim is called the claim severity or claim size'; frequency and severity considered separately); printed contents pp.vii-viii (PDF 9-10: §2.2.1-2.2.4 Exponential, Gamma, Weibull, Pareto; §2.4 tail properties; §2.5.4 effects of inflation), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
     - "Frees et al. (eds.), Loss Data Analytics (open textbook, 1st ed.), ch.3 'Modeling Loss Severity': §3.2.1 gamma light-tailed (all moments), §3.2.2 Pareto heavy-tailed (decreasing hazard 'another indication'), §3.2.3 Weibull hazard decreasing for shape < 1 ('heavy tailed'), increasing for > 1, §3.3.2 scale distributions (inflation multiplies the scale parameter), §3.3.5.2 k-point mixture (E(X^r), M_X(t) weighted sums), §3.4.2 E(X ^ u) = int_0^u [1 - F(x)] dx and Y^L = (X ^ u) - (X ^ d), §3.4.3 Example 3.4.5 (500 xs 100 layer, exponential mean 1000, 5% inflation: cost per payment +1.1%), §3.5.2 censored (S(u)) and truncated (f(x)/S(d)) likelihoods, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
@@ -45,6 +45,8 @@ The severity distributions of the MAS-I reading are the [[Exponential Distributi
 | Lognormal | $1 - \Phi\left(\frac{\ln x - \mu}{\sigma}\right)$ | $e^{\mu + \sigma^2/2}$ |
 
 From the lightest [[Tail Weight|tail]] to the heaviest, the order is the Weibull with $\tau > 1$, the exponential, the lognormal and the Pareto. The lognormal has every moment but no moment generating function. A heavier-tailed distribution places more of the expected loss in the excess layers.
+
+The tail also shows in the [[Mean Excess Loss|mean excess loss]] $e(d)$, the expected amount by which a loss above $d$ exceeds it. It is constant for the exponential and rises in a straight line for the Pareto. At large thresholds the lognormal's mean excess loss rises too, but more slowly than a straight line, and its [[Hazard Rate|hazard rate]] rises at first and then falls toward 0.
 
 ## Scaling and inflation
 

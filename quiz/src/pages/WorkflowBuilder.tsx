@@ -1,12 +1,18 @@
-// Workflows (`/cowork/workflows`, docs/workflows.md), Cowork's second
-// place: documents from Sources, data, calculations and concepts as steps
-// locked on a grid, joined by directed connections, run live on the Actuarial
-// Tools engine — and handed to Claude as a brief for the Actuarial Notes
-// connector. Concept Craft's board, with the physics taken out.
+// Workflows (docs/workflows.md): documents from Data Sources, data,
+// calculations and concepts as steps locked on a grid, joined by directed
+// connections, run live on the Actuarial Tools engine — and handed to Claude
+// as a brief for the Actuarial Notes connector. Concept Craft's board, with
+// the physics taken out.
+//
+//   /workflows       the library — every workflow the reader has built, as a
+//                    grid of cards, with New and the templates first
+//                    (`components/workflow/WorkflowLibrary.tsx`)
+//   /workflows/:id   one workflow's board; Back returns to where it was opened
+//                    from — the library, or the workflow it is a step of
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Bookmark, BookmarkCheck, ChevronDown, ClipboardCopy, Maximize, Plus, Trash2, Workflow as WorkflowIcon, ZoomIn, ZoomOut } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { ChevronDown, ChevronLeft, ClipboardCopy, Copy, Maximize, Plus, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { ClearButton, ControlGroup, MapButton } from '@/components/craft/CraftControls'
 import { WorkflowAddMenu, type ConceptShelf } from '@/components/workflow/WorkflowAddMenu'
 import { WorkflowBoard, type WorkflowBoardCommands } from '@/components/workflow/WorkflowBoard'
@@ -21,7 +27,10 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { usePageHead } from '@/hooks/usePageHead'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
-import { useCurrentWorkflow, useWorkflowResolver, useWorkflows } from '@/hooks/useWorkflows'
+import { useWorkflowResolver, useWorkflows } from '@/hooks/useWorkflows'
+import { backLabel, useBack, usePageLabel } from '@/hooks/useBack'
+import { WorkflowLibrary } from '@/components/workflow/WorkflowLibrary'
+import { subWorkflowChoices } from '@/lib/workflowLibrary'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
@@ -52,7 +61,6 @@ import {
   type WorkflowNode,
   type Workflow,
   type WorkflowEdge,
-  type WorkflowTemplate,
 } from '@/lib/workflow'
 import type { Cell } from '@/lib/workflowGrid'
 import { cn } from '@/lib/utils'
@@ -110,13 +118,22 @@ type Panel = { kind: 'step'; id: string } | { kind: 'edge'; key: string } | { ki
 
 export default function WorkflowBuilder() {
   usePageHead(HEAD)
-  const workflow = useCurrentWorkflow()
-  const create = useWorkflows(s => s.create)
-  // There is always a workflow open: the first visit starts an empty one.
-  useEffect(() => {
-    if (!workflow) create()
-  }, [workflow, create])
+  const { workflowId } = useParams()
   useEffect(() => () => useConceptPopup.getState().close(), [])
+  return workflowId ? <BoardPage id={workflowId} /> : <WorkflowLibrary />
+}
+
+/** One workflow's board, at `/workflows/:id`. An id that names none goes back to the library. */
+function BoardPage({ id }: { id: string }) {
+  const workflow = useWorkflows(s => s.workflows.find(w => w.id === id) ?? null)
+  const currentId = useWorkflows(s => s.currentId)
+  const open = useWorkflows(s => s.open)
+  // The store edits the open workflow; the address says which that is.
+  useEffect(() => {
+    if (workflow && currentId !== id) open(id)
+  }, [workflow, currentId, id, open])
+  usePageLabel(workflow?.title)
+  if (!workflow) return <Navigate to="/workflows" replace />
 
   return (
     // Always dark, as Concept Craft's board is: a canvas the steps are laid
@@ -125,7 +142,7 @@ export default function WorkflowBuilder() {
       className="dark relative flex flex-col overflow-hidden bg-background text-foreground"
       style={{ colorScheme: 'dark', height: 'calc(100dvh - var(--concept-split-height, 0px))' }}
     >
-      {workflow ? <Builder workflow={workflow} /> : <Header workflow={null} onClaude={() => {}} />}
+      {currentId === id && <Builder key={id} workflow={workflow} />}
       <ConceptPopup />
     </div>
   )
@@ -137,10 +154,6 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
   const levels = useConceptLevels()
   const notes = useNotes()
   const update = useWorkflows(s => s.update)
-  const create = useWorkflows(s => s.create)
-  const remove = useWorkflows(s => s.remove)
-  const openWorkflowById = useWorkflows(s => s.open)
-  const setSaved = useWorkflows(s => s.setSaved)
   const saveTemplate = useWorkflows(s => s.saveTemplate)
   const addToLibrary = useCoworkLibrary(s => s.addResource)
   const navigate = useNavigate()
@@ -148,10 +161,6 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
   const resolve = useWorkflowResolver()
   // Sub-workflows read under what they are called now.
   const workflow = useMemo(() => withResolvedLabels(stored, resolve), [stored, resolve])
-  // The sub-workflows gone into on the way down to this one — the way back up.
-  // Each step names where it came from and where it went, so a workflow opened
-  // any other way (the menu, a template) shows no way up it doesn't have.
-  const [trail, setTrail] = useState<{ from: string; to: string }[]>([])
 
   const boardRef = useRef<WorkflowBoardCommands>(null)
   const [panel, setPanel] = useState<Panel>(null)
@@ -163,13 +172,6 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
 
   // Every calculation, run live: what each card shows and each panel opens on.
   const runs = useMemo(() => evaluateWorkflow(workflow, resolve), [workflow, resolve])
-
-  // A workflow switched: nothing from the last one stays selected.
-  useEffect(() => {
-    setPanel(null)
-    setCursor(null)
-    setLinking(null)
-  }, [workflow.id])
 
   useEffect(() => {
     if (!notice) return
@@ -224,22 +226,13 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
     add({ kind: 'data', ref: CSV_DATA, csv: read.table })
   }
 
-  // ── Library and sub-workflows ────────────────────────────────────────────
-  const library = useMemo(
-    () => allWorkflows.filter(w => w.saved && w.id !== workflow.id).map(w => ({ id: w.id, title: w.title, steps: w.nodes.length })),
-    [allWorkflows, workflow.id],
-  )
-  /** Open another workflow from the top: the library, the menu, a template. An empty draft is let go. */
-  const openTop = (id: string) => {
-    if (workflow.nodes.length === 0 && !workflow.saved && id !== workflow.id) remove(workflow.id)
-    setTrail([])
-    openWorkflowById(id)
-    window.setTimeout(() => boardRef.current?.fit(), 60)
-  }
+  // ── Sub-workflows ────────────────────────────────────────────────────────
+  const library = useMemo(() => subWorkflowChoices(allWorkflows, workflow.id), [allWorkflows, workflow.id])
   /**
-   * Go into a sub-workflow, to work on it at full detail. A template is copied
-   * into the library first, and the step pointed at the copy, so what is
-   * changed inside is what the step runs.
+   * Go into a sub-workflow, to work on it at full detail: its own board, at
+   * its own address, so Back comes up again. A template is copied into the
+   * library first, and the step pointed at the copy, so what is changed inside
+   * is what the step runs.
    */
   const goInto = (node: WorkflowNode) => {
     let ref = node.ref
@@ -253,17 +246,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
       say('That workflow is no longer in your library')
       return
     }
-    setTrail(t => [...t, { from: workflow.id, to: ref }])
-    openWorkflowById(ref)
-    window.setTimeout(() => boardRef.current?.fit(), 60)
-  }
-  const step = trail[trail.length - 1]
-  const parent = step && step.to === workflow.id ? resolve(step.from) : undefined
-  const goUp = () => {
-    if (!parent) return
-    setTrail(t => t.slice(0, -1))
-    openWorkflowById(parent.id)
-    window.setTimeout(() => boardRef.current?.fit(), 60)
+    navigate(`/workflows/${ref}`)
   }
 
   // A card goes wherever it is dropped — beside another, if dropped on one.
@@ -345,15 +328,6 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [linking, panel, addOpen])
 
-  const startFrom = (t: WorkflowTemplate) => {
-    // An empty workflow is replaced, not kept beside the template.
-    if (workflow.nodes.length === 0 && !workflow.saved) remove(workflow.id)
-    setTrail([])
-    create(t)
-    play('collect')
-    window.setTimeout(() => boardRef.current?.fit(), 60)
-  }
-
   // ── Layout ───────────────────────────────────────────────────────────────
   const openStep = panel?.kind === 'step' ? workflow.nodes.find(n => n.id === panel.id) ?? null : null
   const openEdge = panel?.kind === 'edge' ? workflow.edges.find(e => edgeKey(e) === panel.key) ?? null : null
@@ -417,7 +391,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
       onNotice={say}
       source={openSource}
       onReadSource={readSource}
-      onSourcePage={id => navigate(`/cowork/sources/${id}`)}
+      onSourcePage={id => navigate(`/data-sources/${id}`)}
     />
   ) : openEdge ? (
     <EdgePanel
@@ -456,14 +430,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
           if (isPhone) useConceptPopup.getState().close()
         }}
         forClaude={forClaude}
-        parent={parent?.title ?? null}
-        onParent={goUp}
-        onToggleSaved={() => {
-          setSaved(workflow.id, !workflow.saved)
-          say(workflow.saved ? 'Taken out of your library' : 'Saved to your library')
-        }}
-        onOpen={openTop}
-        onTemplate={startFrom}
+        onDuplicated={() => say('Copied to your library')}
       />
 
       <div className="relative min-h-0 flex-1">
@@ -491,7 +458,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
             <div className="pointer-events-auto flex w-full max-w-md flex-col items-center gap-4 text-center" data-testid="workflow-empty">
               <WorkflowLogo size="lg" />
               <div className="space-y-1.5">
-                <h2 className="text-lg font-semibold">{parent ? 'An empty workflow' : 'Build a workflow'}</h2>
+                <h2 className="text-lg font-semibold">Build a workflow</h2>
                 <p className="text-sm text-muted-foreground">
                   Add documents from your sources, data, calculations and the concepts behind them, then drag from a
                   step&rsquo;s dot to the next to say what flows where. A calculation joined to one that takes its
@@ -507,44 +474,6 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
                 <Plus className="h-4 w-4" aria-hidden />
                 Add a step
               </button>
-              {library.length > 0 && (
-                <div className="w-full space-y-2 pt-2 text-left" data-testid="workflow-library">
-                  <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your library</p>
-                  <div className="max-h-56 overflow-y-auto rounded-xl bg-card shadow-[var(--shadow-card)]">
-                    {library.map((w, i) => (
-                      <button
-                        key={w.id}
-                        type="button"
-                        onClick={() => openTop(w.id)}
-                        data-testid="workflow-library-item"
-                        className={cn('flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent', i > 0 && 'border-t border-border/60')}
-                      >
-                        <WorkflowIcon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-sm font-medium">{w.title}</span>
-                        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{w.steps} {w.steps === 1 ? 'step' : 'steps'}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              <div className="w-full space-y-2 pt-2 text-left">
-                <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Templates</p>
-                <div className="overflow-hidden rounded-xl bg-card shadow-[var(--shadow-card)]">
-                  {TEMPLATES.map((t, i) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => startFrom(t)}
-                      data-testid="workflow-template"
-                      data-template={t.id}
-                      className={cn('block w-full px-4 py-3 text-left transition-colors hover:bg-accent', i > 0 && 'border-t border-border/60')}
-                    >
-                      <span className="block text-sm font-medium">{t.title}</span>
-                      <span className="line-clamp-2 text-xs text-muted-foreground">{t.goal}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         )}
@@ -629,97 +558,53 @@ function Header({
   workflow,
   onClaude,
   forClaude = false,
-  onTemplate,
-  parent = null,
-  onParent,
-  onToggleSaved,
-  onOpen,
+  onDuplicated,
 }: {
-  workflow: Workflow | null
+  workflow: Workflow
   onClaude: () => void
   forClaude?: boolean
-  onTemplate?: (t: WorkflowTemplate) => void
-  /** The workflow this one was opened from, as a sub-workflow — the way back up. */
-  parent?: string | null
-  onParent?: () => void
-  onToggleSaved?: () => void
-  /** Open another workflow from the menu. */
-  onOpen?: (id: string) => void
+  onDuplicated: () => void
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  // Back to the page this board was opened from — the library, or the
+  // workflow it is a step of — and up to the library for one who landed here.
+  const back = useBack({ to: '/workflows', label: 'Workflows' })
   return (
-    <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
-      {/* Workflows is one of Cowork's two places, chosen in the sidebar like
-          Sources — so no back arrow here, only the way into the drawer. */}
+    <header className="relative z-30 flex h-14 shrink-0 items-center gap-1.5 border-b border-border px-3">
       <MobileNavButton className="lg:hidden" />
+      <button
+        type="button"
+        onClick={back.go}
+        aria-label={backLabel(back)}
+        title={backLabel(back)}
+        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        data-testid="workflow-back"
+      >
+        <ChevronLeft className="h-5 w-5" aria-hidden />
+      </button>
       <WorkflowLogo size="sm" className="hidden sm:flex" />
-      {parent && onParent && (
-        <button
-          type="button"
-          onClick={onParent}
-          title={`Back up to ${parent}`}
-          className="hidden max-w-[10rem] shrink-0 items-center gap-1 truncate rounded-md px-1.5 py-1 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:flex"
-          data-testid="workflow-parent"
-        >
-          <span className="truncate">{parent}</span>
-          <span aria-hidden>›</span>
-        </button>
-      )}
       <div className="relative min-w-0 flex-1">
         <button
           type="button"
           onClick={() => setMenuOpen(v => !v)}
-          disabled={!workflow}
           aria-haspopup="dialog"
           aria-expanded={menuOpen}
           className="flex max-w-full items-center gap-1 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="workflow-title"
         >
           <span className="min-w-0">
-            <span className="block truncate text-sm font-semibold leading-tight sm:text-base">{workflow?.title ?? 'Workflows'}</span>
-            {workflow && (
-              <span className="block truncate text-xs tabular-nums text-muted-foreground" data-testid="workflow-tally">
-                {workflow.nodes.length} {workflow.nodes.length === 1 ? 'step' : 'steps'} · {workflow.edges.length} {workflow.edges.length === 1 ? 'connection' : 'connections'}
-              </span>
-            )}
+            <span className="block truncate text-sm font-semibold leading-tight sm:text-base">{workflow.title}</span>
+            <span className="block truncate text-xs tabular-nums text-muted-foreground" data-testid="workflow-tally">
+              {workflow.nodes.length} {workflow.nodes.length === 1 ? 'step' : 'steps'} · {workflow.edges.length} {workflow.edges.length === 1 ? 'connection' : 'connections'}
+            </span>
           </span>
           <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
         </button>
-        {menuOpen && workflow && onTemplate && onOpen && (
-          <WorkflowMenu workflow={workflow} onTemplate={onTemplate} onOpen={onOpen} onClose={() => setMenuOpen(false)} />
-        )}
+        {menuOpen && <WorkflowMenu workflow={workflow} onDuplicated={onDuplicated} onClose={() => setMenuOpen(false)} />}
       </div>
-      {parent && onParent && (
-        <button
-          type="button"
-          onClick={onParent}
-          aria-label={`Back up to ${parent}`}
-          className="shrink-0 rounded-full px-3 py-2 text-xs font-semibold ring-1 ring-border transition-colors hover:bg-accent sm:hidden"
-        >
-          Up
-        </button>
-      )}
-      {workflow && onToggleSaved && (
-        <button
-          type="button"
-          onClick={onToggleSaved}
-          aria-pressed={!!workflow.saved}
-          aria-label={workflow.saved ? 'Remove from your library' : 'Save to your library'}
-          title={workflow.saved ? 'In your library' : 'Save to your library'}
-          className={cn(
-            'flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            workflow.saved ? 'bg-primary/15 text-foreground ring-1 ring-primary/30' : 'bg-card text-foreground ring-1 ring-border hover:bg-accent',
-          )}
-          data-testid="workflow-save"
-        >
-          {workflow.saved ? <BookmarkCheck className="h-4 w-4" aria-hidden /> : <Bookmark className="h-4 w-4" aria-hidden />}
-          <span className="hidden md:inline">{workflow.saved ? 'In library' : 'Save'}</span>
-        </button>
-      )}
       <button
         type="button"
         onClick={onClaude}
-        disabled={!workflow}
         aria-pressed={forClaude}
         className={cn(
           'flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
@@ -735,12 +620,13 @@ function Header({
   )
 }
 
-/** The workflow's own menu, off its title: rename it, open another, start one, delete it. */
-function WorkflowMenu({ workflow, onTemplate, onOpen, onClose }: { workflow: Workflow; onTemplate: (t: WorkflowTemplate) => void; onOpen: (id: string) => void; onClose: () => void }) {
-  const workflows = useWorkflows(s => s.workflows)
-  const create = useWorkflows(s => s.create)
+/** The workflow's own menu, off its title: rename it, copy it, delete it. */
+function WorkflowMenu({ workflow, onDuplicated, onClose }: { workflow: Workflow; onDuplicated: () => void; onClose: () => void }) {
+  const duplicate = useWorkflows(s => s.duplicate)
   const remove = useWorkflows(s => s.remove)
-  const update = useWorkflows(s => s.update)
+  const rename = useWorkflows(s => s.rename)
+  const navigate = useNavigate()
+  const [name, setName] = useState(workflow.title)
   const [confirming, setConfirming] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -759,78 +645,45 @@ function WorkflowMenu({ workflow, onTemplate, onOpen, onClose }: { workflow: Wor
     }
   }, [onClose])
 
-  const row = 'flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none'
+  const row = 'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none'
   return (
     <div
       ref={ref}
       role="dialog"
-      aria-label="Workflows"
-      className="paper-drop absolute left-0 top-full z-50 mt-2 flex max-h-[min(70dvh,32rem)] w-[min(20rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-xl bg-popover text-popover-foreground shadow-xl ring-1 ring-border"
+      aria-label="Workflow"
+      className="paper-drop absolute left-0 top-full z-50 mt-2 flex w-[min(20rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-xl bg-popover text-popover-foreground shadow-xl ring-1 ring-border"
       data-testid="workflow-menu"
     >
-      <label className="block shrink-0 space-y-1 border-b border-border/60 px-4 py-3">
+      <label className="block space-y-1 border-b border-border/60 px-4 py-3">
         <span className="block text-xs font-semibold text-muted-foreground">Name</span>
         <input
-          value={workflow.title}
-          onChange={e => update((wf, now) => ({ ...wf, title: e.target.value, updatedAt: now }))}
-          onBlur={e => { if (!e.target.value.trim()) update((wf, now) => ({ ...wf, title: 'Untitled workflow', updatedAt: now })) }}
+          value={name}
+          onChange={e => {
+            setName(e.target.value)
+            if (e.target.value.trim()) rename(workflow.id, e.target.value)
+          }}
+          onBlur={e => { if (!e.target.value.trim()) { rename(workflow.id, ''); setName(useWorkflows.getState().workflows.find(w => w.id === workflow.id)?.title ?? '') } }}
           className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="workflow-rename"
         />
       </label>
-      <div className="min-h-0 flex-1 overflow-y-auto py-1 [scrollbar-width:thin]">
-        {[
-          { title: 'Library', list: workflows.filter(w => w.saved) },
-          { title: 'Drafts', list: workflows.filter(w => !w.saved && (w.nodes.length > 0 || w.id === workflow.id)) },
-        ].map(group => group.list.length > 0 && (
-          <div key={group.title}>
-            <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.title}</p>
-            {group.list.map(w => (
-              <button
-                key={w.id}
-                type="button"
-                onClick={() => {
-                  onOpen(w.id)
-                  onClose()
-                }}
-                className={cn(row, w.id === workflow.id && 'font-semibold')}
-                data-testid="workflow-menu-item"
-              >
-                <span className="min-w-0 flex-1 truncate">{w.title}</span>
-                <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{w.nodes.length}</span>
-              </button>
-            ))}
-          </div>
-        ))}
-        <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">New</p>
+      <div className="space-y-0.5 p-2">
         <button
           type="button"
           onClick={() => {
-            create()
+            const copy = duplicate(workflow.id)
             onClose()
+            if (copy) {
+              onDuplicated()
+              navigate(`/workflows/${copy}`)
+            }
           }}
           className={row}
-          data-testid="workflow-new"
+          data-testid="workflow-duplicate"
         >
-          <Plus className="h-4 w-4 shrink-0" aria-hidden />
-          Empty workflow
+          <Copy className="h-4 w-4 shrink-0" aria-hidden />
+          Duplicate
         </button>
-        {TEMPLATES.map(t => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => {
-              onTemplate(t)
-              onClose()
-            }}
-            className={row}
-          >
-            <span className="w-4 shrink-0" aria-hidden />
-            <span className="min-w-0 flex-1 truncate">{t.title}</span>
-          </button>
-        ))}
-      </div>
-      <div className="shrink-0 border-t border-border/60 p-2">
         <button
           type="button"
           onClick={() => {
@@ -840,11 +693,9 @@ function WorkflowMenu({ workflow, onTemplate, onOpen, onClose }: { workflow: Wor
             }
             remove(workflow.id)
             onClose()
+            navigate('/workflows', { replace: true })
           }}
-          className={cn(
-            'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
-            confirming ? 'bg-destructive text-destructive-foreground' : 'text-destructive hover:bg-destructive/10',
-          )}
+          className={cn(row, confirming ? 'bg-destructive text-destructive-foreground hover:bg-destructive' : 'text-destructive hover:bg-destructive/10')}
           data-testid="workflow-delete"
         >
           <Trash2 className="h-4 w-4" aria-hidden />

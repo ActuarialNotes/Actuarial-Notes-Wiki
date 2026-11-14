@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d15fc1e2ab3d40aa3c1c5866de4c41dae00d90716a2358b853ac0d95a269bf8f
+  content_hash: sha256:88c61a40a41df75a27177481b71719767d1ba018a2c24e420e7260d6faf5280b
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Def. 1.1 sample space/outcomes/events, Def. 1.2 P(E)=Σ_{ω∈E} m(ω), Examples 1.6-1.9, set operations and Fig. 1.7, Thm 1.1 (P(E)≥0, P(Ω)=1, monotonicity, disjoint additivity, complement with proof), Thms 1.2-1.4 and Cor. 1.1 (pp.18-24, PDF pp.26-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, Ch.0 §1 Sets: universal set, empty set, power set, union/intersection/difference/complement, De Morgan's laws, distributive laws, symmetric difference, Venn diagrams, partitions, read 2026-11-06, sha256:88ae6adae225bb78dcf149c6e9807cc4de3d615bf803a343f73b387d3729824a — https://www.randomservices.org/random/foundations/Sets.html"
@@ -63,3 +63,16 @@ An event $E$ and its complement $E^c$ are the simplest partition. Any other even
 > [!example]- Every policyholder is classified as exactly one of low, medium or high risk. 50% are low risk and 30% are medium risk. What is the probability that a policyholder chosen at random is high risk? {Example}
 > - Each policyholder is in exactly one class, so the three classes form a partition.
 > - Their probabilities add to 1, so $P(\text{high})$ is $1 - 0.50 - 0.30 = 0.20$.
+
+## An event inside another
+
+If $F \subseteq E$, then $P(F) \le P(E)$. Since $E$ is the disjoint union of $F$ and $E \setminus F$, the probability of the outcomes in $E$ but not in $F$ is
+
+> $$P(E \setminus F) = P(E) - P(F)$$
+
+- $E \setminus F$ is the set of outcomes in $E$ that are not in $F$.
+
+Containment is the case of largest overlap and smallest union. If $F \subseteq E$, then $P(E \cap F) = P(F)$ and $P(E \cup F) = P(E)$, the most the intersection and the least the union can be.
+
+> [!trap] Subtracting without containment
+> $P(E \setminus F) = P(E) - P(F)$ only when $F \subseteq E$. Otherwise it is $P(E) - P(E \cap F)$.

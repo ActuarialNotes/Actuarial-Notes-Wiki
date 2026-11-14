@@ -33,7 +33,7 @@ The problems are concentrated in five places, roughly in order of how much they 
    most serious finding because it breaks the vault's own rule, "nothing invented", for
    the app's claims about itself.
 2. **Cryptic copy:** words that only make sense if you know the code or the game
-   (§3). Analytics tiles, Concept Craft medals, Actuaria's in-world verbs, the
+   (§3). Analytics tiles, Concept Craft medals, the
    Answerability section, "Vintage", "Beta" with no meaning attached.
 3. **Gamification screens that have had no copy pass** (§4). Quest, streak and plan-complete
    overlays, LeaderboardPanel, Settings and the Gem Shop hold almost all of the
@@ -62,12 +62,12 @@ findings below. Accept, change or drop each:
 | R5 | **An error is reader copy.** Every `catch` and every edge-function `error:` maps to a sentence that says what went wrong and what to do. Never show `err.message` raw. | Upgrade, Auth, Settings, Stripe and beta-code functions |
 | R6 | **A completion screen says what happened and what it earned.** No exclamation marks, no "Great work", no praise. (Possible exception for *in-game* moments in Battle: "Steal!", "Match found!".) | Quest, streak, plan-complete and level-up overlays, Settings, Dashboard welcome |
 | R7 | **A tile or caption is one fact, with its unit visible.** If a screen reader is told the unit, so is the screen. No `·`-packed fragments. | Analytics tiles, Craft scoreboard |
-| R8 | **In-world words carry their plain meaning on screen.** It can't live only in a hover tooltip: the app is read on phones. Buttons get the plain verb. | Actuaria's `<Term>` (26 uses), "Chart this sector", "Receive transmission" |
+| R8 | **In-world words carry their plain meaning on screen.** It can't live only in a hover tooltip: the app is read on phones. Buttons get the plain verb. | — |
 | R9 | **Tooltips are noun phrases.** No em dash, no rule of three, no "click"/"hover"/"tap". | ~25 tooltips |
 | R10 | **Say it once per screen.** A legal notice, a status or a phase purpose appears once. Two strings drawn into one `<p>` must not repeat each other. | Tutor phases, Store "nothing is sold", Settings delete warning |
 | R11 | **Don't call it "mastered".** The app's nouns are the levels (Level 1–3, Forgotten). | ReadinessCard, email, quests, study-plan strategy |
 | R12 | **A status word is never shown bare.** "Beta", "In Development", "Vintage" and "Studio voice" get the plain meaning next to them. | Study-guide banner, ExamsPopout, Listen |
-| R13 | **Things don't act like people.** A quiz doesn't "live" anywhere, progress doesn't "come with you", and Cowork doesn't "carry" documents. Say what is stored, where, and what the reader can do about it. *(Added from the maintainer's note on the guest save prompt.)* | GuestSavePrompt, ActiveExamCard "hang off it", Cowork "carries", Raid "the boss is using", Tutor "follows you here, quietly" |
+| R13 | **Things don't act like people.** A quiz doesn't "live" anywhere, progress doesn't "come with you", and Cowork doesn't "carry" documents. Say what is stored, where, and what the reader can do about it. *(Added from the maintainer's note on the guest save prompt.)* | GuestSavePrompt, ActiveExamCard "hang off it", Cowork "carries", Tutor "follows you here, quietly" |
 | R14 | **The reader's things are theirs.** Say "your quiz results", not "this quiz"; speak to the reader, not about the system. *(Same note.)* | GuestSavePrompt and every "this X" that is really the reader's own record |
 
 ---
@@ -100,7 +100,6 @@ for this write-up.
 | `components/FloatingSearchBar.tsx:205` | In Development: "not yet available to study" | The pages are readable; what's missing is the question bank | "Syllabus outline, no practice questions yet" |
 | `components/wiki/CredentialMap.tsx:175` | "Dashed: an SOA or CAS credential carries credit into the CIA's" | Only ACAS→ACIA and FCAS→FCIA are drawn dashed | Draw the SOA edges, or reword |
 | `components/wiki/LearningProgressModal.tsx:140` | "Show exam history" | It shows this concept's history | "Show history" |
-| `pages/Actuaria/CohortView.tsx:328` | "Every gem you earn today pays a quarter more" | Raid loot and guide pay are flat | "Gems from quizzes and quests pay 25% more today." |
 | `lib/tutor/copy.ts:135` | "A confident error, once corrected, is corrected for good." | The doc says "more durably", and the item still comes back for review | "Confident errors are the ones that stick best once corrected." |
 | `quiz/api/_mcp/server.js`, `SKILL.md`, `knowledgeBase.ts:803` | Exam list "(P, FM, MAS-I … PCPA)"; "community-written"; `ready` = "complete — full syllabus and question bank"; "most pages not fact checked" | FAM, SRM, the DISCs, ALTAM and ASTAM are missing. The vault is one maintainer's. "Ready" means the eight gates pass. Nearly every question *is* verified. | Derive the list; "study notes"; "ready"; "Most concept and source pages haven't been checked yet; nearly every question has." |
 | `lib/pcpaReport.ts:261` | Check "Uses exposure as an offset" | Ticked by `/offset\|exposure/`, so any mention passes | "Mentions exposure or an offset", or tighten the test |
@@ -129,8 +128,6 @@ for this write-up.
 | `analytics/AnalyticsLocked.tsx:38` | "See where your marks go" | A situational title (log 2026-10-23) | "Analytics" + a plain body |
 | `craft/CraftScoreboard.tsx:135, 214, 80` | "in 3 for Gold"; "Gold 80% in 20%"; "Missed: 1,200 in its 5 connections" | You need to know the Pareto rule to read these | "120 points to Gold · 3 connections left"; "Gold · 80% of the score in your first 20% of pairs" |
 | `AnswerabilitySection.tsx` + `lib/answerability.ts` | "Answerability", "Out of reach", "Tagged page", "within its reach", "steps the notes needn't teach" | Gate vocabulary (R4) | Title "Taught in the Notes"; pills "Taught on this question's pages" / "Taught on a linked page" / "Not taught yet" |
-| Actuaria, `<Term>` ×26 | "Chart this sector", "Receive transmission", "Z 0.42", "Coverage" | The plain meaning is tooltip-only, so it never shows on a phone (R8) | "Start studying Exam 5"; "Start the review"; "42% ready" next to Z |
-| `pages/Actuaria/RaidView.tsx:164, 117` | "Weak spots the boss is using"; "100 + speed on the exam's pace" | Metaphor on metaphor | "Concepts the cohort is weakest on"; "100, plus a bonus for beating the exam's pace" |
 | `WikiResources.tsx:344`, `SourceMaterialGallery.tsx:160` | Filter "Vintage" | The app's own empty states say "edition" | "Syllabus edition" |
 | `FloatingSearchBar.tsx:211`, `ExamsPopout.tsx:356` | "Beta" on its own | Never explained (R12) | "Beta · questions and pages still being checked" |
 | `wiki/ListenView.tsx:153` | "Studio voice" / "Pro voice" | Studio vs Pro means nothing to a reader | "Recorded voice" |
@@ -142,7 +139,6 @@ for this write-up.
 | `lib/tutor/copy.ts:76, 143`; `journey.ts:27` | "Extra practice is still spaced."; "Start underneath"; "what is heavy" | Cryptic | "Nothing due today. You can still practise."; "Get {X} to Level 1 first."; "the heaviest-weighted sections" |
 | `components/ExamsPopout.tsx:328` | "click to cycle Exam P status" | Code-speak | "Exam P: Not started. Change status" |
 | `store/ProductSheet.tsx:595` | Section "Its twin on the lists" | A clever title for a plain fact | "Also allowed" |
-| `components/Sidebar.tsx:399` | Row "Actuaria", chip "Live" | No plain meaning; it's a Preview | Subtitle "Study game"; chip "Preview" |
 | `ReadinessCard.tsx:1503` | Popup "Study Guide" | Clashes with the Study Guides tab | "Exam Readiness" |
 
 ---
@@ -155,7 +151,6 @@ each pattern lives.
 **Taglines and selling lines**
 - `pages/Store.tsx:227`: "…so you walk in confident". This is the skill's own example of a
   feeling put on the reader's behalf.
-- `pages/Actuaria/TitleScreen.tsx:45`: "Pass actuarial exams like it's a game." Cut it, or say what it is.
 - `pages/Settings.tsx:800`: "a custom study plan and exclusive features" → "Pro plans what
   to study each day until your exam."
 - `data/credentialPaths.ts:248, 402`: "The letters are not the finish line." (×2) Cut it.
@@ -218,7 +213,7 @@ Pick one form for each; I'll apply it everywhere and add it to the skill as a gl
 | Collect reward | Collect · Claim · Unlock · bank | Collect |
 | Ready date | target date (email) · ready date (app) | ready date |
 | Account creation | Sign up · Create Account · Make an account | "Create account" |
-| Levels | Level 1 · L1 · mastered · Decayed · Cleared (Actuaria) | Level 1–3, Forgotten |
+| Levels | Level 1 · L1 · mastered · Decayed | Level 1–3, Forgotten |
 | Spelling | levelled/leveled · personalised · summarising | **?** The app mostly writes British ("practise") |
 | Resource empty state | No sources / No resources match these/the current filters | "No resources match these filters." |
 | Syllabus change | Added · New in Fall 2026 | Added |
@@ -264,7 +259,7 @@ stops when the fact is told.
 
 1. §2: the untrue claims and the bugs. These are small, independent edits, and each one is checkable.
 2. §5: settle the nouns (your call), then a sweep.
-3. §3 and §4, screen by screen: gamification overlays, Settings, the Gem Shop, Analytics, Craft, Actuaria.
+3. §3 and §4, screen by screen: gamification overlays, Settings, the Gem Shop, Analytics, Craft.
 4. §6: delete or quarantine the dead copy.
 5. Codify §1 and §5 into `app-copy`, and into the other skills and guardrails that write
    human-facing text.

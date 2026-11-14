@@ -123,8 +123,7 @@ export function useLobbySession(
 /**
  * The lobby, watched without joining it: how many players are waiting, read by
  * an *observer* session (it counts, never matches). Null until the count is
- * known, and while `active` is off. The Battle page's way in reads it, and so do
- * Actuaria's title screen and star map — one count, from the lobby itself.
+ * known, and while `active` is off. The Battle page's way in reads it.
  */
 export function useLobbyCount(exams: readonly string[], active: boolean): number | null {
   const [id] = useState(() => tabClientId(null))

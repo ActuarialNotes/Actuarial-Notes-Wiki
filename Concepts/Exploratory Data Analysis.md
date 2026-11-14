@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fbe84305aec876f700aa8ceb5ef5a6d56ff5d53b05894e2d228004a52e38b17d
+  content_hash: sha256:5c08fda881f138d2315c937687172005ad912012d886a25114997f20aa952eac
   sources:
     - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.10 'Exploratory data analysis', §10.1 (iterative cycle; not a formal process; data quality even when questions are given; data cleaning one application), §10.2 (questions focus attention; variation and covariation), §10.3.1-10.3.2 (typical/rare values, clusters; zero-coded missing values), §10.6 (pattern questions; model residuals), sha256:ab13c323616810e786eb9f6298ed5d4b9bc50d1cebfb753d2725f91684553432 — https://r4ds.hadley.nz/EDA.html"
     - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.3 'Data transformation', §3.6 'Case study: aggregates and sample size' (include a count n() with any aggregation), sha256:7ecfc380d9ba22575657e2e0ea5b16d9a2c7a235f5cfd2a3ad860bf6bbf745de — https://r4ds.hadley.nz/data-transform.html"
@@ -29,7 +29,7 @@ verification:
 3. Treat each pattern found as a question to check, not as a conclusion.
 4. Fit a model only after the exploration has shown the data's shape and problems.
 
-Examining each variable's distribution doubles as a data quality check. An impossible value, a zero standing in for a missing value or a duplicated record is found by looking at the data before anything is built on it.
+Examining each variable's distribution doubles as a [[Data Quality|data quality]] check. An impossible value, a zero standing in for a missing value or a duplicated record is found by looking at the data before anything is built on it.
 
 > [!example]- An analyst receives a claims file with paid amount, accident date, report date, vehicle class and driver age, and is asked to build a severity model. What should the first round of exploration look at? {Example}
 > - A histogram of paid amounts, and of their logarithm, shows the shape of severity.

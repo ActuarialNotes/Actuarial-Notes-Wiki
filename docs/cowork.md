@@ -1,83 +1,92 @@
-# Cowork
+# Cowork — Workflows and Data Sources
 
-**Cowork** is the second product under the Actuarial Notes roof. Where Study Mode is for
-someone preparing to *become* an actuary, Cowork is for someone doing the work: following
-the entities that publish what they work from, and building the workflows that turn what
-those entities publish into the work.
+**Cowork** was the app's second product, a separate *mode* reached from a Study / Cowork
+pill beside the wordmark. Since 2026-11-14 it is part of the one app: no pill, no second
+sidebar. What it held lives in two places in the main navigation —
 
-It is in **Preview**, gated by `COWORK_ENABLED` in `quiz/src/lib/featureFlags.ts`, and
-while it is in Preview it is open **only to approved accounts** — `PREVIEW_APPROVED_EMAILS`
-in `quiz/src/lib/appMode.ts` (today, `jordan@actuarialnotes.com`). To everyone else it does
-not exist: no mode pill, and `/cowork` redirects to the dashboard. Once it leaves Preview it
-is Pro-only.
+- **Workflows** (`/workflows`, `docs/workflows.md`) — a sidebar row with **Tools** and
+  **Data Sources** under it: a workflow is built from calculations and published data.
+- **Data Sources** (`/data-sources`, `pages/DataSources/`) — the published data a
+  calculation reads from, as four sections: **Tables** (the Data Sources tools — life
+  tables, price indexes, yield curves, insurer filings), the **Assumptions Bank**
+  (`docs/assumptions-bank.md`), **Publishers** (what Cowork called Sources) and
+  **Documents** (what it called Resources).
 
-The one exception is the e2e suite's build: `VITE_COWORK_PREVIEW=on` (playwright.config.ts)
-sets `COWORK_OPEN_TO_ALL`, which passes `previewOpen` to every mode check, so Sources and
-Workflows are tested from a signed-out browser — Actuaria's preview override, for Cowork. No
-deployed build sets it.
+The code keeps the `cowork*` names (`lib/coworkSources.ts`, `data/coworkSources.ts`,
+`components/cowork/`, `useCoworkLibrary`, the `cowork-sources` skill): no reader sees them, and
+renaming them would only churn the tests and the stored library. The word *Cowork* is on no
+screen.
+
+**Who sees what.** Workflows, Publishers and Documents are in **Preview**, gated by
+`COWORK_ENABLED` (and `TOOLS_ENABLED`) in `quiz/src/lib/featureFlags.ts` and open **only to
+approved accounts** — `PREVIEW_APPROVED_EMAILS` in `quiz/src/lib/workflowsAccess.ts` (today,
+`jordan@actuarialnotes.com`), read through `hooks/useWorkflowsAccess.ts`. Tables and the
+Assumptions Bank are open to everyone. So:
+
+| Reader | Sidebar | `/data-sources` | `/workflows` |
+| --- | --- | --- | --- |
+| approved | Workflows, with Tools and Data Sources under it | all four sections | the library |
+| anyone else | Tools and Data Sources as rows of their own | Tables, Assumptions Bank; a publisher's or Publishers/Documents' address leads back to Tables | redirects to the dashboard |
+
+The e2e suite's build sets `VITE_COWORK_PREVIEW=on` (playwright.config.ts) →
+`COWORK_OPEN_TO_ALL`, so Workflows and the publishers are tested signed out. No deployed build
+sets it. The approval list is a UI gate, not a security boundary — the catalogue is bundled
+seed data and its stores are localStorage, so there is no server data behind it to guard.
 
 ---
 
-## 1. Modes
+## 1. Addresses
 
-The two products are **places**, not tabs of each other: different navigation, different
-content, different readers. `quiz/src/lib/appMode.ts` is the one definition of what a mode
-is — its label, its home, the routes it owns, what it takes to enter it, and whether it is
-in preview. Three surfaces read it and none of them re-decides any of it:
+```
+/data-sources               Tables
+/data-sources/assumptions   the Assumptions Bank
+/data-sources/publishers    Publishers                       (Preview)
+/data-sources/documents     Documents                        (Preview)
+/data-sources/<table>       one table — a Data Sources tool's page (ToolPage, pages/Tools.tsx)
+/data-sources/<publisher>   one publisher's page             (Preview)
+/workflows                  the Workflows library            (Preview)
+/workflows/<id>             one workflow's board             (Preview)
+```
 
-- `components/ModeSwitcher.tsx` — the pill beside the wordmark. **Green** in Study,
-  **violet** in Cowork. The green is a deliberate exception to the style guide's semantic
-  palette (§2.2: green is *correct*): here it is a place marker, and nothing on the header
-  row can be answered right or wrong. The pill portals to the body and is placed by
-  `lib/menuPlacement.ts`, like every other menu in the app. It is drawn only when the
-  viewer can see more than one mode (`showsModeSwitcher`) — a Preview mode is visible to
-  approved accounts alone, so for everyone else there is no pill at all.
-- `components/Sidebar.tsx` — which nav rows exist. In Cowork the rows are Cowork's two
-  places, and they are the **only** switch between them: the page carries no tab row, the
-  same as every route in Study mode. (The Sources row stays lit on a source's own page —
-  `forceActive`.) The footer (theme, sound, account) belongs to neither mode and stays put.
-- `App.tsx` — `RequireMode` guards the `/cowork` tree. A mode whose pill is hidden but
-  whose URL lets anyone in is the one bug here a reader would find by typing an address, so
-  the route enforces `canEnterMode`, not just the pill. It waits for
-  `useSubscription().loading` to settle first — bouncing a real subscriber away for one
-  frame is a bug they would see on every visit.
+The sections are `lib/dataSources.ts`; a section name, a table slug and a publisher id share
+one segment, and `lib/dataSources.test.ts` holds them apart. A tool's page address is
+`toolPath(spec)` (`lib/tools/registry.ts`), `/data-sources/<slug>` for area `data` and
+`/tools/<slug>` otherwise; `runPath(slug, input, area)` is the same for a run, and is what the
+MCP connector's `app_url` uses. Every old address redirects: `/cowork` → Publishers,
+`/cowork/resources` → Documents, `/cowork/sources/<id>` → `/data-sources/<id>`,
+`/cowork/workflows`, `/cowork/deliverables` and `/tools/workflow` → `/workflows`,
+`/tools/<table>` → `/data-sources/<table>` with its `#input=` run kept, and `/tools/assumptions`
+→ `/data-sources/assumptions` (`CoworkRedirect` in `App.tsx`, the top of `pages/Tools.tsx`).
 
-A locked mode's destination is `modeDestination`: the dashboard for a Preview mode the
-viewer isn't approved for (it doesn't exist for them), otherwise `/auth` when signed out and
-`/upgrade` when signed in without Pro. The pill and the URL give the same answer because
-they call the same function. The approval list is a UI gate, not a security boundary —
-Cowork's catalogue is bundled seed data and its stores are localStorage, so there is no
-server data behind it to guard.
-
-Adding a third mode is one entry in `APP_MODES` plus its routes.
+The section chips at the top of the page are links that **replace** the history entry: four
+views of one page, so Back leaves Data Sources rather than walking back through them.
 
 ---
 
 ## 2. The loop
 
 ```
-  Sources ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
- (who publishes)         (sources, data,  (what flows   (live, on the   (the brief, for
-                          calculations,    into what)     tools engine)   the connector)
-                          concepts)
+  Publishers ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
+ (who publishes)            (sources, data,  (what flows   (live, on the   (the brief, for
+                             calculations,    into what)     tools engine)   the connector)
+                             concepts)
 ```
 
-Two places, chosen in the sidebar: **Sources** (`/cowork`, a source's page at
-`/cowork/sources/:id`) and **Workflows** (`/cowork/workflows`). Workflows replaced the
-Deliverables place that used to stand second — a scoping wizard whose exports carried
-structure and blank value cells — with the board that was the Tools tab's *Workflow Builder*,
-because a workflow does what a deliverable only described: it runs.
+Publishers and Documents are under Data Sources, and **Workflows** is its own row. Workflows
+replaced the Deliverables place that used to stand second — a scoping wizard whose exports
+carried structure and blank value cells — with the board that was the Tools tab's *Workflow
+Builder*, because a workflow does what a deliverable only described: it runs.
 
-### Sources
+### Publishers
 
 A source is an **entity**, not a document. An actuary does not follow "documents", they
 follow *publishers* — OSFI, FSRA, the CIA, a competitor's annual report, one trade paper —
 and take whatever those publish. So the card is the publisher and its action is **Follow**.
 
-**A source is a page**, at `/cowork/sources/:id`, the way an exam's study guide is a page:
+**A publisher is a page**, at `/data-sources/:id`, the way an exam's study guide is a page:
 the publisher's logo in the sticky header, their description and Follow control below it,
 and their whole catalogue under that as cards, each with its own **Add**
-(`pages/Cowork/SourcePage.tsx`). The shelf at `/cowork` is publishers only — a catalogue
+(`pages/DataSources/SourcePage.tsx`). The Publishers section is publishers only — a catalogue
 folded inside a card on a shelf could not be linked to or scrolled on its own.
 
 The mark in the header and on the card is the publisher's **own** logo, hotlinked from
@@ -108,16 +117,15 @@ never constructed**, and it is the year *this body* came into being, not the yea
 business began — Intact Financial Corporation dates from 2009 though the Halifax Insurance
 Company it grew out of dates from 1809. No record worth citing, no pill.
 
-### Two shelves, Sources and Resources
+### Two sections, Publishers and Documents
 
 Publishers and what they publish are two different questions, each answered by a different
-card, so they are **two pages**: **Sources** (`/cowork`, `pages/Cowork/SourcesView.tsx`) and
-**Resources** (`/cowork/resources`, `pages/Cowork/ResourcesView.tsx`). They were one page with
-a Sources / Documents toggle; now each carries a one-row panel leading to the other
-(`components/cowork/CoworkPageRow.tsx`) — the Study Guides tab's row between its exam ladder
-and its Resources shelf — and the sidebar lists both.
+card, so they are **two sections** of Data Sources: **Publishers**
+(`/data-sources/publishers`, `pages/DataSources/SourcesView.tsx`) and **Documents**
+(`/data-sources/documents`, `pages/DataSources/ResourcesView.tsx`). The page's section chips
+lead between them (they used to be two shelves of their own, each with a row to the other).
 
-**Resources filters the way Study mode's Resources page does**: Exam, Publisher and Year, OR
+**Documents filters the way the Study Guides' Resources page does**: Exam, Publisher and Year, OR
 within one and AND across them, each option counting what choosing it would leave, riding the
 URL (`?publisher=…&year=…`). It is the same code — `lib/resourceFilters.ts` reads any
 `ResourceFacetItem`, and `coworkFacetItem` (`lib/coworkSources.ts`) hands a document over in
@@ -127,7 +135,7 @@ Exam is a dropdown rather than the study page's logo strip, and Vintage (an edit
 exam's syllabus) isn't offered.
 
 **My Library leads each shelf's filter row.** It is a filter, not a section: it narrows the shelf
-to publishers the reader follows (Sources) or resources they have taken (Resources). It used
+to publishers the reader follows (Publishers) or documents they have taken (Documents). It used
 to be a block stacked above the shelf, which made what a reader *had* a different place from
 what they *could have*, pushed the filters below the fold, and showed the same card in both
 its states on one screen. An empty array is a library with nothing in it and matches nothing;
@@ -139,16 +147,16 @@ the tests pin it.
 The bar is the wiki's floating search, built from the same parts
 (`components/FloatingSearchBar.tsx` — sticky blurred bar, input line with the hamburger
 folding away as you type, dimmed backdrop, scope pills, result rows; `SearchHighlight.tsx`
-marks the matched run). Cowork is a second product, not a second design system, and searching
-should not feel like a different app one mode over.
+marks the matched run), so searching here feels like searching anywhere else in the app.
 
 It behaves like the wiki's too: a query is **a question with answers**, not a filter that
 quietly thins the page behind the bar. Typing opens a list and picking a row goes to the
-thing — a publisher to their page, a document into `ConceptPopup`. Publishers and documents are listed apart and each matches **on its own account**
+thing — a table or the Assumptions Bank to its page (`places`, listed first, and for a reader
+without the Preview the only answers), a publisher to their page, a document into `ConceptPopup`. Publishers and documents are listed apart and each matches **on its own account**
 (`searchSources`): on the shelf a publisher that matched answers with its whole catalogue,
 but in a list of results a document that only matched because its publisher did is a row
-nobody asked for, under the row that opens the page it is already on. Scope is **This
-Source** (on a source's page) or **Everywhere**, mirroring the wiki's *This Page* /
+nobody asked for, under the row that opens the page it is already on. On a publisher's page
+the scope is **This publisher** or **Everywhere**, mirroring the wiki's *This Page* /
 *Everywhere*. Nothing goes in the URL, because there is no filtered state of a page to carry.
 
 Adding a document implies following its publisher (you cannot work from a document whose
@@ -277,17 +285,17 @@ localStorage too (`docs/workflows.md`, *Storage*); a source step stores its reso
 title as last seen and the table as the reader filled it in.
 
 The library holds **ids and nothing else**, and the calls that need the catalogue take it as
-an argument. That is not ceremony: the sidebar imports the store to badge the Sources row,
-so a `data/cowork*` import inside it would drag the whole catalogue out of Cowork's lazy
-chunk and into the main bundle, for every reader in Study mode. For the same reason the
-Workflows row carries no count: the workflow store reads the tools engine.
+an argument, so nothing outside the Data Sources and Workflows chunks needs the catalogue. For
+the same reason the Workflows row carries no count: the workflow store reads the tools engine,
+and the sidebar is in the first-paint bundle.
 
 ---
 
 ## 6. Where things are
 
 ```
-quiz/src/lib/appMode.ts               modes: labels, routes, Pro gating, preview
+quiz/src/lib/workflowsAccess.ts       who sees Workflows and the publishers (Preview approval)
+quiz/src/lib/dataSources.ts           Data Sources' sections and addresses
 quiz/src/lib/coworkSources.ts         entity/resource types (a resource's table), search,
                                       filters, library reducers
 quiz/src/lib/coworkContent.ts         wiki-bundle + virtual-file registration (side effects)
@@ -296,16 +304,15 @@ quiz/src/data/coworkSources.ts        the seed catalogue (entities + resources)
 quiz/src/data/coworkDocs.ts           the sample documents' markdown bodies
 quiz/src/hooks/useCoworkLibrary.ts    library persistence (ids only)
 quiz/src/hooks/useWorkflows.ts        workflow persistence
-quiz/src/components/ModeSwitcher.tsx  the mode pill
 quiz/src/lib/coworkCovers.ts          a resource card's vault cover, looked up (pure)
 quiz/src/components/FloatingSearchBar.tsx  the shared search-bar chrome (with the wiki's)
 quiz/src/components/SearchHighlight.tsx    the shared marked-match run
-quiz/src/components/cowork/           Sources' UI (EntityCard, EntityLogo, ResourceCard,
-                                      CoworkTopBar, …)
+quiz/src/components/cowork/           Data Sources' UI (EntityCard, EntityLogo, ResourceCard,
+                                      CoworkTopBar — the page's search bar, …)
 quiz/src/components/workflow/         the board, the + menu, a step's and a line's panels
-quiz/src/pages/Cowork/                index (routing) + Sources shelf / a Source's page
-quiz/src/pages/WorkflowBuilder.tsx    Workflows, at /cowork/workflows
-quiz/e2e/cowork.spec.ts               the mode, its two places and the old links' redirects
+quiz/src/pages/DataSources/           index (sections, routing) + Publishers / Documents / a publisher's page
+quiz/src/pages/WorkflowBuilder.tsx    Workflows: the library (/workflows) and a board (/workflows/:id)
+quiz/e2e/data-sources.spec.ts         the sidebar, Data Sources' sections and the old links' redirects
 quiz/e2e/workflow.spec.ts             Workflows, including a source's table linked into a tool
 ```
 

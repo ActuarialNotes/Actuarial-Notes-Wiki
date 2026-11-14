@@ -1,6 +1,6 @@
 // How hard a quiz's draw is. Two tools live here: the quiz builder's difficulty
 // multi-select (at the bottom — a plain filter on the bank's three levels), and
-// the weighted lean that Quiz Battle, Actuaria and links made under the old
+// the weighted lean that Quiz Battle and links made under the old
 // builder slider still draw with.
 //
 // The lean is continuous but the bank isn't: a question is easy, medium or

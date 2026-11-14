@@ -6,10 +6,13 @@ Read this first, every session. It should save you a re-discovery pass through t
 
 A two-part product for people studying for actuarial exams (CAS/SOA):
 
-The app has **two modes** — two products under one roof, switched from the pill beside the
-wordmark (`lib/appMode.ts`). **Study Mode** is everything below; **Cowork** is the second
-product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
-`lib/appMode.ts`; everyone else sees no pill at all) — see "Cowork" at the end of this file and `docs/cowork.md`.
+The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
+Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
+**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: the published
+tables and the Assumptions Bank for everyone; publishers and their documents in Preview).
+Workflows and the publishers are open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
+`lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
+`docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
 
 Across Study Mode floats the **Tutor** — the reader's own Gem Shop character, in the corner of
 every page, walking an Exam 5 candidate through the exam, purely algorithmically (no model).
@@ -89,18 +92,19 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
-  `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Cowork's Workflows,
-  `/cowork/workflows`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
+  `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
+  at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's Sources shelf and source pages —
+  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: its sections (Tables, Assumptions Bank, Publishers, Documents), a table's page and a publisher's page —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens — `deck/` the Deck, Quiz Battle's own look, the rest Monte Carlo Station's,
-  `Matchmaking.tsx` its lobby; their styles and Tailwind utilities are `battle.css`, in the lazy
-  chunk), `components/craft/` (Concept Craft's board,
+  Battle's screens — `deck/` the Deck, its one look, and the few shared pieces beside it
+  (`OnlineBattle.tsx` the online sessions, `BattleActionBar.tsx`'s round result and reactions,
+  `BattleResults.tsx`'s review row); their styles and Tailwind utilities are `battle.css`, in the
+  lazy chunk), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
@@ -135,8 +139,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
   Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
   It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
-  "tap to go there" entry on those two pages uses (Games, the general guide,
-  Actuaria).
+  "tap to go there" entry on those two pages uses (Games, the general guide).
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
@@ -194,7 +197,7 @@ before touching that area**:
   `lib/tools/bank.ts`. A number field names the kinds it takes (`bank: ['profit-provision']`),
   and its input may be `{ "assumption": "<set>#<row>" }`, which the run reads in and records:
   the judgment's `source`, a working step, the hash, and a warning until fact checked. The card's
-  **From…** menu lists the figures; the shelf is `/tools/assumptions`
+  **From…** menu lists the figures; the shelf is `/data-sources/assumptions`
   (`components/assumptions/`), with each figure linking into the tools that take it; a resource
   page shows its sets (`ResourceAssumptionsCard`). The MCP tools are Phase 2. Read before adding
   a set or a `bank:` field (and run `npm run tools:bundle` after touching `lib/tools/`).
@@ -453,9 +456,13 @@ before touching that area**:
   concept is made of. localStorage only, and only the connections found — the hand is
   re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
   named `craft*`, `conceptCraft` or `conceptGraph`.
-- `docs/workflows.md` — **Workflows** (`/cowork/workflows`, Cowork's second place in the sidebar,
-  behind Cowork's gate; it was the Tools tab's *Workflow Builder*, and `/tools/workflow` and
-  `/cowork/deliverables` redirect to it): **sources** (documents from Cowork's Sources — a
+- `docs/workflows.md` — **Workflows** (`/workflows`, a sidebar row with Tools and Data Sources
+  under it, Preview — `lib/workflowsAccess.ts`; it was the Tools tab's *Workflow Builder*, then
+  Cowork's, and `/tools/workflow`, `/cowork/workflows` and `/cowork/deliverables` redirect to it).
+  It opens on a **library** (`components/workflow/WorkflowLibrary.tsx`, `lib/workflowLibrary.ts`):
+  New and the templates, then every workflow built as a card drawn from its board
+  (`workflowThumbnail`), renamed, duplicated or deleted from its ⋯ menu — no Save, every change is
+  kept; a board is `/workflows/:id`. **Sources** (documents from Data Sources' publishers — a
   `source` step, `sourceStep`), data, calculations and concepts as steps that **stay where they are put**,
   snapped to a fine 24 px grid on an unbounded board (`lib/workflowGrid.ts` — a card dropped on
   another lands in the nearest place it fits, `nearestFit`; workflows saved on the first, coarse grid
@@ -493,13 +500,13 @@ before touching that area**:
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
   every message is untrusted and parsed field by field. Before every online battle (a room's,
-  a matched one's, each rematch's, on either skin) comes the **draft** — each player draws
+  a matched one's, each rematch's) comes the **draft** — each player draws
   4 topics as flashcard tiles in 30 s and strikes 1 of the other's in 15 s, each hidden until
   both are in; the 3 cards left in each hand are **dealt to pairs** by Concept Craft's strength
   (`readPair`), the most pairs some question tests both of first, the strongest of those the
   final; a pair no question covers is settled by a **coin** the host tosses when its round
-  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`
-  — Monte Carlo Station draws them in a Deck scope of its own). On random hands a coin settles
+  comes up (`lib/battleDraft.ts`, `components/battle/deck/DeckDraft.tsx` and `DeckCoinFlip.tsx`).
+  On random hands a coin settles
   most rounds (measured, `docs/quiz-battle-redesign.md` §4); a same-screen battle drafts with the phone passed between turns (`LocalDraft` in `DeckLocal.tsx`). **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
@@ -510,7 +517,7 @@ before touching that area**:
   keep: **nothing is saved** (no mastery, XP, streak or attempts — the other player's answers
   are not the account's; the lobby pairs on the exam alone, since a rating would have to be
   stored), and only click-markable multiple choice is raced. Read before touching anything
-  named `battle*` or `Matchmaking`.
+  named `battle*` or `Deck*`.
 - `docs/tutor.md` — **the Tutor**, the plan and the build spec: the learning science it is
   built on (retrieval, spacing, successive relearning, interleaving, calibration, worked
   examples), the walk through the exam (phases from the exam date and the syllabus met), the
@@ -519,26 +526,16 @@ before touching that area**:
   (FSRS-4.5, gaps capped by the days left), the diagnosis of what is confusing, and who can
   use it (`TUTOR_STAGE`: preview → beta for Pro → open). Read before touching anything under
   `lib/tutor/`, `components/tutor/` or `tutorStore`.
-- `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
-  `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
-  `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
-  same list): each exam a *sector* of a star system, each concept a *landmark*,
-  Credibility = the mastery ladder and the readiness score, Coverage = the streak, a duel = a
-  Quiz Battle. It is the build spec, phase by phase, and its §2 ground rules are the part to
-  keep — one mastery ladder, one readiness number, one currency/streak/XP, **one battle engine**
-  (extend `battleReducer`, never fork it), exam hues from `examAccentStyle`, player colours only
-  inside a battle, and the game never gates study content. In-world words come from
-  `lib/actuaria/lexicon.ts`; the look is style guide §2.6 (`.actuaria dark` scope, the signal
-  teal as chrome only, Oxanium for display labels). Read before touching anything under
-  `actuaria/` or `Actuaria`.
-- `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), its
-  two places — Sources and Workflows (Workflows replaced Deliverables) — and how they meet (a
-  document as a workflow's source step), and the two rules that hold the whole thing up —
+- `docs/cowork.md` — **Workflows and Data Sources** (what was Cowork, the second mode): who sees
+  what (`lib/workflowsAccess.ts`), the addresses (`lib/dataSources.ts` — `/data-sources` and its
+  sections, a table at `/data-sources/<slug>` via `toolPath`, a publisher at `/data-sources/<id>`,
+  every old `/cowork` and `/tools/<table>` link redirected), publishers and documents and how they
+  meet a workflow (a document as a workflow's source step), and the two rules that hold the whole thing up —
   *nothing is invented* (a source's table comes with blank figures until they are read off the
   publisher; a `Sample` entry carries no date and no link because it names no particular
   document) and *there is no second reader* (a Cowork resource opens in `ConceptPopup`; its own
   documents are registered as virtual vault files to keep that true). Read before touching
-  anything named `cowork*`, `ModeSwitcher` or `appMode`.
+  anything named `cowork*`, `DataSources`, `dataSources` or `workflowsAccess`.
 - `docs/community.md` — **Community** (`/community`, a sidebar row after the Shop, Preview: one
   approved account — `COMMUNITY_APPROVED_EMAILS` in `lib/community/access.ts`, behind
   `COMMUNITY_ENABLED`): where actuaries gather — r/actuary's newest posts, read live through the
@@ -923,7 +920,7 @@ Other important `lib/` modules:
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
   ticked). The module also keeps the older weighted *lean* (`drawByDifficulty` /
-  `orderByDifficulty`, a 0–1 target) that Quiz Battle and Actuaria draw with, and that an old
+  `orderByDifficulty`, a 0–1 target) that Quiz Battle draws with, and that an old
   `level=0–100` link still applies. Pure and tested.
 - `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
   `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
@@ -1243,7 +1240,7 @@ Other important `lib/` modules:
   way back — the browser's own Back to the page left (scroll, filters and search intact, drawn
   as a `pop`), or up to the `to` fallback for a reader who came in from outside the app — and
   its name ("Back to Exam P-1"); `usePageLabel` lets a page name its own entry better than its
-  path can (an exam's builder, a Cowork source, a project brief). Don't hardcode a parent in a
+  path can (an exam's builder, a publisher, a workflow, a project brief). Don't hardcode a parent in a
   back arrow; pass it as the fallback. Two moves keep the history honest: the Quiz tab's open
   exam is an entry of its own (`/?topic=…`), so quitting a quiz returns to that exam's builder,
   and a finished quiz hands its entry to the review (`replace` with `REPLACE_AS_PUSH` from
@@ -1456,7 +1453,7 @@ Other important `lib/` modules:
   blurred container, the input line (the hamburger on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
-  wiki's `WikiFloatingSearch`, Cowork's `CoworkTopBar`, `DashboardSearchBar` and
+  wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar`, `DashboardSearchBar` and
   `FlashcardsSearchBar` are all built from these and a
   search feels the same wherever a reader is. `components/SearchHighlight.tsx` is the matched run,
   marked — the one implementation the wiki search, the search panel, the Search page and
@@ -1508,11 +1505,12 @@ Other important `lib/` modules:
   out from its seeds to every concept and connection, and pins a handful of recipes
   (*Frequency* + *Severity* → *Pure Premium*), and replays every topic's medal plays to
   check each medal can be won.
-- `appMode.ts` / `cowork*.ts` — **Cowork**, the app's second product (Preview,
-  approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`; the e2e build opens it
-  to everyone with `VITE_COWORK_PREVIEW=on` → `COWORK_OPEN_TO_ALL` → `ModeViewer.previewOpen`). `appMode.ts` is the one definition of what a mode *is* — label,
-  home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
-  the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
+- `workflowsAccess.ts` / `dataSources.ts` / `cowork*.ts` — **Workflows and Data Sources**
+  (what was Cowork; Preview, approved accounts only via `PREVIEW_APPROVED_EMAILS`,
+  `COWORK_ENABLED`; the e2e build opens it to everyone with `VITE_COWORK_PREVIEW=on` →
+  `COWORK_OPEN_TO_ALL`). `workflowsAccess.ts` is who may use Workflows and the publishers
+  (`canUseWorkflows`, read through `hooks/useWorkflowsAccess.ts` by the sidebar, the Data Sources
+  page and `WorkflowRoute`); `dataSources.ts` is the Data Sources page's sections and addresses.
   `coworkSources.ts` is the entity/resource model (a resource's `table`, for Workflows), the shelf's filters (`groupSources` for publishers,
   `filterResources` for the flat document list, both honouring the `entityIds`/`resourceIds`
   the **My Library** pill passes — `[]` is an empty library, `undefined` is the filter off),
@@ -1576,7 +1574,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1940,14 +1938,11 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
-- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` / `20261001_actuaria_pro.sql` /
-  `20261002_actuaria_approved.sql` — **Actuaria Online** (approved accounts only): a player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
-  `award_gems`), guides, nudges, Cohort Clash challenges and the weekly raid — leagues' privacy
-  model, RPC-only, with `actuaria_raid_hit` callable by the service role alone (`quiz/api/raid.js`),
-  and starting or joining a cohort held to the approved emails (`actuaria_is_approved`, the
-  same list as `ACTUARIA_APPROVED_EMAILS` — `access.test.ts` holds them equal).
-  `supabase/tests/run.sh` runs `supabase/tests/actuaria_crews.sql` against a throwaway local
-  Postgres; CI doesn't, so run it after touching that migration. See `docs/actuaria-online.md`.
+- `20261111_drop_actuaria.sql` — removed **Actuaria Online**, the game layer that the four
+  `*_actuaria*.sql` migrations before it added: every `actuaria_*` table and function is
+  dropped and `award_gems` is back to its plain form (no risk-pool multiplier).
+  `supabase/tests/run.sh` runs `supabase/tests/drop_actuaria.sql` against a throwaway local
+  Postgres (the Actuaria migrations, then the drop); CI doesn't.
 - `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's
   "Report an issue". Insert/select own rows only; **no** UPDATE or DELETE policy, so only the
   service-role `scripts/sync_reports.py` can mark a report synced.
@@ -1965,44 +1960,50 @@ headers for the serverless functions — `chat.js` and the flag-gated `research*
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above. Functions that must share the app's origin live in
 `quiz/api/` (`exam-pdf.js`, `amazon-price.js`, `mcp.js` — the AI connector, which reads
-the knowledge-base export from its own deployment — and `raid.js`, Actuaria's raid marking, which
-reads the same export and needs `SUPABASE_SERVICE_ROLE_KEY`); `quiz/api/_mcp/` and `quiz/api/_raid/`
-are `_`-prefixed so Vercel doesn't route them.
+the knowledge-base export from its own deployment); `quiz/api/_mcp/` and `quiz/api/_tools/` are
+`_`-prefixed so Vercel doesn't route them.
 
-## Cowork (the second product)
+## Workflows and Data Sources (what was Cowork)
 
-In **Preview**, gated by `COWORK_ENABLED`, and open only to the approved accounts in
-`PREVIEW_APPROVED_EMAILS` (`lib/appMode.ts`) — no one else sees the mode pill, and `/cowork`
-redirects them to the dashboard. Two places — **Sources** and **Workflows** — chosen from the
-sidebar, like every route in Study mode (the page carries no tab row). They are the two halves
-of one loop:
+Until 2026-11-14 this was **Cowork**, a second mode behind a pill beside the wordmark. It is now
+part of the one sidebar: **Workflows** (`/workflows`) with **Tools** (`/tools`) and **Data
+Sources** (`/data-sources`) under it. Workflows, and Data Sources' **Publishers** and
+**Documents**, are in **Preview**, gated by `COWORK_ENABLED` and open only to the approved
+accounts in `PREVIEW_APPROVED_EMAILS` (`lib/workflowsAccess.ts`); anyone else sees Tools and Data
+Sources as rows of their own, Data Sources with its **Tables** (the area-`data` tools: life
+tables, price indexes, yield curves, insurer filings) and the **Assumptions Bank** — both open to
+everyone — and `/workflows` redirects them to the dashboard. The word *Cowork* is on no screen;
+the code keeps its `cowork*` names.
 
 ```
-Sources ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
+Publishers ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
 ```
 
 A reader follows the **entities** that publish (OSFI, FSRA, the CIA, Intact, Canadian
 Underwriter…), takes documents into a library, and lays them on a **workflow**'s board
-(`/cowork/workflows`, `docs/workflows.md` — what was the Tools tab's Workflow Builder; it
-replaced Cowork's Deliverables) as **source** steps beside the data, calculations and concepts
-they feed. A document that publishes a table (`SourceResource.table` — FSRA's private passenger
-auto **loss trend benchmarks** first) brings it as the step's data, mapped onto a calculation's
-inputs the way an uploaded CSV's columns are, so a coverage's trend links straight into Trend
-Factor.
+(`docs/workflows.md`) as **source** steps beside the data, calculations and concepts they feed.
+Workflows opens on the reader's **library** of workflows, each a card drawn from its board, with
+New and the templates first. A document that publishes a table (`SourceResource.table` — FSRA's
+private passenger auto **loss trend benchmarks** first) brings it as the step's data, mapped
+onto a calculation's inputs the way an uploaded CSV's columns are, so a coverage's trend links
+straight into Trend Factor.
 
-The Sources surfaces, and the shape of each is deliberate: two shelves — **Sources**
-(`/cowork`, publisher cards) and **Resources** (`/cowork/resources`, document cards, filtered by
-Study mode's Exam / Publisher / Year through `lib/resourceFilters.ts` and `coworkFacetItem`) —
-each carrying a row card to the other (`components/cowork/CoworkPageRow.tsx`, the Study Guides
-tab's Exams ↔ Resources row), and each filter row led by **My Library** (a filter narrowing the
-shelf to what the reader follows/has taken, not a section stacked above it); **a source is its own page**
-(`/cowork/sources/:id`), the way an exam's study guide is, with the publisher's *own* logo in
-the sticky header (`SourceEntity.logo`, transcribed from their site, monogram tile as the
-fallback) and their catalogue below it; and **a document is always a card**, never a row — one
-component (`components/cowork/ResourceCard.tsx`) draws it everywhere, and it is the study
-guide's resource card. On both kinds of card the **whole card** is the target and the one
-control that doesn't navigate (Follow, Add) sits at its right edge; a card carries pills, not a
-paragraph — a publisher's region and `established` year, a document's kind and date.
+Data Sources (`pages/DataSources/`) is one page of four sections chosen by chips that replace the
+history entry — **Tables** (`/data-sources`), **Assumptions Bank** (`/data-sources/assumptions`),
+**Publishers** (`/data-sources/publishers`, publisher cards) and **Documents**
+(`/data-sources/documents`, document cards filtered by the Study Guides' Exam / Publisher / Year
+through `lib/resourceFilters.ts` and `coworkFacetItem`), the last two led by **My Library** (a
+filter narrowing the shelf to what the reader follows/has taken, not a section stacked above it).
+A table is a tool's page (`ToolPage` from `pages/Tools.tsx`) at `/data-sources/<slug>`
+(`toolPath`); **a publisher is its own page** (`/data-sources/<id>`), the way an exam's study
+guide is, with the publisher's *own* logo in the sticky header (`SourceEntity.logo`, transcribed
+from their site, monogram tile as the fallback) and their catalogue below it; and **a document is
+always a card**, never a row — one component (`components/cowork/ResourceCard.tsx`) draws it
+everywhere, and it is the study guide's resource card. On both kinds of card the **whole card**
+is the target and the one control that doesn't navigate (Follow, Add) sits at its right edge; a
+card carries pills, not a paragraph — a publisher's region and `established` year, a document's
+kind and date. Every old address redirects (`CoworkRedirect` in `App.tsx`; `/tools/<table>` and
+`/tools/assumptions` at the top of `pages/Tools.tsx`).
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:
@@ -2025,9 +2026,9 @@ Three things to know before changing any of it — all three are load-bearing, a
    that every `wikiRef` still resolves to a file that is actually in the vault.
 
 The library store (`hooks/useCoworkLibrary.ts`) is localStorage only and holds **ids only** —
-the catalogue is passed in. That is what keeps Cowork a lazy chunk instead of pulling its
-catalogue into the main bundle through the sidebar's nav badge (and why the Workflows row has
-no count: the workflow store reads the tools engine). Populating the corpus more deeply is the next phase.
+the catalogue is passed in, so it stays in the Data Sources and Workflows chunks (and the
+Workflows row has no count: the workflow store reads the tools engine, and the sidebar is in the
+first-paint bundle). Populating the corpus more deeply is the next phase.
 
 ## Working conventions observed in this repo
 

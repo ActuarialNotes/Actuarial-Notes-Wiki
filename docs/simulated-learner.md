@@ -211,6 +211,14 @@ new link brings one step closer shows as the check found it until it is resolved
 `resolve` refuses a quote that isn't on the page, and says whether the page is in the question's
 reach. A retag needs no `resolve`: the gate re-reads the tags. A re-run replaces a question's
 entry and keeps only the `not-required` calls on requirements worded exactly as before.
+
+When pages are **rewritten** (a concept-shape conversion), the requirements still stand but their
+quotes go. `./check-answerable --exam <exam> --relocate` re-runs only the locator (and its second
+look) on the requirements G8 holds open, with the recorded list unchanged, every quote checked in
+code as before; the places it finds are added to the requirement (`merge_relocated`, the question
+marked `relocated: <run>`), and its statement, status and any resolution stay. About half a cent a
+question. What it can't place is left open for a `resolve`, a link, or a fix to the page.
+
 `PageIndex`, the quote matcher, lives in `answerability_lib.py`, so the gate reads a quote exactly
 as the check accepted it.
 

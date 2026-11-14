@@ -1,7 +1,7 @@
 import { test, expect, type Locator, type Page } from './test'
 
-// Workflows (docs/workflows.md), Cowork's second place: the way in from
-// Cowork's sidebar onto an empty board, steps added through the + menu's pages
+// Workflows (docs/workflows.md): the way in from the sidebar onto the
+// library, and from New onto an empty board, steps added through the + menu's pages
 // (a document from Sources among them, its table filled in and mapped into a
 // calculation), a
 // template laid out and run live along its links — the linked field and the
@@ -9,8 +9,10 @@ import { test, expect, type Locator, type Page } from './test'
 // connections drawn by dragging from a step's port (and refused when they
 // would loop), a step moved anywhere and dropped on another landing beside
 // it, a line opened by tapping it, and the workflow copied as a brief for
-// Claude. Signed out throughout: workflows live in localStorage, and the
-// suite's build opens Cowork to every viewer (VITE_COWORK_PREVIEW).
+// Claude; and the library — every workflow a card, renamed, copied and
+// deleted from its menu. Signed out throughout: workflows live in
+// localStorage, and the suite's build opens Workflows to every viewer
+// (VITE_COWORK_PREVIEW).
 
 type Point = { x: number; y: number }
 
@@ -39,15 +41,31 @@ async function restingBox(locator: Locator) {
 }
 
 async function openTemplate(page: Page, id: string) {
-  await page.goto('/cowork/workflows')
+  await page.goto('/workflows')
   await page.locator(`[data-testid="workflow-template"][data-template="${id}"]`).click()
+  await expect(page).toHaveURL(/\/workflows\/wf-/)
+  // The board arrives with a page move (a view transition, which takes the
+  // pointer while it runs — lib/viewTransition.ts): act once it has settled.
+  await expect(page.locator('html[data-paper]')).toHaveCount(0)
+  await restingBox(page.locator('[data-workflow-step]').first())
+}
+
+/** A new, empty workflow's board, from the library's New tile. */
+async function openNew(page: Page) {
+  await page.goto('/workflows')
+  await page.getByTestId('workflow-new').click()
+  await expect(page.getByTestId('workflow-empty')).toBeVisible()
+  await expect(page.locator('html[data-paper]')).toHaveCount(0)
 }
 
 test.describe('workflows', () => {
-  test('opens from Cowork\'s sidebar and adds a step of each kind through the + menu', async ({ page }) => {
-    await page.goto('/cowork')
-    await page.getByRole('link', { name: 'Workflows' }).first().click()
-    await expect(page).toHaveURL(/\/cowork\/workflows$/)
+  test('opens on the library from the sidebar, and adds a step of each kind through the + menu', async ({ page }) => {
+    await page.goto('/data-sources')
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Workflows' }).click()
+    await expect(page).toHaveURL(/\/workflows$/)
+    await expect(page.getByTestId('workflow-library-empty')).toBeVisible()
+    await page.getByTestId('workflow-new').click()
+    await expect(page).toHaveURL(/\/workflows\/wf-/)
     await expect(page.getByTestId('workflow-empty')).toBeVisible()
 
     const add = page.getByTestId('workflow-add')
@@ -183,24 +201,51 @@ test.describe('workflows', () => {
     expect(copied).toContain('`get_concept`')
   })
 
-  test('saves a workflow to the library, and lists it on the starting screen', async ({ page }) => {
+  test('lists every workflow in the library, and renames, copies and deletes it there', async ({ page }) => {
     await openTemplate(page, 'reserve-review')
-    await page.getByTestId('workflow-save').click()
-    await expect(page.getByTestId('workflow-save')).toHaveAttribute('aria-pressed', 'true')
+    await page.getByTestId('workflow-back').click()
+    await expect(page).toHaveURL(/\/workflows$/)
+    const card = page.getByTestId('workflow-card')
+    await expect(card).toHaveCount(1)
+    await expect(card).toContainText('Reserve review')
+    await expect(card).toContainText('5 steps')
 
-    // A new, empty workflow opens on the starting screen: the library, then the templates.
-    await page.getByTestId('workflow-title').click()
+    // A New left empty isn't kept.
     await page.getByTestId('workflow-new').click()
     await expect(page.getByTestId('workflow-empty')).toBeVisible()
-    const item = page.getByTestId('workflow-library-item')
-    await expect(item).toHaveCount(1)
-    await expect(item).toContainText('Reserve review')
-    await item.click()
+    await page.getByTestId('workflow-back').click()
+    await expect(card).toHaveCount(1)
+
+    // Rename, from the card's menu.
+    await card.getByTestId('workflow-card-menu').click()
+    await page.getByTestId('workflow-card-rename-action').click()
+    await card.getByTestId('workflow-card-rename').fill('Q4 reserves')
+    await card.getByTestId('workflow-card-rename').press('Enter')
+    await expect(card.getByTestId('workflow-card-title')).toHaveText('Q4 reserves')
+
+    // Duplicate: the copy leads, being the newest edit.
+    await card.first().getByTestId('workflow-card-menu').click()
+    await page.getByTestId('workflow-card-duplicate').click()
+    await expect(card).toHaveCount(2)
+    await expect(card.first().getByTestId('workflow-card-title')).toHaveText('Q4 reserves (copy)')
+
+    // Delete asks twice.
+    await card.first().getByTestId('workflow-card-menu').click()
+    await page.getByTestId('workflow-card-delete').click()
+    await expect(card).toHaveCount(2)
+    await page.getByTestId('workflow-card-delete').click()
+    await expect(card).toHaveCount(1)
+
+    // A card opens its board; the board's own menu renames it too.
+    await card.getByTestId('workflow-card-open').click()
+    await expect(page.getByTestId('workflow-tally')).toHaveText('5 steps · 4 connections')
+    await page.reload()
     await expect(page.getByTestId('workflow-tally')).toHaveText('5 steps · 4 connections')
   })
 
   test('adds a template as one step, opens it to edit, and comes back up', async ({ page }) => {
-    await page.goto('/cowork/workflows')
+    await openNew(page)
+    const host = page.url()
     await page.getByTestId('workflow-add').click()
     await page.getByTestId('workflow-add-workflows').click()
     await page.locator('[data-testid="workflow-add-template"][data-ref="rate-indication"]').click()
@@ -214,11 +259,13 @@ test.describe('workflows', () => {
     const panel = page.getByTestId('workflow-step-panel')
     await expect(panel.getByTestId('workflow-inner-steps').locator('li')).toHaveCount(6)
     await panel.getByTestId('workflow-open-sub').click()
-    // Inside it, at full detail — a copy of the reader's own, saved to the library.
+    // Inside it, at full detail and its own address — a copy of the reader's own.
     await expect(page.getByTestId('workflow-tally')).toHaveText('6 steps · 5 connections')
-    await expect(page.getByTestId('workflow-save')).toHaveAttribute('aria-pressed', 'true')
+    expect(page.url()).not.toBe(host)
 
-    await page.getByTestId('workflow-parent').click()
+    // Back comes up to the workflow it is a step of.
+    await page.getByTestId('workflow-back').click()
+    await expect(page).toHaveURL(host)
     await expect(page.getByTestId('workflow-tally')).toHaveText('1 step · 0 connections')
     await expect(page.locator('[data-workflow-step][data-kind="workflow"]')).toContainText('Rate indication')
     // The workflow can't go inside itself: the copy is offered, the host isn't.
@@ -228,7 +275,7 @@ test.describe('workflows', () => {
   })
 
   test('uploads a CSV and links its columns into a calculation', async ({ page }) => {
-    await page.goto('/cowork/workflows')
+    await openNew(page)
     await page.getByTestId('workflow-add').click()
     await page.getByTestId('workflow-add-data').click()
     await page.getByTestId('workflow-csv-input').setInputFiles({
@@ -264,8 +311,8 @@ test.describe('workflows', () => {
     await expect(page.locator('[data-testid="workflow-edge"][data-kind="handoff"]')).toHaveCount(0)
   })
 
-  test('brings in FSRA\'s loss trend benchmarks from Sources and links a trend into a calculation', async ({ page }) => {
-    await page.goto('/cowork/workflows')
+  test('brings in FSRA\'s loss trend benchmarks from Data Sources and links a trend into a calculation', async ({ page }) => {
+    await openNew(page)
     await page.getByTestId('workflow-add').click()
     await page.getByTestId('workflow-add-sources').click()
     await page.getByTestId('workflow-add-search').fill('loss trend')
@@ -303,8 +350,10 @@ test.describe('workflows', () => {
     await expect(factor.getByTestId('workflow-link-note')).toHaveText(/^Annual trend linked to .*December 31, 2024/)
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 
-    // Working from it puts it in the reader's library in Sources.
-    await page.goto('/cowork')
+    // Working from it puts it in the reader's library in Data Sources.
+    await page.goto('/data-sources/documents')
+    await page.getByRole('button', { name: /My Library/ }).click()
+    await expect(page.getByText('Private passenger automobile loss trend benchmarks', { exact: false }).first()).toBeVisible()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 })

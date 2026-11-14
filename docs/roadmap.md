@@ -106,13 +106,13 @@ An item is ✅ only when all of the following are true:
 | **Content vault**: 84 exam pages (15 CAS, 40 SOA, 29 CIA), 1,392 concepts, 806 resources, 3,932 questions (2026-10-25) | Candidates and practitioners | ✅ live. 7 exams ready, 10 beta, 67 in development | `examStatus.ts` | §4.3; `content-plan.md` |
 | **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 76.9% of files verified, every served question among them (2026-10-25); sweeps run by hand (D19) | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
-| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
-| **Cowork**: Sources and Workflows | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
+| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` (calculators) and `/data-sources` (tables, Assumptions Bank), and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
+| **Workflows and Data Sources' publishers** (was Cowork, its own mode until 2026-11-14) | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` (`workflowsAccess.ts`) | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
 | **Projects**: the PCPA simulator | PCPA candidates (Pro) | ✅ live, 3 briefs, Pro only | — | `pcpa-project.md` |
 | **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
 | **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |
-| **Actuaria Online** (game layer) | Candidates | 🟡 phases 0–3 built, one approved account | `ACTUARIA_ENABLED` + `ACTUARIA_APPROVED_EMAILS` | `actuaria-online.md` |
+| **Actuaria Online** (game layer) | Candidates | 🗑 removed 2026-11-11, from the app and the database (`20261111_drop_actuaria.sql`) | — | — |
 | **Tutor** (a guided walk through the exam; purely algorithmic) | Exam 5 candidates | 🟡 Phase 1 built, Preview: one approved account | `TUTOR_ENABLED` + `TUTOR_STAGE` / `TUTOR_APPROVED_EMAILS` | `tutor.md` |
 | **Community** (forums, events and places, by topic) | Candidates and practitioners | 🟡 built, Preview: one approved account | `COMMUNITY_ENABLED` + `COMMUNITY_APPROVED_EMAILS` | §4.7 X9; `community.md` |
 | **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
@@ -402,7 +402,6 @@ order below stands.
 - A2 Tools Phase 2 and later
 - G4 monetization packaging
 - G6 the leagues deferrals
-- X3 opening Actuaria to a cohort
 - X4 Listen at scale
 - X5 a simulated-learner live run
 - X6 more Projects briefs
@@ -416,7 +415,6 @@ order below stands.
 | R3 the onboarding tour | A simpler rebuild |
 | A5 the in-app agent | Decision D2 |
 | G5 referrals | The economy metrics actually being read |
-| X3b Actuaria Phase 4 | Decision D16 |
 
 ### 3.4 Proposed (not yet ranked)
 
@@ -765,7 +763,7 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 | E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |
 | E9 | Codify `components/ui/` against the style guide | 🟡 | Later | The style guide *is* the design system; the primitives aren't codified against it. Was P3.2. |
 | E10 | Cruft | ✅ | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`; lint at 0 warnings (2026-10-17). The 4 stranded question files moved (V9, 2026-10-25). |
-| E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand after touching the Actuaria migrations. |
+| E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand; its one test, `drop_actuaria.sql`, checks that the Actuaria migrations are dropped cleanly. |
 | E12 | PWA and offline | ⬜ | Later | E3 is done, so nothing blocks it now. Was P1.6. |
 
 ### 4.2 L: The learning engine (Study Mode)
@@ -893,7 +891,7 @@ A standing rule: **the app calls no model and holds no key** (see the decision l
 | A4 | Cowork: who can see it | 🅿️ one account | — | Waits on D1. After Preview, Cowork is planned to be Pro-only (D13). |
 | A5 | An in-app Actuarial Agent | 🅿️ | Parked | Phase A was delivered *outside* the app, by the connector. Phases B–D (the ontology layer, an eval harness, task assistants) wait on D2. |
 | A6 | Doc hygiene in the AI plans | 🟡 | Next | §16's "not built … all of V2" line is fixed (2026-10-17). Still to fix: §11 says "tools mode". The datasets are bundled into `engine.js`, not under `ai/datasets/`. Workflows overtook Phase 4's "Analyses". |
-| A9 | The Assumptions Bank | 🟡 Phases 0–1 built 2026-11-08 | Next | `assumptions-bank.md` §5.1–5.2. Phase 0: `Assumptions/` with three sets re-read off OSFI, GISA and the AIRB (each figure checked against its document's text by `assumption_lint.py --against`), the lint in CI, VERIFY over the folder, `lib/assumptionBank.ts`, and Cowork's rows derived from the bank. Phase 1: the bank installed into the tools engine; bank fields take `{assumption: id}` and the run records the source, verdict and edition; *From the Assumptions Bank* in field menus; the shelf at `/tools/assumptions` and the resource page's card. Waiting: the AMF and FSRA documents (both sites refuse automated reads — supply the files). Next: Phase 2, the connector (install from the export, `search_assumptions`, `get_assumption`, `data.assumption`). D-AB1–D-AB5 settled. |
+| A9 | The Assumptions Bank | 🟡 Phases 0–1 built 2026-11-08 | Next | `assumptions-bank.md` §5.1–5.2. Phase 0: `Assumptions/` with three sets re-read off OSFI, GISA and the AIRB (each figure checked against its document's text by `assumption_lint.py --against`), the lint in CI, VERIFY over the folder, `lib/assumptionBank.ts`, and Cowork's rows derived from the bank. Phase 1: the bank installed into the tools engine; bank fields take `{assumption: id}` and the run records the source, verdict and edition; *From the Assumptions Bank* in field menus; the shelf (now `/data-sources/assumptions`) and the resource page's card. Waiting: the AMF and FSRA documents (both sites refuse automated reads — supply the files). Next: Phase 2, the connector (install from the export, `search_assumptions`, `get_assumption`, `data.assumption`). D-AB1–D-AB5 settled. |
 
 ### 4.6 G: Growth, engagement and money
 
@@ -909,7 +907,7 @@ Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
 | G3 | The GA4 admin checklist | ⬜ checked 2026-10-19: steps 1, 2, 5, 6 not done | Next | 8 manual steps in `analytics-and-monitoring.md`. The audit (`analytics-audit-2026-10-19.md`) found history-change page views still on (~47% of page views are duplicates), the Internal Traffic filter in Testing (internal devices are 66% of engagement time), and no custom definitions or key events. Steps 3, 4, 7, 8 can't be read through the API. |
 | G4 | Monetization packaging | 🟡 "Pro" rename; Today's Study Plan is Pro-only | Later | Stripe hasn't changed since July. Waits on D13. Rule: never paywall the core retrieval loop. Was P4.3. |
 | G5 | Referrals | 🅿️ | Parked | Was P4.2. Comes back once the gem economy's metrics (§7) are actually read. |
-| G6 | Leagues' deliberate deferrals | ⬜ | Later | Realtime boards, study-group leagues (Actuaria's cohorts are the model to copy), league history. |
+| G6 | Leagues' deliberate deferrals | ⬜ | Later | Realtime boards, study-group leagues, league history. |
 | G7 | README is stale | ✅ 2026-10-17 | — | The exam table follows `examStatus.ts` (MAS-I, 7 and the DISCs complete; the SOA exams past FM listed as in development), and the counts are current (43 exam pages, ~1,400 concepts, ~750 sources, 3,300+ questions). |
 
 ### 4.7 X: Experiences and experiments
@@ -918,7 +916,7 @@ Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
 |---|---|---|---|---|
 | X1 | Quiz Battle | ✅ | — | `quiz-battle.md` "Next": its ideas (more players, written papers, a rating) are deliberately out. |
 | X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,598 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
-| X3 | Actuaria: from one account to a cohort | 🟡 phases 0–3 built | Later | With one account, no cohort reaches `CREW_MIN`, so the risk pool and raids lie dormant. Waits on D1. Phase 4 (ranked play) is parked (D16). |
+| X3 | Actuaria Online | 🗑 | — | Removed 2026-11-11, from the app and the database (`20261111_drop_actuaria.sql`), along with Quiz Battle's Monte Carlo Station skin and its abilities. |
 | X4 | Listen recordings at scale | 🟡 | Later | Upload the first two; split long scripts; fix the numbers stall; choose the voice and the access tier (D12). |
 | X5 | Simulated learner: a first live run | ✅ 2026-10-25, MAS-II | Later | 86% over 21 questions, against 90% for the control learner with no pages: the model knew the material, so studying added nothing measurable. Its real finding came from comparing solutions with pages, which C20 now does for every question. Next: run it only on questions the control learner misses, as a before-and-after for a fixed page. |
 | X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
@@ -951,12 +949,10 @@ Subplans: `daily-plan-email.md`, `daily-podcast.md`, `leagues.md`, `seo.md`,
 - **Cowork's growth is resource-page growth.** A real document enters Cowork only as a
   resource page (in the folder its type names), and a practice page whose publisher has an
   entity joins Cowork by being written.
-- **Actuaria → Quiz Battle.** It uses one reducer, so Actuaria's Phase 4 would change Quiz
-  Battle's "nothing saved" rule.
-- **The approved-email lists.** The same one address is the whole of the Cowork list, the
-  Actuaria list and the Tutor's. Actuaria's list is also mirrored in SQL. Opening any of them
-  to more people (D1, D25) means changing each place; the Tutor's next step is one line
-  (`TUTOR_STAGE = 'beta'`). Community's list (`lib/community/access.ts`) is the fourth.
+- **The approved-email lists.** The same one address is the whole of the Cowork list and the
+  Tutor's. Opening either of them to more people (D1, D25) means changing each place; the
+  Tutor's next step is one line (`TUTOR_STAGE = 'beta'`). Community's list
+  (`lib/community/access.ts`) is the third.
 
 ---
 
@@ -968,7 +964,7 @@ Where a default is given, sessions build with it until the decision is made.
 
 | ID | Decision | Source | Blocks | Default meanwhile |
 |---|---|---|---|---|
-| D1 | Who beyond the one approved account sees **Cowork** and **Actuaria** | `appMode.ts`, `actuaria/access.ts` | A4, X3 | Approved accounts only |
+| D1 | Who beyond the one approved account sees **Workflows and the publishers** (was Cowork) | `workflowsAccess.ts` | A4 | Approved accounts only |
 | D2 | Is an **in-app agent** still wanted, given that the app calls no model? If yes: student or practitioner first, in-app or separate, and how it's priced | agent plan §12 | A5 | No in-app agent; the connector is the agent surface |
 | D3 | **Dataset licence terms** for the SOA tables, the CAS triangles, and the Bank of Canada data | tools §14 #6 | A2 datasets | Leave them out |
 | D4 | Tools access and pricing; HTTP API keys; open-sourcing the engine | tools §14 #2–8 | A2 HTTP | Free; no HTTP endpoint |
@@ -983,7 +979,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
 | D14 | **Make CI a required check on `main`** | the 2026-08-31 assessment | E2 | — (a repo setting) |
 | D15 | The 9 ambiguous concept-gap targets, and the 21 stubs | CONCEPT_GAPS §13 | C11 | Link the existing pages, as proposed |
-| D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
+| D16 | Actuaria Phase 4: ranked play and seasons | — | — | 🗑 moot: Actuaria was removed 2026-11-11 |
 | D17 | The DISC link design | content plan §6 (was CAS D5) | — | The current design |
 | D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
 | D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | ✅ settled 2026-10-18: the default stands — `in_review`, the gate red, until the manual is read. Re-asked as D28 (2026-10-25): it now holds 6C too |
@@ -1024,7 +1020,7 @@ Where a default is given, sessions build with it until the decision is made.
 - **The Store sells nothing.** The Gem Shop is the only place gems are spent.
 - **An exam's status changes only through `publication_readiness.py --check`.**
 - **CAS D6 was settled the open-source way** (2026-10-11).
-- **Actuaria D1 is resolved.** D2–D8 are built with their defaults.
+- **Actuaria Online was removed** (2026-11-11), from the app and the database.
 - **The Actuarial Agent's Phase A ships as the MCP connector, outside the app.**
 - **D19: the Validate Sweep runs by hand, not on a schedule** (2026-10-17). Restoring the
   workflow's `schedule:` trigger is the way back, once the API cost is worth it.
@@ -1077,7 +1073,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/tool-template-v3.md` | Build spec: the Ledger template (one-line rows, solve for any unknown, provenance by exception, chains) | A12 (§3.4) | Built on every page; round 0, solve-for on the finance tools and the chains done; §8 lists what's left | 2026-11-09 |
 | `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A11 (§3.4) | Proposed; Phase 0 started | 2026-11-09 |
 | `docs/osfi-tools-design.md` | Three designs for Insurer Return and MCT Ratio, and what was built | A11 (§3.4) | Design C step 1 built | 2026-11-09 |
-| `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
+| `docs/actuaria-online.md` | — | — | 🗑 **Deleted** 2026-11-11, with Actuaria | — |
 | `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phases 1–2 built, phase 3 open | 2026-11-09 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |

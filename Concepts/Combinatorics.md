@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eae3718e74f72fb74b1230bebb5e30e3294b2eeffb346d2b53be688c450bff67
+  content_hash: sha256:7d7978c22b901e0ba495e14bb10f96a578871f5aaf6029ca2938625931ba7530
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -57,3 +57,25 @@ then the total number of outcomes is
 
 > [!example]- If you have 5 shirts and 4 pairs of pants, how many outfits can you create? {Example}
 > - There are $5 \times 4 = 20$ different outfits.
+
+## Derangements
+
+A **derangement** is a permutation of $n$ items with no fixed point: no item stays in its original position. The number of derangements of $n$ items is written $D_n$. By [[Inclusion-Exclusion Principle|inclusion-exclusion]] over the items that stay in place, it is
+
+> $$D_n = n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}$$
+
+The probability that a random permutation of $n$ items has no fixed point is $D_n/n!$.
+
+> [!example]- Four letters are put at random into their four addressed envelopes. What is the probability that no letter is in its own envelope? {Example}
+> - The number of derangements is $D_4 = 4!\left(1 - 1 + \tfrac{1}{2} - \tfrac{1}{6} + \tfrac{1}{24}\right) = 9$.
+> - There are $4! = 24$ ways to fill the envelopes.
+> - The probability is $9/24 = 0.375$.
+
+## Symmetry in a random arrangement
+
+In a uniformly random seating or ordering, each person is equally likely to be in any position. So one person's position can be fixed without loss of generality; another given person is then equally likely to occupy each of the remaining positions.
+
+> [!example]- Five people sit at random in a row of five seats. What is the probability that Ann and Bob sit next to each other? {Example}
+> - Fix Ann's seat. Bob is equally likely to be in each of the other 4 seats.
+> - If Ann is at an end (probability $\tfrac{2}{5}$), 1 of Bob's 4 seats is next to her. If Ann is in the middle three (probability $\tfrac{3}{5}$), 2 of them are.
+> - The probability is $\tfrac{2}{5} \times \tfrac{1}{4} + \tfrac{3}{5} \times \tfrac{2}{4} = \tfrac{8}{20} = 0.4$.

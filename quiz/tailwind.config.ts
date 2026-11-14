@@ -68,17 +68,6 @@ const config: Config = {
           DEFAULT: 'var(--pick)',
           foreground: 'var(--pick-foreground)',
         },
-        // Actuaria Online's one accent — chrome only, and defined only inside
-        // the `.actuaria` scope (style guide §2.6).
-        'actuaria-signal': {
-          DEFAULT: 'hsl(var(--actuaria-signal) / <alpha-value>)',
-          soft: 'var(--actuaria-signal-soft)',
-        },
-      },
-      fontFamily: {
-        // Actuaria's display face: the wordmark and in-world labels only,
-        // loaded by the Actuaria route chunk (components/actuaria/ActuariaScope.tsx).
-        actuaria: ['Oxanium', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',

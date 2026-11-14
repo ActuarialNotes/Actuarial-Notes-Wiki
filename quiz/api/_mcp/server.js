@@ -735,7 +735,7 @@ TOOLS.push(
         input_hash: inputHash,
         method: methodRefs(ix, spec.method),
         tested_against: toolSummary(spec).tested_against,
-        app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), input)}`, 'run_tool'),
+        app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), input, spec.area)}`, 'run_tool'),
       }))
     },
   },
@@ -763,7 +763,7 @@ function batch(spec, args, site) {
           warnings: run.warnings,
           defaulted_judgments: run.judgments.filter(j => j.default).map(j => j.field),
           input_hash: run.inputHash,
-          app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), run.input)}`, 'run_tool'),
+          app_url: withConnectorSource(`${site}${runPath(toolSlug(spec), run.input, spec.area)}`, 'run_tool'),
         }
       : { label, error })),
     tested_against: toolSummary(spec).tested_against,

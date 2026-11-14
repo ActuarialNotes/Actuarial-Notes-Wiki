@@ -54,7 +54,7 @@ import {
 import { cn } from '@/lib/utils'
 
 /** The gem shop's tabs, which used to live at `/store?tab=…` — sent on to `/store/gems`. */
-const GEM_SHOP_TABS = new Set(['characters', 'skins', 'banners', 'ships'])
+const GEM_SHOP_TABS = new Set(['characters', 'skins', 'banners'])
 
 const AISLE_ICON: Record<StoreAisle, LucideIcon> = {
   registration: Ticket,
@@ -206,7 +206,7 @@ export default function Store() {
     })
   }
 
-  // Links into the old Store, which was the gem shop: `/store?tab=ships`.
+  // Links into the old Store, which was the gem shop: `/store?tab=skins`.
   const legacyTab = params.get('tab')
   if (legacyTab && GEM_SHOP_TABS.has(legacyTab)) return <Navigate to={`/store/gems?tab=${legacyTab}`} replace />
 

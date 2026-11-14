@@ -1,5 +1,5 @@
 import { Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
-import { Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, Navigate, useNavigate, useLocation, useParams } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { usePageHead } from '@/hooks/usePageHead'
 import { NOT_FOUND_HEAD } from '@/lib/seo'
@@ -27,13 +27,10 @@ import { TutorHost } from '@/components/tutor/TutorHost'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { useSubscription } from '@/hooks/useSubscription'
 import { ProCelebration } from '@/components/ProCelebration'
-import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
-import { actuariaDestination } from '@/lib/actuaria/access'
-import { useActuariaAccess } from '@/hooks/useActuariaAccess'
+import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
-import { ACTUARIA_ENABLED, COMMUNITY_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { COMMUNITY_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -45,9 +42,10 @@ import { RotateCw } from 'lucide-react'
 // its chunk is already here, and a page change drawn as a view transition
 // would capture that frame's spinner (see lib/lazyRoute.ts).
 const { Component: Research, preload: loadResearch } = lazyRoute(() => import('@/pages/Research'))
-// Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
-// reader in Study mode should never pay for its catalogue.
-const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pages/Cowork'))
+// Data Sources (`pages/DataSources`) — the published tables, the Assumptions
+// Bank, and (Preview) the publishers and their documents. Lazy: its catalogue
+// and the tools engine are for the readers who open it.
+const { Component: DataSources, preload: loadDataSources } = lazyRoute(() => import('@/pages/DataSources'))
 // The Projects tab — the PCPA project simulator (docs/pcpa-project.md). Lazy:
 // its editor, its spreadsheet and its data generator are for the candidates
 // who open it.
@@ -65,16 +63,13 @@ const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages
 // Community (docs/community.md) — forums, events and places, by topic. Lazy,
 // and approved accounts only (lib/community/access.ts).
 const { Component: Community, preload: loadCommunity } = lazyRoute(() => import('@/pages/Community'))
-// Workflows (docs/workflows.md) — Cowork's second place: sources, data,
-// tools and concepts chained on a board. Its own chunk.
+// Workflows (docs/workflows.md) — sources, data, tools and concepts chained on
+// a board, opened from a library of the reader's workflows. Its own chunk.
 const { Component: WorkflowBuilder, preload: loadWorkflowBuilder } = lazyRoute(() => import('@/pages/WorkflowBuilder'))
 // Concept Craft (docs/concept-craft.md) — a topic's concepts on a board, and
 // how they connect. Lazy: its graph, its physics and the wiki bundle it reads
 // the graph from are for the readers who open it.
 const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages/Craft'))
-// Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
-// so its display face, its star map and its screens never reach Study Mode.
-const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
 // Settings, Search, the Gem Shop and the Upgrade page — opened on purpose,
 // never the first screen, so they wait for the click (first-paint budget, E3).
 const { Component: GemShop, preload: loadGemShop } = lazyRoute(() => import('@/pages/GemShop'))
@@ -103,8 +98,8 @@ const { Component: WikiQuestion, preload: loadWikiQuestion } = lazyRoute(() => i
 function preloadRoute(path: string): Promise<unknown> | null {
   const route = path.split('?')[0].split('#')[0]
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
-  if (TOOLS_ENABLED && (route === '/cowork/workflows' || route.startsWith('/cowork/workflows/'))) return loadWorkflowBuilder()
-  if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
+  if (TOOLS_ENABLED && (route === '/workflows' || route.startsWith('/workflows/'))) return loadWorkflowBuilder()
+  if (TOOLS_ENABLED && (route === '/data-sources' || route.startsWith('/data-sources/'))) return loadDataSources()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
@@ -115,7 +110,6 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/search') return loadSearch()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
-  if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route === '/wiki/resources') return Promise.all([loadWikiLayout(), loadWikiResources()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
@@ -286,37 +280,34 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 
 /**
- * A route that belongs to a gated mode. The rule is the mode's own
- * (`canEnterMode` in `lib/appMode.ts`), and a viewer it keeps out goes where
- * `modeDestination` sends them — the same place the mode pill would — so the
- * pill and the URL can never disagree about who gets in or where a locked
- * mode leads. For a Preview mode that means an account that isn't approved
- * lands back on the dashboard, as if the route didn't exist.
- *
- * `loading` matters: subscription state resolves asynchronously, and bouncing
- * an entitled viewer away for the frame before their row arrives is a bug
- * they would see every time they open the app.
+ * Data Sources: open to everyone (its tables and the Assumptions Bank), the
+ * page itself keeping the publishers to approved accounts. It runs on the
+ * Actuarial Tools engine, so it is behind that flag.
  */
-function RequireMode({ mode, children }: { mode: AppMode; children: ReactNode }) {
-  const { user } = useAuth()
-  const { isPro, loading } = useSubscription()
-  const viewer = { signedIn: !!user, isPro, email: user?.email, previewOpen: COWORK_OPEN_TO_ALL }
-  if (canEnterMode(mode, viewer)) return <>{children}</>
-  if (user && loading) return <WikiFallback />
-  return <Navigate to={modeDestination(mode, viewer)} replace />
+function DataSourcesRoute() {
+  if (!TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <DataSources />
+      </Suspense>
+    </ErrorBoundary>
+  )
 }
 
-function CoworkRoute() {
-  if (!COWORK_ENABLED) return <Navigate to="/dashboard" replace />
-  return (
-    <RequireMode mode="cowork">
-      <ErrorBoundary>
-        <Suspense fallback={<WikiFallback />}>
-          <Cowork />
-        </Suspense>
-      </ErrorBoundary>
-    </RequireMode>
-  )
+/**
+ * The old Cowork addresses, kept so a saved link still lands: the publishers
+ * and documents moved to Data Sources, a publisher's page with them, and the
+ * workflows to `/workflows`.
+ */
+function CoworkRedirect() {
+  const { tab, id } = useParams()
+  const to =
+    tab === 'sources' && id ? `/data-sources/${id}`
+    : tab === 'resources' ? '/data-sources/documents'
+    : tab === 'workflows' || tab === 'deliverables' ? '/workflows'
+    : '/data-sources/publishers'
+  return <Navigate to={to} replace />
 }
 
 function BattleRoute() {
@@ -334,24 +325,6 @@ function CraftRoute() {
     <ErrorBoundary>
       <Suspense fallback={<WikiFallback />}>
         <Craft />
-      </Suspense>
-    </ErrorBoundary>
-  )
-}
-
-function ActuariaRoute() {
-  const location = useLocation()
-  const { allowed, viewer } = useActuariaAccess()
-  if (!ACTUARIA_ENABLED) return <Navigate to="/wiki" replace />
-  // Approved accounts only (lib/actuaria/access.ts): send anyone else to sign
-  // in, or — signed in and not approved — back to the dashboard.
-  if (!allowed) {
-    return <Navigate to={actuariaDestination(viewer)} replace state={{ from: location.pathname + location.search }} />
-  }
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<WikiFallback />}>
-        <Actuaria />
       </Suspense>
     </ErrorBoundary>
   )
@@ -391,20 +364,19 @@ function ToolsRoute() {
 }
 
 /**
- * Workflows — Cowork's second place, so behind Cowork's own gate
- * (`RequireMode`), and run on the Actuarial Tools engine, so behind its flag
- * too.
+ * Workflows — in Preview, for the accounts `lib/workflowsAccess.ts` approves
+ * (the hook also folds in the Cowork and Tools flags); anyone else lands on
+ * the dashboard, as if the route didn't exist.
  */
 function WorkflowRoute() {
-  if (!COWORK_ENABLED || !TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
+  const allowed = useWorkflowsAccess()
+  if (!allowed) return <Navigate to="/dashboard" replace />
   return (
-    <RequireMode mode="cowork">
-      <ErrorBoundary>
-        <Suspense fallback={<WikiFallback />}>
-          <WorkflowBuilder />
-        </Suspense>
-      </ErrorBoundary>
-    </RequireMode>
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <WorkflowBuilder />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 
@@ -444,10 +416,6 @@ export default function App({ initialSession }: { initialSession: Session | null
                 {/* Concept Craft: the board, and a link adding one topic's pack to it. */}
                 <Route path="/craft" element={<CraftRoute />} />
                 <Route path="/craft/:topicId" element={<CraftRoute />} />
-                {/* Actuaria Online: the title, the star map, the sectors, the
-                    Daily Transmission, the Hangar and Monte Carlo Station —
-                    its own routes, inside its own scope (pages/Actuaria). */}
-                <Route path="/actuaria/*" element={<ActuariaRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Suspense fallback={<WikiFallback />}><Search /></Suspense>} />
@@ -459,8 +427,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                     page. The gem shop is a corner of it. */}
                 <Route path="/store" element={<StoreRoute />} />
                 <Route path="/tools" element={<ToolsRoute />} />
-                {/* Workflows moved to Cowork; an old link lands there. */}
-                <Route path="/tools/workflow" element={<Navigate to="/cowork/workflows" replace />} />
+                {/* Workflows left the Tools tab; an old link lands there. */}
+                <Route path="/tools/workflow" element={<Navigate to="/workflows" replace />} />
                 <Route path="/tools/:slug" element={<ToolsRoute />} />
                 <Route path="/community" element={<CommunityRoute />} />
                 <Route path="/community/topic/:topicId" element={<CommunityRoute />} />
@@ -478,19 +446,17 @@ export default function App({ initialSession }: { initialSession: Session | null
                     <Navigate to="/wiki" replace />
                   )
                 } />
-                {/* Cowork — in Preview, open to approved accounts only. The
-                    Sources paths are one page: the open source lives in the
-                    URL so it can be linked to and Back walks the loop.
-                    Workflows is its own full-screen board. `RequireMode` is
-                    what keeps the mode's own rule (`canEnterMode`) true of the
-                    route and not only of the pill. Deliverables were retired
-                    for Workflows; an old link lands there. */}
-                <Route path="/cowork/workflows" element={<WorkflowRoute />} />
-                <Route path="/cowork/deliverables" element={<Navigate to="/cowork/workflows" replace />} />
-                <Route path="/cowork/deliverables/:id" element={<Navigate to="/cowork/workflows" replace />} />
-                <Route path="/cowork" element={<CoworkRoute />} />
-                <Route path="/cowork/:tab" element={<CoworkRoute />} />
-                <Route path="/cowork/:tab/:id" element={<CoworkRoute />} />
+                {/* Data Sources: tables and the Assumptions Bank for everyone,
+                    publishers and documents for approved accounts. */}
+                <Route path="/data-sources" element={<DataSourcesRoute />} />
+                <Route path="/data-sources/:id" element={<DataSourcesRoute />} />
+                {/* Workflows — a library, then one workflow's board. */}
+                <Route path="/workflows" element={<WorkflowRoute />} />
+                <Route path="/workflows/:workflowId" element={<WorkflowRoute />} />
+                {/* Cowork was a mode of its own; its old addresses redirect. */}
+                <Route path="/cowork" element={<CoworkRedirect />} />
+                <Route path="/cowork/:tab" element={<CoworkRedirect />} />
+                <Route path="/cowork/:tab/:id" element={<CoworkRedirect />} />
                 {/* The Projects tab: the briefs, and one attempt. `/project/pcpa`
                     was the PCPA portal before projects were a tab of their own. */}
                 <Route path="/project" element={<ProjectRoute />} />

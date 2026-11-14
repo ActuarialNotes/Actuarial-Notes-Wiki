@@ -82,7 +82,7 @@ tail. A tool call fixes all three, and every number becomes something the human 
 ## 3. Ground rules
 
 These hold up the whole section. Each is enforced in code and pinned by a test, as in
-`docs/ai-connector.md` and `docs/actuaria-online.md` §2.
+`docs/ai-connector.md`.
 
 - **R1 — One engine, two front doors.** A tool is a pure function in `quiz/src/lib/tools/`.
   The tool card, the MCP connector and the HTTP endpoint all call that function. Nothing is
@@ -315,8 +315,10 @@ A data source answers **"what does this publisher's table say?"** It computes no
 up a slice of a published table, draws it, and hands it on. Data sources are what make the rest
 of the catalogue usable without a spreadsheet open beside it: Trend Fit wants an index, Present
 Value a yield curve, the life tools a mortality table, Age-to-Age Factors a triangle. In the
-catalogue they're their own practice area, **Data Sources**, listed first because that's where a
-chain starts. In the engine they're the area `data` (`PracticeArea`), and every one of them is
+app they're no longer in the Tools catalogue: since 2026-11-14 they are the **Tables** of the
+**Data Sources** page (`/data-sources`, each at `/data-sources/<slug>` — `toolPath`; docs/cowork.md),
+beside the Assumptions Bank, and the catalogue ends in one row leading there. In the engine
+they're still the area `data` (`PracticeArea`), and every one of them is
 held to R1–R11 like any other tool, plus these rules, which are R2 applied to a whole table:
 
 - **Extracted mechanically, never retyped.** `scripts/dataset_extract.py` reads the publisher's
@@ -1022,7 +1024,7 @@ measured on calculation. The invalid-input rate is the main feedback for improvi
 | Surface | Integration |
 |---|---|
 | **Study mode** | Open in Tools from concept pages; Work it in a tool from revealed explanations; exam logos on each tool lead back to the exam. Tools never affect mastery. |
-| **Cowork** | **Workflows** (`/cowork/workflows`, docs/workflows.md) run the tools as steps, chained by their hand-offs, beside the documents from Cowork's Sources they rest on — a source's published table (FSRA's loss trend benchmarks) mapped into a tool's inputs as a CSV's columns are. (Cowork's Deliverables, which this row once planned to fill from tool runs, were retired for Workflows.) |
+| **Workflows** | **Workflows** (`/workflows`, docs/workflows.md) run the tools as steps, chained by their hand-offs, beside the documents from Data Sources' publishers they rest on — a source's published table (FSRA's loss trend benchmarks) mapped into a tool's inputs as a CSV's columns are. (Cowork's Deliverables, which this row once planned to fill from tool runs, were retired for Workflows.) |
 | **AI connector** | `list_tools` / `describe_tool` / `run_tool`, the prompts, and the skill section (§7). Bump the connector's version documentation in the same change. The knowledge-base export is untouched, so `KNOWLEDGE_BASE_VERSION` stays as it is. |
 | **Agent product plan** | Delivers B3. Its eval harness gains the calculation arm (§9.4). Phase C copilots (reserve review, method rationale) are built on these tools. |
 | **Distribution simulators** | One engine. The simulator becomes a view of the Distribution Calculator. |
@@ -1358,7 +1360,7 @@ Price Index joins its first and last values rather than drawing a growth curve, 
 formula of the figure's own (R11). The catalogue's rows lead with the figure in miniature.
 
 **Data Sources (§4.11).** Built: Life Table, Price Index and Yield Curve, in `lib/tools/data/`,
-the practice area `data`, first in the catalogue; their datasets from
+the practice area `data` (since 2026-11-14 on the Data Sources page, not the catalogue); their datasets from
 `scripts/dataset_extract.py` (tests: `scripts/test_datasets.py`) with a `Resources/Data/` page
 each; the ⋯ menu names what a data tool reads, its edition, date read and licence; the
 connector's instructions point an agent at them for published figures. `datasets.test.ts` holds
@@ -1592,7 +1594,7 @@ draws it since 2026-11-09**; see the end of this section). The five were: **Born
 (a triangle with its selection exhibit). Every other tool still draws `ToolCard`; both run one
 hook, `components/tools/useToolCard.ts`, so moving a tool changes how it looks and nothing it
 computes. The workflow board's embedded cards stay `ToolCard`. The **Assumptions Bank** shelf
-(`/tools/assumptions`) takes the same shape. The catalogue (`/tools`) is next, after the template.
+(`/tools/assumptions`, since 2026-11-14 `/data-sources/assumptions`) takes the same shape. The catalogue (`/tools`) is next, after the template.
 
 **The page** (`components/tools/ToolTemplate.tsx`), top to bottom:
 

@@ -213,8 +213,7 @@ function CraftScreen() {
 
   return (
     // Always dark: the board is a canvas the concepts are laid out on
-    // (docs/concept-craft.md). Scoped to the route like Actuaria's (style guide
-    // §2.6) — the sidebar and anything portalled to the body keep the reader's
+    // (docs/concept-craft.md). Scoped to the route — the sidebar and anything portalled to the body keep the reader's
     // own theme. It wears an exam's colour (`examAccentStyle`) for what is new
     // and what is being looked at, and gives up the bottom of the screen to the
     // concept popup while that is open, so the board is never under it.

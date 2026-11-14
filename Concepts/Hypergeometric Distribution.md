@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:210e6c74af73387cc1312bdabc2579675c1c9f8fb99096eaaeee9d7d188a8464
+  content_hash: sha256:c3d7f46371178a92562a29892cb82da3aaf3571c370df51ca389700542cd32c5
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201): h(N,k,n,x) = C(k,x)C(N-k,n-x)/C(N,n), every sample of size n equally likely; approaches binomial(n, k/N) for large N, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.2 The Hypergeometric Distribution: var(Y) = n(r/m)(1-r/m)(m-n)/(m-1); draws negatively correlated, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
@@ -76,6 +76,8 @@ When the population splits into types of sizes $K_1, \ldots, K_m$ that add to $N
 - $k_1 + \cdots + k_m = n$.
 
 When only one type matters, combine all the others into one group of $N - K$ items, and the count of that type is the ordinary hypergeometric.
+
+Given that $k_1$ of the $n$ draws fell in type 1, the other $n - k_1$ draws are a sample without replacement from the $N - K_1$ items outside type 1. The count of another type $j$ is then hypergeometric with $N - K_1$ items, $K_j$ successes and $n - k_1$ draws.
 
 > [!example]- A file holds 3 policies with premium errors, 1 with a coverage error and 6 clean. An auditor selects 3 without replacement. What is the probability of one of each? {Example}
 > - Choose 1 of 3, 1 of 1 and 1 of 6: $3 \times 1 \times 6 = 18$ samples.

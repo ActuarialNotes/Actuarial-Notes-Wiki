@@ -201,21 +201,19 @@ export const TOUR_ENABLED: boolean = false
 export const FACT_CHECK_UI_ENABLED: boolean = true
 
 /**
- * **Cowork** — the second product under the Actuarial Notes roof, and the mode
- * switcher that reaches it. ON, in Preview.
+ * **Workflows** and the **Data Sources' publishers** — what was Cowork, the
+ * app's second mode, and is now part of the one app. ON, in Preview.
  *
- * When ON, three things appear: the mode pill beside the wordmark
- * (`components/ModeSwitcher.tsx`), the `/cowork` route tree, and Cowork's own
- * sidebar nav when a reader is inside it — for approved accounts only while it
- * is in Preview (`PREVIEW_APPROVED_EMAILS`); everyone else sees none of it.
- * Who may enter and the Preview mark live in `lib/appMode.ts` rather than
- * here, because they are properties of the mode and every surface has to state
- * them the same way.
+ * When ON, approved accounts (`PREVIEW_APPROVED_EMAILS` in
+ * `lib/workflowsAccess.ts`) get the Workflows row in the sidebar, with Tools
+ * and Data Sources under it, the `/workflows` routes, and the Publishers and
+ * Documents sections of `/data-sources`. Everyone else sees Tools and Data
+ * Sources as plain rows, and the Data Sources page with its tables and the
+ * Assumptions Bank alone.
  *
- * Gating the flag off removes the pill and redirects `/cowork` (Sources and
- * Workflows) back into Study mode; nothing behind it is deleted, and the pure
- * engines (`lib/cowork*.ts`, `lib/workflow*.ts`) and their tests stay compiled
- * either way.
+ * Gating the flag off hides all of that for everyone; nothing behind it is
+ * deleted, and the pure engines (`lib/cowork*.ts`, `lib/workflow*.ts`) and
+ * their tests stay compiled either way.
  * The `: boolean` annotation keeps both branches of every gate type-checked
  * (see the flags above). See `docs/cowork.md`.
  */
@@ -223,9 +221,9 @@ export const COWORK_ENABLED: boolean = true
 
 /**
  * The preview override: Cowork open to every viewer, signed out included,
- * rather than to `PREVIEW_APPROVED_EMAILS` alone (`ModeViewer.previewOpen` in
- * `lib/appMode.ts`). Only the e2e suite's build sets `VITE_COWORK_PREVIEW=on`
- * (playwright.config.ts), so Sources and Workflows are exercised without an
+ * rather than to `PREVIEW_APPROVED_EMAILS` alone (`canUseWorkflows` in
+ * `lib/workflowsAccess.ts`). Only the e2e suite's build sets `VITE_COWORK_PREVIEW=on`
+ * (playwright.config.ts), so Workflows and the publishers are exercised without an
  * approved account; no deployed build does, and there the comparison is a
  * constant `false`.
  */
@@ -238,36 +236,6 @@ export const COWORK_OPEN_TO_ALL: boolean = import.meta.env.VITE_COWORK_PREVIEW =
  * dashboard; the connector's calculators are unaffected.
  */
 export const TOOLS_ENABLED: boolean = true
-
-/**
- * **Actuaria Online** — the game layer over Study Mode (docs/actuaria-online.md).
- *
- * ON, and open to **approved accounts** alone: a signed-in account on
- * `ACTUARIA_APPROVED_EMAILS` (`lib/actuaria/access.ts`) sees a **PLAY** group
- * in the sidebar with the *Actuaria* row, the *Actuaria Online* card on the
- * Study Guides home page, the
- * Store's *Ships* tab, and the `/actuaria/*` route tree (the star map, a
- * sector's landmarks, the Daily Transmission, the Hangar, Monte Carlo Station,
- * cohorts and the weekly raid). Anyone else sees none of it, and `/actuaria/*`
- * sends them to sign in or back to the dashboard. Actuaria is a skin and a social
- * layer over systems the app already has — Credibility is the mastery ladder and
- * the readiness score, Coverage is the streak, a duel is a Quiz Battle — so
- * nothing behind the flag keeps a number of its own.
- *
- * Off, `/actuaria/*` redirects to the Study Guides and every surface above is
- * gone. The world is one lazy chunk either way, so it never weighs on Study
- * Mode's bundle.
- */
-export const ACTUARIA_ENABLED: boolean = true
-
-/**
- * The preview override: Actuaria open to every viewer, signed out included,
- * rather than to the approved accounts alone. Only the e2e suite's build sets
- * `VITE_ACTUARIA_PREVIEW=on` (playwright.config.ts), so the world is exercised
- * without an approved account; no deployed build does, and there the comparison is a
- * constant `false`.
- */
-export const ACTUARIA_OPEN_TO_ALL: boolean = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'
 
 /**
  * **The Tutor** (docs/tutor.md) — the reader's own Gem Shop character as a

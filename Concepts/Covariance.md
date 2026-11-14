@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:aab9ad4d0a0e928e4defb486d7af6051214f45ee5546e6d528efe37e9ab1c726
+  content_hash: sha256:b4c71000082334042c497b32456837e3b6528c322d28fc527fc0400fbfbbc7df
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Lemma 5.3 covariance properties incl. bilinearity; eq. 5.21 Var(aX+bY); correlation definition, -1<=rho<=1, rho=+-1 linear, rho(-X,Y)=-rho(X,Y), rho(aX+b,cY+d)=rho(X,Y) for a,c>0; independent implies uncorrelated, converse fails; pairwise uncorrelated sums, sha256:10ac40b763d78b0fa19a116594da71769bf417b59a1714be707c7c410991a7fb — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
@@ -24,7 +24,7 @@ The **Covariance** of two [[Random Variable|random variables]] $X$ and $Y$ is a 
 
 > $$\text{Cov}(X, Y) = E\big[(X - \mu_X)(Y - \mu_Y)\big]$$
 
-The covariance is positive when $X$ and $Y$ tend to lie on the same side of their means, and negative when they tend to lie on opposite sides. Expanding the product gives the form used to calculate it:
+The covariance is positive when $X$ and $Y$ tend to lie on the same side of their means, and negative when they tend to lie on opposite sides. When $X + Y$ is a constant, such as the numbers of successes and failures in $n$ trials, $\text{Cov}(X, Y) = -\text{Var}(X)$ and their [[Covariance and Correlation Coefficient|correlation]] is $-1$. Expanding the product gives the form used to calculate it:
 
 > $$\text{Cov}(X, Y) = E[XY] - E[X]\,E[Y]$$
 

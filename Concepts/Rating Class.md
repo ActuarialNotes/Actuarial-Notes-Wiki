@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3e5aaab84519b7c8b5ac04df7bdbc9a1882a8ba81e2c85f38f80f8595fc8b02d
+  content_hash: sha256:06d1b471f9582f2a34fc7758ab9fcf0f09c1986b79f207ca916195a60113f8ca
   sources:
     - "ASOP No. 12, Risk Classification (Actuarial Standards Board, Dec 2005, doc. 132), §2.9, §3.2, PDF pp.8-10, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
     - "Mahler, An Example of Credibility and Shifting Risk Parameters (PCAS LXXVII, 1990), §4.2 and Table 4, PDF pp.10-12, sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58 — https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf"
@@ -16,60 +16,66 @@ verification:
   log: .verify/Concepts/Rating Class.md
 ---
 
-**Rating Class** (rate class) is a group of risks that share the same values of the rating variables used to price them and are charged the same rate, on the premise that their expected loss per exposure is similar. A class is valid when it is internally homogeneous, distinct from the other classes, and large enough for its loss cost to be estimated credibly.
+A **Rating Class** (rate class) is a group of risks that share the same values of the [[Rating Variable|rating variables]] used to price them and are charged the same rate, on the premise that their expected loss per exposure is similar. A class is valid when it is internally homogeneous, distinct from the other classes, and large enough for its loss cost to be estimated credibly.
+
+Raw class averages over-react, because next period regresses toward the mean. Group averages ignore real differences. Credibility-weighting sits between the two, and the estimate of class $j$'s loss cost or frequency is
 
 > $$\hat{\mu}_j = Z_j\,\bar{X}_j + (1 - Z_j)\,\bar{X}$$
 
-> $$\chi^2 = \sum_{j=1}^{m} \frac{(O_j - E_j)^2}{E_j}$$
+- $\bar{X}_j$ is class $j$'s observed loss cost or frequency.
+- $\bar{X}$ is the overall, or parent-group, value.
+- $Z_j = n_j/(n_j + k)$ is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] credibility of class $j$, with $n_j$ its volume and $k$ the credibility constant.
 
-- $\bar X_j$ is class $j$'s observed loss cost or frequency and $\bar X$ the overall (or parent-group) value. $Z_j = n_j/(n_j + k)$ is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] credibility. In the test, $O_j$ is the claims observed in class $j$ and $E_j$ the claims expected if every class had the overall frequency. If the classes really do not differ, $\chi^2$ is approximately chi-square with $m - 1$ degrees of freedom.
-- **Validity.** Actuarially, a class should be [[Homogeneity|homogeneous]] within, separated from the others, [[Credibility|credible]] and stable over time. ASOP No. 12 adds considerations for the characteristics that define classes: a demonstrated relationship to expected outcomes (causality is not required), objectivity, practicality, applicable law, and industry and business practice. See the criteria under [[Classification Ratemaking]], and how a class is tested under [[Rate Class Validity]].
-- **[[Statistical Significance|Statistical significance]].** Use a chi-square test on counts; Mahler applied the same test to each risk's results by period to show that risk means shift over time. In a [[Generalized Linear Model|GLM]], use each class coefficient's standard error, [[p-Value|p-value]] and [[Confidence Interval|confidence interval]]. Significance depends on volume: with enough data a trivial difference becomes significant, so significance is necessary but not sufficient.
-- **Estimating class loss costs.** Raw class averages over-react, because next period regresses toward the mean. Group averages ignore real differences. Credibility-weighting sits between the two. Couret and Venter extend this to *multi-dimensional* credibility: a workers compensation class's rare serious-injury frequencies are estimated with the help of its correlated, more common injury types. They validated the estimates on a holdout period with a quintiles test.
-- **Link to individual risk rating.** [[Experience Rating|Experience rating]] measures how a risk differs from others *in its class*. Bailey and Simon showed that the more refined the classes, the less credibility individual experience deserves.
+Couret and Venter extend this to multi-dimensional credibility. A workers compensation class's rare serious-injury frequencies are estimated with the help of its correlated, more common injury types. They validated the estimates on a holdout period with a quintiles test.
 
-> [!example]- Are the Class Differences Significant? {Example}
-> Three classes: A has $10{,}000$ exposures and $480$ claims, B $6{,}000$ and $330$, C $4{,}000$ and $190$. Test at $5\%$ whether the frequencies differ. Then repeat with four times the data at the same frequencies.
->
-> > [!answer]-
-> > The overall frequency is $1{,}000/20{,}000 = 0.05$, so the expected counts are $500$, $300$ and $200$.
-> >
-> > $$
-> > \begin{align*}
-> > \chi^2 &= \frac{(-20)^2}{500} + \frac{30^2}{300} + \frac{(-10)^2}{200} \\
-> > &= 0.8 + 3.0 + 0.5 \\
-> > &= 4.3
-> > \end{align*}
-> > $$
-> >
-> > With $2$ degrees of freedom the $5\%$ critical value is $5.99$ ($p \approx 0.12$), so these data do not justify separate class rates. The frequencies of $4.8\%$, $5.5\%$ and $4.75\%$ are within noise.
-> >
-> > Every squared deviation scales by $16$ and every expected count by $4$, so with four times the data $\chi^2 = 4 \times 4.3 = 17.2$ ($p \approx 0.0002$). The *same* differences are now highly significant. Volume, not just the size of the gap, decides whether a class split is statistically supported. Whether the split is *material* is a separate question.
-
-> [!example]- Testing Class Estimates on a Holdout Period {Example}
+> [!example]- Which estimator should set these class loss costs? {Example}
 > Classes in one hazard group are ranked by estimated relativity from the even years and grouped into quintiles. Three estimators are compared on the odd years (the holdout): the group average ($1.00$ everywhere), the raw even-year relativity, and a credibility blend with $Z = 0.60$.
 >
 > | Quintile | Odd-year actual | Raw even-year |
-> |---|---|---|
-> | 1 | $0.62$ | $0.35$ |
-> | 2 | $0.86$ | $0.70$ |
-> | 3 | $1.00$ | $0.98$ |
-> | 4 | $1.13$ | $1.30$ |
-> | 5 | $1.39$ | $1.67$ |
->
-> Which estimator should set the class loss costs?
+> | :--- | ---: | ---: |
+> | 1 | 0.62 | 0.35 |
+> | 2 | 0.86 | 0.70 |
+> | 3 | 1.00 | 0.98 |
+> | 4 | 1.13 | 1.30 |
+> | 5 | 1.39 | 1.67 |
 >
 > > [!answer]-
-> > The credibility predictions are $1 + 0.6(\text{raw} - 1)$: $0.610$, $0.820$, $0.988$, $1.180$ and $1.402$. The sums of squared errors against the holdout are:
-> >
-> > $$
-> > \begin{align*}
-> > \text{SSE}_{\text{group}} &= 0.1444 + 0.0196 + 0 + 0.0169 + 0.1521 \\
-> > &= 0.3330 \\[4pt]
-> > \text{SSE}_{\text{raw}} &= 0.0729 + 0.0256 + 0.0004 + 0.0289 + 0.0784 \\
-> > &= 0.2062 \\[4pt]
-> > \text{SSE}_{\text{cred}} &= 0.0045
-> > \end{align*}
-> > $$
-> >
-> > The actuals rise across the quintiles, so the classes really do differ, which rules out the flat group average. The raw estimates are too steep, because the holdout regresses toward the mean. The credibility blend fits almost exactly. This is the pattern Couret and Venter found for workers compensation classes.
+> > - The credibility predictions are $1 + 0.6(\text{raw} - 1)$: $0.610$, $0.820$, $0.988$, $1.180$ and $1.402$.
+> > - Against the holdout, the group average's sum of squared errors is $0.1444 + 0.0196 + 0 + 0.0169 + 0.1521 = 0.3330$.
+> > - The raw estimates' is $0.0729 + 0.0256 + 0.0004 + 0.0289 + 0.0784 = 0.2062$.
+> > - The credibility blend's is $0.0045$.
+> > - The actuals rise across the quintiles, so the classes really do differ, which rules out the flat group average.
+> > - The raw estimates are too steep, because the holdout regresses toward the mean.
+> > - The credibility blend fits almost exactly and should set the loss costs. This is the pattern Couret and Venter found for workers compensation classes.
+
+## Criteria for a valid class
+
+Actuarially, a class should be [[Homogeneity|homogeneous]] within, separated from the others, [[Credibility|credible]] and stable over time. ASOP No. 12 adds considerations for the characteristics that define classes: a demonstrated relationship to expected outcomes (causality is not required), objectivity, practicality, applicable law, and industry and business practice. The criteria are set out under [[Classification Ratemaking|classification ratemaking]], and how a class is tested under [[Rate Class Validity|rate class validity]].
+
+## Testing whether classes differ
+
+[[Statistical Significance|Statistical significance]] is tested with a chi-square test on claim counts. For $m$ classes the statistic is
+
+> $$\chi^2 = \sum_{j=1}^{m} \frac{(O_j - E_j)^2}{E_j}$$
+
+- $O_j$ is the claims observed in class $j$.
+- $E_j$ is the claims expected if every class had the overall frequency.
+
+If the classes really do not differ, $\chi^2$ is approximately chi-square with $m - 1$ degrees of freedom. Mahler applied the same test to each risk's results by period to show that risk means shift over time. In a [[Generalized Linear Model|GLM]], each class coefficient's standard error, [[p-Value|p-value]] and [[Confidence Interval|confidence interval]] do the same job. Significance depends on volume. With enough data a trivial difference becomes significant, so significance is necessary but not sufficient.
+
+> [!example]- Do these classes' claim frequencies differ significantly at $5\%$, and would they with four times the data? {Example}
+> Class A has $10{,}000$ exposures and $480$ claims, B $6{,}000$ and $330$, and C $4{,}000$ and $190$. The larger data set has the same frequencies.
+>
+> > [!answer]-
+> > - The overall frequency is $1{,}000/20{,}000 = 0.05$, so the expected counts are $500$, $300$ and $200$.
+> > - $\chi^2 = 20^2/500 + 30^2/300 + 10^2/200 = 0.8 + 3.0 + 0.5 = 4.3$.
+> > - With $2$ degrees of freedom the $5\%$ critical value is $5.99$ ($p \approx 0.12$), so these data do not justify separate class rates. The frequencies of $4.8\%$, $5.5\%$ and $4.75\%$ are within noise.
+> > - With four times the data, every squared deviation scales by $16$ and every expected count by $4$, so $\chi^2 = 4 \times 4.3 = 17.2$ ($p \approx 0.0002$).
+> > - The same differences are now highly significant. Volume, not just the size of the gap, decides whether a class split is statistically supported, and whether the split is material is a separate question.
+
+## Rating classes and experience rating
+
+[[Experience Rating|Experience rating]] measures how a risk differs from others in its class. Bailey and Simon showed that the more refined the classes, the less credibility individual experience deserves.
+
+> [!trap] Significance from volume alone
+> A large book makes a trivial difference between classes significant. In the example, four times the data turns $p \approx 0.12$ into $p \approx 0.0002$ at the same frequencies, so check that the difference is material before splitting.

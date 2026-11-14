@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:65358403505598280866a25a4f1f46c4f481904b53a852bbb0163b820d9a25b0
+  content_hash: sha256:6916fa67e15a785568981112fc84923467dac7a854b1500c38d60c4a675b42c6
   sources:
     - "NAIC, A Regulator's Introduction to the Insurance Industry (2005), §C Production and Distribution, printed pp.25-27 incl. fn 7 (PDF pp.39-41): producer contacts or is contacted by potential buyers, assists them in determining insurance needs and selecting insurer and coverages, may bind, assists in filing and adjusting claims; agents may advise consumers; brokers provide risk-management advice, sha256:7d6e4fce110253b59c6c38f3abfa4e38c561d4f521c24fdc65e0884718e0f264 — https://content.naic.org/sites/default/files/inline-files/prod_serv_marketreg_rii_zb.pdf"
     - "IRMI Glossary, \"prospect\", definition (a potential buyer of insurance), sha256:ba3067383315c28ee5ccfb0286327ec51b2dce3095962d2a19723ad253ae7217 — https://www.irmi.com/term/insurance-definitions/prospect"
@@ -20,53 +20,77 @@ verification:
   log: .verify/Concepts/Insurance Producer.md
 ---
 
-An **Insurance Producer** is a licensed person or firm that sells, solicits or negotiates insurance: an agent, who acts for the [[Insurer|insurer]] under an agency agreement, or a broker, who acts for the buyer. Producers are the marketing and distribution function of [[Insurance Operations|insurance operations]] in the independent agency and brokerage system and the exclusive agency system, while direct writers use salaried sales employees and direct response insurers sell without a producer at all. Producers are paid mostly by commission, a share of the premium they place.
+An **Insurance Producer** is a licensed person or firm that sells, solicits or negotiates insurance: an agent, who acts for the [[Insurer|insurer]] under an agency agreement, or a broker, who acts for the buyer. Agents who sell insurance are called producers because no business is produced until a policy is sold.
+
+The two kinds of producer differ in whom they act for:
+
+| | Agent | Broker |
+| --- | --- | --- |
+| Legally represents | The insurer, under an agency agreement | The insured |
+| Authority | Comes from the insurer | Shops the account among insurers |
+| Binding | Often has binding authority | Usually cannot bind an insurer on its own |
+
+Binding authority is the power to put coverage in force before the insurer issues the policy. Many large firms act as brokers for some insurers and as agents for others.
+
+## Producers in the distribution systems
+
+Producers are the marketing and distribution function of [[Insurance Operations|insurance operations]] in the [[Insurance Distribution Systems|independent agency and brokerage system and the exclusive agency system]].
+
+Independent agents and brokers are independent businesses that represent several unrelated insurers. They own the expirations, the records of their customers and the right to solicit them at renewal, so they can move an account to another insurer. Exclusive agents represent one insurer or a group of insurers under common ownership. They are usually independent contractors, but they typically have limited or no ownership of expirations.
+
+A direct writer sells through its own employees, and the insurer owns the expirations. Direct response insurers sell by telephone, mail or the internet without a producer, and the insurer keeps the customer relationship entirely. Many insurers combine several of these channels, which is called a mixed marketing system.
+
+> [!example]- Who can move this account to another insurer at renewal? {Example}
+> A restaurant has bought its property and liability coverage through the same producer for five years. At renewal, the producer believes another insurer offers better terms. The producer is an independent agent, an exclusive agent, or a direct writer's sales representative.
+>
+> > [!answer]-
+> > - An independent agent owns the expirations, so it can place the restaurant with another insurer it represents.
+> > - An exclusive agent represents one insurer or group and typically does not own the expirations, so it can only offer that insurer's products.
+> > - A direct writer's sales representative is the insurer's employee, the insurer owns the account, and the representative has no other insurer to offer.
+> > - Only the independent agent can move the account.
+
+## Functions of producers
+
+A producer's work runs in this order:
+
+1. **Prospecting**: finding and contacting prospects, the potential buyers of insurance.
+2. **Reviewing loss exposures**: reviewing each prospect's loss exposures and helping it determine its insurance needs, as a consultant on its risk management and insurance program.
+3. **Selling and binding**: selling the coverage, selecting the insurer and binding it where the producer has the authority.
+4. **Claims assistance**: later assisting the insured in filing and adjusting claims.
+
+The review can find exposures the customer did not know it had. A review of its non-insurance contracts, such as leases and hold-harmless or indemnification agreements, shows liability it has taken on by contract, and an inspection of its premises can find unreported hazards and assets.
+
+Using the insurer's forms, an independent agent binds the insurer, sends underwriting information to it and later delivers the policy, and may or may not collect premiums. Brokers place business for their clients, and modern brokerage firms also provide risk management surveys and administrative and claim services to self-insurers.
+
+## Producer compensation
+
+Producers are paid mostly by commission, a share of the premium they place. If $c$ is the commission rate, the base commission on [[Written Premium|written premium]] $\text{WP}$ is
 
 > $$C = c \times \text{WP}$$
 
+Some insurers also pay a contingent commission, which depends on the results of the producer's book. One form of it is
+
 > $$C_{\text{cont}} = s \times \max\left(0,\ T - \text{LR}\right) \times \text{EP}$$
 
-- **Symbols:** $C$ is the base commission, $c$ the commission rate and WP the [[Written Premium|written premium]] the producer places. $C_{\text{cont}}$ is a contingent commission: $T$ is a target [[Loss Ratio|loss ratio]], LR is the loss ratio on the producer's book with the insurer, EP is the book's [[Earned Premium|earned premium]] and $s$ is the share of the margin below the target paid to the producer. Actual contingent commission formulas vary by insurer and often add volume or growth conditions.
-- **Agents and brokers:** An agent's authority comes from the insurer, and an agent often has binding authority, the power to put coverage in force before the insurer issues the policy. A broker legally represents the insured, shops the account among insurers, and usually cannot bind an insurer on its own. Many large firms act as brokers for some insurers and as agents for others.
-- **Independent agency and brokerage system:** Independent agents and brokers are independent businesses that represent several unrelated insurers. They own the expirations, the records of their customers and the right to solicit them at renewal, so they can move an account to another insurer.
-- **Exclusive agency system:** Exclusive agents represent one insurer or a group of insurers under common ownership. They are usually independent contractors, but they typically have limited or no ownership of expirations.
-- **Direct writers and direct response:** A direct writer sells through its own employees, and the insurer owns the expirations. Direct response insurers sell by telephone, mail or the internet without a producer, and the insurer keeps the customer relationship entirely. Many insurers combine several of these channels, which is called a mixed marketing system.
-- **Functions of producers:** Producers sell the insurer's policies: agents who sell insurance are called producers because no business is produced until a policy is sold. The work runs from prospecting, finding and contacting prospects (potential buyers of insurance), through reviewing each prospect's loss exposures and helping it determine its insurance needs, to selling the coverage, selecting the insurer and binding it where the producer has the authority, and later to assisting the insured in filing and adjusting claims. In the review the producer acts as a consultant on the customer's risk management and insurance program, and it can find exposures the customer did not know it had: a review of the customer's non-insurance contracts, such as leases and hold-harmless or indemnification agreements, shows liability the customer has taken on by contract, and an inspection of its premises can find unreported hazards and assets. Using the insurer's forms, an independent agent binds the insurer, sends underwriting information to it and later delivers the policy, and may or may not collect premiums. Brokers place business for their clients, and modern brokerage firms also provide risk management surveys and administrative and claim services to self-insurers.
-- **Licensing:** State insurance laws require agents, brokers and claims adjusters to be licensed, and the commissioner can grant, deny or suspend licenses; unfair practices and misappropriation of premium can cost a producer its license. Insurers themselves must be licensed in each state where they do business. In Canada, the provinces license agents, brokers and adjusters as part of [[Market Conduct Regulation|market conduct regulation]].
-- **Why it matters to actuaries:** The distribution system drives the [[Expense Ratio|expense ratio]] and the persistency of the book. Commissions are a [[Variable Expenses|variable expense]] in the rate, and contingent commissions depend on the book's results, so they are accrued as the loss ratio develops.
+- $T$ is a target [[Loss Ratio|loss ratio]].
+- $\text{LR}$ is the loss ratio on the producer's book with the insurer.
+- $\text{EP}$ is the book's [[Earned Premium|earned premium]].
+- $s$ is the share of the margin below the target paid to the producer.
 
-> [!example]- Commission and Contingent Commission on an Agency's Book {Example}
-> An insurer pays an independent agency a base commission of 15% of written premium. With illustrative terms, it also pays a contingent commission of 25% of the margin by which the agency's loss ratio falls below 60%, applied to earned premium. During the year the agency writes \$2,000,000 of premium with the insurer, earns \$1,900,000 and incurs \$950,000 of losses. Find the agency's total commission and its rate on written premium.
+Actual contingent commission formulas vary by insurer and often add volume or growth conditions. Commissions are a [[Variable Expenses|variable expense]] in the rate and drive the [[Expense Ratio|expense ratio]]. Contingent commissions are accrued as the loss ratio develops.
+
+> [!example]- What is this agency's total commission, and its rate on written premium? {Example}
+> An insurer pays an independent agency a base commission of 15% of written premium. With illustrative terms, it also pays a contingent commission of 25% of the margin by which the agency's loss ratio falls below 60%, applied to earned premium. The agency writes $\$2{,}000{,}000$ of premium with the insurer, earns $\$1{,}900{,}000$ and incurs $\$950{,}000$ of losses.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{LR} &= \frac{950{,}000}{1{,}900{,}000} \\
-> > &= 50\% \\
-> > C &= 0.15 \times 2{,}000{,}000 \\
-> > &= 300{,}000 \\
-> > C_{\text{cont}} &= 0.25 \times (0.60 - 0.50) \times 1{,}900{,}000 \\
-> > &= 47{,}500 \\
-> > \text{Total} &= 300{,}000 + 47{,}500 \\
-> > &= 347{,}500 \\
-> > \text{Rate} &= \frac{347{,}500}{2{,}000{,}000} \\
-> > &= 17.4\%
-> > \end{align*}
-> > $$
-> > The contingent commission rewards the agency for bringing in profitable business, which aligns its interest with the insurer's underwriting goals. Because the loss ratio is measured before the losses are fully developed, the insurer's estimate of the payment can change after the year ends.
+> > - The loss ratio is $950{,}000/1{,}900{,}000 = 50\%$.
+> > - The base commission is $0.15 \times 2{,}000{,}000 = \$300{,}000$.
+> > - The contingent commission is $0.25 \times (0.60 - 0.50) \times 1{,}900{,}000 = \$47{,}500$.
+> > - The total is $300{,}000 + 47{,}500 = \$347{,}500$, or $347{,}500/2{,}000{,}000 = 17.4\%$ of written premium.
 
-> [!example]- Who Can Move the Account at Renewal? {Example}
-> A restaurant has bought its property and liability coverage through the same producer for five years. At renewal, the producer believes another insurer offers better terms. What can the producer do if it is an independent agent, an exclusive agent, or a direct writer's sales representative?
->
-> > [!answer]-
-> > An independent agent owns the expirations, so it can place the restaurant with another insurer it represents, and the current insurer has no right to the customer's renewal information. An exclusive agent represents one insurer or group and typically doesn't own the expirations, so it can only offer that insurer's products and can't take the account elsewhere. A direct writer's sales representative is the insurer's employee, the insurer owns the account, and the representative has no other insurer to offer. This difference is one reason insurers that use independent agents must keep their price and service competitive at every renewal.
+## Producer licensing
 
-> [!tip]- How it appears on the exam
-> - **DISC-RM:** Questions ask candidates to describe the distribution systems and channels, compare agents and brokers, and list or apply the functions producers perform, such as which function a producer is carrying out in a short scenario. A related objective asks how an insurer selects distribution systems for its markets.
-> - **DISC-IA:** The regulation section asks why and how insurers and insurance personnel are licensed, including producers and claims representatives, and what regulators can do when a licensee breaks the rules. The licensing rules are on [[Insurance Licensing]].
+State insurance laws require agents, brokers and claims adjusters to be licensed, and the commissioner can grant, deny or suspend licenses. Unfair practices and misappropriation of premium can cost a producer its license. Insurers themselves must be licensed in each state where they do business ([[Insurance Licensing]]). In Canada, the provinces license agents, brokers and adjusters as part of [[Market Conduct Regulation|market conduct regulation]].
 
-> [!warning]- Exam traps
-> - **Agent versus broker:** An agent represents the insurer and a broker represents the buyer. Saying that an independent agent represents the customer confuses the agency relationship with the customer relationship the agent manages.
-> - **Exclusive does not mean employee:** Exclusive agents are usually independent contractors who sell for one insurer. The salaried sales employee belongs to the direct writer system.
-> - **Ownership of expirations:** The independent agent owns the expirations, and the direct writer's insurer owns them. Ownership is what lets an independent agent move an account, so it is a common distinguishing question.
-> - **Contingent commission is not guaranteed:** It depends on the book's loss ratio and often its volume, and it is paid only when the conditions are met. Treating it as part of the fixed commission rate overstates the insurer's acquisition cost in a bad year and understates it in a good one.
+> [!trap] An independent agent still represents the insurer
+> An agent represents the insurer and a broker represents the buyer. Saying that an independent agent represents the customer confuses the agency relationship with the customer relationship the agent manages.

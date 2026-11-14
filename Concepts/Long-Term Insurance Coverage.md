@@ -2,11 +2,11 @@
 aliases:
   - Long-Term Insurance Benefit
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:09e60d53dde5244b1c1887eac949251b349840d776d39f52fdf1063d8cb5177b
+  content_hash: sha256:157d590ad910886a02c2b69cdf52d6c9ccba3857b174cdc3d29daa6f5e26d240
   sources:
     - "Dickson, Hardy & Waters, AMLCR 3rd ed. (CUP 2020) — publisher's excerpt, Ch. 1 §§1.1-1.3.5, pp.1-10, sha256:31487d2e0f23e14b52e889f99ea95d4e7bfe00d9059ce1796d18d15f0dc94656 — https://assets.cambridge.org/97811084/78083/excerpt/9781108478083_excerpt.pdf"
     - "SOA Exam FAM-L sample questions (Oct 2024), Q1.1-1.4, pp.3-4, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
@@ -21,13 +21,28 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Long-Term Insurance Coverage.md
 ---
-**A Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life: life insurance, annuities, long-term health insurance and pension plans. The cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality, paid for by level premiums, and backed by policy values.
+
+A **Long-Term Insurance Coverage** is an [[Insurance Coverage|insurance coverage]] written for many years or for life: life insurance, annuities, long-term health insurance and pension plans. Its cash flows run for decades and depend on the survival or health of the insured, so they are valued with interest and mortality.
+
+The expected present value of a coverage's cash flows is
 
 > $$\text{EPV} = \sum_{k} \text{CF}_k\, v^{k}\,\Pr(\text{CF}_k \text{ is paid})$$
 
-> $$\text{EPV(premiums)} = \text{EPV(benefits)} + \text{EPV(expenses)}$$
+- $\text{CF}_k$ is a cash flow due at time $k$, paid only if the life is in the state the contract requires, such as alive, dead or sick.
+- $v = 1/(1+i)$ is the discount factor at interest rate $i$.
 
-> $${}_tV = \text{EPV}_t(\text{outgo}) - \text{EPV}_t(\text{income})$$
+A benefit of $B$ has $B$ times the EPV of a benefit of 1. Mortality probabilities do not depend on the interest rate, so the same $q$ values serve at any rate.
+
+> [!example]- What does a fall in the interest rate from 5% to 4% do to these EPVs on $(65)$? {Example}
+> On the SULT, $\ddot{a}_{65} = 13.5498$ and $A_{65} = 0.35477$ at $5\%$, and $\ddot{a}_{65} = 14.8746$ and $A_{65} = 0.42790$ at $4\%$. Also $q_{65} = 0.005915$. The coverages are a life annuity-due of $\$10{,}000$ a year, a whole life insurance and a one-year term insurance of $\$100{,}000$.
+>
+> > [!answer]-
+> > - The annuity's EPV rises from $10{,}000(13.5498) = 135{,}498$ to $10{,}000(14.8746) = 148{,}746$, which is $+9.8\%$.
+> > - The whole life insurance rises by $0.42790/0.35477 - 1 = +20.6\%$.
+> > - The one-year term insurance moves from $100{,}000(0.005915)/1.05 = 563.33$ to $100{,}000(0.005915)/1.04 = 568.75$, which is $+1.0\%$.
+> > - A one-point fall in the interest rate barely moves a one-year cover but raises the cost of the long-term benefits by 10% to 21%. An insurer that guaranteed them at 5% bears that interest rate risk.
+
+## The coverages
 
 | Coverage | What it pays | Main risks to the provider |
 |---|---|---|
@@ -42,48 +57,31 @@ verification:
 | [[Defined Benefit Plan]] | Pension set by a formula | Sponsor: investment, longevity |
 | [[Defined Contribution Plan]] | Whatever the member's account buys | Member: investment, annuity price |
 
-- **Symbols:** $\text{CF}_k$ is a cash flow due at time $k$, paid only if the life is in the state the contract requires, such as alive, dead or sick. The second block is the [[Equivalence Principle|equivalence principle]], and the third is the policy value, the long-term form of a [[Reserve|reserve]].
-- **What makes a coverage long-term:** A level premium is more than the cost of cover in the early years and less than it later, so the insurer holds a policy value that earns investment income for decades. Interest therefore matters as much as mortality.
-- **Health:** Long-term [[Health Insurance|health insurance]] is modelled with a [[Multiple State Model|multiple state model]], in which benefits depend on being sick or on falling sick.
-- **Contrast:** A [[Short-Term Insurance Coverage|short-term coverage]] is priced one term at a time, so its premium is close to that term's expected claims, and its reserves are for claims already incurred rather than for future guaranteed benefits.
+Long-term [[Health Insurance|health insurance]] is modelled with a [[Multiple State Model|multiple state model]], in which benefits depend on being sick or on falling sick.
 
-> [!example]- Why a Level Premium Builds a Reserve {Example}
-> A fully discrete whole life insurance of \$100,000 on $(50)$ has the SULT net premium \$1,111.99 at $i = 5\%$, as in [[Equivalence Principle]]. The cost of one year's cover at age $y$, paid at the start of the year, is $100{,}000\,v\,q_y$. Compare it with the premium at ages 50, 60, 70 and 80, given $q_{50} = 0.001209$, $q_{60} = 0.003398$, $q_{70} = 0.010413$ and $q_{80} = 0.032658$. At what age does the cost first exceed the premium, given $q_{71} = 0.011670$ and $q_{72} = 0.013081$?
+## Premiums and policy values
+
+Premiums are set by the [[Equivalence Principle|equivalence principle]]:
+
+> $$\text{EPV(premiums)} = \text{EPV(benefits)} + \text{EPV(expenses)}$$
+
+A level premium is more than the cost of cover in the early years and less than it later. The insurer holds the excess as a policy value, the long-term form of a [[Reserve|reserve]], which earns investment income for decades. At time $t$ the policy value is
+
+> $${}_tV = \text{EPV}_t(\text{outgo}) - \text{EPV}_t(\text{income})$$
+
+- $\text{EPV}_t$ is the expected present value at time $t$ of the future cash flows of a policy still in force.
+
+A [[Short-Term Insurance Coverage|short-term coverage]] is priced one term at a time, so its premium is close to that term's expected claims. Its reserves are for claims already incurred rather than for future guaranteed benefits.
+
+> [!example]- At what age does a year's cost of cover first exceed this level premium? {Example}
+> A fully discrete whole life insurance of $\$100{,}000$ on $(50)$ has the SULT net premium $\$1{,}111.99$ at $i = 5\%$. The cost of one year's cover at age $y$, paid at the start of the year, is $100{,}000\,v\,q_y$. On the SULT, $q_{50} = 0.001209$, $q_{70} = 0.010413$, $q_{71} = 0.011670$ and $q_{72} = 0.013081$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Age 50: } 100{,}000(0.001209)/1.05 &= 115.14 \\
-> > \text{Age 60: } 100{,}000(0.003398)/1.05 &= 323.62 \\
-> > \text{Age 70: } 100{,}000(0.010413)/1.05 &= 991.71 \\
-> > \text{Age 80: } 100{,}000(0.032658)/1.05 &= 3{,}110.29
-> > \end{align*}
-> > $$
-> > The cost is \$1,111.43 at age 71 and \$1,245.81 at age 72, so it first exceeds the level premium at age 72. Until then, each premium pays more than the year's cover, and the excess is held as the policy value and earns interest. From age 72 on, that policy value pays for the shortfall, which is why a guaranteed level premium needs a reserve that a one-year coverage does not.
+> > - At age 50 the cost is $100{,}000(0.001209)/1.05 = 115.14$, far below the premium.
+> > - At age 70 it is $100{,}000(0.010413)/1.05 = 991.71$, still below.
+> > - At age 71 it is $100{,}000(0.011670)/1.05 = 1{,}111.43$, just below.
+> > - At age 72 it is $100{,}000(0.013081)/1.05 = 1{,}245.81$, so the cost first exceeds the premium at age 72.
+> > - Until then each premium pays more than the year's cover, and the excess builds the policy value that pays for the later shortfall.
 
-> [!example]- Interest Sensitivity of Long-Term Values {Example}
-> On the SULT, $\ddot{a}_{65} = 13.5498$ and $A_{65} = 0.35477$ at $5\%$, and $\ddot{a}_{65} = 14.8746$ and $A_{65} = 0.42790$ at $4\%$, with $q_{65} = 0.005915$. Find the change in the EPV of a life annuity-due of \$10,000 a year on $(65)$, in $A_{65}$, and in the EPV of a one-year term insurance of \$100,000 on $(65)$ when the interest rate falls from $5\%$ to $4\%$.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Annuity: } 10{,}000(13.5498) &= 135{,}498 \\
-> > 10{,}000(14.8746) &= 148{,}746 \\
-> > \text{Change} &= +9.8\% \\
-> > \text{Whole life: } 0.42790/0.35477 - 1 &= +20.6\% \\
-> > \text{One-year term: } 100{,}000(0.005915)/1.05 &= 563.33 \\
-> > 100{,}000(0.005915)/1.04 &= 568.75 \\
-> > \text{Change} &= +1.0\%
-> > \end{align*}
-> > $$
-> > A one-point fall in the interest rate barely moves a one-year cover, but it raises the cost of the long-term benefits by 10% to 21%. An insurer that guaranteed these benefits at $5\%$ bears that cost, which is the interest rate risk of a long-term coverage.
-
-> [!tip]- How it appears on the exam
-> - **FAM** asks candidates to identify the long-term coverages, including life, health, annuities, and DB and DC pension plans, from a description of their benefits, and to contrast them, for example by who bears the investment risk in a pension plan.
-> - **Calculations:** FAM's sections on present value random variables and on premiums and policy values are the calculation side of the same coverages: EPVs, premiums by the equivalence or portfolio percentile principle, policy values, and the effect of a change in mortality or interest.
-> - **ALTAM** asks candidates to critique the Markov assumption in multiple state models for long-term benefits. A typical point is that the chance of recovering from sickness depends on how long the life has been sick, which a Markov model ignores.
-
-> [!warning]- Exam traps
-> - **Long-term health is not group medical:** Disability income, long-term care and critical illness are long-term coverages with level premiums. Group medical insurance, renewed and repriced each year, is short-term, so its reserves are chiefly claim reserves.
-> - **Who bears the risk:** In a DB plan the sponsor bears investment and longevity risk, and in a DC plan the member does. Reversing the two describes the other kind of plan.
-> - **Endowment versus pure endowment:** An endowment insurance pays on death within the term as well as on survival. A [[Pure Endowment|pure endowment]] pays only on survival, so a question about "the death benefit of an endowment" refers to the endowment insurance.
+> [!trap] Who bears the risk in a pension plan
+> In a defined benefit plan the sponsor bears the investment and longevity risk. In a defined contribution plan the member does. Reversing the two describes the other kind of plan.

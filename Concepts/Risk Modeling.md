@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b8d31d3b28ebe9d41de0fab715442533a66065587b2a0a1aefcc1ca4518e8c8f
+  content_hash: sha256:81ebb14ebe27ac207948a9eb57af6b0acdc06f692aeb583d1c0a3a0f32aec543
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.109-114 (PDF pp.11-16: definition, four risk types and lists, process steps, treat/exploit: avoid, retain, reduce, transfer, exploit); pp.117-118 (PDF pp.19-20: solvency- and performance-related measures); PDF pp.23, 25 (DFA as structural simulation model; ESG linking interest rates and inflation; natural hedge), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
@@ -21,69 +21,77 @@ verification:
   log: .verify/Concepts/Risk Modeling.md
 ---
 
-**Risk Modeling** is the construction of a stochastic model of an organisation's material risks and their dependencies — for an insurer, an **internal risk model** (IRM), also called a dynamic financial analysis model — that simulates the distribution of its results, so that [[Risk Measure|risk measures]] can be computed and strategies compared on one basis.
+**Risk Modeling** is the construction of a stochastic model of an organisation's material risks and their dependencies that simulates the distribution of its results, so that [[Risk Measure|risk measures]] can be computed and strategies compared on one basis. For an insurer it is an **internal risk model** (IRM), also called a dynamic financial analysis model.
+
+In scenario $i$ of $n$, the simulated year-end surplus $S_1^{(i)}$ is
 
 > $$S_1^{(i)} = S_0 + P - L^{(i)} - X + I^{(i)}$$
 
+- $S_0$ is the opening surplus.
+- $P$ is the premium.
+- $L^{(i)}$ is the simulated loss in the scenario.
+- $X$ is the expenses.
+- $I^{(i)}$ is the simulated investment result in the scenario.
+
+## Components of an internal risk model
+
+Brehm's components are:
+
+1. underwriting risk: frequency and severity, pricing risk, [[Parameter Risk|parameter risk]] and catastrophe risk,
+2. reserve risk,
+3. asset risk, from an economic scenario generator,
+4. **dependencies**: common drivers such as inflation acting on claims and asset values together, catastrophes crossing lines, the cycle moving lines together, and tail dependence.
+
+The dependencies are what make the model realistic. Without them the enterprise looks unrealistically stable.
+
+Each category needs a model suited to its nature, data and materiality. [[Risk Taxonomies]] maps the categories to models and [[Model Selection]] gives the statistical criteria. Parsimony matters: every added parameter adds estimation error and [[Model Risk|model risk]].
+
+## Modelling the dependencies
+
+A single correlation coefficient says how strongly lines move together overall, but not where. A [[Copula|copula]] joins each line's own distribution and can concentrate the dependence in the tail, where catastrophes and clash events put lines in loss together. Kendall's and Spearman's [[Rank Correlation|rank correlations]] depend only on the copula, and matching Kendall's tau is one way to fit one.
+
+> [!example]- By how much does assuming independence understate this book's capital? {Example}
+> Two lines each lose $50$ with probability $90\%$ and $150$ with probability $10\%$. Capital is $\text{TVaR}_{95\%} - E[L]$. A common inflation driver makes both lines bad together $5\%$ of the time.
+>
+> > [!answer]-
+> > - Either way, $E[L] = 2(0.9 \times 50 + 0.1 \times 150) = 120$.
+> > - Independent, the book loses $100$ with probability $81\%$, $200$ with $18\%$ and $300$ with $1\%$.
+> > - Its worst $5\%$ is $1\%$ at $300$ and $4\%$ at $200$, so $\text{TVaR}_{95\%} = (3 + 8)/0.05 = 220$ and capital is $100$.
+> > - With the common driver, both lines are bad $5\%$ of the time (loss $300$), exactly one is bad $2(10\% - 5\%) = 10\%$ (loss $200$), and neither $85\%$ (loss $100$).
+> > - The worst $5\%$ is all $300$, so $\text{TVaR}_{95\%} = 300$ and capital is $180$.
+> > - The independent model understates capital by $80$, or $44\%$, with the same marginal distributions and the same mean.
+> > - The implied correlation between the lines' bad years is only $(0.05 - 0.01)/(0.1 \times 0.9) = 0.44$.
+
+## Risk measures from simulations
+
+With $Y_{(1)} \leq \cdots \leq Y_{(n)}$ the simulated losses (or surplus declines) in order, the estimated TVaR at level $\alpha$ is
+
 > $$\widehat{\text{TVaR}}_{\alpha} = \frac{1}{m}\sum_{j=1}^{m} Y_{(n+1-j)}$$
 
-- In scenario $i$ of $n$, year-end surplus $S_1^{(i)}$ is opening surplus $S_0$ plus premium $P$, less simulated losses $L^{(i)}$ and expenses $X$, plus the simulated investment result $I^{(i)}$. $Y_{(1)} \leq \cdots \leq Y_{(n)}$ are the simulated losses (or surplus declines) in order, and TVaR at level $\alpha$ averages the worst $m = n(1 - \alpha)$ of them.
-- **Brehm's components:** underwriting risk (frequency and severity, pricing risk, [[Parameter Risk|parameter risk]], catastrophe risk), reserve risk, asset risk from an economic scenario generator, and — what makes the model realistic — **dependencies**: common drivers such as inflation acting on claims and asset values together, catastrophes crossing lines, the cycle moving lines together, and tail dependence. Without them the enterprise looks unrealistically stable.
-- **Selecting models for diverse risks.** Each category needs a model suited to its nature, data and materiality — see [[Risk Taxonomies]] for the mapping and [[Model Selection]] for the statistical criteria. Parsimony matters: every added parameter adds estimation error and [[Model Risk|model risk]].
-- **The effect on strategic management.** An IRM answers strategic questions: how much capital a target rating or ruin probability requires, how to allocate it ([[Risk Capital]]), which reinsurance programme or asset mix sits on the **efficient frontier** of return against risk, and whether the business plan fits [[Risk Appetite|appetite]].
-- **The choice of risk measure is itself strategic.** VaR reads one quantile; TVaR averages the tail beyond it; they can rank the same strategies differently. Brehm recommends looking at several metrics rather than one.
+- $m = n(1 - \alpha)$ is the number of worst scenarios averaged.
 
-- **Modelling the dependencies.** A single correlation coefficient says how strongly lines move together overall, but not where; a [[Copula|copula]] joins each line's own distribution and can concentrate the dependence in the tail, where catastrophes and clash events put lines in loss together. Kendall's and Spearman's [[Rank Correlation|rank correlations]] depend only on the copula, and matching Kendall's tau is one way to fit one.
-- **Implementing and owning the model.** CAS's examiners credit two governance points about an internal model. It needs dedicated, full-time staff — or a dedicated ERM function — because people building and maintaining it alongside their regular duties face scheduling conflicts and delay its implementation and upkeep. And the correlation assumptions between lines need knowledge of the whole firm and are politically sensitive, so a leader setting them for one line may be inexperienced in the others or biased towards a favourable answer: they belong at the corporate level, owned or reviewed by the CRO or the ERM department, or agreed by consensus among the line leaders.
+## The effect on strategic management
 
-> [!example]- VaR and TVaR Pick Different Growth Plans {Example}
-> An insurer's model gives next year's net loss (in $\$$M) under two growth plans with the same premium.
+An IRM answers strategic questions: how much capital a target rating or ruin probability requires, how to allocate it ([[Risk Capital]]), which reinsurance programme or asset mix sits on the **efficient frontier** of return against risk, and whether the business plan fits [[Risk Appetite|appetite]].
+
+The choice of risk measure is itself strategic. VaR reads one quantile, and TVaR averages the tail beyond it, so they can rank the same strategies differently. Brehm recommends looking at several metrics rather than one.
+
+> [!example]- Which growth plan do the mean, $\text{VaR}_{95\%}$ and $\text{TVaR}_{95\%}$ prefer? {Example}
+> An insurer's model gives next year's net loss ($\$$M) under two growth plans with the same premium:
 >
-> - Plan A (grow coastal property): $10$ with probability $90\%$, $40$ with $8\%$, $200$ with $2\%$.
-> - Plan B (grow commercial liability): $12$ with probability $90\%$, $60$ with $9\%$, $100$ with $1\%$.
->
-> Compare the mean, $\text{VaR}_{95\%}$ and $\text{TVaR}_{95\%}$.
+> | Plan | Losses (probability) |
+> | :--- | :--- |
+> | A, coastal property | 10 (90%), 40 (8%), 200 (2%) |
+> | B, commercial liability | 12 (90%), 60 (9%), 100 (1%) |
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[L_A] &= 9 + 3.2 + 4 \\
-> > &= 16.2 \\
-> > E[L_B] &= 10.8 + 5.4 + 1 \\
-> > &= 17.2
-> > \end{align*}
-> > $$
-> >
-> > The $95$th percentile is where the cumulative probability first reaches $95\%$: $\text{VaR}_A = 40$ (cumulative $98\%$) and $\text{VaR}_B = 60$ (cumulative $99\%$). TVaR averages the worst $5\%$:
-> >
-> > $$
-> > \begin{align*}
-> > \text{TVaR}_A &= \frac{0.02(200) + 0.03(40)}{0.05} \\
-> > &= 104 \\
-> > \text{TVaR}_B &= \frac{0.01(100) + 0.04(60)}{0.05} \\
-> > &= 68
-> > \end{align*}
-> > $$
-> >
-> > On the mean and on VaR, plan A looks better; on TVaR, plan B is far safer. VaR does not see A's $2\%$ chance of a $200$ loss at all. A board whose appetite is written in VaR will choose A, one whose appetite is written in TVaR will choose B — the risk measure has made the strategic decision.
+> > - The means are $E[L_A] = 9 + 3.2 + 4 = 16.2$ and $E[L_B] = 10.8 + 5.4 + 1 = 17.2$.
+> > - The cumulative probability first reaches $95\%$ at $40$ for A and at $60$ for B, so $\text{VaR}_A = 40$ and $\text{VaR}_B = 60$.
+> > - $\text{TVaR}_A = (4 + 1.2)/0.05 = 104$ and $\text{TVaR}_B = (1 + 2.4)/0.05 = 68$.
+> > - On the mean and on VaR, plan A looks better. On TVaR, plan B is far safer.
+> > - VaR does not see A's $2\%$ chance of a $200$ loss at all.
+> > - A board whose appetite is written in VaR will choose A, and one whose appetite is written in TVaR will choose B.
 
-> [!example]- Ignoring Dependence Understates Capital {Example}
-> Two lines each lose $50$ with probability $90\%$ and $150$ with probability $10\%$. Find $\text{TVaR}_{95\%}$ and capital $= \text{TVaR}_{95\%} - E[L]$ for the combined book (a) assuming independence, (b) if a common inflation driver makes both lines bad together $5\%$ of the time.
->
-> > [!answer]-
-> > Either way $E[L] = 2(0.9 \times 50 + 0.1 \times 150) = 120$.
-> >
-> > **(a) Independent:** $100$ with $81\%$, $200$ with $18\%$, $300$ with $1\%$.
-> >
-> > $$
-> > \begin{align*}
-> > \text{TVaR}_{95\%} &= \frac{0.01(300) + 0.04(200)}{0.05} \\
-> > &= 220
-> > \end{align*}
-> > $$
-> >
-> > Capital $= 220 - 120 = 100$.
-> >
-> > **(b) Common driver:** both bad $5\%$ (loss $300$), exactly one bad $2(10\% - 5\%) = 10\%$ (loss $200$), neither $85\%$ (loss $100$). The worst $5\%$ is all $300$, so $\text{TVaR}_{95\%} = 300$ and capital $= 180$.
-> >
-> > Same marginal distributions, same mean — but the independent model understates capital by $80$, or $44\%$. The implied correlation between the lines' bad years is only $(0.05 - 0.01)/(0.1 \times 0.9) = 0.44$.
+## Implementing and owning the model
+
+CAS's examiners credit two governance points about an internal model. It needs dedicated, full-time staff, or a dedicated ERM function, because people building and maintaining it alongside their regular duties face scheduling conflicts and delay its implementation and upkeep. The correlation assumptions between lines need knowledge of the whole firm and are politically sensitive. A leader setting them for one line may be inexperienced in the others or biased towards a favourable answer, so they belong at the corporate level, owned or reviewed by the CRO or the ERM department, or agreed by consensus among the line leaders.

@@ -4,40 +4,48 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1e290f8503e4d44e95397676076c674cd4d093dbd46343fcc04e1ea97ff0bab4
+  content_hash: sha256:c57db48d002b3a4c3a1362bed86c9da743dd60278523df0d77fc1fdb50f64ea0
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Residual Market.md
 ---
 
-**The Residual Market** is the mechanism that provides coverage to risks the voluntary market will not write at approved rates. It exists wherever insurance is **compulsory** — chiefly automobile — because a mandate to buy is meaningless if no insurer will sell. In Canada the residual market is the [[Facility Association]], supplemented by [[Risk Sharing Pool|risk sharing pools]] and Quebec's *plan de répartition des risques*.
-
-- **Two structures, and the difference matters:**
-  - **A residual market facility** ([[Facility Association]]) — the risk is written *by* the facility, which is a separate entity; results are shared among all licensed insurers by market share. The policyholder knows they are in the residual market and pays its rates.
-  - **A risk sharing pool** — the risk is written by an ordinary insurer at ordinary rates, and the insurer then **cedes** it to a pool whose results are shared. The policyholder does not know, and pays the normal rate.
-- **Size is a diagnostic, not a goal.** A large or rapidly growing residual market is evidence that approved rates are inadequate for part of the risk spectrum, or that classification restrictions have made some segments unwritable. Regulators watch the trend for exactly this reason.
-- **Every insurer participates** in the results whether or not it writes the business, in proportion to its voluntary market share. There is no opting out — which is what makes it a market-wide mechanism rather than a competitive product.
-- **Depopulation** is the desired direction: as insurers become able to price and write formerly residual risks, volume returns to the voluntary market. The tools are permitting adequate rates, allowing appropriate classification, and take-out programs.
-- **Actuarial issues:** residual market business is adversely selected by construction, so its loss ratios exceed the voluntary market's; the sharing formula determines each insurer's exposure to a business it did not underwrite; and the [[Take-All-Comers Rule]] governs which risks are legitimately there rather than being pushed there.
-
 ![[Media/Figures/Residual_Market.svg|340]]
 
-> [!example]- Reading the Residual Market Share {Example}
-> A province's residual market share of private passenger auto exposures over five years: $1.2\%$, $1.5\%$, $2.4\%$, $4.1\%$, $6.8\%$. Approved rate increases over the same period averaged $2\%$ per year while industry loss costs rose $7\%$ per year.
+**The Residual Market** is the mechanism that provides coverage to risks the voluntary market will not write at approved rates. It exists wherever insurance is compulsory, chiefly automobile, because a mandate to buy is meaningless if no insurer will sell. In Canada the residual market is the [[Facility Association]], supplemented by [[Risk Sharing Pool|risk sharing pools]] and Quebec's *plan de répartition des risques*.
+
+A residual market takes one of two structures:
+
+| | Residual market facility | Risk sharing pool |
+| :--- | :--- | :--- |
+| Who writes the risk | The facility, a separate entity such as the [[Facility Association]] | An ordinary insurer, which then cedes it to the pool |
+| Rates | The facility's rates | The insurer's normal rates |
+| Does the policyholder know? | Yes | No |
+
+Under either structure, every licensed insurer shares in the results in proportion to its voluntary market share, whether or not it writes the business. There is no opting out, which makes the residual market a market-wide mechanism rather than a competitive product. The sharing formula sets each insurer's exposure to business it did not underwrite.
+
+Residual market business is adversely selected by construction, so its loss ratios exceed the voluntary market's. The [[Take-All-Comers Rule]] governs which risks are legitimately there rather than pushed there.
+
+## Size of the residual market
+
+A large or rapidly growing residual market is evidence that approved rates are inadequate for part of the risk spectrum, or that classification restrictions have made some segments unwritable. Regulators watch its trend for this reason.
+
+**Depopulation**, the return of residual risks to the voluntary market as insurers become able to price and write them, is the desired direction. Its tools are adequate approved rates, appropriate classification and take-out programs.
+
+> [!example]- What does this rising residual market share show, and what would reverse it? {Example}
+> A province's residual market share of private passenger auto exposures over five years was:
 >
-> Diagnose, and say what would reverse it.
+> | Year | 1 | 2 | 3 | 4 | 5 |
+> | :--- | ---: | ---: | ---: | ---: | ---: |
+> | Residual share | $1.2\%$ | $1.5\%$ | $2.4\%$ | $4.1\%$ | $6.8\%$ |
+>
+> Approved rate increases over the same period averaged $2\%$ a year, while industry loss costs rose $7\%$ a year.
 >
 > > [!answer]-
-> > **The diagnosis is rate inadequacy, and the arithmetic shows it.** Over five years, prices rose by $1.02^5 = 1.104$ and costs by $1.07^5 = 1.403$ — a widening gap of roughly $27\%$. As rates fall below cost for progressively larger parts of the risk spectrum, insurers tighten filed underwriting rules, and the risks those rules exclude go to the [[Facility Association]]. The residual share is a **thermometer**, and it is reading a fever in the rate regime, not a change in drivers.
-> >
-> > Note the acceleration: $+0.3$, $+0.9$, $+1.7$, $+2.7$ percentage points. That convexity is expected — each year of suppression makes a wider band of risks unprofitable, so the population crossing the line grows.
-> >
-> > **What reverses it:**
-> >
-> > - **Adequate approved rates.** The only durable fix; everything else treats symptoms.
-> > - **Classification flexibility**, so insurers can price the marginal risks rather than decline them. If a restriction is what made them unwritable, the residual market is where the restriction's cost is showing up.
-> > - **Take-out incentives** to move residual business back into voluntary books.
-> > - **Cost reduction** through [[Automobile Insurance Reform|product reform]], which lowers the cost the rate must cover.
-> >
-> > **What does not work:** pressuring insurers to write the business anyway. They are already obliged to write anything their filed rules accept ([[Take-All-Comers Rule]]); the risks in the residual market are there because the *rules* exclude them, and the rules exclude them because the rate does not support them.
+> > - Over five years prices rose by $1.02^5 = 1.104$ and costs by $1.07^5 = 1.403$, a gap of about $27\%$.
+> > - As rates fall below cost for more of the risk spectrum, insurers tighten their filed underwriting rules, and the risks those rules exclude go to the [[Facility Association]].
+> > - The yearly increases of $0.3$, $0.9$, $1.7$ and $2.7$ percentage points accelerate, because each year of suppressed rates makes a wider band of risks unprofitable.
+> > - The share shows rate inadequacy, not a change in drivers.
+> > - Pressing insurers to write the business does not help. Under the [[Take-All-Comers Rule]] they already write every risk their filed rules accept.
+> > - Adequate approved rates reverse it. Classification flexibility, take-out incentives and cost reduction through [[Automobile Insurance Reform|product reform]] support them.

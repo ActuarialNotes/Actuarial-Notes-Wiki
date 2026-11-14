@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f8adc73f007fffff712f326de4d498a5c270876edd5588b287af79ab5e35ec57
+  content_hash: sha256:aefea820fa91b0351ecf5c368106bffc43b05461e5dd981214dcc7f34a9be3fb
   sources:
     - "CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026, pp.1-3, sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf"
     - "Froot, Risk Management, Capital Budgeting and Capital Structure Policy for Insurers and Reinsurers (NBER WP 10184, 2003), pp.2-10, 16, sha256:0de3a439eb286ea2a5ed225fcfa4cbb2ed62d964dc2485dbb79239dabfb6383e — https://www.nber.org/system/files/working_papers/w10184/w10184.pdf"
@@ -21,51 +21,70 @@ verification:
   log: .verify/Concepts/Capital Structure.md
 ---
 
-**Capital Structure** is the mix of claims that finance a firm's assets and the order in which they absorb losses. For an [[Insurer|insurer]] the largest claimholders are its own [[Policyholder|policyholders]] — loss reserves and unearned premium are debt-like obligations to customers — with the rest funded by equity, debt such as surplus notes, and capital supplied off the balance sheet by [[Reinsurance]] and [[CAT Bonds]].
+**Capital Structure** is the mix of claims that finance a firm's assets and the order in which they absorb losses. For an [[Insurer|insurer]] the largest claimholders are its own [[Policyholder|policyholders]], because loss reserves and unearned premium are debt-like obligations to customers. The rest is funded by equity, by debt such as surplus notes, and by capital supplied off the balance sheet through [[Reinsurance|reinsurance]] and [[CAT Bonds|CAT bonds]].
+
+An insurer's balance sheet is
 
 > $$A = L + D + E$$
 
-- $A$ is assets, $L$ policyholder liabilities (loss and LAE reserves, unearned premium), $D$ debt and hybrid capital, and $E$ shareholders' equity. In U.S. statutory accounting, surplus notes are classified as [[Capital and Surplus|surplus]] (equity), although GAAP reports them as debt.
-- **Priority of claims.** Losses beyond what premium and reserves fund are absorbed by equity first, then by subordinated debt, and only then do policyholders go unpaid. Surplus notes are unsecured debt subordinated to all claims by policyholders and other creditors.
-- **Leverage magnifies return and risk.** Net income is investment income on *all* assets plus underwriting profit, so, ignoring taxes and interest on debt, $\text{ROE} = i \cdot A/E + u \cdot P/E$, with $i$ the investment yield, $u$ the underwriting margin and $P$ premium. Policyholder-supplied funds are leverage that costs nothing while $u \geq 0$ — see [[Insurance Leverage]].
-- **Why capital structure is not irrelevant here.** Modigliani–Miller says financing does not change firm value in a perfect market. For an insurer it does: policyholders are customers who cannot diversify their insurer's default risk and pay less, or leave, as that risk rises; and [[Insurance Market Imperfections|taxes, distress costs, agency costs and regulation]] all bear on the choice. The target structure trades the [[Cost of Capital]] against the cost of default risk.
-- **The default option.** Limited liability gives shareholders a call on the assets, and policyholders hold the promised losses less an insolvency put: $\text{PV}(L) - \text{Put}(A, L)$. That put — closely related to the expected policyholder deficit, which leaves out discounting and a risk margin — is what [[Risk Capital]] is held to shrink, and what a [[Financial Risk]] shock inflates.
+- $A$ is assets.
+- $L$ is policyholder liabilities, the loss and LAE reserves and unearned premium.
+- $D$ is debt and hybrid capital.
+- $E$ is shareholders' equity.
 
-> [!example]- A Loss Waterfall Through the Capital Structure {Example}
-> An insurer ends the year with $\$1{,}300$M of assets. Its claims are policyholder losses (uncertain), $\$100$M of surplus notes, and equity (the residual). Show who is paid if policyholder losses turn out to be (a) $\$1{,}000$M, (b) $\$1{,}250$M, (c) $\$1{,}400$M.
+In U.S. statutory accounting, surplus notes are classified as [[Capital and Surplus|surplus]] (equity), although GAAP reports them as debt.
+
+## Priority of claims
+
+Losses beyond what premium and reserves fund are absorbed by equity first, then by subordinated debt, and only then do policyholders go unpaid. Surplus notes are unsecured debt subordinated to all claims by policyholders and other creditors. Equity is first loss and the notes second loss, which is why subordinated notes count as capital from the policyholder's point of view even though they are debt to the investor.
+
+> [!example]- Who is paid at each of these three levels of policyholder losses? {Example}
+> An insurer ends the year with $\$1{,}300$M of assets. Its claims are policyholder losses, $\$100$M of surplus notes, and equity, which is the residual. Policyholder losses turn out to be (a) $\$1{,}000$M, (b) $\$1{,}250$M or (c) $\$1{,}400$M.
 >
 > > [!answer]-
-> > Pay in order of priority — policyholders, then noteholders, then equity:
-> >
-> > - **(a)** Policyholders $\$1{,}000$M; noteholders $\$100$M; equity keeps $\$200$M.
-> > - **(b)** Policyholders $\$1{,}250$M; $\$50$M is left, so noteholders recover half their $\$100$M; equity is wiped out.
-> > - **(c)** Assets fall $\$100$M short of claims; notes and equity receive nothing, and policyholders recover
-> >
-> > $$\frac{1{,}300}{1{,}400} = 0.929$$
-> >
-> > i.e. about $93$ cents on the dollar.
-> >
-> > Equity is first loss, the notes second loss; policyholders bear loss only after both are exhausted. That is why subordinated notes count as capital from the policyholder's point of view even though they are debt to the investor.
+> > - Claims are paid in order of priority: policyholders, then noteholders, then equity.
+> > - At (a), policyholders get $\$1{,}000$M and noteholders $\$100$M, and equity keeps $\$200$M.
+> > - At (b), policyholders get $\$1{,}250$M. The $\$50$M left pays noteholders half their $\$100$M, and equity is wiped out.
+> > - At (c), assets fall $\$100$M short of policyholder claims. Notes and equity receive nothing.
+> > - Policyholders recover $1{,}300/1{,}400 = 0.929$, about 93 cents on the dollar.
 
-> [!example]- Leverage, Return and Downside {Example}
-> Two insurers write identical books: premium $\$1{,}000$M, policyholder liabilities $\$1{,}500$M, investment yield $4\%$. Insurer H holds equity of $\$500$M; insurer K holds $\$1{,}000$M. Ignore taxes.
->
-> Compare ROE in a normal year (underwriting margin $+2\%$) and a bad year (combined ratio $115\%$, margin $-15\%$).
+## Leverage and return on equity
+
+Net income is investment income on *all* assets plus underwriting profit. Ignoring taxes and interest on debt, the return on equity is
+
+> $$\text{ROE} = i \cdot \frac{A}{E} + u \cdot \frac{P}{E}$$
+
+- $i$ is the investment yield.
+- $u$ is the underwriting margin.
+- $P$ is premium.
+
+Policyholder-supplied funds are leverage that costs nothing while $u \geq 0$ ([[Insurance Leverage|insurance leverage]]). Leverage magnifies both the return and the risk.
+
+> [!example]- How do these two insurers' ROEs compare in a normal year and in a bad year? {Example}
+> Two insurers write identical books: premium of $\$1{,}000$M, policyholder liabilities of $\$1{,}500$M and an investment yield of 4%. Insurer H holds equity of $\$500$M and insurer K holds $\$1{,}000$M. The underwriting margin is $+2\%$ in a normal year and $-15\%$ in a bad year (a 115% combined ratio). Ignore taxes.
 >
 > > [!answer]-
-> > Assets are liabilities plus equity: $\$2{,}000$M for H, $\$2{,}500$M for K.
-> >
-> > $$
-> > \begin{align*}
-> > \text{ROE}_H^{\text{normal}} &= \frac{0.04(2{,}000) + 0.02(1{,}000)}{500} \\
-> > &= 20\% \\
-> > \text{ROE}_K^{\text{normal}} &= \frac{0.04(2{,}500) + 0.02(1{,}000)}{1{,}000} \\
-> > &= 12\% \\
-> > \text{ROE}_H^{\text{bad}} &= \frac{80 - 150}{500} \\
-> > &= -14\% \\
-> > \text{ROE}_K^{\text{bad}} &= \frac{100 - 150}{1{,}000} \\
-> > &= -5\%
-> > \end{align*}
-> > $$
-> >
-> > The more leveraged insurer earns more in a normal year and loses far more of its capital in a bad one. K's extra $\$500$M earns only the $4\%$ investment yield, which is why excess capital drags on ROE — and why the right amount of capital is a trade-off, not a maximum.
+> > - Assets are liabilities plus equity: $\$2{,}000$M for H and $\$2{,}500$M for K.
+> > - Investment income is $0.04 \times 2{,}000 = \$80$M for H and $0.04 \times 2{,}500 = \$100$M for K.
+> > - Underwriting profit is $+\$20$M in the normal year and $-\$150$M in the bad year for both.
+> > - In the normal year, H's ROE is $(80 + 20)/500 = 20\%$ and K's is $(100 + 20)/1{,}000 = 12\%$.
+> > - In the bad year, H's ROE is $(80 - 150)/500 = -14\%$ and K's is $(100 - 150)/1{,}000 = -5\%$.
+> > - K's extra $\$500$M earns only the 4% investment yield, so excess capital lowers ROE, while leverage deepens H's loss in a bad year.
+
+## Why capital structure matters for an insurer
+
+Modigliani–Miller says financing does not change firm value in a perfect market. For an insurer it does. Policyholders are customers who cannot diversify their insurer's default risk, and they pay less, or leave, as that risk rises. [[Insurance Market Imperfections|Taxes, distress costs, agency costs and regulation]] also bear on the choice. The target structure trades the [[Cost of Capital|cost of capital]] against the cost of default risk.
+
+## The default option
+
+Limited liability gives shareholders a call on the assets. The policyholders' claim is worth the promised losses less an insolvency put, which is
+
+> $$\text{PV}(L) - \text{Put}(A, L)$$
+
+- $\text{PV}(L)$ is the present value of the promised losses.
+- $\text{Put}(A, L)$ is the value of a put on the assets $A$ with strike $L$.
+
+The put is closely related to the expected policyholder deficit, which leaves out discounting and a risk margin. It is what [[Risk Capital|risk capital]] is held to shrink, and what a [[Financial Risk|financial risk]] shock inflates.
+
+> [!trap] Earning investment income on equity alone
+> An insurer earns investment income on all its assets, including the funds policyholders supply, not only on its equity. For insurer H the investment income is $0.04 \times 2{,}000 = \$80$M, not $0.04 \times 500 = \$20$M. Leaving them out gives H a normal-year ROE of $(20 + 20)/500 = 8\%$ in place of 20%.

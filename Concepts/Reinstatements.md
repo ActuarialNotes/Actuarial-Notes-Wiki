@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b0271fe6633b8c2030536cc369d84b3c72be5d47ce068c10ee0ae3fa67a88541
+  content_hash: sha256:b572a0d70c7296215dbdec67ec70cf5a26009fbbd21bc1922b32cd9a89cab805
   sources:
     - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.43-44 (reinstatement premium, pro rata as to amount/time, aggregate limit, payback approach), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
@@ -14,76 +14,69 @@ verification:
   log: .verify/Concepts/Reinstatements.md
 ---
 
-**Reinstatements** restore the limit of an [[Excess of Loss|excess of loss]] layer, typically a property catastrophe cover, after a loss has used it up, so the layer is available again for a later event in the same period. A reinstatement is usually paid for with a **reinstatement premium**, most often *pro rata as to amount* and less often also *pro rata as to time*.
+A **Reinstatement** restores the limit of an [[Excess of Loss|excess of loss]] layer, typically a property catastrophe cover, after a loss has used it up, so the layer is available again for a later event in the same period. A reinstatement is usually paid for with a **reinstatement premium**, most often *pro rata as to amount* and less often also *pro rata as to time*.
+
+## Reinstatement premium
+
+Pro rata as to amount, the reinstatement premium is
 
 > $$\text{RP} = P \times r \times \frac{\text{Limit reinstated}}{L}$$
 
+- $P$ is the annual (up-front) premium.
+- $r$ is the reinstatement rate, such as $100\%$, or the $110\%$ in Clark's illustration.
+- $L$ is the occurrence limit.
+
+*Pro rata as to time* multiplies RP by the fraction of the term left at the loss date. Clark notes few contracts do this, because catastrophes such as hurricanes are seasonal.
+
+> [!example]- What are the recovery and the reinstatement premium on this cover, and what cover remains? {Example}
+> A calendar-year catastrophe cover is $\$20$M xs $\$30$M with an annual premium of $\$3$M and one reinstatement at $100\%$. A hurricane on September 1 causes a gross loss of $\$42$M.
+>
+> > [!answer]-
+> > - The layer loss is $\min(\max(42 - 30, 0), 20) = \$12$M, which is the recovery.
+> > - Pro rata as to amount, $\text{RP} = \$3\text{M} \times 1.00 \times 12/20 = \$1.8$M.
+> > - Also pro rata as to time, with four of twelve months left, $\text{RP} = \$1.8\text{M} \times 4/12 = \$0.6$M.
+> > - As to amount only, the cedant's net cost of the event is its $\$30$M retention plus the $\$1.8$M RP, or $\$31.8$M.
+> > - The full $\$20$M occurrence limit is available again for the next event.
+> > - Of the $\$40$M aggregate limit, $\$28$M remains, and $\$8$M of reinstatement capacity is left after the $\$12$M reinstated.
+
+## Aggregate limit
+
+With $n$ reinstatements the most the reinsurer pays in a year is $(1+n)L$. The aggregate limit is
+
 > $$\text{Aggregate limit} = (1 + n)\,L$$
 
-> $$\begin{aligned} &P\left(1 + r\,\frac{E[\min(S,\, nL)]}{L}\right) \\ &\quad = \text{Required total premium} \end{aligned}$$
+- $n$ is the number of reinstatements.
 
-- $P$ is the annual (up-front) premium, $r$ the reinstatement rate ($100\%$ is common; Clark's illustration uses $110\%$), $L$ the occurrence limit, $n$ the number of reinstatements and $S$ the year's total loss to the layer before any aggregate cap. *Pro rata as to time* multiplies RP by the fraction of the term left at the loss date. Clark notes few contracts do this, because catastrophes such as hurricanes are seasonal.
-- **Aggregate limit.** With $n$ reinstatements the most the reinsurer pays in a year is $(1+n)L$. Pro rata as to amount means that, with one reinstatement, four half-limit losses produce the same result as two full-limit losses.
-- **Effect on loss cost.** Limiting reinstatements caps expected ceded loss at $E[\min(S, (1+n)L)]$. Expected reinstatement premium is additional premium, so the up-front premium needed to hit a target is *lower* by the factor $1 + r\,E[\min(S, nL)]/L$. A reinsurer that ignored it would overprice the cover. *Free* reinstatements ($r = 0$) must be paid for in $P$ instead.
-- **Who bears what.** The cedant pays the reinstatement premium at the worst moment, straight after a catastrophe. Its net cost of an event is retention, plus loss above the limit, plus RP, and the net [[Probable Maximum Loss|PML]] must include it. For the reinsurer, premium that arrives with the losses makes the result less volatile.
-- Priced from [[Catastrophe Modelling|catastrophe model]] output (the annual loss distribution to the layer — see [[Catastrophe Expected Loss Cost]]). Before models, the *payback* approach set $P$ so that $L$ would be repaid over a chosen number of years. See [[Reinsurance Contract Provisions]].
+Pro rata as to amount means that, with one reinstatement, four half-limit losses produce the same result as two full-limit losses. Once the aggregate limit is used up, the cedant keeps every further loss. Its net cost of an event is its retention, plus any loss above the limit, plus the RP.
 
-> [!example]- Computing a Reinstatement Premium {Example}
-> A calendar-year catastrophe cover is $\$20$M xs $\$30$M with an annual premium of $\$3$M and one reinstatement at $100\%$. A hurricane on September 1 causes a gross loss of $\$42$M. Find the recovery and reinstatement premium if the reinstatement is (a) pro rata as to amount only, (b) also pro rata as to time. What cover remains?
+## Pricing a layer with reinstatements
+
+A layer is priced from [[Catastrophe Modelling|catastrophe model]] output, the annual loss to the layer ([[Catastrophe Expected Loss Cost]]). Limiting reinstatements caps the expected ceded loss at $E[\min(S, (1+n)L)]$. Expected reinstatement premium is additional premium, so the expected total premium is
+
+> $$P\left(1 + r\,\frac{E[\min(S,\, nL)]}{L}\right)$$
+
+- $S$ is the year's total loss to the layer before any aggregate cap.
+
+Setting this equal to the required total premium gives $P$. *Free* reinstatements ($r = 0$) must be paid for in $P$ instead. Before models, the *payback* approach set $P$ so that $L$ would be repaid over a chosen number of years. See [[Reinsurance Contract Provisions]].
+
+> [!example]- What up-front premium meets this reinsurer's target? {Example}
+> A $\$10$M xs $\$10$M catastrophe layer has one reinstatement at $100\%$, pro rata as to amount. The reinsurer targets a $60\%$ loss ratio on total premium. The annual loss to the layer, before any cap, is:
+>
+> | Layer loss | Probability | Events |
+> | ---: | ---: | :--- |
+> | \$0 | 0.80 | none |
+> | \$5M | 0.10 | one partial |
+> | \$10M | 0.06 | one full |
+> | \$20M | 0.03 | two full |
+> | \$30M | 0.01 | three full |
 >
 > > [!answer]-
-> > Layer loss: $\min(\max(42 - 30, 0), 20) = \$12$M.
-> >
-> > **(a) As to amount:**
-> >
-> > $$
-> > \begin{align*}
-> > \text{RP} &= \$3\text{M} \times 1.00 \times \frac{12}{20} \\
-> > &= \$1.8\text{M}
-> > \end{align*}
-> > $$
-> >
-> > **(b) Also as to time,** with four of twelve months left:
-> >
-> > $$
-> > \begin{align*}
-> > \text{RP} &= \$1.8\text{M} \times \frac{4}{12} \\
-> > &= \$0.6\text{M}
-> > \end{align*}
-> > $$
-> >
-> > In case (a) the cedant recovers $\$12$M and pays back $\$1.8$M, so its net cost of the event is $\$30\text{M} + \$1.8\text{M} = \$31.8$M. The full $\$20$M occurrence limit is available again for the next event. Of the $\$40$M aggregate limit, $\$28$M remains: $\$8$M of reinstatement capacity is left after the $\$12$M reinstated.
+> > - The aggregate limit is $\$20$M, so ceded loss is $0, 5, 10, 20, 20$ and $E[\text{Ceded}] = 0.10(5) + 0.06(10) + 0.03(20) + 0.01(20) = 1.9$.
+> > - Limit reinstated, $\min(S, 10)$, is $0, 5, 10, 10, 10$, so $E[\min(S, 10)] = 1.5$.
+> > - The required total premium is $1.9/0.60 = \$3.167$M.
+> > - $P(1 + 1.5/10) = 3.167$, so $P = 3.167/1.15 = \$2.754$M, a rate on line of $27.5\%$.
+> > - With a free reinstatement the whole $\$3.167$M must be charged up front.
+> > - With no reinstatement expected loss falls to $\$1.5$M and $P = 1.5/0.60 = \$2.5$M.
 
-> [!example]- Pricing a Layer with One Paid Reinstatement {Example}
-> A $\$10$M xs $\$10$M catastrophe layer has one reinstatement at $100\%$, pro rata as to amount. The annual loss to the layer, before any cap, is $\$0$ ($p = 0.80$), $\$5$M ($0.10$, one partial event), $\$10$M ($0.06$), $\$20$M ($0.03$, two full events) or $\$30$M ($0.01$, three full events). The reinsurer targets a $60\%$ loss ratio on total premium. Find the up-front premium.
->
-> > [!answer]-
-> > With aggregate limit $\$20$M, ceded loss is $0, 5, 10, 20, 20$:
-> >
-> > $$
-> > \begin{align*}
-> > E[\text{Ceded}] &= 0.10(5) + 0.06(10) + 0.03(20) + 0.01(20) \\
-> > &= 1.9
-> > \end{align*}
-> > $$
-> >
-> > Limit reinstated, $\min(S, 10)$, is $0, 5, 10, 10, 10$:
-> >
-> > $$
-> > \begin{align*}
-> > E[\min(S, 10)] &= 0.10(5) + 0.06(10) + 0.03(10) + 0.01(10) \\
-> > &= 1.5
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > P\left(1 + \frac{1.5}{10}\right) &= \frac{1.9}{0.60} \\
-> > P &= \frac{3.1667}{1.15} \\
-> > &= \$2.754\text{M}
-> > \end{align*}
-> > $$
-> >
-> > The rate on line is $27.5\%$. Expected reinstatement premium is $0.15 \times 2.754 = \$0.413$M, which brings total expected premium to $\$3.167$M.
-> >
-> > **Comparisons:** with a *free* reinstatement the whole $\$3.167$M must be charged up front. With *no* reinstatement the aggregate limit is $\$10$M, expected loss falls to $\$1.5$M, and $P = 1.5/0.60 = \$2.5$M.
+> [!trap] Leaving the reinstatement premium out of the price
+> Expected reinstatement premium is premium the reinsurer will collect, so the up-front premium needed to hit a target is lower by the factor $1 + r\,E[\min(S, nL)]/L$. A reinsurer that ignored it would overprice the cover, charging $\$3.167$M up front in the example instead of $\$2.754$M.

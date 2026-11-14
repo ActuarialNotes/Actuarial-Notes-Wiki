@@ -4,74 +4,64 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ca36c0485b0c3d7e7f68f938a095d459a82ab04cd2870c00b313b7eaad53b397
+  content_hash: sha256:a295a614b8fe95e63cbb7feb3fd202464452351f703adfbaca624595ddd168d2
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hedging.md
 ---
 
-**Hedging** is taking a position in one or more instruments whose value moves opposite to an existing exposure, so that the combined portfolio is insensitive to a chosen risk factor. A hedge is **static** if it is set once and held (for example, buying the matching put), or **dynamic** if it is rebalanced as sensitivities change ([[Delta Hedging|delta hedging]]); it is **perfect** only when the hedge instrument and the exposure move together exactly, otherwise **basis risk** remains.
+**Hedging** is taking a position in one or more instruments whose value moves opposite to an existing exposure, so that the combined portfolio is insensitive to a chosen risk factor. A hedge is perfect only when the hedge instrument and the exposure move together exactly. Otherwise **basis risk** remains.
+
+A hedge is **static** if it is set once and held, such as buying the matching put. It is **dynamic** if it is rebalanced as the exposure's sensitivities change, as in [[Delta Hedging|delta hedging]].
+
+## Delta and gamma neutrality
+
+An exposure of value $V$, hedged with $n_i$ units of each instrument $H_i$, is **delta-neutral** in the underlying price $S$ when
 
 > $$\frac{\partial}{\partial S}\Big(V + \sum_i n_i H_i\Big) = 0$$
 
+It is **gamma-neutral** when
+
 > $$\frac{\partial^2}{\partial S^2}\Big(V + \sum_i n_i H_i\Big) = 0$$
+
+Each condition needs its own instrument. The underlying has a delta of 1 and a gamma of 0, so gamma is neutralized with options first, and the delta that remains is then removed with a position in the underlying equal to minus that delta. A positive delta is hedged by shorting the underlying and a negative one by buying it. Vega and rho neutrality are added the same way, one instrument for each.
+
+> [!example]- What hedge makes this guarantee book delta- and gamma-neutral? {Example}
+> An insurer has written maturity guarantees (puts) on variable annuity funds. Measured per unit of the equity index, its book has delta $+450$ and gamma $-30$. It can trade the index and a listed put on the index with delta $-0.45$ and gamma $0.04$.
+>
+> > [!answer]-
+> > - Only the put carries gamma, so it is solved first: $-30 + 0.04\,n = 0$ gives $n = 750$ puts.
+> > - The puts add delta $750 \times (-0.45) = -337.5$, which leaves $450 - 337.5 = 112.5$.
+> > - The index has delta 1, so the insurer shorts 112.5 units of it.
+> > - The hedge is to buy 750 puts and short 112.5 units of the index. Fixing delta first and then adding the puts would undo the delta hedge.
+
+## The minimum-variance hedge ratio
+
+When an exposure is hedged with futures, the hedge ratio that minimizes the variance of the hedged position is
 
 > $$h^* = \rho\,\frac{\sigma_S}{\sigma_F}$$
 
-- The first two blocks are **delta-neutral** and **gamma-neutral** conditions: $V$ is the exposure, $H_i$ the hedge instruments and $n_i$ the quantities held. Each condition needs its own instrument, and the underlying itself has zero gamma, so gamma is neutralized with options first and the delta is then fixed with the underlying; vega and rho neutrality are added the same way
-- $h^*$ is the **minimum-variance hedge ratio** for hedging an exposure with futures: $\sigma_S$ and $\sigma_F$ are the standard deviations of the exposure's and the futures' returns and $\rho$ their [[Correlation|correlation]]; the hedge removes the fraction $\rho^2$ of the variance (the **hedge effectiveness**)
-- An insurer hedging an embedded option in a liability (a variable annuity GMxB, an indexed annuity crediting) can hedge **equity, interest-rate and volatility** risk with traded instruments; [[Mortality|mortality]], policyholder behaviour, basis, counterparty and correlation risk can be hedged only partly or not at all
-- Hedges fail when their assumptions fail: discrete rebalancing, jumps and gaps, realized [[Volatility|volatility]] above the hedge's, liquidity, [[Model Risk|model]] and [[Credit Risk|counterparty]] risk
+- $\sigma_S$ and $\sigma_F$ are the standard deviations of the exposure's and the futures' returns.
+- $\rho$ is their [[Correlation|correlation]].
 
-> [!example]- Making a Guarantee Book Delta- and Gamma-Neutral {Example}
-> An insurer has written maturity guarantees (puts) on variable annuity funds. Measured per unit of the equity index, its book has delta $+450$ and gamma $-30$. It can trade the index and a listed put on the index with delta $-0.45$ and gamma $0.04$. Find the hedge that makes the book delta- and gamma-neutral.
+The hedge removes the fraction $\rho^2$ of the variance, which is the **hedge effectiveness**. What remains is basis risk.
+
+> [!example]- How many futures contracts should this fund's hedge short, and how much volatility is left? {Example}
+> A $\$50$ million variable annuity fund tracks a managed fund with return volatility $18\%$. The insurer hedges it with index futures whose returns have volatility $20\%$ and correlation $0.92$ with the fund. Each contract is $\$250$ times an index level of $5{,}000$.
 >
 > > [!answer]-
-> > Gamma first, since only the option carries gamma:
-> > $$
-> > \begin{align*}
-> > -30 + 0.04\,n &= 0 \\
-> > n &= 750 \text{ puts}
-> > \end{align*}
-> > $$
-> > The puts add delta $750(-0.45) = -337.5$, leaving
-> > $$
-> > \begin{align*}
-> > \Delta &= 450 - 337.5 \\
-> >        &= 112.5
-> > \end{align*}
-> > $$
-> > so the insurer **buys 750 puts and shorts 112.5 units of the index**. Fixing delta first and then adding the options would undo the delta hedge.
+> > - The hedge ratio is $h^* = 0.92 \times 0.18/0.20 = 0.828$.
+> > - Each contract is worth $250 \times 5{,}000 = \$1{,}250{,}000$, so the number of contracts is $0.828 \times 50{,}000{,}000 / 1{,}250{,}000 = 33.12$.
+> > - The hedge removes $\rho^2 = 0.92^2 = 84.64\%$ of the variance.
+> > - The residual volatility is $0.18\sqrt{1 - 0.8464} = 7.05\%$, about $\$3.53$ million on the fund.
+> > - Short about 33 contracts. The $7.05\%$ that remains is basis risk, the part of the fund's return the index does not explain.
 
-> [!example]- Minimum-Variance Hedge with Basis Risk {Example}
-> A $\$50$ million variable annuity fund tracks a managed fund with return volatility $18\%$. The insurer hedges it with index futures whose returns have volatility $20\%$ and correlation $0.92$ with the fund. Each contract is $\$250$ times an index level of $5{,}000$. Find the number of contracts to short and the volatility left after hedging.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > h^* &= 0.92 \times \frac{0.18}{0.20} \\
-> >     &= 0.828 \\
-> > N^* &= \frac{0.828 \times 50{,}000{,}000}{250 \times 5{,}000} \\
-> >     &= 33.12
-> > \end{align*}
-> > $$
-> > Short about $33$ contracts. The hedge removes $\rho^2 = 84.64\%$ of the variance; the residual volatility is
-> > $$
-> > \begin{align*}
-> > \sigma_{\text{resid}} &= 0.18\sqrt{1 - 0.92^2} \\
-> >                      &= 0.0705
-> > \end{align*}
-> > $$
-> > or about $\$3.53$ million on the fund. The $7.05\%$ that remains is basis risk, the part of the fund's return the index does not explain.
+## Hedging embedded options in liabilities
 
-> [!tip]- How it appears on the exam
-> - **INV-201** ("the Greeks of derivatives"; "static and dynamic hedging"): given the Greeks of a liability and of available instruments, find the positions that neutralize two or three of delta, gamma and vega, then evaluate what the hedge leaves exposed.
-> - **INV-201** (hedging "embedded options in liabilities"): describe a hedge program for a GMxB, an indexed annuity or a RILA, separating hedgeable equity, rate and volatility risk from the partly hedgeable mortality, lapse, basis and counterparty risks, as a written answer.
-> - **INV-201** ("how hedge strategies may fail"): diagnose a hedge program's losses from given hedge results (gaps, realized volatility, basis, model error).
+An insurer hedging an [[Embedded Option|embedded option]] in a liability, such as a variable annuity guarantee or an indexed annuity's crediting, can hedge equity, interest-rate and volatility risk with traded instruments. [[Mortality|Mortality]], policyholder behaviour, basis, counterparty and correlation risk can be hedged only partly or not at all. The hedge quantities assume expected survivorship and lapses, so experience that differs from them becomes unhedged profit or loss.
 
-> [!warning]- Exam traps
-> - **Solving delta before gamma.** The underlying has no gamma but the options have delta; neutralize gamma with options, then rebalance delta with the underlying, or the delta hedge is broken by the option trade.
-> - **Sign of the liability's Greeks.** An insurer *writing* a guarantee is short the option. A GMMB is a put, with negative delta, so the insurer's book has *positive* delta and negative gamma; hedging the put's own Greeks instead of the book's trades in the wrong direction and doubles the exposure.
-> - **Treating the hedge ratio as the correlation or the volatility ratio alone.** $h^* = \rho\,\sigma_S/\sigma_F$; using $\rho$ or $\sigma_S/\sigma_F$ by itself over- or under-hedges.
-> - **Claiming mortality or lapse risk is hedged by the equity hedge.** The hedge quantities assume expected survivorship and lapses; any experience different from that becomes unhedged P&L.
+Hedges fail when their assumptions fail. The usual causes are discrete rebalancing, jumps and gaps in the price, realized [[Volatility|volatility]] above the volatility the hedge assumed, illiquid instruments, [[Model Risk|model risk]] and [[Credit Risk|counterparty risk]].
+
+> [!trap] Hedging the guarantee's Greeks instead of the book's
+> An insurer that writes a guarantee is short the option. A maturity guarantee is a put with negative delta, so the insurer's book has positive delta and negative gamma. Hedging the put's own Greeks trades in the wrong direction and doubles the exposure.

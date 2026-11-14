@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6ddbbd80351c1d984dcef47edc5e9d772d10c8fa7ce934a8e112994c2853eae6
+  content_hash: sha256:ed9a9b45c2d5b365d31a00a8c90b3158cfaf8e4fdc21377a2747fd4d565cd379
   sources:
     - "Robertson, NCCI's 2007 Hazard Group Mapping (Variance 3:2, 2009), abstract, §1, Tables 3-4, PDF pp.1-2, 7-9, sha256:458f17d0e4279114ba2c895fd4c7a5bf58de1ebf82fbd27d60ef08af120e3d4b — https://www.casact.org/sites/default/files/2021-07/NCCI-2007-Hazard-Robertson.pdf"
     - "Couret & Venter, Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), 2008), PDF pp.1-3, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf"
@@ -16,49 +16,65 @@ verification:
   log: .verify/Concepts/Workers Compensation Classification.md
 ---
 
-**Workers Compensation Classification** assigns each employer to one or more payroll classifications describing its business, and charges a manual rate per $\$100$ of payroll for each class. In the United States the classes are maintained by rating bureaus such as NCCI. With hundreds of thinly populated levels, the class is the textbook high-dimensional rating variable.
+A **Workers Compensation Classification** is a payroll class describing an employer's business, with a manual rate per $\$100$ of payroll. Each employer is assigned to one or more classifications, which in the United States are maintained by rating bureaus such as NCCI.
+
+An employer's manual premium is
 
 > $$\text{Manual Premium} = \sum_{c} \frac{\text{Payroll}_c}{100} \times \text{Rate}_c$$
 
+- $\text{Payroll}_c$ is the employer's payroll in class $c$.
+- $\text{Rate}_c$ is class $c$'s manual rate per $\$100$ of payroll.
+
+The class sets the manual rate, and [[Experience Rating|experience rating]] captures the differences between employers *within* a class.
+
+> [!example]- What is this framing contractor's manual premium, and can the carpentry crew's supervisor be reported as clerical? {Example}
+> The contractor has $\$2{,}000{,}000$ of carpentry payroll at a (hypothetical) rate of $\$9.50$ per $\$100$, and $\$300{,}000$ of clerical office payroll at $\$0.25$.
+>
+> > [!answer]-
+> > - The carpentry premium is $2{,}000{,}000/100 \times 9.50 = \$190{,}000$.
+> > - The clerical premium is $300{,}000/100 \times 0.25 = \$750$.
+> > - The manual premium is $\$190{,}750$.
+> > - The clerical exception covers only employees confined to clerical office work. A supervisor who is exposed to the job site belongs to the governing class.
+> > - Otherwise any employer could cut its premium by 97% per dollar of payroll ($0.25$ against $9.50$) by relabelling staff. The audit exists to enforce this.
+
+## Assigning an employer to classes
+
+An employer is classified by its *business*, the governing classification, rather than by each worker's occupation. A short list of standard exceptions, such as clerical office employees and outside salespersons, is rated separately. Classifying by business also stops payroll from being shifted into cheaper classes.
+
+Payroll is the [[Exposure Base|exposure base]]. It tracks the exposure, moves with wage inflation, and is verified by [[Premium Audit|premium audit]].
+
+## Estimating a thin class's loss cost
+
+Robertson (2009) put the count at about 800 classes in NCCI states, many of them small. Their loss costs are dominated by rare, severe injuries (fatal, permanent total, major permanent partial), so raw class estimates are volatile. With hundreds of thinly populated levels, the class is the textbook high-dimensional rating variable.
+
+Weighting a class's own indication against its group's, the estimated loss cost of class $c$ is
+
 > $$\widehat{\text{LC}}_c = Z_c\,\text{LC}_c + (1 - Z_c)\,\text{LC}_{\text{group}}$$
 
-- $\text{LC}_c$ is class $c$'s indicated loss cost per $\$100$ of payroll, $\text{LC}_{\text{group}}$ that of the broader group it belongs to, and $Z_c$ the class's [[Credibility|credibility]].
-- **How employers are classified.** By the employer's *business* — the governing classification — rather than each worker's occupation. A short list of standard exceptions, such as clerical office employees and outside salespersons, is rated separately. Payroll is the [[Exposure Base|exposure base]]: it tracks the exposure, moves with wage inflation, and is verified by [[Premium Audit|premium audit]]. Classifying by business also stops payroll from being shifted into cheaper classes.
-- **Why it is high-dimensional.** Robertson (2009) put the count at about 800 classes in NCCI states, many of them small. Their loss costs are dominated by rare, severe injuries (fatal, permanent total, major permanent partial), so raw class estimates are volatile. There are four ways to deal with that:
-  - *Credibility-weight* each class toward its group, as in the formula above.
-  - Use *multi-dimensional credibility* across injury types, estimating a class's rare serious-injury frequencies from its correlated, more common types (Couret and Venter).
-  - Treat class as a random effect in a GLMM, whose shrinkage is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] blend ([[Random Effects]]).
-  - *[[Clustering|Cluster]]* classes with similar loss characteristics into a few groups, as NCCI's hazard groups do.
-- **Hazard groups.** NCCI moved to seven hazard groups in 2007, assigning classes by weighted [[K-Means Clustering|k-means]] on credibility-weighted vectors of excess ratios at five loss limits, from $\$100$K to $\$5$M (Robertson). Classes in a hazard group share the same excess loss factors, which NCCI uses in class ratemaking and in pricing loss limits on retrospectively rated policies. The class sets the manual rate, and [[Experience Rating|experience rating]] captures the differences between employers *within* a class.
-- In Canada, workers compensation is run by provincial boards that assess employers by industry rate group. See [[Workers Compensation Insurance]].
+- $\text{LC}_c$ is class $c$'s indicated loss cost per $\$100$ of payroll.
+- $\text{LC}_{\text{group}}$ is the loss cost of the broader group it belongs to.
+- $Z_c$ is the class's [[Credibility|credibility]].
 
-> [!example]- Manual Premium Across Two Classes {Example}
-> A framing contractor has $\$2{,}000{,}000$ of carpentry payroll at a (hypothetical) rate of $\$9.50$ per $\$100$ and $\$300{,}000$ of clerical office payroll at $\$0.25$. Compute the manual premium, and explain why the carpentry crew's supervisor cannot be reported as clerical.
+> [!example]- What is the estimated loss cost of this thin class? {Example}
+> A small class shows an indicated loss cost of $\$3.20$ per $\$100$ of payroll, based on $\$400{,}000$ of expected losses. Its industry group's loss cost is $\$2.40$. Credibility is $Z = E/(E + K)$ with $K = \$600{,}000$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Carpentry} &= \frac{2{,}000{,}000}{100} \times 9.50 \\
-> > &= \$190{,}000 \\[4pt]
-> > \text{Clerical} &= \frac{300{,}000}{100} \times 0.25 \\
-> > &= \$750 \\[4pt]
-> > \text{Manual premium} &= \$190{,}750
-> > \end{align*}
-> > $$
-> >
-> > The clerical exception covers only employees confined to clerical office work. A supervisor who is exposed to the job site belongs to the governing class. Otherwise any employer could cut its premium by $97\%$ per dollar of payroll ($0.25$ against $9.50$) by relabelling staff. The audit exists to enforce this.
+> > - $Z = 400{,}000/(400{,}000 + 600{,}000) = 0.40$.
+> > - $\widehat{\text{LC}} = 0.40(3.20) + 0.60(2.40) = \$2.72$.
+> > - The class keeps 40% of its apparent excess over the group. A large class with the same indication would keep most of it.
 
-> [!example]- Estimating a Thin Class's Loss Cost {Example}
-> A small class shows an indicated loss cost of $\$3.20$ per $\$100$ of payroll, based on $\$400{,}000$ of expected losses. Its industry group's loss cost is $\$2.40$. Credibility is $Z = E/(E + K)$ with $K = \$600{,}000$. Estimate the class loss cost.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > Z &= \frac{400{,}000}{400{,}000 + 600{,}000} \\
-> > &= 0.40 \\[4pt]
-> > \widehat{\text{LC}} &= 0.40(3.20) + 0.60(2.40) \\
-> > &= \$2.72
-> > \end{align*}
-> > $$
-> >
-> > The class keeps $40\%$ of its apparent excess over the group. A large class with the same indication would keep most of it, and a GLMM with class as a random effect would shrink it by the same logic. If this class's excess ratios also differed from its group's, the hazard group assignment would be revisited too, because excess loss potential and loss cost per payroll are separate questions.
+Credibility-weighting each class toward its group is one of four ways to deal with thin classes:
+
+1. Credibility-weight each class toward its group, as above.
+2. Use multi-dimensional credibility across injury types, estimating a class's rare serious-injury frequencies from its correlated, more common types (Couret and Venter).
+3. Treat class as a random effect in a GLMM, whose shrinkage is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] blend ([[Random Effects]]).
+4. [[Clustering|Cluster]] classes with similar loss characteristics into a few groups, as NCCI's hazard groups do.
+
+## Hazard groups
+
+NCCI moved to seven hazard groups in 2007, assigning classes by weighted [[K-Means Clustering|k-means]] on credibility-weighted vectors of excess ratios at five loss limits, from $\$100$K to $\$5$M (Robertson). Classes in a hazard group share the same excess loss factors, which NCCI uses in class ratemaking and in pricing loss limits on retrospectively rated policies. Excess loss potential and loss cost per $\$100$ of payroll are separate questions, so a class whose excess ratios differ from its group's has its hazard group assignment revisited.
+
+In Canada, workers compensation is run by provincial boards that assess employers by industry rate group ([[Workers Compensation Insurance]]).
+
+> [!trap] Classifying each worker by occupation
+> The employer's governing classification covers all its employees except the standard exceptions. Only employees confined to clerical office work fall under the clerical exception, so a supervisor exposed to the job site is rated in the governing class.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1522a9137d7cd2c80bb66f77a43473fa0344ecebb10e4dce3de540b3f8f1b4c6
+  content_hash: sha256:aeed1a36fcf9e454543783c1ce24c72787983590deb23055ac31c7b94a48314f
   sources:
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, exclusion f. Pollution (pp.3-4: heating-equipment and hostile-fire exceptions; clean-up costs), g. Aircraft, p. Electronic Data (p.5); no employment-related practices, professional services or data-disclosure exclusion in the base form, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form, Additional Coverage d. Pollutant Clean-up and Removal ($10,000; only if release caused by a Covered Cause of Loss), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
@@ -18,54 +18,67 @@ verification:
   log: .verify/Concepts/Environmental Insurance.md
 ---
 
-**Environmental Insurance** is the family of policies that cover pollution losses which standard commercial policies exclude, such as a business's liability for injury or damage caused by pollutants and the cost of cleaning contamination up. The main forms are pollution legal liability for a site, contractor's pollution liability for operations, remediation cost cap policies for known cleanups, and storage tank policies. They exist because the [[Commercial General Liability|CGL]] carries a broad pollution exclusion and property forms pay only a small amount for pollutant cleanup.
+**Environmental Insurance** is the family of policies that cover pollution losses which standard commercial policies exclude, such as a business's liability for injury or damage caused by pollutants and the cost of cleaning contamination up. Its main forms are:
 
-> $$A = E_0 + S$$
+1. **Pollution legal liability** (PLL), for pollution conditions at a site.
+2. **Contractor's pollution liability** (CPL), for pollution a contractor's operations cause.
+3. **Remediation cost cap**, for overruns on a known, planned cleanup.
+4. **Storage tank policies**, for releases from scheduled tanks.
 
-> $$\text{Paid} = \min\left((1 - c)\,(C - A)^+,\ L\right)$$
+## Pollution under standard commercial policies
 
-- **Symbols:** These describe a remediation cost cap. $E_0$ is the expected cleanup cost in the agreed remediation plan, $S$ is the insured's self-insured buffer above it, and $A$ is the attachment point. $C$ is the actual cleanup cost, $c$ is the insured's coinsurance share above the attachment and $L$ is the policy limit.
-- **The CGL pollution exclusion:** The standard CGL excludes bodily injury and property damage from the actual, alleged or threatened discharge of pollutants, and the cost of testing for or cleaning them up. Narrow exceptions give back cover for a few situations, such as fumes from a hostile fire or a building's heating equipment. Most gradual or sudden pollution from a business's premises or operations is therefore uninsured under the CGL.
-- **Property policies:** The [[Building and Personal Property Coverage Form|building and personal property form]] excludes pollution damage and pays only a small additional amount for removing pollutants from the insured's own land, and only when a covered cause of loss released them. Gradual leakage from corroded equipment is not a covered cause of loss.
-- **Pollution legal liability:** A site pollution legal liability (PLL) policy covers third-party bodily injury and property damage, and cleanup costs on and off the site, from pollution conditions at a scheduled location. It covers pre-existing conditions the insured did not know of, as well as new releases, is written claims-made, and can run for several years, which suits a property sale or a lender's needs. Liability for cleanup can be strict and joint and several under federal and state environmental law ([[Strict Liability]], [[Joint and Several Liability]]), so an owner can be liable for contamination someone else caused.
-- **Contractor's pollution liability:** A contractor's pollution liability (CPL) policy covers pollution a contractor causes at a job site, such as disturbing asbestos or releasing fuel. It follows the contractor's work rather than a fixed location, so its aggregate limit can be used up by claims from the contractor's other projects; a developer can instead buy one owner-controlled policy covering every party on its project.
-- **Remediation cost cap:** A cost cap, or cleanup stop-loss, is bought once contamination is known and a cleanup plan is agreed. It pays cost overruns above the expected cost and the buffer, usually with coinsurance, because the risk is the uncertainty in how much contamination there is and how long it takes to remove, not whether a loss occurs.
-- **Storage tank policies:** Owners of underground storage tanks holding petroleum must show financial responsibility for cleanup and third-party claims under federal and state rules. A storage tank policy is a common way to meet the requirement, and it covers releases from the scheduled tanks.
+The standard [[Commercial General Liability|CGL]] excludes bodily injury and property damage from the actual, alleged or threatened discharge of pollutants, and the cost of testing for or cleaning them up. Narrow exceptions give back cover for a few situations, such as fumes from a hostile fire or a building's heating equipment. The current exclusion has no exception for sudden or accidental releases, so most sudden or gradual pollution from a business's premises or operations is uninsured under the CGL.
 
-> [!example]- Applying a Remediation Cost Cap {Example}
-> A developer buys a former industrial site whose agreed cleanup plan is estimated at \$4,000,000. Its cost cap policy attaches above the estimate plus a self-insured buffer of 10% of the estimate, has a \$5,000,000 limit and 10% coinsurance. During the work, more contamination is found and the cleanup costs \$6,200,000. What does the insurer pay, and what does the developer bear?
+The [[Building and Personal Property Coverage Form|building and personal property form]] excludes pollution damage. It pays only a small additional amount for removing pollutants from the insured's own land, and only when a covered cause of loss released them. Gradual leakage from corroded equipment is not a covered cause of loss.
+
+## Pollution legal liability
+
+A site pollution legal liability policy covers third-party bodily injury and property damage, and cleanup costs on and off the site, from pollution conditions at a scheduled location. It covers pre-existing conditions the insured did not know of, as well as new releases. It is written claims-made and can run for several years, which suits a property sale or a lender's needs.
+
+Liability for cleanup can be [[Strict Liability|strict]] and [[Joint and Several Liability|joint and several]] under federal and state environmental law, so an owner can be liable for contamination someone else caused, such as a previous owner. That is why buyers and lenders want PLL with cover for pre-existing conditions.
+
+> [!example]- Which of this manufacturer's policies pay for its leaking tank, and how much? {Example}
+> A manufacturer's solvent tank corrodes and leaks for months, contaminating the manufacturer's land and a neighbour's well. The manufacturer has a CGL with the standard pollution exclusion, a building and personal property policy, and a site PLL policy with a $\$5{,}000{,}000$ limit and a $\$100{,}000$ retention. The costs are:
+>
+> | Cost | Amount ($) |
+> | :--- | ---: |
+> | Cleanup of the manufacturer's site | 220,000 |
+> | Cleanup of the contamination that migrated off the site | 480,000 |
+> | Settlement of the neighbour's property damage claim | 350,000 |
 >
 > > [!answer]-
-> > The attachment is the estimate plus the buffer, and the insurer pays 90% of the overrun above it.
-> > $$
-> > \begin{align*}
-> > A &= 4{,}000{,}000 + 0.10 \times 4{,}000{,}000 \\
-> > &= 4{,}400{,}000 \\
-> > \text{Paid} &= 0.90\,(6{,}200{,}000 - 4{,}400{,}000) \\
-> > &= 1{,}620{,}000
-> > \end{align*}
-> > $$
-> > The payment is within the limit. The developer bears \$4,580,000: the \$4,000,000 it expected to spend, the \$400,000 buffer and \$180,000 of coinsurance. The policy turned an open-ended overrun into a known worst case, which is what a lender financing the project needs to see.
+> > - The CGL excludes the neighbour's claim and the cleanup, because both arise from the discharge of pollutants.
+> > - The property policy's pollutant cleanup coverage does not apply, because a gradual leak from corrosion is not a covered cause of loss.
+> > - The PLL policy covers on-site and off-site cleanup and third-party damage from a pollution condition at the scheduled location.
+> > - It pays $220{,}000 + 480{,}000 + 350{,}000 - 100{,}000 = \$950{,}000$, and the manufacturer bears the $\$100{,}000$ retention.
 
-> [!example]- A Leaking Tank Under Three Policies {Example}
-> A manufacturer's solvent tank corrodes and leaks for months. The leak contaminates the manufacturer's land and a neighbour's well. Costs are \$220,000 to clean up the manufacturer's site, \$480,000 to clean up the contamination that migrated off it, and \$350,000 to settle the neighbour's property damage claim. The manufacturer has a CGL with the standard pollution exclusion, a building and personal property policy, and a site PLL policy with a \$5,000,000 limit and a \$100,000 retention. Which policies pay?
+## Contractor's pollution liability
+
+A contractor's pollution liability policy covers pollution a contractor causes at a job site, such as disturbing asbestos or releasing fuel. It follows the contractor's work rather than a fixed location, so a contractor that causes a release at a client's site needs CPL, since the client's PLL covers the client. Its aggregate limit can be used up by claims from the contractor's other projects. A developer can instead buy one owner-controlled policy covering every party on its project.
+
+## Remediation cost cap
+
+A remediation cost cap, or cleanup stop-loss, is bought once contamination is known and a cleanup plan is agreed. The risk it covers is the uncertainty in how much contamination there is and how long it takes to remove, not whether a loss occurs. It pays cost overruns above the expected cost and a self-insured buffer, usually with coinsurance, so the amount it pays is
+
+> $$\text{Paid} = \min\left((1 - c)\,(C - E_0 - S)^+,\ L\right)$$
+
+- $C$ is the actual cleanup cost.
+- $E_0$ is the expected cleanup cost in the agreed remediation plan.
+- $S$ is the insured's self-insured buffer above it, and $E_0 + S$ is the attachment point.
+- $c$ is the insured's coinsurance share above the attachment point.
+- $L$ is the policy limit.
+
+> [!example]- What does this cost cap pay, and what does the developer bear? {Example}
+> A developer buys a former industrial site whose agreed cleanup plan is estimated at $\$4{,}000{,}000$. Its cost cap policy attaches above the estimate plus a self-insured buffer of 10% of the estimate, and has a $\$5{,}000{,}000$ limit and 10% coinsurance. During the work more contamination is found, and the cleanup costs $\$6{,}200{,}000$.
 >
 > > [!answer]-
-> > The CGL excludes the neighbour's claim and the cleanup, because both arise from the discharge of pollutants. The property policy's pollutant cleanup coverage does not apply either, because a gradual leak from corrosion is not a covered cause of loss. The PLL policy covers on-site and off-site cleanup and third-party damage from a pollution condition at the scheduled location.
-> > $$
-> > \begin{align*}
-> > \text{Paid} &= 220{,}000 + 480{,}000 + 350{,}000 - 100{,}000 \\
-> > &= 950{,}000
-> > \end{align*}
-> > $$
-> > The manufacturer bears the \$100,000 retention. Without the PLL policy it would bear all \$1,050,000.
+> > - The attachment point is $4{,}000{,}000 + 0.10 \times 4{,}000{,}000 = \$4{,}400{,}000$.
+> > - The insurer pays $0.90 \times (6{,}200{,}000 - 4{,}400{,}000) = \$1{,}620{,}000$, which is within the limit.
+> > - The developer bears $\$4{,}580{,}000$: the $\$4{,}000{,}000$ it expected to spend, the $\$400{,}000$ buffer and $\$180{,}000$ of coinsurance.
 
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** Questions ask why the CGL and property policies leave pollution largely uninsured, and what each environmental form covers: pollution legal liability, contractor's pollution liability, remediation cost cap and storage tank policies. The applied version describes an exposure, such as a property purchase, a contractor's job or a known cleanup, and asks which policy fits it.
-> - **Liability law:** Environmental liability is a standard example of [[Strict Liability|strict liability]] in the insurance law assignments, where liability doesn't depend on fault.
+## Storage tank policies
 
-> [!warning]- Exam traps
-> - **Sudden or gradual alike:** The current CGL pollution exclusion has no exception for sudden or accidental releases, so apart from its narrow exceptions it removes sudden and gradual pollution alike.
-> - **Cost cap needs a known loss:** A remediation cost cap covers overruns on a cleanup that is already planned. It does not cover the expected cost, and it is not liability insurance for unknown contamination, which is what PLL does.
-> - **Site versus operations:** PLL follows a location, and CPL follows a contractor's work. A contractor that causes a release at a client's site needs CPL, since the client's PLL covers the client.
-> - **Strict liability:** An owner can owe cleanup costs for contamination a previous owner caused. That is why buyers and lenders want PLL with cover for pre-existing conditions.
+Owners of underground storage tanks holding petroleum must show financial responsibility for cleanup and third-party claims under federal and state rules. A storage tank policy is a common way to meet the requirement, and it covers releases from the scheduled tanks.
+
+> [!trap] Using a cost cap for unknown contamination
+> A remediation cost cap covers overruns on a cleanup that is already planned. It does not pay the expected cost, and it is not liability insurance for unknown contamination, which is what PLL covers.

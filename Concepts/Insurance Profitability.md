@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:302eaec9583029992fc7a053cb040d269a1097bbe5cf64b32d35b3f1a367c94c
+  content_hash: sha256:ac85b7df280d08de30e533c497a9633a808b0c47b38ae441767f5bb8f5fbeca4
   sources:
     - "CAS Exam 9 Practice Items and Solutions (2026; retired Spring 2026 items), Items 3 (M&M 11.3: cost of capital i = [g(s)-s]/[1-g(s)], g(s) = (s+i)/(1+i), LR = s/g(s)) and 4 (M&M pp.317-318: Shapley allocation), sha256:9cf61c6c2597a9a1a6d2d548d83f78a1a56e73778226176ab30308aa85f615fb — https://www.casact.org/sites/default/files/2026-08/Exam9_PracticeItems_2026.xlsx"
     - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.1-9 (notation p.5-6), 18-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
@@ -17,62 +17,56 @@ verification:
   log: .verify/Concepts/Insurance Profitability.md
 ---
 
-**Insurance Profitability** is how well premium rewards the capital that stands behind it. Exam 9 assesses it through three linked ratios — [[Insurance Margin|margin]] (profit relative to premium), [[Return on Capital|return]] (profit relative to capital) and [[Insurance Leverage|leverage]] (premium relative to capital) — because none of them alone says whether a line is profitable.
+**Insurance Profitability** is how well premium rewards the capital that stands behind it. It is measured by three linked ratios: the [[Insurance Margin|margin]] ratio (margin relative to premium), the [[Return on Capital|return]] (margin relative to capital) and [[Insurance Leverage|leverage]] (premium relative to capital).
+
+With no expenses, taxes or investment income, the margin is premium minus expected loss, $M = P - L$. The return on capital $Q$ is
 
 > $$\frac{M}{Q} = \frac{M}{P} \times \frac{P}{Q}$$
->
+
+- $M/P$ is the margin ratio.
+- $P/Q$ is premium-to-capital leverage, the inverse of capital-to-premium.
+
+Return equals margin ratio times premium-to-capital leverage, and the margin ratio, one minus the [[Loss Ratio|loss ratio]], is
+
 > $$\frac{M}{P} = 1 - \frac{L}{P}$$
 
-- Return equals margin ratio times premium-to-capital leverage, and the margin ratio is one minus the [[Loss Ratio|loss ratio]]. A thin margin on a highly leveraged book and a fat margin on a lightly leveraged one can earn the same return.
-- **The insurance pentagon** (Mildenhall and Major): five amounts — expected loss $L$, premium $P$, margin $M$, capital $Q$ and assets $a$ — tied by $P = L + M$ and $a = P + Q$, and described by three ratios: loss ratio $L/P$, leverage and return $\iota = M/Q$. That leaves three degrees of freedom, so three well-chosen quantities (say $L$, $a$ and $\iota$) usually determine the rest. The three ratios alone do not: they fix proportions, not volume.
-- **The loss ratio alone misleads.** A line with a low loss ratio can be unprofitable if it consumes a great deal of capital, and one with a high loss ratio can be very profitable if it needs little. Comparing lines requires capital allocated to each — see [[Risk-Adjusted Performance]] and [[Risk Capital]].
-- **Diversification sets the mix.** Where diversification works, capital can be highly leveraged and margins thin; where it fails, as for [[Catastrophe Risk|catastrophe risk]], leverage falls and the margin ratio must rise to deliver the same return.
-- **Accounting versus pricing.** Reported measures — the [[Combined Ratio|combined ratio]], the operating ratio, net income over surplus ([[Key Financial Measures]]) — mix accident years, reserve development and realised gains. Pricing profitability uses expected values, allocated capital and discounted cash flows ([[Economic Value]]).
+A thin margin on a highly leveraged book and a fat margin on a lightly leveraged one can earn the same return. Lines are therefore compared on return on capital, not on the margin ratio or the dollar margin alone. With premium and margin fixed, the leverage needed to earn a target return is the target return divided by the margin ratio.
 
-> [!example]- Completing the Pentagon and Testing Against a Target {Example}
-> A book has expected loss $70$, is supported by assets of $150$ and is written at a premium of $78$. Investors require $12\%$. Compute margin, capital, loss ratio, leverage and return, and the shortfall against the target.
+> [!example]- Does this book earn its investors' required $12\%$ return? {Example}
+> A book has expected loss $70$, is supported by assets of $150$ and is written at a premium of $78$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > M &= 78 - 70 \\
-> > &= 8 \\
-> > Q &= 150 - 78 \\
-> > &= 72 \\
-> > \iota &= \frac{8}{72} \\
-> > &= 11.1\%
-> > \end{align*}
-> > $$
-> >
-> > The loss ratio is $70/78 = 89.7\%$, so the margin ratio is $10.3\%$; leverage is $78/72 = 1.083$; and $10.3\% \times 1.083 = 11.1\%$ agrees.
-> >
-> > The premium that earns $12\%$, with $\delta = 0.12/1.12 = 0.10714$:
-> >
-> > $$
-> > \begin{align*}
-> > P_{\text{req}} &= 70 + 0.10714(150 - 70) \\
-> > &= 78.57
-> > \end{align*}
-> > $$
-> >
-> > The book is $0.57$ short of its required margin: $11.1\%$ is below the cost of capital even though an $89.7\%$ loss ratio might look acceptable on its own.
+> > - The margin is $M = 78 - 70 = 8$ and the capital is $Q = 150 - 78 = 72$.
+> > - The loss ratio is $70/78 = 89.7\%$, so the margin ratio is $10.3\%$.
+> > - Leverage is $78/72 = 1.083$, so the return is $10.3\% \times 1.083 = 11.1\%$, which agrees with $8/72$.
+> > - The premium that earns $12\%$ is $70 + 0.10714 \times (150 - 70) = 78.57$, with $\delta = 0.12/1.12 = 0.10714$ ([[Insurance Pricing]]).
+> > - The book is $0.57$ short of its required margin, so it does not earn $12\%$.
 
-> [!example]- A 51% and a 96% Loss Ratio Earning the Same Return {Example}
-> Two lines are each supported by assets of $100$ and priced at a $12\%$ return. Personal auto has expected loss $70$; a catastrophe-exposed property line has expected loss $10$. Compare their loss ratios and leverage.
+## The insurance pentagon
+
+Mildenhall and Major's insurance pentagon has five amounts: expected loss $L$, premium $P$, margin $M$, capital $Q$ and assets $a$. They are tied by
+
+> $$P = L + M$$
+
+> $$a = P + Q$$
+
+The pentagon is described by three ratios: the loss ratio $L/P$, leverage and the return $\iota = M/Q$. Three well-chosen quantities, say $L$, $a$ and $\iota$, usually determine the rest. The three ratios alone do not, because they fix proportions, not volume.
+
+## Diversification and the margin ratio
+
+Where diversification works, capital can be highly leveraged and margins thin. Where it fails, as for [[Catastrophe Risk|catastrophe risk]], leverage falls and the margin ratio must rise to deliver the same return.
+
+> [!example]- How do the loss ratios and leverage of these two lines compare? {Example}
+> Two lines are each supported by assets of $100$ and priced at a $12\%$ return, so $\delta = 0.10714$. Personal auto has expected loss $70$. A catastrophe-exposed property line has expected loss $10$.
 >
 > > [!answer]-
-> > With $\delta = 0.10714$ and $P = L + \delta(a - L)$:
-> >
-> > $$
-> > \begin{align*}
-> > P_{\text{auto}} &= 70 + 0.10714(30) \\
-> > &= 73.21 \\
-> > P_{\text{cat}} &= 10 + 0.10714(90) \\
-> > &= 19.64
-> > \end{align*}
-> > $$
-> >
-> > - Auto: loss ratio $70/73.21 = 95.6\%$, capital $26.79$, leverage $2.73$, margin ratio $4.4\%$.
-> > - Catastrophe: loss ratio $10/19.64 = 50.9\%$, capital $80.36$, leverage $0.24$, margin ratio $49.1\%$.
-> >
-> > In both, $\text{margin ratio} \times \text{leverage} = 12\%$. The catastrophe line's low loss ratio is not excess profit — it is the price of the capital its tail consumes.
+> > - Auto's premium is $70 + 0.10714 \times 30 = 73.21$, its loss ratio $95.6\%$, its capital $26.79$ and its leverage $2.73$, with a margin ratio of $4.4\%$.
+> > - The catastrophe line's premium is $10 + 0.10714 \times 90 = 19.64$, its loss ratio $50.9\%$, its capital $80.36$ and its leverage $0.24$, with a margin ratio of $49.1\%$.
+> > - In both, margin ratio times leverage is $12\%$.
+
+## Accounting and pricing profitability
+
+Reported measures, such as the [[Combined Ratio|combined ratio]], the operating ratio and net income over surplus ([[Key Financial Measures]]), mix accident years, reserve development and realised gains. Pricing profitability uses expected values, allocated capital and discounted cash flows ([[Economic Value]]).
+
+> [!trap] Judging a line by its loss ratio alone
+> A line with a low loss ratio can be unprofitable if it consumes a great deal of capital, and one with a high loss ratio can be very profitable if it needs little. Compare lines on return on capital, with capital allocated to each ([[Risk-Adjusted Performance]], [[Risk Capital]]).

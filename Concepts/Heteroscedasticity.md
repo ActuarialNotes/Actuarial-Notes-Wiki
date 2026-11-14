@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:45d5169904925f3d6dc46f545248f9eda71ef544084b99393aeb6e68cd1ad751
+  content_hash: sha256:7bcb45d1413fa5e42010b98fa3f89391516455b228cd1051058b6f50cc3b39f5
   sources:
     - "Shapland, Using the ODP Bootstrap Model: A Practitioner's Guide (CAS Monograph 4, 2016), §4.6 eqs (4.8)-(4.13) printed pp.25-27 (PDF 33-35); §5.1-5.2 incl. 9 hetero groups P-value 14.3% printed pp.32-35 (PDF 40-43), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
     - "Venter, Testing the Assumptions of Age-to-Age Factors (PCAS 1998), assumption 3, Results (Mack), Extension, PDF pp.3-5; weighted least squares PDF p.16, sha256:58523222aa33f1b8c82455818e8c2da1b8f24aee7d83badf8c88d2f71a638dcb — https://www.casact.org/sites/default/files/database/proceed_proceed98_980807.pdf"
@@ -15,105 +15,88 @@ verification:
   log: .verify/Concepts/Heteroscedasticity.md
 ---
 
-**Heteroscedasticity** is non-constant variance among a model's [[Residual|residuals]]. In a reserving model it usually means the residuals of some development periods are more variable than those of others. The [[ODP Bootstrap Model|ODP bootstrap]] assumes the opposite, homoscedasticity: that the standardized [[Pearson Residual|Pearson residuals]] are independent and identically distributed, which is what allows a residual from one cell to be applied to any other. [[Using the ODP Bootstrap Model (Shapland - 2016)|Shapland (2016)]] corrects for it with hetero-adjustment factors by group of development periods.
+**Heteroscedasticity** is non-constant variance among a model's [[Residual|residuals]]. Its opposite, constant variance, is homoscedasticity. In a reserving model, heteroscedasticity usually means that the residuals of some development periods are more variable than those of others.
+
+The [[ODP Bootstrap Model|ODP bootstrap]] assumes that the standardized [[Pearson Residual|Pearson residuals]] are independent and identically distributed, which is what allows a residual from one cell to be applied to any other. Heteroscedastic residuals break that assumption. Sampled freely from anywhere in the triangle, they overstate some simulated incremental losses and understate others, and the variability of the unpaid claims is misstated. [[Using the ODP Bootstrap Model (Shapland - 2016)|Shapland (2016)]] gives three ways to adjust for it, each starting from groups of development periods whose residuals have similar variances: stratified sampling, hetero-adjustment factors and non-constant scale parameters.
+
+## Detecting heteroscedasticity
+
+A [[Residual Plot|residual graph]] by development period shows it: the residuals in some periods spread wider around zero than in others. The same graphs by accident year and calendar period are read for differing spread and for systematic trends, such as residuals drifting away from zero. Pearson residuals are already scaled for the expected variance, so the larger incremental values at early ages do not justify larger residuals there. Shapland adds graphs of the standard deviation and range relativities by period to suggest the groups, then tests the groups with the normality statistics and the [[AIC]] and [[BIC]].
+
+There are fewer residuals in the later development periods, so the credibility of an apparent difference in variance has to be weighed, especially near the tail.
+
+## Stratified sampling
+
+Stratified sampling draws each cell's residual only from the residuals of the cell's own group. It is simple, but a small group limits the variability of the outcomes.
+
+## Hetero-adjustment factors
+
+The hetero-adjustment factor of group $i$, for development periods split into groups $1, \dots, j$, is
 
 > $$h_i = \frac{\mathrm{stdev}\left(\bigcup_{1}^{j} r^{H}_{w,d}\right)}{\mathrm{stdev}\left(\bigcup_{i} r^{H}_{w,d}\right)}$$
 
+- $r^{H}_{w,d}$ is the standardized residual of accident year $w$ in development period $d$.
+- The numerator is the standard deviation of all the residuals, and the denominator that of group $i$'s residuals.
+
+Each group's residuals are multiplied by its factor, so the adjusted residual is
+
 > $$r^{iH}_{w,d} = r^{H}_{w,d} \times h_i$$
+
+After the multiplication every group has the same standard deviation, so the adjusted residuals can be sampled as one pool. A residual sampled for a cell in group $i$ is divided by that group's $h_i$, which puts the group's variance back. The pseudo incremental value of the cell is
 
 > $$q^{i*}(w,d) = \frac{r^{*}}{h_i}\sqrt{m_{w,d}} + m_{w,d}$$
 
-- The development periods are split into groups $1, \dots, j$ whose residuals have similar variances. $h_i$ is group $i$'s hetero-adjustment factor: the standard deviation of all the residuals over that of group $i$'s. Multiplied by $h_i$, every group's residuals have the same standard deviation, so the adjusted residuals can be sampled freely as one pool. Dividing a sampled $r^*$ by the $h_i$ of the cell being simulated puts that group's variance back. The factors also scale the future process variance by development period.
-- **Detecting it.** A [[Residual Plot|residual graph]] by development period shows it: the residuals in some periods spread wider than in others. Shapland adds graphs of the standard deviation and range relativities by period to suggest groups, then tests the groups with the normality statistics and the [[AIC]] and [[BIC]]. There are fewer residuals in the later development periods, so the credibility of an apparent difference in variance has to be weighed, especially near the tail.
-- **Three options** (Shapland's Section 4.6):
-  - *Stratified sampling* draws each group's residuals only from that group. It is simple, but a small group limits the variability of the outcomes.
-  - *Hetero-adjustment factors*, as above.
-  - *Non-constant scale parameters*, one for each group: $\phi_i = \sum_{i}\big(\sqrt{N/(N-p)}\; r_{w,d}\big)^2 / n_i$ over the $n_i$ residuals of group $i$, with $h_i = \sqrt{\phi}/\sqrt{\phi_i}$. This is a bit more theoretically sound, but in practice the two sets of factors are very close.
-- **They are parameters.** The factors reduce the degrees of freedom, which changes $\phi$ and the degrees-of-freedom factor, and a model that is already over-parameterized gets worse. For the Taylor and Ashe data, nine groups gave a normality P-value of $14.3\%$, worse than no groups, while the AIC and BIC rose significantly. A [[Generalized Linear Model|GLM]] bootstrap, with fewer parameters, calendar trends and a choice of error distribution, may remove the problem instead.
-- **Venter's version.** [[Testing the Assumptions of Age-to-Age Factors (Venter - 1998)|Venter (1998)]] makes the variance of the next increment an explicit assumption, $\mathrm{Var}[q(w,d+1)] = a[d, c(w,d)]$ given the data to date (see [[Chain Ladder Assumptions]]). Its form decides which factor is the least-squares optimum. Variance proportional to $c(w,d)$ gives the volume-weighted average, proportional to $c(w,d)^2$ the simple average of the ratios, and constant variance an unweighted regression. Residual variances that are not constant over the triangle call for weighted least squares, with weights inversely proportional to the variance.
+- $r^{*}$ is the adjusted residual sampled from the pool.
+- $m_{w,d}$ is the fitted incremental value of the cell.
 
-> [!example]- Hetero-Adjustment Factors for Two Groups {Example}
-> An ODP bootstrap's standardized residuals, grouped by development period:
+The factors also scale the future process variance by development period.
+
+> [!example]- What are the hetero-adjustment factors, and the pseudo value when the largest adjusted residual is sampled for this period-4 cell? {Example}
+> An ODP bootstrap's standardized residuals, grouped by development period, are:
 >
-> - Periods 1–2: $1.9$, $-2.3$, $0.8$, $-1.6$, $2.5$, $-0.5$, $-1.2$
-> - Periods 3–5: $0.5$, $-0.4$, $0.7$, $-0.6$, $0.3$
+> | Group | Residuals |
+> | :--- | :--- |
+> | Periods 1–2 | $1.9$, $-2.3$, $0.8$, $-1.6$, $2.5$, $-0.5$, $-1.2$ |
+> | Periods 3–5 | $0.5$, $-0.4$, $0.7$, $-0.6$, $0.3$ |
 >
-> Compute the hetero-adjustment factors, using standard deviations with an $n - 1$ divisor. Then find the pseudo value when the largest adjusted residual is sampled for a period-4 cell with fitted value $m = 150$.
+> The period-4 cell has fitted value $m = 150$. Standard deviations use an $n - 1$ divisor.
 >
 > > [!answer]-
-> > The standard deviations are $1.8265$ for periods 1–2, $0.5701$ for periods 3–5 and $1.3944$ for all twelve residuals together.
-> >
-> > $$
-> > \begin{align*}
-> > h_1 &= \frac{1.3944}{1.8265} \\
-> > &= 0.7634 \\
-> > h_2 &= \frac{1.3944}{0.5701} \\
-> > &= 2.4460
-> > \end{align*}
-> > $$
-> >
-> > The early residuals are shrunk and the late ones stretched: $2.5 \times 0.7634 = 1.909$ and $0.7 \times 2.4460 = 1.712$. Each group now has a standard deviation of $1.3944$.
-> >
-> > The largest adjusted residual is $1.909$. Sampled for a period-4 cell, it is divided by that group's factor:
-> >
-> > $$
-> > \begin{align*}
-> > q^{*} &= \frac{1.909}{2.4460}\sqrt{150} + 150 \\
-> > &= 0.780 \times 12.247 + 150 \\
-> > &= 159.6
-> > \end{align*}
-> > $$
-> >
-> > Without the adjustment, the raw $2.5$ would have given $2.5\sqrt{150} + 150 = 180.6$. That is a period-4 value far more volatile than any period-4 residual in the data supports. The adjustment lets the whole pool be sampled while keeping the late periods quiet.
+> > - The standard deviations are $1.8265$ for periods 1–2, $0.5701$ for periods 3–5 and $1.3944$ for all twelve residuals together.
+> > - The factors are $h_1 = 1.3944/1.8265 = 0.7634$ and $h_2 = 1.3944/0.5701 = 2.4460$.
+> > - The early residuals are shrunk and the late ones stretched: $2.5 \times 0.7634 = 1.909$ and $0.7 \times 2.4460 = 1.712$. Each group now has a standard deviation of $1.3944$.
+> > - The largest adjusted residual is $1.909$. For a period-4 cell it is divided by that group's factor, $1.909/2.4460 = 0.780$.
+> > - The pseudo value is $0.780\sqrt{150} + 150 = 0.780 \times 12.247 + 150 = 159.6$.
 
-> [!example]- Non-Constant Scale Parameters {Example}
-> A $5 \times 5$ paid triangle has $N = 15$ cells and $p = 9$ parameters. Its unscaled Pearson residuals are, apart from the two zero corners:
->
-> - Group A, periods 1–2: $1.10$, $-0.95$, $0.40$, $-1.30$, $0.85$, $-0.70$, $1.20$, $-0.60$
-> - Group B, periods 3–4: $0.35$, $-0.25$, $0.30$, $-0.20$, $0.15$
->
-> Compute $\phi$, the group scale parameters and the hetero-adjustment factors. Then find the process standard deviation of a future cell in group B with mean $80$.
->
-> > [!answer]-
-> > The sums of squares are $6.975$ for group A and $0.3375$ for group B, and $N/(N-p) = 15/6 = 2.5$.
-> >
-> > $$
-> > \begin{align*}
-> > \phi &= \frac{6.975 + 0.3375}{15 - 9} \\
-> > &= 1.2188 \\
-> > \phi_A &= \frac{2.5 \times 6.975}{8} \\
-> > &= 2.1797 \\
-> > \phi_B &= \frac{2.5 \times 0.3375}{5} \\
-> > &= 0.1688
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > h_A &= \sqrt{1.2188/2.1797} \\
-> > &= 0.748 \\
-> > h_B &= \sqrt{1.2188/0.1688} \\
-> > &= 2.687
-> > \end{align*}
-> > $$
-> >
-> > The standard-deviation factors of the first option, applied to the same residuals, are $0.782$ and $2.789$. They are close, as Shapland says, but not identical: the standard deviation is taken about the group mean, while $\phi_i$ uses the raw squares.
-> >
-> > **Process variance** for the group B cell uses $\phi_B$:
-> >
-> > $$
-> > \begin{align*}
-> > \mathrm{SD} &= \sqrt{0.1688 \times 80} \\
-> > &= 3.67
-> > \end{align*}
-> > $$
-> >
-> > A single $\phi$ would have given $\sqrt{1.2188 \times 80} = 9.87$, overstating the late periods' volatility by a factor of $2.7$. The group-A cells go the other way.
+The factors are parameters. They reduce the degrees of freedom, which changes the scale parameter $\phi$ and the degrees-of-freedom factor, and a model that is already over-parameterized gets worse. For the Taylor and Ashe data, nine groups gave a normality P-value of $14.3\%$, worse than no groups, while the AIC and BIC rose significantly. A [[Generalized Linear Model|GLM]] bootstrap, with fewer parameters, calendar trends and a choice of error distribution, may remove the problem instead.
+
+> [!trap] Dividing by the factor of the residual's own group
+> A sampled residual is divided by the $h_i$ of the cell it is placed in, not of the group it was drawn from. Dividing by its own group's factor gives back the raw residual: in the example, the raw $2.5$ in the period-4 cell gives $2.5\sqrt{150} + 150 = 180.6$, a period-4 value more volatile than any period-4 residual in the data supports.
+
+## Non-constant scale parameters
+
+The third option estimates a scale parameter for each group. Group $i$'s scale parameter is
+
+> $$\phi_i = \frac{\sum_{i} \left(\sqrt{\frac{N}{N-p}}\; r_{w,d}\right)^2}{n_i}$$
+
+- The sum runs over the $n_i$ residuals of group $i$.
+- $r_{w,d}$ is the unscaled Pearson residual of the cell.
+- $N$ is the number of incremental values in the triangle and $p$ the number of parameters.
+
+The hetero-adjustment factor of group $i$ is then
+
+> $$h_i = \frac{\sqrt{\phi}}{\sqrt{\phi_i}}$$
+
+- $\phi$ is the scale parameter of the whole triangle.
+
+This option is a bit more theoretically sound, but in practice the two sets of factors are very close.
 
 ## In least-squares regression
 
-The same word names a failed assumption of the [[Linear Regression|linear regression]] model, whose errors are assumed to have constant variance, $\mathrm{Var}(\epsilon_i) = \sigma^2$. The standard errors, confidence intervals and hypothesis tests of the fit rely on it (James et al., §3.3.3, item 3).
+The same word names a failed assumption of the [[Linear Regression|linear regression]] model, whose errors are assumed to have constant variance, $\mathrm{Var}(\epsilon_i) = \sigma^2$. The standard errors, confidence intervals and hypothesis tests of the fit rely on it (James et al., §3.3.3, item 3). A funnel shape in the [[Residual Plot|plot of residuals against fitted values]] shows it: the residuals spread wider as the fitted values grow, which happens when the error variance increases with the response.
 
-- **Detecting it.** A funnel shape in the [[Residual Plot|plot of residuals against fitted values]]: the residuals spread wider as the fitted values grow, which happens when the error variance increases with the response.
-- **Transform the response.** One remedy is to replace $Y$ with a concave function of it, such as $\log Y$ or $\sqrt{Y}$. A power transformation $Y^{\lambda}$ with $0 < \lambda < 1$ is concave in the same way. Such a transformation shrinks the larger responses more than the smaller ones, which reduces the heteroscedasticity. Refit and read the residual plot again.
-- **Or weight the fit.** When the variance of each response is known up to a constant, say $\sigma^2/n_i$ for an average of $n_i$ raw observations, fit by weighted least squares with weights proportional to the inverse variances, here $w_i = n_i$.
+One remedy is to replace $Y$ with a concave function of it, such as $\log Y$ or $\sqrt{Y}$. A power transformation $Y^{\lambda}$ with $0 < \lambda < 1$ is concave in the same way. Such a transformation shrinks the larger responses more than the smaller ones, which reduces the heteroscedasticity. The model is then refitted and its residual plot read again.
+
+When the variance of each response is known up to a constant, the fit is weighted instead. Weighted least squares uses weights inversely proportional to the variances: for an average of $n_i$ raw observations, with variance $\sigma^2/n_i$, the weight is $w_i = n_i$.
+
+[[Testing the Assumptions of Age-to-Age Factors (Venter - 1998)|Venter (1998)]] makes the variance of the next increment, $\mathrm{Var}[q(w,d+1)] = a[d, c(w,d)]$ given the data to date, an explicit [[Chain Ladder Assumptions|chain ladder assumption]]. Its form decides which factor is the least-squares optimum. Variance proportional to $c(w,d)$ gives the volume-weighted average, proportional to $c(w,d)^2$ the simple average of the ratios, and constant variance an unweighted regression. Residual variances that are not constant over the triangle call for weighted least squares.

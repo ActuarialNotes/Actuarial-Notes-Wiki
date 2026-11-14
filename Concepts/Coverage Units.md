@@ -4,48 +4,58 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1df84a606b05e921fb049eda5992efe73755327bac4d121bfaef19d352b12713
+  content_hash: sha256:41d6b2242c5292b09e04b8a75957e137c19f05914423814495237adffe3cae25
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coverage Units.md
 ---
+![[Media/Figures/Coverage_Units.svg|340]]
 
-**Coverage Units** are the [[IFRS 17]] measure of the **quantity of service** a group of contracts provides in a period, used to allocate the [[Contractual Service Margin]] to [[Insurance Revenue|revenue]]. Each period's CSM release is the CSM available divided across the coverage units provided this period and expected in future periods.
+**Coverage Units** are the [[IFRS 17]] measure of the quantity of service a group of contracts provides in a period. They allocate the [[Contractual Service Margin]] (CSM) to [[Insurance Revenue|insurance revenue]], by spreading the CSM over the coverage units provided this period and expected in future periods.
+
+The CSM released in a period is
 
 > $$\text{CSM released} = \text{CSM} \times \frac{\text{Coverage units this period}}{\text{Total coverage units remaining}}$$
 
-- **What a coverage unit is:** the quantity of coverage provided, determined by considering **the amount of benefits** the contracts could provide and their **expected duration**. IFRS 17 does not prescribe a formula — the insurer selects a driver that reflects the service and applies it consistently.
-- **Common drivers:** the number of contracts in force (simplest, appropriate where each provides similar coverage), sum insured or policy limit (where amounts differ materially), expected claims, or time. The choice is a significant judgement and must be disclosed.
-- **Expected duration is included**, so coverage units must reflect **expected lapses** — units are counted for the coverage actually expected to be provided, not for the full contractual term ignoring cancellation.
-- **Revised each period.** The pattern of expected future coverage units is updated, which changes the release rate prospectively. A group whose expected duration shortens releases CSM faster.
-- **Not applicable under the [[Premium Allocation Approach|PAA]]** for the [[Liability for Remaining Coverage|LRC]], since there is no CSM to release. Coverage units matter to a Canadian P&C insurer mainly on [[General Measurement Model|GMM]]-measured multi-year contracts and on some [[Reinsurance Contracts Held|reinsurance held]].
-- The choice can change reported profit substantially: a limit-weighted driver front-loads profit on a group with large early-expiring policies, while a contract-count driver spreads it evenly.
+- $\text{CSM}$ is the contractual service margin available for the group.
+- The total coverage units remaining are the units provided this period plus those expected in future periods.
 
-![[Media/Figures/Coverage_Units.svg|340]]
+## Choosing the coverage unit driver
 
-> [!example]- Choosing the Coverage Unit Driver {Example}
-> A three-year group contains two sub-blocks: $1{,}000$ contracts with a $\$1$ million limit each, all running the full three years; and $4{,}000$ contracts with a $\$100{,}000$ limit each, expected to lapse evenly so that only $50\%$ remain in year 2 and $25\%$ in year 3. The CSM at inception is $\$15$ million.
+The quantity of coverage is determined by considering the amount of benefits the contracts could provide and their expected duration. IFRS 17 does not prescribe a formula. The insurer selects a driver that reflects the service and applies it consistently. Common drivers are:
+
+1. the number of contracts in force, the simplest, appropriate where each contract provides similar coverage;
+2. the sum insured or policy limit, where amounts differ materially;
+3. expected claims;
+4. time.
+
+The choice is a significant judgement and must be disclosed. It can change reported profit substantially. A limit-weighted driver front-loads profit on a group whose large policies expire early, while a contract-count driver spreads it evenly over the contracts.
+
+> [!example]- What is this group's year-1 CSM release under a contract-count driver and under a limit-weighted driver, and which driver fits? {Example}
+> A three-year group has a CSM at inception of $\$15$ million and two sub-blocks:
 >
-> Compute the year-1 CSM release under a contract-count driver and under a limit-weighted driver.
+> | Sub-block | Contracts | Limit each | In force in year 2 | In force in year 3 |
+> | :--- | ---: | ---: | ---: | ---: |
+> | Large | $1{,}000$ | $\$1$ million | $100\%$ | $100\%$ |
+> | Small | $4{,}000$ | $\$100{,}000$ | $50\%$ | $25\%$ |
 >
 > > [!answer]-
-> > **Contract count.** Contracts in force: year 1, $1{,}000 + 4{,}000 = 5{,}000$; year 2, $1{,}000 + 2{,}000 = 3{,}000$; year 3, $1{,}000 + 1{,}000 = 2{,}000$. Total $10{,}000$.
-> >
-> > $$\begin{align*}
-> > \text{Year 1 release} &= \$15\text{M} \times \frac{5{,}000}{10{,}000} \\
-> > &= \$7.5\text{M}
-> > \end{align*}$$
-> >
-> > **Limit-weighted.** Limits in force, in millions: year 1, $1{,}000 + 400 = 1{,}400$; year 2, $1{,}000 + 200 = 1{,}200$; year 3, $1{,}000 + 100 = 1{,}100$. Total $3{,}700$.
-> >
-> > $$\begin{align*}
-> > \text{Year 1 release} &= \$15\text{M} \times \frac{1{,}400}{3{,}700} \\
-> > &= \$5.68\text{M}
-> > \end{align*}$$
-> >
-> > **A $\$1.8$ million difference in year-1 profit from a single judgement**, with no difference in cash, claims or coverage.
-> >
-> > **Which is right?** The limit-weighted driver, on these facts. The large-limit contracts provide far more coverage per contract, and they persist while the small ones lapse — so counting contracts treats a $\$100{,}000$ policy as equal service to a $\$1$ million one, which does not reflect "the amount of benefits the contracts could provide." The contract-count driver would be defensible only if the limits were similar.
-> >
-> > This is why the coverage-unit driver must be **disclosed**: it is a lever on reported profit, and a reader cannot interpret the CSM release without knowing which one was pulled.
+> > - Contracts in force are $5{,}000$ in year 1, $1{,}000 + 2{,}000 = 3{,}000$ in year 2 and $1{,}000 + 1{,}000 = 2{,}000$ in year 3, a total of $10{,}000$.
+> > - Under the contract-count driver, the year-1 release is $\$15\text{M} \times 5{,}000/10{,}000 = \$7.5$ million.
+> > - Limits in force, in millions, are $1{,}000 + 400 = 1{,}400$ in year 1, $1{,}200$ in year 2 and $1{,}100$ in year 3, a total of $3{,}700$.
+> > - Under the limit-weighted driver, the year-1 release is $\$15\text{M} \times 1{,}400/3{,}700 = \$5.68$ million.
+> > - The two drivers differ by $\$1.8$ million of year-1 profit, with no difference in cash, claims or coverage.
+> > - A $\$1$ million contract provides far more coverage than a $\$100{,}000$ one, and the large contracts persist while the small ones lapse.
+> > - Counting contracts would not reflect the amount of benefits the contracts could provide, so the limit-weighted driver fits these facts.
+
+## Expected duration and revision
+
+Because expected duration is part of the quantity of coverage, coverage units reflect **expected lapses**. Units are counted for the coverage actually expected to be provided, not for the full contractual term. The pattern of expected future coverage units is revised each period, which changes the release rate prospectively. A group whose expected duration shortens releases its CSM faster.
+
+## Where coverage units apply
+
+Under the [[Premium Allocation Approach|premium allocation approach]], the [[Liability for Remaining Coverage|liability for remaining coverage]] has no CSM to release, so coverage units are not needed. They matter to a Canadian P&C insurer mainly on multi-year contracts measured under the [[General Measurement Model|general measurement model]] and on some [[Reinsurance Contracts Held|reinsurance contracts held]].
+
+> [!trap] Counting the full contractual term
+> Coverage units ignoring cancellation overstate the coverage still to come, so the CSM is released too slowly. Count only the coverage expected to be provided after expected lapses.

@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a9011558f17ab467bedbe5444694364c008bbf33fb780250ff3c28251a4fc5b6
+  content_hash: sha256:bb231756fd562461c710d4037d9955a309125a12b35ffb2bfba228bb2383412c
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fellow of the Canadian Institute of Actuaries (FCIA).md
 ---
 
-A **Fellow of the Canadian Institute of Actuaries (FCIA)** is an actuary who has met the fellowship requirements of the [[Canadian Institute of Actuaries (CIA)]], Some roles in Canada, such as the [[Appointed Actuary]], require it. The CIA describes a Fellow as able to apply the Canadian practice-specific standards, legislation, concepts and techniques its syllabuses define. It says the route takes seven to nine years on average including university, or one to three years after another recognised fellow-level credential.
+A **Fellow of the Canadian Institute of Actuaries (FCIA)** is an actuary who has met the fellowship requirements of the [[Canadian Institute of Actuaries (CIA)]]. Some roles in Canada, such as the [[Appointed Actuary]], require it. The CIA describes a Fellow as able to apply the Canadian practice-specific standards, legislation, concepts and techniques its syllabuses define. It says the route takes seven to nine years on average including university, or one to three years after another recognised fellow-level credential.
 
 %%credential-path FCIA%%
 
@@ -19,18 +19,18 @@ A **Fellow of the Canadian Institute of Actuaries (FCIA)** is an actuary who has
 
 Each track is two online modules and three open-book, four-hour exams:
 
-- **Property and casualty**: [[Exam PC-M1 (CIA)|PC Module 1]], [[Exam PC-M2 (CIA)|PC Module 2]]; [[Exam F1PC (CIA)|F1PC]] Pricing, [[Exam F2PC (CIA)|F2PC]] Estimating Unpaid Claims and Financial Reporting under IFRS 17, [[Exam F3PC (CIA)|F3PC]] ERM, Economic Capital Modelling, and Stress and Scenario Testing.
-- **Individual life and annuities**: [[Exam ILA-M1 (CIA)|ILA Module 1]], [[Exam ILA-M2 (CIA)|ILA Module 2]]; [[Exam F1ILA (CIA)|F1ILA]] Finance and Valuation, [[Exam F2ILA (CIA)|F2ILA]] Product Design and Pricing, [[Exam F3ILA (CIA)|F3ILA]] Risk Management.
-- **Group benefits**: [[Exam GB-M1 (CIA)|GB Module 1]], [[Exam GB-M2 (CIA)|GB Module 2]]; [[Exam F1GB (CIA)|F1GB]] Product Design and Group Benefits Environment, [[Exam F2GB (CIA)|F2GB]] Group Benefits Product Pricing, [[Exam F3GB (CIA)|F3GB]] Group Benefits Reserving.
-- **Retirement benefits**: [[Exam RET-M1 (CIA)|RET Module 1]], [[Exam RET-M2 (CIA)|RET Module 2]]; [[Exam F1RET (CIA)|F1RET]] Pension Funding and Regulation, [[Exam F2RET (CIA)|F2RET]] Pension Financial Reporting, [[Exam F3RET (CIA)|F3RET]] Pension Risk Management.
-- **Finance, investments and ERM**: [[Exam FIE-M1 (CIA)|FIE Module 1]], [[Exam FIE-M2 (CIA)|FIE Module 2]]; [[Exam F1FIE (CIA)|F1FIE]] Financial Products, [[Exam F2FIE (CIA)|F2FIE]] Valuation and Financial Considerations, and [[Exam F3FIE (CIA)|F3FIE]] Risk Management or, in the banking option, [[Exam F3BNK (CIA)|F3BNK]] Banking Applications.
+1. **Property and casualty**: modules [[Exam PC-M1 (CIA)|PC Module 1]] and [[Exam PC-M2 (CIA)|PC Module 2]], then exams [[Exam F1PC (CIA)|F1PC]] Pricing; [[Exam F2PC (CIA)|F2PC]] Estimating Unpaid Claims and Financial Reporting under IFRS 17; [[Exam F3PC (CIA)|F3PC]] ERM, Economic Capital Modelling, and Stress and Scenario Testing.
+2. **Individual life and annuities**: modules [[Exam ILA-M1 (CIA)|ILA Module 1]] and [[Exam ILA-M2 (CIA)|ILA Module 2]], then exams [[Exam F1ILA (CIA)|F1ILA]] Finance and Valuation; [[Exam F2ILA (CIA)|F2ILA]] Product Design and Pricing; [[Exam F3ILA (CIA)|F3ILA]] Risk Management.
+3. **Group benefits**: modules [[Exam GB-M1 (CIA)|GB Module 1]] and [[Exam GB-M2 (CIA)|GB Module 2]], then exams [[Exam F1GB (CIA)|F1GB]] Product Design and Group Benefits Environment; [[Exam F2GB (CIA)|F2GB]] Group Benefits Product Pricing; [[Exam F3GB (CIA)|F3GB]] Group Benefits Reserving.
+4. **Retirement benefits**: modules [[Exam RET-M1 (CIA)|RET Module 1]] and [[Exam RET-M2 (CIA)|RET Module 2]], then exams [[Exam F1RET (CIA)|F1RET]] Pension Funding and Regulation; [[Exam F2RET (CIA)|F2RET]] Pension Financial Reporting; [[Exam F3RET (CIA)|F3RET]] Pension Risk Management.
+5. **Finance, investments and ERM**: modules [[Exam FIE-M1 (CIA)|FIE Module 1]] and [[Exam FIE-M2 (CIA)|FIE Module 2]], then exams [[Exam F1FIE (CIA)|F1FIE]] Financial Products; [[Exam F2FIE (CIA)|F2FIE]] Valuation and Financial Considerations; [[Exam F3FIE (CIA)|F3FIE]] Risk Management or, in the banking option, [[Exam F3BNK (CIA)|F3BNK]] Banking Applications.
 
 ## Coming from another body's fellowship
 
 Pathway 3 is for a fellow of a recognised organization (ASSA, CAS, DAV, IAAust, IFoA, SAI, SOA), by experience or fast track:
 
-- **3A (experience):** FCIA Module 2 of a track, the APLC, and three years of Canadian experience in the last four, after the first fellow-level designation.
-- **3B (fast track):** FCIA Module 2, the APLC, one track-specific FCIA exam in some cases (F1GB, F2PC, F1ILA, F2FIE, or a retirement exam that depends on the SOA exams credited), and three years of experience in the last six, including 12 months in Canada, after the first fellow-level designation.
+1. **3A, by experience:** FCIA Module 2 of a track, the APLC, and three years of Canadian experience in the last four, after the first fellow-level designation.
+2. **3B, the fast track:** FCIA Module 2, the APLC, one track-specific FCIA exam in some cases (F1GB, F2PC, F1ILA, F2FIE, or a retirement exam that depends on the SOA exams credited), and three years of experience in the last six, including 12 months in Canada, after the first fellow-level designation.
 
 The [[Credential Path|three societies' routes]] show which credentials count toward which.
 

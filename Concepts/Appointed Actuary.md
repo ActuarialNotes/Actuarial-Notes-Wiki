@@ -4,42 +4,47 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ef713730c830c16c1c6a52cc8c0d4293995c6c79554d7a9d190134479a39cc86
+  content_hash: sha256:869ac3b1de8b9f2ee32f985c2d47fc46bebdc54f6e60ae877b25b879ba2aa1de
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Appointed Actuary.md
 ---
 
-**The Appointed Actuary** (AA) is the actuary a Canadian insurer's **board of directors** appoints under the [[Insurance Companies Act]] (or its provincial equivalent) to value the company's [[Insurance Contract Liabilities]], report on its financial condition, and give the [[Statement of Actuarial Opinion]]. The role is a statutory one with duties owed to the company, to the board, and — in defined circumstances — to [[OSFI]].
-
-- **Appointed by the directors, removable only by them** (s. 357), with notice to OSFI on any change and an opportunity for the actuary to state the reasons. That reporting line, above management, is the structural protection that makes the role work.
-- **The core duties:**
-  - **Value the liabilities** in accordance with [[Accepted Actuarial Practice]] (s. 365) and opine on them in the [[Statement of Actuarial Opinion]].
-  - **Report to the directors on financial condition** — the [[FCT]] report, at least annually.
-  - **Report material adverse matters** to the CEO and CFO, then the directors, then OSFI — the [[Duty to Report]] escalation.
-  - Prepare the **[[Appointed Actuary's Report]]** documenting the valuation.
-- **Protections:** a right of access to the records needed for the work, and **civil immunity** for statements made in good faith in carrying out these duties (s. 361). Without both, the reporting duties would be unusable.
-- **The dual accountability** is the defining tension of the role. The AA is usually an employee, paid by the company, working alongside management — and is required to reach conclusions management may not want and to escalate over their heads if necessary. The [[Standards of Practice]] and the statute exist precisely to make that possible.
-- **The AA is not the auditor.** The [[External Auditor]] audits the financial statements and relies on the actuary's work for the liabilities; the actuary produces that work. Each has a professional duty to communicate with the other, and neither may substitute the other's judgement for their own.
-- **Qualification** requires Fellowship of the [[Canadian Institute of Actuaries (CIA)]] with relevant experience, and the actuary must comply with the CIA's Rules of Professional Conduct and continuing professional development requirements.
-
 ![[Media/Figures/Appointed_Actuary.svg|340]]
 
-> [!example]- When the Actuary and Management Disagree {Example}
-> The Appointed Actuary's central estimate of the [[Liability for Incurred Claims|LIC]] is $\$318$ million, with a reasonable range of $\$298$ million to $\$342$ million. Management proposes to carry $\$285$ million, arguing that the actuary's assumptions are pessimistic and that a lower figure is "still an actuarial estimate." Surplus is $\$160$ million.
->
-> What must the actuary do?
+The **Appointed Actuary** (AA) is the actuary a Canadian insurer's board of directors appoints under the [[Insurance Companies Act]], or its provincial equivalent, to value the company's [[Insurance Contract Liabilities|insurance contract liabilities]], report on its financial condition and give the [[Statement of Actuarial Opinion]]. The role is statutory, with duties owed to the company, to the board and, in defined circumstances, to [[OSFI]].
+
+The Appointed Actuary's core duties are to:
+
+1. Value the liabilities in accordance with [[Accepted Actuarial Practice|accepted actuarial practice]] (s. 365) and give an opinion on them in the [[Statement of Actuarial Opinion]].
+2. Report to the directors on financial condition in the [[FCT]] report, at least annually.
+3. Report material adverse matters to the CEO and CFO, then the directors, then OSFI, under the [[Duty to Report|duty to report]].
+4. Prepare the [[Appointed Actuary's Report]] documenting the valuation.
+
+## Appointment and protections
+
+The AA is appointed by the directors and removable only by them (s. 357). OSFI is notified of any change, and the actuary has an opportunity to state the reasons. That reporting line, above management, is the structural protection the role depends on.
+
+The AA has a right of access to the records needed for the work, and civil immunity for statements made in good faith in carrying out these duties (s. 361). The AA is usually an employee, paid by the company and working alongside management, and is still required to reach conclusions management may not want and to escalate over their heads if necessary.
+
+Qualification requires Fellowship of the [[Canadian Institute of Actuaries (CIA)]] with relevant experience. The actuary must comply with the CIA's Rules of Professional Conduct and its continuing professional development requirements.
+
+The AA is not the auditor. The [[External Auditor]] audits the financial statements and uses the actuary's work for the liabilities, and each has a professional duty to communicate with the other ([[Actuary and Auditor Relationship]]).
+
+## Disagreement with management
+
+The valuation is the actuary's. Reconsidering an assumption when management has information the actuary lacked, such as a change in settlement strategy, a legal development or a data error, is part of the work. A challenge that only finds the answer inconvenient does not change the estimate.
+
+> [!example]- What must the Appointed Actuary do here? {Example}
+> The AA's central estimate of the [[Liability for Incurred Claims|LIC]] is $\$318$ million, with a reasonable range of $\$298$ million to $\$342$ million. Management proposes to carry $\$285$ million, arguing that the actuary's assumptions are pessimistic. Surplus is $\$160$ million.
 >
 > > [!answer]-
-> > **Step 1: the valuation is the actuary's, not management's.** Section 365 requires the liabilities to be valued in accordance with accepted actuarial practice, and that valuation produces $\$318$ million. The actuary does not adopt management's number.
-> >
-> > **Step 2: consider whether management has a point.** Reconsidering assumptions when challenged is professional, not weak. If management has information the actuary lacked — a settlement strategy change, a legal development, a data error — it belongs in the estimate. If the challenge is only that the answer is inconvenient, it does not.
-> >
-> > **Step 3: the opinion.** $\$285$ million is **below the bottom of the range**, so the actuary cannot opine that the amount carried makes appropriate provision. The opinion must be **qualified or adverse**, stating the deficiency of at least $\$13$ million against the low end and $\$33$ million against the central estimate.
-> >
-> > **Step 4: escalate.** A $\$33$ million shortfall against $\$160$ million of surplus is plainly material. This is a matter with material adverse effects on financial condition: report to the CEO and CFO; if not suitably addressed, to the **directors**; if still not addressed, to **OSFI**. Section 361 protects the report made in good faith.
-> >
-> > **Step 5: the consequences.** The [[MCT]] ratio is overstated by the deficiency; the [[FCT]] report must be prepared on the true liability; and if reserves are light, the rate indications built on them are too, so current business is being underpriced — which under [[IFRS 17]] should be surfacing as [[Onerous Contract|onerous groups]].
-> >
-> > **What the actuary may not do:** resign quietly. Resignation without reporting leaves the deficiency undisclosed, which is the outcome the statutory framework is built to prevent — and OSFI must be notified of the change in appointment in any event.
+> > - Section 365 requires the liabilities to be valued in accordance with accepted actuarial practice, and that valuation gives $\$318$ million, so the actuary does not adopt management's number.
+> > - $\$285$ million is below the bottom of the range, so the actuary cannot give an opinion that the amount carried makes appropriate provision.
+> > - The opinion must be qualified or adverse, stating a deficiency of at least $\$13$ million against the low end and $\$33$ million against the central estimate.
+> > - A $\$33$ million shortfall against $\$160$ million of surplus is material, so the actuary reports to the CEO and CFO, then to the directors if it is not addressed, then to OSFI.
+> > - Section 361 protects the report made in good faith.
+
+> [!trap] Resigning instead of reporting
+> An Appointed Actuary who resigns quietly over a deficiency leaves it undisclosed, which is the outcome the statutory framework is built to prevent. The duty is to report it up the escalation chain, and OSFI must be notified of the change in appointment in any event.

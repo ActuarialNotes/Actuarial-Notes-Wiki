@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b83b2ee72b989ef991532ad395cab10c592114692281014967c943051c130b8
+  content_hash: sha256:03817c06ed60f9638a86ba2b05e4eff714a9b70066901e849ac5227c660efc8b
   sources:
     - "Erel, Myers & Read, A Theory of Risk Capital (JFE-2013-0394 revised, Oct 2013), abstract p.1; p.7 (Merton and Perold's definition of risk capital), sha256:1fb728de691bf9eed3c3443629227c8c0b6040fb83145ef2690f4a0c5ed815cf — https://web.actuaries.ie/sites/default/files/erm-resources/a_theory_of_risk_capital.pdf"
     - "Goldfarb, Risk-Adjusted Performance Measurement for P&C Insurers (CAS study note, rev. Oct 2010), pp.3-5, 9-11, 31-44, sha256:b0ee2f3239c7f53d07401d4c56828d9a1129d5c1f7b660603d811a50019d7b8e — https://www.casact.org/sites/default/files/database/studynotes_goldfarb8.2.pdf"
@@ -25,67 +25,84 @@ verification:
   log: .verify/Concepts/Risk Capital.md
 ---
 
-**Risk Capital** is the capital an insurer holds to absorb unexpected losses — outcomes worse than those funded by premium and reserves — sized by a [[Risk Measure]] at a chosen tolerance. Merton and Perold define it as the present-value cost of complete insurance against a fall in the value of the firm's net assets below a risk-free investment of those net assets; allocating its [[Cost of Capital|cost]] to [[Business Unit|business units]] and [[Line of Business|lines]] is the core calculation of [[Financial Risk Management]].
+**Risk Capital** is the capital an insurer holds to absorb unexpected losses, the outcomes worse than those funded by premium and reserves, sized by a [[Risk Measure|risk measure]] at a chosen tolerance. Merton and Perold define it as the present-value cost of complete insurance against a fall in the value of the firm's net assets below a risk-free investment of those net assets.
+
+For an insurer whose aggregate loss is $X$, risk capital is
 
 > $$C = \rho(X) - E[X]$$
 
+- $\rho$ is the risk measure: VaR or TVaR at a chosen level, or the assets needed to hold the expected policyholder deficit (EPD) to a target.
+
+The EPD is better than VaR as a standard because it reflects the size of a shortfall as well as its probability.
+
+> [!example]- What assets and risk capital does this insurer need for an EPD of $1\%$ of expected losses? {Example}
+> Aggregate losses are:
+>
+> | Loss | Probability |
+> | ---: | ---: |
+> | 50 | 0.50 |
+> | 100 | 0.30 |
+> | 200 | 0.15 |
+> | 300 | 0.05 |
+>
+> > [!answer]-
+> > - $E[X] = 25 + 30 + 30 + 15 = 100$, so the target is $\text{EPD} = E[(X - a)_+] = 1$.
+> > - For assets $a$ between $200$ and $300$ only the worst outcome falls short, so $0.05(300 - a) = 1$ and $a = 280$.
+> > - Risk capital is $280 - 100 = 180$.
+> > - $\text{VaR}_{0.95} = 200$ would suggest capital of only $100$, but at $a = 200$ the EPD is $0.05 \times 100 = 5$, an EPD ratio of $5\%$.
+
+## Reference points for total capital
+
+Before it can be allocated, total capital has to be tied to an event the firm wants to survive. Default avoidance, enough capital to keep the probability of ruin small, mainly protects policyholders, and it has two drawbacks:
+
+1. It places the requirement deep in the tail of the loss distribution, where a risk model has the least data and is least reliable.
+2. Shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard.
+
+Other reference points look at the firm as a going concern: keeping enough capital to continue writing and servicing the renewal book after an adverse year, to come through a catastrophe and still operate strongly afterwards, to keep the target rating, or to avoid regulatory action. Kreps gives management appetites of the form "not more than a 10% chance of losing 20% of capital". Venter notes that because renewal business has a value, the goal can be enough capital to keep operating even in the identified adverse situation.
+
+If the firm will lose no more than a fraction $k$ of its capital in its average 1-in-$y$-year event, measured as the TVaR at the matching percentile, the capital it needs is
+
+> $$C_{\min} = \frac{\text{TVaR}_{1 - 1/y}}{k}$$
+
+> [!example]- A firm will lose no more than a quarter of its capital in its average 1-in-20 bad year. How much capital does it need? {Example}
+> - The average 1-in-20 bad year is measured by $\text{TVaR}_{0.95}$.
+> - With $k = 0.25$, $C_{\min} = \text{TVaR}_{0.95}/0.25$, four times the 95% TVaR.
+
+## Allocating risk capital
+
+Allocating the [[Cost of Capital|cost]] of risk capital to [[Business Unit|business units]] and [[Line of Business|lines]] is the core calculation of [[Financial Risk Management|financial risk management]]. Because lines are imperfectly correlated, the capital $C_i$ allocated to the units sums to less than their standalone capital:
+
 > $$\sum_i C_i = C \leq \sum_i C_i^{\text{standalone}}$$
 
-- $X$ is the insurer's aggregate loss, $\rho$ the risk measure — VaR or TVaR at a chosen level, or the assets needed to hold the expected policyholder deficit (EPD) to a target — and $C_i$ the capital allocated to unit $i$. The gap below the sum of standalone amounts is the **diversification benefit**; how to share it is the allocation problem.
-- **Allocation methods:**
-  - **Proportional** to standalone capital, or to a regulatory [[Risk-Based Capital]] formula — simple, but blind to how each unit diversifies the rest.
-  - **CAPM** — a cost of capital per line from underwriting betas; prices systematic risk only.
-  - **VaR or EPD by line** — size each line to the firm's ruin probability or EPD ratio as if it stood alone. The EPD version is better, since it reflects the size of shortfalls, but both ignore diversification.
-  - **Merton–Perold marginal** — $C_i = C(\text{all}) - C(\text{all but } i)$. Correct for adding or dropping a whole line, but the pieces do not in general sum to $C$ — they can fall short of it, leaving capital unallocated, or exceed it.
-  - **Shapley** — each unit's marginal capital averaged over every order in which units could be added; adds up exactly.
-  - **Myers–Read and Euler (gradient)** — each unit's contribution to the default value or risk measure for a *small* change in its size. For a measure that scales with the portfolio these add up exactly (Euler's theorem); for a standard-deviation measure they reduce to allocating by covariance with the total.
-  - **Co-measures and margin allocation** — co-TVaR allocates by each unit's average loss in the tail; Mildenhall and Major allocate margin directly (the *natural allocation*) and let the implied capital follow.
-- **Allocation is a device.** All capital stands behind every policy; the allocation exists to set [[Risk-Adjusted Pricing|prices]] and judge [[Risk-Adjusted Performance|performance]], and marginal methods that recognise diversification are the ones that support good decisions.
+- $C_i^{\text{standalone}}$ is the capital unit $i$ would need on its own.
 
-- **Capital reference points.** Before it can be allocated, total capital has to be tied to an event the firm wants to survive. *Default avoidance* — enough capital to keep the probability of ruin small — mainly protects policyholders, and it has two drawbacks:
-  - it places the requirement deep in the tail of the loss distribution, where a risk model has the least data and is least reliable; and
-  - shareholders and other stakeholders are hurt by large partial losses of capital well before default, so a more likely, less extreme event can be the more meaningful standard.
+The gap is the **diversification benefit**, and how to share it is the allocation problem. The methods are:
 
-  Other reference points look at the firm as a going concern: keeping enough capital to continue writing and servicing the renewal book after an adverse year, to come through a catastrophe and still operate strongly afterwards, to keep the target rating, or to avoid regulatory action. Kreps gives management appetites of the form "not more than a 10% chance of losing 20% of capital", and Venter notes that because renewal business has a value, the goal can be enough capital to keep operating even in the identified adverse situation.
-- **From a reference point to a capital requirement:** choose the largest fraction $k$ of capital the firm will tolerate losing in a 1-in-$y$-year event, measure that event's average loss as the TVaR at the matching percentile, and require $C_{\min} = \text{TVaR}_{1 - 1/y} / k$, a multiple $1/k$ of the TVaR. For instance, a firm that will lose no more than a quarter of its capital in its average 1-in-20 bad year holds four times its 95% TVaR. Venter's example is a goal that the average 1-in-100 or worse year use up no more than premium plus one third of capital, which makes required capital three times the 99% excess TVaR (measured above the mean, since the mean is funded by premium).
+1. *Proportional* to standalone capital or to a regulatory [[Risk-Based Capital]] formula. It is simple, but blind to how each unit diversifies the rest.
+2. *CAPM*: a cost of capital per line from underwriting betas, which prices systematic risk only.
+3. *VaR or EPD by line*: each line sized to the firm's ruin probability or EPD ratio as if it stood alone. The EPD version is better, since it reflects the size of shortfalls, but both ignore diversification.
+4. *Merton–Perold marginal*: each unit's capital is what the firm saves without it.
+5. *Shapley*: each unit's marginal capital averaged over every order in which units could be added, which adds up exactly.
+6. *Myers–Read and Euler (gradient)*: each unit's contribution to the default value or risk measure for a small change in its size. For a measure that scales with the portfolio these add up exactly (Euler's theorem). For a standard-deviation measure they reduce to allocating by covariance with the total.
+7. *Co-measures*: co-TVaR allocates in proportion to each unit's average loss in the tail.
+8. *Natural allocation*: Mildenhall and Major allocate margin directly and let the implied capital follow.
 
-> [!example]- Four Allocations of the Same Capital {Example}
-> Two lines have loss standard deviations $\sigma_A = 30$ and $\sigma_B = 50$ with correlation $0.5$. The insurer holds capital equal to twice the standard deviation of its total loss. Allocate total capital by (a) standalone proportions, (b) Merton–Perold, (c) Shapley, (d) covariance (Euler).
+The Merton–Perold marginal capital of unit $i$ is
+
+> $$C_i = C(\text{all}) - C(\text{all but } i)$$
+
+It is correct for adding or dropping a whole line, but the pieces do not in general sum to $C$. They can fall short of it, leaving capital unallocated, or exceed it.
+
+> [!example]- How do four allocation methods share this insurer's capital? {Example}
+> Two lines have loss standard deviations $\sigma_A = 30$ and $\sigma_B = 50$ with correlation $0.5$. The insurer holds capital equal to twice the standard deviation of its total loss. Allocate it by (a) standalone proportions, (b) Merton–Perold, (c) Shapley and (d) covariance.
 >
 > > [!answer]-
-> > Standalone capital: $C_A = 60$, $C_B = 100$, total $160$.
-> >
-> > $$
-> > \begin{align*}
-> > \sigma_{A+B}^2 &= 30^2 + 50^2 + 2(0.5)(30)(50) \\
-> > &= 4{,}900 \\
-> > C &= 2\sqrt{4{,}900} \\
-> > &= 140
-> > \end{align*}
-> > $$
-> >
-> > so diversification saves $20$.
-> >
-> > - **(a) Proportional:** $A = 140 \times 60/160 = 52.5$; $B = 87.5$.
-> > - **(b) Merton–Perold:** $A = 140 - 100 = 40$; $B = 140 - 60 = 80$. They sum to $120$, leaving $20$ unallocated.
-> > - **(c) Shapley:** $A = \tfrac{1}{2}(60 + 40) = 50$; $B = \tfrac{1}{2}(100 + 80) = 90$.
-> > - **(d) Covariance:** $\text{Cov}(A, A{+}B) = 900 + 750 = 1{,}650$ and $\text{Cov}(B, A{+}B) = 2{,}500 + 750 = 3{,}250$, so $A = 2(1{,}650)/70 = 47.14$ and $B = 2(3{,}250)/70 = 92.86$.
-> >
-> > Line A is charged anywhere from $40$ to $52.5$. Under every method that recognises diversification, the smaller line gets the larger *percentage* reduction from its standalone capital — $33\%$ against $20\%$ under Merton–Perold, $17\%$ against $10\%$ under Shapley, $21\%$ against $7\%$ by covariance — and that difference flows straight into its price and its measured return.
+> > - Standalone capital is $C_A = 60$ and $C_B = 100$, a total of $160$.
+> > - $\sigma_{A+B}^2 = 30^2 + 50^2 + 2(0.5)(30)(50) = 4{,}900$, so $C = 2\sqrt{4{,}900} = 140$ and diversification saves $20$.
+> > - (a) Proportional: $A = 140 \times 60/160 = 52.5$ and $B = 87.5$.
+> > - (b) Merton–Perold: $A = 140 - 100 = 40$ and $B = 140 - 60 = 80$. They sum to $120$, leaving $20$ unallocated.
+> > - (c) Shapley: $A = \tfrac{1}{2}(60 + 40) = 50$ and $B = \tfrac{1}{2}(100 + 80) = 90$.
+> > - (d) Covariance: $\text{Cov}(A, A{+}B) = 900 + 750 = 1{,}650$ and $\text{Cov}(B, A{+}B) = 2{,}500 + 750 = 3{,}250$, so $A = 2(1{,}650)/70 = 47.14$ and $B = 2(3{,}250)/70 = 92.86$.
+> > - Under every method that recognises diversification, the smaller line A gets the larger percentage reduction from its standalone capital: $33\%$ against $20\%$ under Merton–Perold, $17\%$ against $10\%$ under Shapley and $21\%$ against $7\%$ by covariance.
 
-> [!example]- Capital from an EPD Target {Example}
-> Aggregate losses are $50$ w.p. $0.50$, $100$ w.p. $0.30$, $200$ w.p. $0.15$ and $300$ w.p. $0.05$. The insurer targets an EPD ratio of $1\%$ of expected losses. Find the assets and risk capital required, and compare with $\text{VaR}_{0.95}$.
->
-> > [!answer]-
-> > $E[X] = 25 + 30 + 30 + 15 = 100$, so the target is $\text{EPD} = E[(X - a)_+] = 1$. For assets $a$ between $200$ and $300$ only the worst outcome falls short:
-> >
-> > $$
-> > \begin{align*}
-> > 0.05(300 - a) &= 1 \\
-> > a &= 280
-> > \end{align*}
-> > $$
-> >
-> > Risk capital is $280 - 100 = 180$.
-> >
-> > $\text{VaR}_{0.95} = 200$ would suggest capital of only $100$ — but at $a = 200$ the EPD is $0.05 \times 100 = 5$, an EPD ratio of $5\%$. VaR sees only the probability of shortfall; the EPD also sees its size, which is why it is the better standard for capital.
+All capital stands behind every policy. The allocation exists to set [[Risk-Adjusted Pricing|prices]] and judge [[Risk-Adjusted Performance|performance]], and marginal methods that recognise diversification are the ones that support good decisions.

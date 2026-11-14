@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f27b8d0a3f0a2443edce7715ab4a0790f826aca798e5e50ddbf878b8e3c4495e
+  content_hash: sha256:b449d3be623cd0c1bc90d9add153837b1ef930d88755df481f6dcf77ac68eecf
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -13,22 +13,38 @@ verification:
   log: .verify/Concepts/MSA Ratios.md
 ---
 
-**MSA Ratios** are the standardised financial ratios computed from Canadian P&C insurers' regulatory filings and published by MSA Research — the industry's common analytical vocabulary. Because every insurer files the same [[Canadian Annual Return]] on the same instructions, the ratios are genuinely comparable across companies, which is what makes external analysis of the Canadian market possible.
+![[Media/Figures/MSA_Ratios.svg|340]]
+
+**MSA Ratios** are the standardised financial ratios computed from Canadian P&C insurers' regulatory filings and published by MSA Research. Every insurer files the same [[Canadian Annual Return]] on the same instructions, so the ratios are comparable across companies.
+
+The central profitability ratio, the combined ratio, is
 
 > $$\text{Combined ratio} = \frac{\text{Claims incurred} + \text{Expenses}}{\text{Earned premium}}$$
 
-- **Profitability:** loss ratio, expense ratio and **combined ratio** (below $100\%$ is an underwriting profit); return on equity; investment yield; and the operating ratio, which nets investment income against the combined ratio.
-- **Leverage:** **premium to surplus** (how much business is supported by each dollar of capital) and **reserves to surplus** (how exposed surplus is to a reserve error). A reserves-to-surplus ratio of $3$ means a $10\%$ reserve deficiency consumes $30\%$ of surplus.
-- **Reserve adequacy:** one-year and two-year development on prior-year reserves as a percentage of opening surplus — the ratio that most directly signals a reserving problem, and the analogue of the US Schedule P development measures.
-- **Capital and liquidity:** the [[MCT]] ratio and its trend, liquid assets to liabilities, and change in net written premium (rapid growth being a standard failure precursor — see [[PACICC]]).
-- **How to read them.** No single ratio diagnoses anything. The combination that signals distress is the one [[PACICC]]'s failure research identifies: **rapid premium growth, high premium-to-surplus leverage, adverse development, and a falling MCT ratio** appearing together.
-- **The IFRS 17 complication.** [[Insurance Revenue]] is not earned premium and [[Insurance Service Expenses]] exclude discount unwind, so ratios computed post-transition are not directly comparable with pre-transition history. Any multi-year ratio series spanning 2023 must be read with that break in mind.
+A combined ratio below $100\%$ is an underwriting profit.
 
-![[Media/Figures/MSA_Ratios.svg|340]]
+The ratios fall into four groups:
 
-> [!example]- Diagnosing an Insurer From Its Ratios {Example}
+| Group | Ratios |
+| :--- | :--- |
+| Profitability | Loss ratio, expense ratio, combined ratio, return on equity, investment yield, operating ratio |
+| Leverage | Premium to surplus, reserves to surplus |
+| Reserve adequacy | One-year and two-year development on prior-year reserves, as a percentage of opening surplus |
+| Capital and liquidity | The [[MCT]] ratio and its trend, liquid assets to liabilities, change in net written premium |
+
+The operating ratio nets investment income against the combined ratio. Premium to surplus measures how much business each dollar of capital supports. Reserves to surplus measures how exposed surplus is to a reserve error. The development ratios most directly signal a reserving problem and are the analogue of the US Schedule P development measures. Rapid growth in net written premium is a standard precursor of failure.
+
+> [!example]- An insurer's reserves are $3$ times its surplus. What share of surplus does a $10\%$ reserve deficiency consume? {Example}
+> - The deficiency is $10\%$ of reserves, which is $0.10 \times 3 = 0.30$ times surplus.
+> - It consumes $30\%$ of surplus.
+
+## Reading the ratios together
+
+No single ratio diagnoses anything. The combination that signals distress is the one [[PACICC]]'s failure research identifies: rapid premium growth, high premium-to-surplus leverage, adverse development and a falling MCT ratio appearing together.
+
+> [!example]- What do these ratios say about this insurer? {Example}
 > | Ratio | Insurer | Industry |
-> |---|---|---|
+> | :--- | ---: | ---: |
 > | Combined ratio | $103\%$ | $96\%$ |
 > | Premium to surplus | $2.8$ | $1.4$ |
 > | Reserves to surplus | $3.4$ | $1.9$ |
@@ -36,18 +52,15 @@ verification:
 > | Growth in net written premium | $+31\%$ | $+5\%$ |
 > | MCT ratio | $154\%$ | $221\%$ |
 >
-> Assess.
->
 > > [!answer]-
-> > **Every ratio points the same way, and together they are the classic pre-failure profile.**
-> >
-> > 1. **Growth of $31\%$ against an industry $5\%$.** An insurer growing six times the market is winning business on price, not on selection — nobody hands over that much share for any other reason.
-> > 2. **Combined ratio $103\%$** confirms it: the business is being written at an underwriting loss.
-> > 3. **Leverage of $2.8$ times surplus, double the industry.** The insurer is supporting twice as much business per dollar of capital, so the same loss ratio hurts twice as much.
-> > 4. **Reserves at $3.4$ times surplus** means a $10\%$ reserve deficiency wipes out $34\%$ of surplus. There is no room for error.
-> > 5. **Adverse development of $7\%$ of surplus** shows the error is already occurring, and given (3), the true deficiency may be larger than reported.
-> > 6. **[[MCT]] at $154\%$** — near the supervisory target, and with growth continuing minimum capital required rises every quarter while losses reduce [[Capital Available]]. Both sides of the ratio move against it.
-> >
-> > **The mechanism.** Growth is funded by capital the insurer does not have, at prices that do not cover cost, with reserves that are already proving light. This is precisely the sequence [[PACICC]]'s failure research describes, and the remedy — stop growing, raise rates, strengthen reserves, raise capital — is one the insurer will resist because it means shrinking.
-> >
-> > **What should happen:** [[OSFI]] escalates, requires a capital plan and restricts growth; the [[Appointed Actuary]]'s [[FCT]] report models whether the minimum is breached under adverse scenarios; and the reserve adequacy question is answered independently rather than by the same process that produced the current estimate.
+> > - Growth of $31\%$ against the industry's $5\%$ suggests business won on price rather than selection.
+> > - The combined ratio of $103\%$ confirms the business is written at an underwriting loss.
+> > - Premium to surplus of $2.8$, double the industry's, means the same loss ratio hurts twice as much.
+> > - Reserves at $3.4$ times surplus mean a $10\%$ reserve deficiency wipes out $34\%$ of surplus.
+> > - Adverse development of $7\%$ of surplus shows the reserve error is already occurring.
+> > - The MCT ratio of $154\%$ is near the supervisory target. Continued growth raises minimum capital required while losses reduce [[Capital Available|capital available]].
+> > - Together these are the pre-failure profile PACICC's research describes. [[OSFI]] would be expected to escalate, require a capital plan and restrict growth, and the [[Appointed Actuary|appointed actuary]]'s [[FCT]] would test whether the minimum is breached under adverse scenarios.
+
+## Ratios after IFRS 17
+
+[[Insurance Revenue|Insurance revenue]] is not earned premium, and [[Insurance Service Expenses|insurance service expenses]] exclude discount unwind. Ratios computed after the transition to [[IFRS 17]] are therefore not directly comparable with earlier ones, and a ratio series spanning 2023 must be read with that break in mind.

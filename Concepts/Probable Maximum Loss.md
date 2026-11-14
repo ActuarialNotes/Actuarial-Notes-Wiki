@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bdd8ef5becff418f6545a40d8f8022f4b9813d261ea99e68bd591b38b25285ed
+  content_hash: sha256:955787777f5b20e5ff39ed6a4651c9b7deb5f80b544ccf37f505027e267a7483
   sources:
     - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (2013), current web text: Principle 2 data quality, Principle 3 models (significant uncertainty, wide range of results from model to model, consider more than one model), Principle 4 PML estimates (data quality, non-modelled exposures, model uncertainty, multiple regions), financial resources against gross PML, FCT earthquake scenario, definitions (PML as return period loss for probabilistic models; gross and net PML), sha256:0421fe099975731fb9a3d9d47c1b484be4fd79f8891b7c54c5edc3c15efc03fd — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices-guideline-2013"
     - "OSFI, Earthquake Exposure Sound Practices — Letter (2013), Appendix A (PML250 and PML500 at return periods, gross and net PML definitions), sha256:64484c9bebbdb759294daf5cf7cadcb550b00028793dc69e2441c3c5567dbade — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
@@ -22,47 +22,54 @@ verification:
   log: .verify/Concepts/Probable Maximum Loss.md
 ---
 
-**The Probable Maximum Loss** (PML) is the loss an insurer's portfolio would suffer from a catastrophe of a specified return period — commonly the $1$-in-$500$ year event for [[Earthquake Exposure Risk Margin|earthquake]] under [[OSFI]]'s requirements. It is the central figure in catastrophe risk management: it sizes the reinsurance programme, drives the capital requirement, and is the number the board is asked to accept.
-
-> $$\text{PML}_{p} = \text{VaR}_{p}(\text{Portfolio catastrophe loss})$$
-
-- **In property underwriting the term is used per location.** Underwriters and loss control staff use probable maximum loss for one location: the largest loss expected there from a fire, stated in dollars or as a percentage of the location's total values. It sits between two neighbours: the maximum foreseeable loss (MFL), the worst loss likely from a single event, and the maximum possible loss (MPL), the worst that could possibly occur. DISC-RM uses it to determine the potential loss severity of a commercial property, and for business income it is the income lost over the longest probable [[Period of Restoration|period of restoration]] ([[Business Income Coverage]], [[COPE]]).
-- **It is a modelled quantity, not an observed one.** PMLs come from catastrophe models built on hazard science (fault maps, ground motion, wind fields), an exposure database (location, construction, occupancy, height, age), a vulnerability function linking hazard intensity to damage, and the financial terms (limits, deductibles, reinsurance).
-- **Return period language is often misread.** A $1$-in-$500$ event has a $0.2\%$ annual probability; over $30$ years the probability of at least one such event is $1 - 0.998^{30} \approx 5.8\%$. "Once in $500$ years" does not mean "not in our lifetime."
-- **Reading a PML between the tabulated points.** An exceedance probability curve is a continuous curve, and a table or graph gives only some of its points. To read the PML at a return period that isn't listed, convert the return period to an exceedance probability ($1/\text{RP}$) and interpolate linearly *in exceedance probability* between the two bracketing points; don't pick the nearer plotted point, and don't interpolate on the return-period years — CAS's examiners list each of these as a common mistake. For example, with points at exceedance probability $0.010$ (loss $\$40$M) and $0.004$ (loss $\$70$M), the $1$-in-$200$ PML at $0.005$ is $40 + \frac{0.010 - 0.005}{0.010 - 0.004}(70 - 40) = \$65$M; interpolating on return periods $100$ and $250$ would give $40 + \frac{200 - 100}{250 - 100}(30) = \$60$M instead. The exception is a *discrete* loss distribution, such as a short list of events each with a fixed loss: there the loss at a given probability is the step the probability falls on, the losses in between can't occur, and interpolating is wrong (the reading in the [[Catastrophe Model Output]] example).
-- **Gross and net PML are different questions.** Gross PML sizes the reinsurance programme; net PML — after reinsurance — is what actually hits capital. OSFI's earthquake requirements test whether the insurer's financial resources cover the net exposure.
-- **Model uncertainty is large.** Different vendor models produce materially different PMLs for the same portfolio, and all are sensitive to exposure data quality. Using a single model's output as a precise figure is a [[Model Risk]] failure; the defensible practice is multiple models, sensitivity testing, and disclosure of the basis.
-- **Exposure data quality dominates.** A PML computed on unmapped or mis-coded locations is wrong regardless of the model's sophistication — one of the most common and least visible errors in catastrophe management.
-- **The PML feeds [[FCT]] and [[ORSA]]**: the catastrophe scenario in the financial condition testing report is usually built from it, and the [[Internal Target Capital Ratio|internal target]] should be set so the ratio survives the net figure.
-
 ![[Media/Figures/Probable_Maximum_Loss.svg|340]]
 
-> [!example]- Sizing a Catastrophe Programme From the PML {Example}
-> An insurer's modelled earthquake PMLs are: $1$-in-$100$, $\$180$ million; $1$-in-$250$, $\$310$ million; $1$-in-$500$, $\$430$ million. Its reinsurance programme retains $\$40$ million and covers up to $\$350$ million. Capital available is $\$390$ million and minimum capital required under the [[MCT]] is $\$230$ million.
->
-> Assess the adequacy of the programme.
+**The Probable Maximum Loss** (PML) is the loss an insurer's portfolio would suffer from a catastrophe of a specified return period, commonly the $1$-in-$500$ year event for [[Earthquake Exposure Risk Margin|earthquake]] under [[OSFI]]'s requirements. It sizes the reinsurance programme, drives the capital requirement, and is the number the board is asked to accept.
+
+The $1$-in-$N$ year PML is the loss on the exceedance probability curve whose annual exceedance probability is
+
+> $$P\left(\text{Loss} > \text{PML}_N\right) = \frac{1}{N}$$
+
+- $N$ is the return period in years, the average number of years between losses that exceed $\text{PML}_N$.
+
+A PML is a modelled quantity, not an observed one. It comes from a catastrophe model built on hazard science (fault maps, ground motion, wind fields), an exposure database (location, construction, occupancy, height, age), a vulnerability function linking hazard intensity to damage, and the financial terms (limits, deductibles, reinsurance).
+
+> [!example]- What is the probability of at least one $1$-in-$500$ year event over 30 years? {Example}
+> - A $1$-in-$500$ event has a $0.2\%$ annual probability.
+> - The probability of no such event in a year is $0.998$, and in 30 years $0.998^{30}$.
+> - Over $30$ years the probability of at least one such event is $1 - 0.998^{30} \approx 5.8\%$.
+
+## Reading a PML between tabulated points
+
+An exceedance probability curve is a continuous curve, and a table or graph gives only some of its points. To read the PML at a return period that isn't listed, convert the return period to an exceedance probability ($1/N$) and interpolate linearly in exceedance probability between the two bracketing points. Picking the nearer plotted point is wrong.
+
+The exception is a discrete loss distribution, such as a short list of events each with a fixed loss. There the loss at a given probability is the step the probability falls on, the losses in between can't occur, and interpolating is wrong (the reading in the [[Catastrophe Model Output]] example).
+
+> [!example]- An exceedance probability curve passes through a $\$40$M loss at $0.010$ and a $\$70$M loss at $0.004$. What is the $1$-in-$200$ PML? {Example}
+> - The $1$-in-$200$ exceedance probability is $1/200 = 0.005$.
+> - It lies $\frac{0.010 - 0.005}{0.010 - 0.004} = \frac{5}{6}$ of the way from $0.010$ to $0.004$.
+> - The PML is $40 + \frac{5}{6} \times 30 = \$65$M.
+
+> [!trap] Interpolating on the return period
+> The return periods of the two points are 100 and 250 years. Interpolating on those years gives $40 + \frac{200 - 100}{250 - 100} \times 30 = \$60$M, which CAS's examiners list as a common mistake.
+
+## Gross and net PML
+
+Gross PML sizes the reinsurance programme. Net PML, after reinsurance, is what actually hits capital. OSFI's earthquake requirements test whether the insurer's financial resources cover the net exposure. The catastrophe scenario in the [[FCT]] report is usually built from the PML, and the [[Internal Target Capital Ratio|internal target]] should be set so the ratio survives the net figure ([[ORSA]]).
+
+Different vendor models produce materially different PMLs for the same portfolio, and all are sensitive to exposure data quality. Using a single model's output as a precise figure is a [[Model Risk]] failure. The defensible practice is multiple models, sensitivity testing, and disclosure of the basis. A PML computed on unmapped or mis-coded locations is wrong regardless of the model's sophistication.
+
+> [!example]- Is this earthquake reinsurance programme adequate? {Example}
+> An insurer's modelled earthquake PMLs are \$180 million at $1$-in-$100$, \$310 million at $1$-in-$250$ and \$430 million at $1$-in-$500$. Its reinsurance programme retains \$40 million and covers up to \$350 million. Capital available is \$390 million and minimum capital required under the [[MCT]] is \$230 million.
 >
 > > [!answer]-
-> > **At the $1$-in-$500$ level the programme is exhausted.** The insurer retains:
-> >
-> > $$\begin{align*}
-> > \text{Net loss} &= \$40\text{M} + (\$430\text{M} - \$350\text{M}) \\
-> > &= \$40\text{M} + \$80\text{M} \\
-> > &= \$120\text{M}
-> > \end{align*}$$
-> >
-> > **Effect on the capital ratio**, taking the loss after tax at roughly $\$88$ million:
-> >
-> > $$\begin{align*}
-> > \text{MCT} &= \frac{\$390\text{M} - \$88\text{M}}{\$230\text{M}} \\
-> > &= 131\%
-> > \end{align*}$$
-> >
-> > **The insurer survives** — above the $100\%$ minimum — **but falls below the $150\%$ supervisory target**, with an earthquake to pay for, a damaged region, likely reinstatement premium to find, and no easy access to capital markets.
-> >
-> > **What to consider:**
-> >
-> > - **Buy the top layer.** Extending cover from $\$350$M to $\$430$M removes the $\$80$M excess exposure. The question is whether that layer's premium is worth the roughly $26$ points of post-event MCT ratio it protects.
-> > - **Check reinstatements.** If the programme has limited reinstatements and a foreshock or a second event occurs, the analysis above is optimistic.
-> > - **Check the model.** A single model's $1$-in-$500$ figure carries real uncertainty; a second model might put it at $\$550$ million, at which point the retained loss is $\$240$ million and the conclusion changes entirely.
-> > - **Reinsurer credit.** A $\$310$ million recovery is only worth what the reinsurers pay. Their [[Credit Risk Margin|credit standing]] and any [[Concentration Risk|concentration]] among them is part of the assessment, and it matters most in exactly the scenario where every cedant is claiming at once.
+> > - At the $1$-in-$500$ level the programme is exhausted, so the insurer retains $40 + (430 - 350) = \$120$ million.
+> > - Taking that loss after tax at roughly \$88 million, the MCT ratio falls to $(390 - 88)/230 = 131\%$.
+> > - The insurer survives above the $100\%$ minimum, but falls below the $150\%$ supervisory target.
+> > - Extending cover from \$350 million to \$430 million removes the \$80 million excess exposure and protects roughly 26 points of post-event MCT ratio.
+> > - A second model might put the $1$-in-$500$ loss at \$550 million, at which point the retained loss is \$240 million and the conclusion changes.
+> > - A recovery is only worth what the reinsurers pay, so their [[Credit Risk Margin|credit standing]] and any [[Concentration Risk|concentration]] among them are part of the assessment.
+
+## Probable maximum loss of one location
+
+Underwriters and loss control staff use probable maximum loss for one location: the largest loss expected there from a fire, stated in dollars or as a percentage of the location's total values. It sits between two neighbours: the maximum foreseeable loss (MFL), the worst loss likely from a single event, and the maximum possible loss (MPL), the worst that could possibly occur. DISC-RM uses it to determine the potential loss severity of a commercial property ([[COPE]]). For [[Business Income Coverage|business income]] it is the income lost over the longest probable [[Period of Restoration|period of restoration]].

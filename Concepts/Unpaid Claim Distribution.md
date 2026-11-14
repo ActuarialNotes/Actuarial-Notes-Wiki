@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d18d080ea58658db50565492b80ca30414576d47a82a5b7b2f3d4a1b697c125b
+  content_hash: sha256:335c1946e1c5261f039d14ed173f8be5195d1ed9c381fb771eb432bf04a1d415
   sources:
     - "Shapland, CAS Monograph 4 (2016), Sections 1, 3.2-3.4, 4.1.1, 5.5.1, 6, 6.1 (pp. 1-3, 8-19, 21-22, 41-49; PDF 9-11, 16-27, 29-30, 49-57), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
     - "Meyers, CAS Monograph 8 (2019), Sections 1, 3-5, 7-8, 12 (pp. 1-2, 6-22, 31-42, 77-80; PDF 11-12, 16-32, 41-52, 87-90), sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf"
@@ -14,75 +14,78 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Unpaid Claim Distribution.md
 ---
-
-**An unpaid claim distribution** is the probability distribution of the total amount $R$ that will be paid after the valuation date on claims that have already occurred. Its mean is the central estimate of [[Unpaid Claims|unpaid claims]], and its spread, measured by the [[Prediction Error|prediction error]] and [[Percentile|percentiles]], measures how uncertain the reserve is.
+An **Unpaid Claim Distribution** is the probability distribution of the total amount $R$ that will be paid after the valuation date on claims that have already occurred. Its mean is the central estimate of [[Unpaid Claims|unpaid claims]], and its spread, measured by the [[Prediction Error|prediction error]] and [[Percentile|percentiles]], measures how uncertain the reserve is. For an $n$-year triangle, the unpaid amount is
 
 > $$R = \sum_{w + d \,>\, n + 1} q_{w,d}$$
 
+- $q_{w,d}$ is the future incremental payment for accident year $w$ at development period $d$, below the diagonal.
+- Any tail beyond the triangle is added.
+
+The distribution drives [[Risk Margin|risk margins]], capital and reinsurance decisions. It is reported by its mean, standard error, CoV and percentiles such as the 50th, 75th, 95th and 99th. Unpaid claims are right-skewed, so a normal approximation understates the upper tail. At a modest percentile such as the 75th, however, a normal puts the value slightly *above* a lognormal with the same mean and CV.
+
+## Estimating the distribution
+
+One route is to take moments from a model (Mack's mean and standard error, or Clark's maximum likelihood fit with its variance) and attach a distribution. The other is to simulate: an ODP bootstrap, a GLM or MCMC posterior draws produce thousands of outcomes, and moments and percentiles are read off directly ([[Stochastic Reserving|stochastic reserving]]).
+
+Each simulated iteration draws the parameters (the bootstrap pseudo-triangle, or the posterior draw) and then the outcome. The 95th percentile of the total is not the sum of the accident years' 95th percentiles, because years diversify ([[Parameter Risk|parameter risk]]).
+
+## Fitting a lognormal to a mean and CV
+
+Mack suggested fitting a [[Lognormal Distribution|lognormal]] to the mean and CV of his chain ladder reserve. Its parameter $\sigma^2$ is
+
 > $$\sigma^2 = \ln\!\left(1 + \mathrm{CV}^2\right)$$
+
+- $\mathrm{CV}$ is the coefficient of variation, the standard error divided by the mean $E[R]$.
+
+Its parameter $\mu$ is
 
 > $$\mu = \ln E[R] - \tfrac{1}{2}\sigma^2$$
 
-- $R$ sums the future incremental payments $q_{w,d}$ below the diagonal of an $n$-year triangle, plus any tail. The second and third blocks fit a [[Lognormal Distribution|lognormal]] to a mean and a CV. Mack suggested this for his chain ladder moments. Its $p$-th percentile is then $R_p = e^{\mu + z_p\sigma}$.
-- **Estimating the parameters.** One route is to take moments from a model (Mack's mean and standard error, or Clark's maximum likelihood fit with its variance) and attach a distribution. The other is to simulate: an ODP bootstrap, a GLM or MCMC posterior draws produce thousands of outcomes, and moments and percentiles are read off directly. See [[Stochastic Reserving]].
-- **Moments and shape.** Report the mean, standard error, CoV and percentiles such as the 50th, 75th, 95th and 99th. Unpaid claims are right-skewed, so a normal approximation understates the upper tail. At a modest percentile such as the 75th, however, a normal puts the value slightly *above* a lognormal with the same mean and CV.
-- **Simulating percentiles.** Each iteration draws the parameters (the bootstrap pseudo-triangle, or the posterior draw) and then the outcome. The 95th percentile of the total is not the sum of the accident years' 95th percentiles, because years diversify. See [[Parameter Risk]].
-- **Reasonableness of the output** (Shapland):
-  - the standard error should rise from the oldest to the most recent years;
-  - the CoV should generally fall, though it may turn up again for the latest years as parameter uncertainty grows;
-  - the total's standard error should exceed any single year's, and its CoV should be below any single year's;
-  - the minimum and maximum iterations must be plausible.
+Its $p$-th percentile is then
 
-  Meyers adds a retrospective test: the percentiles of actual outcomes should be uniform. See [[Reasonableness Testing]].
-- The distribution drives [[Risk Margin|risk margins]], capital and reinsurance decisions. It is **not** a [[Range of Indications|range of reasonable estimates]]: its percentiles describe outcomes, not alternative estimates of the mean.
+> $$R_p = e^{\mu + z_p\sigma}$$
 
-> [!example]- Percentiles from a Mean and Standard Error {Example}
-> A Mack analysis gives a total reserve of $5{,}000$ with standard error $800$ (\$000s). Assuming a lognormal, find the 75th and 95th percentiles and compare them with a normal.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \mathrm{CV} &= 800/5{,}000 \\
-> > &= 0.16 \\
-> > \sigma^2 &= \ln(1.0256) \\
-> > &= 0.02528 \\
-> > \sigma &= 0.1590 \\
-> > \mu &= \ln 5{,}000 - 0.01264 \\
-> > &= 8.50455
-> > \end{align*}
-> > $$
-> >
-> > $$
-> > \begin{align*}
-> > R_{0.75} &= e^{8.50455 + 0.6745(0.1590)} \\
-> > &= 5{,}496 \\
-> > R_{0.95} &= e^{8.50455 + 1.645(0.1590)} \\
-> > &= 6{,}413
-> > \end{align*}
-> > $$
-> >
-> > The normal gives $5{,}000 + 0.6745(800) = 5{,}540$ and $5{,}000 + 1.645(800) = 6{,}316$. The lognormal is *lower* at the 75th percentile and *higher* at the 95th. The choice of distribution matters most exactly where capital and reinsurance decisions are made. The mean and standard error alone do not settle it.
+- $z_p$ is the $p$-th percentile of the standard normal distribution.
 
-> [!example]- Reviewing Bootstrap Output {Example}
-> An ODP bootstrap on paid data (10,000 iterations, \$000s) returns:
+> [!example]- A Mack analysis gives a total reserve of $5{,}000$ with standard error $800$ ($000s). What are its lognormal 75th and 95th percentiles? {Example}
+> - The CV is $800/5{,}000 = 0.16$.
+> - $\sigma^2 = \ln(1.0256) = 0.02528$, so $\sigma = 0.1590$.
+> - $\mu = \ln 5{,}000 - 0.01264 = 8.50455$.
+> - $R_{0.75} = e^{8.50455 + 0.6745(0.1590)} = 5{,}496$.
+> - $R_{0.95} = e^{8.50455 + 1.645(0.1590)} = 6{,}413$.
+> - A normal would give $5{,}000 + 0.6745(800) = 5{,}540$ and $5{,}000 + 1.645(800) = 6{,}316$. The lognormal is lower at the 75th percentile and higher at the 95th, where capital and reinsurance decisions are made.
+
+## Reasonableness of the output
+
+Shapland's checks of the output are that
+
+- the standard error should rise from the oldest to the most recent years;
+- the CoV should generally fall, though it may turn up again for the latest years as parameter uncertainty grows;
+- the total's standard error should exceed any single year's, and its CoV should be below any single year's;
+- and the minimum and maximum iterations must be plausible.
+
+Meyers adds a retrospective test: the percentiles of actual outcomes should be uniform ([[Reasonableness Testing|reasonableness testing]]).
+
+> [!example]- Is this bootstrap output reasonable? {Example}
+> An ODP bootstrap on paid data (10,000 iterations, $000s) returns the table below. The minimum iteration for 2016 is $-60$.
 >
 > | AY | Mean | Std error | CoV |
-> |---|---|---|---|
-> | 2016 | $120$ | $95$ | $79\%$ |
-> | 2017 | $410$ | $160$ | $39\%$ |
-> | 2018 | $900$ | $250$ | $28\%$ |
-> | 2019 | $1{,}650$ | $330$ | $20\%$ |
-> | 2020 | $2{,}800$ | $450$ | $16\%$ |
-> | 2021 | $4{,}100$ | $1{,}350$ | $33\%$ |
-> | Total | $9{,}980$ | $1{,}520$ | $15\%$ |
->
-> The minimum iteration for 2016 is $-60$. Assess the output.
+> | :--- | ---: | ---: | ---: |
+> | 2016 | 120 | 95 | 79% |
+> | 2017 | 410 | 160 | 39% |
+> | 2018 | 900 | 250 | 28% |
+> | 2019 | 1,650 | 330 | 20% |
+> | 2020 | 2,800 | 450 | 16% |
+> | 2021 | 4,100 | 1,350 | 33% |
+> | Total | 9,980 | 1,520 | 15% |
 >
 > > [!answer]-
-> > - **Standard errors** rise from $95$ to $1{,}350$, and the total's $1{,}520$ exceeds every year's. ✓
-> > - **The total's CoV** ($15.2\%$) is below every year's, the lowest being 2020's $16.1\%$. ✓
-> > - **CoVs fall** from $79\%$ to $16\%$ through 2020, as they should. A small, nearly settled reserve for 2016 has most of its uncertainty relative to its size. ✓
-> > - **2021 jumps to $33\%$.** A chain ladder on the latest year multiplies one thin diagonal by the full CDF, so parameter uncertainty swamps the decline. Shapland's remedy is to consider a BF or Cape Cod model for the recent years, which borrows an a priori loss ratio.
-> > - **The negative minimum** for 2016 comes from negative incremental values in a few iterations. It is acceptable only if negative development is genuinely possible, for example from salvage or case-reserve takedowns. Otherwise the simulation should be constrained.
-> >
-> > The distribution is usable for 2016 to 2020, but 2021 should be re-modelled before any percentile is quoted for the total.
+> > - The standard errors rise from $95$ to $1{,}350$, and the total's $1{,}520$ exceeds every year's, as they should.
+> > - The total's CoV, $15.2\%$, is below every year's, the lowest being 2020's $16.1\%$.
+> > - The CoVs fall from $79\%$ to $16\%$ through 2020. A small, nearly settled reserve for 2016 has most of its uncertainty relative to its size.
+> > - 2021 jumps to $33\%$. A chain ladder on the latest year multiplies one thin diagonal by the full CDF, so parameter uncertainty swamps the decline. Shapland's remedy is to consider a BF or Cape Cod model for the recent years, which borrows an a priori loss ratio.
+> > - The negative minimum for 2016 comes from negative incremental values in a few iterations. It is acceptable only if negative development is genuinely possible, for example from salvage or case-reserve takedowns. Otherwise the simulation should be constrained.
+> > - The distribution is usable for 2016 to 2020, but 2021 should be re-modelled before any percentile is quoted for the total.
+
+> [!trap] Reading the percentiles as a range of reasonable estimates
+> An unpaid claim distribution is **not** a [[Range of Indications|range of reasonable estimates]]. Its percentiles describe outcomes, not alternative estimates of the mean.

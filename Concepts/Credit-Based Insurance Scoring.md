@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:be705fa8c8696aebf10f0d038f2dba40c71fc769ae6f221b6c4188c70e4cf3e7
+  content_hash: sha256:3b460fb619819b584ec6ebea6ea3d131a413efd6b1d24303b9e356aecd3b63e8
   sources:
     - "FTC, Credit-Based Insurance Scores: Impacts on Consumers of Automobile Insurance (Report to Congress, July 2007), PDF pp.13-14, 29, 48-49, sha256:4ab0292ce105ff017feb03304dd6f89120b87fa76f8afea1594d7f2c7cbeb05d — https://www.ftc.gov/sites/default/files/documents/reports/credit-based-insurance-scores-impacts-consumers-automobile-insurance-report-congress-federal-trade/p044804facta_report_credit-based_insurance_scores.pdf"
     - "NCOIL Model Act Regarding Use of Credit Information in Personal Insurance (2025 readoption text), §5A-B, §5E, §6, re-rating at renewal, sha256:77244865a5db8d1912cec5675aa3e089e5f7c42114fe2b179919a79beadb4f3f — https://ncoil.org/wp-content/uploads/2025/12/NCOIL-Credit-Model-July-2025.pdf"
@@ -18,69 +18,69 @@ verification:
   log: .verify/Concepts/Credit-Based Insurance Scoring.md
 ---
 
-**Credit-Based Insurance Scoring** is the use of a score built from an applicant's credit report — payment history, outstanding debt, length of credit history, recent applications for credit, mix of credit — to underwrite and rate personal auto and homeowners insurance. It is one of the most predictive [[Rating Variable|rating variables]] U.S. insurers use and one of the most contested, because its predictive power is well documented while its causal link to loss and its effect on protected groups are disputed.
+**Credit-Based Insurance Scoring** is the use of a score built from an applicant's credit report (payment history, outstanding debt, length of credit history, recent applications for credit and mix of credit) to underwrite and rate personal auto and homeowners insurance. It is one of the most predictive [[Rating Variable|rating variables]] U.S. insurers use and one of the most contested, because its predictive power is well documented while its causal link to loss and its effect on protected groups are disputed.
+
+The insurance score is not the lending score. It is built to predict insurance loss, not default, and state laws based on the NCOIL model bar income, gender, address, ethnic group, religion, marital status and nationality from its inputs.
+
+To test the score, an insurer groups policies by score tier $k$ and computes each tier's [[Loss Ratio|loss ratio]] at current rates that do not use credit. The loss ratio relativity of tier $k$ is
 
 > $$\text{LR relativity}_k = \frac{\text{Loss ratio}_k}{\text{Loss ratio}_{\text{total}}}$$
 
-- **How its value is shown.** Group policies by score tier $k$ and compute each tier's [[Loss Ratio|loss ratio]] at current rates that do not use credit. If the relativities move steadily with the score — worst scores highest — the score explains loss the existing rating plan misses. A multivariate model ([[Generalized Linear Model|GLM]]) confirms the effect net of the other variables, as with any rating variable in [[Classification Ratemaking]].
-- **The insurance score is not the lending score.** It is built to predict insurance loss, not default, and state laws based on the NCOIL model bar income, gender, address, ethnic group, religion, marital status and nationality from its inputs.
-- **Federal law.** The Fair Credit Reporting Act gives insurers a permissible purpose to obtain credit reports for underwriting and requires an **adverse action notice** when a consumer is charged more or refused coverage because of information in the report; the Supreme Court addressed what triggers that notice in *Safeco v. Burr* (2007). The FTC's 2007 study for Congress found scores to be effective predictors of auto claim risk, and also that scores differ markedly across racial and ethnic groups.
-- **State regulation.** Many states follow the NCOIL model act on credit in personal insurance: credit may not be the sole basis to decline, cancel or non-renew; a thin or missing credit file must be treated neutrally or on a filed, supported basis; the consumer can ask to be re-scored at renewal; and exceptions apply for extraordinary life circumstances such as serious illness, death of a spouse, divorce, job loss, identity theft or military deployment. A few states go further — California, Hawaii and Massachusetts bar credit in private passenger auto rating.
-- **The debate.** *For:* strong, validated predictive power; cheap, objective and hard to manipulate; its use lowers premiums for most insureds. *Against:* no agreed causal mechanism; disparate impact on minority and low-income consumers; penalising people for medical debt, recession job loss or other hardship; errors in credit files. This is a live case of [[Unfair Discrimination]] and proxy discrimination — see also [[Predictive Analytics]] and [[Emerging Regulatory Issues]].
+- $\text{Loss ratio}_{\text{total}}$ is the loss ratio of all tiers combined.
 
-> [!example]- Testing Credit as a Rating Variable {Example}
+A relativity above $1.00$ means the tier costs more than its current rate, and one below $1.00$ means it costs less. If the relativities move steadily with the score, worst scores highest, the score explains loss the existing rating plan misses. A multivariate model ([[Generalized Linear Model|GLM]]) confirms the effect net of the other variables, as with any rating variable in [[Classification Ratemaking]].
+
+> [!example]- What are the loss ratio relativities by score tier, and what does a state ban on credit do to them? {Example}
 > An auto insurer that does not yet use credit reviews a year of experience at current rates, grouped by insurance score:
 >
-> - Low score: premium $\$2.0$M, losses $\$1.70$M
-> - Middle score: premium $\$5.0$M, losses $\$3.25$M
-> - High score: premium $\$3.0$M, losses $\$1.50$M
->
-> Compute the loss ratio relativities, and describe the effect of a state ban on credit.
+> | Score tier | Premium | Losses |
+> | :--- | ---: | ---: |
+> | Low | $\$2.0$M | $\$1.70$M |
+> | Middle | $\$5.0$M | $\$3.25$M |
+> | High | $\$3.0$M | $\$1.50$M |
 >
 > > [!answer]-
-> > The total loss ratio is $\$6.45\text{M} / \$10.0\text{M} = 64.5\%$.
-> >
-> > $$
-> > \begin{align*}
-> > \text{Low} &= \frac{85.0\%}{64.5\%} \\
-> > &= 1.318 \\[4pt]
-> > \text{Middle} &= \frac{65.0\%}{64.5\%} \\
-> > &= 1.008 \\[4pt]
-> > \text{High} &= \frac{50.0\%}{64.5\%} \\
-> > &= 0.775
-> > \end{align*}
-> > $$
-> >
-> > The premium-weighted average relativity is $1.00$, as it must be:
-> >
-> > $$
-> > \begin{align*}
-> > \frac{2.0(1.318) + 5.0(1.008) + 3.0(0.775)}{10.0} &= \frac{10.001}{10.0} \\
-> > &= 1.00
-> > \end{align*}
-> > $$
-> >
-> > The ordered relativities show that credit explains loss the current plan misses. Before filing, the insurer should check with a GLM that the effect survives the other variables and that the tiers are credible.
-> >
-> > **A ban.** If the state prohibits credit, every tier pays relativity $1.00$. Relative to a credit-rated plan, high-score drivers pay $1.00 / 0.775 = 1.29$ times their indicated rate and low-score drivers $1.00 / 1.318 = 0.76$ times theirs. A ban does not remove the cost difference; it moves it from low-score to high-score drivers. Whether that transfer is fair is the policy question — how big it is, is the actuary's.
+> > - The tier loss ratios are $1.70/2.0 = 85.0\%$, $3.25/5.0 = 65.0\%$ and $1.50/3.0 = 50.0\%$.
+> > - The total loss ratio is $\$6.45\text{M} / \$10.0\text{M} = 64.5\%$.
+> > - The relativities are $85.0/64.5 = 1.318$ low, $65.0/64.5 = 1.008$ middle and $50.0/64.5 = 0.775$ high.
+> > - Weighted by premium they average $1.00$: $2.0(1.318) + 5.0(1.008) + 3.0(0.775) = 10.001$, over $10.0$.
+> > - The ordered relativities show that credit explains loss the current plan misses. Before filing, the insurer should check with a GLM that the effect survives the other variables and that the tiers are credible.
+> > - If the state prohibits credit, every tier pays relativity $1.00$. Relative to a credit-rated plan, high-score drivers pay $1.00 / 0.775 = 1.29$ times their indicated rate and low-score drivers $1.00 / 1.318 = 0.76$ times theirs.
 
-> [!example]- An Extraordinary Life Circumstance {Example}
-> At renewal, a homeowner's insurance score has fallen sharply because of unpaid hospital bills after a serious illness, and the insurer's rating plan would raise her premium by $25\%$. Her state has adopted the NCOIL model provisions. What must the insurer do?
+## Federal law
+
+The Fair Credit Reporting Act gives insurers a permissible purpose to obtain credit reports for underwriting. It requires an **adverse action notice** when a consumer is charged more or refused coverage because of information in the report ([[Insurance Data Regulation]]). The Supreme Court addressed what triggers that notice in *Safeco v. Burr* (2007). The FTC's 2007 study for Congress found scores to be effective predictors of auto claim risk, and also that scores differ markedly across racial and ethnic groups.
+
+## State regulation
+
+Many states follow the NCOIL model act on credit in personal insurance:
+
+1. Credit may not be the sole basis to decline, cancel or non-renew.
+2. A thin or missing credit file must be treated neutrally or on a filed, supported basis.
+3. The consumer can ask to be re-scored at renewal.
+4. Exceptions apply for extraordinary life circumstances such as serious illness, death of a spouse, divorce, job loss, identity theft or military deployment.
+
+A few states go further. California, Hawaii and Massachusetts bar credit in private passenger auto rating.
+
+> [!example]- What must the insurer do for this homeowner whose score fell after a serious illness? {Example}
+> At renewal, a homeowner's insurance score has fallen sharply because of unpaid hospital bills after a serious illness, and the insurer's rating plan would raise her premium by $25\%$. Her state has adopted the NCOIL model provisions.
 >
 > > [!answer]-
 > > - **Adverse action notice.** Because credit information is causing a higher premium, she must be told so, with the reason and how to obtain her credit report and dispute errors.
-> > - **Reasonable exception.** Serious illness is a listed extraordinary life circumstance. On her written request, and with reasonable documentation, the insurer must provide a reasonable exception to its credit-based rating — for example, rating her as though the illness-related deterioration had not occurred, or with a neutral score.
+> > - **Reasonable exception.** Serious illness is a listed extraordinary life circumstance. On her written request, and with reasonable documentation, the insurer must provide a reasonable exception to its credit-based rating, for example rating her as though the illness-related deterioration had not occurred, or with a neutral score.
 > > - **Re-scoring.** If she disputes an error and the report is corrected, the policy must be re-rated.
 > > - **Not the sole reason.** The insurer could not non-renew her solely because of the credit change.
-> >
-> > The provisions mark the line regulators have drawn: credit is admissible as a statistical predictor, but not where the credit damage reflects a misfortune rather than the behaviour the score is taken to measure.
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA:** Section 10.4 covers the societal impact of credit-based insurance scores. Questions ask for the arguments for and against their use, what the FCRA requires when a score raises a premium ([[Insurance Data Regulation]]), how state rules such as the extraordinary life circumstances exception work, and why the scores raise questions of proxy discrimination.
-> - **Exam 6U:** Questions apply the loss ratio relativity test and the state regulatory framework, as in the examples above.
+## The debate over its use
 
-> [!warning]- Exam traps
-> - **Predictive is not the same as permitted:** The FTC found scores predictive of auto claims and also found they differ across racial and ethnic groups; both findings matter to the policy question.
-> - **The insurance score is not the lending score:** It is built to predict insurance loss, and state laws based on the NCOIL model bar certain inputs such as income and ethnic group.
-> - **A ban moves cost, it does not remove it:** Prohibiting credit shifts premium from low-score to high-score insureds.
+| For | Against |
+| :--- | :--- |
+| Strong, validated predictive power | No agreed causal mechanism |
+| Cheap, objective and hard to manipulate | Disparate impact on minority and low-income consumers |
+| Its use lowers premiums for most insureds | It penalises people for medical debt, recession job loss or other hardship |
+| | Errors in credit files |
 
+Predictive is not the same as permitted: both of the FTC's findings matter to the policy question. Credit scoring is a live case of [[Unfair Discrimination|unfair discrimination]] and proxy discrimination, raised in [[Predictive Analytics]] and [[Emerging Regulatory Issues]].
+
+> [!trap] Thinking a ban removes the cost difference
+> A ban does not remove the cost difference between score tiers. It moves it from low-score to high-score drivers, who then subsidize the low-score drivers.

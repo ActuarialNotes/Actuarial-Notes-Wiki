@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cd6bc4c246269bbace7c2e211a1cfa1bff2dc252ba64fcdf34522b48f553895e
+  content_hash: sha256:487ae31f9d42beee126437338307c0d040341f7e15f3c59ce2b651460280ac6a
   sources:
     - "International Actuarial Association, IAA Risk Book: Reinsurance (May 2023), §11.2 Catastrophe Bonds and §11.3 Catastrophe Swaps, printed pp.21-22 (PDF pp.26-27: exchange different exposures directly between two parties at a modelled 'exchange rate' acceptable to both, usually through accepted natural catastrophe models; two undertakings with 'peak' exposures in different parts of the world swap, e.g. x units of European windstorm for y units of Japanese earthquake within a given period), sha256:925844f73a5c5e99698a5e26b44452702123c186e60f9fcfb27a645ca8036780 — https://actuaries.org/app/uploads/2025/08/IAARiskBook_Reinsurance_2023-05.pdf"
     - "CAS Exam 9 Spring 2013 — exam, model solutions and examiner's report, Q13: model solutions PDF p.46 (CAT bond fully collateralised, no credit risk; swap only an agreement to pay, not prefunded, counterparty default risk; pairing uncorrelated risks on opposite sides of the world; low counterparty risk by a financially strong participant; basis risk depends on the trigger for both; a CAT bond gives the issuing company no diversification), examiner's report PDF p.95 (diversification of a CAT bond accrues to its investors, not the issuer; both instruments can limit basis risk by trigger selection), sha256:8cad072030f7457e0220739fd8af1f74ce23873efd78efdd1d99021816131e75 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam9_13-9.pdf"
@@ -18,44 +18,57 @@ verification:
   log: .verify/Concepts/Insurance-Linked Securities.md
 ---
 
-**Insurance-Linked Securities** (ILS) are financial instruments whose value depends on insurance losses — usually catastrophe losses — through which capital-market investors take insurance risk directly rather than through the shares of an insurer or reinsurer. The family covers [[CAT Bonds|cat bonds]], sidecars, industry loss warranties, collateralised reinsurance and related derivatives.
+**Insurance-Linked Securities** (ILS) are financial instruments whose value depends on insurance losses, usually catastrophe losses, through which capital-market investors take insurance risk directly rather than through the shares of an insurer or reinsurer. The family covers [[CAT Bonds|cat bonds]], sidecars, industry loss warranties, collateralised reinsurance and related derivatives.
+
+As a fraction of the capital posted, an investor's return on an ILS is
 
 > $$R_{\text{investor}} = r_{\text{collateral}} + s - \ell$$
 
-- $s$ is the premium or spread received and $\ell$ the loss suffered, both as fractions of the capital posted; for a fully collateralised instrument $0 \leq \ell \leq 1$. The expected excess return $s - E[\ell]$ is the price of the risk. Because [[Catastrophe Risk|catastrophe losses]] are nearly independent of financial markets, investors value that return as a diversifier.
-- **The main forms:**
-  - **Cat bonds** — notes issued by a special purpose reinsurer, tradable among institutional investors, typically multi-year, with indemnity, industry-index, modelled-loss or parametric triggers.
-  - **Sidecars** — special purpose vehicles through which a (re)insurer cedes premium and risk on a defined book, for example by a [[Quota Share|quota share]], to outside investors whose funds are held as collateral. They are tactical instruments of limited duration, used in a hard market, and became very popular after Hurricane Katrina.
-  - **Industry loss warranties** (ILWs) — pay a fixed limit if an industry loss index exceeds a trigger. Written as reinsurance they add a second trigger on the buyer's own loss, which supplies the indemnity.
-  - **Catastrophe risk swaps** — instead of turning a catastrophe exposure into a premium, two parties with "peak" exposures in different parts of the world exchange them directly, for example units of European windstorm exposure for units of Japanese earthquake exposure over a set period, at an "exchange rate" both accept, usually from catastrophe models. Pairing uncorrelated exposures diversifies both parties' books, which a cat bond — protection on the issuer's own risk — does not do for its issuer. A swap is not prefunded: it is only an agreement to pay if the covered event occurs, so each party carries counterparty default risk, reduced by choosing a financially strong counterparty; its basis risk depends, as a cat bond's does, on the trigger chosen.
-  - **Other risk-linked instruments** — contingent capital such as a catastrophe equity put, an option to raise additional equity capital if losses exceed a predetermined level; the instruments have also spread to life insurance and annuities. Exchange-traded catastrophe options, offered on the Chicago Board of Trade from 1995, were among the first attempts, and trading ceased in 1999 for lack of demand.
-- **Against traditional [[Reinsurance|reinsurance]]:** collateral replaces a reinsurer's promise, so there is no [[Reinsurance Credit Risk|credit risk]] on the limit; capacity comes from capital markets; and index or parametric triggers trade moral hazard for **basis risk**. Cummins concludes that ILS complement reinsurance rather than replace it. See [[Securitization]] for the economic case.
+- $r_{\text{collateral}}$ is the return earned on the collateral.
+- $s$ is the premium or spread received.
+- $\ell$ is the loss suffered, with $0 \le \ell \le 1$ for a fully collateralised instrument.
 
-> [!example]- A Sidecar's Return in Three Years {Example}
-> A reinsurer cedes a $40\%$ quota share of its $\$250$ million property-catastrophe book to a sidecar for one year, receiving a $25\%$ ceding commission. Investors fund the sidecar with $\$300$ million held as collateral; its liability is limited to that collateral plus the premium it receives. Ignoring collateral yield, find the investors' return if the book's loss ratio is (a) $30\%$, (b) $250\%$, (c) $400\%$.
+The expected excess return $s - E[\ell]$ is the price of the risk. Because [[Catastrophe Risk|catastrophe losses]] are nearly independent of financial markets, investors value that return as a diversifier.
+
+## Catastrophe bonds
+
+Cat bonds are notes issued by a special purpose reinsurer, tradable among institutional investors and typically multi-year. Their triggers are indemnity, industry-index, modelled-loss or parametric. A cat bond is protection on the issuer's own risk, so the diversification benefit goes to the investors, not to the issuer.
+
+## Sidecars
+
+A sidecar is a special purpose vehicle through which a (re)insurer cedes premium and risk on a defined book, for example by a [[Quota Share|quota share]], to outside investors whose funds are held as collateral. Sidecars are tactical instruments of limited duration, used in a hard market, and became very popular after Hurricane Katrina.
+
+> [!example]- What is the investors' return on this sidecar if the book's loss ratio is $30\%$, $250\%$ or $400\%$? {Example}
+> A reinsurer cedes a $40\%$ quota share of its $\$250$ million property-catastrophe book to a sidecar for one year, receiving a $25\%$ ceding commission. Investors fund the sidecar with $\$300$ million held as collateral. Its liability is limited to that collateral plus the premium it receives. Ignore the collateral yield.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Sidecar premium} &= 0.40 \times \$250\text{M} \times (1 - 0.25) \\
-> > &= \$75\text{M} \\[4pt]
-> > \text{Ceded loss} &= 0.40 \times \$250\text{M} \times \text{LR} \\
-> > &= \$100\text{M} \times \text{LR}
-> > \end{align*}
-> > $$
-> >
-> > - (a) Loss $\$30$M; profit $\$75\text{M} - \$30\text{M} = \$45\text{M}$; return $45/300 = 15.0\%$.
-> > - (b) Loss $\$250$M; profit $\$75\text{M} - \$250\text{M} = -\$175\text{M}$; return $-58.3\%$.
-> > - (c) Loss $\$400$M exceeds the sidecar's $\$375$M of resources. Investors lose everything ($-100\%$) and the sponsor bears the $\$25$M excess.
-> >
-> > The sponsor gains capacity and commission income without raising equity; the investors take the sponsor's **underwriting**, not just the hazard, because a quota share passes through its risk selection and pricing. And the cover is limited-recourse: beyond the collateral, the tail comes back to the sponsor.
+> > - The sidecar's premium is $0.40 \times \$250\text{M} \times (1 - 0.25) = \$75\text{M}$, and its loss is $0.40 \times \$250\text{M} = \$100\text{M}$ times the loss ratio.
+> > - At $30\%$ the loss is $\$30$M, the profit $\$45$M and the return $45/300 = 15.0\%$.
+> > - At $250\%$ the loss is $\$250$M, the profit $-\$175$M and the return $-58.3\%$.
+> > - At $400\%$ the loss of $\$400$M exceeds the sidecar's $\$375$M of resources, so the investors lose everything ($-100\%$) and the sponsor bears the $\$25$M excess.
 
-> [!example]- Industry Loss Warranty: Two Triggers {Example}
-> An insurer buys a $\$50$ million ILW in reinsurance form: it pays the full limit if U.S. hurricane industry losses reach $\$30$ billion **and** the buyer's own loss exceeds $\$1$ million. What does it pay if (a) industry losses are $\$34$ billion and the buyer's loss $\$220$ million; (b) industry $\$26$ billion, buyer $\$400$ million; (c) industry $\$34$ billion, buyer nothing?
+## Industry loss warranties
+
+An industry loss warranty (ILW) pays a fixed limit if an industry loss index exceeds a trigger. Written as reinsurance, it adds a second trigger on the buyer's own loss, which supplies the indemnity, and regulators treat buying one with that trigger as a reinsurance purchase. An ILW is standardised protection against a *market-wide* event, with relatively low transaction costs.
+
+> [!example]- What does this ILW pay in each of three hurricane outcomes? {Example}
+> An insurer buys a $\$50$ million ILW in reinsurance form: it pays the full limit if U.S. hurricane industry losses reach $\$30$ billion **and** the buyer's own loss exceeds $\$1$ million. The outcomes are (a) industry losses of $\$34$ billion and a buyer's loss of $\$220$ million, (b) $\$26$ billion and $\$400$ million, and (c) $\$34$ billion and nothing.
 >
 > > [!answer]-
-> > - (a) Both triggers met: **$\$50$ million**.
-> > - (b) Industry trigger missed: **nothing**, despite a heavy own loss — basis risk.
-> > - (c) Own-loss trigger missed: **nothing**.
-> >
-> > The ILW is standardised protection against a *market-wide* event, with relatively low transaction costs. The own-loss trigger is what makes it indemnity, and regulators treat buying one with that trigger as a reinsurance purchase.
+> > - In (a) both triggers are met, so it pays **$\$50$ million**.
+> > - In (b) the industry trigger is missed, so it pays **nothing**, despite a heavy own loss. That is basis risk.
+> > - In (c) the own-loss trigger is missed, so it pays **nothing**.
+
+## Catastrophe risk swaps
+
+In a catastrophe risk swap, two parties with "peak" exposures in different parts of the world exchange them directly instead of turning a catastrophe exposure into a premium. For example, European windstorm exposure is exchanged for Japanese earthquake exposure at an "exchange rate" both accept, usually from catastrophe models. Pairing uncorrelated exposures diversifies both parties' books, which a cat bond does not do for its issuer.
+
+A swap is not prefunded. It is only an agreement to pay if the covered event occurs, so each party carries counterparty default risk, reduced by choosing a financially strong counterparty. Its basis risk depends, as a cat bond's does, on the trigger chosen.
+
+## Other risk-linked instruments
+
+Contingent capital includes the catastrophe equity put, an option to raise additional equity capital if losses exceed a predetermined level. Exchange-traded catastrophe options, offered on the Chicago Board of Trade from 1995, were among the first attempts, and trading ceased in 1999 for lack of demand.
+
+## Insurance-linked securities and reinsurance
+
+Against traditional [[Reinsurance|reinsurance]], collateral replaces a reinsurer's promise, so there is no [[Reinsurance Credit Risk|credit risk]] on the limit. Capacity comes from the capital markets. Index or parametric triggers trade moral hazard for **basis risk**. Cummins concludes that ILS complement reinsurance rather than replace it ([[Securitization]]).

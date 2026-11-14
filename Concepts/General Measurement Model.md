@@ -4,54 +4,41 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:36ac86ee7a04d70c09b372923cf7dc54efd234ea54b271e8e70377f84efefa76
+  content_hash: sha256:5ae917e8131f173acd3dfaf0f0190e1bf8273c1d445b49e471af09d89b2fc08c
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/General Measurement Model.md
 ---
 
-**The General Measurement Model** (GMM, also the *building block approach*) is [[IFRS 17]]'s default measurement basis for insurance contracts: the liability is the present value of expected [[Fulfilment Cash Flows|fulfilment cash flows]], plus a [[Risk Adjustment for Non-Financial Risk|risk adjustment]], plus a [[Contractual Service Margin]] holding the unearned profit.
+![[Media/Figures/General_Measurement_Model.svg|340]]
+
+The **General Measurement Model** (GMM, also the building block approach) is [[IFRS 17]]'s default measurement basis for insurance contracts. Under it, the liability for a group of contracts is
 
 > $$\text{Liability} = \text{PV(Cash flows)} + \text{RA} + \text{CSM}$$
 
-- **The three (or four) building blocks:** estimates of future cash flows; discounting for the time value of money and financial risk; the risk adjustment for non-financial risk; and — for the [[Liability for Remaining Coverage|LRC]] only — the CSM. Together the first three are the fulfilment cash flows.
-- **Every contract is eligible.** The GMM applies unless a contract qualifies for the [[Premium Allocation Approach|PAA]] simplification or the variable fee approach. In Canadian P&C practice most short-duration business uses the PAA, so the GMM appears mainly on **multi-year contracts**, some long-term commercial covers, and certain [[Reinsurance Contracts Held|reinsurance held]] arrangements.
-- **Full remeasurement each period.** Cash flow estimates, discount rates and the risk adjustment are all updated to current values, with the changes routed according to whether they relate to future service (CSM), past service (profit or loss), or the time value of money ([[Insurance Finance Income or Expenses]]).
-- **The [[Liability for Incurred Claims|LIC]] is measured the same way under both models** — fulfilment cash flows plus risk adjustment, no CSM. The GMM/PAA choice affects only the LRC, which is a point candidates frequently get backwards.
-- **The GMM is more work.** It requires cash flow projection over the full contract term, a locked-in discount rate for CSM accretion alongside current rates for the liability, and coverage-unit tracking for CSM release — which is precisely why the PAA exists.
+- $\text{PV(Cash flows)}$ is the present value of the expected future cash flows, discounted for the time value of money and financial risk.
+- $\text{RA}$ is the [[Risk Adjustment for Non-Financial Risk|risk adjustment for non-financial risk]].
+- $\text{CSM}$ is the [[Contractual Service Margin|contractual service margin]], the unearned profit, held for the [[Liability for Remaining Coverage|liability for remaining coverage]] (LRC) only.
 
-![[Media/Figures/General_Measurement_Model.svg|340]]
+The present value and the risk adjustment together are the [[Fulfilment Cash Flows|fulfilment cash flows]]. Every period the cash flow estimates, discount rates and risk adjustment are all updated to current values. A change is routed by what it relates to: future service adjusts the CSM, past service goes to profit or loss, and the time value of money goes to [[Insurance Finance Income or Expenses|insurance finance income or expenses]].
 
-> [!example]- GMM Versus PAA on the Same Contract {Example}
-> A three-year commercial policy is written for a single premium of $\$9$ million. Expected claims are $\$2.2$ million in each year, the risk adjustment is $\$0.6$ million, and the discount rate is $3\%$. Acquisition costs are $\$0.9$ million.
->
-> Contrast the initial LRC under the GMM with what the PAA would produce (were the contract eligible).
+> [!example]- What is the initial LRC of this contract under the GMM? {Example}
+> A three-year commercial policy is written for a single premium of $\$9$ million. Expected claims are $\$2.2$ million a year, paid at the end of each year. The risk adjustment is $\$0.6$ million, the discount rate 3%, and acquisition costs $\$0.9$ million.
 >
 > > [!answer]-
-> > **GMM.** Present value of expected claims, paid at the end of each year:
-> >
-> > $$\begin{align*}
-> > \text{PV} &= \$2.2\text{M}\left(\frac{1 - 1.03^{-3}}{0.03}\right) \\
-> > &= \$2.2\text{M} \times 2.82861 \\
-> > &= \$6.223\text{M}
-> > \end{align*}$$
-> >
-> > Adding acquisition costs and the risk adjustment, and comparing with the premium:
-> >
-> > $$\begin{align*}
-> > \text{CSM}_0 &= \$9\text{M} - \$6.223\text{M} - \$0.9\text{M} - \$0.6\text{M} \\
-> > &= \$1.277\text{M}
-> > \end{align*}$$
-> >
-> > **Initial LRC under the GMM:**
-> >
-> > $$\$6.223\text{M} + \$0.6\text{M} + \$1.277\text{M} = \$8.1\text{M}$$
-> >
-> > which equals premium less acquisition costs, as it must — the CSM is defined to make it so.
-> >
-> > **PAA.** The LRC is simply premium less acquisition cash flows:
-> >
-> > $$\$9\text{M} - \$0.9\text{M} = \$8.1\text{M}$$
-> >
-> > **The same number at inception.** The models diverge *afterwards*: under the PAA the LRC runs off on a time or expected-release basis with no CSM to adjust, while under the GMM revisions to future claims adjust the CSM and the components are remeasured every period. On a three-year contract, that difference is material — which is why the PAA is restricted to coverage periods of a year or less unless the insurer can demonstrate the results would not differ materially.
+> > - The present value of the claims is $2.2 \times (1 - 1.03^{-3})/0.03 = 2.2 \times 2.82861 = \$6.223$ million.
+> > - The CSM is the premium less the claims, acquisition costs and risk adjustment: $9 - 6.223 - 0.9 - 0.6 = \$1.277$ million.
+> > - The initial LRC is $6.223 + 0.6 + 1.277 = \$8.1$ million.
+> > - This equals the premium less acquisition costs, as it must, because the CSM is defined to make it so.
+
+## The GMM and the premium allocation approach
+
+The GMM applies to every contract unless it qualifies for the [[Premium Allocation Approach|PAA]] simplification or the variable fee approach. In Canadian P&C practice most short-duration business uses the PAA, so the GMM appears mainly on multi-year contracts, some long-term commercial covers and certain [[Reinsurance Contracts Held|reinsurance held]] arrangements.
+
+The GMM is more work. It requires a cash flow projection over the full contract term, a locked-in discount rate for accreting the CSM alongside current rates for the liability, and coverage-unit tracking for releasing the CSM.
+
+Under the PAA the initial LRC is the premium less acquisition cash flows. On the contract above that is $9 - 0.9 = \$8.1$ million, the same as the GMM at inception. The models diverge afterwards. Under the PAA the LRC runs off on a time or expected-release basis with no CSM to adjust, while under the GMM revisions to future claims adjust the CSM and the components are remeasured every period. On a three-year contract that difference is material, which is why the PAA is restricted to coverage periods of a year or less unless the insurer can demonstrate that the results would not differ materially.
+
+> [!trap] Applying the GMM/PAA choice to incurred claims
+> The [[Liability for Incurred Claims|liability for incurred claims]] is measured the same way under both models: fulfilment cash flows, with no CSM. The choice between the GMM and the PAA affects only the LRC.

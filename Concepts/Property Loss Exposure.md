@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:396e0f0ab0788c2c73ebbebab024599d981573f7cab381e92146c56447ed2b70
+  content_hash: sha256:19f854c3e591470b51dda9fdaa081a4a8115b61df7764c1cadf94f406dcdf25e
   sources:
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.9 pp.167-169 (PDF pp.186-188): ACV = RC less depreciation, valuation methods, insurable interest of owners, bailees, secured creditors, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 p.46: business income exposures (loss of income, continuing expenses, extra expenses), sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
@@ -15,72 +15,86 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Property Loss Exposure.md
 ---
+A **Property Loss Exposure** is any condition or situation that presents the possibility that a person or organization will suffer a loss because property in which it has a financial interest is damaged, destroyed, taken or made unusable. It is one of the four types of [[Loss Exposure|loss exposure]], and it is described by the property exposed, the [[Causes of Loss|cause of loss]] and the financial consequences.
 
-A **property loss exposure** is any condition or situation that presents the possibility that a person or organization will suffer a loss because property in which it has a financial interest is damaged, destroyed, taken or made unusable. It is one of the four types of [[Loss Exposure|loss exposure]], and like every exposure it is described by the property exposed, the [[Causes of Loss|cause of loss]] and the financial consequences. Individuals manage these exposures mainly through the [[Homeowners Policy|homeowners policy]] and personal auto coverage, and businesses through [[Commercial Property Insurance|commercial property insurance]].
+The total financial consequence of one property loss to the party with the interest is
 
 > $$L = \Delta V + I_{\text{lost}} + E_{\text{extra}}$$
 
+- $\Delta V$ is the reduction in the value of the property, measured on whichever valuation basis applies.
+- $I_{\text{lost}}$ is the income lost while the property cannot be used.
+- $E_{\text{extra}}$ is the extra expense of carrying on in the meantime.
+
+## Types of property
+
+Real property is land, buildings and other structures attached to the land. Personal property is everything else, including furniture, equipment, inventory, vehicles, money and securities, and valuable records such as accounts receivable.
+
+## Parties with a financial interest
+
+The owner is not the only party who can lose when property is damaged:
+
+- A **mortgagee** or other secured lender loses when the collateral behind its loan is destroyed.
+- A **tenant** can lose the improvements it paid for and the use of the premises.
+- A **bailee**, such as a dry cleaner, can be held responsible for customers' property in its care.
+
+## Causes of loss
+
+A cause of loss, or peril, is what damages the property, such as fire, windstorm, theft or water damage. Property policies either list the perils they cover, as the basic and broad forms do, or cover risks of direct physical loss except those excluded, as the special form does. Flood and earth movement are typically excluded and handled by separate coverage.
+
+## Valuation of property
+
+The reduction in value can be measured at [[Replacement Cost|replacement cost]] (RC), the cost to repair or replace with property of like kind and quality, at actual cash value (ACV), at market value, or at an agreed value set in advance. Actual cash value is
+
 > $$\text{ACV} = \text{RC} - \text{Depreciation}$$
 
-- **Symbols:** $L$ is the total financial consequence of one property loss to the party with the interest. $\Delta V$ is the reduction in the value of the property, measured on whichever valuation basis applies. $I_{\text{lost}}$ is the income lost while the property cannot be used, and $E_{\text{extra}}$ is the extra expense of carrying on in the meantime. ACV is actual cash value and RC is [[Replacement Cost|replacement cost]], the cost to repair or replace with property of like kind and quality.
-- **Types of property:** Real property is land, buildings and other structures attached to the land. Personal property is everything else, including furniture, equipment, inventory, vehicles, money and securities, and valuable records such as accounts receivable.
-- **Parties with a financial interest:** The owner is not the only party who can lose. A mortgagee or other secured lender loses when the collateral behind its loan is destroyed, a tenant can lose the improvements it paid for and the use of the premises, and a bailee, such as a dry cleaner, can be held responsible for customers' property in its care.
-- **Causes of loss:** A cause of loss, or peril, is what damages the property, such as fire, windstorm, theft or water damage. Property policies either list the perils they cover, as the basic and broad forms do, or cover risks of direct physical loss except those excluded, as the special form does. Flood and earth movement are typically excluded and handled by separate coverage.
-- **Reduction in value:** The loss in value can be measured at replacement cost, at actual cash value, which deducts depreciation from replacement cost, at market value, or at an agreed value set in advance. The basis matters because the gap between replacement cost and actual cash value is a real loss that the party bears unless the policy pays replacement cost, and [[Insurance to Value|insuring to value]] decides whether the limit is high enough to pay it.
-- **Lost income and extra expense:** A business that cannot operate loses the net income it would have earned and still has to pay continuing expenses such as salaried payroll and loan interest. It may also spend extra, such as renting temporary space, to keep operating. A family whose home is unlivable faces the matching personal exposure, the additional living expense of staying elsewhere above its normal costs.
-- **Personal exposures:** An individual's main property exposures are the dwelling, other structures on the lot, household personal property, autos, and the loss of use of the home. The HO-3 policy answers these with its dwelling, other structures, personal property and loss of use coverages ([[HO-3 Property Coverages]]), each subject to its perils, exclusions and loss settlement conditions, and the auto is insured under the personal auto policy's [[Auto Physical Damage Coverage|coverage for damage to your auto]]. Exposures the HO-3 limits or excludes, such as valuable articles, earthquake and sewer back-up, are treated with [[Homeowners Endorsements]].
-- **Commercial exposures:** A business's exposures fall into its buildings, its business personal property, the property of others in its care, and the business income and extra expense that follow a loss. The [[Building and Personal Property Coverage Form|building and personal property coverage form]] and [[Business Income Coverage|business income coverage]] answer them, and specialized property, such as money, property in transit and equipment that can break down, often needs its own coverage.
-- **Managing the exposure:** [[Risk Control|Risk control]] reduces frequency or severity, through sprinklers, alarms, safes and fire-resistive construction. Risk financing pays for the losses that remain, by retaining the small ones through a [[Deductible|deductible]] and transferring the large ones through insurance ([[Risk Transfer]]).
+The gap between replacement cost and actual cash value is a real loss that the party bears unless the policy pays replacement cost. [[Insurance to Value|Insuring to value]] decides whether the limit is high enough to pay it.
 
-> [!example]- Financial Consequences of a Bakery Fire {Example}
-> A fire closes a bakery for three months. With illustrative figures, the building damage would cost \$320,000 to repair at replacement cost, and the damaged part of the building had depreciated by 30%. Ovens and fixtures that would cost \$90,000 to replace had depreciated by 40%. While closed, the bakery loses net income of \$15,000 a month and continues to pay \$20,000 a month in expenses, and it spends \$12,000 renting a temporary kitchen to keep supplying its wholesale customers. Find the financial consequences on a replacement cost basis and on an actual cash value basis.
+> [!example]- What are the bakery's financial consequences on a replacement cost basis and on an actual cash value basis? {Example}
+> A fire closes a bakery for three months. The figures are illustrative:
+>
+> | Item | Amount |
+> | :--- | ---: |
+> | Building damage at replacement cost | \$320,000, depreciated 30% |
+> | Ovens and fixtures at replacement cost | \$90,000, depreciated 40% |
+> | Net income lost | \$15,000 a month |
+> | Continuing expenses | \$20,000 a month |
+> | Temporary kitchen rented to keep supplying customers | \$12,000 |
 >
 > > [!answer]-
-> > The reduction in value depends on the valuation basis, and the income and expense items do not.
-> > $$
-> > \begin{align*}
-> > \text{ACV}_{\text{bldg}} &= 320{,}000(1 - 0.30) \\
-> > &= 224{,}000 \\
-> > \text{ACV}_{\text{equip}} &= 90{,}000(1 - 0.40) \\
-> > &= 54{,}000 \\
-> > I_{\text{lost}} &= 3(15{,}000 + 20{,}000) \\
-> > &= 105{,}000
-> > \end{align*}
-> > $$
-> > Adding the extra expense to each basis gives the total.
-> > $$
-> > \begin{align*}
-> > L_{\text{RC}} &= 320{,}000 + 90{,}000 + 105{,}000 + 12{,}000 \\
-> > &= 527{,}000 \\
-> > L_{\text{ACV}} &= 224{,}000 + 54{,}000 + 105{,}000 + 12{,}000 \\
-> > &= 395{,}000
-> > \end{align*}
-> > $$
-> > Restoring the bakery costs \$527,000. If its insurance values property at actual cash value, the bakery bears the \$132,000 of depreciation itself, which is why most commercial property is insured at replacement cost.
+> > - The building's actual cash value loss is $320{,}000(1 - 0.30) = \$224{,}000$.
+> > - The equipment's actual cash value loss is $90{,}000(1 - 0.40) = \$54{,}000$.
+> > - The lost income is the net income plus the continuing expenses, $3(15{,}000 + 20{,}000) = \$105{,}000$, on either basis.
+> > - The extra expense is the $\$12{,}000$ temporary kitchen, on either basis.
+> > - At replacement cost, $L = 320{,}000 + 90{,}000 + 105{,}000 + 12{,}000 = \$527{,}000$.
+> > - At actual cash value, $L = 224{,}000 + 54{,}000 + 105{,}000 + 12{,}000 = \$395{,}000$.
+> > - If its insurance pays actual cash value, the bakery bears the $\$132{,}000$ of depreciation itself, which is why most commercial property is insured at replacement cost.
 
-> [!example]- A Homeowner's Kitchen Fire {Example}
-> A kitchen fire causes \$60,000 of damage to a house. Household contents that would cost \$18,000 to replace have an actual cash value of \$11,000. The family rents an apartment for two months at \$3,000 a month and spends \$900 more than usual on meals, while its mortgage and other normal costs continue. The homeowners policy has a \$1,000 deductible applied to the dwelling claim, values the dwelling at replacement cost and values personal property at actual cash value. Find the family's financial consequences and the part it retains.
+## Lost income and extra expense
+
+A business that cannot operate loses the net income it would have earned and still has to pay continuing expenses such as salaried payroll and loan interest. Its business income loss is the net income lost plus those continuing expenses. It may also spend extra, such as renting temporary space, to keep operating.
+
+A family whose home is unlivable faces the matching personal exposure, the additional living expense of staying elsewhere. Additional living expense is the increase over the family's normal living costs, not the total cost of living elsewhere. Costs that continue regardless, such as the mortgage, are not part of it, and costs that stop during the displacement reduce it.
+
+> [!example]- What are the family's financial consequences, and how much of them does it retain? {Example}
+> A kitchen fire causes \$60,000 of damage to a house. Household contents that would cost \$18,000 to replace have an actual cash value of \$11,000. The family rents an apartment for two months at \$3,000 a month and spends \$900 more than usual on meals, while its mortgage and other normal costs continue. The homeowners policy values the dwelling at replacement cost with a \$1,000 deductible, and values personal property at actual cash value.
 >
 > > [!answer]-
-> > The additional living expense is the increase over normal living costs, which here is the rent and the extra meals.
-> > $$
-> > \begin{align*}
-> > L &= 60{,}000 + 18{,}000 + 2(3{,}000) + 900 \\
-> > &= 84{,}900 \\
-> > \text{Insured} &= (60{,}000 - 1{,}000) + 11{,}000 + 6{,}900 \\
-> > &= 76{,}900 \\
-> > \text{Retained} &= 84{,}900 - 76{,}900 \\
-> > &= 8{,}000
-> > \end{align*}
-> > $$
-> > The family retains \$8,000, made up of the \$1,000 deductible and the \$7,000 of depreciation on its contents. A replacement cost endorsement on personal property would shrink that to the deductible.
+> > - The additional living expense is the rent and the extra meals, $2(3{,}000) + 900 = \$6{,}900$. The mortgage continues anyway, so it is not part of it.
+> > - The financial consequence is $L = 60{,}000 + 18{,}000 + 6{,}900 = \$84{,}900$.
+> > - The policy pays $(60{,}000 - 1{,}000) + 11{,}000 + 6{,}900 = \$76{,}900$.
+> > - The family retains $84{,}900 - 76{,}900 = \$8{,}000$, the $\$1{,}000$ deductible and the $\$7{,}000$ of depreciation on its contents.
 
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** The homeowners section opens by asking how an individual manages personal property exposures, and the commercial property section opens by asking candidates to analyze a business's property exposures. Questions name the property, the causes of loss and the financial consequences, then ask which part of the HO-3 or the BPP responds.
-> - **DISC-RM:** In the section on insurance as a risk management technique, a scenario describes a household or a business and asks which property exposures it faces, what a loss would cost, and how risk control and insurance would treat them.
+## Personal property exposures
 
-> [!warning]- Exam traps
-> - **Forgetting the time element:** A property loss usually brings lost income and extra expense, or additional living expense for a family. Measuring a loss by the repair cost alone understates it, often by a large share.
-> - **Actual cash value versus replacement cost:** Actual cash value deducts depreciation, and the difference is borne by the insured unless the policy pays replacement cost. A question that gives both figures expects the candidate to say which basis applies.
-> - **Additional living expense is an increase:** Additional living expense is what the family spends above its normal costs, not the total cost of living elsewhere. Costs that stop during the displacement reduce it.
-> - **The owner is not the only interest:** A lender, a tenant and a bailee all have property exposures in property they do not own. An answer that names only the owner misses parties the course expects candidates to identify.
+An individual's main property exposures are the dwelling, other structures on the lot, household personal property, autos, and the loss of use of the home. The [[Homeowners Policy|homeowners policy]] answers these with its dwelling, other structures, personal property and loss of use coverages ([[HO-3 Property Coverages]]), each subject to its perils, exclusions and loss settlement conditions. The auto is insured under the personal auto policy's [[Auto Physical Damage Coverage|coverage for damage to your auto]]. Exposures the HO-3 limits or excludes, such as valuable articles, earthquake and sewer back-up, are treated with [[Homeowners Endorsements]].
+
+## Commercial property exposures
+
+A business's exposures fall into its buildings, its business personal property, the property of others in its care, and the business income and extra expense that follow a loss. The [[Building and Personal Property Coverage Form|building and personal property coverage form]] and [[Business Income Coverage|business income coverage]] answer them, under [[Commercial Property Insurance|commercial property insurance]]. Specialized property, such as money, property in transit and equipment that can break down, often needs its own coverage.
+
+## Managing the exposure
+
+[[Risk Control|Risk control]] reduces frequency or severity, through sprinklers, alarms, safes and fire-resistive construction. Risk financing pays for the losses that remain, by retaining the small ones through a [[Deductible|deductible]] and transferring the large ones through insurance ([[Risk Transfer]]).
+
+> [!trap] Measuring the loss by the repair cost alone
+> A property loss usually brings lost income and extra expense, or additional living expense for a family. Leaving them out understates the loss: in the bakery example they add $\$117{,}000$ to the $\$410{,}000$ of property damage.

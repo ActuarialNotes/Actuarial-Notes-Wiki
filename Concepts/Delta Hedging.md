@@ -2,11 +2,11 @@
 aliases:
   - Delta-Hedging
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80e9e4a489b85e06801c17a75538998cdb8dfd444329d664607000e5ae1d3c8b
+  content_hash: sha256:a648a1708b9bb85528e98ad47c2f76919800be82d86c2d9c25287a04cfcc8afd
   sources:
     - "SOA Exam FAM syllabus, October 2026, Topic 6 (a)-(d), p.5; readings p.8 (AMLCR Ch.16), sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
     - "M. Haugh (Columbia IEOR E4706), The Black-Scholes Model (2016), delta p.7, gamma p.8, Delta Hedging and eq.24 pp.11-12, sha256:a84225df571d081f2eb2079d8e1160d51af50c72e4fd2c52f5073ac39d6884bb — http://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf"
@@ -18,83 +18,74 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Delta Hedging.md
 ---
-**Delta hedging** offsets a derivative position with $\Delta$ units of the underlying asset, $\Delta$ being the derivative's sensitivity to the asset price, so that the combined position does not gain or lose on a small price move; rebalanced as $\Delta$ changes, the stock-plus-bond position becomes a **replicating portfolio** for the derivative. It is the dynamic [[Hedging|hedge]] behind both an option market-maker's book and an insurer's hedge of an equity-linked guarantee.
+**Delta Hedging** is a dynamic [[Hedging|hedge]] that offsets a derivative position with $\Delta$ units of the underlying asset, $\Delta$ being the derivative's sensitivity to the asset price, so that the combined position does not gain or lose on a small price move. Rebalanced as $\Delta$ changes, the stock-plus-bond position becomes a replicating portfolio for the derivative. In the [[Black-Scholes Model|Black-Scholes model]], the delta of a European call on a stock with dividend yield $\delta$ is
 
 > $$\Delta_{C} = e^{-\delta T} N(d_1)$$
 
+- $N(\cdot)$ is the standard normal CDF.
+- $T$ is the time to expiry in years.
+
+The delta of the matching put is
+
 > $$\Delta_{P} = -e^{-\delta T} N(-d_1)$$
 
-> $$\Delta = e^{-\delta h}\,\frac{V_u - V_d}{S(u - d)}$$
+The argument $d_1$ is
 
-> $$B = e^{-rh}\,\frac{u V_d - d V_u}{u - d}$$
+> $$d_1 = \dfrac{\ln(S/K) + (r - \delta + \sigma^2/2)T}{\sigma\sqrt{T}}$$
+
+- $S$ is the stock price and $K$ is the strike.
+- $r$ is the continuously compounded risk-free rate and $\sigma$ is the [[Volatility|volatility]].
+
+For FAM's non-dividend-paying stock, $\delta = 0$, so the call's delta is $N(d_1)$ and the put's is $-N(-d_1) = N(d_1) - 1$. A position's delta is the number of options times each option's delta, positive for options held and negative for options written. A hedge holds shares equal to the negative of the position's delta, so the total delta is zero. A writer of the derivative holds $+\Delta$ shares per option sold (a call writer buys stock, a put writer shorts it). The hedged position earns the risk-free rate only in the limit of continuous rebalancing under the model's assumptions. In a binomial tree, the shares and bonds that hedge an option over one period are its [[Binomial Option Pricing Model#The replicating portfolio|replicating portfolio]].
+
+> [!example]- How many shares does this market-maker buy to delta-hedge, and how many more one week later? {Example}
+> A market-maker writes $1{,}000$ six-month European calls on a non-dividend-paying stock with $S_0 = 40$, $K = 42$, $r = 0.05$ and $\sigma = 0.25$. One week later the stock is at $41.50$.
+>
+> > [!answer]-
+> > - At the start, $\ln(40/42) = -0.048790$, $(r + \sigma^2/2)T = 0.040625$ and $\sigma\sqrt{T} = 0.176777$.
+> > - So $d_1 = (-0.048790 + 0.040625)/0.176777 = -0.04619$.
+> > - Each call's delta is $\Delta_0 = N(-0.04619) = 0.48158$.
+> > - The writer buys $481.58$ shares. Each call is worth $2.3954$, so $\$16{,}868$ is borrowed.
+> > - A week later the time to expiry is $T = 0.5 - 1/52 = 0.48077$.
+> > - Then $\ln(41.5/42) = -0.011976$, $(r + \sigma^2/2)T = 0.039063$ and $\sigma\sqrt{T} = 0.173344$.
+> > - So $d_1 = (-0.011976 + 0.039063)/0.173344 = 0.15626$ and $\Delta_1 = N(0.15626) = 0.56209$.
+> > - The writer buys $1{,}000(0.56209 - 0.48158) = 80.51$ more shares, for about $\$3{,}341$.
+
+## Hedging an insurance guarantee
+
+For a guarantee on a [[Life Insurance|life insurance]] or annuity contract, each option's delta is weighted by the probability the benefit is paid, which assumes [[Mortality|mortality]] risk is diversified away. A fund that pays a management charge deducted continuously behaves like a stock with that charge as its dividend yield.
+
+> [!example]- What is the cost of this guarantee, and what portfolio replicates it at issue? {Example}
+> An insurer has $1{,}000$ policies issued to lives aged $60$. Each has a fund value $F_0 = 100$ invested in an equity index and a GMMB guaranteeing $G = 100$ to survivors at $T = 10$. The fund pays a management charge of $1\%$ a year, deducted continuously. Also, $r = 0.04$, $\sigma = 0.20$ and ${}_{10}p_{60} = 0.90$.
+>
+> > [!answer]-
+> > - The guarantee is a put on the fund, which behaves like a stock with dividend yield $0.01$.
+> > - $d_1 = (0 + 0.05 \times 10)/(0.20\sqrt{10}) = 0.5/0.63246 = 0.79057$ and $d_2 = 0.79057 - 0.63246 = 0.15811$.
+> > - The bond part is $100e^{-0.4}N(-0.15811) = 67.032(0.43718) = 29.305$.
+> > - The fund part is $100e^{-0.1}N(-0.79057) = 90.484(0.21460) = 19.418$.
+> > - The put is $29.305 - 19.418 = 9.888$.
+> > - The cost is $1{,}000(0.90)(9.888) = \$8{,}899$.
+> > - The replicating portfolio is a short position of $1{,}000(0.90)(19.418) = \$17{,}476$ in the index and $1{,}000(0.90)(29.305) = \$26{,}375$ in 10-year zero-coupon bonds, net $\$8{,}899$.
+> > - The insurer is short the put, so it holds this portfolio as its hedge.
+
+## Hedge error with discrete rebalancing
+
+With discrete rebalancing the hedge is exact only to first order. Over a short period $h$ in which a non-dividend-paying stock moves by $\epsilon$, the approximate profit of a writer of a delta-hedged option is
 
 > $$R(h) \approx \tfrac12 S^2 \Gamma \left[\sigma^2 h - (\epsilon/S)^2\right]$$
 
-- The first two are the [[Black-Scholes Model|Black-Scholes]] deltas, with $d_1 = \dfrac{\ln(S/K) + (r - \delta + \sigma^2/2)T}{\sigma\sqrt{T}}$; the third and fourth are the binomial replicating portfolio, $\Delta$ shares plus $B$ in bonds, worth $V = \Delta S + B$
-- A writer of the derivative holds $+\Delta$ shares per option sold (a call writer buys stock, a put writer shorts it); the hedged position earns the risk-free rate only in the limit of continuous rebalancing under the model's assumptions
-- With discrete rebalancing the hedge is exact only to first order. The last block is the approximate profit $R(h)$ of a writer of a delta-hedged option on a non-dividend stock over a short period $h$ in which the stock moves by $\epsilon$, with $\Gamma$ the option's gamma: the writer gains when the realized move is smaller than the one-sigma move $\sigma S\sqrt{h}$ and loses when it is larger, so the hedge outcome depends on realized versus assumed [[Volatility|volatility]]
-- For a guarantee on a [[Life Insurance|life insurance]] or annuity contract, each option's delta is weighted by the probability the benefit is paid, which assumes [[Mortality|mortality]] risk is diversified away
+- $\Gamma$ is the option's gamma.
 
-> [!example]- Setting and Rebalancing a Market-Maker's Hedge {Example}
-> A market-maker writes $1{,}000$ six-month European calls on a non-dividend stock with $S_0 = 40$, $K = 42$, $r = 0.05$, $\sigma = 0.25$. Find the shares bought to delta-hedge, then the shares to buy one week later if the stock is at $41.50$.
+The writer gains when the realized move is smaller than the one-sigma move $\sigma S\sqrt{h}$ and loses when it is larger. The hedge outcome therefore depends on realized against assumed volatility.
+
+> [!example]- What is the delta-hedged writer's approximate profit on these calls over the day? {Example}
+> A market-maker has written and delta-hedged $1{,}000$ calls on a stock at $S = 40$ with $\sigma = 0.25$. Each call's gamma is $\Gamma = 0.056359$. Over one day ($h = 1/365$) the stock moves by $\$1.20$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > d_1 &= \frac{\ln(40/42) + (0.05 + 0.03125)(0.5)}{0.25\sqrt{0.5}} \\
-> >     &= -0.04619 \\
-> > \Delta_0 &= N(-0.04619) \\
-> >          &= 0.48158
-> > \end{align*}
-> > $$
-> > The writer buys $481.58$ shares (call value $2.3954$ each, so $\$16{,}868$ is borrowed). A week later $T = 0.5 - 1/52$:
-> > $$
-> > \begin{align*}
-> > d_1 &= \frac{\ln(41.5/42) + (0.08125)(0.48077)}{0.25\sqrt{0.48077}} \\
-> >     &= 0.15626 \\
-> > \Delta_1 &= 0.56209
-> > \end{align*}
-> > $$
-> > The writer buys $1{,}000(0.56209 - 0.48158) = 80.51$ more shares for about $\$3{,}341$. Delta hedging a short call means buying after rises and selling after falls.
+> > - $\tfrac12 S^2 \Gamma$ for the $1{,}000$ calls is $1{,}000 \times \tfrac12 (40)^2 (0.056359) = 45{,}087$.
+> > - $\sigma^2 h = 0.0625/365 = 0.000171$ and $(\epsilon/S)^2 = (1.20/40)^2 = 0.000900$.
+> > - The profit is $45{,}087 \times (0.000171 - 0.000900) = -32.86$.
+> > - The one-sigma daily move is $0.25(40)\sqrt{1/365} = 0.523$, so a move of more than twice that costs the writer about $\$32.86$, in either direction.
 
-> [!example]- Replicating a Guaranteed Minimum Maturity Benefit {Example}
-> An insurer has $1{,}000$ policies issued to lives aged $60$, each with fund value $F_0 = 100$ invested in an equity index and a GMMB guaranteeing $G = 100$ to survivors at $T = 10$. The fund pays a management charge of $1\%$ a year deducted continuously, $r = 0.04$, $\sigma = 0.20$ and ${}_{10}p_{60} = 0.90$. Find the cost of the guarantee and the replicating portfolio at time $0$.
->
-> > [!answer]-
-> > The guarantee is a put on the fund, which behaves like a stock with dividend yield $0.01$:
-> > $$
-> > \begin{align*}
-> > d_1 &= \frac{\ln(1) + (0.04 - 0.01 + 0.02)(10)}{0.20\sqrt{10}} \\
-> >     &= 0.79057 \\
-> > d_2 &= 0.15811 \\
-> > P &= 100e^{-0.4}N(-0.15811) - 100e^{-0.1}N(-0.79057) \\
-> >   &= 67.032(0.43718) - 90.484(0.21460) \\
-> >   &= 29.305 - 19.418 \\
-> >   &= 9.888
-> > \end{align*}
-> > $$
-> > The cost is $1{,}000(0.90)(9.888) = \$8{,}899$. The replicating portfolio is a **short** position of $1{,}000(0.90)(19.418) = \$17{,}476$ in the index and $1{,}000(0.90)(29.305) = \$26{,}375$ in 10-year zero-coupon bonds, net $\$8{,}899$. The insurer, being short the put, *holds* this portfolio as its hedge.
-
-> [!example]- Hedge Profit When the Stock Jumps {Example}
-> For the calls in the first example ($\Gamma = 0.056359$ at time $0$), the stock moves by $\$1.20$ over one day ($h = 1/365$). Approximate the delta-hedged writer's profit on the $1{,}000$ calls.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > R &\approx 1{,}000 \times \tfrac12 (40)^2 (0.056359)\left[\frac{0.0625}{365} - \left(\frac{1.20}{40}\right)^2\right] \\
-> >   &= 45{,}087 \times (0.000171 - 0.000900) \\
-> >   &= -32.86
-> > \end{align*}
-> > $$
-> > The one-sigma daily move is $0.25(40)\sqrt{1/365} = 0.523$; a move more than twice that costs the writer about $\$32.86$, whichever direction it goes.
-
-> [!tip]- How it appears on the exam
-> - **FAM** (Black-Scholes "price and delta hedge"): compute $\Delta$ for a call or put and the number of shares to buy or sell to hedge a written position.
-> - **ALTAM** ("construct a replicating portfolio ... using delta-hedging"): for a GMMB or GMDB, split the guarantee's value into its stock and bond parts, weighted by survival or death probabilities, and roll it forward to find the rebalancing cost and the hedge error at the next step.
-> - **INV-201** ("the interplay between hedging assumptions and hedging outcomes"): explain or compute hedge P&L under discrete rebalancing, realized versus implied volatility, jumps and transaction costs, usually as a written answer supported by the gamma approximation.
-
-> [!warning]- Exam traps
-> - **Sign of the hedge.** A *written* call is hedged by buying $N(d_1)$ shares; a written put by *shorting* $e^{-\delta T}N(-d_1)$ shares. Quoting $\Delta_P$ as $N(-d_1)$ with a plus sign reverses the trade.
-> - **Dropping $e^{-\delta T}$.** With a dividend yield (or a fund management charge) the delta is $e^{-\delta T}N(d_1)$, not $N(d_1)$.
-> - **Rebalancing with the old time to expiry.** Recompute $d_1$ with the remaining term; reusing $T$ gives a delta that is slightly wrong and a rebalancing trade off by a few shares.
-> - **Forgetting the survival weight on an insurance guarantee.** The GMMB hedge is ${}_{T}p_x$ times the option hedge per policy; hedging every policy in full over-hedges by the expected deaths.
+> [!trap] Hedging a written put by buying shares
+> A written call is hedged by buying $e^{-\delta T}N(d_1)$ shares, and a written put by shorting $e^{-\delta T}N(-d_1)$ shares. Quoting $\Delta_P$ as $N(-d_1)$ with a plus sign reverses the trade.

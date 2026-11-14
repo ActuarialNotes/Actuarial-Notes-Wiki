@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2ee117474a9c852fc21b589ee8c3c307588fa5041a3b0ca43d83d8ec856f8fa9
+  content_hash: sha256:3bdebc4e24073056adb8f06213b6781ec2f7131f87ca518b09b0623bcded031c
   sources:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 External Data / Other Third-Party Data, printed pp.44-47 (re-read p.44 this session) (PDF pp.56-59): credit, geo-demographic, weather indices, motor vehicle records; Ch.9 Traditional Risk Classification, printed p.158 (PDF p.170): usage-based insurance, privacy consent, legal criteria, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "ASB, ASOP No. 23 Data Quality (Doc. No. 185, Dec. 2016), §3.5 reliance on data supplied by others, disclosed, PDF p.10, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
@@ -15,34 +15,52 @@ verification:
   log: .verify/Concepts/External Data.md
 ---
 
-**External Data** is data that originates outside the insurer's own policy, billing and claims systems: it is bought from vendors, taken from public sources or collected from devices. Insurers add it to their internal data to measure characteristics their own records lack, such as a person's credit history, how a car is driven, a property's exposure to hazards and the weather at a location.
+**External Data** is data that originates outside the insurer's own policy, billing and claims systems. It is bought from vendors, taken from public sources or collected from devices. Insurers add it to their internal data to measure characteristics their own records lack, such as a person's credit history, how a car is driven, a property's exposure to hazards and the weather at a location.
+
+The insurer's own records are its [[Insurer Operational Data|operational data]], which describe its own book at the level of the individual policy and claim. External data supplements them. Its common sources are:
+
+| Source | What it describes |
+| :--- | :--- |
+| Credit reports | A person's credit history, scored by [[Credit-Based Insurance Scoring]] |
+| Telematics devices and phone apps | Driving behaviour, for [[Usage-Based Insurance]] |
+| Geospatial and weather data | A location's exposure to wildfire, flood or hail |
+| Public records | Motor vehicle reports, property and court records |
+| Connected sensors (the Internet of Things) | Events in homes and vehicles, such as water leaks, as they happen |
+
+Before using a source, an insurer checks:
+
+1. Its quality: accuracy, completeness, how current it is and whether its definitions change over time.
+2. Whether its use is legal for that purpose and line of business.
+3. The privacy and consent requirements for personal data.
+4. Its cost against the improvement it brings to the model.
+5. Whether it carries historical bias that could lead to [[Proxy Discrimination|proxy discrimination]].
+
+[[Data Quality|Data quality]] standards such as ASOP No. 23 still expect the actuary to review data supplied by others and to disclose any reliance on them. A vendor's score is often a model whose inputs the insurer cannot see, so the insurer cannot fully explain it. That limits the model's [[Explainability|explainability]], and testing the score's outputs across groups becomes the main check for bias.
+
+## Matching to internal records
+
+External data must be attached to the insurer's records by a key such as an address, a vehicle identification number, or a name with a date of birth. For a group of records, the share that found a match is the
 
 > $$\text{Match rate} = \frac{\text{records matched to the source}}{\text{records submitted}}$$
 
-- **Versus internal data:** The insurer's own records are its [[Insurer Operational Data|operational data]], which describe its own book at the level of the individual policy and claim; external data supplements them.
-- **Common sources:** [[Credit-Based Insurance Scoring|Credit-based insurance scores]] are built from credit reports, and telematics devices and phone apps record driving behaviour for [[Usage-Based Insurance|usage-based insurance]]. Geospatial and weather data describe a location's exposure to wildfire, flood or hail, public records include motor vehicle reports and property and court records, and connected sensors in homes and vehicles (the Internet of Things) report events such as water leaks as they happen.
-- **Matching:** External data must be attached to the insurer's records by a key such as an address, a vehicle identification number, or a name with a date of birth. The match rate above measures how many records found a match, and the records that fail to match are rarely a random sample of the book.
-- **Considerations:** Before using a source, check its quality (accuracy, completeness, how current it is and whether its definitions change over time), whether its use is legal for that purpose and line of business, the privacy and consent requirements for personal data, and its cost against the improvement it brings to the model. Check also whether it carries historical bias that could lead to [[Proxy Discrimination|proxy discrimination]]. [[Data Quality|Data quality]] standards such as ASOP No. 23 still expect the actuary to review data supplied by others and to disclose any reliance on them.
+The records that fail to match are rarely a random sample of the book, so match rates are compared across segments, such as territories, as well as overall.
 
-> [!example]- A Match Rate That Is Not Random {Example}
-> An insurer sends its 50,000 homeowners policies to a vendor for a roof-condition score derived from aerial images, and 46,000 are matched. Of the 5,000 rural policies, 2,000 are matched, and of the 45,000 other policies, 44,000 are matched. Compute the match rates and say what they mean for the model.
+> [!example]- What do these match rates mean for the roof-condition model? {Example}
+> An insurer sends its 50,000 homeowners policies to a vendor for a roof-condition score derived from aerial images.
+>
+> | Segment | Policies | Matched |
+> | :--- | ---: | ---: |
+> | Rural | 5,000 | 2,000 |
+> | Other | 45,000 | 44,000 |
+> | Total | 50,000 | 46,000 |
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Overall} &= \frac{46{,}000}{50{,}000} \\
-> > &= 92.0\% \\
-> > \text{Rural} &= \frac{2{,}000}{5{,}000} \\
-> > &= 40.0\% \\
-> > \text{Other} &= \frac{44{,}000}{45{,}000} \\
-> > &= 97.8\%
-> > \end{align*}
-> > $$
-> > The overall rate looks good, but the missing scores are concentrated in rural policies, so they are not missing at random. Dropping the unmatched policies would remove 60% of the rural book and bias the model toward urban risks. The better treatment keeps them with "no score" as a level of its own (see [[Missing Data]]), and the purchase should be justified by the improvement in the model given that the score reaches only 40% of rural risks.
+> > - The overall match rate is $46{,}000/50{,}000 = 92.0\%$.
+> > - The rural match rate is $2{,}000/5{,}000 = 40.0\%$, and the rate for the other policies is $44{,}000/45{,}000 = 97.8\%$.
+> > - The overall rate looks good, but the missing scores are concentrated in rural policies, so they are not missing at random.
+> > - Dropping the unmatched policies would remove 60% of the rural book and bias the model toward urban risks.
+> > - The better treatment keeps them with "no score" as a level of its own ([[Missing Data]]).
+> > - The purchase should be justified by the improvement in the model, given that the score reaches only 40% of rural risks.
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA** covers external data sources in its topic on collecting data for insurer models, beside insurer operational data and statistical plans, and its final topic covers the societal impact of credit-based insurance scores. A question can describe a proposed external source and ask which consideration, such as quality, legality, privacy, cost or bias, matters most for it.
-
-> [!warning]- Exam traps
-> - **Predictive is not permitted:** A source that improves a model can still be restricted or barred for that use, and the rules differ by jurisdiction and line of business. Legality should be checked before the modelling work, not after.
-> - **Vendor scores are not self-explaining:** A vendor's score is often a model whose inputs the insurer cannot see, so the insurer cannot fully explain it. That limits the model's [[Explainability|explainability]], and testing the score's outputs across groups becomes the main check for bias.
+> [!trap] Treating a predictive source as permitted
+> A source that improves a model can still be restricted or barred for that use, and the rules differ by jurisdiction and line of business. Legality should be checked before the modelling work, not after.

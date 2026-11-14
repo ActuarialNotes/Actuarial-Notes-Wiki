@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f20115efdbfd479cf79c1652dd9bb7f7e16a78c25389f8617fba19e7064e0a13
+  content_hash: sha256:d0569cf68b47b675d801afff6e4473d7bbcc5d2db5419a99d1a0dffd13466d06
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -13,46 +13,46 @@ verification:
   log: .verify/Concepts/Capital Available.md
 ---
 
-**Capital Available** is the numerator of the [[MCT]] ratio: the capital an insurer actually holds that is available to absorb losses. It starts from accounting equity and applies **regulatory adjustments and deductions** for items that would not in fact absorb a loss, then classifies what remains into quality tiers.
+![[Media/Figures/Capital_Available.svg|340]]
+
+**Capital Available** is the capital an insurer holds that is available to absorb losses, and the numerator of the [[MCT]] ratio. It starts from accounting equity, applies regulatory adjustments and deductions for items that would not absorb a loss, and classifies what remains into quality tiers.
+
+Capital available is
 
 > $$\text{Capital Available} = \text{Category A} + \text{Category B} - \text{Deductions}$$
 
-- **The tiering.** **Category A** is the highest quality — common shares, retained earnings, [[Comprehensive Income|accumulated other comprehensive income]] — permanently available and freely usable to absorb losses. **Category B** and **C** cover instruments with more limited loss absorbency, such as certain preferred shares and subordinated debt, and are subject to limits relative to Category A.
-- **Principal deductions:** goodwill and intangible assets (cannot be sold to pay claims); deferred tax assets that depend on future profitability (worthless exactly when needed); interests in unconsolidated financial institutions; and certain other assets OSFI does not accept.
-- **Why equity and capital available differ.** The deductions can be large — an acquisitive insurer's goodwill consumes regulatory capital dollar for dollar while leaving accounting equity untouched. This is why a strong balance sheet can still produce a weak MCT ratio.
-- **It moves with the income statement and with markets.** Losses reduce it, dividends reduce it, and unrealised losses on FVOCI investments reduce it through OCI. Under [[IFRS 17]] an [[Onerous Contract|onerous group]] charge reduces it in the year the business is written.
-- **Loss absorbency is the organising test.** Every question about whether an item counts reduces to: *would this absorb a loss when the insurer is in trouble?* Goodwill would not; a deferred tax asset contingent on profits would not; common equity would.
+- $\text{Category A}$ is the highest-quality capital, such as common shares, retained earnings and [[Comprehensive Income|accumulated other comprehensive income]], which is permanently available and freely usable to absorb losses.
+- $\text{Category B}$ is capital with more limited loss absorbency, such as certain preferred shares and subordinated debt. Category B and Category C instruments are subject to limits relative to Category A.
+- $\text{Deductions}$ are the regulatory deductions for items that would not in fact absorb a loss.
 
-![[Media/Figures/Capital_Available.svg|340]]
-
-> [!example]- Building Capital Available {Example}
-> An insurer reports equity of $\$340$ million, comprising common shares $\$120$ million, retained earnings $\$185$ million and accumulated OCI $\$35$ million. It also has $\$50$ million of subordinated debt qualifying as Category B. Deductions: goodwill $\$45$ million, intangibles $\$22$ million, and deferred tax assets dependent on future profitability $\$16$ million.
->
-> Compute capital available, and the effect of a $\$30$ million unrealised investment loss.
+> [!example]- What is this insurer's capital available? {Example}
+> An insurer's equity is $\$340$ million: common shares $\$120$ million, retained earnings $\$185$ million and accumulated OCI $\$35$ million. It has $\$50$ million of subordinated debt that qualifies as Category B. Its goodwill is $\$45$ million, its intangible assets $\$22$ million, and its deferred tax assets that depend on future profitability $\$16$ million.
 >
 > > [!answer]-
-> > **Category A:**
-> >
-> > $$\$120\text{M} + \$185\text{M} + \$35\text{M} = \$340\text{M}$$
-> >
-> > **Deductions:**
-> >
-> > $$\$45\text{M} + \$22\text{M} + \$16\text{M} = \$83\text{M}$$
-> >
-> > **Capital available:**
-> >
-> > $$\begin{align*}
-> > &= \$340\text{M} + \$50\text{M} - \$83\text{M} \\
-> > &= \$307\text{M}
-> > \end{align*}$$
-> >
-> > **Now a $\$30$ million unrealised loss** on FVOCI bonds, recognised in OCI:
-> >
-> > $$\begin{align*}
-> > \text{Accumulated OCI} &= \$35\text{M} - \$30\text{M} = \$5\text{M} \\[4pt]
-> > \text{Capital available} &= \$277\text{M}
-> > \end{align*}$$
-> >
-> > **A $10\%$ fall in capital available from a movement in interest rates**, on bonds the insurer intends to hold to maturity and will suffer no realised loss on. If minimum capital required were $\$180$ million, the [[MCT]] ratio falls from $171\%$ to $154\%$ — close to the supervisory target — for a reason unrelated to underwriting.
-> >
-> > **The management response** is not to sell the bonds (which would realise the loss) but to recognise that the liabilities are also worth less at higher rates. If the insurer has elected the [[Other Comprehensive Income Option|OCI option]] on its liabilities, the offsetting liability gain also runs through OCI and the net effect is only the duration mismatch — which is the whole reason the option exists.
+> > - Category A is $\$120\text{M} + \$185\text{M} + \$35\text{M} = \$340\text{M}$.
+> > - The deductions are $\$45\text{M} + \$22\text{M} + \$16\text{M} = \$83\text{M}$.
+> > - Capital available is $\$340\text{M} + \$50\text{M} - \$83\text{M} = \$307\text{M}$.
+
+## Deductions
+
+Every question about whether an item counts comes down to one test: would it absorb a loss when the insurer is in trouble? Common equity would. The principal deductions are the items that would not:
+
+1. Goodwill and intangible assets, which cannot be sold to pay claims.
+2. Deferred tax assets that depend on future profitability, which are worthless exactly when they are needed.
+3. Interests in unconsolidated financial institutions.
+4. Certain other assets OSFI does not accept.
+
+The deductions can be large. An acquisitive insurer's goodwill reduces its capital available dollar for dollar while leaving its accounting equity untouched, so a strong balance sheet can still produce a weak MCT ratio.
+
+## What changes capital available
+
+Capital available moves with the income statement and with markets. Losses and dividends reduce it. Unrealised losses on FVOCI investments reduce it through OCI. Under [[IFRS 17]], an [[Onerous Contract|onerous group]]'s loss reduces it in the year the business is written.
+
+> [!example]- The insurer above, with capital available of $\$307$ million and minimum capital required of $\$180$ million, has a $\$30$ million unrealised loss on its FVOCI bonds. What happens to its MCT ratio? {Example}
+> - The loss is recognised in OCI, so accumulated OCI falls from $\$35\text{M}$ to $\$5\text{M}$.
+> - Capital available falls to $\$307\text{M} - \$30\text{M} = \$277\text{M}$, about $10\%$ lower.
+> - The MCT ratio falls from $\$307\text{M}/\$180\text{M} = 171\%$ to $\$277\text{M}/\$180\text{M} = 154\%$, close to the $150\%$ [[Supervisory Target Capital Ratio|supervisory target]], for a reason unrelated to underwriting.
+> - Selling the bonds would only realise the loss. If the insurer has elected the [[Other Comprehensive Income Option|OCI option]] on its liabilities, the gain on its liabilities at higher interest rates also runs through OCI, and the net effect is only the duration mismatch.
+
+> [!trap] Treating accounting equity as capital available
+> Equity of $\$340$ million is not capital available of $\$340$ million. Add qualifying Category B capital and subtract the deductions first: goodwill, intangibles and profit-dependent deferred tax assets absorb no loss.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4374e5f94614f3c33024ebac6cac1c81b26b09a885894e687b93775c5f07f262
+  content_hash: sha256:6e9c8cecd5fce8f2082830c16df2052fd4fae54817cf6f539488b4bdabbb2a15
   sources:
     - "Braun & Kousky, Catastrophe Bonds, Wharton Risk Center Primer (July 2021), pp.1-6 (sponsor, bankruptcy-remote SPV, Treasury collateral in trust, floating rate plus premium; indemnity, industry-loss, parametric and modelled-loss triggers and Figure 3: parametric most transparent and most basis risk, indemnity the opposite, the other two between; modeller estimates probability of first loss and EL from property and policy data; average maturity three years; proportional payout from attachment to exhaustion; multi-year price stability, full collateral, dollar-for-dollar capital in the top layers; complement and substitute for reinsurance), sha256:38708381788f2732616650c245307b1775384bb347f4d1f7a884d05eb13918e7 — https://esg.wharton.upenn.edu/wp-content/uploads/2023/08/Cat-Bond-Primer-July-2021.pdf"
     - "Patel, The Drivers of Catastrophe Bond Pricing, PartnerReviews (PartnerRe, Oct 2015), pp.1-5 incl. fn.2 (SPV and high-quality collateral; floating spread over the collateral's money-market return; spread = modelled EL + risk premium; margin from uncertainty in EL; reinsurance cycle and capacity; cat bonds are excess-of-loss cover similar to ABS/MBS, attachment and exhaustion; total return swap, Lehman, treasury money market funds now preferred collateral), sha256:9a516152899ad4ec9709961e15f1417bfe74c8e0a259d5268e597c7635f6456a — https://www.partnerre.com/wp-content/uploads/2017/08/Catastrophe-Bond-Pricing.pdf"
@@ -23,60 +23,65 @@ verification:
   log: .verify/Concepts/CAT Bonds.md
 ---
 
-**CAT Bonds** (catastrophe bonds) are fully collateralised securities through which an insurer or reinsurer — the **sponsor** — buys multi-year catastrophe protection from capital-market investors. Investors earn a floating collateral yield plus a risk spread, and forfeit part or all of their principal if a defined catastrophe **trigger** is hit.
+A **CAT Bond** (catastrophe bond) is a fully collateralised security through which an insurer or reinsurer, the **sponsor**, buys multi-year catastrophe protection from capital-market investors. Investors earn a floating collateral yield plus a risk spread, and forfeit part or all of their principal if a defined catastrophe **trigger** is hit.
+
+The coupon rate the investors earn is
 
 > $$\text{Coupon rate} = r_{\text{mm}} + s$$
 
+- $r_{\text{mm}}$ is the money-market return on the collateral.
+- $s$ is the risk spread.
+
+A cat bond is a [[Layer of Insurance|layer]], a tranche of the trigger's distribution ([[Structured Finance|structured finance]]). If the trigger's measured value is $I$, the principal lost is
+
 > $$\text{Principal lost} = \text{Principal} \times \min\!\left(1,\ \frac{(I - A)^+}{E - A}\right)$$
 
-- $r_{\text{mm}}$ is the money-market return on the collateral, $s$ the risk spread, $I$ the trigger's measured value, $A$ the attachment and $E$ the exhaustion point. A cat bond is a [[Layer of Insurance|layer]] — a tranche of the trigger's distribution ([[Structured Finance]]).
-- **Structure.** The sponsor enters a reinsurance (or derivative) contract with a single-purpose reinsurer, usually offshore, and pays it premium. The SPV issues the notes, commonly for about three years, and places the proceeds in a **collateral trust**. Historically a total return swap converted the trust's yield to a floating rate; after Lehman Brothers' 2008 failure impaired several bonds that relied on it as swap counterparty, collateral moved mostly to Treasury money-market funds. If the trigger is hit the trust pays the sponsor; otherwise principal is repaid at maturity.
-- **Triggers** — indemnity at one end (no basis risk, the most moral hazard) and parametric at the other (the most basis risk), with modelled-loss and industry-index triggers between:
-  - **Indemnity** — the sponsor's actual losses. No basis risk, but [[Moral Hazard|moral hazard]] in claims handling, disclosure of the sponsor's book, and slow settlement.
-  - **Modelled loss** — the event's physical parameters run through an agreed [[Catastrophe Modelling|catastrophe model]] on the sponsor's exposure. Basis risk equals the model's error.
-  - **Industry index** — an industry loss estimate (PCS in the U.S.). Transparent and quick; basis risk wherever the sponsor's book differs from the industry's.
-  - **Parametric** — the physical event itself: magnitude and location, or wind speed in a defined box. Fastest and most transparent, with the most basis risk.
-- **Basis risk** — the gap between the sponsor's actual loss and its recovery — is two-sided, and it has an accounting consequence: a non-indemnity bond may not qualify as reinsurance.
-- **Pricing.** Offerings quote the attachment probability, the exhaustion probability and the **expected loss** (EL), and the spread is read as a multiple of EL. Cat losses are nearly independent of the economy, so theory says the spread need only cover EL; in practice it runs well above, reflecting [[Model Risk|model uncertainty]], limited capacity and the reinsurance cycle. See [[Insurance-Linked Securities]] for the wider market and [[Securitization]] for why it exists.
+- $A$ is the attachment point.
+- $E$ is the exhaustion point.
+- $(I - A)^+$ is $\max(I - A,\, 0)$.
 
-> [!example]- Layer Metrics and the Investor's Outcome {Example}
-> A sponsor issues $\$150$ million of notes covering $50\%$ of its indemnity losses between $\$1.0$ billion and $\$1.3$ billion from a single hurricane. The modelled attachment probability is $2.5\%$ and the exhaustion probability $1.2\%$; the spread is $6.0\%$. Estimate the EL (assume exceedance probability falls linearly across the layer) and the spread multiple, then find the principal lost if a hurricane costs the sponsor $\$1.2$ billion.
+## Structure
+
+The sponsor enters a reinsurance (or derivative) contract with a single-purpose reinsurer, a special purpose vehicle (SPV) usually set up offshore, and pays it premium. The SPV issues the notes, commonly for about three years, and places the proceeds in a **collateral trust**. If the trigger is hit, the trust pays the sponsor. Otherwise the principal is repaid at maturity.
+
+Historically a total return swap converted the trust's yield to a floating rate. After Lehman Brothers' 2008 failure impaired several bonds that relied on it as swap counterparty, collateral moved mostly to Treasury money-market funds.
+
+## Triggers
+
+The trigger decides what the bond pays on. There are four kinds, from the least basis risk to the most:
+
+1. **Indemnity**: the sponsor's actual losses. It has no basis risk, but it carries [[Moral Hazard|moral hazard]] in claims handling, requires disclosure of the sponsor's book, and settles slowly.
+2. **Modelled loss**: the event's physical parameters run through an agreed [[Catastrophe Modelling|catastrophe model]] on the sponsor's exposure. Its basis risk equals the model's error.
+3. **Industry index**: an industry loss estimate, such as PCS in the U.S. It is transparent and quick, with basis risk wherever the sponsor's book differs from the industry's.
+4. **Parametric**: the physical event itself, such as magnitude and location, or wind speed in a defined box. It is the fastest and most transparent, with the most basis risk.
+
+**Basis risk** is the gap between the sponsor's actual loss and its recovery. It runs in both directions, and it has an accounting consequence: a non-indemnity bond may not qualify as reinsurance.
+
+> [!example]- What do the index bond and the indemnity cover recover for each storm? {Example}
+> A Florida insurer with about a 2% market share buys an index bond paying 2% of industry losses above $\$25$ billion, capped at $\$200$ million. An indemnity cover would instead pay its own losses above $\$500$ million, capped at $\$200$ million. Two hurricanes each cause $\$32$ billion of industry loss. Storm X lands where the insurer is concentrated and costs it $\$800$ million. Storm Y lands elsewhere and costs it $\$450$ million.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{EL} &\approx \frac{2.5\% + 1.2\%}{2} \\
-> > &= 1.85\% \\[4pt]
-> > \text{Multiple} &= \frac{6.0\%}{1.85\%} \\
-> > &= 3.2
-> > \end{align*}
-> > $$
-> >
-> > For the event, $I = \$1{,}200\text{M}$, $A = \$1{,}000\text{M}$, $E = \$1{,}300\text{M}$:
-> >
-> > $$
-> > \begin{align*}
-> > \text{Principal lost} &= \$150\text{M} \times \frac{1{,}200 - 1{,}000}{1{,}300 - 1{,}000} \\
-> > &= \$100\text{M}
-> > \end{align*}
-> > $$
-> >
-> > Investors lose two-thirds of their principal; in a quiet year they earn the money-market rate plus $\$9$ million of spread. The sponsor keeps the other half of the layer — a co-participation that gives it a stake in its own claims handling.
+> > - For either storm the index bond pays $0.02 \times (32 - 25) = \$0.14$ billion, or $\$140$ million.
+> > - For storm X, the indemnity cover would pay $\min(800 - 500,\ 200) = \$200$ million. The index bond falls $\$60$ million short in the storm that hurt most.
+> > - For storm Y, the loss is inside the indemnity retention, so the indemnity cover would pay nothing. The index bond pays $\$140$ million the insurer did not need.
 
-> [!example]- Industry-Index Trigger and Basis Risk {Example}
-> A Florida insurer with about a $2\%$ market share buys an index bond paying $2\%$ of industry losses above $\$25$ billion, capped at $\$200$ million. An indemnity cover would instead pay its own losses above $\$500$ million, capped at $\$200$ million. Two hurricanes each cause $\$32$ billion of industry loss: storm X lands where the insurer is concentrated (its loss $\$800$ million), storm Y elsewhere (its loss $\$450$ million). Compare recoveries.
+## Pricing
+
+Offerings quote the attachment probability, the exhaustion probability and the **expected loss** (EL), the expected share of principal lost. The spread is read as a multiple of EL, which is
+
+> $$\text{Multiple} = \frac{s}{\text{EL}}$$
+
+Cat losses are nearly independent of the economy, so theory says the spread need only cover EL. In practice it runs well above, reflecting [[Model Risk|model uncertainty]], limited capacity and the reinsurance cycle. [[Insurance-Linked Securities|Insurance-linked securities]] describes the wider market, and [[Securitization|securitization]] why it exists.
+
+> [!example]- What are this bond's EL and spread multiple, and how much principal does a $\$1.2$ billion hurricane cost investors? {Example}
+> A sponsor issues $\$150$ million of notes covering 50% of its indemnity losses between $\$1.0$ billion and $\$1.3$ billion from a single hurricane. The modelled attachment probability is 2.5% and the exhaustion probability is 1.2%. The spread is 6.0%. Assume the exceedance probability falls linearly across the layer.
 >
 > > [!answer]-
-> > The index bond pays the same for both storms:
-> >
-> > $$
-> > \begin{align*}
-> > \text{Index recovery} &= 0.02 \times (\$32\text{B} - \$25\text{B}) \\
-> > &= \$140\text{M}
-> > \end{align*}
-> > $$
-> >
-> > - **Storm X:** indemnity would pay $\min(\$800\text{M} - \$500\text{M},\ \$200\text{M}) = \$200\text{M}$. The index pays $\$140$ million — a **$\$60$ million shortfall**, in the storm that hurt most.
-> > - **Storm Y:** indemnity would pay nothing (the loss is inside the retention); the index pays $\$140$ million the insurer did not need.
-> >
-> > Basis risk runs both ways, but the damaging side is systematic: the index under-recovers precisely when the insurer's concentration makes an event worse for it than for the market. An index built on smaller regions, or a modelled-loss trigger, narrows the gap.
+> > - With a linear exceedance probability, EL is the average of the two probabilities, $(2.5\% + 1.2\%)/2 = 1.85\%$.
+> > - The spread multiple is $6.0\%/1.85\% = 3.2$.
+> > - For the hurricane, $I = 1{,}200$, $A = 1{,}000$ and $E = 1{,}300$, in $\$$ millions.
+> > - The principal lost is $150 \times (1{,}200 - 1{,}000)/(1{,}300 - 1{,}000) = \$100$ million, two-thirds of the principal.
+> > - In a quiet year, investors earn the money-market rate plus $0.06 \times 150 = \$9$ million of spread.
+
+> [!trap] Treating an index recovery as the sponsor's loss
+> An index or parametric trigger pays on the industry or the event, not on the sponsor's book. The shortfall is largest when the sponsor's concentration makes an event worse for it than for the market, as with storm X. An index built on smaller regions, or a modelled-loss trigger, narrows the gap.

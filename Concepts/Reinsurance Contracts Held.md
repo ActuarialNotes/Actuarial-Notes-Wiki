@@ -4,49 +4,60 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4935d730fc74a51ba24b5765e2a4e0fbde991c4bba4b60e6c3919dc815cdb523
+  content_hash: sha256:4cd4f92d8204364c1f94029d6d05e1f511170ba1378bc0e1816ac82f7044d368
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Contracts Held.md
 ---
 
-**Reinsurance Contracts Held** are the reinsurance an insurer buys, measured under [[IFRS 17]] as a **separate asset** with its own [[Fulfilment Cash Flows|fulfilment cash flows]], [[Risk Adjustment for Non-Financial Risk|risk adjustment]] and [[Contractual Service Margin|CSM]]. They are **never netted** against the underlying insurance contract liabilities, and several measurement rules are deliberately mirror-images of those for contracts issued.
-
-> $$\text{Reinsurance asset} = \text{PV(recoveries)} - \text{PV(ceded premiums)} + \text{RA} + \text{CSM}$$
-
-- **No netting, ever.** The balance sheet shows gross [[Insurance Contract Liabilities]] and a separate reinsurance asset. The purpose is to make **counterparty exposure visible** — a heavily reinsured insurer now displays how much of its balance sheet depends on someone else's solvency.
-- **The risk adjustment has the opposite sign in effect.** For contracts issued, the RA increases the liability; for reinsurance held, it represents risk **transferred away** and therefore **increases the asset**. Getting this sign wrong is the most common IFRS 17 reinsurance error.
-- **Non-performance risk is separate and explicit.** The reinsurer's credit risk — including disputes and collectability, not only default — reduces the asset, and changes in it go through profit or loss. This is distinct from the risk adjustment.
-- **The CSM can be a net cost.** Reinsurance is usually bought at a price above expected recoveries, so the "profit" on the contract is negative. IFRS 17 nonetheless defers it as a CSM (a net cost of purchasing reinsurance) rather than recognising it immediately — the **no day-one loss** treatment, the reverse of the onerous rule for contracts issued.
-- **The loss-recovery component.** Where reinsurance covers an [[Onerous Contract|onerous]] group, a loss-recovery component is recognised on the reinsurance asset **at the same time** as the loss on the underlying group, so the two are matched rather than the loss appearing first.
-- **[[Premium Allocation Approach|PAA]] eligibility is assessed separately** for reinsurance held, and a treaty covering multiple underwriting years or with a long coverage period may need the [[General Measurement Model|GMM]] even where the underlying business uses the PAA.
-
 ![[Media/Figures/Reinsurance_Contracts_Held.svg|340]]
 
-> [!example]- Measuring the Reinsurance Asset {Example}
-> An insurer buys a quota share ceding $30\%$. Ceded premium is $\$60$ million, expected recoveries have a present value of $\$52$ million, the ceding commission is $\$14$ million, the risk adjustment on risk transferred is $\$3$ million, and the allowance for reinsurer non-performance is $\$1.2$ million.
+**Reinsurance Contracts Held** are the reinsurance an insurer buys. Under [[IFRS 17]] they are measured as a **separate asset** with their own [[Fulfilment Cash Flows|fulfilment cash flows]], [[Risk Adjustment for Non-Financial Risk|risk adjustment]] and [[Contractual Service Margin|CSM]], and several of their measurement rules mirror those for contracts issued. From the cedant's side, the reinsurance asset is
+
+> $$\text{Asset} = \text{PV(recoveries)} - \text{PV(ceded premiums)} + \text{RA} - \text{NPR} + \text{CSM}$$
+
+- $\text{PV(recoveries)}$ is the present value of the claims the reinsurer is expected to pay.
+- $\text{PV(ceded premiums)}$ is the present value of the premiums paid to the reinsurer, net of any ceding commission received.
+- $\text{RA}$ is the risk adjustment for the risk transferred to the reinsurer.
+- $\text{NPR}$ is the allowance for the reinsurer's non-performance.
+
+The risk adjustment on reinsurance held represents risk **transferred away**, so it increases the asset, where on contracts issued it increases the liability. Non-performance risk is separate from it and explicit. It covers the reinsurer's credit risk, including disputes and collectability as well as default, it reduces the asset, and changes in it go through profit or loss.
+
+> [!example]- What is this quota share's reinsurance asset at initial recognition? {Example}
+> An insurer buys a quota share ceding $30\%$. Its estimates at inception are:
 >
-> Measure the asset at initial recognition and state the presentation.
+> | Item | Amount |
+> | :--- | ---: |
+> | Ceded premium | $\$60$ million |
+> | PV of expected recoveries | $\$52$ million |
+> | Ceding commission | $\$14$ million |
+> | Risk adjustment on risk transferred | $\$3$ million |
+> | Allowance for reinsurer non-performance | $\$1.2$ million |
 >
 > > [!answer]-
-> > **Fulfilment cash flows** on the reinsurance held, from the cedant's perspective — recoveries in, ceded premium out, commission in:
-> >
-> > $$\begin{align*}
-> > \text{Net inflows} &= \$52\text{M} + \$14\text{M} - \$60\text{M} \\
-> > &= \$6\text{M}
-> > \end{align*}$$
-> >
-> > **Add the risk adjustment** for risk transferred (it increases the asset):
-> >
-> > $$\$6\text{M} + \$3\text{M} = \$9\text{M}$$
-> >
-> > **Deduct non-performance risk:**
-> >
-> > $$\$9\text{M} - \$1.2\text{M} = \$7.8\text{M}$$
-> >
-> > **CSM.** Since the fulfilment cash flows are favourable to the cedant, a CSM of $\$7.8$ million is established so that no gain is recognised at inception; the asset carries at $\$7.8$M net and the CSM releases as coverage is received.
-> >
-> > **Presentation.** The asset appears on its own line — it does **not** reduce the gross liabilities. If the insurer's gross [[Liability for Incurred Claims|LIC]] is $\$400$ million and the reinsurance share of it is $\$120$ million, the balance sheet shows $\$400$ million of liability and a $\$120$ million-plus asset, not $\$280$ million net.
-> >
-> > **Why that matters.** The gross-up makes the insurer's dependence on its reinsurers plain: a reader can now see that $30\%$ of the claim liability is recoverable from third parties, and can ask who they are and how they are rated. Under netting, that exposure was invisible.
+> > - The net cash flows to the cedant are $\$52\text{M} + \$14\text{M} - \$60\text{M} = \$6$ million.
+> > - The risk adjustment increases the asset to $\$6\text{M} + \$3\text{M} = \$9$ million.
+> > - The non-performance allowance reduces it to $\$9\text{M} - \$1.2\text{M} = \$7.8$ million.
+> > - No gain is recognised at inception, so the CSM is $-\$7.8$ million and the asset's carrying amount at initial recognition is $\$7.8\text{M} - \$7.8\text{M} = 0$.
+> > - The $\$7.8$ million is released from the CSM as the reinsurance coverage is received.
+
+## The contractual service margin on reinsurance held
+
+Reinsurance is usually bought at a price above expected recoveries, so the CSM on reinsurance held is usually a net cost of purchasing reinsurance. IFRS 17 defers it as a CSM rather than recognising it immediately. This no day-one loss treatment is the reverse of the onerous rule for contracts issued.
+
+Where reinsurance covers an [[Onerous Contract|onerous]] group, a **loss-recovery component** is recognised on the reinsurance asset at the same time as the loss on the underlying group, so the two are matched.
+
+[[Premium Allocation Approach|PAA]] eligibility is assessed separately for reinsurance held. A treaty covering several underwriting years or with a long coverage period may need the [[General Measurement Model|GMM]] even where the underlying business uses the PAA.
+
+## Presentation
+
+Reinsurance held is **never netted** against the underlying insurance contract liabilities. The balance sheet shows gross [[Insurance Contract Liabilities|insurance contract liabilities]] and the reinsurance asset on its own line, which makes the insurer's exposure to its reinsurers' solvency visible.
+
+> [!example]- An insurer's gross LIC is $\$400$ million, of which $\$120$ million is recoverable under its quota share. What does the balance sheet show? {Example}
+> - The gross [[Liability for Incurred Claims|LIC]] is shown in full, as a liability of $\$400$ million.
+> - The reinsurance share is shown as a separate asset of $\$120$ million plus its risk adjustment, less non-performance risk.
+> - The balance sheet does not show $\$280$ million net, so a reader can see that $30\%$ of the claim liability depends on third parties and ask who they are.
+
+> [!trap] Deducting the risk adjustment from the reinsurance asset
+> On contracts issued the risk adjustment adds to the liability. On reinsurance held it represents risk transferred away, so it is added to the asset, not deducted from it.

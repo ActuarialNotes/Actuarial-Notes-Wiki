@@ -4,79 +4,96 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:13b2dabcc753ec5b89e441bfc2f9df664c7fdef01c776168f8feba86fe088da0
+  content_hash: sha256:d8dfd8d4f1baf4e15b484001dd9cad82cd714d87ac99f72754e97e0e7d63d7cd
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/ALM Failure.md
 ---
+An **ALM failure** is the collapse, or near collapse, of an insurer, pension fund or bank caused by a mismatch between its assets and liabilities that it did not measure, did not price or could not unwind in time. Each classic case turned an [[ALM Risk|ALM risk]] that looked remote into a loss of solvency or of liquidity, and their lessons shape how [[Asset-Liability Management|asset-liability management]] is practised.
 
-An **ALM failure** is the collapse, or near collapse, of an insurer, pension fund or bank caused by a mismatch between its assets and liabilities that it did not measure, did not price or could not unwind in time. The classic cases, General American Life, Equitable Life, the Japanese life insurers of the 1990s and Silicon Valley Bank, each turned an [[ALM Risk|ALM risk]] that looked remote into a loss of solvency or of liquidity, and their lessons shape how [[Asset-Liability Management|asset-liability management]] is practised.
+The failures share four features:
+
+1. A liability option was held by others and exercised against the institution.
+2. The mismatch was invisible in the accounting measure the institution watched.
+3. Concentration made the policyholders or depositors act together.
+4. The institution's own downgrade or announcement started the run.
+
+## General American Life (1999)
+
+The insurer had issued several billion dollars of funding agreements to money market funds that holders could put back for cash on seven days' notice, and it backed them with longer, less liquid assets. When Moody's downgraded it in the summer of 1999, the holders exercised their puts on more than $\$4$ billion at once. The company was solvent but couldn't sell assets fast enough. Missouri regulators placed it under administrative supervision in August 1999, and MetLife bought it in January 2000. A ratings trigger can turn a put option that is rarely used into a run.
+
+The liquidity coverage ratio over a stress horizon is
 
 > $$\text{Coverage} = \frac{\sum_j (1 - h_j)\,q_j\,A_j}{\sum_k r_k\,L_k}$$
 
-> $$\text{GAO value} = F \times \max\left(g\,\ddot{a}_x - 1,\ 0\right)$$
+- $A_j$ is the value of asset class $j$.
+- $q_j$ is the share of it that can be sold within the stress horizon.
+- $h_j$ is the haircut on a forced sale.
+- $L_k$ is the value of liability class $k$.
+- $r_k$ is the share of it expected to be withdrawn in the stress.
 
-> $$\text{Annual loss} = \left(i_g - i_A\right) \times L$$
+A ratio below 1 means the institution runs out of cash.
 
-- **Symbols:** In the liquidity coverage ratio, $A_j$ is the value of asset class $j$, $q_j$ the share of it that can be sold within the stress horizon and $h_j$ the haircut on a forced sale; $L_k$ is a liability class and $r_k$ the share of it expected to be withdrawn in the stress. A ratio below 1 means the institution runs out of cash. For a guaranteed annuity option (GAO), $F$ is the policyholder's fund at retirement, $g$ the guaranteed annual annuity per unit of fund and $\ddot{a}_x$ the market annuity factor. In the last line, $i_g$ is the guaranteed rate credited on liabilities $L$ and $i_A$ the yield the assets earn.
-- **General American Life (1999):** The insurer had issued several billion dollars of funding agreements to money market funds that holders could put back for cash on seven days' notice, and it backed them with longer, less liquid assets. When Moody's downgraded it in the summer of 1999, the holders exercised their puts on more than \$4 billion at once. The company was solvent but couldn't sell assets fast enough, so Missouri regulators placed it under administrative supervision in August 1999, and MetLife bought it in January 2000. The lesson is that a ratings trigger can turn a put option that is rarely used into a run.
-- **Equitable Life (UK, 2000):** The world's oldest mutual life office had sold with-profits pension policies with guaranteed annuity rates, mostly when interest rates were high and the guarantees seemed worthless. When rates and mortality fell in the 1990s, the guarantees became very valuable. It had neither reserved nor hedged for them, and when the courts ruled in 2000 that it could not cut the bonuses of the guaranteed-rate holders to pay for them, it closed to new business. The lesson is that [[Embedded Option|embedded options]] must be valued and hedged when they are written, not when they are in the money.
-- **Japanese life insurers (late 1990s):** Insurers had sold savings policies guaranteeing rates of around 5% or more. After the bubble burst, Japanese government bond yields fell far below those rates and stayed there, and the insurers earned less on their assets than they had promised, a negative spread. Several failed between 1997 and 2001. The lesson is that long guarantees backed by shorter assets leave the insurer exposed to [[Reinvestment Risk|reinvestment risk]] for decades.
-- **Silicon Valley Bank (2023):** The bank invested a surge of deposits in long-dated Treasuries and mortgage-backed securities without hedging their duration. When rates rose sharply, those securities lost a large part of their value. Most of its deposits were uninsured and concentrated among technology firms and venture funds, so when it announced a loss on selling securities and a plan to raise capital, depositors withdrew tens of billions of dollars in a day and it failed within 48 hours. The lesson is that unhedged duration and flighty, concentrated liabilities together can destroy a bank faster than accounting shows.
-- **Common threads:** The failures share a few features. A liability option was held by others and exercised against the institution, the mismatch was invisible in the accounting measure the institution watched, concentration made the policyholders or depositors act together, and the institution's own downgrade or announcement started the run.
-- **What the lessons changed:** Insurers now limit puttable and ratings-triggered liabilities, run liquidity stress tests alongside solvency tests, price and hedge guarantees with [[Interest Rate Derivative|interest rate derivatives]] when they are sold, and measure duration on surplus with key rate and scenario tools. Regulators added liquidity monitoring and asset adequacy testing that must consider these risks.
-
-> [!example]- Liquidity Coverage After a Downgrade, General-American Style {Example}
-> A life insurer has issued \$6.0 billion of funding agreements that holders can put on seven days' notice, and it expects other outflows of \$0.2 billion in any week. Its liquid sources over a week are:
+> [!example]- What is this insurer's liquidity coverage in a normal week and after a downgrade? {Example}
+> A life insurer has issued $\$6.0$ billion of funding agreements that holders can put on seven days' notice, and it expects other outflows of $\$0.2$ billion in any week. In a normal week 10% of the agreements are put, and after a downgrade 75%. Its private placements and commercial mortgages can't be sold within a week. Its liquid sources are:
 >
-> | Asset | Value (\$ billion) | Saleable in a week | Haircut |
-> |---|---|---|---|
+> | Asset | Value ($ billion) | Saleable in a week | Haircut |
+> | :--- | ---: | ---: | ---: |
 > | Cash | 0.4 | 100% | 0% |
 > | Treasuries | 0.8 | 100% | 2% |
 > | Agency MBS | 1.5 | 100% | 5% |
 > | Public corporate bonds | 6.0 | 30% | 10% |
 >
-> Its private placements and commercial mortgages can't be sold within a week. Find the coverage ratio if 10% of the funding agreements are put in a normal week, and if 75% are put after a downgrade.
+> > [!answer]-
+> > - The sources are $0.4 + 0.784 + 1.425 + 1.620 = \$4.229$ billion, where the bonds give $6.0 \times 0.30 \times 0.90 = 1.620$.
+> > - In a normal week the outflow is $0.10 \times 6.0 + 0.2 = \$0.8$ billion, so coverage is $4.229 / 0.8 = 5.29$.
+> > - After the downgrade the outflow is $0.75 \times 6.0 + 0.2 = \$4.7$ billion, so coverage is $4.229 / 4.7 = 0.90$.
+> > - The insurer is short by $4.7 - 4.229 = \$0.471$ billion, even though its balance sheet may show a healthy surplus.
+> > - Selling private assets at a deep discount to raise the rest can turn the liquidity problem into a solvency one.
+
+## Equitable Life (UK, 2000)
+
+The world's oldest mutual life office had sold with-profits pension policies with guaranteed annuity rates, mostly when interest rates were high and the guarantees seemed worthless. When rates and mortality fell in the 1990s, the guarantees became very valuable. It had neither reserved nor hedged for them. When the courts ruled in 2000 that it could not cut the bonuses of the guaranteed-rate holders to pay for them, it closed to new business. [[Embedded Option|Embedded options]] must be valued and hedged when they are written, at their full value under changing rates rather than their current intrinsic value.
+
+The value at retirement of a guaranteed annuity option (GAO) is
+
+> $$\text{GAO value} = F \times \max\left(g\,\ddot{a}_x - 1,\ 0\right)$$
+
+- $F$ is the policyholder's fund at retirement.
+- $g$ is the guaranteed annual annuity per unit of fund.
+- $\ddot{a}_x$ is the market annuity factor at the retirement age.
+
+> [!example]- What is this guaranteed annuity option worth when the annuity factor is 8.0, and when it is 11.0? {Example}
+> A policy guarantees that a fund of $\$100{,}000$ buys an annuity of at least 11.1% a year, $\$11{,}100$. The market annuity factor was 8.0 when the policy was sold. By retirement, rates and mortality have fallen and the factor is 11.0.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Sources} &= 0.4 + 0.8(0.98) + 1.5(0.95) + 6.0(0.30)(0.90) \\
-> > &= 0.400 + 0.784 + 1.425 + 1.620 \\
-> > &= 4.229 \\
-> > \text{Coverage}_{\text{normal}} &= \frac{4.229}{0.10(6.0) + 0.2} \\
-> > &= 5.29 \\
-> > \text{Coverage}_{\text{stress}} &= \frac{4.229}{0.75(6.0) + 0.2} \\
-> > &= 0.90
-> > \end{align*}
-> > $$
-> > In a normal week the insurer has more than five times the cash it needs. After the downgrade it is short by $4.7 - 4.229 = \$0.471$ billion, even though its balance sheet may show a healthy surplus. To raise the rest it must sell private assets at a deep discount, which can turn a liquidity problem into a solvency one. Limiting the puttable liabilities to well under the liquid sources, or removing ratings triggers, would have prevented the run.
+> > - At a factor of 8.0, $g\,\ddot{a}_x = 0.111 \times 8.0 = 0.888$, so the guaranteed annuity is worth 88.8% of the fund and the option is worth nothing.
+> > - At 11.0, $g\,\ddot{a}_x = 0.111 \times 11.0 = 1.221$.
+> > - The option is worth $100{,}000 \times (1.221 - 1) = \$22{,}100$, or 22.1% of the fund.
+> > - A receiver swaption bought at issue would have paid off in the same scenario.
 
-> [!example]- The Cost of a Guaranteed Annuity Rate When Rates Fall {Example}
-> A with-profits pension policy guarantees that at retirement the fund will buy an annuity of 11.1% a year, so a fund of \$100,000 buys at least \$11,100 a year. When the policy was sold, interest rates were high and the market annuity factor at the retirement age was 8.0. By the time the policyholder retires, rates and mortality have fallen and the factor is 11.0. Find the value of the guarantee at each factor.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > g\,\ddot{a}_{\text{high}} &= 0.111(8.0) \\
-> > &= 0.888 \\
-> > g\,\ddot{a}_{\text{low}} &= 0.111(11.0) \\
-> > &= 1.221 \\
-> > \text{GAO value} &= 100{,}000 \times (1.221 - 1) \\
-> > &= 22{,}100
-> > \end{align*}
-> > $$
-> > At a factor of 8.0 the guaranteed annuity is worth only 88.8% of the fund, so the option is out of the money and costs nothing. At 11.0 the insurer must provide an annuity worth \$122,100 for a fund of \$100,000, a cost of 22% of the fund. A guarantee that was far out of the money when sold became deep in the money as rates fell, which is the shape of the Equitable Life problem; a receiver swaption bought at issue would have paid off in the same scenario.
+## Japanese life insurers (late 1990s)
 
-> [!tip]- How it appears on the exam
-> - **CP-351, learning objective 1b:** Candidates understand the lessons learned from ALM failures, from the case study on General American Life, Sweeting's case studies, the paper on what insurers and pension funds can learn from bank failures, and the IAA risk book's sections on failures and near failures. Expect a written answer that explains what went wrong in a named case and what an insurer should do differently.
-> - **Applying the lessons:** Questions often describe a new product or balance sheet with features like those in the cases, such as a ratings trigger, a guarantee or deposits that can be withdrawn on demand, and ask what risks it carries and how to manage them.
-> - **Supporting calculations:** A liquidity coverage test, the value of a guarantee at a new rate, or the loss from a negative spread can support the written answer.
+Insurers had sold savings policies guaranteeing rates of around 5% or more. After the bubble burst, Japanese government bond yields fell far below those rates and stayed there. The insurers earned less on their assets than they had promised, a negative spread, and several failed between 1997 and 2001. Long guarantees backed by shorter assets leave the insurer exposed to [[Reinvestment Risk|reinvestment risk]] for decades.
 
-> [!warning]- Exam traps
-> - **Solvent is not liquid:** General American had positive surplus when it failed. An answer that blames losses on bad investments misses that the failure was the speed of the withdrawals, not the quality of the assets.
-> - **The trigger matters as much as the mismatch:** A puttable liability is safe in normal times and dangerous only when an event makes all holders act together. Describing the risk without the downgrade trigger misses why the run happened.
-> - **Options cost most when they look cheapest to ignore:** Equitable's guarantees were worthless at issue and very valuable later. Valuing an option at its current intrinsic value, rather than at its full value under changing rates, understates the liability.
-> - **Negative spread is a slow failure:** The Japanese insurers did not fail from one shock but from years of earning less than they credited. A one-period stress test misses this, so long guarantees need multi-year projections under low-rate scenarios.
-> - **Book values can hide the loss:** SVB's securities were mostly held at amortized cost, so the losses didn't reduce reported capital until securities were sold. Judging a balance sheet on book values hides the duration risk that market values would show.
+The annual loss from a negative spread is
+
+> $$\text{Annual loss} = \left(i_g - i_A\right) \times L$$
+
+- $i_g$ is the guaranteed rate credited on the liabilities.
+- $L$ is the value of the liabilities.
+- $i_A$ is the yield the assets earn.
+
+The failure came from years of such losses, not one shock, so a one-period stress test misses it. Long guarantees need multi-year projections under low-rate scenarios.
+
+## Silicon Valley Bank (2023)
+
+The bank invested a surge of deposits in long-dated Treasuries and mortgage-backed securities without hedging their duration. When rates rose sharply, those securities lost a large part of their value. The securities were mostly held at amortized cost, so the losses didn't reduce reported capital until securities were sold. Most of its deposits were uninsured and concentrated among technology firms and venture funds. When it announced a loss on selling securities and a plan to raise capital, depositors withdrew tens of billions of dollars in a day, and it failed within 48 hours. Unhedged duration and flighty, concentrated liabilities together can destroy a bank faster than its accounts show.
+
+## What the lessons changed
+
+Insurers now limit puttable and ratings-triggered liabilities and run liquidity stress tests alongside solvency tests. They price and hedge guarantees with [[Interest Rate Derivative|interest rate derivatives]] when they are sold, and measure the duration of surplus with key rate and scenario tools. Regulators added liquidity monitoring and asset adequacy testing that must consider these risks.
+
+> [!trap] Treating a liquidity failure as bad investments
+> General American had positive surplus when it failed. The failure was the speed of the withdrawals after the downgrade, not the quality of the assets, so an answer must name the put option and the ratings trigger that made every holder act at once.

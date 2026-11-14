@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b98634897d3eefca17f3fd80445be703e0578400575ce050a6bc06056e3270bf
+  content_hash: sha256:e265921d00158db15883dc57c504e3bd008fe442b33ef07304c2e1a82c986d11
   sources:
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section I Coverage A para 2 exclusions a-q and closing paragraph (pp.2-6); Section III para 6 (p.11); Section V defs 7, 8, 9, 11, 12, 15, 16, 21, 22 (pp.13-16), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
@@ -14,71 +14,115 @@ verification:
 
 The **CGL Coverage A exclusions** are the seventeen exclusions, lettered a through q, that remove bodily injury and property damage from the [[CGL Coverage A Insuring Agreement|Coverage A insuring agreement]] of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition). Most of them send a loss to the policy built for it, such as [[Workers Compensation Insurance|workers compensation]], [[Business Auto Coverage|business auto]] or a liquor or pollution form, or remove business risks the insured controls, such as faulty work and recalls. Many end with an exception that gives some of the coverage back.
 
+The seventeen exclusions are:
+
+| | Exclusion | What it removes |
+| :--- | :--- | :--- |
+| a | Expected or intended injury | Injury expected or intended from the standpoint of the insured, except injury from reasonable force to protect persons or property |
+| b | Contractual liability | Liability assumed in a contract, except liability the insured would have anyway and liability assumed in an insured contract |
+| c | Liquor liability | Liability for intoxication or furnishing alcohol, for an insured in the liquor business |
+| d | Workers compensation and similar laws | Any obligation under a workers compensation, disability benefits or unemployment compensation law |
+| e | Employer's liability | Bodily injury to an employee in the course of employment, and the family's consequential claims |
+| f | Pollution | Injury or damage from the discharge, release or escape of pollutants, and clean-up costs |
+| g | Aircraft, auto or watercraft | Injury from aircraft, autos or watercraft owned or operated by, or rented or loaned to, any insured |
+| h | Mobile equipment | Transporting mobile equipment by an insured's auto, and its use in racing, speed, demolition or stunting |
+| i | War | War, warlike action, insurrection, rebellion or revolution |
+| j | Damage to property | The insured's own, rented, loaned or controlled property, and the part of property it is working on |
+| k | Damage to your product | Property damage to the insured's product arising out of it |
+| l | Damage to your work | Property damage to the insured's completed work arising out of it |
+| m | Damage to impaired property or property not physically injured | Loss of use of property that incorporates the insured's defective product or work |
+| n | Recall of products, work or impaired property | The cost of withdrawing or recalling the insured's product or work |
+| o | Personal and advertising injury | Bodily injury arising out of personal and advertising injury, handled under [[CGL Coverage B]] |
+| p | Electronic data | Damages from the loss of, or inability to use, electronic data, except for bodily injury |
+| q | Recording and distribution of material in violation of law | Injury from violating the Telephone Consumer Protection Act, the CAN-SPAM Act of 2003, the Fair Credit Reporting Act or a similar law |
+
+Exclusion d sends employee injury to workers compensation, and exclusion e to [[Employers Liability Insurance|employers liability insurance]]. Exclusion e applies whether the insured is liable as employer or otherwise, and liability assumed under an insured contract is excepted. Pollution exclusion f has its own exceptions, such as injury from the heat, smoke or fumes of a "hostile fire", one that becomes uncontrollable or breaks out from where it was meant to be.
+
+## Contractual liability and the insured contract
+
+Under exclusion b, liability assumed in an "insured contract" is covered if the injury occurs after the contract was signed. The defense costs of the other party (the indemnitee) are then treated as damages when the insured also assumed that party's defense in the same insured contract. An insured contract includes:
+
+1. A lease of premises, except its indemnity for fire damage to the premises.
+2. A sidetrack agreement.
+3. An easement or license agreement, except for construction or demolition within 50 feet of a railroad.
+4. An indemnity of a municipality required by ordinance.
+5. An elevator maintenance agreement.
+6. The part of any other business contract in which the insured assumes another party's tort liability to third persons.
+
+## Liquor liability
+
+Exclusion c removes injury for which an insured may be held liable for causing or contributing to someone's intoxication, furnishing alcohol to a person under the legal drinking age or under the influence, or violating a liquor statute, ordinance or regulation. It applies even when the claim alleges negligent supervision, hiring, training or monitoring.
+
+The exclusion applies only if the named insured is in the business of manufacturing, distributing, selling, serving or furnishing alcoholic beverages. Letting people bring their own alcohol onto the premises is not by itself that business. A landscaper whose guest drives home drunk from a barbecue it hosts for its clients is not in that business, so the claim is within Coverage A.
+
+## Aircraft, auto, watercraft and mobile equipment
+
+Exclusion g removes injury from the ownership, maintenance, use (including loading or unloading) or entrustment to others of any aircraft, "auto" or watercraft owned or operated by, or rented or loaned to, any insured. It applies even if the claim alleges negligent supervision or hiring. That exposure goes to the business auto policy. The exceptions restore:
+
+1. A watercraft ashore on premises the named insured owns or rents.
+2. A non-owned watercraft under 26 feet not carrying people or property for a charge.
+3. Parking a non-owned auto on, or on the ways next to, the premises.
+4. Liability for aircraft or watercraft assumed in an insured contract.
+5. The operation of machinery attached to certain vehicles that would be mobile equipment but for a motor vehicle law.
+
+"Mobile equipment", such as bulldozers, forklifts and vehicles used only on the insured's premises, is covered by the CGL rather than an auto policy. Exclusion h removes it only when it is transported by an auto an insured owns, operates, rents or borrows, or used in a prearranged racing, speed, demolition or stunting activity.
+
+## Damage to property and fire damage to rented premises
+
+Exclusion j removes property damage to:
+
+1. Property the named insured owns, rents or occupies, including costs to repair or maintain it.
+2. Premises it sells, gives away or abandons, from any part of those premises.
+3. Property loaned to it.
+4. Personal property in an insured's care, custody or control.
+5. The particular part of real property on which it or its contractors are working, if the damage arises from that work.
+6. The particular part of any property that must be restored or replaced because the insured's work was done incorrectly on it.
+
+Items (1), (3) and (4) do not apply to damage, other than by fire, to premises rented for seven or fewer consecutive days. Item (2) does not apply to premises that were the insured's work and never occupied, rented or held for rental by it. Items (3) to (6) do not apply to liability under a sidetrack agreement, and item (6) does not apply to damage within the products-completed operations hazard.
+
+After exclusion q, the form says exclusions c to n do not apply to damage by fire to premises while rented to the named insured or temporarily occupied with the owner's permission. That coverage has its own limit, Damage to Premises Rented to You ([[CGL Limits of Insurance]]), which sits inside the each occurrence limit. For fire damage to rented premises the amount paid is
+
 > $$\text{Paid}_{\text{fire}} = \min\left(D,\ L_{\text{rent}}\right)$$
 
-- **Symbols:** $D$ is the damages for fire damage to premises rented to the named insured or temporarily occupied with the owner's permission, and $L_{\text{rent}}$ is the Damage to Premises Rented to You limit in the declarations, which sits inside the each occurrence limit. The closing paragraph of the exclusions gives this coverage back after exclusions c to n would remove it.
-- **a. Expected or intended injury:** Bodily injury or property damage expected or intended from the standpoint of the insured is excluded. The exception restores bodily injury that results from using reasonable force to protect persons or property.
-- **b. Contractual liability:** Injury or damage the insured must pay for because it assumed liability in a contract is excluded, except (1) liability it would have anyway without the contract, and (2) liability assumed in an "insured contract", if the injury occurs after the contract was signed. Under (2), the defense costs of the other party (the indemnitee) are treated as damages when the insured also assumed that party's defense in the same insured contract. An insured contract includes a lease of premises (except its indemnity for fire damage to the premises), a sidetrack agreement, an easement or license agreement (except for construction or demolition within 50 feet of a railroad), an indemnity of a municipality required by ordinance, an elevator maintenance agreement, and the part of any other business contract in which the insured assumes another party's tort liability to third persons.
-- **c. Liquor liability:** Injury for which an insured may be held liable for causing or contributing to someone's intoxication, furnishing alcohol to a person under the legal drinking age or under the influence, or violating a liquor statute, ordinance or regulation is excluded, even when the claim alleges negligent supervision, hiring, training or monitoring, or a failure to provide transportation. The exclusion applies only if the named insured is in the business of manufacturing, distributing, selling, serving or furnishing alcoholic beverages; letting people bring their own alcohol onto the premises is not by itself that business.
-- **d. Workers compensation and similar laws:** Any obligation of the insured under a workers compensation, disability benefits or unemployment compensation law, or a similar law, is excluded.
-- **e. Employer's liability:** Bodily injury to an employee arising out of and in the course of employment, or of performing duties related to the insured's business, is excluded, along with the consequential claims of the employee's spouse, child, parent, brother or sister. It applies whether the insured is liable as employer or otherwise, and to any obligation to share damages with or repay someone else. Liability assumed under an insured contract is excepted. [[Employers Liability Insurance|Employers liability insurance]] covers this exposure.
-- **f. Pollution:** Injury or damage from the actual, alleged or threatened discharge, release or escape of "pollutants" is excluded when it happens at or from premises an insured owns, occupies, rents or has ever done so; at or from a site used to handle, store, treat or dispose of waste; from pollutants transported, stored or treated as waste by or for an insured; at a site where an insured or its contractors are working, if they brought the pollutants there; or at a site where the operations are to test for, clean up or respond to pollutants. Costs arising out of any request, demand, order or statutory or regulatory requirement to test for, clean up or otherwise respond to pollutants, and governmental claims or suits for those costs, are excluded too. Exceptions restore bodily injury inside a building from the building's own heating, cooling, dehumidifying or water-heating equipment; a contractor's liability at a site where the owner is an additional insured for the contractor's ongoing operations; injury from the heat, smoke or fumes of a "hostile fire" (one that becomes uncontrollable or breaks out from where it was meant to be); escaping fuels and fluids needed to run mobile equipment; and fumes inside a building from materials brought in for the insured's operations. "Pollutants" are any solid, liquid, gaseous or thermal irritant or contaminant, including smoke, vapor, soot, fumes, acids, alkalis, chemicals and waste.
-- **g. Aircraft, auto or watercraft:** Injury from the ownership, maintenance, use (including loading or unloading) or entrustment to others of any aircraft, "auto" or watercraft owned or operated by, or rented or loaned to, any insured is excluded, even if the claim alleges negligent supervision or hiring. Exceptions restore a watercraft ashore on premises the named insured owns or rents; a non-owned watercraft under 26 feet not carrying people or property for a charge; parking a non-owned auto on or next to the premises; liability for aircraft or watercraft assumed in an insured contract; and the operation of machinery attached to certain vehicles that would be mobile equipment but for a motor vehicle law.
-- **h. Mobile equipment:** Injury from transporting "mobile equipment" by an auto an insured owns, operates, rents or borrows, or from using mobile equipment in, practicing for or preparing for a prearranged racing, speed, demolition or stunting activity, is excluded. Otherwise mobile equipment, such as bulldozers, forklifts and vehicles used only on the insured's premises, is covered by the CGL rather than an auto policy.
-- **i. War:** Injury arising from war, warlike action by a military force, or insurrection, rebellion or revolution is excluded, however caused.
-- **j. Damage to property:** Property damage is excluded to (1) property the named insured owns, rents or occupies, including costs to repair or maintain it; (2) premises it sells, gives away or abandons, from any part of those premises; (3) property loaned to it; (4) personal property in an insured's care, custody or control; (5) the particular part of real property on which it or its contractors are working, if the damage arises from that work; and (6) the particular part of any property that must be restored or replaced because the insured's work was done incorrectly on it. Exceptions: (1), (3) and (4) do not apply to damage, other than by fire, to premises rented for seven or fewer consecutive days; (2) does not apply to premises that were the insured's work and never occupied, rented or held for rental by it; (3) to (6) do not apply to liability under a sidetrack agreement; and (6) does not apply to damage within the products-completed operations hazard.
-- **k. Damage to your product:** Property damage to "your product" arising out of the product or any part of it is excluded. The product itself is not insured, though the damage it does to other property is.
-- **l. Damage to your work:** Property damage to "your work" arising out of it and within the products-completed operations hazard is excluded. The exception restores coverage when the damaged work, or the work that caused the damage, was performed for the named insured by a subcontractor.
-- **m. Damage to impaired property or property not physically injured:** Property damage to "impaired property", or to property not physically injured, arising out of a defect or dangerous condition in the insured's product or work, or out of a delay or failure to perform a contract, is excluded. Impaired property is tangible property, other than the insured's product or work, that can't be used or is less useful because it incorporates the insured's defective product or work, or because the insured failed to perform a contract, and that can be restored by fixing or removing the product or work or by performing the contract. The exception restores loss of use of other property arising from sudden and accidental physical injury to the insured's product or work after it has been put to its intended use.
-- **n. Recall of products, work or impaired property:** The cost of loss of use, withdrawal, recall, inspection, repair, replacement or disposal of the insured's product, work or impaired property, when it is withdrawn from the market or from use because of a known or suspected defect, is excluded. Product recall is a separate exposure.
-- **o. Personal and advertising injury:** Bodily injury arising out of personal and advertising injury is excluded, so that it is handled under [[CGL Coverage B|Coverage B]].
-- **p. Electronic data:** Damages from the loss, corruption or inability to access or use electronic data are excluded, except liability for damages because of bodily injury.
-- **q. Recording and distribution of material in violation of law:** Injury arising from any act that violates or is alleged to violate the Telephone Consumer Protection Act, the CAN-SPAM Act of 2003, the Fair Credit Reporting Act (including the Fair and Accurate Credit Transactions Act), or any other law that limits the printing, sending or distribution of material or information, is excluded.
-- **Fire damage to rented premises:** After exclusion q, the form says exclusions c to n do not apply to damage by fire to premises while rented to the named insured or temporarily occupied with the owner's permission. That coverage has its own limit, Damage to Premises Rented to You ([[CGL Limits of Insurance]]).
-- **Your product and your work:** "Your product" is goods or products, other than real property, that the named insured or others trading under its name make, sell, handle, distribute or dispose of, with their containers and parts, warranties and warnings; it excludes vending machines and other property rented or located for others' use but not sold. "Your work" is work or operations performed by or for the named insured, with the materials and equipment furnished for it, and its warranties and warnings. The [[Products and Completed Operations Liability|products-completed operations hazard]] is injury or damage away from premises the named insured owns or rents, arising from its product or completed work, except products still in its possession and work not yet completed or abandoned.
+- $D$ is the damages for fire damage to the premises.
+- $L_{\text{rent}}$ is the Damage to Premises Rented to You limit in the declarations.
 
-> [!example]- A Roof, a Subcontractor and the Insured's Own Work {Example}
-> A general contractor builds a house and hands it over to the owner. Two years later the roof leaks, ruining the roof deck, the owner's furniture and an interior wall. The roof was installed by a roofing subcontractor; the interior walls were built by the general contractor's own crew. The contractor is sued for all three. Apply the "your work" exclusion under the contractor's CGL.
+> [!example]- What does Coverage A pay for this tenant's fire, the borrowed ladder and the water damage? {Example}
+> A consulting firm rents office space on a five-year lease. Its CGL has a $\$1{,}000{,}000$ each occurrence limit and a $\$100{,}000$ Damage to Premises Rented to You limit. An employee's space heater starts a fire that does $\$180{,}000$ of damage to the landlord's building, and the fire also destroys a $\$900$ ladder the firm had borrowed from the landlord. Separately, an employee floods the office by leaving a tap running, causing $\$15{,}000$ of water damage to the building.
 >
 > > [!answer]-
-> > The damage happened away from the contractor's premises after the work was completed, so it is within the products-completed operations hazard and exclusion l is in play.
-> >
-> > - **Furniture:** It is the owner's property, not the contractor's work, so exclusion l does not reach it. Covered.
-> > - **Interior wall:** It is the contractor's own work, but the damage arose out of the roof, which a subcontractor performed. The subcontractor exception restores coverage whenever the damaged work or the work out of which the damage arises was performed by a subcontractor. Covered.
-> > - **Roof deck:** The damaged work is the subcontractor's roof itself, so the exception applies here too. Covered.
-> >
-> > Had the contractor's own crew installed the roof, the roof and the interior wall (both the contractor's own work, with the damage arising from its own work) would be excluded, and only the furniture would be covered.
+> > - Exclusion j would remove damage to premises rented to the named insured, but exclusions c to n do not apply to damage by fire to those premises.
+> > - The fire damage is paid up to its own limit, $\min(180{,}000,\ 100{,}000) = \$100{,}000$.
+> > - The ladder is loaned property, and the fire give-back covers only the premises, so exclusion j(3) removes it.
+> > - The water damage is not damage by fire, and the lease is far longer than seven days, so exclusion j(1) removes it.
+> > - The firm bears $\$80{,}000$ of the fire damage, the ladder and the $\$15{,}000$ water loss.
 
-> [!example]- A Tenant's Fire and a Borrowed Ladder {Example}
-> A consulting firm rents office space on a five-year lease. Its CGL has a \$1,000,000 each occurrence limit and a \$100,000 Damage to Premises Rented to You limit. An employee's space heater starts a fire that does \$180,000 of damage to the landlord's building, and the fire also destroys a \$900 ladder the firm had borrowed from the landlord. Separately, an employee floods the office by leaving a tap running, causing \$15,000 of water damage to the building. What does Coverage A pay?
+## Business risk exclusions
+
+Exclusions k to n remove damage to the insured's own product or work, but not bodily injury or damage to other property that the product or work causes. Their terms are defined in the form:
+
+- **"Your product"** is goods or products, other than real property, that the named insured or others trading under its name make, sell, handle, distribute or dispose of, with their containers and parts, warranties and warnings. It excludes vending machines and other property rented or located for others' use but not sold.
+- **"Your work"** is work or operations performed by or for the named insured, with the materials and equipment furnished for it, and its warranties and warnings. Work a subcontractor performs for the insured is the insured's work.
+- **The [[Products and Completed Operations Liability|products-completed operations hazard]]** is injury or damage away from premises the named insured owns or rents, arising from its product or completed work, except products still in its possession and work not yet completed or abandoned.
+- **"Impaired property"** is tangible property, other than the insured's product or work, that can't be used or is less useful because it incorporates the insured's defective product or work, or because the insured failed to perform a contract, and that can be restored by fixing or removing the product or work or by performing the contract.
+
+Exclusion k removes property damage to "your product" arising out of the product or any part of it. The product itself is not insured, though the damage it does to other property is.
+
+Exclusion l removes property damage to "your work" arising out of it and within the products-completed operations hazard. The exception restores coverage when the damaged work, or the work that caused the damage, was performed for the named insured by a subcontractor. Damage to other people's property, such as the customer's furniture, is not damage to the insured's work.
+
+Exclusion m removes property damage to impaired property, or to property not physically injured, arising out of a defect or dangerous condition in the insured's product or work, or out of a delay or failure to perform a contract. The exception restores loss of use of other property arising from sudden and accidental physical injury to the insured's product or work after it has been put to its intended use.
+
+Exclusion n removes the cost of loss of use, withdrawal, recall, inspection, repair, replacement or disposal of the insured's product, work or impaired property, when it is withdrawn from the market or from use because of a known or suspected defect. Product recall is a separate exposure.
+
+> [!example]- Which parts of this roof-leak claim does the "your work" exclusion remove? {Example}
+> A general contractor builds a house and hands it over to the owner. Two years later the roof leaks, ruining the roof deck, the owner's furniture and an interior wall. The roof was installed by a roofing subcontractor, and the interior walls were built by the general contractor's own crew. The contractor is sued for all three.
 >
 > > [!answer]-
-> > Exclusion j would remove damage to premises rented to the named insured and to property loaned to it. For fire, the closing paragraph says exclusions c to n do not apply to damage by fire to premises rented to the named insured, subject to its own limit.
-> > $$
-> > \begin{align*}
-> > \text{Paid}_{\text{fire}} &= \min(180{,}000,\ 100{,}000) \\
-> > &= 100{,}000
-> > \end{align*}
-> > $$
-> > The ladder is loaned property, and the fire give-back covers only the premises, so exclusion j(3) removes it. The water damage is not damage by fire, and the seven-day exception does not help because the lease is far longer than seven days, so exclusion j(1) removes it. The firm bears \$80,000 of the fire damage, the ladder and the \$15,000 water loss.
+> > - The damage happened away from the contractor's premises after the work was completed, so it is within the products-completed operations hazard and exclusion l is in play.
+> > - The furniture is the owner's property, not the contractor's work, so exclusion l does not reach it. It is covered.
+> > - The interior wall is the contractor's own work, but the damage arose out of the roof, which a subcontractor performed, so the subcontractor exception restores it. It is covered.
+> > - The roof deck is the subcontractor's work itself, so the exception applies here too. It is covered.
+> > - Had the contractor's own crew installed the roof, the roof and the interior wall would be excluded, and only the furniture would be covered.
 
-> [!example]- Which Exclusion Moves the Loss? {Example}
-> A landscaping company's CGL is asked to respond to four claims: (a) a worker on its crew is injured by a mower; (b) a passer-by is struck by the company's pickup truck on the road; (c) a customer's patio is cracked by the company's rented skid-steer loader while the crew works on it; (d) a guest at a barbecue the company hosts for its clients drives home drunk and injures another driver. Which exclusion, if any, applies?
->
-> > [!answer]-
-> > - **(a) Exclusion e, employer's liability:** Bodily injury to an employee in the course of employment goes to workers compensation and employers liability.
-> > - **(b) Exclusion g, auto:** The pickup is an auto owned by the insured, so the injury goes to the business auto policy.
-> > - **(c) Exclusion j(5):** A skid-steer used off the road is mobile equipment, which the CGL covers, but the patio is the particular part of real property on which the company was performing operations, and the damage arose out of those operations, so it is excluded.
-> > - **(d) Not excluded by c:** The liquor exclusion applies only if the named insured is in the business of manufacturing, distributing, selling, serving or furnishing alcohol. A landscaper hosting a party is not, so the claim is within Coverage A.
-
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** Section 10 splits the exclusions over two objectives (parts 1 and 2). Questions give a loss that is within the insuring agreement and ask which exclusion removes it, and whether an exception gives it back.
-> - **Business risk exclusions:** The your product, your work, impaired property and recall exclusions are tested together, usually with a construction or manufacturing case that has damage to the insured's own work and to other property.
-> - **Coordination with other policies:** Questions ask which policy covers an excluded loss: employee injury to workers compensation, autos to business auto, liquor to a liquor liability form ([[Specialty General Liability Forms]]).
-
-> [!warning]- Exam traps
-> - **Read the exception:** The subcontractor exception to exclusion l, the reasonable force exception to exclusion a, and the insured contract exception to exclusion b each restore coverage. Stopping at the first sentence of an exclusion denies covered losses.
-> - **Product versus the damage it causes:** Exclusion k removes only the insured's product. Bodily injury and damage to other property caused by the product remain covered.
-> - **Liquor needs a liquor business:** A host who serves drinks at a company party is not excluded; a bar or restaurant is. Letting guests bring their own alcohol does not by itself make a business a liquor business.
-> - **Fire versus other perils:** The give-back for rented premises applies to fire whatever the length of the rental, but damage by other perils is restored only for a rental of seven or fewer consecutive days.
-> - **Mobile equipment is CGL, autos are not:** A forklift or bulldozer used off public roads is covered by the CGL; the same injury caused by a road vehicle subject to a motor vehicle law is an auto exposure and excluded.
+> [!trap] Stopping before the exception
+> The subcontractor exception to exclusion l, the reasonable force exception to exclusion a and the insured contract exception to exclusion b each restore coverage. Reading only the first sentence of an exclusion denies covered losses.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c04480b99c6e3f0006e538effda05db7af7e0050ae6239cf85f2c2f33717c07a
+  content_hash: sha256:33698127121bd2a12bd3e91f3c1c7a955a2c10bfbedd60c8589bbc4d335ab82c
   sources:
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s10 pooling + transfer to a third party; steps; sentimental value; reduces risk and anxiety; objective/subjective estimates, sha256:a643d7b54dd325ce18405f2c482ebef89986853c6894651046d3f112a552cc04 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s10-02-nature-of-insurance.html"
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s10 six requisites; economic feasibility; deductibles, sha256:a313b603e25c423326a69258356cf6a570917a4d41924c731e91cd3fe3c061f3 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s10-03-ideal-requisites-for-insurabil.html"
@@ -16,54 +16,83 @@ verification:
   log: .verify/Concepts/Insurance as a Risk Management Technique.md
 ---
 
-**Insurance as a risk management technique** is the use of insurance to finance the losses an organization or person cannot avoid or reduce to an acceptable level. It combines two things: [[Risk Transfer|transfer]] of the financial consequences of a loss to an insurer, in return for a premium, and the insurer's *pooling* of many similar exposures, which makes the losses of the group predictable. It fits best the exposures with a low [[Frequency|frequency]] and a high [[Severity|severity]] of loss.
+**Insurance as a risk management technique** is the use of insurance to finance the losses an organization or person cannot avoid or reduce to an acceptable level. It combines two things: [[Risk Transfer|transfer]] of the financial consequences of a loss to an insurer, in return for a premium, and the insurer's *pooling* of many similar exposures, which makes the losses of the group predictable.
 
-> $$\text{Expected cost per insured} = \frac{n\,p\,s}{n} = p\,s$$
+Insurance fits best the exposures with a low [[Frequency|frequency]] and a high [[Severity|severity]] of loss. The traditional risk management matrix for one exposure gives the treatment:
+
+| | Low severity | High severity |
+| --- | --- | --- |
+| **Low frequency** | Retention | Transfer by insurance |
+| **High frequency** | Retention with loss control | Avoidance |
+
+Insurance is economically feasible when the possible loss is significant to the insured and the premium is small next to it. Insuring frequent small losses would cost a premium large compared with the losses themselves, which is why [[Deductible|deductibles]] retain them. The exposure should also have the characteristics of an [[Insurable Risk|insurable risk]]: many similar units, accidental losses, no catastrophe for the group, definite losses, a calculable loss distribution and a feasible cost.
+
+> [!example]- How should a firm treat a rare loss that would cost more than it could pay? {Example}
+> - The exposure has low frequency and high severity.
+> - The possible loss is significant to the firm, and its rarity keeps the premium small next to it, so insurance is economically feasible.
+> - The firm should transfer it by insurance, retaining the small losses through a deductible.
+
+## Pooling
+
+Insurance does not prevent the event. The insured transfers the risk to the insurer, the insurer pools the exposures and forecasts their losses, and underwriting classifies each exposure with similar ones so that each pays a premium reflecting its expected loss. Pooling alone is not insurance. Insurance also transfers the losses to a third party.
+
+If $n$ similar exposures each have probability $p$ of a loss of size $s$ in the period, the expected cost per insured is
+
+> $$\frac{n\,p\,s}{n} = p\,s$$
+
+The pool's losses are shared through premiums by all members, those with no loss and those with large losses alike. Each pays the expected cost $p\,s$ plus a charge for expenses, profit and the risk of losses exceeding expectations.
+
+The relative variation of the pool's number of losses, $\sigma / \mu$, falls as $n$ grows ([[Law of Large Numbers]], [[Risk Classifications]]). For independent exposures it is
 
 > $$\frac{\sigma}{\mu} = \sqrt{\frac{q}{n\,p}}$$
 
-- **Symbols:** $n$ is the number of similar exposures in the pool, $p$ the probability that one has a loss in the period, $q = 1 - p$, and $s$ the loss when one occurs. The pool's losses are shared through premiums by all members, those with no loss and those with large losses alike, so each pays the expected cost $p\,s$ plus a charge for expenses, profit and the risk of losses exceeding expectations. The relative variation of the pool's number of losses, $\sigma / \mu$, falls as $n$ grows ([[Law of Large Numbers]], [[Risk Classifications]]).
-- **How insurance works:** The insured transfers the risk to the insurer; the insurer pools the exposures and forecasts their losses, more accurately as the number grows; and underwriting classifies each exposure with similar ones, so that each pays a premium reflecting its expected loss. Transfer and pooling together reduce risk for society and the anxiety it causes. Insurance does not prevent the event, and it cannot replace sentimental value or the grief of a loss, which cannot be measured in money.
-- **When insurance fits:** In the traditional risk management matrix for one exposure, low frequency and high severity point to transfer by insurance; low frequency and low severity to retention; high frequency and low severity to retention with loss control; and high frequency and high severity to avoidance. Insurance is economically feasible when the possible loss is significant to the insured and the premium is small next to it. Insuring frequent small losses would cost a premium large compared with the losses themselves, which is why [[Deductible|deductibles]] retain them. The exposure should also have the characteristics of an [[Insurable Risk|insurable risk]]: many similar units, accidental losses, no catastrophe for the group, definite losses, a calculable loss distribution and a feasible cost.
-- **Using insurance in a program:** A risk manager who uses insurance must select the coverages, select the insurer, negotiate the terms, tell the organization what is covered and what records to keep, and review the program periodically. Insurers are chosen on financial strength, the risk management services they provide, and the cost and terms of protection.
-- **Advantages to the buyer:** After a loss the firm is indemnified and can keep operating; uncertainty, and with it worry, is reduced; insurers provide services such as loss control and claims adjusting; and premiums are deductible as a business expense.
-- **Disadvantages to the buyer:** Premiums are a major cost, paid in advance, whereas under retention the money could stay invested in the business until claims are paid; negotiating coverage takes considerable time and effort; and an insured may take less care over loss control ([[Moral Hazard]]).
-- **Insurance versus noninsurance transfer:** Risk can also be shifted by contracts other than insurance: hold-harmless and indemnity clauses, leases and rental agreements, warranties, and surety bonds; forming a separate corporation limits the owners' loss to their investment. A noninsurance transfer can shift a loss that is not commercially insurable, often costs less than insurance, and can place the loss with a party better able to control it. But the transfer can fail if the contract language is ambiguous, and if the party who accepted the loss cannot pay it, the firm is still responsible. Insurance places the loss with an insurer that is pooling it, rather than with a single counterparty ([[Risk Treatment]]).
-- **The actuarial / Exam 9 treatment:** Risk transfer between insurers and reinsurers, and the accounting test of whether a contract transfers enough risk to count as reinsurance, are in [[Risk Transfer]].
+- $q = 1 - p$.
 
-> [!example]- Why Pooling Makes a House Fire Insurable {Example}
-> A homeowner's house has a 1% chance of a total fire loss of \$150,000 in a year. An insurer pools 10,000 such houses, independently exposed. Find the expected annual cost per house, and compare the relative variation ($\sigma / \mu$) of the number of losses for one homeowner bearing the risk alone and for the insurer.
+> [!example]- How much more predictable is a pool of 10,000 houses than one house? {Example}
+> A house has a 1% chance of a total fire loss of $\$150{,}000$ in a year. An insurer pools 10,000 such houses, independently exposed.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > p\,s &= 0.01 \times 150{,}000 \\
-> > &= 1{,}500
-> > \end{align*}
-> > $$
-> > The pool expects $10{,}000 \times 0.01 = 100$ fires, \$15 million in all, which is \$1,500 for each house before expenses and profit.
-> > $$
-> > \begin{align*}
-> > \text{One house: } \sigma/\mu &= \sqrt{0.99 / 0.01} \\
-> > &\approx 9.95 \\
-> > \text{Pool: } \sigma/\mu &= \sqrt{0.99 / 100} \\
-> > &\approx 0.0995
-> > \end{align*}
-> > $$
-> > Alone, the homeowner pays either nothing or \$150,000, a relative variation of almost 10. The insurer's number of fires varies only about 10% around 100, so it can promise to pay for a premium near \$1,500. Transfer moves the loss off the homeowner; pooling is what makes it predictable for the insurer.
+> > - The expected annual cost per house is $0.01 \times 150{,}000 = \$1{,}500$.
+> > - The pool expects $10{,}000 \times 0.01 = 100$ fires, $\$15$ million in all, which is $\$1{,}500$ for each house before expenses and profit.
+> > - For one house, $\sigma/\mu = \sqrt{0.99/0.01} \approx 9.95$. The homeowner pays either nothing or $\$150{,}000$.
+> > - For the pool, $\sigma/\mu = \sqrt{0.99/100} \approx 0.0995$. The insurer's number of fires varies only about 10% around 100.
+> > - The insurer can promise to pay for a premium near $\$1{,}500$. Transfer moves the loss off the homeowner, and pooling makes it predictable for the insurer.
 
-> [!example]- Relying on a Hold-Harmless Clause {Example}
-> A museum lets a small catering company use its hall for events. The contract requires the caterer to indemnify the museum for any claims arising from the caterer's use of the premises. A guest is injured by the caterer's equipment and sues the museum for \$400,000. The caterer has few assets and no insurance. What has the museum transferred, and what has it kept?
+## Advantages and disadvantages to the buyer
+
+Insurance has these advantages for the buyer:
+
+1. After a loss the firm is indemnified and can keep operating.
+2. Uncertainty, and with it worry, is reduced.
+3. Insurers provide services such as loss control and claims adjusting.
+4. Premiums are deductible as a business expense.
+
+It has these disadvantages:
+
+1. Premiums are a major cost, paid in advance, whereas under retention the money could stay invested in the business until claims are paid.
+2. Negotiating coverage takes considerable time and effort.
+3. An insured may take less care over loss control ([[Moral Hazard]]).
+
+Insurance also cannot replace sentimental value or the grief of a loss, which cannot be measured in money.
+
+## Using insurance in a risk management program
+
+A risk manager who uses insurance must select the coverages, select the insurer, negotiate the terms, tell the organization what is covered and what records to keep, and review the program periodically. Insurers are chosen on financial strength, the risk management services they provide, and the cost and terms of protection.
+
+## Noninsurance risk transfer
+
+Risk can also be shifted by contracts other than insurance: hold-harmless and indemnity clauses, leases and rental agreements, warranties, and surety bonds. Forming a separate corporation limits the owners' loss to their investment ([[Risk Treatment]]).
+
+A noninsurance transfer can shift a loss that is not commercially insurable, often costs less than insurance, and can place the loss with a party better able to control it. But the transfer can fail if the contract language is ambiguous, and if the party who accepted the loss cannot pay it, the firm is still responsible. Insurance places the loss with an insurer that is pooling it, rather than with a single counterparty. Risk transfer between insurers and reinsurers is in [[Risk Transfer]].
+
+> [!example]- What has this museum transferred by its hold-harmless clause, and what has it kept? {Example}
+> A museum lets a small catering company use its hall. The contract requires the caterer to indemnify the museum for any claims arising from the caterer's use of the premises. A guest is injured by the caterer's equipment and sues the museum for $\$400{,}000$. The caterer has few assets and no insurance.
 >
 > > [!answer]-
-> > The hold-harmless clause is a noninsurance transfer: by contract, the financial consequences of claims arising from the caterer's use pass to the caterer. It cost the museum nothing, and the caterer is the party best placed to control the hazard. But a transfer is only as good as the party who accepts it. Because the caterer cannot pay \$400,000, the museum is still responsible for the loss. Insurance would have placed the same loss with an insurer that pools it with many others, which is why the two techniques are often used together.
+> > - The hold-harmless clause is a noninsurance transfer: by contract, the financial consequences of claims arising from the caterer's use pass to the caterer.
+> > - It cost the museum nothing, and the caterer is the party best placed to control the hazard.
+> > - The caterer cannot pay $\$400{,}000$, so the museum is still responsible for the loss.
+> > - Insurance would have placed the same loss with an insurer that pools it with many others, which is why the two techniques are often used together.
 
-> [!tip]- How it appears on the exam
-> - **DISC-RM:** The section on insurance as a risk management technique opens with using insurance to treat risk. Questions ask when insurance fits an exposure, using the frequency and severity of its losses, how a risk manager selects coverages and insurers, and what insurance offers and costs the buyer compared with retention or noninsurance transfer.
-> - **Pooling and transfer:** A question may ask which element of insurance makes losses predictable and which shifts them off the insured.
-> - **Scenarios:** A short case lists an organization's exposures and asks whether a contract clause leaves any loss with the organization.
-
-> [!warning]- Exam traps
-> - **Insure the large, retain the small:** Insurance is for low-frequency, high-severity exposures. Insuring frequent small losses costs more in premium than it saves.
-> - **Pooling alone is not insurance:** Pooling makes losses predictable, but insurance also transfers them to a third party.
-> - **A noninsurance transfer can fail:** If the other party cannot pay, or the clause is ambiguous, the loss comes back to the organization.
+> [!trap] Insuring frequent small losses
+> Insurance is for low-frequency, high-severity exposures. Insuring frequent small losses costs more in premium than it saves, so those losses are retained, with loss control where they are frequent.

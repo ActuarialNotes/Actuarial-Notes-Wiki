@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-30
   last_checked_by: agent:validate-v1
-  content_hash: sha256:22ffe1dcaa1b7f3c95df9f2de0ddbc94b988b76a18ee13d59c459ddeeb2c5b72
+  content_hash: sha256:91ac8d2ebde11eec168e5ef02c3939a9ef52ec67da0e77885ba6cde404258890
   sources:
     - "Shapland, Using the ODP Bootstrap Model: A Practitioner's Guide (CAS Monograph No. 4, 2016), §4.1 eq. 4.1-4.3 and §4.1.1 (PDF pp.28-30), §4.2 (PDF p.31), §4.5 (PDF pp.32-33), §4.7-4.7.2 (PDF pp.35-37), §5.5.1 (PDF pp.49-50); printed = PDF - 8, sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
   open_findings: 0
@@ -12,124 +12,98 @@ verification:
   log: .verify/Concepts/ODP Bootstrap Model.md
 ---
 
-**ODP Bootstrap Model** is the simulation model of an [[Unpaid Claim Distribution|unpaid claim distribution]] that [[Using the ODP Bootstrap Model (Shapland - 2016)|Shapland (2016)]] sets out. It fits the [[Over-Dispersed Poisson Model|over-dispersed Poisson]] model to a triangle of incremental losses and resamples its [[Pearson Residual|Pearson residuals]] with replacement into thousands of pseudo triangles. It re-runs the [[Chain Ladder Method|chain ladder]] on each and adds process variance to every projected future payment. The result is a distribution of possible outcomes rather than a point estimate.
+The **ODP Bootstrap Model** is the simulation model of an [[Unpaid Claim Distribution|unpaid claim distribution]] that [[Using the ODP Bootstrap Model (Shapland - 2016)|Shapland (2016)]] sets out. It fits the [[Over-Dispersed Poisson Model|over-dispersed Poisson]] model to a triangle of incremental losses, resamples its [[Pearson Residual|Pearson residuals]] with replacement into thousands of pseudo triangles, re-runs the [[Chain Ladder Method|chain ladder]] on each and adds process variance to every projected future payment. The result is a distribution of possible outcomes rather than a point estimate.
+
+Each cell of a pseudo triangle, its pseudo value, is
 
 > $$q^{*}(w,d) = r^{*}\sqrt{m_{w,d}} + m_{w,d}$$
 
+- $m_{w,d}$ is the fitted incremental loss of accident year $w$ at development age $d$.
+- $r^*$ is a residual sampled from the pool.
+
+Each future incremental value projected from a pseudo triangle is drawn as
+
 > $$q_{\text{future}}(w,d) \sim \mathrm{Gamma}\left(m^{*}_{w,d},\ \phi\, m^{*}_{w,d}\right)$$
 
-- $m_{w,d}$ is the fitted incremental loss, $r^*$ a residual sampled from the pool, and $q^*$ the pseudo value. In the second block $m^*_{w,d}$ is a future incremental value projected from a pseudo triangle, drawn from a [[Gamma|gamma]] with that mean and variance $\phi\, m^*_{w,d}$, where $\phi$ is the scale parameter.
-- **The algorithm.**
-  - *Fit.* Compute volume-weighted factors and divide the latest diagonal backwards to get the fitted incremental values. This equals the ODP GLM fit without solving the GLM; Shapland calls it the "simplified GLM".
-  - *Residuals.* Compute the unscaled Pearson residuals, the scale parameter $\phi = \sum r^2/(N-p)$ with $p = 2n - 1$, and the standardized residuals from the [[Hat Matrix|hat matrix]]. The zero residuals in the two corners are left out of the pool.
-  - *Resample.* In each iteration, sample a residual for every cell, form the pseudo triangle, cumulate it and recompute the factors. Project the future incremental values from the pseudo triangle's own diagonal. The spread of these projections across iterations is the [[Parameter Risk|parameter variance]].
-  - *Process variance.* Draw each future incremental value from the gamma above, and sum the draws by accident year and in total. Shapland's examples run $10{,}000$ iterations.
-- **Assumptions.** The model inherits the chain ladder's two: each accident year has the same development factors, and each has its own level, its latest cumulative value. The residuals must be independent and identically distributed, but need not be normal, so their skewness flows into the simulation ("semi-parametric"). Accident years are independent, so the total's coefficient of variation should be lower than any single year's.
-- **Practical adjustments** (Shapland's Section 4). Negative incremental values use $\sqrt{|m|}$, and a negative future mean is simulated as $-\mathrm{Gamma}$ or as $\mathrm{Gamma} + 2m$. The section also adjusts for a non-zero mean of the residuals, $L$-year average factors, missing values, outliers and [[Heteroscedasticity|heteroscedasticity]]. It covers heteroecthesious data (partial first or last periods), exposure adjustment, a stochastic [[Tail Factor|tail factor]] and a parametric bootstrap from a distribution fitted to the residuals.
-  - *A negative column.* When a whole development column sums negative the GLM has no solution even with Shapland's modified log link, which takes $-\ln|q|$ for a negative value. Subtract the largest negative value $\psi$ from every incremental value so they are all positive, fit the GLM to the shifted triangle, then add $\psi$ back to each fitted value, which reduces it by $|\psi|$.
-  - *A non-zero mean of the residuals.* An average far from zero questions the model's fit. If it is close to zero and a zero average is wanted, add a single constant to all the non-zero residuals so that the shifted residuals sum to zero.
-  - *Outliers.* Remove an outlier and treat it as a missing value, or exclude it from the average factors (numerator, denominator or both) and from the residuals but still resample its cell when the pseudo triangles are built. The second removes its extreme effect but keeps a non-extreme variability in that cell. Skewed residuals are expected, so remove outliers with caution and only once the data behind them is understood.
-  - *A sparse row.* An accident year with sparse data and negative incremental values, for example the first row when it was the first year the product was written, can be removed from the triangle if it causes extreme results and does not improve the model's parameterization.
-  - *Partial first development period.* The residuals need no adjustment, since Pearson residuals are independent of exposure. After the future incremental values are projected from each pseudo triangle, reduce the latest accident year's to remove the exposure beyond the evaluation date (by half for annual data at June 30), either before or after the process variance step.
-  - *Partial last diagonal.* Annualize the last diagonal so it is consistent with the rest of the triangle, and fit and compute residuals from the annualized triangle. In the simulation, compute factors from each annualized pseudo triangle and interpolate them. Then de-annualize the pseudo triangle's last diagonal, reversing the annualization, and project it with the interpolated factors. Reduce the latest accident year's future values to remove its future exposure, as above.
-- **Variants.** An incurred triangle gives outcomes of IBNR, not unpaid; each iteration's ultimates are converted to payments with a parallel paid model's random pattern. [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] and [[Cape Cod Method|Cape Cod]] versions steady the most recent years, and the *GLM bootstrap* fits fewer parameters, including [[Calendar Year Effect|calendar-year]] trends.
-- **Using the output.** Diagnostics are residual graphs, a normality test, box-whisker outliers and a review of the output. Standard errors should rise from old to recent years, because they follow the size of the mean unpaid, which grows from the oldest accident year, typically with only a few incremental payments left, to the most recent. CoVs should fall from old to recent years; a CoV that turns up again for the latest year points to parameter uncertainty or a need for BF or Cape Cod. Several models are weighted by accident year into a best-estimate distribution, which is Shapland's answer to [[Model Risk|model risk]] and a basis for a [[Range of Indications|range]]. Segments are [[Correlation|correlated]] by location mapping or re-sorting.
-- **Tested.** On artificial data built to satisfy each model's assumptions, the true outcome exceeded the ODP bootstrap's 99th percentile $2.6$–$3.1\%$ of the time, against $8$–$13\%$ for the [[Mack Chain Ladder Model|Mack]] model. See also [[Bootstrap]] and [[Stochastic Reserving]].
+- $m^*_{w,d}$ is the future incremental value projected from the pseudo triangle, the [[Gamma|gamma]]'s mean.
+- $\phi\, m^*_{w,d}$ is its variance, where $\phi$ is the scale parameter.
 
-> [!example]- One Bootstrap Iteration {Example}
-> A $4 \times 4$ triangle of incremental losses (\$000s) has these ODP fitted values (from factors $1.58788$, $1.17059$ and $1.05263$) and a chain ladder reserve of $1{,}780.3$:
+## The algorithm
+
+1. **Fit.** Compute volume-weighted factors and divide the latest diagonal backwards to get the fitted incremental values. This equals the ODP GLM fit without solving the GLM, and Shapland calls it the "simplified GLM".
+2. **Residuals.** Compute the unscaled Pearson residuals, the scale parameter $\phi = \sum r^2/(N-p)$ with $p = 2n - 1$, and the standardized residuals from the [[Hat Matrix|hat matrix]]. The zero residuals in the two corners are left out of the pool.
+3. **Resample.** In each iteration, sample a residual for every cell, form the pseudo triangle, cumulate it and recompute the factors. Project the future incremental values from the pseudo triangle's own diagonal. The spread of these projections across iterations is the [[Parameter Risk|parameter variance]].
+4. **Process variance.** Draw each future incremental value from the gamma above, and sum the draws by accident year and in total. Shapland's examples run 10,000 iterations.
+
+In step 2, $N$ is the number of cells in the triangle and $n$ the number of accident years.
+
+> [!example]- What is this bootstrap iteration's reserve, before process variance? {Example}
+> A $4 \times 4$ triangle of incremental losses ($\$000$s) has these ODP fitted values, from factors 1.58788, 1.17059 and 1.05263, and a chain ladder reserve of 1,780.3:
 >
 > | AY | 1 | 2 | 3 | 4 |
-> |---|---|---|---|---|
-> | 1 | $1{,}022.2$ | $600.9$ | $276.9$ | $100.0$ |
-> | 2 | $1{,}119.0$ | $657.9$ | $303.1$ | |
-> | 3 | $1{,}158.8$ | $681.2$ | | |
-> | 4 | $1{,}300.0$ | | | |
+> | :--- | ---: | ---: | ---: | ---: |
+> | 1 | 1,022.2 | 600.9 | 276.9 | 100.0 |
+> | 2 | 1,119.0 | 657.9 | 303.1 | |
+> | 3 | 1,158.8 | 681.2 | | |
+> | 4 | 1,300.0 | | | |
 >
-> Its eight non-zero standardized residuals are $-1.260$, $-1.059$, $2.471$, $-0.055$, $2.472$, $-2.471$, $2.079$ and $-2.079$. One iteration draws, cell by cell:
+> One iteration draws these standardized residuals from the pool, cell by cell:
 >
 > | AY | 1 | 2 | 3 | 4 |
-> |---|---|---|---|---|
-> | 1 | $2.472$ | $-2.471$ | $-2.079$ | $-1.260$ |
-> | 2 | $-1.260$ | $-1.059$ | $2.472$ | |
-> | 3 | $-0.055$ | $2.471$ | | |
-> | 4 | $2.079$ | | | |
->
-> Build the pseudo triangle and find this iteration's reserve, before process variance.
+> | :--- | ---: | ---: | ---: | ---: |
+> | 1 | 2.472 | -2.471 | -2.079 | -1.260 |
+> | 2 | -1.260 | -1.059 | 2.472 | |
+> | 3 | -0.055 | 2.471 | | |
+> | 4 | 2.079 | | | |
 >
 > > [!answer]-
-> > **Pseudo values** $q^* = r^*\sqrt{m} + m$. For cell $(1,1)$ that is $2.472\sqrt{1{,}022.2} + 1{,}022.2 = 79.0 + 1{,}022.2 = 1{,}101.2$.
+> > - Cell $(1,1)$'s pseudo value is $2.472\sqrt{1{,}022.2} + 1{,}022.2 = 1{,}101.2$, and the other cells follow the same way.
+> > - The corner cells get a sampled residual too. Only the pool excludes their zero residuals.
 > >
 > > | AY | 1 | 2 | 3 | 4 |
-> > |---|---|---|---|---|
-> > | 1 | $1{,}101.2$ | $540.3$ | $242.3$ | $87.4$ |
-> > | 2 | $1{,}076.9$ | $630.7$ | $346.1$ | |
-> > | 3 | $1{,}156.9$ | $745.7$ | | |
-> > | 4 | $1{,}375.0$ | | | |
+> > | :--- | ---: | ---: | ---: | ---: |
+> > | 1 | 1,101.2 | 540.3 | 242.3 | 87.4 |
+> > | 2 | 1,076.9 | 630.7 | 346.1 | |
+> > | 3 | 1,156.9 | 745.7 | | |
+> > | 4 | 1,375.0 | | | |
 > >
-> > The corner cells get a sampled residual too. Only the *pool* excludes their zero residuals.
-> >
-> > **Cumulate and refit.** The cumulative diagonal is $1{,}971.2$, $2{,}053.7$, $1{,}902.6$ and $1{,}375.0$.
-> >
-> > $$
-> > \begin{align*}
-> > f_1^* &= \frac{1{,}641.5 + 1{,}707.6 + 1{,}902.6}{1{,}101.2 + 1{,}076.9 + 1{,}156.9} \\
-> > &= \frac{5{,}251.7}{3{,}335.0} \\
-> > &= 1.5747 \\
-> > f_2^* &= \frac{1{,}883.8 + 2{,}053.7}{1{,}641.5 + 1{,}707.6} \\
-> > &= 1.1757 \\
-> > f_3^* &= \frac{1{,}971.2}{1{,}883.8} \\
-> > &= 1.0464
-> > \end{align*}
-> > $$
-> >
-> > **Project from the pseudo diagonal.** AY 2 gives $2{,}053.7 \times 0.0464 = 95.3$. AY 3 gives $1{,}902.6 \times 0.1757 = 334.3$ and then $103.8$, a total of $438.1$. AY 4 gives $1{,}375.0 \times 0.5747 = 790.2$ in its second period, and $1{,}375.0 \times (1.5747 \times 1.1757 \times 1.0464 - 1) = 1{,}288.8$ in total.
-> >
-> > $$
-> > \begin{align*}
-> > R^* &= 95.3 + 438.1 + 1{,}288.8 \\
-> > &= 1{,}822.2
-> > \end{align*}
-> > $$
-> >
-> > This iteration's point estimate is $1{,}822.2$, against $1{,}780.3$ from the data itself. Thousands of such iterations spread out the parameter variance. The gamma draws of the next example then add process variance to each future cell.
+> > - Cumulated, the pseudo diagonal is 1,971.2, 2,053.7, 1,902.6 and 1,375.0.
+> > - The first factor is $5{,}251.7/3{,}335.0 = 1.5747$.
+> > - The second is $3{,}937.5/3{,}349.1 = 1.1757$, and the third is $1{,}971.2/1{,}883.8 = 1.0464$.
+> > - AY 2 projects $2{,}053.7 \times 0.0464 = 95.3$.
+> > - AY 3 projects $1{,}902.6 \times 0.1757 = 334.3$ and then 103.8, a total of 438.1.
+> > - AY 4 projects $1{,}375.0 \times (1.5747 \times 1.1757 \times 1.0464 - 1) = 1{,}288.8$, of which 790.2 is in its second period.
+> > - This iteration's reserve is $95.3 + 438.1 + 1{,}288.8 = 1{,}822.2$, against 1,780.3 from the data itself.
 
-> [!example]- Adding Process Variance, Including a Negative Mean {Example}
-> With $\phi = 3.720$ (\$000s), the iteration above projects a mean of $790.2$ for AY 4's second period. In another iteration an old accident year's final cell has a negative mean of $-12.0$, from a factor below $1.00$. Specify the gamma draws for both cells.
->
-> > [!answer]-
-> > **Positive mean.** A gamma with mean $790.2$ and variance $3.720 \times 790.2 = 2{,}939.5$ has shape $790.2/3.720 = 212.4$ and scale $3.720$. Its standard deviation is $54.2$, and it is nearly symmetric.
-> >
-> > **Negative mean.** A gamma needs positive parameters, so work with $|m| = 12.0$: variance $3.720 \times 12.0 = 44.6$, standard deviation $6.68$, shape $12.0/3.720 = 3.23$. Its skewness is $2/\sqrt{3.23} = 1.11$. Shapland gives two options:
-> >
-> > $$
-> > \begin{align*}
-> > \text{(4.6)}\quad q &= -\,\mathrm{Gamma}(12.0,\ 44.6) \\
-> > \text{(4.7)}\quad q &= \mathrm{Gamma}(12.0,\ 44.6) + 2(-12.0)
-> > \end{align*}
-> > $$
-> >
-> > Both have mean $-12.0$ and standard deviation $6.68$. The first flips the gamma, so its skewness is $-1.11$: a long tail of large *recoveries*. The second shifts it and keeps the right skew of $+1.11$, the usual direction for claims, which Shapland finds the more logical choice.
-> >
-> > Negative values in the *early* cells of a pseudo triangle are a different problem. They can make a factor explode. The remedies there are to remove the extreme iterations, recalibrate the model, or floor the incremental values at zero.
+## Assumptions
 
-> [!example]- Weighting Two Models as a Mixture {Example}
-> For one accident year, a paid chain ladder bootstrap gives unpaid with mean $4{,}000$ and standard deviation $1{,}000$. A paid Bornhuetter-Ferguson bootstrap gives mean $3{,}600$ and standard deviation $600$. The actuary weights them $25\%$ and $75\%$. Using independent random variables, each iteration picks one model at random with those probabilities. Find the mean and standard deviation of the weighted result.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[R] &= 0.25(4{,}000) + 0.75(3{,}600) \\
-> > &= 3{,}700 \\
-> > E[R^2] &= 0.25(1{,}000^2 + 4{,}000^2) + 0.75(600^2 + 3{,}600^2) \\
-> > &= 4{,}250{,}000 + 9{,}990{,}000 \\
-> > &= 14{,}240{,}000 \\
-> > \mathrm{Var}(R) &= 14{,}240{,}000 - 3{,}700^2 \\
-> > &= 550{,}000 \\
-> > \mathrm{SD}(R) &= 741.6
-> > \end{align*}
-> > $$
-> >
-> > The CoV is $741.6/3{,}700 = 20.0\%$. The variance splits into the models' own variances, $0.25(1{,}000{,}000) + 0.75(360{,}000) = 520{,}000$, plus $30{,}000$ for the difference between their means.
-> >
-> > Shapland's other method runs both models on the *same* random variables and weights each iteration's values. That gives the same mean, but a standard deviation of at most $0.25(1{,}000) + 0.75(600) = 700$, reached only if the two models move in lockstep. The mixture is wider because it keeps the disagreement between the models as part of the uncertainty.
+The model inherits the chain ladder's two: each accident year has the same development factors, and each has its own level, its latest cumulative value. The residuals must be independent and identically distributed, but need not be normal, so their skewness flows into the simulation ("semi-parametric"). Accident years are independent, so the total's coefficient of variation should be lower than any single year's.
+
+## Practical adjustments
+
+Shapland's Section 4 adjusts for negative incremental values, a non-zero mean of the residuals, $L$-year average factors, missing values, outliers and [[Heteroscedasticity|heteroscedasticity]]. It covers heteroecthesious data (partial first or last periods), exposure adjustment, a stochastic [[Tail Factor|tail factor]] and a parametric bootstrap from a distribution fitted to the residuals.
+
+Negative incremental values use $\sqrt{|m|}$ in the pseudo value. A negative future mean is simulated as $-\mathrm{Gamma}$ or as $\mathrm{Gamma} + 2m$. When a whole development column sums negative, the GLM has no solution even with Shapland's modified log link, which takes $-\ln|q|$ for a negative value. Subtract the largest negative value $\psi$ from every incremental value so they are all positive, fit the GLM to the shifted triangle, then add $\psi$ back to each fitted value, which reduces it by $|\psi|$. Negative values in the early cells of a pseudo triangle can make a factor explode. The remedies there are to remove the extreme iterations, recalibrate the model, or floor the incremental values at zero.
+
+> [!example]- How is a future cell with a mean of $-12.0$ simulated, with $\phi = 3.720$? {Example}
+> - A gamma needs positive parameters, so work with $|m| = 12.0$.
+> - Its variance is $3.720 \times 12.0 = 44.6$, its standard deviation 6.68 and its shape $12.0/3.720 = 3.23$.
+> - Its skewness is $2/\sqrt{3.23} = 1.11$.
+> - Shapland's first option, $q = -\mathrm{Gamma}(12.0,\ 44.6)$, has mean $-12.0$ and skewness $-1.11$, a long tail of large recoveries.
+> - The second, $q = \mathrm{Gamma}(12.0,\ 44.6) - 24.0$, has the same mean and standard deviation and keeps the right skew of $+1.11$.
+> - Shapland finds the second the more logical choice, because right skew is the usual direction for claims.
+
+An average of the residuals far from zero questions the model's fit. If it is close to zero and a zero average is wanted, add a single constant to all the non-zero residuals so that the shifted residuals sum to zero. An outlier is removed and treated as a missing value, or excluded from the average factors (numerator, denominator or both) and from the residuals while its cell is still resampled. The second removes its extreme effect but keeps a non-extreme variability in that cell. Skewed residuals are expected, so outliers are removed with caution and only once the data behind them is understood. An accident year with sparse data and negative incremental values, such as the first year the product was written, can be removed from the triangle if it causes extreme results and does not improve the model's parameterization.
+
+## Variants
+
+An incurred triangle gives outcomes of IBNR, not unpaid, and each iteration's ultimates are converted to payments with a parallel paid model's random pattern. [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] and [[Cape Cod Method|Cape Cod]] versions steady the most recent years. The *GLM bootstrap* fits fewer parameters, including [[Calendar Year Effect|calendar-year]] trends.
+
+## Using the output
+
+Diagnostics are residual graphs, a normality test, box-whisker outliers and a review of the output. Standard errors should rise from old to recent years, because they follow the size of the mean unpaid, which grows from the oldest accident year, typically with only a few incremental payments left, to the most recent. CoVs should fall from old to recent years. A CoV that turns up again for the latest year points to parameter uncertainty or a need for BF or Cape Cod.
+
+Several models are weighted by accident year into a best-estimate distribution, which is Shapland's answer to [[Model Risk|model risk]] and a basis for a [[Range of Indications|range]]. Segments are [[Correlation|correlated]] by location mapping or re-sorting. On artificial data built to satisfy each model's assumptions, the true outcome exceeded the ODP bootstrap's 99th percentile 2.6–3.1% of the time, against 8–13% for the [[Mack Chain Ladder Model|Mack]] model. See also [[Bootstrap]] and [[Stochastic Reserving]].
+
+> [!trap] Leaving the corner cells out of the pseudo triangle
+> The two corner cells have zero residuals, so those residuals are left out of the pool. The cells themselves still get a sampled residual in every iteration, like every other cell of the triangle.

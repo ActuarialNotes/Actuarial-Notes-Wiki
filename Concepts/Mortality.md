@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:429f917c539a852cbbe4b1b362dc3e413f5874f07cbdfccb89ff2f347c45d867
+  content_hash: sha256:896ca1217910bac894afe37a5d8e5bc39a91e4b82d22b04842645126758d1981
   sources:
     - "SOA Tables for Exam FAM (2024-10), Standard Ultimate Life Table pp.20-21; Makeham's law formula p.22, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
     - "SOA Exam FAM-L tables Excel workbook (2022-10), sheet 'Select and Ult', cells A4:B6 (A = 0.00022, B = 2.7E-6, c = 1.124), sha256:ed9eb9c1d1ce26e050d26cb59d44fa3e03ab4d7595d5485e9cad9687e63b800d — https://www.soa.org/globalassets/assets/files/edu/2022/2022-10-exam-fam-l-tables-excel-workbook.xlsx"
@@ -23,81 +23,86 @@ verification:
   log: .verify/Concepts/Mortality.md
 ---
 
-**Mortality** is the incidence of death in a population, measured as a function of age by the annual mortality rate $q_x$ and the force of mortality $\mu_x$ (the [[Hazard Rate|hazard rate]] of the [[Survival Model|future lifetime]]), and varying also with sex, health, duration since underwriting (selection) and calendar year (mortality improvement). Mortality assumptions drive every [[Life Insurance|life insurance]] and [[Life Annuity|annuity]] value: higher mortality raises insurance costs and lowers annuity costs.
+**Mortality** is the incidence of death in a population, measured as a function of age by the annual mortality rate $q_x$ and the force of mortality $\mu_x$, the [[Hazard Rate|hazard rate]] of the [[Survival Model|future lifetime]]. It varies also with sex, health, duration since underwriting (selection) and calendar year (mortality improvement).
+
+The probability that a life aged $x$ survives $t$ years is
 
 > $${}_tp_x = \exp\!\left(-\int_0^t \mu_{x+s}\,ds\right)$$
 
+- $\mu_{x+s}$ is the force of mortality at age $x + s$.
+
+The probability of death within $t$ years is ${}_tq_x = 1 - {}_tp_x$, and over one year $q_x = 1 - p_x$. Under a constant force of mortality $\mu$, ${}_tp_x = e^{-\mu t}$, so $q_x = 1 - e^{-\mu}$.
+
+> [!example]- The force of mortality is a constant 0.02. What is the probability that a life dies within 5 years? {Example}
+> - ${}_5p_x = e^{-0.02(5)} = e^{-0.1} = 0.904837$.
+> - ${}_5q_x = 1 - 0.904837 = 0.095163$.
+
+Mortality assumptions drive every [[Life Insurance|life insurance]] and [[Life Annuity|annuity]] value: higher mortality raises insurance costs and lowers annuity costs. Lighter mortality than assumed hurts an annuity writer (**longevity risk**) and helps an insurer, so a company writing both has a partial natural offset. [[Life Table|Table]] values and a [[Fractional Age Assumption|fractional age assumption]] fill in between integer ages.
+
+## The mortality curve
+
+A typical mortality curve falls after high infant mortality, shows an accident hump in the late teens and twenties, then rises roughly exponentially through adult ages. Heterogeneity (sex, smoking, socioeconomic group, select versus ultimate) makes a population a mix of such curves.
+
+## Makeham's law and Gompertz's law
+
+**Makeham's law** models the force of mortality as an age-independent term plus a term rising exponentially with age:
+
 > $$\mu_x = A + Bc^x$$
 
-> $$\mu^{*}_{x+s} = \mu_{x+s} + \theta$$
+- $A$ is the age-independent (accident) term, and $Bc^x$ is the term that rises with age.
+
+Under Makeham's law the survival probability is
+
+> $${}_tp_x = \exp\!\left(-At - \frac{B}{\ln c}\,c^x(c^t - 1)\right)$$
+
+With $A = 0$ it is **Gompertz's law**, $\mu_x = Bc^x$. The Standard Ultimate Life Table used on FAM and ALTAM is Makeham with $A = 0.00022$, $B = 2.7\times10^{-6}$, $c = 1.124$.
+
+> [!example]- Under the Standard Ultimate Life Table's Makeham law, what are $\mu_{60}$ and ${}_{10}p_{60}$? {Example}
+> - $Bc^{60} = 2.7\times10^{-6}(1.124)^{60} = 0.0030015$.
+> - $\mu_{60} = 0.00022 + 0.0030015 = 0.0032215$.
+> - The integral of the force over 10 years is $0.00022(10) + 0.0030015(1.124^{10} - 1)/\ln 1.124$.
+> - That is $0.0022 + 0.0030015(2.21857)/0.116894 = 0.059167$.
+> - ${}_{10}p_{60} = e^{-0.059167} = 0.94255$, matching the table's ratio $\ell_{70}/\ell_{60}$.
+
+## Extra risk
+
+Mortality for a substandard life is modelled from the standard table in one of three ways:
+
+1. An **age rating**: a life aged $x$ rated up $k$ years uses the table at $x + k$, and every later age shifts by $k$ too.
+2. A **constant addition** $\theta$ to the force of mortality, $\mu^{*}_{x+s} = \mu_{x+s} + \theta$.
+3. A **constant multiple** of the rate, $q^*_x = k\,q_x$.
+
+A constant addition to the force multiplies survival by an exponential factor:
+
+> $${}_tp^*_x = e^{-\theta t}\,{}_tp_x$$
+
+Multiplying the force by $k$ instead raises the survival probability to the power $k$.
+
+> [!example]- Standard rates are $q_{60} = 0.010$ and $q_{61} = 0.011$. What is the two-year death probability at 150% of standard rates, and with 0.005 added to the force? {Example}
+> - Standard survival is ${}_2p_{60} = (0.990)(0.989) = 0.97911$.
+> - At 150%, the rates are 0.015 and 0.0165, so ${}_2q^*_{60} = 1 - (0.985)(0.9835) = 0.031253$.
+> - With 0.005 added to the force, ${}_2q^*_{60} = 1 - 0.97911\,e^{-0.005(2)} = 0.030632$.
+> - Both raise the two-year death probability from 0.02089 to about 0.031.
+
+## Mortality improvement
+
+Mortality improvement is the fall in mortality rates from one calendar year to the next. The rate at age $x$ in year $t$ is
 
 > $$q(x, t) = q(x, t-1)\,\big(1 - \phi(x, t)\big)$$
 
-- The second block is **Makeham's law** ($A = 0$ gives Gompertz): an age-independent term plus a term rising exponentially with age. The Standard Ultimate Life Table used on FAM and ALTAM is Makeham with $A = 0.00022$, $B = 2.7\times10^{-6}$, $c = 1.124$, for which ${}_tp_x = \exp\!\big(-At - Bc^x(c^t - 1)/\ln c\big)$
-- A typical **mortality curve** falls after high infant mortality, shows an accident hump in the late teens and twenties, then rises roughly exponentially through adult ages; **heterogeneity** (sex, smoking, socioeconomic group, select versus ultimate) makes a population a mix of such curves
-- **Extra risk** for substandard lives is modelled by an **age rating** (use the table at $x + k$), a **constant addition** $\theta$ to the force (third block, so ${}_tp^*_x = e^{-\theta t}\,{}_tp_x$) or a **constant multiple** of the rate, $q^*_x = k\,q_x$; the fourth block is **mortality improvement**, with $\phi(x, t)$ the proportional fall in $q$ at age $x$ from year $t-1$ to $t$
-- Lighter mortality than assumed hurts an annuity writer (**longevity risk**) and helps an insurer, so a company writing both has a partial natural offset; [[Life Table|table]] values and a [[Fractional Age Assumption|fractional age assumption]] fill in between integer ages
+- $\phi(x, t)$ is the proportional fall in $q$ at age $x$ from year $t-1$ to $t$.
 
-> [!example]- Survival under the Standard Ultimate Life Table {Example}
-> Using Makeham's law with $A = 0.00022$, $B = 2.7\times10^{-6}$, $c = 1.124$, find $\mu_{60}$ and ${}_{10}p_{60}$.
+A life ages as calendar time passes, so its survival uses the rates along the diagonal, $q(x+t, Y+t)$, not the period row $q(x+t, Y)$.
+
+> [!example]- What is the probability that a life aged 65 in 2026 survives three years, on the period table and on the cohort basis? {Example}
+> For calendar year 2026, $q(65) = 0.010$, $q(66) = 0.011$ and $q(67) = 0.012$. Mortality improves by $\phi = 2\%$ a year at every age.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \mu_{60} &= 0.00022 + 2.7\times10^{-6}(1.124)^{60} \\
-> >          &= 0.00022 + 0.0030015 \\
-> >          &= 0.0032215 \\
-> > \int_0^{10}\mu_{60+s}\,ds &= 0.00022(10) + \frac{0.0030015\,(1.124^{10} - 1)}{\ln 1.124} \\
-> >                          &= 0.0022 + \frac{0.0030015(2.21857)}{0.116894} \\
-> >                          &= 0.059167 \\
-> > {}_{10}p_{60} &= e^{-0.059167} \\
-> >               &= 0.94255
-> > \end{align*}
-> > $$
-> > A 60-year-old has a $94.3\%$ chance of reaching 70, matching the SULT ratio $\ell_{70}/\ell_{60}$.
+> > - The period basis uses the 2026 rates throughout: ${}_3p_{65} = (0.990)(0.989)(0.988) = 0.96736$.
+> > - The cohort reaches 66 in 2027, so $q(66, 2027) = 0.011(0.98) = 0.01078$.
+> > - It reaches 67 in 2028, so $q(67, 2028) = 0.012(0.98)^2 = 0.011525$.
+> > - On the cohort basis, ${}_3p_{65} = (0.990)(0.98922)(0.988475) = 0.96804$.
+> > - The cohort death probability is 0.03196, against 0.03264 on the period table.
 
-> [!example]- Two Ways to Load for Extra Risk {Example}
-> Standard rates are $q_{60} = 0.010$ and $q_{61} = 0.011$. Find the probability that a substandard life aged 60 dies within two years (a) at $150\%$ of standard mortality and (b) with $0.005$ added to the force of mortality.
->
-> > [!answer]-
-> > Standard: ${}_2p_{60} = (0.990)(0.989) = 0.97911$.
-> > $$
-> > \begin{align*}
-> > \text{(a)}\quad {}_2q^*_{60} &= 1 - (1 - 0.015)(1 - 0.0165) \\
-> >                             &= 1 - 0.968748 \\
-> >                             &= 0.031253 \\
-> > \text{(b)}\quad {}_2q^*_{60} &= 1 - 0.97911\,e^{-0.005(2)} \\
-> >                             &= 1 - 0.969368 \\
-> >                             &= 0.030632
-> > \end{align*}
-> > $$
-> > Both raise the two-year death probability from $0.02089$ to about $0.031$. The multiple scales with age, so it bites harder at older ages; the addition is the same at every age.
-
-> [!example]- Cohort versus Period Survival with Improvement {Example}
-> For calendar year 2026, $q(65) = 0.010$, $q(66) = 0.011$, $q(67) = 0.012$. Mortality improves by $\phi = 2\%$ a year at every age. Find the probability that a life aged 65 in 2026 survives three years, on the period table and on the cohort (diagonal) basis.
->
-> > [!answer]-
-> > The period basis uses the 2026 rates throughout: ${}_3p_{65} = (0.990)(0.989)(0.988) = 0.96736$. The cohort reaches 66 in 2027 and 67 in 2028:
-> > $$
-> > \begin{align*}
-> > q(66, 2027) &= 0.011(0.98) \\
-> >             &= 0.01078 \\
-> > q(67, 2028) &= 0.012(0.98)^2 \\
-> >             &= 0.011525 \\
-> > {}_3p_{65} &= (0.990)(1 - 0.01078)(1 - 0.011525) \\
-> >            &= 0.96804
-> > \end{align*}
-> > $$
-> > The cohort death probability is $0.03196$ against $0.03264$ on the period table. Over a whole annuity the gap compounds, which is why ignoring improvement understates annuity values.
-
-> [!tip]- How it appears on the exam
-> - **FAM** (Mortality Models): given a parametric law (Gompertz, Makeham, de Moivre) or a life table, compute ${}_tp_x$, ${}_{t|}q_x$, $\mu_x$ and moments of $T_x$ and $K_x$, with UDD or constant force between integer ages.
-> - **FAM** ("effect of changes in underlying assumptions"; "modelling extra risk"): recompute a premium or policy value after an age rating, a constant addition to $\mu$ or a multiple of $q$, often for a term insurance or endowment.
-> - **ALTAM** ("features of typical mortality curves and heterogeneities"): describe the shape of a curve and the sources of heterogeneity and selection, and work with mortality improvement scales in annuity values, as written and calculation parts.
-> - **ILA-101 / ILA-201** (mortality assumption development; "offsets between mortality and longevity risk"): explain how experience studies set the assumption and how insurance and annuity blocks offset, as written answers; **INV-201** lists mortality among risks that can only be partially hedged.
-
-> [!warning]- Exam traps
-> - **Adding to $q$ when the question adds to $\mu$.** A constant addition $\theta$ to the force multiplies survival by $e^{-\theta t}$; adding $\theta$ to each $q_x$ gives a slightly different (wrong) answer.
-> - **Multiplying the force when the question multiplies the rate.** $150\%$ of $q_x$ is not $1.5\mu_x$: $1 - (1-q)^{1.5} \neq 1.5q$.
-> - **Age rating in the wrong direction.** A substandard life aged $x$ rated up $k$ years uses $q_{x+k}$, and the age in every subsequent factor also shifts by $k$.
-> - **Applying improvement along the period row.** A life ages as calendar time passes; use $q(x+t, Y+t)$, not $q(x+t, Y)$, or the improvement is ignored.
+> [!trap] Adding to $q$ when the question adds to $\mu$
+> A constant addition $\theta$ to the force multiplies survival by $e^{-\theta t}$. Adding $\theta$ to each $q_x$ gives a slightly different, wrong answer. In the same way, $150\%$ of $q_x$ is not $1.5\mu_x$, because $1 - (1-q)^{1.5} \neq 1.5q$.

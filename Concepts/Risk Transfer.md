@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bec0984e798f4c0d55a329075645f5463e43c4184c467510ec75f8ef120a17d7
+  content_hash: sha256:9ca9f70da9889a7fe0e630c4aca5c490118b0cb27f512499bc5a6392227bb00e
   sources:
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.51-53 (PDF pp.70-72), sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s10-02 pooling and transfer, sha256:a643d7b54dd325ce18405f2c482ebef89986853c6894651046d3f112a552cc04 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s10-02-nature-of-insurance.html"
@@ -13,59 +13,76 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Risk Transfer.md
 ---
+![[Media/Figures/Risk_Transfer.svg|340]]
 
-**Risk Transfer** is the shifting of the financial consequences of uncertain events from one party to another — from policyholder to insurer, from insurer to [[Reinsurance|reinsurer]], or from either to the capital markets. In **[[Reinsurance Accounting]]** it has a narrower and decisive meaning: a contract qualifies for reinsurance accounting only if it transfers **significant insurance risk**; if it does not, it is a financing arrangement and must be accounted for as a deposit.
+**Risk Transfer** is the shifting of the financial consequences of uncertain events from one party to another, such as from policyholder to insurer, from insurer to [[Reinsurance|reinsurer]], or from either to the capital markets. In [[Reinsurance Accounting|reinsurance accounting]] it has a narrower meaning: a contract qualifies for reinsurance accounting only if it transfers **significant insurance risk**.
+
+## Insurance as a risk management technique
+
+For the organization buying it, insurance combines two things: *transfer* of the financial consequences of a loss to an insurer, and *pooling* of many similar exposures by that insurer, which makes losses predictable through the [[Law of Large Numbers|law of large numbers]]. It suits exposures that are low in frequency and high in severity and have the characteristics of an [[Insurable Risk|insurable risk]]. It cannot replace sentimental value. A premium for frequent small losses would be large next to the losses themselves, which is why [[Deductible|deductibles]] retain them, a choice of [[Risk Treatment|risk treatment]].
+
+The risk manager sorts the coverages into three groups:
+
+1. *essential* insurance, required by law or contract, such as workers compensation, or protecting against a loss that threatens survival;
+2. *desirable* insurance, for losses that would cause financial difficulty but not bankruptcy;
+3. *available* insurance, for slight losses that would only be an inconvenience.
+
+The manager then selects insurers by financial strength, services and cost, negotiates the terms, tells the organization what is covered and what records to keep, and reviews the program periodically.
+
+> [!example]- How should this contractor's coverages be sorted into essential, desirable and available insurance? {Example}
+> A small building contractor has a limited insurance budget. Its exposures are:
+>
+> - injuries to its employees, in a state that requires workers compensation;
+> - a liability claim from a collapsed structure that could exceed the firm's net worth;
+> - theft of hand tools worth a few hundred dollars at a time;
+> - damage to its \$400,000 equipment yard, which would be a serious setback but not fatal.
+>
+> Its bank requires property insurance on the equipment it finances.
+>
+> > [!answer]-
+> > - Workers compensation is essential, because the law requires it.
+> > - Liability insurance is essential, because a large claim threatens the firm's survival.
+> > - Property insurance on the financed equipment is essential, because the loan contract requires it.
+> > - Property insurance on the rest of the yard is desirable, because its loss would cause financial difficulty but not bankruptcy.
+> > - Theft of hand tools is available insurance at most. It is a frequent, small loss better retained and controlled, for example with locked storage.
+
+After a loss the firm is indemnified and can keep operating. Uncertainty and worry are reduced, insurers provide services such as loss control and claims adjusting, and premiums are deductible as a business expense. Against this, premiums are a major cost paid in advance, money that could otherwise stay in the business. Negotiating coverage takes time and effort, and an insured may take less care over loss control ([[Moral Hazard|moral hazard]]).
+
+## Noninsurance transfer
+
+Risk also moves by contract without insurance: hold-harmless and indemnity clauses in leases and service contracts, warranties, and surety bonds. These shift the loss to another party but depend on that party's ability to pay. Risk is also transferred through catastrophe bonds and insurance-linked securities. It is **retained** through captives, self-insurance and deductibles, the alternatives against which a transfer's cost is judged.
+
+## Risk transfer in reinsurance accounting
+
+The insurance risk a contract can transfer is
 
 > $$\text{Insurance risk} = \text{Underwriting risk} + \text{Timing risk}$$
 
-- **The two components.** *Underwriting risk* is uncertainty in the **amount** ultimately paid; *timing risk* is uncertainty in **when**. A contract transferring only timing risk — the reinsurer pays the same total, merely earlier or later — is a loan, not reinsurance.
-- **The test.** Under [[IFRS 17]] a contract is an insurance contract only if it transfers **significant insurance risk**, meaning there is at least one scenario with commercial substance in which the issuer suffers a loss on a present-value basis. This is a *possibility* test rather than a probability threshold — importantly different from the US statutory "$10$-$10$" rule of thumb (a $10\%$ chance of a $10\%$ loss), which candidates should be able to contrast.
-- **Features that destroy risk transfer:** loss ratio corridors, aggregate limits set just above the expected loss, retrospective premium adjustments that return favourable experience, profit commissions that claw back nearly all the margin, and cancellation provisions that let the reinsurer exit before losses emerge. Any of these can leave the reinsurer's outcome nearly independent of the cedant's experience.
-- **The consequence of failing the test is severe:** deposit accounting. No ceded premium, no ceded losses, no improvement in the loss ratio — instead a deposit asset accruing interest. An insurer that booked a failed contract as reinsurance has overstated capital and understated liabilities.
-- Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings — which is the point at which it becomes a governance and professionalism issue rather than a technical one.
-- Beyond reinsurance, risk is transferred through catastrophe bonds and insurance-linked securities, and **retained** through captives, self-insurance and [[Deductible|deductibles]] — the alternatives against which a transfer's cost is judged.
+- $\text{Underwriting risk}$ is uncertainty in the **amount** ultimately paid.
+- $\text{Timing risk}$ is uncertainty in **when** it is paid.
 
-- **Insurance as a risk management technique.** For the organization buying it, insurance combines two things: *transfer* of the financial consequences of a loss to an insurer, and *pooling* of many similar exposures by that insurer, which makes losses predictable through the [[Law of Large Numbers|law of large numbers]]. It suits exposures that are low in frequency and high in severity and have the characteristics of an [[Insurable Risk|insurable risk]]; it cannot replace sentimental value, and a premium for frequent small losses would be large next to the losses themselves, which is why [[Deductible|deductibles]] retain them ([[Risk Treatment]]).
-- **Using insurance in a program.** The risk manager selects the coverages, sorting them into *essential* insurance (required by law or contract, such as workers compensation, or protecting against a loss that threatens survival), *desirable* insurance (losses that would cause financial difficulty but not bankruptcy) and *available* insurance (slight losses that would only be an inconvenience). The manager then selects insurers by financial strength, services and cost, negotiates the terms, tells the organization what is covered and what records to keep, and reviews the program periodically.
-- **Advantages and disadvantages for the buyer.** After a loss the firm is indemnified and can keep operating; uncertainty and worry are reduced; insurers provide services such as loss control and claims adjusting; and premiums are deductible as a business expense. Against this, premiums are a major cost paid in advance, money that could otherwise stay in the business; negotiating coverage takes time and effort; and an insured may take less care over loss control ([[Moral Hazard]]).
-- **Noninsurance transfer.** Risk also moves by contract without insurance: hold-harmless and indemnity clauses in leases and service contracts, warranties, and surety bonds. These shift the loss to another party but depend on that party's ability to pay.
+A contract transferring only timing risk, where the reinsurer pays the same total earlier or later, is a loan, not reinsurance. Under [[IFRS 17]] a contract is an insurance contract only if it transfers significant insurance risk, meaning there is at least one scenario with commercial substance in which the issuer suffers a loss on a present-value basis.
 
-![[Media/Figures/Risk_Transfer.svg|340]]
+Features that can leave the reinsurer's outcome nearly independent of the cedant's experience destroy risk transfer:
 
-> [!example]- Does This Contract Transfer Risk? {Example}
-> An insurer cedes $\$50$ million of premium under an aggregate stop-loss attaching at a $95\%$ loss ratio with a $105\%$ exit, so the reinsurer's maximum payment is $10\%$ of subject premium. The cedant's expected loss ratio is $78\%$ with a standard deviation of $6$ points. There is a profit commission returning $90\%$ of the reinsurer's margin to the cedant.
->
-> Does it transfer significant insurance risk?
->
-> > [!answer]-
-> > **Almost certainly not**, for two independent reasons.
-> >
-> > **1. The attachment point is remote.** Reaching $95\%$ requires a loss ratio $\frac{95 - 78}{6} = 2.83$ standard deviations above expected — under a normal approximation, roughly a $0.2\%$ probability. The layer is priced and structured so that it is unlikely ever to be entered.
-> >
-> > **2. The profit commission removes what remains.** Returning $90\%$ of the margin means that in the overwhelmingly likely scenario where no loss is ceded, the reinsurer keeps only $10\%$ of the premium and returns the rest. The reinsurer's outcome is nearly deterministic: a fee for holding money.
-> >
-> > **Conclusion.** There is no scenario with commercial substance in which the reinsurer suffers a significant loss on a present-value basis. The contract is a financing arrangement and must be recorded under **deposit accounting**.
-> >
-> > **What the [[Appointed Actuary]] should do.** Say so, in writing, before the contract is booked as reinsurance. If it is booked as reinsurance, the ceded premium improperly reduces the loss ratio, the [[MCT]] ratio is overstated through improper credit for ceded liabilities, and the financial statements are misstated. That is a matter with material adverse effects on financial condition, engaging the [[Duty to Report]] escalation under the [[Insurance Companies Act]].
-> >
-> > **What would fix it:** lower the attachment to a level the cedant's experience can plausibly reach, widen the layer, and remove or sharply reduce the profit commission. Any one of those changes the answer; all three together make it plainly reinsurance.
+- loss ratio corridors;
+- aggregate limits set just above the expected loss;
+- retrospective premium adjustments that return favourable experience;
+- profit commissions that claw back nearly all the margin;
+- cancellation provisions that let the reinsurer exit before losses emerge.
 
-> [!example]- Sorting a Contractor's Insurance Needs {Example}
-> A small building contractor has a limited insurance budget. Its exposures are: injuries to its employees, in a state that requires workers compensation; a liability claim from a collapsed structure that could exceed the firm's net worth; theft of hand tools worth a few hundred dollars at a time; and damage to its \$400,000 equipment yard, which would be a serious setback but not fatal. Its bank requires property insurance on the equipment it finances. Sort the coverages into essential, desirable and available insurance.
+Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings. A contract that fails is a financing arrangement, accounted for as a deposit: no ceded premium, no ceded losses and no improvement in the loss ratio, but a deposit asset accruing interest. An insurer that booked a failed contract as reinsurance has overstated capital and understated liabilities.
+
+> [!example]- Does this aggregate stop-loss transfer significant insurance risk? {Example}
+> An insurer cedes $\$50$ million of premium under an aggregate stop-loss attaching at a $95\%$ loss ratio with a $105\%$ exit, so the reinsurer's maximum payment is $10\%$ of subject premium. The cedant's expected loss ratio is $78\%$ with a standard deviation of $6$ points. A profit commission returns $90\%$ of the reinsurer's margin to the cedant.
 >
 > > [!answer]-
-> > - **Essential:** Workers compensation, because the law requires it; liability insurance, because a large claim threatens the firm's survival; and property insurance on the financed equipment, because the loan contract requires it.
-> > - **Desirable:** Property insurance on the rest of the equipment yard, whose loss would cause financial difficulty but not bankruptcy.
-> > - **Available:** Coverage for theft of hand tools, a frequent, small loss better retained and controlled, for example with locked storage.
-> >
-> > The ranking follows the post-loss objectives: coverage that protects survival and meets external obligations comes first.
+> > - Reaching $95\%$ needs a loss ratio $(95 - 78)/6 = 2.83$ standard deviations above expected, about a $0.2\%$ probability under a normal approximation.
+> > - In the likely case that no loss is ceded, the profit commission leaves the reinsurer only $10\%$ of its margin. Its outcome is a fee for holding money.
+> > - There is no scenario with commercial substance in which the reinsurer suffers a significant loss on a present-value basis.
+> > - The contract is a financing arrangement and must be recorded under **deposit accounting**.
+> > - Booked as reinsurance, it would improperly reduce the loss ratio and overstate the [[MCT]] ratio. The [[Appointed Actuary]] should say so in writing, and a material misstatement engages the [[Duty to Report]] under the [[Insurance Companies Act]].
+> > - A lower attachment, a wider layer or a much smaller profit commission would each change the answer.
 
-> [!tip]- How it appears on the exam
-> - **DISC-RM:** The section on insurance as a risk management technique opens with using insurance to treat risk. Questions ask what makes insurance suitable for an exposure, how a risk manager selects coverages and insurers, and what the advantages and disadvantages of insurance are compared with retention or noninsurance transfer.
-> - **Exams 6, 7 and 9:** In reinsurance accounting, the question is whether a contract transfers significant insurance risk; cases describe contract features and ask whether risk transfer is met and how the contract must be accounted for.
-
-> [!warning]- Exam traps
-> - **Transfer is not the same as insurance:** Hold-harmless clauses, warranties and surety bonds transfer risk without an insurance policy, and hedges transfer financial risk through the capital markets.
-> - **Insure the large, retain the small:** Insuring frequent, small losses costs more in premium and expense than the losses themselves. Essential insurance protects against what the organization could not survive or is required to carry.
-> - **A contract that moves only timing is not reinsurance:** Without underwriting risk the arrangement is financing, and it is accounted for as a deposit.
-
+> [!trap] Reading the significance test as a probability threshold
+> The IFRS 17 test asks whether a scenario with commercial substance exists in which the issuer loses on a present-value basis. It is a possibility test, unlike the US statutory "$10$-$10$" rule of thumb (a $10\%$ chance of a $10\%$ loss).

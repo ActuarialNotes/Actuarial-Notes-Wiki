@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7b48a97527bfebc844a20d0e1fb0b1145583aacb19055307e5a628945af6bc20
+  content_hash: sha256:1d22f07e0feac86da2c4859644018aa693d6115d1e8ed2e6f9bae40e2cd08ed2
   sources:
     - "BCBS, An Explanatory Note on the Basel II IRB Risk Weight Functions (BIS, July 2005), §2, pp.3-4 (EL = PD * EAD * LGD; PD, EAD, LGD defined; LGD depends on collateral), sha256:387f8627a148dbd0a6eff3c5a0a020e44044051d3d8f34f0485b8297f49b503d — https://www.bis.org/publications/explanatory-note-basel-ii-irb-risk-weight-functions.pdf"
     - "BIS Quarterly Review, December 2003, Amato & Remolona, The credit spread puzzle, pp.51-53 (PDF pp.56-58), Table 1 (spreads many times expected default loss; taxes, risk premia, liquidity premia; negatively skewed returns hard to diversify; transition matrix with downgrades and defaults), sha256:e3b7518fe973471144d23ade36aac097a96d02921c12b8e320f20eb4d04269f8 — https://www.bis.org/publications/qr-200312_1.pdf"
@@ -21,48 +21,55 @@ verification:
 
 **Credit Risk** is the risk of loss because a counterparty fails to pay what it owes (**default**) or because its credit standing deteriorates, lowering the value of the claim before any default occurs. An insurer's credit exposures are its bonds and loans, securitisations, [[Reinsurance Credit Risk|reinsurance recoverables]], premium receivables from agents and brokers, and derivative counterparties.
 
+The expected credit loss on an exposure over a horizon is
+
 > $$E[\text{Credit loss}] = PD \times LGD \times EAD$$
 
-- $PD$ is the probability of default over the horizon, $LGD = 1 - \text{recovery rate}$ the share of the exposure lost if default occurs (it depends, among other things, on the collateral), and $EAD$ the amount outstanding at default. As a percentage of exposure, $E[\text{Credit loss}] = PD \times LGD$.
-- **Spreads pay for more than expected loss.** Observed credit spreads are many times the expected default loss $PD \times LGD$ — the *credit spread puzzle*. The explanations offered are taxes, risk premia, liquidity premia, and default risk that is hard to diversify because the return distribution of a bond portfolio is highly negatively skewed.
-- **On Exam 9.** Task C5 of the Fall 2026 outline reads "Estimate and manage interest rate and credit risk (e.g., default, prepayment, reinsurance)": prepayment is named, with default and reinsurance, as an example of the interest rate and credit risk of C5. Prepayment is a borrower repaying principal early, usually when rates fall; see [[Prepayment Risk]].
-- **Loss before default.** A deterioration in credit standing widens a bond's credit spread over the risk-free curve and lowers its value before any default (*spread risk*). [[Credit Rating Migration|Rating transition]] matrices give the probabilities of downgrades as well as defaults, so a portfolio's credit risk includes mark-to-market loss, not only default.
-- **Correlation is the portfolio risk.** Defaults cluster, so the loss distribution of a credit portfolio is skewed with a heavy tail whose size is set by **default correlation**. This is the central lesson of [[Structured Finance]]: a tranche's rating depends on default correlation as well as on default probability — Coval, Jurek & Stafford's AAA senior tranche falls to A+ at a correlation of 40% and to BBB− at 60% — tranches of tranches (CDO²) are far more sensitive still, and senior claims default in exactly the economic states where investors are worst off.
-- **Managing it.** Approved-counterparty lists and exposure limits per counterparty ([[Concentration Risk]]); collateral and letters of credit; credit default swaps. Regulators charge capital for it — the U.S. [[Risk-Based Capital]] formula (R1 for fixed income, which covers both interest rate changes and default; R3 for receivables and reinsurance recoverables) and, in Canada, the [[Credit Risk Margin|credit risk]] requirement of the [[MCT]], whose factors follow the counterparty's rating and are reduced by collateral. Credit risk and [[Interest Rate Risk]] are both [[Financial Risk|financial risks]] of a bond portfolio.
+- $PD$ is the probability of default over the horizon.
+- $LGD = 1 - \text{recovery rate}$ is the share of the exposure lost if default occurs. It depends, among other things, on the collateral.
+- $EAD$ is the amount outstanding at default.
 
-> [!example]- Expected Loss versus Spread on a Corporate Bond {Example}
-> An insurer holds $\$50$M of BBB corporate bonds. The one-year probability of default is $0.25\%$, the expected recovery $40\%$, and the bonds yield $1.30\%$ over Treasuries. Compare the expected credit loss with the spread earned.
+As a percentage of the exposure, the expected credit loss is $PD \times LGD$.
+
+> [!example]- An insurer holds $\$50$M of BBB corporate bonds with a one-year default probability of $0.25\%$ and an expected recovery of $40\%$. What is the expected credit loss? {Example}
+> - The loss given default is $1 - 0.40 = 0.60$.
+> - The expected credit loss is $0.0025 \times 0.60 \times \$50\text{M} = \$75{,}000$, or $0.15\%$ of the exposure.
+
+## The credit spread puzzle
+
+Observed credit spreads are many times the expected default loss $PD \times LGD$. The explanations offered are taxes, risk premia, liquidity premia, and default risk that is hard to diversify because the return distribution of a bond portfolio is highly negatively skewed.
+
+## Loss before default
+
+A deterioration in credit standing widens a bond's credit spread over the risk-free curve and lowers its value before any default (*spread risk*). [[Credit Rating Migration|Rating transition]] matrices give the probabilities of downgrades as well as defaults, so a portfolio's credit risk includes mark-to-market loss, not only default.
+
+## Default correlation
+
+Defaults cluster, so the loss distribution of a credit portfolio is skewed with a heavy tail whose size is set by **default correlation**. For two default indicators with common probability $p$ and correlation $\rho$, the probability that both default is
+
+> $$P(\text{both}) = p^2 + \rho\,p(1-p)$$
+
+- With independent defaults, $\rho = 0$ and $P(\text{both}) = p^2$.
+
+> [!example]- What is the probability that both of these counterparties default? {Example}
+> Two counterparties each have a one-year default probability of $5\%$. Find the probability that both default if defaults are independent, and if their default correlation is $0.2$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > E[\text{loss}] &= 0.0025 \times 0.60 \times \$50\text{M} \\
-> > &= \$75{,}000 \\
-> > \text{Spread income} &= 0.0130 \times \$50\text{M} \\
-> > &= \$650{,}000
-> > \end{align*}
-> > $$
-> >
-> > The expected loss is $0.15\%$ a year, so $\$575{,}000$ of the spread is something other than compensation for expected default — the taxes, risk and liquidity premia and undiversifiable default risk of the credit spread puzzle. The spread is not a measure of expected credit loss.
+> > - Independent, $P(\text{both}) = 0.05^2 = 0.25\%$.
+> > - Correlated, $P(\text{both}) = 0.0025 + 0.2(0.05)(0.95) = 1.20\%$.
+> > - Independent, the number of defaults is $0$, $1$ or $2$ with probabilities $90.25\%$, $9.50\%$ and $0.25\%$.
+> > - Correlated, they are $91.2\%$, $7.6\%$ and $1.2\%$.
+> > - The expected number of defaults is $0.10$ either way, but the probability of losing both counterparties is almost five times higher when defaults are correlated.
 
-> [!example]- Default Correlation and the Joint Tail {Example}
-> Two counterparties each have a one-year default probability of $5\%$. Find the probability that both default if defaults are (a) independent, (b) correlated with default correlation $0.2$. Also find the distribution of the number of defaults.
->
-> > [!answer]-
-> > For two default indicators with common probability $p$ and correlation $\rho$, $P(\text{both}) = p^2 + \rho\,p(1-p)$.
-> >
-> > $$
-> > \begin{align*}
-> > P_{\text{indep}}(\text{both}) &= 0.05^2 \\
-> > &= 0.25\% \\
-> > P_{\rho}(\text{both}) &= 0.0025 + 0.2(0.05)(0.95) \\
-> > &= 1.20\%
-> > \end{align*}
-> > $$
-> >
-> > Number of defaults:
-> >
-> > - Independent: $0$ w.p. $90.25\%$, $1$ w.p. $9.50\%$, $2$ w.p. $0.25\%$
-> > - Correlated: $0$ w.p. $91.2\%$, $1$ w.p. $7.6\%$, $2$ w.p. $1.2\%$
-> >
-> > The expected number of defaults is $0.10$ in both cases, but the chance of losing both counterparties is almost five times higher. Expected loss is blind to correlation; the tail — what capital, a senior tranche, or a two-reinsurer panel is exposed to — is not.
+Default correlation is the central lesson of [[Structured Finance]]. A tranche's rating depends on default correlation as well as on default probability. Coval, Jurek & Stafford's AAA senior tranche falls to A+ at a correlation of 40% and to BBB− at 60%. Tranches of tranches (CDO²) are far more sensitive still, and senior claims default in exactly the economic states where investors are worst off.
+
+## Managing credit risk
+
+Insurers keep approved-counterparty lists and set exposure limits per counterparty ([[Concentration Risk]]). They take collateral and letters of credit, and buy credit default swaps.
+
+Regulators charge capital for it. The U.S. [[Risk-Based Capital]] formula charges R1 for fixed income, which covers both interest rate changes and default, and R3 for receivables and reinsurance recoverables. In Canada, the [[Credit Risk Margin|credit risk]] requirement of the [[MCT]] has factors that follow the counterparty's rating and are reduced by collateral.
+
+Credit risk and [[Interest Rate Risk]] are both [[Financial Risk|financial risks]] of a bond portfolio. [[Prepayment Risk|Prepayment]], a borrower repaying principal early, usually when rates fall, is another.
+
+> [!trap] Reading the spread as expected credit loss
+> The BBB bonds above yield $1.30\%$ over Treasuries, or $\$650{,}000$ a year, against an expected credit loss of $\$75{,}000$. The other $\$575{,}000$ is the taxes, risk and liquidity premia and undiversifiable default risk of the credit spread puzzle, so the spread overstates expected default loss.

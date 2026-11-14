@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b0a6ebd8b1f042d3f496c7948093f8a7e6fd962d03d29455ce77312c94149d0b
+  content_hash: sha256:6b66e82ceb065199ab9ed848fb3acd835c05076ae691689b53cf81bd1c6ec4dc
   sources:
     - "D'Arcy, Capital Allocation in the Property-Liability Insurance Industry (Variance 5:2), pp.141-146 (PDF pp.1-6), sha256:e7a4dc616cf02bf9721fd906a35cdd3c2a017ae92921b058a6a932555c955612 — https://www.casact.org/sites/default/files/2021-07/Capital-Allocation-Darcy.pdf"
     - "Damodaran, The Cost of Capital: The Swiss Army Knife of Finance (April 2016), pp.2, 5, 17, sha256:5213c261bc05b5e8920f6a2feba1687c1f424fa1155b20789b6848a3e4223f90 — https://pages.stern.nyu.edu/~adamodar/pdfiles/papers/costofcapital.pdf"
@@ -23,49 +23,69 @@ verification:
   log: .verify/Concepts/Cost of Capital.md
 ---
 
-**The Cost of Capital** is the return investors require for supplying capital to an insurer — the hurdle rate $k$ that a [[Line of Business|line]], [[Business Unit|business unit]] or policy must earn on the [[Risk Capital]] allocated to it for the business to add value. For an insurer it has two layers: the market's required return for the risk borne, and the **frictional costs** of holding capital inside an insurance company, which arise from [[Insurance Market Imperfections]].
+The **Cost of Capital** is the return investors require for supplying capital to an insurer. It is the hurdle rate $k$ that a [[Line of Business|line]], [[Business Unit|business unit]] or policy must earn on the [[Risk Capital|risk capital]] allocated to it for the business to add value. For an insurer it has two layers: the market's required return for the risk borne, and the **frictional costs** of holding capital inside an insurance company, which arise from [[Insurance Market Imperfections|insurance market imperfections]].
+
+By the capital asset pricing model (CAPM), the cost of equity is
 
 > $$k_E = r_f + \beta_E\,\bigl(E[r_m] - r_f\bigr)$$
 
+- $r_f$ is the risk-free rate.
+- $\beta_E$ is the insurer's equity beta.
+- $E[r_m] - r_f$ is the market risk premium.
+
+With debt in the [[Capital Structure|capital structure]], the firm-wide rate is the weighted average cost of capital,
+
+> $$k_{\text{WACC}} = \frac{E}{D+E}\,k_E + \frac{D}{D+E}\,k_D(1-t)$$
+
+- $E$ and $D$ are the values of equity and debt.
+- $k_D$ is the cost of debt, and $t$ is the tax rate.
+
+## Allocating the cost of capital
+
+The cost of capital is charged to each unit in proportion to the capital allocated to it. The charge to unit $i$ is
+
 > $$\text{Capital charge}_i = k \times C_i$$
 
-- $k_E$ is the cost of equity by the capital asset pricing model: $r_f$ the risk-free rate, $\beta_E$ the equity beta, $E[r_m] - r_f$ the market risk premium. With debt in the [[Capital Structure]], the firm-wide rate is the weighted average cost of capital, $k_{\text{WACC}} = \frac{E}{D+E}\,k_E + \frac{D}{D+E}\,k_D(1-t)$.
-- **Allocating the cost.** $C_i$ is the capital allocated to unit $i$, so the allocation method (see [[Risk Capital]]) decides each unit's charge. The charge is due for every year the capital is held, which is why long-tailed lines carry far more of it than their first-year capital suggests.
-- **Line-specific rates.** One could instead estimate a beta for each line and charge each line its own CAPM rate. In practice underwriting betas are hard to estimate, and the CAPM prices only systematic risk, whereas an insurer's frictional costs depend on *total* risk — including the diversifiable risk the CAPM treats as free.
-- **Frictional costs.** Capital inside an insurer costs more than the same capital held by investors directly: investment income on it is taxed at the corporate level before it reaches shareholders ([[Insurance Income Tax|double taxation]]), surplus capital invites agency costs, and replacing capital after a large loss is expensive. The part pricing must recover is the required return **less** what the capital earns while it is held.
-- **The discount rate in a valuation multiple.** The cost of equity is also the discount rate $k$ that ties the price-to-book value multiple to a firm's fundamentals: with constant ROE and book value growing at $g$, $\text{P/BV} = 1 + (\text{ROE} - k)/(k - g)$. Firms with similar ROE, growth and discount rates should therefore trade at similar multiples. A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value (or tangible book value), giving a range of values. Book value is the reported book value of the firm's equity, resting on the asset and liability values its balance sheet reports; tangible book value is that reported book value adjusted to remove the impact of intangible assets such as goodwill. Transaction prices avoid the day-to-day swings of market prices, but can carry a control premium or an acquirer's overpayment, IPOs tend to be underpriced, and a past deal reflects the interest rates and outlook of its own time.
-- **Cost versus return.** The hurdle $k$ is compared with the unit's [[Return on Capital]] (RAROC), or subtracted from its income to give EVA — see [[Risk-Adjusted Performance]]. In Mildenhall and Major's notation the cost of capital $\iota$ is margin divided by capital, and it sets the premium in [[Risk-Adjusted Pricing]].
+- $C_i$ is the capital allocated to unit $i$.
 
-> [!example]- Cost of Equity and the Charge to Each Line {Example}
-> The risk-free rate is $4\%$, the insurer's equity beta $0.9$ and the market risk premium $6\%$. Capital of $\$1{,}000$M is allocated: property $\$450$M, auto $\$350$M, workers compensation $\$200$M. Compute the cost of equity and each line's annual capital charge.
+The allocation method ([[Risk Capital|risk capital]]) therefore decides each unit's charge. The charge is due for every year the capital is held, which is why long-tailed lines carry far more of it than their first-year capital suggests.
+
+One could instead estimate a beta for each line and charge each line its own CAPM rate. In practice underwriting betas are hard to estimate, and the CAPM prices only systematic risk, whereas an insurer's frictional costs depend on *total* risk — including the diversifiable risk the CAPM treats as free.
+
+> [!example]- What are the cost of equity and each line's annual capital charge? {Example}
+> The risk-free rate is 4%, the insurer's equity beta is $0.9$ and the market risk premium is 6%. Capital of $\$1{,}000\text{M}$ is allocated as property $\$450\text{M}$, auto $\$350\text{M}$ and workers compensation $\$200\text{M}$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > k_E &= 0.04 + 0.9(0.06) \\
-> > &= 9.4\%
-> > \end{align*}
-> > $$
-> >
-> > - Property: $0.094 \times 450 = \$42.3$M
-> > - Auto: $0.094 \times 350 = \$32.9$M
-> > - Workers compensation: $0.094 \times 200 = \$18.8$M
-> >
-> > The charges sum to $\$94.0$M, the cost of the whole $\$1{,}000$M. Each line's result must cover its charge; which line bears how much is entirely a product of the allocation.
+> > - The cost of equity is $k_E = 0.04 + 0.9(0.06) = 9.4\%$.
+> > - Property is charged $0.094 \times 450 = \$42.3\text{M}$.
+> > - Auto is charged $0.094 \times 350 = \$32.9\text{M}$.
+> > - Workers compensation is charged $0.094 \times 200 = \$18.8\text{M}$.
+> > - The charges sum to $\$94.0\text{M}$, the cost of the whole $\$1{,}000\text{M}$. Which line bears how much is a product of the allocation.
 
-> [!example]- The Tax Wedge and the Net Cost a Line Must Earn {Example}
-> Investors require $10\%$ after tax. Capital held inside the insurer is invested in bonds yielding $5\%$ pre-tax, and the insurer pays tax at $21\%$. Commercial auto is allocated $\$200$M of capital. What after-tax and pre-tax underwriting profit must the line earn?
+## Frictional costs
+
+Capital inside an insurer costs more than the same capital held by investors directly. Investment income on it is taxed at the corporate level before it reaches shareholders ([[Insurance Income Tax|double taxation]]), surplus capital invites agency costs, and replacing capital after a large loss is expensive. The part pricing must recover is the required return **less** what the capital earns while it is held.
+
+> [!example]- What after-tax and pre-tax underwriting profit must commercial auto earn? {Example}
+> Investors require 10% after tax. Capital held inside the insurer is invested in bonds yielding 5% pre-tax, and the insurer pays tax at 21%. Commercial auto is allocated $\$200\text{M}$ of capital.
 >
 > > [!answer]-
-> > After tax, the capital earns $5\% \times (1 - 0.21) = 3.95\%$ while held. Underwriting must supply the rest:
-> >
-> > $$
-> > \begin{align*}
-> > \text{After-tax UW profit} &= (0.10 - 0.0395) \times 200 \\
-> > &= \$12.1\text{M} \\
-> > \text{Pre-tax UW profit} &= \frac{12.1}{1 - 0.21} \\
-> > &= \$15.3\text{M}
-> > \end{align*}
-> > $$
-> >
-> > An investor who pays no tax (a pension fund, say) would earn the full $5\%$ holding the same bonds directly; inside the insurer it earns $3.95\%$. The $1.05\%$ wedge — $\$2.1$M a year on this line — is a pure frictional cost of holding capital in an insurance company, and it is paid by the line's customers through the price.
+> > - After tax, the capital earns $5\% \times (1 - 0.21) = 3.95\%$ while held. Underwriting must supply the rest.
+> > - The after-tax underwriting profit is $(0.10 - 0.0395) \times 200 = \$12.1\text{M}$.
+> > - The pre-tax underwriting profit is $12.1/(1 - 0.21) = \$15.3\text{M}$.
+> > - An investor who pays no tax, such as a pension fund, would earn the full 5% holding the same bonds directly.
+> > - The 1.05% wedge, $\$2.1\text{M}$ a year on this line, is a frictional cost of holding capital in an insurance company, paid by the line's customers through the price.
+
+## Cost of capital and return on capital
+
+The hurdle $k$ is compared with the unit's [[Return on Capital]] (RAROC), or subtracted from its income to give EVA ([[Risk-Adjusted Performance|risk-adjusted performance]]). In Mildenhall and Major's notation, the cost of capital $\iota$ is margin divided by capital, and it sets the premium in [[Risk-Adjusted Pricing|risk-adjusted pricing]].
+
+## The cost of equity in a valuation multiple
+
+The cost of equity is also the discount rate $k$ that ties the price-to-book value multiple to a firm's fundamentals. With a constant return on equity and book value growing at $g$, the multiple is
+
+> $$\text{P/BV} = 1 + \frac{\text{ROE} - k}{k - g}$$
+
+- $\text{ROE}$ is the firm's return on equity.
+
+Firms with similar ROE, growth and discount rates should therefore trade at similar multiples. A shortcut valuation applies the P-BV multiples of such comparable firms, or of comparable past acquisitions and IPOs (**transaction multiples**), to the firm's book value or tangible book value, giving a range of values. Book value is the reported book value of the firm's equity, resting on the asset and liability values its balance sheet reports; tangible book value is that reported book value adjusted to remove the impact of intangible assets such as goodwill. Transaction prices avoid the day-to-day swings of market prices. They can carry a control premium or an acquirer's overpayment, IPOs tend to be underpriced, and a past deal reflects the interest rates and outlook of its own time.

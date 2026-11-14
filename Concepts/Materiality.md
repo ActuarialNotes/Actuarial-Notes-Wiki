@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7c21312b69610f6618058c68f04acc9b36ebc204d9f5a10f7c716ee1aa5a8877
+  content_hash: sha256:d9e527c9711b6a83c52657d05a44813d1db7b0470642e93bbecbc4a0aac0df41
   sources:
     - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
     - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
@@ -13,36 +13,48 @@ verification:
   log: .verify/Concepts/Materiality.md
 ---
 
-**Materiality** is the threshold above which an error, omission or difference would be expected to affect a user's decision. It is a **judgement made by the actuary for the purpose of the work**, not a fixed percentage, and the [[Standards of Practice]] require the actuary to select a materiality standard, apply it consistently, and — where relevant — disclose it.
-
-- **Purpose-dependent.** The materiality standard for a [[Statement of Actuarial Opinion]] on liabilities is not the same as for a [[FCT|financial condition testing]] report or a pricing exercise, because the users and the decisions differ. The actuary selects it by asking **who uses this work and what decision does it affect?**
-- **Common reference points**, none of them a rule: a percentage of [[Insurance Contract Liabilities]], of equity or [[Capital Available]], of pre-tax income, or an amount that would change the [[MCT]] ratio enough to alter the supervisory picture. The last is often the binding one for an insurer near a target.
-- **It cuts both ways.** Materiality permits approximation and simplification below the threshold — which is what makes actuarial work practicable — and it *requires* attention above it. An actuary who applies a large materiality standard to justify ignoring a problem has inverted the concept.
-- **Consistency matters.** Using a small threshold when it favours one conclusion and a large one when it favours another is not a materiality judgement; it is a result-driven one.
-- **Aggregation.** Individually immaterial items that are all one-directional can be material in total. A set of small conservative approximations, each below threshold, can add to a significant bias.
-- **The [[External Auditor]]'s materiality is set for the financial statements as a whole** and may differ from the actuary's. The two should be discussed rather than assumed to coincide, since a difference means one of them is testing something the other is not.
-
 ![[Media/Figures/Materiality.svg|340]]
 
-> [!example]- Setting and Applying a Materiality Standard {Example}
-> An insurer has [[Insurance Contract Liabilities]] of $\$800$ million, [[Capital Available]] of $\$260$ million, minimum capital required of $\$150$ million (so an [[MCT]] ratio of $173\%$), and pre-tax income of $\$35$ million. Its [[Internal Target Capital Ratio|internal target]] is $170\%$.
->
-> Select a materiality standard for the valuation, and apply it to three findings: a $\$3$ million data reconciliation difference; a $\$9$ million potential understatement in one line's tail; and eleven separate approximations each conservative by about $\$0.8$ million.
+**Materiality** is the threshold above which an error, omission or difference would be expected to affect a user's decision. It is a judgement made by the actuary for the purpose of the work, not a fixed percentage.
+
+The [[Standards of Practice]] require the actuary to:
+
+1. **Select a materiality standard** for the work, by asking who uses it and what decision it affects.
+2. **Apply it consistently.** Using a small threshold when it favours one conclusion and a large one when it favours another is a result-driven judgement, not a materiality one.
+3. **Disclose it**, where relevant.
+
+The standard depends on the purpose. The standard for a [[Statement of Actuarial Opinion]] on liabilities is not the same as for a [[FCT|financial condition testing]] report or a pricing exercise, because the users and the decisions differ. Common reference points, none of them a rule, are a percentage of [[Insurance Contract Liabilities]], of equity or [[Capital Available]], of pre-tax income, or the amount that would change the [[MCT]] ratio enough to alter the supervisory picture. The last is often the binding one for an insurer near a target.
+
+Materiality cuts both ways. It permits approximation and simplification below the threshold, which is what makes actuarial work practicable, and it requires attention above it. An actuary who applies a large materiality standard to justify ignoring a problem has inverted the concept.
+
+The [[External Auditor]]'s materiality is set for the financial statements as a whole and may differ from the actuary's. The two should be discussed rather than assumed to coincide, since a difference means one of them is testing something the other is not.
+
+> [!example]- What materiality standard suits this valuation? {Example}
+> An insurer has [[Insurance Contract Liabilities]] of $\$800$ million, [[Capital Available]] of $\$260$ million, minimum capital required of $\$150$ million (an [[MCT]] ratio of $173\%$) and pre-tax income of $\$35$ million. Its [[Internal Target Capital Ratio|internal target]] is $170\%$, and the tax rate is $27\%$.
 >
 > > [!answer]-
-> > **Selecting the standard.** Candidate reference points:
-> >
-> > - $1\%$ of liabilities: $\$8$M
-> > - $5\%$ of capital available: $\$13$M
-> > - $10\%$ of pre-tax income: $\$3.5$M
-> > - The amount that would take the MCT ratio below the $170\%$ internal target: capital available would need to fall to $1.70 \times \$150 = \$255$M, so **$\$5$ million** after tax (roughly $\$7$M pre-tax at a $27\%$ rate).
-> >
-> > The last is the tightest and the most decision-relevant: this insurer sits $3$ points above its internal target, so a modest error changes the supervisory picture. **Select roughly $\$5$–$7$ million**, and document why.
-> >
-> > **Applying it:**
-> >
-> > - **The $\$3$ million reconciliation difference** is below threshold. It may be treated as immaterial — but the actuary must **investigate it and conclude** that it is, and disclose the conclusion. Unexplained is not the same as immaterial.
-> > - **The $\$9$ million tail understatement** is above threshold and must be addressed: either corrected in the liability, or disclosed with a quantified effect. It would take the ratio to roughly $169\%$, below the internal target — which is precisely why the standard was set where it was.
-> > - **The eleven approximations** total $\$8.8$ million, all in the same direction. Individually immaterial, **collectively material and biased**. They must be assessed in aggregate; treating each separately is the classic aggregation error the standards warn about.
-> >
-> > **The lesson:** materiality is chosen with the decision in mind, applied consistently, and never used as a reason to leave something uninvestigated.
+> > - $1\%$ of liabilities is $\$8$ million.
+> > - $5\%$ of capital available is $\$13$ million.
+> > - $10\%$ of pre-tax income is $\$3.5$ million.
+> > - At the internal target, capital available would be $1.70 \times \$150\text{M} = \$255\text{M}$, so a fall of $\$5$ million after tax, about $\$7$ million before tax, crosses it.
+> > - The last is the tightest and the most decision-relevant, because this insurer sits 3 points above its internal target.
+> > - Select roughly $\$5$ to $\$7$ million, and document why.
+
+## Applying the standard
+
+An item below the threshold may be treated as immaterial only once the actuary has investigated it and concluded that it is. Unexplained is not the same as immaterial. An item above the threshold must be corrected, or disclosed with its effect quantified.
+
+> [!example]- With a materiality standard of $\$5$ to $\$7$ million, how should the actuary treat each of these findings? {Example}
+> The insurer above has three findings:
+>
+> 1. A $\$3$ million data reconciliation difference.
+> 2. A $\$9$ million potential understatement in one line's tail.
+> 3. Eleven separate approximations, each conservative by about $\$0.8$ million.
+>
+> > [!answer]-
+> > - The $\$3$ million difference is below the threshold. The actuary must investigate it, conclude that it is immaterial and disclose the conclusion.
+> > - The $\$9$ million understatement is above the threshold. It would take the MCT ratio to about $169\%$, below the internal target, so it must be corrected in the liability or disclosed with its effect quantified.
+> > - The eleven approximations total $11 \times \$0.8\text{M} = \$8.8\text{M}$, all in the same direction. Each is immaterial, but together they are material and biased, so they must be assessed in aggregate.
+
+> [!trap] Judging one-directional items one at a time
+> Individually immaterial items that all lean the same way can be material in total. A set of small conservative approximations, each below the threshold, can add up to a significant bias.

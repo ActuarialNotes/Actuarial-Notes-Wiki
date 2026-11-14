@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:622b429a224a6c14278619adc81ea2626bba1219d8a1f51e57a565f8554424ac
+  content_hash: sha256:391d1b27b3b20a5b71dd30f36e2e0b0a3c3172693a01cb90b3624424d7acf2c2
   sources:
     - "Humphreys, Exceedance Probability in Catastrophe Modeling, CAS E-Forum Winter 2021, pp.1-7, 16 (definition and perils incl. terrorism; uses: ratemaking, portfolio management, underwriting, cost of capital, cost of reinsurance and risk transfer, ERM, capital adequacy; EP(x) = P(X > x); AAL = sum p_i X_i; return period = 1/EP; OEP = probability the largest loss in a year exceeds x; AEP the survival function of the annual aggregate S, E[S] = integral of A(x) dx; AEP used for aggregate covers such as stop loss), sha256:c161864d85d35169b8e1f92af664542f05f005772e4cc6607ead0d68f08fdf89 — https://www.casact.org/sites/default/files/2021-03/02_humphreys.pdf"
     - "Ermoliev, Ermolieva, MacDonald & Norkin, Insurability of Catastrophic Risks: The Stochastic Optimization Model, IIASA Research Report RR-00-20 (reprinted from Optimization 47, 2000, with permission), PDF pp.3-4 (catastrophes produce losses highly correlated in space and time, which break the law of large numbers; insurers can reduce ruin only by deliberately selecting the dependent risks they cover; catastrophe modelling used for coverage, premiums and reinsurance), sha256:451edc97fb5e761c971298be1e43e1f43ad5970a850631a559fa93d7b93cb5d0 — https://pure.iiasa.ac.at/id/eprint/6252/1/RR-00-20.pdf"
@@ -27,48 +27,52 @@ verification:
 
 **Catastrophe Risk** is the risk of a very large loss from a single event — hurricane, earthquake, flood, wildfire, severe convective storm, or a man-made event such as terrorism — that damages many insured exposures at once. Its defining feature is **correlation**: one event strikes many policies together, so pooling does not diversify it the way it diversifies independent claims.
 
+## The exceedance probability curve
+
+The exceedance probability curve is the standard description of catastrophe risk. The probability that the annual loss exceeds a loss level $x$ is
+
 > $$\text{EP}(x) = P(\text{annual loss} > x)$$
->
+
+The return period of $x$, the average number of years between years whose loss exceeds it, is
+
 > $$\text{Return period}(x) = \frac{1}{\text{EP}(x)}$$
 
-- The **exceedance probability curve** $\text{EP}(x)$ is the standard description of catastrophe risk. The *occurrence* curve (OEP) looks at the largest single event in a year, the *aggregate* curve (AEP) at the year's total. The area under the AEP curve is the average annual loss ([[Catastrophe Expected Loss Cost]]), and the loss at a chosen return period is the [[Probable Maximum Loss|PML]].
-- **How it is modelled.** Grossi and Kunreuther describe a catastrophe model in four parts: *hazard* (where events occur, how often, how intense), *inventory* (the exposed properties), *vulnerability* (damage given intensity) and *loss* (the financial result after policy terms). See [[Catastrophe Modelling]].
-- **Two kinds of uncertainty.** *Aleatory* uncertainty is the inherent randomness of events and cannot be reduced; *epistemic* uncertainty comes from incomplete knowledge of the hazard, vulnerability and exposure, and can be. Different vendor models give materially different answers for the same book ([[Model Risk]]).
-- **Why it is capital-hungry.** Catastrophes produce losses correlated in space and time, so the [[Law of Large Numbers]] does not operate across the book, and catastrophe risk needs capital out of proportion to its expected loss: in the highest layers a reinsurer's diversification advantage becomes negligible and it must back each dollar of exposure with a dollar of capital. Insurers transfer it through [[Reinsurance|reinsurance]] ([[Reinsurance Pricing]]) and choose which accumulations to hold ([[Catastrophe Exposure Management]]).
-- **Capital markets.** [[Securitization]] moves catastrophe risk to investors through [[CAT Bonds]] and other [[Insurance-Linked Securities]]. A cat bond's principal is held in a collateral trust, largely removing counterparty credit risk. Its trigger — indemnity (the sponsor's own losses), industry index, parametric (physical event measures) or modelled loss — trades *basis risk* (the payout not matching the sponsor's loss) against moral hazard, transparency and speed of settlement.
-- Public mechanisms share part of the risk, for example the [[Florida Hurricane Catastrophe Fund]]; a changing climate alters future catastrophe losses ([[Climate Risk]]).
+The *occurrence* curve (OEP) looks at the largest single event in a year, the *aggregate* curve (AEP) at the year's total. The area under the AEP curve is the average annual loss ([[Catastrophe Expected Loss Cost]]), and the loss at a chosen return period is the [[Probable Maximum Loss|PML]].
 
-> [!example]- Why Pooling Fails: Independent Versus Correlated Homes {Example}
-> An insurer covers $1{,}000$ homes, each with a $1\%$ annual chance of a \$200,000 total loss. Compare the mean and standard deviation of annual losses if (a) the losses are independent (fires) and (b) a single event destroys every home at once with probability $1\%$ (a storm).
+> [!example]- What are the occurrence and aggregate exceedance probabilities at 50 and 70 for this region? {Example}
+> A region faces two independent perils, each striking at most once a year: a hurricane costing $60$ with probability $0.05$, and a hailstorm costing $30$ with probability $0.10$.
 >
 > > [!answer]-
-> > The mean is the same in both: $1{,}000 \times 0.01 \times \$200{,}000 = \$2$M.
-> >
-> > $$
-> > \begin{align*}
-> > \sigma_{(a)} &= \$200{,}000\sqrt{1{,}000(0.01)(0.99)} \\
-> > &= \$0.63\text{M} \\
-> > \sigma_{(b)} &= \$200\text{M}\sqrt{0.01(0.99)} \\
-> > &= \$19.9\text{M}
-> > \end{align*}
-> > $$
-> >
-> > The coefficient of variation is $0.31$ for independent losses and $9.95$ for correlated ones — about $32$ times as large. Adding homes shrinks the relative volatility in (a) but not at all in (b). The expected loss is identical; the capital needed is not.
+> > - The AAL is $0.05(60) + 0.10(30) = 6$.
+> > - Only the hurricane exceeds $50$ on its own, so $\text{OEP}(50) = 0.05$.
+> > - The year's total exceeds $50$ exactly when the hurricane occurs, so $\text{AEP}(50) = 0.05$ as well.
+> > - No single event exceeds $70$, so $\text{OEP}(70) = 0$.
+> > - The year's total exceeds $70$ only when both occur, so $\text{AEP}(70) = 0.05(0.10) = 0.005$.
+> > - The year's total exceeds $70$ once in $1/0.005 = 200$ years.
+> > - A per-occurrence cover attaching at $70$ would never pay, and an aggregate cover attaching at $70$ would.
 
-> [!example]- Occurrence Versus Aggregate Exceedance {Example}
-> A region faces two independent perils, each striking at most once a year: a hurricane costing $60$ with probability $0.05$, and a hailstorm costing $30$ with probability $0.10$. Find the AAL, the occurrence and aggregate exceedance probabilities at $50$ and $70$, and the return period of a year's losses exceeding $70$.
+## Modelling catastrophe risk
+
+Grossi and Kunreuther describe a catastrophe model in four parts: *hazard* (where events occur, how often, how intense), *inventory* (the exposed properties), *vulnerability* (damage given intensity) and *loss* (the financial result after policy terms). See [[Catastrophe Modelling]].
+
+A model carries two kinds of uncertainty. *Aleatory* uncertainty is the inherent randomness of events and cannot be reduced; *epistemic* uncertainty comes from incomplete knowledge of the hazard, vulnerability and exposure, and can be. Different vendor models give materially different answers for the same book ([[Model Risk|model risk]]).
+
+## Catastrophe risk and capital
+
+Catastrophes produce losses correlated in space and time, so the [[Law of Large Numbers|law of large numbers]] does not operate across the book. Catastrophe risk therefore needs capital out of proportion to its expected loss. In the highest layers, a reinsurer's diversification advantage becomes negligible, and it must back each dollar of exposure with a dollar of capital. Insurers transfer it through [[Reinsurance|reinsurance]] ([[Reinsurance Pricing]]) and choose which accumulations to hold ([[Catastrophe Exposure Management]]).
+
+> [!example]- How do the mean and standard deviation of annual losses differ between independent and correlated homes? {Example}
+> An insurer covers $1{,}000$ homes, each with a 1% annual chance of a $\$200{,}000$ total loss. In case (a) the losses are independent, like fires. In case (b) a single event destroys every home at once with probability 1%, like a storm.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{AAL} &= 0.05(60) + 0.10(30) \\
-> > &= 6 \\
-> > \text{OEP}(50) &= P(\text{hurricane}) \\
-> > &= 0.05 \\
-> > \text{AEP}(70) &= P(\text{both occur}) \\
-> > &= 0.05(0.10) \\
-> > &= 0.005
-> > \end{align*}
-> > $$
-> >
-> > $\text{AEP}(50) = 0.05$ as well, since the year's total exceeds $50$ exactly when the hurricane occurs; but $\text{OEP}(70) = 0$, because no single event exceeds $70$. The year's total exceeds $70$ once in $1/0.005 = 200$ years. A per-occurrence cover attaching at $70$ would never pay; an aggregate cover attaching at $70$ would — which is why the two curves answer different questions.
+> > - The mean is the same in both: $1{,}000 \times 0.01 \times \$200{,}000 = \$2\text{M}$.
+> > - In (a), the number of losses is binomial, so $\sigma = 200{,}000\sqrt{1{,}000(0.01)(0.99)} = \$0.63\text{M}$.
+> > - In (b), the loss is $\$200\text{M}$ or nothing, so $\sigma = 200\sqrt{0.01(0.99)} = \$19.9\text{M}$.
+> > - The coefficient of variation is $0.31$ in (a) and $9.95$ in (b), about 32 times as large.
+> > - Adding homes shrinks the relative volatility in (a) but not at all in (b). The expected loss is the same, and the capital needed is not.
+
+## Transferring catastrophe risk to capital markets
+
+[[Securitization]] moves catastrophe risk to investors through [[CAT Bonds]] and other [[Insurance-Linked Securities]]. A cat bond's principal is held in a collateral trust, largely removing counterparty credit risk. Its trigger — indemnity (the sponsor's own losses), industry index, parametric (physical event measures) or modelled loss — trades *basis risk* (the payout not matching the sponsor's loss) against moral hazard, transparency and speed of settlement.
+
+Public mechanisms share part of the risk, for example the [[Florida Hurricane Catastrophe Fund]]. A changing climate alters future catastrophe losses ([[Climate Risk|climate risk]]).

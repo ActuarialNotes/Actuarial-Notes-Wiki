@@ -420,6 +420,18 @@ order below stands.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **A13: Decisions, a collaborative decision system (proposed 2026-11-14).** The maintainer's
+  thesis, *Deciding Together Under Uncertainty*, proposes a shared decision record that many
+  partially aligned parties move through five stages (Frame, Evidence, Choose, Attest, Learn),
+  with a choice rule fixed before the options are seen, results reported by group, forecasts
+  scored and AI agents marked and reviewed. `docs/decision-system.md` is the plan: a student
+  case simulation first (a cohort plays the parties to an invented decision whose futures come
+  from a known model, so forecasts are scored in the same course), built beside Workflows on the
+  tools engine, Supabase and the connector. The rules are enforced in code; agents run in each
+  participant's own assistant through signed-in connector tools, so the app still calls no
+  model. Five phases, from an append-only record to the attestation package. Six decisions
+  (D37–D42).
+
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the
@@ -999,6 +1011,12 @@ Where a default is given, sessions build with it until the decision is made.
 | D35 | The daily podcast: **when to move to ElevenLabs** (which voice, which model), and whether to build the **private RSS feed** | `daily-podcast.md` | G10 | Kokoro `af_heart` until then; no feed |
 | D36 | Quiz Battle **saves a record** for signed-in players (results, a rating per exam, an opt-in leaderboard), reversing §6.2's "Quiz Battle saves nothing". Still no mastery, XP or streak from a battle | `quiz-battle-redesign.md` §5 | X10 phase 3 | Nothing saved until decided; phases 1 and 2 don't need it |
 | D31 | Re-run `check-answerable --ids` after a page edit closes an item? | content plan §6 | C20 | ✅ settled 2026-10-30 by the maintainer: **no**; `resolve` proves the item closed in code. A question is re-run only when its own text changes |
+| D37 | The name on screen of the collaborative decision system | `decision-system.md` §11 | A13 | *Decisions* |
+| D38 | Who can join a **decision room**: anyone signed in with its code, or only approved accounts | `decision-system.md` §10 | A13 phase 1 | Anyone signed in with the code; creating a room stays behind the Workflows gate |
+| D39 | The first **decision case**, and whether the thesis's flood example (a First Nation's council as a party) is written and who reviews it | `decision-system.md` §3 | A13 phase 0 | An invented mutual insurer first; the flood case only after review by someone from such a community |
+| D40 | **Connector OAuth** for decision tools: the connector's first signed-in tools | `decision-system.md` §7, A1 | A13 phase 3 | Build it in phase 3, scoped to decision tools only |
+| D41 | A **real decision** outside a classroom: confidential data, retention, a security review, who funds the attesting actuary | `decision-system.md` §11 | A13 later | Not before phase 4 and a security review |
+| D42 | **IEC 31010's licence**: what of the standard may be quoted in the repo | `decision-system.md` §6 | A13 techniques | Cite clauses and paraphrase; copy no tables |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -1072,6 +1090,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/tools-ux-review.md` | Review: every tool page, the catalogue and the Assumptions Bank on a phone, with redesign rounds | A12 (§3.4) | Proposed; nothing changed yet | 2026-11-09 |
 | `docs/tool-template-v3.md` | Build spec: the Ledger template (one-line rows, solve for any unknown, provenance by exception, chains) | A12 (§3.4) | Built on every page; round 0, solve-for on the finance tools and the chains done; §8 lists what's left | 2026-11-09 |
 | `docs/osfi-pc-data.md` | Proposal: OSFI's insurer filings (open-data API + Beyond 20/20 archive) across Tools, the connector and Cowork | A11 (§3.4) | Proposed; Phase 0 started | 2026-11-09 |
+| `docs/decision-system.md` | Plan: Decisions, a collaborative decision system from the thesis *Deciding Together Under Uncertainty*, a student case simulation first | A13 (§3.4), D37–D42 | Proposed; nothing built | 2026-11-14 |
 | `docs/osfi-tools-design.md` | Three designs for Insurer Return and MCT Ratio, and what was built | A11 (§3.4) | Design C step 1 built | 2026-11-09 |
 | `docs/actuaria-online.md` | — | — | 🗑 **Deleted** 2026-11-11, with Actuaria | — |
 | `docs/quiz-battle-redesign.md` | Plan and build spec: Quiz Battle as a card game, the pairs draft, stats and tiers | X10 (§3.4), D36 | Active: phases 1–2 built, phase 3 open | 2026-11-09 |

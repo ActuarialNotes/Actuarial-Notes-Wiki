@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7ef9a8f921e33d1a8228966b1d7491271cf3017a6d49b4cfb3c312d1206626ea
+  content_hash: sha256:86baa3f9b352d1106bcf4e4d7a91a8bf2ed58835651a4a4ff9e0deeeaa146efd
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.1 Joint Probability Density Function (probability as the double integral; marginal PDFs; normalisation with inner limit in the outer variable), web page as fetched 2026-09-28, sha256:256703bb60bfcdf98140e34bd6b476a7875aabd59ced22f8f881189b09ec8886 — https://www.probabilitycourse.com/chapter5/5_2_1_joint_pdf.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.3 Conditioning and Independence (f_X|Y = f_XY/f_Y; independence iff f_XY = f_X f_Y), web page as fetched 2026-09-28, sha256:a87cccc76b2d0a5139f26cd6a59fa1aac41b982e3e3d2d16bb353b9c41dac04c — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
@@ -13,86 +13,90 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Joint Probability Density Function.md
 ---
+![[Media/Figures/Joint_Probability_Density_Function.svg|340]]
 
-A **Joint Probability Density Function** $f(x,y)$ describes the [[Multivariate Distribution]] of two continuous random variables. Probability is *volume* under the surface $f$: to find $P((X,Y) \in A)$, integrate $f$ over the region $A$.
+A **Joint Probability Density Function** of two continuous [[Random Variable|random variables]] $X$ and $Y$ is a function $f(x,y)$ whose volume over a region is the probability that $(X,Y)$ lies in that region. It describes their [[Multivariate Distribution|joint distribution]]. The probability that $(X,Y)$ lies in a region $A$ is
 
 > $$P\bigl((X,Y) \in A\bigr) = \iint_A f(x,y)\,dA$$
 
+- $dA$ is the area element, $dy\,dx$ or $dx\,dy$ in an iterated integral.
+
+A valid joint density satisfies $f(x,y) \geq 0$ and integrates to 1 over its support. Setting that double integral equal to 1 is how an unknown constant $c$ is found. The support is the set of points $(x,y)$ where $f(x,y) > 0$.
+
+> [!example]- $f(x,y) = c(x+y)$ on the region $0 < x < y < 1$. What is $c$? {Example}
+> - The support is the triangle above the line $y = x$ inside the unit square.
+> - For each $x$ from 0 to 1, $y$ runs from $x$ to 1.
+> - The inner integral is $\int_x^1 (x+y)\,dy = x + \tfrac{1}{2} - \tfrac{3x^2}{2}$.
+> - Integrating over $x$ from 0 to 1 gives $\tfrac{1}{2} + \tfrac{1}{2} - \tfrac{1}{2} = \tfrac{1}{2}$, so the double integral is $\tfrac{c}{2}$.
+> - Setting $\tfrac{c}{2} = 1$ gives $c = 2$.
+
+## Limits of integration
+
+The integrand is rarely the hard part. The region is. With $x$ as the outer variable, a probability is the iterated integral
+
+> $$\int_{a}^{b}\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx$$
+
+- $a$ and $b$ are the smallest and largest values of $x$ in the region, and are numbers.
+- $g_1(x)$ and $g_2(x)$ are the lower and upper limits of $y$ for that $x$.
+
+The limits are set up in four steps:
+
+1. Sketch the support, shading the points $(x,y)$ where $f > 0$.
+2. Pick an outer variable and read off its full range. Those limits are constants.
+3. Hold the outer variable fixed and read the inner variable's range off the sketch. Those limits may involve the outer variable.
+4. Check that the limits on $dy$ never contain $y$.
+
+Reversing the order of integration is often easier, but the limits must be read again from the sketch, not swapped.
+
+> [!example]- $X$ and $Y$ have joint density $f(x,y) = 8xy$ for $0 < x < y < 1$. What is $P(Y > 2X)$? {Example}
+> - The event $Y > 2X$ is the part of the triangle above the line $y = 2x$.
+> - With $x$ outer, $y$ runs from $2x$ to 1, and $x$ can go no higher than $\tfrac{1}{2}$.
+> - The inner integral is $\int_{2x}^{1} 8xy\,dy = 4x(1 - 4x^2) = 4x - 16x^3$.
+> - The outer integral is $\int_0^{1/2} (4x - 16x^3)\,dx = \left[2x^2 - 4x^4\right]_0^{1/2} = \tfrac{1}{2} - \tfrac{1}{4}$.
+> - $P(Y > 2X) = 0.25$.
+
+## Marginal density
+
+The [[Marginal Probability Function|marginal density]] of $X$ integrates $y$ out of the joint density:
+
 > $$f_X(x) = \int f(x,y)\,dy$$
+
+The limits on that inner integral depend on $x$ whenever the support is not a rectangle. The marginal is a function of $x$ alone, so if $y$ survives, the limits were wrong. In the same way, $f_Y(y)$ integrates $x$ out.
+
+> [!example]- Losses on two coverages have joint density $f(x,y) = 8xy$ for $0 < x < y < 1$. What is the marginal density of $Y$? {Example}
+> - For a fixed $y$, $x$ runs from 0 to $y$, not from 0 to 1.
+> - $f_Y(y) = \int_0^y 8xy\,dx = 8y \cdot \tfrac{y^2}{2} = 4y^3$ for $0 < y < 1$.
+> - As a check, $\int_0^1 4y^3\,dy = 1$.
+> - Limits of 0 to 1 for $x$ would have given $4y$, which integrates to 2, a sign the region was wrong.
+
+## Conditional density
+
+Given $X = x$, the [[Conditional Probability Function|conditional density]] of $Y$ is the joint density divided by the marginal:
 
 > $$f_{Y \mid X}(y \mid x) = \frac{f(x,y)}{f_X(x)}$$
 
-- A valid joint density satisfies $f(x,y) \geq 0$ and integrates to 1 over its support. Setting that double integral equal to 1 is how an unknown constant $c$ is found.
-- The [[Marginal Probability Function|marginal]] $f_X(x)$ integrates $y$ **out** — the limits on that inner integral depend on $x$ whenever the support is not a rectangle. The marginal is a function of $x$ alone; if $y$ survives, the limits were wrong.
-- $X$ and $Y$ are [[Independent Random Variables|independent]] **only if** $f(x,y) = f_X(x)f_Y(y)$ *and* the support is a rectangle. A triangular support such as $0 < x < y < 1$ forces dependence no matter how the formula factors, because the range of $Y$ depends on $x$.
-- $E[g(X,Y)] = \iint g(x,y) f(x,y)\,dx\,dy$ — see [[Moments for Joint Distributions]] and [[Covariance]].
+- $f_X(x) > 0$.
 
-## Setting up the limits
+> [!example]- With $f(x,y) = 8xy$ on $0 < x < y < 1$ and $f_Y(y) = 4y^3$, what is the conditional density of $X$ given $Y = y$? {Example}
+> - Divide the joint density by the marginal of $Y$: $f_{X \mid Y}(x \mid y) = \dfrac{8xy}{4y^3}$.
+> - $f_{X \mid Y}(x \mid y) = \dfrac{2x}{y^2}$ for $0 < x < y$.
+> - Given $Y = y$, $X$ is confined to $(0, y)$, so the conditional support shrinks with $y$.
 
-The integrand is rarely the hard part; the **region** is. Work in this order:
+## Independence
 
-1. **Sketch the support.** Shade the set of $(x,y)$ where $f > 0$.
-2. **Pick an outer variable** and read off its full numeric range — those limits must be constants.
-3. **Slice.** Holding the outer variable fixed, read the inner variable's range off the sketch — those limits may involve the outer variable.
-4. **Sanity check:** the outer limits are always numbers; the inner limits may mention the outer variable but never the inner variable itself — the limits on $dy$ never contain $y$.
+$X$ and $Y$ are [[Independent Random Variables|independent]] if and only if the joint density is the product of the marginals:
 
-> $$\int_{a}^{b}\!\!\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx$$
+> $$f(x,y) = f_X(x)\,f_Y(y)$$
 
-Reversing the order of integration is a legitimate move and is often far easier — but the limits must be re-derived from the sketch, not swapped mechanically.
+Independent $X$ and $Y$ therefore have a rectangular support. A triangular support such as $0 < x < y < 1$ forces dependence no matter how the formula factors, because the range of $Y$ depends on $x$.
 
-![[Media/Figures/Joint_Probability_Density_Function.svg|340]]
+## Expected value of a function
 
-> [!example]- Finding the Normalizing Constant on a Triangle {Example}
-> $f(x,y) = c(x+y)$ on the region $0 < x < y < 1$. Find $c$.
->
-> > [!answer]-
-> > The support is the triangle above the line $y = x$ inside the unit square. Integrate $x$ from 0 to 1; for each $x$, $y$ runs from $x$ up to 1:
-> > $$
-> > \begin{align*}
-> > 1 &= \int_0^1\!\!\int_x^1 c(x+y)\,dy\,dx \\
-> >   &= c\int_0^1 \left[xy + \tfrac{y^2}{2}\right]_{y=x}^{y=1} dx \\
-> >   &= c\int_0^1 \left(x + \tfrac{1}{2} - x^2 - \tfrac{x^2}{2}\right) dx \\
-> >   &= c\int_0^1 \left(x + \tfrac{1}{2} - \tfrac{3x^2}{2}\right) dx \\
-> >   &= c\left[\tfrac{1}{2} + \tfrac{1}{2} - \tfrac{1}{2}\right] \\
-> >   &= \frac{c}{2}
-> > \end{align*}
-> > $$
-> > So $c = 2$.
+The expected value of a function $g(X,Y)$ is
 
-> [!example]- Marginal Density on a Non-Rectangular Support {Example}
-> Losses on two coverages have $f(x,y) = 8xy$ for $0 < x < y < 1$. Find the marginal density of $Y$.
->
-> > [!answer]-
-> > To get $f_Y(y)$, integrate $x$ out. On the sketch, fixing $y$ means $x$ runs from 0 up to $y$ — **not** from 0 to 1:
-> > $$
-> > \begin{align*}
-> > f_Y(y) &= \int_0^y 8xy\,dx \\
-> >        &= 8y\left[\tfrac{x^2}{2}\right]_0^y \\
-> >        &= 4y^3, \quad 0 < y < 1
-> > \end{align*}
-> > $$
-> > Check: $\int_0^1 4y^3\,dy = 1$. Using limits 0 to 1 for $x$ would have given $4y$, which integrates to 2 — an immediate signal the region was wrong.
+> $$E[g(X,Y)] = \iint g(x,y) f(x,y)\,dx\,dy$$
 
-> [!example]- Probability over a Region and a Conditional Density {Example}
-> With $f(x,y) = 8xy$ on $0 < x < y < 1$, find $P(Y > 2X)$ and the conditional density $f_{X \mid Y}(x \mid y)$.
->
-> > [!answer]-
-> > The event $Y > 2X$ is the part of the triangle above the line $y = 2x$. Integrating $x$ outermost, $y$ runs from $2x$ to 1, and $x$ can go no higher than $\tfrac{1}{2}$:
-> > $$
-> > \begin{align*}
-> > P(Y > 2X) &= \int_0^{1/2}\!\!\int_{2x}^{1} 8xy\,dy\,dx \\
-> >           &= \int_0^{1/2} 4x\left[y^2\right]_{2x}^{1} dx \\
-> >           &= \int_0^{1/2} \left(4x - 16x^3\right) dx \\
-> >           &= \left[2x^2 - 4x^4\right]_0^{1/2} \\
-> >           &= \tfrac{1}{2} - \tfrac{1}{4} \\
-> >           &= 0.25
-> > \end{align*}
-> > $$
-> > Dividing the joint by the marginal $f_Y(y) = 4y^3$ from the previous example:
-> > $$
-> > \begin{align*}
-> > f_{X \mid Y}(x \mid y) &= \frac{8xy}{4y^3} \\
-> >                        &= \frac{2x}{y^2}, \quad 0 < x < y
-> > \end{align*}
-> > $$
-> > Given $Y = y$, $X$ is confined to $(0, y)$ — the conditional support shrinks with $y$, which is exactly why $X$ and $Y$ cannot be independent here even though $8xy$ factors as $(8x)(y)$.
+The integral runs over the support. With $g(x,y) = xy$ it gives $E[XY]$, which [[Moments for Joint Distributions]] and [[Covariance]] use.
+
+> [!trap] A formula that factors on a triangle
+> $f(x,y) = 8xy$ on $0 < x < y < 1$ factors as $(8x)(y)$, but $X$ and $Y$ are not independent. The support is a triangle, so the range of $X$ depends on $y$. Check the support before the formula.

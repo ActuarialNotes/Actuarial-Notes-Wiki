@@ -1,25 +1,22 @@
 import { useCallback, useMemo } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { ChevronLeft, Table2 } from 'lucide-react'
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { backLabel, useBack, usePageLabel } from '@/hooks/useBack'
 import { usePageHead } from '@/hooks/usePageHead'
-import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { DATA_SOURCES_HEAD } from '@/lib/seo'
 import { installWikiBundle } from '@/lib/wikiBundle'
 import { TOOLS, toolBySlug, toolPath } from '@/lib/tools'
 import { inkChip } from '@/components/ui/ink'
-import { ListPanel, ListRow } from '@/components/ui/ListPanel'
-import { LogoTile } from '@/components/LogoTile'
 import { AssumptionsShelf } from '@/components/assumptions/AssumptionsShelf'
 import { CoworkTopBar, type TopBarPlace } from '@/components/cowork/CoworkTopBar'
 import { EntityLogo } from '@/components/cowork/EntityLogo'
 import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { cn } from '@/lib/utils'
-import { DATA_SECTIONS, dataSection, type DataSection } from '@/lib/dataSources'
+import { DATA_SECTIONS, DATA_SOURCES_ROUTE, LEGACY_SECTIONS, dataSection, type DataSection } from '@/lib/dataSources'
 import { ToolPage } from '@/pages/Tools'
 import SourcesView from './SourcesView'
 import ResourcesView from './ResourcesView'
@@ -30,27 +27,28 @@ import SourcePage from './SourcePage'
 import '@/lib/coworkContent'
 
 /**
- * **Data Sources** (`/data-sources`) — the published data a calculation or a
- * workflow reads from, in one place, as four sections:
+ * **Data Sources** (`/data-sources`) — the published material a calculation
+ * or a workflow reads from, as one chain in three sections:
  *
- *   /data-sources               **Tables** — the Data Sources tools (area
- *                               `data`): life tables, price indexes, yield
- *                               curves, insurer filings. Open to everyone.
- *   /data-sources/assumptions   the **Assumptions Bank** — figures and facts a
- *                               published document states. Open to everyone.
- *   /data-sources/publishers    **Publishers** — the entities a reader follows.
- *   /data-sources/documents     **Documents** — what they publish.
+ *   /data-sources               **Assumptions** — the Assumptions Bank's
+ *                               figures, each under the source and document
+ *                               it was read from.
+ *   /data-sources/sources       **Sources** — the publishers, each opening in
+ *                               place on the documents that give data or
+ *                               figures.
+ *   /data-sources/documents     **Documents** — what they publish, each tagged
+ *                               with what it gives: Data, Assumptions.
  *
- * and three kinds of page under it:
+ * and two kinds of page under it:
  *
  *   /data-sources/<table>       one table, drawn by the Tools tab's `ToolPage`
- *   /data-sources/<publisher>   one publisher's own page
+ *                               — the table a data document opens
+ *   /data-sources/<publisher>   one source's own page
  *
- * Publishers and Documents (and a publisher's page) are in Preview, for the
- * accounts `lib/workflowsAccess.ts` approves; to anyone else the page is its
- * tables and the bank, and those addresses lead back here. A table slug, a
- * section name and a publisher id never collide — `lib/dataSources.test.ts`
- * holds them apart.
+ * A published table is a document like any other: it sits under its
+ * publisher, and its **Data** tag opens the table. Every section is open to
+ * everyone; Workflows stays in Preview. A table slug, a section name and a
+ * publisher id never collide — `lib/dataSources.test.ts` holds them apart.
  *
  * **There is no second reader.** A document opens in `ConceptPopup` — the
  * same split pane the study guide reads a concept in. The sample documents are
@@ -58,13 +56,10 @@ import '@/lib/coworkContent'
  * true. See `docs/cowork.md`.
  */
 
-/** The published tables: the Data Sources tools. */
-const TABLES = TOOLS.filter(t => t.area === 'data')
-
-/** What the search bar can go to besides the publishers: each table, and the bank. */
+/** What the search bar can go to besides the publishers: each table, and the Assumptions section. */
 const PLACES: TopBarPlace[] = [
-  ...TABLES.map(t => ({ name: t.name, subtitle: t.answers, to: toolPath(t), kind: 'table' as const })),
-  { name: 'Assumptions Bank', subtitle: 'Figures from published documents, each with its page', to: '/data-sources/assumptions', kind: 'bank' },
+  ...TOOLS.filter(t => t.area === 'data').map(t => ({ name: t.name, subtitle: t.answers, to: toolPath(t), kind: 'table' as const })),
+  { name: 'Assumptions', subtitle: 'Figures from published documents, each with its page', to: DATA_SOURCES_ROUTE, kind: 'bank' },
 ]
 
 /** Open a resource page — the document a set of published figures was read from — in the popup. */
@@ -76,7 +71,7 @@ async function openVaultResource(name: string) {
 
 export default function DataSources() {
   const { id } = useParams()
-  const approved = useWorkflowsAccess()
+  const { search } = useLocation()
 
   // A table is a tool's page, with its own bar and breadcrumb.
   const table = id ? toolBySlug(id) : undefined
@@ -89,16 +84,14 @@ export default function DataSources() {
     )
   }
 
+  // An address the page had before its sections were Assumptions, Sources and Documents.
+  if (id && LEGACY_SECTIONS[id]) return <Navigate to={`${LEGACY_SECTIONS[id]}${search}`} replace />
+
   const section = dataSection(id)
-  const entityId = section ? null : id ?? null
-  // Publishers, Documents and a publisher's page are for approved accounts.
-  if ((section && DATA_SECTIONS.find(s => s.id === section)!.preview && !approved) || (entityId && !approved)) {
-    return <Navigate to="/data-sources" replace />
-  }
-  return <DataSourcesPage section={section} entityId={entityId} approved={approved} />
+  return <DataSourcesPage section={section} entityId={section ? null : id ?? null} />
 }
 
-function DataSourcesPage({ section, entityId, approved }: { section: DataSection | null; entityId: string | null; approved: boolean }) {
+function DataSourcesPage({ section, entityId }: { section: DataSection | null; entityId: string | null }) {
   usePageHead(DATA_SOURCES_HEAD)
   const openPopup = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
@@ -125,10 +118,10 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
   // The publisher's own logo in the sticky header, where an exam page puts the exam's.
   const entity = useMemo(() => (entityId ? entityById(COWORK_ENTITIES, entityId) : null), [entityId])
 
-  // A publisher's way back leads to the page the reader came from (a
-  // workflow's source step, a search), and up to the Publishers section for
+  // A source's way back leads to the page the reader came from (a
+  // workflow's source step, a search), and up to the Sources section for
   // one who landed here — `hooks/useBack.ts`.
-  const sourceBack = useBack({ to: '/data-sources/publishers', label: 'Publishers' })
+  const sourceBack = useBack({ to: '/data-sources/sources', label: 'Sources' })
   usePageLabel(entity?.name ?? (section ? DATA_SECTIONS.find(s => s.id === section)!.label : undefined))
 
   const backLink = useMemo(
@@ -148,8 +141,6 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
     [entity, sourceBack],
   )
 
-  const sections = DATA_SECTIONS.filter(s => approved || !s.preview)
-
   return (
     <div className="min-h-screen">
       <CoworkTopBar
@@ -160,7 +151,6 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
         entityId={entityId}
         onOpenResource={openResource}
         places={PLACES}
-        catalogue={approved}
       />
 
       <div
@@ -173,20 +163,19 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
           <div className="space-y-5">
             <header className="space-y-3">
               <h1 className="text-2xl font-bold tracking-tight">Data Sources</h1>
-              {/* The sections, always on screen. Each is an address of its own
-                  but the same page, so a switch replaces rather than pushes. */}
+              {/* The three sections as one switch, always on screen. Each is an
+                  address of its own, so a switch is a step Back undoes. */}
               <nav
-                className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0"
+                className="grid max-w-md grid-cols-3 gap-1 rounded-full bg-muted p-1"
                 aria-label="Data Sources sections"
                 data-testid="data-sections"
               >
-                {sections.map(s => (
+                {DATA_SECTIONS.map(s => (
                   <Link
                     key={s.id}
                     to={s.to}
-                    replace
                     aria-current={section === s.id ? 'page' : undefined}
-                    className={cn(inkChip(section === s.id), 'shrink-0')}
+                    className={cn(inkChip(section === s.id), 'w-full px-2', section !== s.id && 'text-foreground/80')}
                     data-testid={`data-section-${s.id}`}
                   >
                     {s.label}
@@ -194,13 +183,12 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
                 ))}
               </nav>
             </header>
-            {section === 'tables' && <TablesSection />}
             {section === 'assumptions' && (
               <div className="max-w-2xl">
                 <AssumptionsShelf onReadSource={name => void openVaultResource(name)} />
               </div>
             )}
-            {section === 'publishers' && <SourcesView />}
+            {section === 'sources' && <SourcesView onOpenResource={openResource} />}
             {section === 'documents' && <ResourcesView onOpenResource={openResource} />}
           </div>
         )}
@@ -208,31 +196,6 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
 
       {/* The one reader. See the note at the top of this file. */}
       <ConceptPopup />
-    </div>
-  )
-}
-
-/** The published tables, a row each: its name and the question it answers. */
-function TablesSection() {
-  return (
-    <div className="max-w-3xl">
-      <ListPanel>
-        {TABLES.map(t => (
-          <ListRow
-            key={t.id}
-            to={toolPath(t)}
-            leading={
-              <LogoTile size="lg" className="bg-muted text-foreground">
-                <Table2 className="h-6 w-6" aria-hidden />
-              </LogoTile>
-            }
-            title={t.name}
-            subtitle={t.answers}
-            subtitleLines={2}
-            data-testid="data-table-row"
-          />
-        ))}
-      </ListPanel>
     </div>
   )
 }

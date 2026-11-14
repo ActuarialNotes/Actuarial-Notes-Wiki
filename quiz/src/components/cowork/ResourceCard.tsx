@@ -10,6 +10,7 @@ import {
   type SourceResource,
 } from '@/lib/coworkSources'
 import { cn } from '@/lib/utils'
+import { ResourceOfferTags } from '@/components/cowork/OfferTags'
 
 /**
  * One document, as a **card**.
@@ -61,6 +62,8 @@ export interface ResourceCardProps {
   cover?: string
   /** Renames the add control ("Add to workflow"), for a surface that takes the document somewhere else. */
   attachLabel?: string
+  /** Show what the document gives — Data, Assumptions — as tags that open it (Data Sources). */
+  offers?: boolean
 }
 
 export function ResourceCard({
@@ -70,6 +73,7 @@ export function ResourceCard({
   onOpen,
   cover,
   attachLabel,
+  offers = false,
 }: ResourceCardProps) {
   const [coverFailed, setCoverFailed] = useState(false)
   const Icon = KIND_ICON[resource.kind] ?? FileText
@@ -117,6 +121,7 @@ export function ResourceCard({
           <p className="text-sm font-semibold leading-snug">{resource.title}</p>
 
           <div className="mt-1.5 flex flex-wrap items-center gap-1">
+            {offers && <ResourceOfferTags resource={resource} />}
             <MetaPill>{resourceKindLabel(resource.kind)}</MetaPill>
             <MetaPill>{formatPublished(resource.published)}</MetaPill>
             {resource.wikiRef && (

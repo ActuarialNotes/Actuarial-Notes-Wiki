@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowLeft, Check, ExternalLink, Plus } from 'lucide-react'
-import { entityById, entityResources, type SourceResource } from '@/lib/coworkSources'
+import { entityById, featuredResources, type SourceResource } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkCovers } from '@/hooks/useCoworkCovers'
@@ -33,12 +34,13 @@ export interface SourcePageProps {
   backLabel?: string
 }
 
-export default function SourcePage({ entityId, onOpenResource, onBack, backLabel = 'Publishers' }: SourcePageProps) {
+export default function SourcePage({ entityId, onOpenResource, onBack, backLabel = 'Sources' }: SourcePageProps) {
   const library = useCoworkLibrary()
   const covers = useCoworkCovers()
   const entity = useMemo(() => entityById(COWORK_ENTITIES, entityId), [entityId])
 
-  const resources = useMemo(() => entityResources(COWORK_RESOURCES, entityId), [entityId])
+  // The documents that give data or figures lead, as they do on the source's row.
+  const resources = useMemo(() => featuredResources(COWORK_RESOURCES, entityId), [entityId])
 
   // The store holds ids only, so the cascade that drops a publisher's documents
   // is handed the catalogue here — see `hooks/useCoworkLibrary.ts`.
@@ -59,7 +61,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
           {backLabel}
         </button>
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
-          That source is no longer in the catalogue.
+          That source is no longer listed.
         </p>
       </div>
     )
@@ -70,6 +72,13 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
   return (
     <div className="space-y-6">
       <header>
+        <nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-1.5 text-sm text-muted-foreground">
+          <Link to="/data-sources/sources" className="font-medium text-foreground/80 hover:text-foreground hover:underline">
+            Sources
+          </Link>
+          <span aria-hidden>›</span>
+          <span className="truncate font-semibold text-foreground">{entity.short}</span>
+        </nav>
         <div className="flex items-start gap-4">
           <EntityLogo entity={entity} size="lg" />
           <div className="min-w-0 flex-1">
@@ -113,7 +122,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
 
       <section>
         <h2 className="mb-3 text-sm font-semibold text-foreground">
-          Resources
+          Documents
           {resources.length > 0 && (
             <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-muted-foreground">
               {resources.length}
@@ -135,6 +144,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack, backLabel
                 inLibrary={library.resourceIds.includes(resource.id)}
                 onToggleLibrary={library.toggleResource}
                 onOpen={onOpenResource}
+                offers
               />
             ))}
           </ResourceCardGrid>

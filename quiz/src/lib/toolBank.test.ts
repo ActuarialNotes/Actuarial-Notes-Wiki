@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import bank from 'virtual:assumption-bank'
 import { ASSUMPTION_KINDS } from './assumptionBank'
 import { bankFigure, bankFigures, decodeRunInput, runTool, toolById } from '@/lib/tools'
-import { figureUses, kindsIn, toBankFigures } from './toolBank'
+import { figureUses, kindsIn, shelfRows, takesFigure, toBankFigures, toolsTakingFigures } from './toolBank'
 
 describe('the bank, installed into the engine', () => {
   it('installs every figure of every set, and no fact or blank', () => {
@@ -47,5 +47,30 @@ describe('kindsIn', () => {
     expect(kinds).toContain('profit-provision')
     expect(kinds).toContain('ulae-factor')
     expect(kinds.indexOf('variable-expense')).toBeLessThan(kinds.indexOf('ulae-factor'))
+  })
+})
+
+describe('the shelf’s filters', () => {
+  const airb = bank.find(s => s.id.startsWith('AIRB'))!
+
+  it('keeps what a filter keeps, folds the rest, and puts blanks last', () => {
+    const all = shelfRows(airb.rows, null)
+    expect(all.folded).toEqual([])
+    const firstBlank = all.shown.findIndex(r => r.raw === '')
+    expect(firstBlank).toBeGreaterThan(0)
+    expect(all.shown.slice(firstBlank).every(r => r.raw === '')).toBe(true)
+    const profit = shelfRows(airb.rows, r => r.kind === 'profit-provision')
+    expect(profit.shown.map(r => r.kind)).toEqual(['profit-provision'])
+    expect(profit.shown.length + profit.folded.length).toBe(airb.rows.length)
+  })
+
+  it('offers the tools that take a figure, and knows which figures each takes', () => {
+    const tools = toolsTakingFigures()
+    const plr = tools.find(t => t.id === 'ratemaking.permissible_loss_ratio')!
+    expect(plr).toBeDefined()
+    const profit = airb.rows.find(r => r.kind === 'profit-provision')!
+    const ulae = airb.rows.find(r => r.kind === 'ulae-factor')!
+    expect(takesFigure(plr, profit)).toBe(true)
+    expect(takesFigure(plr, ulae)).toBe(false)
   })
 })

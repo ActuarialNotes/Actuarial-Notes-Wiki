@@ -107,7 +107,7 @@ An item is ✅ only when all of the following are true:
 | **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 76.9% of files verified, every served question among them (2026-10-25); sweeps run by hand (D19) | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
 | **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` (calculators) and `/data-sources` (tables, Assumptions Bank), and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
-| **Workflows and Data Sources' publishers** (was Cowork, its own mode until 2026-11-14) | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` (`workflowsAccess.ts`) | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
+| **Workflows** (was Cowork, its own mode until 2026-11-14; Data Sources' sources and documents opened to everyone on 2026-11-14) | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` (`workflowsAccess.ts`) | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
 | **Projects**: the PCPA simulator | PCPA candidates (Pro) | ✅ live, 3 briefs, Pro only | — | `pcpa-project.md` |
 | **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |

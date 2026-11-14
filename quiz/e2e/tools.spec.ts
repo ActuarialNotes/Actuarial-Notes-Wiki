@@ -29,8 +29,9 @@ test.describe('tools', () => {
     await page.getByTestId('data-sources-row').click()
     await expect(page).toHaveURL(/\/data-sources$/)
     await expect(page.getByRole('heading', { name: 'Data Sources', exact: true })).toBeVisible()
-    await expect(page.getByTestId('data-table-row')).toHaveCount(4)
-    await page.getByTestId('data-table-row').filter({ hasText: 'Yield Curve' }).click()
+    // A published table is a document: its Data tag opens the table.
+    await page.goto('/data-sources/documents')
+    await page.getByRole('link', { name: 'Open the table: Daily Treasury Par Yield Curve Rates' }).click()
     await expect(page).toHaveURL(/\/data-sources\/yield-curve$/)
     await expect(page.getByTestId('tool-card')).toBeVisible()
 
@@ -38,7 +39,7 @@ test.describe('tools', () => {
     await page.goto('/tools/life-table#input=e30')
     await expect(page).toHaveURL(/\/data-sources\/life-table#input=e30$/)
     await page.goto('/tools/assumptions')
-    await expect(page).toHaveURL(/\/data-sources\/assumptions$/)
+    await expect(page).toHaveURL(/\/data-sources$/)
     await expect(page.getByTestId('assumption-set').first()).toBeVisible()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
@@ -242,11 +243,12 @@ test.describe('tools', () => {
   // into a tool, from the shelf or from the field's own From… menu, and the
   // run saying where it came from.
   test('takes a published figure from the Assumptions Bank into a tool, with its source', async ({ page }) => {
-    await page.goto('/data-sources')
+    await page.goto('/data-sources/sources')
     await page.getByTestId('data-section-assumptions').click()
-    await expect(page).toHaveURL(/\/data-sources\/assumptions$/)
+    await expect(page).toHaveURL(/\/data-sources$/)
     await expect(page.getByTestId('assumption-set').first()).toBeVisible()
-    await page.getByRole('button', { name: 'Profit provision', exact: true }).click()
+    await page.getByRole('button', { name: /^Kind/ }).click()
+    await page.locator('div.absolute.top-full button').filter({ hasText: 'Profit provision' }).click()
     await expect(page.getByTestId('assumption-set')).toHaveCount(1)
     await page.getByRole('button', { name: /^Use Profit provision/ }).click()
     await page.getByRole('link', { name: /Use Profit provision .* as Profit & contingency in Permissible Loss Ratio/ }).click()
@@ -376,7 +378,7 @@ test.describe('tools', () => {
   })
 
   test('shows a document\'s figures on its resource page', async ({ page }) => {
-    await page.goto('/data-sources/assumptions')
+    await page.goto('/data-sources')
     const set = page.getByTestId('assumption-set').filter({ hasText: 'ULAE factors' })
     await set.getByRole('button', { name: 'Read the source' }).click()
     const assumptions = page.getByTestId('resource-assumptions')

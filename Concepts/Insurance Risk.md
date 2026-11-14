@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:74dd3bb1a9c53a58271d9f352c240e9aae8e20c760db41c7cce17b0a7c8ed756
+  content_hash: sha256:5ad9707109c8d76137938e30162f169ac1a57b9374632b1add4daa17963259e8
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Directive 2009/138/EC (Solvency II), consolidated HTML, Art.13(30)-(34) definitions (underwriting, market, credit, operational, liquidity risk); Art.45(1) ORSA; Art.101(3) 99.5% one-year VaR; Art.104(1) risk modules; Art.105(2), (5), (6) non-life premium/reserve and catastrophe, market sub-modules, counterparty default (reinsurance, derivatives, receivables from intermediaries); Art.107(1), (3) operational risk capital requirement, sha256:ad77288b3961fb0425f2e8db221ecc9706975bf72c37d7d3adcf8f0df62f702e — https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0138"
@@ -24,56 +24,52 @@ verification:
 
 **Insurance Risk** is the risk that claims, their timing and the cost of settling them differ from what was expected when the business was priced and reserved. For a P&C insurer it has three parts: **underwriting (premium) risk** on business written or to be written, **reserve risk** on claims already incurred, and **catastrophe risk** from single events that strike many policies at once.
 
-> $$
-> \begin{aligned}
-> \text{Var}(L) &= E\big[\text{Var}(L \mid \theta)\big] \\
-> &\quad + \text{Var}\big(E[L \mid \theta]\big)
-> \end{aligned}
-> $$
+If $\theta$ is the true, unknown set of parameters of the distribution of aggregate loss $L$, the variance of $L$ is
 
-- $L$ is aggregate loss and $\theta$ the true, unknown parameters of its distribution. The first term is **process risk** — randomness given the parameters, which pooling diversifies away ([[Law of Large Numbers]]). The second is **[[Parameter Risk|parameter risk]]** — the chance the parameters are wrong — which does **not** diversify, because it moves every policy the same way. (Credibility theory splits variance the same way, into the [[Expected Value of Process Variance|EPV]] and the [[Variance of Hypothetical Means|VHM]].)
-- **Brehm's components of underwriting risk:** process risk in frequency and severity (an [[Aggregate Loss Model|aggregate loss model]]); pricing risk from mis-estimation and competitive pressure; parameter risk, subdivided into *estimation* (too little data), *projection* (trend and development, often driven by [[Inflation|inflation]]), *event* (a court ruling, a latent exposure, a new cause of loss) and *systematic* (drivers that hit all policies together); and catastrophe risk, where the correlation is physical.
-- **Reserve risk** applies the same analysis to liabilities already on the balance sheet — the distribution of unpaid claims ([[Unpaid Claim Distribution]], [[Stochastic Reserving]]). PACICC has identified inadequate pricing and deficient reserves as the leading causes of insolvency for P&C insurers in Canada.
-- **Analysing it quantitatively** means giving each part a distribution and a [[Risk Measure|risk measure]] — coefficient of variation, VaR, TVaR, PML — and combining it with [[Financial Risk|financial risk]] in the [[Risk Modeling|internal risk model]].
+> $$\text{Var}(L) = E\big[\text{Var}(L \mid \theta)\big] + \text{Var}\big(E[L \mid \theta]\big)$$
 
-> [!example]- Parameter Risk Does Not Diversify {Example}
-> Given the true mean $\theta$, each policy's annual loss has standard deviation $\$3{,}000$ and losses are independent. The mean is estimated at $\$1{,}000$ per policy but is uncertain, with standard deviation $\$50$. Find the coefficient of variation of total losses for $100$ and $10{,}000$ policies.
+- $E[\text{Var}(L \mid \theta)]$ is **process risk**, the randomness given the parameters.
+- $\text{Var}(E[L \mid \theta])$ is **[[Parameter Risk|parameter risk]]**, the chance the parameters are wrong.
+
+Pooling diversifies process risk away ([[Law of Large Numbers]]). Parameter risk does **not** diversify, because it moves every policy the same way. Parameter risk is therefore a larger share of the total for a larger book. Credibility theory splits variance the same way, into the [[Expected Value of Process Variance|EPV]] and the [[Variance of Hypothetical Means|VHM]].
+
+> [!example]- What is the coefficient of variation of total losses for $100$ and for $10{,}000$ policies? {Example}
+> Given the true mean, each policy's annual loss has standard deviation $\$3{,}000$ and losses are independent. The mean is estimated at $\$1{,}000$ per policy but is uncertain, with standard deviation $\$50$.
 >
 > > [!answer]-
-> > For $n$ policies, $\text{Var}(S) = n(3{,}000)^2 + n^2(50)^2$.
-> >
-> > $$
-> > \begin{align*}
-> > n = 100: \quad \text{Var}(S) &= 9.0 \times 10^8 + 2.5 \times 10^7 \\
-> > &= 9.25 \times 10^8 \\
-> > \text{CV} &= \frac{30{,}414}{100{,}000} \\
-> > &= 30.4\% \\[6pt]
-> > n = 10{,}000: \quad \text{Var}(S) &= 9.0 \times 10^{10} + 2.5 \times 10^{11} \\
-> > &= 3.4 \times 10^{11} \\
-> > \text{CV} &= \frac{583{,}095}{10{,}000{,}000} \\
-> > &= 5.83\%
-> > \end{align*}
-> > $$
-> >
-> > Growing the book a hundredfold cuts the process CV from $30\%$ to $3\%$, but the CV can never fall below $50/1{,}000 = 5\%$: at $10{,}000$ policies parameter risk is already $74\%$ of the variance. Volume diversifies process risk, not parameter risk.
+> > - For $n$ policies, total loss $S$ has $\text{Var}(S) = n(3{,}000)^2 + n^2(50)^2$.
+> > - For $n = 100$, $\text{Var}(S) = 9.25 \times 10^8$, so the CV is $30{,}414/100{,}000 = 30.4\%$.
+> > - For $n = 10{,}000$, $\text{Var}(S) = 3.4 \times 10^{11}$, so the CV is $583{,}095/10{,}000{,}000 = 5.83\%$.
+> > - Growing the book a hundredfold cuts the process CV from $30\%$ to $3\%$, but the CV can never fall below $50/1{,}000 = 5\%$.
+> > - At $10{,}000$ policies parameter risk is already $74\%$ of the variance.
 
-> [!example]- Catastrophe Risk: Same Mean, Different Tail {Example}
-> An insurer covers $1{,}000$ homes worth $\$250{,}000$ each. In book A the homes face independent fires, each destroying a home with probability $0.2\%$ a year. In book B there is no fire risk, but a hurricane with annual probability $2\%$ would damage every home by $10\%$. Compare the mean, standard deviation and $99$th percentile of annual loss.
+## Components of underwriting risk
+
+Brehm's components of underwriting risk are:
+
+1. **Process risk** in frequency and severity, modelled with an [[Aggregate Loss Model|aggregate loss model]].
+2. **Pricing risk**, from mis-estimation and competitive pressure.
+3. **Parameter risk**, which is subdivided into:
+   - *estimation* risk, from too little data,
+   - *projection* risk, from trend and development, often driven by [[Inflation|inflation]],
+   - *event* risk, from a court ruling, a latent exposure or a new cause of loss,
+   - *systematic* risk, from drivers that hit all policies together.
+4. **Catastrophe risk**, where the correlation between policies is physical.
+
+## Catastrophe risk
+
+A catastrophe strikes many policies at once, so writing more policies in the same region does not diversify it. Catastrophe risk is managed through exposure limits, reinsurance and [[CAT Bonds|cat bonds]] rather than volume.
+
+> [!example]- How do the mean, standard deviation and $99$th percentile of annual loss compare for these two books? {Example}
+> An insurer covers $1{,}000$ homes worth $\$250{,}000$ each. In book A the homes face independent fires, each destroying a home with probability $0.2\%$ a year. In book B there is no fire risk, but a hurricane with annual probability $2\%$ would damage every home by $10\%$.
 >
 > > [!answer]-
-> > **Book A.** $N \sim \text{Bin}(1{,}000,\ 0.002)$ homes lost.
-> >
-> > $$
-> > \begin{align*}
-> > E[L_A] &= 2 \times \$250{,}000 \\
-> > &= \$500{,}000 \\
-> > \text{SD}(L_A) &= \$250{,}000\sqrt{1{,}000(0.002)(0.998)} \\
-> > &= \$353{,}000
-> > \end{align*}
-> > $$
-> >
-> > $P(N \leq 5) = 0.984$ and $P(N \leq 6) = 0.996$, so the $99$th percentile is $6$ homes, $\$1.5$ million.
-> >
-> > **Book B.** The loss is $\$25$ million with probability $2\%$, else zero: mean $\$500{,}000$, standard deviation $\$25\text{M}\sqrt{0.02 \times 0.98} = \$3.5$ million, and $99$th percentile $\$25$ million.
-> >
-> > Same expected loss; the catastrophe book's 1-in-100 loss is about $17$ times larger, and writing more homes in the same region does not help. That is why catastrophe risk is managed through exposure limits, reinsurance and [[CAT Bonds|cat bonds]] rather than volume.
+> > - In book A the number of homes lost is $N \sim \text{Bin}(1{,}000,\ 0.002)$, so the mean loss is $2 \times \$250{,}000 = \$500{,}000$.
+> > - Its standard deviation is $\$250{,}000\sqrt{1{,}000 \times 0.002 \times 0.998} = \$353{,}000$.
+> > - $P(N \le 5) = 0.984$ and $P(N \le 6) = 0.996$, so book A's $99$th percentile is $6$ homes, $\$1.5$ million.
+> > - Book B loses $\$25$ million with probability $2\%$, else nothing, so its mean is $\$500{,}000$ and its standard deviation $\$25\text{M}\sqrt{0.02 \times 0.98} = \$3.5$ million.
+> > - Book B's $99$th percentile is $\$25$ million, about $17$ times book A's, with the same expected loss.
+
+## Reserve risk
+
+Reserve risk applies the same analysis to liabilities already on the balance sheet, the distribution of unpaid claims ([[Unpaid Claim Distribution]], [[Stochastic Reserving]]). PACICC has identified inadequate pricing and deficient reserves as the leading causes of insolvency for P&C insurers in Canada. Quantified, each part of insurance risk gets a distribution and a [[Risk Measure|risk measure]], such as the coefficient of variation, VaR, TVaR or PML, and is combined with [[Financial Risk|financial risk]] in the [[Risk Modeling|internal risk model]].

@@ -4,97 +4,80 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a44177201a795e7246e04634fae102c3494b5901605dbcfedd8666041b267a9f
+  content_hash: sha256:aec49ba50bcf79e2c496454fbdb74e447fff2e3edb8c0f3c7482c426d0d5f8f8
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Estimator.md
 ---
 
-An **estimator** $\hat\theta$ is a rule — a function of the sample $X_1, \ldots, X_n$ — that produces a value for an unknown parameter $\theta$; being a function of random data, it is itself a [[Random Variable|random variable]], and its quality is judged by the distribution it has *before* the data are seen. The number it produces from a particular sample is the **estimate**.
+An **Estimator** $\hat\theta$ is a rule, a function of the sample $X_1, \ldots, X_n$, that produces a value for an unknown parameter $\theta$. The number it produces from a particular sample is the **estimate**.
 
-> $$\text{bias}_{\hat\theta}(\theta) = E[\hat\theta \mid \theta] - \theta$$
+An estimator is a function of random data, so it is itself a [[Random Variable|random variable]]. Its quality is judged by the distribution it has *before* the data are seen, over repeated samples. The estimates from one sample cannot by themselves show its bias.
 
-> $$\text{MSE}_{\hat\theta}(\theta) = E\big[(\hat\theta - \theta)^2 \mid \theta\big]$$
+The bias of an estimator $\hat\theta$, with the expectation taken at the true value of $\theta$, is
 
-> $$\text{MSE}_{\hat\theta}(\theta) = \text{Var}(\hat\theta \mid \theta) + \big[\text{bias}_{\hat\theta}(\theta)\big]^2$$
+> $$\text{Bias}(\hat\theta) = E[\hat\theta] - \theta$$
 
-- **Properties.** An estimator is [[Unbiasedness|unbiased]] if its bias is zero for every $\theta$, asymptotically unbiased if the bias vanishes as $n \to \infty$, and [[Consistency|consistent]] if $\Pr(|\hat\theta_n - \theta| > \delta) \to 0$ for every $\delta > 0$. Among unbiased estimators, the one with smallest variance is the most [[Efficiency|efficient]]; the [[Cramér-Rao Lower Bound]] is the floor.
-- **MSE trades bias against variance**, so a biased estimator can beat an unbiased one ([[Bias-Variance Tradeoff]]).
-- **Variance of an MLE.** Under regularity conditions the [[Maximum Likelihood Estimation|MLE]] is asymptotically normal with variance $1/I_n(\theta)$, estimated by the inverse of the observed information $-\ell''(\hat\theta)$ ([[Fisher Information]]). That gives the normal [[Confidence Interval|confidence interval]] $\hat\theta \pm z_{1-\alpha/2}\sqrt{\widehat{\text{Var}}(\hat\theta)}$; for a function $g(\hat\theta)$ use the [[Delta Method|delta method]].
-- **Non-normal interval.** Klugman's likelihood-based alternative keeps every $\theta$ with $\ell(\theta) \ge \ell(\hat\theta) - \tfrac{1}{2}\chi^2_{1,\,1-\alpha}$; it need not be symmetric about $\hat\theta$.
+The mean squared error of $\hat\theta$, the expected squared difference between the estimator and the true value, is
 
-> [!example]- Three Estimators of a Maximum Claim {Example}
-> Claim sizes are uniform on $(0, \theta)$. From a sample of $n = 4$, compare by MSE: (a) $2\bar X$, (b) the sample maximum $X_{(4)}$ (the MLE), (c) $\tfrac{5}{4}X_{(4)}$. Use $E[X_{(n)}] = \frac{n\theta}{n+1}$ and $\text{Var}(X_{(n)}) = \frac{n\theta^2}{(n+1)^2(n+2)}$.
+> $$\text{MSE}(\hat\theta) = E\big[(\hat\theta - \theta)^2\big]$$
+
+> $$\text{MSE}(\hat\theta) = \text{Var}(\hat\theta) + \big[\text{Bias}(\hat\theta)\big]^2$$
+
+MSE trades bias against variance, so a biased estimator can have a smaller MSE than an unbiased one ([[Bias-Variance Tradeoff|bias-variance tradeoff]]).
+
+> [!example]- Claim sizes are uniform on $(0, \theta)$, and $n = 4$. Which of $2\bar X$, $X_{(4)}$ and $\tfrac{5}{4}X_{(4)}$ has the smallest MSE? {Example}
+> - For a sample of $n$ from a uniform on $(0, \theta)$, the sample maximum has $E[X_{(n)}] = \frac{n\theta}{n+1}$ and $\text{Var}(X_{(n)}) = \frac{n\theta^2}{(n+1)^2(n+2)}$.
+> - $E[2\bar X] = \theta$, so $2\bar X$ is unbiased. Its MSE is its variance, $4 \cdot \frac{\theta^2}{12 \cdot 4} = 0.0833\,\theta^2$.
+> - The maximum $X_{(4)}$, the MLE, is biased low: its bias is $\tfrac{4}{5}\theta - \theta = -0.2\,\theta$.
+> - Its variance is $\frac{4\theta^2}{25 \cdot 6} = 0.02667\,\theta^2$, so its MSE is $0.02667\,\theta^2 + 0.04\,\theta^2 = 0.0667\,\theta^2$.
+> - $\tfrac{5}{4}X_{(4)}$ is unbiased. Since $\text{Var}(cX) = c^2\,\text{Var}(X)$, its MSE is $\left(\tfrac{5}{4}\right)^2 (0.02667\,\theta^2) = 0.0417\,\theta^2$.
+> - $\tfrac{5}{4}X_{(4)}$ has the smallest MSE, and the biased MLE beats the unbiased $2\bar X$.
+
+## Properties of an estimator
+
+An estimator is [[Unbiasedness|unbiased]] if its bias is zero for every $\theta$, and asymptotically unbiased if its bias goes to zero as $n \to \infty$. Among unbiased estimators, the one with the smallest variance is the most [[Efficiency|efficient]]. The [[Cramér-Rao Lower Bound|Cramér-Rao lower bound]] is the floor on that variance.
+
+An estimator $\hat\theta_n$ from a sample of size $n$ is [[Consistency|consistent]], converging in probability to $\theta$, if, for every $\delta > 0$,
+
+> $$\lim_{n \to \infty} P\big(|\hat\theta_n - \theta| > \delta\big) = 0$$
+
+## Variance of a maximum likelihood estimator
+
+Under regularity conditions, the [[Maximum Likelihood Estimation|maximum likelihood estimator]] is asymptotically normal with variance $1/I(\theta)$, where $I(\theta)$ is the [[Fisher Information|Fisher information]] of the sample. The variance is estimated by the inverse of the observed information,
+
+> $$\widehat{\text{Var}}(\hat\theta) = \frac{1}{-l''(\hat\theta)}$$
+
+- $l(\theta)$ is the log-likelihood, and $l''(\hat\theta)$ its second derivative at the estimate.
+
+The normal [[Confidence Interval|confidence interval]] at level $1 - \alpha$ is
+
+> $$\hat\theta \pm z_{1-\alpha/2}\sqrt{\widehat{\text{Var}}(\hat\theta)}$$
+
+- $z_{1-\alpha/2}$ is the $1 - \alpha/2$ percentile of the standard normal distribution.
+
+For a function $g(\hat\theta)$ of the estimate, the variance comes from the [[Delta Method|delta method]].
+
+> [!example]- What are $\hat\mu$ and an approximate 95% confidence interval for this transition intensity? {Example}
+> A healthy–sick model has a constant intensity $\mu$ from healthy to sick. A study records $d = 45$ transitions in $v = 1{,}500$ years spent healthy.
 >
 > > [!answer]-
-> > (a) $E[2\bar X] = \theta$, so it is unbiased and
-> >
-> > $$
-> > \begin{align*}
-> > \text{MSE} &= 4 \cdot \frac{\theta^2}{12 \cdot 4} \\
-> > &= 0.0833\,\theta^2
-> > \end{align*}
-> > $$
-> >
-> > (b) The maximum is biased low:
-> >
-> > $$
-> > \begin{align*}
-> > \text{bias} &= \tfrac{4}{5}\theta - \theta \\
-> > &= -0.2\,\theta \\
-> > \text{Var} &= \frac{4\theta^2}{25 \cdot 6} \\
-> > &= 0.02667\,\theta^2 \\
-> > \text{MSE} &= 0.02667\,\theta^2 + 0.04\,\theta^2 \\
-> > &= 0.0667\,\theta^2
-> > \end{align*}
-> > $$
-> >
-> > (c) Scaling removes the bias:
-> >
-> > $$
-> > \begin{align*}
-> > \text{MSE} &= \left(\tfrac{5}{4}\right)^2 (0.02667\,\theta^2) \\
-> > &= 0.0417\,\theta^2
-> > \end{align*}
-> > $$
-> >
-> > The biased MLE beats the unbiased $2\bar X$, and the bias-corrected maximum beats both: unbiasedness alone does not decide which estimator is better.
+> > - The log-likelihood is $l(\mu) = d \ln \mu - \mu v$.
+> > - Setting $l'(\mu) = d/\mu - v = 0$ gives $\hat\mu = d/v = 45/1{,}500 = 0.03$.
+> > - The observed information is $-l''(\hat\mu) = d/\hat\mu^2$, so $\widehat{\text{Var}}(\hat\mu) = \hat\mu^2/d = d/v^2$.
+> > - The standard error is $\sqrt{45}/1{,}500 = 0.004472$.
+> > - The interval is $0.03 \pm 1.96(0.004472)$, which is $(0.0212,\ 0.0388)$.
 
-> [!example]- Confidence Interval for a Transition Intensity {Example}
-> In a healthy–sick model with a constant intensity $\mu$ from healthy to sick, a study records $d = 45$ transitions in $v = 1{,}500$ years spent healthy. The log-likelihood is $\ell(\mu) = d \ln \mu - \mu v$. Estimate $\mu$ and give an approximate $95\%$ confidence interval.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\mu &= \frac{d}{v} \\
-> > &= \frac{45}{1{,}500} \\
-> > &= 0.03
-> > \end{align*}
-> > $$
-> >
-> > The observed information is $-\ell''(\hat\mu) = d/\hat\mu^2$, so
-> >
-> > $$
-> > \begin{align*}
-> > \widehat{\text{Var}}(\hat\mu) &= \frac{\hat\mu^2}{d} \\
-> > &= \frac{d}{v^2} \\
-> > \text{SE} &= \frac{\sqrt{45}}{1{,}500} \\
-> > &= 0.004472 \\[4pt]
-> > \text{CI} &= 0.03 \pm 1.96(0.004472) \\
-> > &= (0.0212,\ 0.0388)
-> > \end{align*}
-> > $$
-> >
-> > The data place the annual sickness intensity between about $2.1\%$ and $3.9\%$; a tighter interval needs more transitions, not just more exposure time.
+## Likelihood-based confidence interval
 
-> [!tip]- How it appears on the exam
-> - **ASTAM** (*estimate the variance of the estimators and construct normal and non-normal confidence intervals*): fit a severity or frequency by maximum likelihood, invert the (observed or expected) information for the variance, then build $\hat\theta \pm z\,\text{SE}$; a variant asks for the likelihood-based interval instead.
-> - **ASTAM** also asks for the bias, variance or MSE of a stated estimator — sample mean, sample maximum, an empirical survival probability — where the answer turns on $\text{MSE} = \text{Var} + \text{bias}^2$.
-> - **ALTAM** (*approximate confidence intervals for the estimators in Topic 1(h)*): the MLE of a constant transition intensity $d/v$ from multiple-state or multiple-decrement data, its variance $d/v^2$, and an interval for the intensity or, through the delta method, for a transition probability.
+A non-normal confidence interval at level $1 - \alpha$ keeps every $\theta$ with
 
-> [!warning]- Exam traps
-> - **Squaring the bias into the wrong place.** $\text{MSE} = \text{Var} + \text{bias}^2$; adding the bias unsquared, or subtracting it because it is negative, gives a wrong answer that is often an offered choice.
-> - **Confusing $\text{Var}(X)$ with $\text{Var}(\bar X)$.** The variance of the sample mean divides by $n$; an interval built on $\sigma$ instead of $\sigma/\sqrt n$ is $\sqrt n$ times too wide.
-> - **Dividing by exposure instead of transitions.** For $\hat\mu = d/v$ the variance is $d/v^2$ (equivalently $\hat\mu^2/d$), not $\hat\mu/v^2$ or $\hat\mu^2/v$.
-> - **Equating unbiased with best.** An unbiased estimator with large variance can lose to a biased one on MSE, as the sample maximum shows.
+> $$l(\theta) \ge l(\hat\theta) - \tfrac{1}{2}\chi^2_{1,\,1-\alpha}$$
+
+- $\chi^2_{1,\,1-\alpha}$ is the $1 - \alpha$ percentile of the chi-square distribution with one degree of freedom.
+
+This interval need not be symmetric about $\hat\theta$.
+
+> [!trap] Adding the bias without squaring it
+> $\text{MSE} = \text{Var} + \text{Bias}^2$. Adding the bias unsquared, or subtracting it because it is negative, gives a wrong answer that is often one of the choices. For $X_{(4)}$ above, $0.02667\,\theta^2 - 0.2\,\theta$ is not an MSE at all.

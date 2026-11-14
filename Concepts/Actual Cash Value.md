@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:162eee5cf3f64972c9216a71ba06d29697e7ab004630a357dd92382acdee737b
+  content_hash: sha256:7b364a38261bb2abb58f4fb1d626ff4efdccd1019b7cdeb4775c6096197672c7
   sources:
     - "IRMI Insurance Glossary, 'actual cash value (ACV)' (fetched 2026-10-10), sha256:5f284ad72439afe65429eed3341df2aa74bdea4fe89c9f1835b801646fc5053a — https://www.irmi.com/term/insurance-definitions/actual-cash-value"
     - "NY Supreme Court 2011 NY Slip Op 30852(U) opinion citing McAnarney v. Newark Fire Ins. Co., 247 NY 176 (fetched 2026-10-10), sha256:be29872438be8a9e0d15ad74b62bc2817deb7e99044e1e74a559e006672e7841 — https://www.nycourts.gov/reporter/pdfs/2011/2011_30852.pdf"
@@ -18,64 +18,60 @@ verification:
   log: .verify/Concepts/Actual Cash Value.md
 ---
 
-**Actual Cash Value** (ACV) is the value of property at the time of a loss, the amount that puts the insured back where they were rather than paying for something new. Policies rarely define it, so it is measured in one of three ways depending on the jurisdiction: [[Replacement Cost|replacement cost]] less depreciation, fair market value, or the broad evidence rule, under which every relevant fact is weighed. The Institutes' DISC-IA outline calls it actual cost value.
+**Actual Cash Value** (ACV) is the value of property at the time of a loss, the amount that puts the insured back where they were rather than paying for something new. The Institutes' DISC-IA outline calls it actual cost value. Policies rarely define it, so depending on the jurisdiction it is measured in one of three ways:
 
-> $$\text{ACV} = \text{RC}_{\text{today}} - \text{Depreciation}$$
+1. **[[Replacement Cost|Replacement cost]] less depreciation**, the most common measure.
+2. **Fair market value**, the price a willing buyer would pay a willing seller, neither under pressure to deal.
+3. **The broad evidence rule**, under which every relevant fact is weighed.
 
-> $$\text{ACV} = \text{Fair market value}$$
-
-> $$\text{ACV} = \text{Value weighed on all the evidence}$$
-
-- **Replacement cost less depreciation:** This is the most common measure. Replacement cost is today's price for property of like kind and quality, and depreciation reflects the loss of value from age, wear, physical condition and obsolescence. The calculation on the property itself, with a straight-line estimate and a worked example, is on [[Replacement Cost]].
-- **Fair market value:** This is the price a willing buyer would pay a willing seller, neither under pressure to deal. It suits property that trades in an active market, such as a used car, which is why [[Auto Physical Damage Coverage|auto physical damage]] is settled at the vehicle's ACV. It is hard to use for a building, because a sale price includes the land and reflects location and demand rather than the cost to rebuild.
-- **The broad evidence rule:** Many courts let the adjuster and the trier of fact consider every relevant factor, including replacement cost, depreciation, market value, obsolescence, the property's use and the income it produces, and reach the figure that best measures the insured's actual loss. The rule is usually traced to the New York case *McAnarney v. Newark Fire Insurance Co.* (1928), and it exists because each single test can badly misstate the loss of an old building in a weak market.
-- **Indemnity:** ACV is the measure that comes closest to strict indemnity, which pays the insured what was lost and no more. A replacement cost basis pays more than that whenever property has aged, so policies offer it as an option or a condition, often requiring the property to be rebuilt first.
-- **Where it applies:** The commercial [[Building and Personal Property Coverage Form|BPP]] values property at ACV unless the replacement cost option is chosen, the [[Homeowners Policy|homeowners policy]] settles personal property at ACV unless endorsed, and the [[Personal Auto Policy|personal auto policy]] limits physical damage payments to ACV. The other settlement bases that replace or modify it are on [[Loss Settlement Provisions]].
-- **Coinsurance on an ACV basis:** When the policy values property at ACV, the coinsurance requirement is also measured at ACV, so the measure chosen changes the required limit too ([[Insurance to Value]]).
-
-> [!example]- An Old Building Valued Three Ways {Example}
-> A three-story brick warehouse is 30 years into a 50-year useful life, in a district where demand has collapsed. A building of like kind and quality would cost \$900,000 to build today. A comparable property, land included, recently sold for \$250,000, and the land alone is worth \$100,000. The building's upper floors are unusable for modern storage. Find its ACV under replacement cost less depreciation and under fair market value, and describe how the broad evidence rule would approach it.
+> [!example]- What is this warehouse's ACV under each of the three measures? {Example}
+> A three-story brick warehouse is 30 years into a 50-year useful life, in a district where demand has collapsed. A building of like kind and quality would cost $\$900{,}000$ to build today. A comparable property, land included, recently sold for $\$250{,}000$, and the land alone is worth $\$100{,}000$. The building's upper floors are unusable for modern storage.
 >
 > > [!answer]-
-> > With straight-line depreciation:
-> > $$
-> > \begin{align*}
-> > \text{Depreciation} &= 900{,}000 \times \frac{30}{50} \\
-> > &= 540{,}000 \\
-> > \text{ACV}_{\text{RC}} &= 900{,}000 - 540{,}000 \\
-> > &= 360{,}000
-> > \end{align*}
-> > $$
-> > The market measure values the building alone, so the land is taken out of the sale price.
-> > $$
-> > \begin{align*}
-> > \text{ACV}_{\text{FMV}} &= 250{,}000 - 100{,}000 \\
-> > &= 150{,}000
-> > \end{align*}
-> > $$
-> > The two measures differ by \$210,000. The broad evidence rule uses no formula: the adjuster or court weighs both figures together with the functional obsolescence of the upper floors and the rent the building can earn. Here those facts point toward the lower figure, because a buyer would not pay \$360,000 for a building the market values at \$150,000. A building in a strong market, where the sale price exceeds the depreciated replacement cost, would push the weighing the other way.
+> > - Straight-line depreciation is $900{,}000 \times \frac{30}{50} = \$540{,}000$, so replacement cost less depreciation is $900{,}000 - 540{,}000 = \$360{,}000$.
+> > - The market measure values the building alone, so the land comes out of the sale price, leaving $250{,}000 - 100{,}000 = \$150{,}000$.
+> > - The two measures differ by $\$210{,}000$.
+> > - The broad evidence rule uses no formula. The adjuster or court weighs both figures with the functional obsolescence of the upper floors and the rent the building can earn.
+> > - Here those facts point toward the lower figure, because a buyer would not pay $\$360{,}000$ for a building the market values at $\$150{,}000$.
 
-> [!example]- Depreciating Today's Cost, Not the Price Paid {Example}
-> A restaurant bought a walk-in freezer six years ago for \$20,000. A freezer of like kind and quality costs \$26,000 today, and the useful life is 15 years. The adjuster also deducts an illustrative 10% of replacement cost for obsolescence, because the freezer's refrigerant is being phased out. Find the ACV, and the figure an adjuster would reach by depreciating the purchase price.
+## Replacement cost less depreciation
+
+Replacement cost is today's price for property of like kind and quality, and depreciation reflects the loss of value from age, wear, physical condition and obsolescence. The ACV is
+
+> $$\text{ACV} = \text{RC} - \text{Depreciation}$$
+
+- $\text{RC}$ is the replacement cost today.
+
+With straight-line depreciation over the property's useful life, the depreciation is
+
+> $$\text{Depreciation} = \text{RC} \times \frac{\text{Age}}{\text{Useful life}}$$
+
+An adjuster may also deduct for obsolescence, so an item can lose value faster than its age alone suggests.
+
+> [!example]- What is the freezer's ACV, and what would depreciating its purchase price give? {Example}
+> A restaurant bought a walk-in freezer six years ago for $\$20{,}000$. A freezer of like kind and quality costs $\$26{,}000$ today, and the useful life is 15 years. The adjuster also deducts an illustrative 10% of replacement cost for obsolescence, because the freezer's refrigerant is being phased out.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{ACV} &= 26{,}000\left(1 - \frac{6}{15} - 0.10\right) \\
-> > &= 13{,}000 \\
-> > \text{Price-based} &= 20{,}000\left(1 - \frac{6}{15} - 0.10\right) \\
-> > &= 10{,}000
-> > \end{align*}
-> > $$
-> > The price-based figure understates the loss by \$3,000, because prices have risen 30% since the purchase. ACV starts from what it would cost to replace the property now. Obsolescence is a deduction in its own right, so an item can lose value faster than its age alone suggests.
+> > - Age takes off $\frac{6}{15} = 40\%$ and obsolescence another 10%, leaving 50% of the starting value.
+> > - ACV starts from today's cost: $26{,}000 \times 0.50 = \$13{,}000$.
+> > - Depreciating the price paid gives $20{,}000 \times 0.50 = \$10{,}000$.
+> > - The price-based figure understates the loss by $\$3{,}000$, because prices have risen 30% since the purchase.
 
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** The objective is to determine replacement cost and actual cash value. A question gives an item's replacement cost, age and useful life, or a depreciation percentage, and asks for its ACV and the payment after a deductible.
-> - **Measures of ACV:** A definitional question asks how ACV is measured under the fair market value approach or the broad evidence rule, or which measure suits a given kind of property.
-> - **Combined provisions:** A settlement question can apply a coinsurance clause measured at ACV, or compare the ACV payment with what a replacement cost or other basis would pay ([[Loss Settlement Provisions]]).
+## Fair market value
 
-> [!warning]- Exam traps
-> - **Today's cost:** Depreciation comes off the current replacement cost, not the original purchase price. A question that gives both is testing which one you start from.
-> - **Land in the market price:** A real estate sale price includes the land, which is not destroyed by fire and is not insured. Using the full sale price as a building's ACV overstates it.
-> - **ACV is not book value:** The insured's accounting records show cost less accounting depreciation, which follows tax or accounting schedules rather than the property's real condition. ACV is an economic value and can be far above the book figure.
-> - **Total auto losses:** Auto physical damage pays the lesser of the ACV and the repair cost. An answer that pays a repair estimate above the car's ACV has missed the total-loss rule.
+Fair market value suits property that trades in an active market, such as a used car, which is why [[Auto Physical Damage Coverage|auto physical damage]] is settled at the vehicle's ACV. It is hard to use for a building, because a sale price includes the land, which is not destroyed by fire and is not insured, and it reflects location and demand rather than the cost to rebuild.
+
+## The broad evidence rule
+
+Many courts let the adjuster and the trier of fact consider every relevant factor, including replacement cost, depreciation, market value, obsolescence, the property's use and the income it produces, and reach the figure that best measures the insured's actual loss. The rule is usually traced to the New York case *McAnarney v. Newark Fire Insurance Co.* (1928). It exists because each single test can badly misstate the loss of an old building in a weak market.
+
+## ACV and indemnity
+
+ACV is the measure that comes closest to strict indemnity, which pays the insured what was lost and no more. A replacement cost basis pays more than that whenever property has aged, so policies offer it as an option or a condition, often requiring the property to be rebuilt first.
+
+The commercial [[Building and Personal Property Coverage Form|BPP]] values property at ACV unless the replacement cost option is chosen. The [[Homeowners Policy|homeowners policy]] settles personal property at ACV unless endorsed, and the [[Personal Auto Policy|personal auto policy]] limits physical damage payments to ACV. When the policy values property at ACV, the coinsurance requirement is also measured at ACV ([[Insurance to Value]]). The other settlement bases are on [[Loss Settlement Provisions]].
+
+ACV is not book value. The insured's accounting records show cost less accounting depreciation, which follows tax or accounting schedules rather than the property's real condition.
+
+> [!trap] Depreciating the purchase price
+> Depreciation comes off the current replacement cost, not the original purchase price. A question that gives both is testing which one you start from.

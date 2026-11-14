@@ -2,11 +2,11 @@
 aliases:
   - Parametric Survival
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1224096ccf033b536de3a39f21693e8c76035847e65cc801236106f8e0f2e8d8
+  content_hash: sha256:15daaf789a9eeb69d3f10e8de38433be4339f767b8f48691fdb3dbc7e2136f8e
   sources:
     - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, 2001, author's posted text), §2.2 pp.39-44 (PDF 49-54: force of mortality, tpx = exp(-int mu), uniform, exponential, Weibull, Gompertz-Makeham, infant mortality); §3.2 pp.62-66 (PDF 72-76: UDD tqx = t qx and mu = q/(1-tq), constant force tpx = px^t, complete = curtate + 1/2, no simple model fits a whole life table); §4.1 pp.99-103 (PDF 109-113: term, pure endowment nEx = v^n npx, endowment = term + pure endowment, deferred = nEx A_{x+n}, d ä + A = 1); §4.2 pp.110-111 (PDF 120-121: Abar = (i/delta) A under UDD); §5.1 p.127 (PDF 137: i/i(m) on the term part only, pure endowment independent of m), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
     - "SOA Tables for Exam FAM (2024-10), Standard Ultimate Life Table pp.20-21; Makeham's law formula p.22, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
@@ -18,88 +18,79 @@ verification:
   open_critical: 0
   log: .verify/Concepts/Parametric Survival Model.md
 ---
-**A Parametric Survival Model** specifies the distribution of the [[Future Lifetime Random Variable|future lifetime]] by a formula with a few parameters, usually a law for the [[Hazard Rate|force of mortality]] $\mu_x$, so that every survival probability and moment follows by integration. A [[Life Table|life table]] is the nonparametric alternative, listing $\ell_x$ or $q_x$ at integer ages. The two are linked, because a law generates a table and a table can be fitted by a law.
+
+A **Parametric Survival Model** specifies the distribution of the [[Future Lifetime Random Variable|future lifetime]] $T_x$ by a formula with a few parameters, usually a law for the [[Hazard Rate|force of mortality]] $\mu_x$. Every survival probability and moment then follows by integration. The probability that a life aged $x$ survives $t$ years is
 
 > $${}_tp_x = \exp\left(-\int_0^t \mu_{x+s}\,ds\right)$$
 
-> $$\text{Makeham: } \mu_x = A + Bc^x$$
+- $\mu_{x+s}$ is the force of mortality at age $x + s$.
 
-> $$\text{Makeham: } {}_tp_x = \exp\left(-At - \frac{Bc^x\left(c^t - 1\right)}{\ln c}\right)$$
+The probability that the life dies between ages $x + a$ and $x + b$ is ${}_ap_x - {}_bp_x$. A [[Life Table|life table]] is the nonparametric alternative, listing $\ell_x$ or $q_x$ at integer ages. A law generates a table through $\ell_{x+t} = \ell_x\,{}_tp_x$, and a table can be fitted by a law.
 
-> $$\text{Weibull: } {}_tp_x = \exp\left(-\frac{k\left[(x+t)^{n+1} - x^{n+1}\right]}{n+1}\right)$$
+A law is smooth, needs few parameters and extrapolates to the oldest ages, where data are thin. No simple law fits the whole human [[Mortality|mortality]] curve, with its infant mortality and its accident hump in early adulthood, so tables are used where accuracy at every age matters.
 
-> $$\text{de Moivre: } {}_tp_x = \frac{\omega - x - t}{\omega - x}$$
+## Constant force of mortality
 
-- **The laws:** Gompertz's law is Makeham's with $A = 0$, a force that grows exponentially with age, and Makeham's constant $A$ adds an age-independent risk such as accidents. Weibull's law has $\mu_x = kx^n$. The exponential model has a constant force $\mu$, so ${}_tp_x = e^{-\mu t}$ at every age. De Moivre's law has $\mu_x = 1/(\omega - x)$, so $T_x$ is [[Uniform Continuous Distribution|uniform]] on $(0, \omega - x)$.
-- **Moments:** Under a constant force, $\mathring{e}_x = 1/\mu$ and $\text{Var}(T_x) = 1/\mu^2$, as for any [[Exponential Distribution|exponential distribution]]. Under de Moivre's law, $\mathring{e}_x = (\omega - x)/2$ and $\text{Var}(T_x) = (\omega - x)^2/12$. Gompertz and Makeham moments are found numerically or from a table.
-- **From law to table:** A law generates a table through $\ell_{x+t} = \ell_x\,{}_tp_x$. The Standard Ultimate Life Table (SULT) used on FAM is Makeham's law with $A = 0.00022$, $B = 2.7 \times 10^{-6}$ and $c = 1.124$, tabulated from a radix at age 20. A table gives values only at integer ages and needs a [[Fractional Age Assumption|fractional age assumption]] between them, while a law gives ${}_tp_x$ at every age directly.
-- **Strengths and limits:** A law is smooth, needs few parameters and extrapolates to the oldest ages, where data are thin. No simple law fits the whole human [[Mortality|mortality]] curve, with its infant mortality and its accident hump in early adulthood, so tables are used where accuracy at every age matters.
+The exponential model has a constant force $\mu$ at every age, so the survival probability is
 
-> [!example]- The SULT as a Table Generated by Makeham's Law {Example}
-> Under the SULT, find ${}_{10}p_{65}$ and ${}_{20}p_{65}$ from Makeham's law and use them to find ${}_{10|10}q_{65}$. Check the answer against the table values $\ell_{65} = 94{,}579.7$, $\ell_{75} = 85{,}203.5$ and $\ell_{85} = 61{,}184.9$.
+> $${}_tp_x = e^{-\mu t}$$
+
+The survival probability does not depend on $x$. $T_x$ has an [[Exponential Distribution|exponential distribution]] with $\mathring{e}_x = 1/\mu$ and $\text{Var}(T_x) = 1/\mu^2$.
+
+## De Moivre's law
+
+De Moivre's law has $\mu_x = 1/(\omega - x)$ for $x < \omega$, so the survival probability is
+
+> $${}_tp_x = \frac{\omega - x - t}{\omega - x}$$
+
+- $\omega$ is the limiting age.
+
+$T_x$ is [[Uniform Continuous Distribution|uniform]] on $(0, \omega - x)$, so $\mathring{e}_x = (\omega - x)/2$ and $\text{Var}(T_x) = (\omega - x)^2/12$.
+
+> [!example]- For a life aged 40, how do de Moivre's law with $\omega = 100$ and a constant force $\mu = 1/30$ compare? {Example}
+> - Under de Moivre's law $T_{40}$ is uniform on $(0, 60)$, so $\mathring{e}_{40} = 60/2 = 30$.
+> - Under the constant force $T_{40}$ is exponential, so $\mathring{e}_{40} = 1/\mu = 30$.
+> - The survival probabilities to age 70 are ${}_{30}p_{40} = 30/60 = 0.5$ under de Moivre's law and $e^{-1} = 0.3679$ under the constant force.
+> - The variances are $60^2/12 = 300$ under de Moivre's law and $30^2 = 900$ under the constant force.
+> - The means agree, but the exponential model kills more lives early and lets some live without limit, so its variance is three times as large.
+
+## Gompertz's and Makeham's laws
+
+Makeham's law gives the force of mortality as
+
+> $$\mu_x = A + Bc^x$$
+
+- $A$ is an age-independent risk, such as accidents.
+- $Bc^x$ is a risk that grows exponentially with age.
+
+Gompertz's law is Makeham's with $A = 0$. Integrating Makeham's force gives the survival probability
+
+> $${}_tp_x = \exp\left(-At - \frac{Bc^x\left(c^t - 1\right)}{\ln c}\right)$$
+
+> [!example]- Mortality follows Gompertz's law with $\mu_{50} = 0.003$ and $\mu_{60} = 0.009$. What are $c$ and ${}_{10}p_{60}$? {Example}
+> - Dividing the two forces gives $c^{10} = 3$, so $c = 3^{0.1} = 1.116123$ and $\ln c = 0.109861$.
+> - With $A = 0$ and $Bc^{60} = \mu_{60}$, the survival probability is ${}_{10}p_{60} = \exp\left(-\mu_{60}(c^{10} - 1)/\ln c\right)$.
+> - The exponent is $0.009(3 - 1)/0.109861 = 0.163843$.
+> - ${}_{10}p_{60} = e^{-0.163843} = 0.84888$. $B$ is never needed.
+
+## The Standard Ultimate Life Table
+
+The Standard Ultimate Life Table (SULT) used on FAM is Makeham's law with $A = 0.00022$, $B = 2.7 \times 10^{-6}$ and $c = 1.124$, tabulated from a radix at age 20. Its $\ell_x$ values give survival probabilities ${}_tp_x = \ell_{x+t}/\ell_x$ at integer ages. Between integer ages a table needs a [[Fractional Age Assumption|fractional age assumption]], while the law gives ${}_tp_x$ at every age directly.
+
+> [!example]- Under the SULT, what is ${}_{10|10}q_{65}$ from Makeham's law, and does the table agree? {Example}
+> The table gives $\ell_{65} = 94{,}579.7$, $\ell_{75} = 85{,}203.5$ and $\ell_{85} = 61{,}184.9$.
 >
 > > [!answer]-
-> > Here $Bc^{65} = 0.00538485$ and $\ln c = 0.116894$.
-> > $$
-> > \begin{align*}
-> > \int_0^{10}\mu_{65+s}\,ds &= 0.00022(10) + \frac{0.00538485(1.124^{10} - 1)}{0.116894} \\
-> > &= 0.0022 + 0.102201 \\
-> > &= 0.104401 \\
-> > {}_{10}p_{65} &= e^{-0.104401} \\
-> > &= 0.90086 \\
-> > \int_0^{20}\mu_{65+s}\,ds &= 0.0044 + \frac{0.00538485(1.124^{20} - 1)}{0.116894} \\
-> > &= 0.0044 + 0.431142 \\
-> > &= 0.435542 \\
-> > {}_{20}p_{65} &= e^{-0.435542} \\
-> > &= 0.64691
-> > \end{align*}
-> > $$
-> > So ${}_{10|10}q_{65} = 0.90086 - 0.64691 = 0.25395$. The table gives $(85{,}203.5 - 61{,}184.9)/94{,}579.7 = 0.25395$, the same value, because the table was generated from the law.
+> > - At age 65, $Bc^{65} = 0.00538485$ and $\ln c = 0.116894$.
+> > - Over 10 years the integral of the force is $0.0022 + 0.00538485(1.124^{10} - 1)/0.116894 = 0.104401$, so ${}_{10}p_{65} = e^{-0.104401} = 0.90086$.
+> > - Over 20 years it is $0.0044 + 0.00538485(1.124^{20} - 1)/0.116894 = 0.435543$, so ${}_{20}p_{65} = e^{-0.435543} = 0.64691$.
+> > - So ${}_{10|10}q_{65} = 0.90086 - 0.64691 = 0.25395$.
+> > - The table gives $(85{,}203.5 - 61{,}184.9)/94{,}579.7 = 0.25395$, the same value, because the table was generated from the law.
 
-> [!example]- Two Models with the Same Expectation of Life {Example}
-> For a life aged 40, compare de Moivre's law with $\omega = 100$ and a constant force $\mu = 1/30$. Find $\mathring{e}_{40}$, ${}_{30}p_{40}$ and $\text{Var}(T_{40})$ under each.
->
-> > [!answer]-
-> > Under de Moivre's law $T_{40}$ is uniform on $(0, 60)$, and under the constant force it is exponential with mean 30.
-> > $$
-> > \begin{align*}
-> > \text{de Moivre: } \mathring{e}_{40} &= 60/2 \\
-> > &= 30 \\
-> > {}_{30}p_{40} &= 30/60 \\
-> > &= 0.5 \\
-> > \text{Var}(T_{40}) &= 60^2/12 \\
-> > &= 300 \\
-> > \text{Exponential: } \mathring{e}_{40} &= 1/\mu \\
-> > &= 30 \\
-> > {}_{30}p_{40} &= e^{-1} \\
-> > &= 0.3679 \\
-> > \text{Var}(T_{40}) &= 30^2 \\
-> > &= 900
-> > \end{align*}
-> > $$
-> > The means agree, but the exponential model kills more lives early and lets some live without limit, so its variance is three times as large. Its force is also flat, while de Moivre's force rises from $1/60$ at age 40 to $1/40$ at age 60.
+## Weibull's law
 
-> [!example]- Fitting Gompertz's Law to Two Forces {Example}
-> Mortality follows Gompertz's law, $\mu_x = Bc^x$, with $\mu_{50} = 0.003$ and $\mu_{60} = 0.009$. Find $c$ and ${}_{10}p_{60}$.
->
-> > [!answer]-
-> > Dividing the two forces gives $c^{10} = 3$, so $c = 3^{0.1} = 1.116123$ and $\ln c = 0.109861$. The Gompertz survival probability is ${}_tp_x = \exp\left(-\mu_x(c^t - 1)/\ln c\right)$.
-> > $$
-> > \begin{align*}
-> > {}_{10}p_{60} &= \exp\left(-\frac{0.009(3 - 1)}{0.109861}\right) \\
-> > &= e^{-0.163843} \\
-> > &= 0.84888
-> > \end{align*}
-> > $$
-> > $B$ is never needed, because $Bc^{60}$ is the given force $\mu_{60}$.
+Weibull's law has $\mu_x = kx^n$, so the survival probability is
 
-> [!tip]- How it appears on the exam
-> - **FAM** gives a law (constant force, de Moivre, Gompertz, Makeham or Weibull) with its parameters and asks for ${}_tp_x$, ${}_tq_x$, $\mu_x$, $\mathring{e}_x$ or $\text{Var}(T_x)$ at a stated age.
-> - **Relationship to tables:** A question can give a few table values and ask which law produced them, or ask for a parameter from two forces or two survival probabilities, as in the Gompertz example.
-> - **SULT questions:** The SULT is itself Makeham's law, so a question can ask for a fractional-age probability directly from the law where a table alone would need UDD or a constant force.
-
-> [!warning]- Exam traps
-> - **Age in the Makeham term:** The factor is $Bc^x$ at the current age $x$, not $Bc^0$ or $Bc^t$. Using $B$ alone treats the life as a newborn.
-> - **Dividing by $\ln c$:** The integral of $Bc^{x+s}$ over $(0, t)$ is $Bc^x(c^t - 1)/\ln c$. Forgetting the $\ln c$ understates the integral by a factor of about 8.6 for the SULT.
-> - **De Moivre at age $x$:** $T_x$ is uniform on $(0, \omega - x)$, not on $(0, \omega)$. Using $\omega$ for a life aged $x$ overstates $\mathring{e}_x$ by $x/2$.
-> - **Constant force and age:** Under a constant force, ${}_tp_x$ does not depend on $x$. The age given with a constant force plays no part in the answer, and adjusting for it is an error.
+> $${}_tp_x = \exp\left(-\frac{k\left[(x+t)^{n+1} - x^{n+1}\right]}{n+1}\right)$$
+> [!trap] Using $B$ in place of $Bc^x$
+> The age-dependent factor in ${}_tp_x$ is $Bc^x$ at the current age $x$, not $B$. Using $B$ alone treats the life as a newborn. The integral also divides by $\ln c$, and leaving it out understates the integral by a factor of about 8.6 for the SULT.

@@ -179,7 +179,7 @@ export function WorkflowAddMenu({
     case 'root':
       body = (
         <>
-          <NavRow icon={Library} title="Source" subtitle="A resource from Sources, and the tables it publishes" onClick={() => go({ id: 'sources' })} testId="workflow-add-sources" />
+          <NavRow icon={Library} title="Source" subtitle="A document from Data Sources, and the tables it publishes" onClick={() => go({ id: 'sources' })} testId="workflow-add-sources" />
           <NavRow icon={Database} title="Data" subtitle="Published tables, or your own" onClick={() => go({ id: 'data' })} testId="workflow-add-data" />
           <NavRow icon={Calculator} title="Calculation" subtitle={`${TOOLS.length - dataTools.length} tools in ${calcAreas.length} areas`} onClick={() => go({ id: 'calc' })} testId="workflow-add-calc" />
           <NavRow icon={BookOpen} title="Concept" subtitle="The method or idea a step rests on" onClick={() => go({ id: 'concepts' })} testId="workflow-add-concepts" />

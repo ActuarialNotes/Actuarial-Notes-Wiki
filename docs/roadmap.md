@@ -106,8 +106,8 @@ An item is ✅ only when all of the following are true:
 | **Content vault**: 84 exam pages (15 CAS, 40 SOA, 29 CIA), 1,392 concepts, 806 resources, 3,932 questions (2026-10-25) | Candidates and practitioners | ✅ live. 7 exams ready, 10 beta, 67 in development | `examStatus.ts` | §4.3; `content-plan.md` |
 | **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 76.9% of files verified, every served question among them (2026-10-25); sweeps run by hand (D19) | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
-| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
-| **Cowork**: Sources and Workflows | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
+| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` (calculators) and `/data-sources` (tables, Assumptions Bank), and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
+| **Workflows and Data Sources' publishers** (was Cowork, its own mode until 2026-11-14) | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` (`workflowsAccess.ts`) | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
 | **Projects**: the PCPA simulator | PCPA candidates (Pro) | ✅ live, 3 briefs, Pro only | — | `pcpa-project.md` |
 | **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
@@ -891,7 +891,7 @@ A standing rule: **the app calls no model and holds no key** (see the decision l
 | A4 | Cowork: who can see it | 🅿️ one account | — | Waits on D1. After Preview, Cowork is planned to be Pro-only (D13). |
 | A5 | An in-app Actuarial Agent | 🅿️ | Parked | Phase A was delivered *outside* the app, by the connector. Phases B–D (the ontology layer, an eval harness, task assistants) wait on D2. |
 | A6 | Doc hygiene in the AI plans | 🟡 | Next | §16's "not built … all of V2" line is fixed (2026-10-17). Still to fix: §11 says "tools mode". The datasets are bundled into `engine.js`, not under `ai/datasets/`. Workflows overtook Phase 4's "Analyses". |
-| A9 | The Assumptions Bank | 🟡 Phases 0–1 built 2026-11-08 | Next | `assumptions-bank.md` §5.1–5.2. Phase 0: `Assumptions/` with three sets re-read off OSFI, GISA and the AIRB (each figure checked against its document's text by `assumption_lint.py --against`), the lint in CI, VERIFY over the folder, `lib/assumptionBank.ts`, and Cowork's rows derived from the bank. Phase 1: the bank installed into the tools engine; bank fields take `{assumption: id}` and the run records the source, verdict and edition; *From the Assumptions Bank* in field menus; the shelf at `/tools/assumptions` and the resource page's card. Waiting: the AMF and FSRA documents (both sites refuse automated reads — supply the files). Next: Phase 2, the connector (install from the export, `search_assumptions`, `get_assumption`, `data.assumption`). D-AB1–D-AB5 settled. |
+| A9 | The Assumptions Bank | 🟡 Phases 0–1 built 2026-11-08 | Next | `assumptions-bank.md` §5.1–5.2. Phase 0: `Assumptions/` with three sets re-read off OSFI, GISA and the AIRB (each figure checked against its document's text by `assumption_lint.py --against`), the lint in CI, VERIFY over the folder, `lib/assumptionBank.ts`, and Cowork's rows derived from the bank. Phase 1: the bank installed into the tools engine; bank fields take `{assumption: id}` and the run records the source, verdict and edition; *From the Assumptions Bank* in field menus; the shelf (now `/data-sources/assumptions`) and the resource page's card. Waiting: the AMF and FSRA documents (both sites refuse automated reads — supply the files). Next: Phase 2, the connector (install from the export, `search_assumptions`, `get_assumption`, `data.assumption`). D-AB1–D-AB5 settled. |
 
 ### 4.6 G: Growth, engagement and money
 
@@ -964,7 +964,7 @@ Where a default is given, sessions build with it until the decision is made.
 
 | ID | Decision | Source | Blocks | Default meanwhile |
 |---|---|---|---|---|
-| D1 | Who beyond the one approved account sees **Cowork** | `appMode.ts` | A4 | Approved accounts only |
+| D1 | Who beyond the one approved account sees **Workflows and the publishers** (was Cowork) | `workflowsAccess.ts` | A4 | Approved accounts only |
 | D2 | Is an **in-app agent** still wanted, given that the app calls no model? If yes: student or practitioner first, in-app or separate, and how it's priced | agent plan §12 | A5 | No in-app agent; the connector is the agent surface |
 | D3 | **Dataset licence terms** for the SOA tables, the CAS triangles, and the Bank of Canada data | tools §14 #6 | A2 datasets | Leave them out |
 | D4 | Tools access and pricing; HTTP API keys; open-sourcing the engine | tools §14 #2–8 | A2 HTTP | Free; no HTTP endpoint |

@@ -153,7 +153,7 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
   return (
     <div className="min-h-screen">
       <CoworkTopBar
-        placeholder={approved ? 'Search tables, publishers and documents' : 'Search data sources'}
+        placeholder="Search data sources"
         pageTitle={entity?.name ?? null}
         pageIcon={entity ? <EntityLogo entity={entity} size="md" /> : undefined}
         backLink={backLink}
@@ -196,7 +196,7 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
             </header>
             {section === 'tables' && <TablesSection />}
             {section === 'assumptions' && (
-              <div className="mx-auto max-w-2xl">
+              <div className="max-w-2xl">
                 <AssumptionsShelf onReadSource={name => void openVaultResource(name)} />
               </div>
             )}
@@ -215,7 +215,7 @@ function DataSourcesPage({ section, entityId, approved }: { section: DataSection
 /** The published tables, a row each: its name and the question it answers. */
 function TablesSection() {
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="max-w-3xl">
       <ListPanel>
         {TABLES.map(t => (
           <ListRow

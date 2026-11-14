@@ -35,9 +35,9 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
 /**
  * The **Documents** section of Data Sources (`/data-sources/documents`):
  * everything the publishers publish, as document cards
- * (`components/cowork/ResourceCard.tsx`), newest first. Its neighbour is the
- * **Publishers** section (`SourcesView.tsx`); the page's section chips lead
- * between them.
+ * (`components/cowork/ResourceCard.tsx`), newest first, each tagged with what
+ * it gives (Data opens its table, Assumptions its figures). A published table
+ * is one of them. Its neighbour is the **Sources** section (`SourcesView.tsx`).
  *
  * The filters are the Study Guides tab's Resources page's — **Exam**,
  * **Publisher** and **Year**, OR within one and AND across them, each option
@@ -49,7 +49,7 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
  * The study page's Vintage filter is an edition of one exam's syllabus, so it
  * has nothing to say about a publisher's documents and isn't offered.
  *
- * **My Library** leads the row, as it does on Publishers: here it is the
+ * **My Library** leads the row, as it does on Sources: here it is the
  * resources the reader has taken.
  */
 export default function ResourcesView({ onOpenResource }: { onOpenResource: (resource: SourceResource) => void }) {
@@ -172,6 +172,7 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
               inLibrary={library.resourceIds.includes(resource.id)}
               onToggleLibrary={library.toggleResource}
               onOpen={onOpenResource}
+              offers
             />
           ))}
         </ResourceCardGrid>

@@ -6,30 +6,33 @@ sidebar. What it held lives in two places in the main navigation —
 
 - **Workflows** (`/workflows`, `docs/workflows.md`) — a sidebar row with **Tools** and
   **Data Sources** under it: a workflow is built from calculations and published data.
-- **Data Sources** (`/data-sources`, `pages/DataSources/`) — the published data a
-  calculation reads from, as four sections: **Tables** (the Data Sources tools — life
-  tables, price indexes, yield curves, insurer filings), the **Assumptions Bank**
-  (`docs/assumptions-bank.md`), **Publishers** (what Cowork called Sources) and
-  **Documents** (what it called Resources).
+- **Data Sources** (`/data-sources`, `pages/DataSources/`) — the published material a
+  calculation reads from, as one chain in three sections: **Assumptions** (the Assumptions
+  Bank, `docs/assumptions-bank.md`), **Sources** (the publishers) and **Documents** (what
+  they publish). A source publishes documents; a document gives its text, **data** (a table
+  the app reads — the Data Sources tools: life tables, price indexes, yield curves, insurer
+  filings) or **assumptions** (figures in the bank). Until 2026-11-14 the tables were a
+  fourth section, *Tables*; they are documents now, each under its publisher
+  (`SourceResource.tool`).
 
 The code keeps the `cowork*` names (`lib/coworkSources.ts`, `data/coworkSources.ts`,
 `components/cowork/`, `useCoworkLibrary`, the `cowork-sources` skill): no reader sees them, and
 renaming them would only churn the tests and the stored library. The word *Cowork* is on no
 screen.
 
-**Who sees what.** Workflows, Publishers and Documents are in **Preview**, gated by
-`COWORK_ENABLED` (and `TOOLS_ENABLED`) in `quiz/src/lib/featureFlags.ts` and open **only to
-approved accounts** — `PREVIEW_APPROVED_EMAILS` in `quiz/src/lib/workflowsAccess.ts` (today,
-`jordan@actuarialnotes.com`), read through `hooks/useWorkflowsAccess.ts`. Tables and the
-Assumptions Bank are open to everyone. So:
+**Who sees what.** Workflows is in **Preview**, gated by `COWORK_ENABLED` (and
+`TOOLS_ENABLED`) in `quiz/src/lib/featureFlags.ts` and open **only to approved accounts** —
+`PREVIEW_APPROVED_EMAILS` in `quiz/src/lib/workflowsAccess.ts`, read through
+`hooks/useWorkflowsAccess.ts`. Data Sources — all three sections and every source's page — is
+open to everyone (since 2026-11-14; the publishers and documents were Preview before). So:
 
 | Reader | Sidebar | `/data-sources` | `/workflows` |
 | --- | --- | --- | --- |
-| approved | Workflows, with Tools and Data Sources under it | all four sections | the library |
-| anyone else | Tools and Data Sources as rows of their own | Tables, Assumptions Bank; a publisher's or Publishers/Documents' address leads back to Tables | redirects to the dashboard |
+| approved | Workflows, with Tools and Data Sources under it | all three sections | the library |
+| anyone else | Tools and Data Sources as rows of their own | all three sections | redirects to the dashboard |
 
 The e2e suite's build sets `VITE_COWORK_PREVIEW=on` (playwright.config.ts) →
-`COWORK_OPEN_TO_ALL`, so Workflows and the publishers are tested signed out. No deployed build
+`COWORK_OPEN_TO_ALL`, so Workflows is tested signed out. No deployed build
 sets it. The approval list is a UI gate, not a security boundary — the catalogue is bundled
 seed data and its stores are localStorage, so there is no server data behind it to guard.
 
@@ -38,12 +41,11 @@ seed data and its stores are localStorage, so there is no server data behind it 
 ## 1. Addresses
 
 ```
-/data-sources               Tables
-/data-sources/assumptions   the Assumptions Bank
-/data-sources/publishers    Publishers                       (Preview)
-/data-sources/documents     Documents                        (Preview)
+/data-sources               Assumptions (the Assumptions Bank; ?kind= ?tool= ?set=)
+/data-sources/sources       Sources
+/data-sources/documents     Documents
 /data-sources/<table>       one table — a Data Sources tool's page (ToolPage, pages/Tools.tsx)
-/data-sources/<publisher>   one publisher's page             (Preview)
+/data-sources/<publisher>   one source's page
 /workflows                  the Workflows library            (Preview)
 /workflows/<id>             one workflow's board             (Preview)
 ```
@@ -52,14 +54,24 @@ The sections are `lib/dataSources.ts`; a section name, a table slug and a publis
 one segment, and `lib/dataSources.test.ts` holds them apart. A tool's page address is
 `toolPath(spec)` (`lib/tools/registry.ts`), `/data-sources/<slug>` for area `data` and
 `/tools/<slug>` otherwise; `runPath(slug, input, area)` is the same for a run, and is what the
-MCP connector's `app_url` uses. Every old address redirects: `/cowork` → Publishers,
+MCP connector's `app_url` uses. Every old address redirects: `/data-sources/assumptions` →
+`/data-sources` (its query kept), `/data-sources/publishers` → Sources and `/data-sources/tables`
+→ Documents (`LEGACY_SECTIONS`), `/cowork` → Sources,
 `/cowork/resources` → Documents, `/cowork/sources/<id>` → `/data-sources/<id>`,
 `/cowork/workflows`, `/cowork/deliverables` and `/tools/workflow` → `/workflows`,
 `/tools/<table>` → `/data-sources/<table>` with its `#input=` run kept, and `/tools/assumptions`
-→ `/data-sources/assumptions` (`CoworkRedirect` in `App.tsx`, the top of `pages/Tools.tsx`).
+→ `/data-sources` (`CoworkRedirect` in `App.tsx`, the top of `pages/Tools.tsx`).
 
-The section chips at the top of the page are links that **replace** the history entry: four
-views of one page, so Back leaves Data Sources rather than walking back through them.
+The three sections are one switch at the top of the page, and each switch is a step in the
+history, so Back undoes it. On the desk (`lib/viewTransition.ts`) the three lie together at
+depth 0 and a source's page is a sheet over them.
+
+**Every list says what a document gives.** A document carries **Data** and **Assumptions**
+tags (`resourceOffers`, `components/cowork/OfferTags.tsx`): Data opens its table
+(`resourceTablePath`, the tool's page pointed at this publisher's file through the run
+fragment), Assumptions opens the Assumptions section narrowed to the figures read from it
+(`assumptionSetPath`, `?set=`). A source's row carries the same tags for what any of its
+documents gives (`entityOffers`), as plain tags.
 
 ---
 
@@ -117,13 +129,23 @@ never constructed**, and it is the year *this body* came into being, not the yea
 business began — Intact Financial Corporation dates from 2009 though the Halifax Insurance
 Company it grew out of dates from 1809. No record worth citing, no pill.
 
-### Two sections, Publishers and Documents
+### Sources and Documents
 
-Publishers and what they publish are two different questions, each answered by a different
-card, so they are **two sections** of Data Sources: **Publishers**
-(`/data-sources/publishers`, `pages/DataSources/SourcesView.tsx`) and **Documents**
-(`/data-sources/documents`, `pages/DataSources/ResourcesView.tsx`). The page's section chips
-lead between them (they used to be two shelves of their own, each with a row to the other).
+**Sources** (`/data-sources/sources`, `pages/DataSources/SourcesView.tsx`) is one list of
+publishers, each row tagged with what its documents give. A row **opens in place** on its
+first three documents — the ones that give data or figures first, then the newest
+(`featuredResources`) — each opening in the reader, its tags opening what they name, and a
+last line to the source's own page for the rest. So a document is one tap from the list, and
+the source's page is for following it and reading its whole catalogue. Its one filter is the
+kind of publisher, beside My Library. **Documents** (`/data-sources/documents`,
+`pages/DataSources/ResourcesView.tsx`) is every document as a card, tagged the same way.
+
+**Assumptions** (`/data-sources`, `components/assumptions/AssumptionsShelf.tsx`) heads every
+set with where it sits in the chain — *Source › Document*, each a link — and has one row of
+filters: the **Kind** of figure and the **Tool** a figure goes into (`toolsTakingFigures`,
+`takesFigure` in `lib/toolBank.ts`). Tapping a figure opens its sheet: the value, its basis
+and date, Source › Document › where it is printed, what it means in the set's own words, and
+every tool it goes into.
 
 **Documents filters the way the Study Guides' Resources page does**: Exam, Publisher and Year, OR
 within one and AND across them, each option counting what choosing it would leave, riding the
@@ -135,7 +157,7 @@ Exam is a dropdown rather than the study page's logo strip, and Vintage (an edit
 exam's syllabus) isn't offered.
 
 **My Library leads each shelf's filter row.** It is a filter, not a section: it narrows the shelf
-to publishers the reader follows (Publishers) or documents they have taken (Documents). It used
+to publishers the reader follows (Sources) or documents they have taken (Documents). It used
 to be a block stacked above the shelf, which made what a reader *had* a different place from
 what they *could have*, pushed the filters below the fold, and showed the same card in both
 its states on one screen. An empty array is a library with nothing in it and matches nothing;
@@ -151,8 +173,7 @@ marks the matched run), so searching here feels like searching anywhere else in 
 
 It behaves like the wiki's too: a query is **a question with answers**, not a filter that
 quietly thins the page behind the bar. Typing opens a list and picking a row goes to the
-thing — a table or the Assumptions Bank to its page (`places`, listed first, and for a reader
-without the Preview the only answers), a publisher to their page, a document into `ConceptPopup`. Publishers and documents are listed apart and each matches **on its own account**
+thing — a table or the Assumptions section to its page (`places`, listed first), a publisher to their page, a document into `ConceptPopup`. Publishers and documents are listed apart and each matches **on its own account**
 (`searchSources`): on the shelf a publisher that matched answers with its whole catalogue,
 but in a list of results a document that only matched because its publisher did is a row
 nobody asked for, under the row that opens the page it is already on. On a publisher's page
@@ -310,7 +331,7 @@ quiz/src/components/SearchHighlight.tsx    the shared marked-match run
 quiz/src/components/cowork/           Data Sources' UI (EntityCard, EntityLogo, ResourceCard,
                                       CoworkTopBar — the page's search bar, …)
 quiz/src/components/workflow/         the board, the + menu, a step's and a line's panels
-quiz/src/pages/DataSources/           index (sections, routing) + Publishers / Documents / a publisher's page
+quiz/src/pages/DataSources/           index (sections, routing) + Sources / Documents / a source's page
 quiz/src/pages/WorkflowBuilder.tsx    Workflows: the library (/workflows) and a board (/workflows/:id)
 quiz/e2e/data-sources.spec.ts         the sidebar, Data Sources' sections and the old links' redirects
 quiz/e2e/workflow.spec.ts             Workflows, including a source's table linked into a tool

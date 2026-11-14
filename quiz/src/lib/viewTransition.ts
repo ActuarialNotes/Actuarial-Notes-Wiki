@@ -92,6 +92,9 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/workflows', tab: 4.05, depth: 0, below: 1 },
   { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
   { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
+  // Its three sections lie together at the top; a source's page is a sheet over them.
+  { prefix: '/data-sources/sources', tab: 4.15, depth: 0 },
+  { prefix: '/data-sources/documents', tab: 4.15, depth: 0 },
   // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
   { prefix: '/search', tab: 5, depth: 0 },

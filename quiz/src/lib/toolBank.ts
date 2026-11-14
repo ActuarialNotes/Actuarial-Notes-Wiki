@@ -93,11 +93,28 @@ export function pendingFiguresFor(field: Pick<NumberField, 'bank' | 'unit'>, ban
 /** A set by its id, for a figure's level-2 explanation (its document, its lead). */
 export const assumptionSet = (id: string): AssumptionSet | undefined => sets.find(s => s.id === id)
 
-/** A set's figures in the order the shelf lists them: those with a value first, a blank never leading. */
-export function shelfRows(rows: readonly AssumptionRow[], kind: string | null): { shown: AssumptionRow[]; folded: AssumptionRow[] } {
+/**
+ * A set's rows on the shelf: the figures a filter keeps, entered ones before
+ * blanks, and the rest folded into one line under them. With no filter every
+ * row is shown.
+ */
+export function shelfRows(
+  rows: readonly AssumptionRow[],
+  keep: ((row: AssumptionRow) => boolean) | null,
+): { shown: AssumptionRow[]; folded: AssumptionRow[] } {
   const ordered = [...rows.filter(r => r.raw !== ''), ...rows.filter(r => r.raw === '')]
-  if (!kind) return { shown: ordered, folded: [] }
-  return { shown: ordered.filter(r => r.kind === kind), folded: ordered.filter(r => r.kind !== kind) }
+  if (!keep) return { shown: ordered, folded: [] }
+  return { shown: ordered.filter(keep), folded: ordered.filter(r => !keep(r)) }
+}
+
+/** The tools that take a figure from the bank, in the catalogue's order — the shelf's Tool filter. */
+export function toolsTakingFigures(): ToolSpec[] {
+  return TOOLS.filter(t => t.fields.some(f => f.kind === 'number' && !!f.bank?.length))
+}
+
+/** Whether a tool takes this row's figure. */
+export function takesFigure(tool: Pick<ToolSpec, 'id'>, row: Pick<AssumptionRow, 'id' | 'kind' | 'unit' | 'decimal'>): boolean {
+  return figureUses(row).some(u => u.tool.id === tool.id)
 }
 
 /** The kinds a bank holds figures or rows of, in the vocabulary's order — the shelf's filter. */

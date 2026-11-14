@@ -201,6 +201,18 @@ export interface SourceResource {
    * so a figure on a board is always one somebody read, never one we supplied.
    */
   table?: ResourceTable
+  /**
+   * The Data Sources table that reads this document (`lib/tools/data/`): the
+   * tool's slug, and the input that opens it on this publisher's file. A
+   * document with one is **data** — its card's Data tag opens the table.
+   */
+  tool?: ResourceTool
+}
+
+export interface ResourceTool {
+  slug: string
+  /** Choice values that point the table at this document's file (`{ table: 'nchs-us-life-tables' }`). */
+  input?: Record<string, string>
 }
 
 export interface ResourceTable {
@@ -253,6 +265,41 @@ export function withBankAssumptions(resource: SourceResource, sets: readonly Ass
       }),
     )
   return { ...resource, assumptions }
+}
+
+/**
+ * What a document gives a reader beyond its text: **data** (a table the app
+ * reads, `tool`) and **assumptions** (figures in the Assumptions Bank). The
+ * tags every list of documents and publishers shows, so a reader knows what
+ * is inside before opening it.
+ */
+export interface ResourceOffers {
+  data: boolean
+  assumptions: boolean
+}
+
+export function resourceOffers(resource: Pick<SourceResource, 'tool' | 'assumptions'>): ResourceOffers {
+  return { data: Boolean(resource.tool), assumptions: Boolean(resource.assumptions?.some(a => a.bankId)) }
+}
+
+/** What any of a publisher's documents gives. */
+export function entityOffers(resources: readonly SourceResource[], entityId: string): ResourceOffers {
+  const mine = resources.filter(r => r.entityId === entityId).map(resourceOffers)
+  return { data: mine.some(o => o.data), assumptions: mine.some(o => o.assumptions) }
+}
+
+/**
+ * A publisher's documents in the order its page and its row on Sources list
+ * them: the ones that give data or figures first, then the rest, each run
+ * newest first.
+ */
+export function featuredResources(resources: readonly SourceResource[], entityId: string): SourceResource[] {
+  const mine = sortResourcesByDate(resources.filter(r => r.entityId === entityId))
+  const gives = (r: SourceResource) => {
+    const o = resourceOffers(r)
+    return o.data || o.assumptions
+  }
+  return [...mine.filter(gives), ...mine.filter(r => !gives(r))]
 }
 
 /** The popup-viewer target for a resource: a vault page or its virtual one. */

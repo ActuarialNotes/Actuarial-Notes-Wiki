@@ -206,10 +206,9 @@ export const FACT_CHECK_UI_ENABLED: boolean = true
  *
  * When ON, approved accounts (`PREVIEW_APPROVED_EMAILS` in
  * `lib/workflowsAccess.ts`) get the Workflows row in the sidebar, with Tools
- * and Data Sources under it, the `/workflows` routes, and the Publishers and
- * Documents sections of `/data-sources`. Everyone else sees Tools and Data
- * Sources as plain rows, and the Data Sources page with its tables and the
- * Assumptions Bank alone.
+ * and Data Sources under it, and the `/workflows` routes. Everyone else sees
+ * Tools and Data Sources as plain rows. Data Sources itself (assumptions,
+ * sources, documents) is open to everyone.
  *
  * Gating the flag off hides all of that for everyone; nothing behind it is
  * deleted, and the pure engines (`lib/cowork*.ts`, `lib/workflow*.ts`) and

@@ -8,10 +8,9 @@ A two-part product for people studying for actuarial exams (CAS/SOA):
 
 The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
 Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
-**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: the published
-tables and the Assumptions Bank for everyone; publishers and their documents in Preview).
-Workflows and the publishers are open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
-`lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
+**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: Assumptions,
+Sources and Documents, open to everyone). Workflows is open only to approved accounts
+(`PREVIEW_APPROVED_EMAILS` in `lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
 `docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
 
 Across Study Mode floats the **Tutor** — the reader's own Gem Shop character, in the corner of
@@ -95,7 +94,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: its sections (Tables, Assumptions Bank, Publishers, Documents), a table's page and a publisher's page —
+  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: its sections (Assumptions, Sources, Documents), a table's page and a source's page —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -197,7 +196,7 @@ before touching that area**:
   `lib/tools/bank.ts`. A number field names the kinds it takes (`bank: ['profit-provision']`),
   and its input may be `{ "assumption": "<set>#<row>" }`, which the run reads in and records:
   the judgment's `source`, a working step, the hash, and a warning until fact checked. The card's
-  **From…** menu lists the figures; the shelf is `/data-sources/assumptions`
+  **From…** menu lists the figures; the shelf is `/data-sources`, Data Sources' Assumptions section
   (`components/assumptions/`), with each figure linking into the tools that take it; a resource
   page shows its sets (`ResourceAssumptionsCard`). The MCP tools are Phase 2. Read before adding
   a set or a `bank:` field (and run `npm run tools:bundle` after touching `lib/tools/`).
@@ -1967,12 +1966,10 @@ the knowledge-base export from its own deployment); `quiz/api/_mcp/` and `quiz/a
 
 Until 2026-11-14 this was **Cowork**, a second mode behind a pill beside the wordmark. It is now
 part of the one sidebar: **Workflows** (`/workflows`) with **Tools** (`/tools`) and **Data
-Sources** (`/data-sources`) under it. Workflows, and Data Sources' **Publishers** and
-**Documents**, are in **Preview**, gated by `COWORK_ENABLED` and open only to the approved
-accounts in `PREVIEW_APPROVED_EMAILS` (`lib/workflowsAccess.ts`); anyone else sees Tools and Data
-Sources as rows of their own, Data Sources with its **Tables** (the area-`data` tools: life
-tables, price indexes, yield curves, insurer filings) and the **Assumptions Bank** — both open to
-everyone — and `/workflows` redirects them to the dashboard. The word *Cowork* is on no screen;
+Sources** (`/data-sources`) under it. Workflows is in **Preview**, gated by `COWORK_ENABLED`
+and open only to the approved accounts in `PREVIEW_APPROVED_EMAILS` (`lib/workflowsAccess.ts`);
+anyone else sees Tools and Data Sources as rows of their own, and `/workflows` redirects them to
+the dashboard. Data Sources is open to everyone. The word *Cowork* is on no screen;
 the code keeps its `cowork*` names.
 
 ```
@@ -1988,22 +1985,30 @@ private passenger auto **loss trend benchmarks** first) brings it as the step's 
 onto a calculation's inputs the way an uploaded CSV's columns are, so a coverage's trend links
 straight into Trend Factor.
 
-Data Sources (`pages/DataSources/`) is one page of four sections chosen by chips that replace the
-history entry — **Tables** (`/data-sources`), **Assumptions Bank** (`/data-sources/assumptions`),
-**Publishers** (`/data-sources/publishers`, publisher cards) and **Documents**
-(`/data-sources/documents`, document cards filtered by the Study Guides' Exam / Publisher / Year
-through `lib/resourceFilters.ts` and `coworkFacetItem`), the last two led by **My Library** (a
-filter narrowing the shelf to what the reader follows/has taken, not a section stacked above it).
-A table is a tool's page (`ToolPage` from `pages/Tools.tsx`) at `/data-sources/<slug>`
-(`toolPath`); **a publisher is its own page** (`/data-sources/<id>`), the way an exam's study
+Data Sources (`pages/DataSources/`) is **one chain in three sections** — a *source* publishes
+*documents*, and a document gives its text, **data** (a table the app reads) or **assumptions**
+(figures in the bank) — chosen by one switch whose every move is a step Back undoes:
+**Assumptions** (`/data-sources`, the bank, each set headed *Source › Document*, filtered by Kind
+and by the Tool a figure goes into, a figure's sheet opening on a tap), **Sources**
+(`/data-sources/sources`, one list of publishers, each opening in place on its leading documents)
+and **Documents** (`/data-sources/documents`, document cards filtered by the Study Guides' Exam /
+Publisher / Year through `lib/resourceFilters.ts` and `coworkFacetItem`), the last two led by
+**My Library** (a filter narrowing the shelf to what the reader follows/has taken, not a section
+stacked above it). Every document and source is tagged with what it gives — **Data**,
+**Assumptions** (`resourceOffers`, `components/cowork/OfferTags.tsx`) — and a document's tag opens
+it: Data its table, Assumptions its figures (`?set=`). A published table is a **document** under
+its publisher (`SourceResource.tool` — NCHS, BLS, the US Treasury, Statistics Canada, OSFI);
+there is no Tables section. A table is a tool's page (`ToolPage` from `pages/Tools.tsx`) at
+`/data-sources/<slug>` (`toolPath`); **a publisher is its own page** (`/data-sources/<id>`), the way an exam's study
 guide is, with the publisher's *own* logo in the sticky header (`SourceEntity.logo`, transcribed
 from their site, monogram tile as the fallback) and their catalogue below it; and **a document is
 always a card**, never a row — one component (`components/cowork/ResourceCard.tsx`) draws it
 everywhere, and it is the study guide's resource card. On both kinds of card the **whole card**
 is the target and the one control that doesn't navigate (Follow, Add) sits at its right edge; a
 card carries pills, not a paragraph — a publisher's region and `established` year, a document's
-kind and date. Every old address redirects (`CoworkRedirect` in `App.tsx`; `/tools/<table>` and
-`/tools/assumptions` at the top of `pages/Tools.tsx`).
+kind and date. Every old address redirects (`LEGACY_SECTIONS` in `lib/dataSources.ts` for
+`/data-sources/assumptions`, `/publishers` and `/tables`; `CoworkRedirect` in `App.tsx`;
+`/tools/<table>` and `/tools/assumptions` at the top of `pages/Tools.tsx`).
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:

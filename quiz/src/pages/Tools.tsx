@@ -61,7 +61,7 @@ export default function Tools() {
   useEffect(() => () => useConceptPopup.getState().close(), [])
   // The Assumptions Bank and the published tables moved to Data Sources; an
   // old link (a share, an agent's app_url) lands there with its run.
-  if (slug === 'assumptions') return <Navigate to={`/data-sources/assumptions${location.search}`} replace />
+  if (slug === 'assumptions') return <Navigate to={`/data-sources${location.search}`} replace />
   const spec = slug ? toolBySlug(slug) : undefined
   if (spec && spec.area === 'data') return <Navigate to={`${toolPath(spec)}${location.search}${location.hash}`} replace />
   // One root, as every page has: the popup beside the page in a fragment
@@ -217,7 +217,7 @@ function DataSourcesRow() {
         </LogoTile>
       }
       title="Data Sources"
-      subtitle="Life tables, price indexes, yield curves, insurer filings and published figures"
+      subtitle="Published figures, their sources and documents: life tables, price indexes, yield curves, insurer filings"
       subtitleLines={2}
       data-testid="data-sources-row"
     />

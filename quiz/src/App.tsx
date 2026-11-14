@@ -280,8 +280,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 
 /**
- * Data Sources: open to everyone (its tables and the Assumptions Bank), the
- * page itself keeping the publishers to approved accounts. It runs on the
+ * Data Sources: open to everyone (its assumptions, sources and documents). It runs on the
  * Actuarial Tools engine, so it is behind that flag.
  */
 function DataSourcesRoute() {
@@ -306,7 +305,7 @@ function CoworkRedirect() {
     tab === 'sources' && id ? `/data-sources/${id}`
     : tab === 'resources' ? '/data-sources/documents'
     : tab === 'workflows' || tab === 'deliverables' ? '/workflows'
-    : '/data-sources/publishers'
+    : '/data-sources/sources'
   return <Navigate to={to} replace />
 }
 

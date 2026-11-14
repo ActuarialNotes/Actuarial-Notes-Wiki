@@ -4,36 +4,42 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a59b14f0cfcfe189f74aea2579a799e58ffb72803261469fbccbf05bf139d690
+  content_hash: sha256:badbb7d0195b4461b9433fbad40b14544d90c7c2e0024c140a59dce463e42f68
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Bureau of Canada.md
 ---
 
-**The Insurance Bureau of Canada** (IBC) is the national trade association of Canada's private property and casualty insurers. It is **not a regulator**: it advocates for the industry, publishes industry statistics and catastrophe data, runs consumer information services, and maintains the [[Code of Consumer Rights and Responsibilities]].
-
-- **Advocacy.** IBC is the industry's voice in [[Automobile Insurance Reform|auto reform]], [[Flood Insurance|flood]] policy, [[Tort Reform|tort]] and tax consultations. Exam readings routinely quote IBC positions, and the expected candidate skill is to identify the *interest* behind a position rather than to adopt it.
-- **Data and research.** IBC compiles industry aggregate statistics, catastrophe loss totals, and vehicle-related data (including the Vehicle Information Centre's collision and theft loss experience by model, used directly in auto rating).
-- **Consumer-facing work:** the Consumer Information Centre, disaster response after major catastrophes, and anti-fraud programmes.
-- IBC coordinates industry positions on **residual market** mechanisms and works alongside the [[Facility Association]] and [[PACICC]], but each of those is a separate body with its own mandate.
-- The [[Code of Consumer Rights and Responsibilities]] is voluntary self-regulation. Its existence is often argued as a reason regulation can be lighter; the counter-argument, which candidates should be able to state, is that a voluntary code adopted by an industry association carries no enforcement and no remedy for the individual consumer.
-
 ![[Media/Figures/Insurance_Bureau_of_Canada.svg|340]]
 
-> [!example]- Reading an Industry Position Critically {Example}
-> IBC publishes analysis arguing that a proposed reduction in auto benefits will lower premiums by $6\%$. A consumer group publishes analysis arguing the same reform will lower premiums by $1\%$ while cutting benefits substantially. Both cite real data.
->
-> How should the actuary evaluate the two claims?
+The **Insurance Bureau of Canada** (IBC) is the national trade association of Canada's private property and casualty insurers. It is not a regulator.
+
+IBC's work falls under four heads:
+
+1. **Advocacy.** IBC is the industry's voice in consultations on [[Automobile Insurance Reform|auto reform]], [[Flood Insurance|flood]] policy, [[Tort Reform|tort reform]] and tax.
+2. **Data and research.** IBC compiles industry aggregate statistics and catastrophe loss totals. Its Vehicle Information Centre publishes collision and theft loss experience by vehicle model, which is used directly in auto rating.
+3. **Consumer work.** IBC runs the Consumer Information Centre, disaster response after major catastrophes and anti-fraud programmes.
+4. **Industry coordination.** IBC coordinates industry positions on residual market mechanisms and maintains the [[Code of Consumer Rights and Responsibilities]].
+
+IBC works alongside the [[Facility Association]] and [[PACICC]], but each of those is a separate body with its own mandate.
+
+Exam readings often quote IBC positions. The skill the exam expects is to identify the interest behind a position rather than to adopt it.
+
+> [!example]- How should the actuary evaluate these two estimates of the same auto reform? {Example}
+> IBC publishes analysis arguing that a proposed reduction in auto benefits will lower premiums by $6\%$. A consumer group publishes analysis arguing that the same reform will lower premiums by $1\%$ while cutting benefits substantially. Both cite real data.
 >
 > > [!answer]-
-> > By asking what each analysis holds constant, not by weighing the sources' credibility.
-> >
-> > Questions that resolve the disagreement:
-> >
-> > - **What baseline?** A saving measured against *projected* costs (which assume continued trend) is larger than the same saving measured against *current* costs. Both numbers can be right against different baselines.
-> > - **Behavioural response.** Does the estimate assume claiming behaviour shifts to the remaining benefit heads? Reforms that cap one benefit frequently see cost migrate to another; ignoring that overstates savings.
-> > - **Timing.** Savings emerge over the claim payout tail, so a first-year premium effect is smaller than the ultimate cost effect.
-> > - **Who bears the cost?** A premium reduction financed by reduced benefits is a transfer, not an efficiency gain. An analysis that reports only the premium side is incomplete regardless of who published it.
-> >
-> > The professional obligation under the [[Standards of Practice]] is to state the basis and the assumptions, so that a reader can see which of these choices produced the number.
+> > - The actuary asks what each analysis holds constant, rather than weighing the credibility of the two publishers.
+> > - A saving measured against projected costs, which assume continued trend, is larger than the same saving measured against current costs, so both numbers can be right against different baselines.
+> > - Reforms that cap one benefit often see cost migrate to another, so an estimate that ignores this shift in claiming behaviour overstates the saving.
+> > - Savings emerge over the claim payout tail, so a first-year premium effect is smaller than the ultimate cost effect.
+> > - A premium reduction financed by reduced benefits is a transfer, so an analysis that reports only the premium side is incomplete whoever published it.
+> > - Under the [[Standards of Practice]], the actuary states the basis and the assumptions, so a reader can see which of these choices produced the number.
+
+## The Code of Consumer Rights and Responsibilities
+
+The [[Code of Consumer Rights and Responsibilities]] is voluntary self-regulation. Its existence is often argued as a reason regulation can be lighter. The counter-argument is that a voluntary code adopted by an industry association carries no enforcement and no remedy for the individual consumer.
+
+> [!trap] Treating IBC as a regulator
+> IBC is the insurers' trade association and has no regulatory role. An IBC position is the industry's argument in a consultation, and its interest is part of reading it.

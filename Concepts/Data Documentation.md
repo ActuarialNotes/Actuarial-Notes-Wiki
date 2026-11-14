@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb98c733f7d70758d6c7934981ec5027d6179ade6baaf09fe4bcffe24e346b51
+  content_hash: sha256:9d6a449afa7d64dc14c5b2113c5358b02ac4bbc313c4946baf35da7b1ec0e135
   sources:
     - "U.S. Geological Survey, Data Management: Data Dictionaries, contents of a data dictionary (data type, size, nullability, business rules, domains/lookup tables, definitions); USGS Survey Manual 502.7 metadata (who produced the data, collection and processing methods, definitions of entities and attributes), sha256:4d1a24d7a64bec6e3f31b3b12d59fb36f14427d6a4aacfa206e393a1274bc830 — https://www.usgs.gov/data-management/data-dictionaries"
     - "Google Cloud, Dataplex documentation, About data lineage, 'Data lineage ... shows you where your data comes from (the origin), where it travels (the destinations), and all the changes or transformations', sha256:7748d727c6fd9c29c65f30f109cf59cc39f7e51f661de7c8ca50c27945dbe4b1 — https://docs.cloud.google.com/dataplex/docs/about-data-lineage"
@@ -21,62 +21,66 @@ verification:
 
 **Data Documentation** is the written record of what a data set contains and how it was made: a definition, type, unit and valid range for every field, where each field came from, and every transformation applied on the way. It lets someone who did not build the data, such as a modeler, a reviewer or a regulator, use it correctly and reproduce it, and it is the first defence of [[Data Quality|data quality]] in an insurer's modelling project.
 
+It has four parts:
+
+1. The **data dictionary**, which describes each field.
+2. The **metadata**, which describes the data set as a whole.
+3. The **lineage**, which traces each field back to its source.
+4. The **transformations and assumptions** behind each derived field.
+
+Documenting a field correctly does not make its values right. The values still need the range, consistency and reconciliation checks of [[Data Validation|data validation]].
+
+## Data dictionary
+
+A data dictionary lists every field with its name, plain-language definition, data type and format, unit, allowed values or range, how missing values are coded, the source system, and the owner who can answer questions about it. A coded field also needs its code list, because `03` means nothing until the dictionary says which territory or coverage it stands for.
+
+A dictionary's definition should be precise enough to compute from. For [[Earned Exposure|earned exposure]] over a reporting period $[a, b]$, where policy $i$ runs from $s_i$ to $e_i$, the definition is
+
 > $$E_{[a,b]} = \sum_i u_i \times \frac{\left|[s_i, e_i] \cap [a, b]\right|}{e_i - s_i}$$
 
-> $$\text{field} = T_k \circ \cdots \circ T_2 \circ T_1(\text{source})$$
+- $u_i$ is the written exposure of policy $i$, in stated units such as car-years.
+- The fraction is the share of the policy's term that falls inside the period.
 
-- **Symbols:** The first block is the kind of precise definition a data dictionary should hold, here for [[Earned Exposure|earned exposure]] over a reporting period $[a, b]$. Policy $i$ runs from $s_i$ to $e_i$ and carries written exposure $u_i$ in stated units, such as car-years, and the fraction is the share of its term that falls inside the period. The second block is a field's lineage: the ordered transformations $T_1, \dots, T_k$ that turn a source field into the field as delivered.
-- **Data dictionary:** A data dictionary lists every field with its name, plain-language definition, data type and format, unit, allowed values or range, how missing values are coded, the source system, and the owner who can answer questions about it. A coded field also needs its code list, because `03` means nothing until the dictionary says which territory or coverage it stands for.
-- **Metadata:** Metadata is data about the data set as a whole. It records when the data were extracted and as of what valuation date, the number of records and the control totals, the filters applied, the version, and who prepared it. The control totals are what later [[Data Validation|validation]] reconciles against.
-- **Lineage:** Lineage traces each field back through the [[Data Pipeline|pipeline]] to its source: which tables were joined, which records were excluded, how amounts were converted, and which rules derived a new field. When a number looks wrong, lineage is what lets the analyst find the step that changed it.
-- **Transformations and assumptions:** A derived field is documented with its formula and the judgments behind it. Examples are whether losses include allocated loss adjustment expense, whether [[Salvage and Subrogation|salvage and subrogation]] are netted, how a policy cancelled mid-term is earned, and how outliers were capped.
-- **Why it matters:** The same word often means different things in different departments. Underwriting may count exposure in policies, ratemaking in car-years, and finance may book premium net of [[Reinsurance|ceded reinsurance]]. Documentation fixes one meaning per field, so that two analysts who join the same tables get the same answer.
-- **Standards:** [[ASOP 23 - Data Quality (ASB - 2016)|ASOP No. 23]] asks the actuary to make a reasonable effort to learn the definition of each data element and to disclose the data's limitations, and [[Model Governance|model governance]] guidance expects the data behind a model to be assessed and documented: U.S. bank supervisors' model risk guidance (SR 11-7) asks for documentation detailed enough that someone unfamiliar with the model can understand how it operates, its limitations and its key assumptions, and [[ASOP 56 - Modeling (ASB - 2019)|ASOP No. 56]] asks for documentation from which another qualified actuary could assess the reasonableness of the work.
-
-> [!example]- A Data Dictionary Entry for Earned Exposure {Example}
-> An auto insurer's modelling data set has a field `earned_exposure_cy`, which holds the exposure each policy earned in calendar year 2024. Two policies illustrate it. Policy A insures 2 cars for 12 months from October 1, 2024 to October 1, 2025. Policy B insures 1 car for 6 months from August 15, 2024 to February 15, 2025. Write the dictionary entry for the field and compute its value for each policy, counting days.
+> [!example]- What is the data dictionary entry for this earned exposure field, and what are its values for these two policies? {Example}
+> An auto insurer's modelling data set has a field `earned_exposure_cy`, which holds the exposure each policy earned in calendar year 2024, counting days. Policy A insures 2 cars for 12 months from October 1, 2024 to October 1, 2025. Policy B insures 1 car for 6 months from August 15, 2024 to February 15, 2025.
 >
 > > [!answer]-
-> > A useful entry for the field reads as follows.
-> >
 > > - **Definition:** The car-years of coverage provided by the policy term within calendar year 2024, earned evenly by day.
 > > - **Unit and type:** The unit is car-years, where 1 car insured for 365 days is 1.0000, and the type is a decimal with 4 places.
 > > - **Range:** The value lies between 0 and the term's written car-years, and a negative value is an error.
 > > - **Source and lineage:** It comes from `policy_term` (effective date, expiry date and vehicle count) and is derived as written car-years times the share of the term's days inside 2024. A cancelled term uses its cancellation date as $e_i$.
 > > - **Owner and as-of date:** The pricing data team owns it, and it was extracted as of March 31, 2025.
-> >
-> > Policy A writes 2 car-years, and 92 of its 365 days fall in 2024. Policy B writes 0.5 car-years over 184 days, and 139 of them fall in 2024.
-> > $$
-> > \begin{align*}
-> > E_A &= 2 \times \frac{92}{365} \\
-> > &= 0.5041 \\
-> > E_B &= 0.5 \times \frac{139}{184} \\
-> > &= 0.3777
-> > \end{align*}
-> > $$
-> > Together the two policies earned 0.8818 car-years in 2024. The definition matters for Policy B: counted in policy terms instead of car-years, it would show 0.7554, twice its car-years.
+> > - Policy A writes 2 car-years, and 92 of its 365 days fall in 2024, so $E_A = 2 \times 92/365 = 0.5041$.
+> > - Policy B writes 0.5 car-years over 184 days, and 139 of them fall in 2024, so $E_B = 0.5 \times 139/184 = 0.3777$.
+> > - Together the two policies earned 0.8818 car-years in 2024. Counted in policy terms instead of car-years, Policy B would show 0.7554, twice its car-years.
 
-> [!example]- What Goes Wrong Without a Definition {Example}
-> A pricing analyst receives a file of six-month auto policies with a field named `exposure` and no data dictionary. In the year, 2,000 policy terms were fully earned and incurred losses were \$1,200,000. The rate manual quotes premiums per car-year. The analyst assumes `exposure` counts car-years, but it actually counts policy terms. What pure premium does the analyst compute, and what should it be?
+## Metadata
+
+Metadata is data about the data set as a whole. It records when the data were extracted and as of what valuation date, the number of records and the control totals, the filters applied, the version, and who prepared it. The control totals are what later [[Data Validation|validation]] reconciles against.
+
+## Lineage
+
+Lineage traces each field back through the [[Data Pipeline|pipeline]] to its source: which tables were joined, which records were excluded, how amounts were converted, and which rules derived a new field. It records how a field was derived, not just which database it sits in. When a number looks wrong, lineage is what lets the analyst find the step that changed it. Without it, an excluded line of business or a changed rule is invisible.
+
+## Transformations and assumptions
+
+A derived field is documented with its formula and the judgments behind it. Examples are whether losses include allocated loss adjustment expense, whether [[Salvage and Subrogation|salvage and subrogation]] are netted, how a policy cancelled mid-term is earned, and how outliers were capped. A field name like `exposure` or `losses` leaves open the unit, the basis and what is included, so the documentation says whether losses are paid or incurred, whether they include expenses, and whether they are gross or net of recoveries.
+
+The same word often means different things in different departments. Underwriting may count exposure in policies, ratemaking in car-years, and finance may book premium net of [[Reinsurance|ceded reinsurance]]. Documentation fixes one meaning per field, so that two analysts who join the same tables get the same answer.
+
+> [!example]- What pure premium does the analyst compute from this undocumented field, and what should it be? {Example}
+> A pricing analyst receives a file of six-month auto policies with a field named `exposure` and no data dictionary. In the year, 2,000 policy terms were fully earned and incurred losses were \$1,200,000. The rate manual quotes premiums per car-year. The analyst assumes `exposure` counts car-years, but it actually counts policy terms.
 >
 > > [!answer]-
-> > Each six-month term is half a car-year, so the 2,000 terms are 1,000 car-years.
-> > $$
-> > \begin{align*}
-> > \text{PP}_{\text{analyst}} &= \frac{1{,}200{,}000}{2{,}000} \\
-> > &= 600 \\
-> > \text{PP}_{\text{correct}} &= \frac{1{,}200{,}000}{1{,}000} \\
-> > &= 1{,}200
-> > \end{align*}
-> > $$
-> > The analyst's \$600 is a pure premium per six-month term, but it would be read as \$600 per car-year, so the indicated annual rate is half what the losses support. Nothing in the data looks wrong, because every value is valid. Only a dictionary entry stating the unit, or a reconciliation of exposure to the policy count, would catch it.
+> > - Each six-month term is half a car-year, so the 2,000 terms are 1,000 car-years.
+> > - The analyst computes $1{,}200{,}000 / 2{,}000 = \$600$.
+> > - The correct pure premium is $1{,}200{,}000 / 1{,}000 = \$1{,}200$ per car-year.
+> > - The analyst's \$600 is a pure premium per six-month term, but it would be read as \$600 per car-year, so the indicated annual rate is half what the losses support.
+> > - Nothing in the data looks wrong, because every value is valid. Only a dictionary entry stating the unit, or a reconciliation of exposure to the policy count, would catch it.
 
-> [!tip]- How it appears on the exam
-> - **DISC-DA:** Questions describe a modelling project and ask which element of documentation is missing or what a data dictionary should record for a field. Others ask why lineage matters when a result cannot be reproduced. Expect application questions that pair documentation with [[Data Quality|data quality principles]] and [[Data Types|data classifications]] from the same topic.
-> - **Scenario questions:** A common shape gives two analysts who reach different totals from the same source and asks for the cause. The answer is usually an undocumented definition, filter or transformation, such as a field counting policies in one extract and car-years in the other.
+## Standards
 
-> [!warning]- Exam traps
-> - **A field name is not a definition:** A name like `exposure` or `losses` leaves open the unit, the basis and what is included. The documentation has to say whether losses are paid or incurred, whether they include expenses, and whether they are gross or net of recoveries.
-> - **Metadata versus the data dictionary:** The data dictionary describes each field, while metadata describes the data set as a whole, such as its extract date, record count, filters and version. A question about control totals or the as-of date is about metadata.
-> - **Lineage is about transformations, not storage:** Lineage records how a field was derived and which records were dropped on the way, not just which database it sits in. Without it, an excluded line of business or a changed rule is invisible.
-> - **Documentation does not validate the data:** Documenting a field correctly does not make its values right. The values still need the range, consistency and reconciliation checks of [[Data Validation|data validation]].
+[[ASOP 23 - Data Quality (ASB - 2016)|ASOP No. 23]] asks the actuary to make a reasonable effort to learn the definition of each data element and to disclose the data's limitations. [[Model Governance|Model governance]] guidance expects the data behind a model to be assessed and documented. U.S. bank supervisors' model risk guidance (SR 11-7) asks for documentation detailed enough that someone unfamiliar with the model can understand how it operates, its limitations and its key assumptions. [[ASOP 56 - Modeling (ASB - 2019)|ASOP No. 56]] asks for documentation from which another qualified actuary could assess the reasonableness of the work.
+
+> [!trap] Confusing metadata with the data dictionary
+> The data dictionary describes each field, while metadata describes the data set as a whole, such as its extract date, record count, filters and version. A question about control totals or the as-of date is about metadata.

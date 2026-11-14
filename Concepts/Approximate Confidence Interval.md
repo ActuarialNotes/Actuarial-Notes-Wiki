@@ -6,83 +6,88 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a30ebfb638fb31c8bc07099224bdd55bf8e7c2c2022453d1af7d499eab7f276d
+  content_hash: sha256:2c370732fe31a07ee6b72bad6dbb203667ceb7f7457be68641551e043bc0ddaa
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Approximate Confidence Interval.md
 ---
 
-**Approximate Confidence Interval** is an interval for a parameter built from the large-sample behaviour of its [[Maximum Likelihood Estimation|maximum likelihood estimator]] rather than from an exact sampling distribution. The usual one is the normal interval, the estimate plus or minus a normal percentile times a standard error taken from the [[Fisher Information|Fisher information]]. The non-normal intervals, log-transformed or based on the likelihood ratio, keep a positive parameter positive and become asymmetric when the likelihood is.
+An **Approximate Confidence Interval** is an interval for a parameter $\theta$ built from the large-sample behaviour of its [[Maximum Likelihood Estimation|maximum likelihood estimator]] $\hat\theta$ rather than from an exact sampling distribution. The usual one is the normal interval, the estimate plus or minus a normal percentile times a standard error taken from the [[Fisher Information|Fisher information]]. At confidence level $p$, the normal interval is
 
-> $$\hat\theta \pm z_{\alpha/2}\sqrt{\widehat{\text{Var}}(\hat\theta)}$$
+> $$\hat\theta \pm z_{(1+p)/2}\sqrt{\widehat{\text{Var}}(\hat\theta)}$$
 
-> $$\widehat{\text{Var}}(\hat\theta) = \big[-\ell''(\hat\theta)\big]^{-1}$$
+- $z_{(1+p)/2}$ is the $100(1+p)/2$th percentile of the standard normal distribution, 1.96 for a 95% interval.
+- $\sqrt{\widehat{\text{Var}}(\hat\theta)}$ is the standard error of $\hat\theta$, written $\text{SE}$.
 
-> $$\Big(\hat\theta\,e^{-z_{\alpha/2}\text{SE}/\hat\theta},\ \hat\theta\,e^{z_{\alpha/2}\text{SE}/\hat\theta}\Big)$$
+The estimated variance is the inverse of the observed information:
 
-> $$\Big\{\theta : \ell(\theta) \ge \ell(\hat\theta) - \tfrac{1}{2}\chi^2_{1,\,1-\alpha}\Big\}$$
+> $$\widehat{\text{Var}}(\hat\theta) = \big[-l''(\hat\theta)\big]^{-1}$$
+
+- $l(\theta)$ is the log-likelihood, and $l''$ is its second derivative.
+- The expected information evaluated at $\hat\theta$ can be used in place of $-l''(\hat\theta)$.
+
+For a function $g(\theta)$, the [[Delta Method|delta method]] gives the variance $g'(\hat\theta)^2\,\widehat{\text{Var}}(\hat\theta)$, and the normal interval for $g(\theta)$ is built the same way. All of these intervals are large-sample approximations. With few observations the normal interval can include impossible values, such as a negative intensity, and the non-normal intervals below are the remedy.
+
+> [!example]- What is the maximum likelihood estimate of $\alpha$, and its 95% normal interval? {Example}
+> Ten losses above $\$500{,}000$ are modelled as single-parameter Pareto with $\theta = 500{,}000$ known and $\alpha$ unknown. The data give $\sum \ln(x_i/500{,}000) = 4.0$.
+>
+> > [!answer]-
+> > - Apart from a constant, the log-likelihood is $l(\alpha) = 10\ln\alpha - 4\alpha$. The constant does not depend on $\alpha$, so it does not move the maximum.
+> > - Setting $l'(\alpha) = 10/\alpha - 4$ to 0 gives $\hat\alpha = 2.5$.
+> > - The observed information is $-l''(\alpha) = 10/\alpha^2$, so $\widehat{\text{Var}}(\hat\alpha) = 2.5^2/10 = 0.625$ and $\text{SE} = 0.7906$.
+> > - The 95% normal interval is $2.5 \pm 1.96(0.7906)$, which is $(0.950,\ 4.050)$.
+
+## Non-normal confidence intervals
+
+The log-transformed interval is the normal interval for $\ln\theta$ mapped back. The delta method gives $\text{SE}(\ln\hat\theta) \approx \text{SE}/\hat\theta$, so the interval is
+
+> $$\Big(\hat\theta\,e^{-z_{(1+p)/2}\text{SE}/\hat\theta},\ \hat\theta\,e^{z_{(1+p)/2}\text{SE}/\hat\theta}\Big)$$
+
+It stays positive and reaches further above $\hat\theta$ than below.
+
+The likelihood-ratio interval keeps every $\theta$ that a [[Likelihood Ratio Test|likelihood ratio test]] would not reject:
+
+> $$\Big\{\theta : l(\theta) \ge l(\hat\theta) - \tfrac{1}{2}\chi^2_{1,\,p}\Big\}$$
+
+- $\chi^2_{1,\,p}$ is the $100p$th percentile of the [[Chi-Squared Distribution|chi-squared distribution]] with one degree of freedom, 3.841 at 95%.
+
+The likelihood-ratio interval follows the shape of the likelihood, needs no variance, and transforms with the parameter. It is the non-normal interval of Klugman, Panjer & Willmot (*Loss Models*, chapter 11). Its two endpoints are found by solving $l(\theta) = l(\hat\theta) - \tfrac{1}{2}\chi^2_{1,\,p}$, numerically or by checking given candidate values.
+
+> [!example]- What are the 95% log-transformed and likelihood-ratio intervals for $\alpha$? {Example}
+> The ten Pareto losses of the example above give $l(\alpha) = 10\ln\alpha - 4\alpha$, $\hat\alpha = 2.5$ and $\text{SE} = 0.7906$.
+>
+> > [!answer]-
+> > - For the log-transformed interval, $e^{1.96(0.7906)/2.5} = e^{0.6198} = 1.8586$.
+> > - The log-transformed interval is $(2.5/1.8586,\ 2.5 \times 1.8586)$, which is $(1.345,\ 4.646)$.
+> > - For the likelihood-ratio interval, $l(2.5) = 10\ln 2.5 - 10 = -0.8371$, and the cutoff is $-0.8371 - 3.841/2 = -2.7576$.
+> > - Solving $10\ln\alpha - 4\alpha = -2.7576$ numerically gives the interval $(1.253,\ 4.385)$.
+> > - Both non-normal intervals sit further right than the normal interval $(0.950,\ 4.050)$, because the log-likelihood falls away more steeply below $\hat\alpha$ than above it. Both stay well clear of $\alpha = 1$, below which the Pareto mean is infinite.
+
+## Transition intensities in a multiple state model
+
+In a [[Multiple State Model|multiple state model]] with a constant [[Transition Intensity|transition intensity]] $\mu$ out of a state, the likelihood is $\mu^d e^{-\mu v}$, and the maximum likelihood estimate is
 
 > $$\hat\mu = \frac{d}{v}$$
 
+- $d$ is the number of transitions observed.
+- $v$ is the total time that lives were observed in the state the transition leaves, not the total time in the study.
+
+From $-l''(\mu) = d/\mu^2$, its estimated variance (Dickson, Hardy & Waters, chapter 8) is
+
 > $$\widehat{\text{Var}}(\hat\mu) = \frac{d}{v^2}$$
 
-- **Symbols:** $\ell$ is the log-likelihood, $z_{\alpha/2}$ is the upper $\alpha/2$ point of the standard normal (1.96 for 95%), and $\text{SE} = \sqrt{\widehat{\text{Var}}(\hat\theta)}$. The variance can come from the observed information $-\ell''(\hat\theta)$, as written, or from the expected information evaluated at $\hat\theta$. $\chi^2_{1,\,1-\alpha}$ is the $100(1-\alpha)$th percentile of the [[Chi-Squared Distribution|chi-squared distribution]] with one degree of freedom, which is 3.841 at 95%. For a function $g(\theta)$, the [[Delta Method|delta method]] gives $\widehat{\text{Var}}[g(\hat\theta)] \approx g'(\hat\theta)^2\,\widehat{\text{Var}}(\hat\theta)$.
-- **Non-normal intervals:** The log-transformed interval is the normal interval for $\ln\theta$ mapped back, since the delta method gives $\text{SE}(\ln\hat\theta) \approx \text{SE}/\hat\theta$. It stays positive and reaches further above $\hat\theta$ than below. The likelihood-ratio interval keeps every $\theta$ that a [[Likelihood Ratio Test|likelihood ratio test]] would not reject. It follows the shape of the likelihood, needs no variance, and transforms with the parameter, and it is the non-normal interval of Klugman, Panjer & Willmot (*Loss Models*, chapter 11).
-- **Transition intensities:** In a [[Multiple State Model|multiple state model]] with a constant [[Transition Intensity|transition intensity]] $\mu$ out of a state, $v$ is the total time that lives were observed in the state and $d$ is the number of transitions observed. The likelihood is $\mu^d e^{-\mu v}$, so $\hat\mu = d/v$, and $-\ell''(\mu) = d/\mu^2$ gives the variance $\hat\mu^2/d = d/v^2$ (Dickson, Hardy & Waters, chapter 8). Intensities out of the same state share $v$, but the cross derivatives of the log-likelihood are 0, so their estimators are asymptotically independent.
-- **Accuracy:** All of these intervals are large-sample approximations. With few observations the normal interval can include impossible values, such as a negative intensity, and the non-normal forms are the remedy.
+Intensities out of the same state share $v$, but the cross derivatives of the log-likelihood are 0, so their estimators are asymptotically independent. A probability of staying in a state depends on every intensity out of it, so the variance of their total adds all of their variances.
 
-> [!example]- Three Intervals for a Pareto Tail Index {Example}
-> Ten losses above \$500,000 are modelled as single-parameter Pareto with $\theta = 500{,}000$ known and $\alpha$ unknown. The data give $\sum \ln(x_i/500{,}000) = 4.0$. Find the maximum likelihood estimate of $\alpha$ and 95% normal, log-transformed and likelihood-ratio intervals for it.
+> [!example]- What are 95% intervals for $\mu^{01}$ and for ${}_1p_{60}^{\overline{00}}$? {Example}
+> In a healthy–sick–dead model with constant intensities over ages 60 to 65, a study observes 1,250 person-years in the healthy state, with 30 transitions to sick and 5 deaths. The probability that a healthy life stays healthy for a year is ${}_1p_{60}^{\overline{00}} = e^{-(\mu^{01} + \mu^{02})}$.
 >
 > > [!answer]-
-> > Apart from a constant, the log-likelihood is $\ell(\alpha) = 10\ln\alpha - 4\alpha$, so $\hat\alpha = 10/4 = 2.5$ and $-\ell''(\alpha) = 10/\alpha^2$.
-> > $$
-> > \begin{align*}
-> > \widehat{\text{Var}}(\hat\alpha) &= \frac{2.5^2}{10} \\
-> > &= 0.625 \\
-> > \text{Normal} &= 2.5 \pm 1.96(0.7906) \\
-> > &= (0.950,\ 4.050) \\
-> > e^{1.96(0.7906)/2.5} &= e^{0.6198} \\
-> > &= 1.8586 \\
-> > \text{Log} &= (2.5/1.8586,\ 2.5 \times 1.8586) \\
-> > &= (1.345,\ 4.646)
-> > \end{align*}
-> > $$
-> > For the likelihood-ratio interval, $\ell(2.5) = 10\ln 2.5 - 10 = -0.8371$, and the cutoff is $-0.8371 - 3.841/2 = -2.7576$. Solving $10\ln\alpha - 4\alpha = -2.7576$ numerically gives the interval $(1.253,\ 4.385)$. Both non-normal intervals sit further right than the normal one, because the log-likelihood falls away more steeply below $\hat\alpha$ than above it, and both keep well clear of $\alpha = 1$, below which the Pareto mean is infinite.
+> > - $\hat\mu^{01} = 30/1{,}250 = 0.024$, with standard error $\sqrt{30}/1{,}250 = 0.004382$.
+> > - The interval for $\mu^{01}$ is $0.024 \pm 1.96(0.004382)$, which is $(0.0154,\ 0.0326)$.
+> > - The total intensity is $35/1{,}250 = 0.028$. The two estimators are asymptotically independent, so its variance is $35/1{,}250^2$ and its standard error is 0.004733.
+> > - The derivative of $e^{-s}$ is $-e^{-s}$, so the delta method multiplies that standard error by $\hat p = e^{-0.028} = 0.97239$, giving 0.004602.
+> > - The interval for ${}_1p_{60}^{\overline{00}}$ is $0.97239 \pm 1.96(0.004602)$, which is $(0.9634,\ 0.9814)$.
 
-> [!example]- A Sickness Intensity and a Probability of Staying Healthy {Example}
-> In a healthy–sick–dead model with constant intensities over ages 60 to 65, a study observes 1,250 person-years in the healthy state, with 30 transitions to sick and 5 deaths. Give 95% intervals for $\mu^{01}$ and for the probability ${}_1p_{60}^{\overline{00}} = e^{-(\mu^{01} + \mu^{02})}$ that a healthy life stays healthy for a year.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \hat\mu^{01} &= \frac{30}{1{,}250} \\
-> > &= 0.024 \\
-> > \text{SE}(\hat\mu^{01}) &= \frac{\sqrt{30}}{1{,}250} \\
-> > &= 0.004382 \\
-> > \text{CI} &= 0.024 \pm 1.96(0.004382) \\
-> > &= (0.0154,\ 0.0326)
-> > \end{align*}
-> > $$
-> > The total intensity is $\hat\mu^{01} + \hat\mu^{02} = 35/1{,}250 = 0.028$, and because the two estimators are asymptotically independent its variance is $35/1{,}250^2$, with standard error 0.004733. The derivative of $e^{-s}$ is $-e^{-s}$, so the delta method multiplies that standard error by $\hat p = e^{-0.028} = 0.97239$.
-> > $$
-> > \begin{align*}
-> > \text{SE}(\hat p) &= 0.97239(0.004733) \\
-> > &= 0.004602 \\
-> > \text{CI} &= 0.97239 \pm 1.96(0.004602) \\
-> > &= (0.9634,\ 0.9814)
-> > \end{align*}
-> > $$
-> > Thirty transitions estimate the sickness intensity only to within about 36% either way, while the one-year probability is pinned down far more tightly in absolute terms, because it is close to 1.
-
-> [!tip]- How it appears on the exam
-> - **ASTAM** asks candidates to estimate the variance of estimators and construct normal and non-normal confidence intervals. A question fits a distribution by maximum likelihood, asks for the variance from the information, and then asks for an interval for the parameter or, through the delta method, for a probability, a percentile or a limited expected value.
-> - **ALTAM** asks for approximate confidence intervals for the maximum likelihood estimates of transition intensities and probabilities in multiple state and multiple decrement models. A question gives waiting times and transition counts for each state and asks for $\hat\mu = d/v$ with its interval, or for an interval for a probability built from several intensities.
-> - **Likelihood-ratio interval:** When it is asked for, the interval is found by solving $\ell(\theta) = \ell(\hat\theta) - \tfrac12\chi^2$ for its two endpoints, numerically or by checking given candidate values.
-
-> [!warning]- Exam traps
-> - **Information or its inverse:** The variance is the inverse of the information. Using $-\ell''(\hat\theta)$ itself as the variance gives a nonsense interval, which is easy to miss only when the information happens to be close to 1.
-> - **Half the chi-squared value:** The likelihood-ratio cutoff is $\ell(\hat\theta) - \tfrac12\chi^2_{1,\,1-\alpha}$. Subtracting the full 3.841 gives an interval that is much too wide.
-> - **Exposure in the right state:** In $\hat\mu = d/v$, $v$ is the time spent in the state the transition leaves, not the total time in the study. Using all person-years understates an intensity out of the healthy state.
-> - **Every way out of the state:** A probability of staying in a state depends on every intensity out of it. In the second example the variance of the total intensity is $(30 + 5)/1{,}250^2$, and using only the 30 sicknesses leaves out the deaths, which also end a stay in the healthy state.
+> [!trap] Using the information as the variance
+> The variance is the inverse of the information. Using $-l''(\hat\theta)$ itself as the variance gives a nonsense interval, which is easy to miss when the information happens to be close to 1.

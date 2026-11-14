@@ -4,83 +4,95 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:da73586b12142c14c699e89fcc16ce3f331f6b3770cb9acd7fbb5ddd338a8b67
+  content_hash: sha256:7530630b0662dec1bf2356fd93cb672039c6ecc645a48be46c6157b28e3e9a55
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Pension Plan.md
 ---
 
-A **pension plan** is an arrangement through which a [[Plan Sponsor|plan sponsor]], usually an employer, provides retirement income to employees, financed by contributions accumulated in a fund. In a [[Defined Benefit Plan|defined benefit (DB)]] plan the benefit is set by formula from salary and service and the sponsor bears the investment and [[Mortality|longevity]] risk; in a [[Defined Contribution Plan|defined contribution (DC)]] plan the contributions are set and the member's benefit is whatever the account buys.
+A **Pension Plan** is an arrangement through which a [[Plan Sponsor|plan sponsor]], usually an employer, provides retirement income to employees, financed by contributions accumulated in a fund. There are two kinds:
+
+1. In a [[Defined Benefit Plan|defined benefit (DB)]] plan the benefit is set by formula from salary and service, and the sponsor bears the investment and [[Mortality|longevity]] risk.
+2. In a [[Defined Contribution Plan|defined contribution (DC)]] plan the contributions are set, and the member's benefit is whatever the account buys.
+
+## Defined benefit formula
+
+In a DB plan, the annual pension of a member with $n$ years of service is
 
 > $$B = \alpha \, n \, \bar S$$
 
+- $\alpha$ is the accrual rate, such as $1.5\%$.
+- $\bar S$ is the pensionable salary: the final average salary (FAS), the career average earnings (CAE) or the career average revalued earnings (CARE).
+
+The [[Replacement Ratio|replacement ratio]] of a pension is
+
 > $$R = \frac{\text{pension income in the year after retirement}}{\text{salary in the year before retirement}}$$
+
+Future salaries are projected with a [[Salary Scale|salary scale]] $s_y$. The ratio of a member's salary at age $y$ to the salary at age $x$ is
 
 > $$\frac{S_y}{S_x} = \frac{s_y}{s_x}$$
 
-> $$c\sum_{t=0}^{n-1} S_{x+t}\,(1+i)^{n-t} = \text{account at retirement}$$
+- $S_x$ and $S_y$ are the member's salaries at ages $x$ and $y$.
 
-- In the DB formula $\alpha$ is the **accrual rate** (e.g. $1.5\%$), $n$ the years of service and $\bar S$ the pensionable salary: final average salary (FAS), career average earnings (CAE), or career average revalued earnings (CARE). $R$ is the **replacement ratio**
-- The **salary scale** $s_y$ projects salary from age $x$ to age $y$; in the DC equation $c$ is the contribution rate, paid at the start of each year here, and the account buys an annuity at retirement
-- A DB plan is valued for several **purposes** with different assumptions: **going-concern funding** (contributions, via a cost method's [[Normal Cost|normal cost]] and [[Actuarial Accrued Liability|accrued liability]]), **solvency or hypothetical wind-up** (benefits if the plan ended today, at annuity-purchase rates), **termination**, and accounting
-- The liabilities are long-duration and often inflation-linked, so their value is very sensitive to interest rates and longevity; liability-driven investing matches the asset [[Duration|duration]] to the liability's (a partial [[Immunization|immunization]]) instead of maximizing return
-
-> [!example]- Replacement Ratio under a Final-Average-Salary Plan {Example}
-> A member aged exactly 40, hired at 30, earns $\$70{,}000$ in the year of age 40 to 41. Salaries rise $3\%$ a year. The plan pays $1.6\%$ of the 3-year final average salary per year of service at age 65. Find the annual pension and the replacement ratio.
+> [!example]- What are this member's annual pension and replacement ratio? {Example}
+> A member aged exactly 40, hired at 30, earns $\$70{,}000$ in the year of age 40 to 41. Salaries rise $3\%$ a year. The plan pays $1.6\%$ of the 3-year final average salary per year of service from age 65.
 >
 > > [!answer]-
-> > The final year's salary (age 64 to 65) is $70{,}000(1.03)^{24} = 142{,}296$, and the 3-year average is
-> > $$
-> > \begin{align*}
-> > \bar S &= \frac{142{,}296}{3}\left(1 + 1.03^{-1} + 1.03^{-2}\right) \\
-> >        &= 138{,}191 \\
-> > B &= 0.016 \times 35 \times 138{,}191 \\
-> >   &= 77{,}387 \\
-> > R &= \frac{77{,}387}{142{,}296} \\
-> >   &= 0.544
-> > \end{align*}
-> > $$
-> > The pension of $\$77{,}387$ replaces $54.4\%$ of final salary; averaging over three years costs about $2.9\%$ of the benefit.
+> > - The salary for the year of age 40 to 41 grows 24 times to reach the year 64 to 65, so the final year's salary is $70{,}000(1.03)^{24} = 142{,}296$.
+> > - The 3-year final average salary is $138{,}191$, the average of $142{,}296$, $142{,}296/1.03$ and $142{,}296/1.03^2$.
+> > - The member will have 35 years of service, so $B = 0.016 \times 35 \times 138{,}191 = \$77{,}387$.
+> > - The replacement ratio is $77{,}387/142{,}296 = 54.4\%$.
+> > - Averaging over three years costs about $2.9\%$ of the benefit.
 
-> [!example]- DC Contribution Rate for a Target Replacement Ratio {Example}
-> A member aged 35 earns $\$50{,}000$ this year; salaries rise $3\%$ a year. Contributions of $c$ times salary are paid at the start of each year to age 65 and earn $6\%$. At 65 the account buys a pension at $\$12.0$ per $\$1$ of annual income. Find $c$ for a replacement ratio of $50\%$.
+## Defined contribution accumulation
+
+In a DC plan with contributions of $c$ times salary paid at the start of each year for $n$ years, earning $i$, the account at retirement is
+
+> $$c\sum_{t=0}^{n-1} S_{x+t}\,(1+i)^{n-t}$$
+
+- $S_{x+t}$ is the salary in the year of age $x+t$ to $x+t+1$.
+
+At retirement the account buys an annuity. The member bears any shortfall if the assumptions are not realized.
+
+> [!example]- What contribution rate gives this member a replacement ratio of 50%? {Example}
+> A member aged 35 earns $\$50{,}000$ this year, and salaries rise $3\%$ a year. Contributions of $c$ times salary are paid at the start of each year to age 65 and earn $6\%$. At 65 the account buys a pension at $\$12.0$ per $\$1$ of annual income.
 >
 > > [!answer]-
-> > Final salary is $50{,}000(1.03)^{29} = 117{,}828$, so the target pension is $58{,}914$ and the account must reach $12.0 \times 58{,}914 = 706{,}970$.
-> > $$
-> > \begin{align*}
-> > \sum_{t=0}^{29} 50{,}000(1.03)^t(1.06)^{30-t} &= 50{,}000(1.06)^{30}\,\frac{1 - (1.03/1.06)^{30}}{1 - 1.03/1.06} \\
-> >                                               &= 5{,}858{,}671 \\
-> > c &= \frac{706{,}970}{5{,}858{,}671} \\
-> >   &= 0.1207
-> > \end{align*}
-> > $$
-> > A contribution rate of about $12.1\%$ meets the target, but only if every assumption is realized; the member bears any shortfall.
+> > - The final salary is $50{,}000(1.03)^{29} = 117{,}828$, so the target pension is $58{,}914$.
+> > - The account must reach $12.0 \times 58{,}914 = 706{,}970$.
+> > - At $c = 1$ the contributions would accumulate to $5{,}858{,}671$, the sum of $50{,}000(1.03)^t(1.06)^{30-t}$ for $t = 0$ to $29$.
+> > - The contribution rate is $c = 706{,}970/5{,}858{,}671 = 12.07\%$.
 
-> [!example]- Interest Rate Hedge Ratio of a DB Plan {Example}
-> A DB plan has liabilities of $\$200$ million with modified duration $14$. Its $\$200$ million of assets are $\$80$ million of bonds with duration $6$ and $\$120$ million of equities (treat as duration $0$). Find the interest rate hedge ratio, the surplus change if rates fall $1\%$, and the receive-fixed swap notional (duration $18$) that raises the hedge ratio to $80\%$.
+## Purposes of a valuation
+
+A DB plan is valued for several purposes, each with its own assumptions:
+
+1. **Going-concern funding** sets contributions, through a cost method's [[Normal Cost|normal cost]] and [[Actuarial Accrued Liability|accrued liability]].
+2. **Solvency or hypothetical wind-up** values the benefits as if the plan ended today, at annuity-purchase rates.
+
+It is also valued on termination and for accounting.
+
+Solvency and hypothetical wind-up liabilities use settlement rates, the annuity-purchase and commuted-value rates, and include no future salary increases.
+
+> [!trap] Using going-concern assumptions for a wind-up valuation
+> A wind-up liability is valued at settlement rates. Discounting it at the going-concern rate understates it.
+
+## Liability-driven investment
+
+The liabilities of a DB plan are long-duration and often inflation-linked, so their value is very sensitive to interest rates and longevity. Liability-driven investing matches the asset [[Duration|duration]] to the liability's, a partial [[Immunization|immunization]], instead of maximizing return. The interest rate hedge ratio is
+
+> $$\text{Hedge ratio} = \frac{\text{dollar duration of the assets}}{\text{dollar duration of the liabilities}}$$
+
+- A dollar duration is a value times its modified duration.
+
+A plan $40\%$ invested in bonds is not $40\%$ hedged, because short bonds hedge little of a long liability.
+
+> [!example]- What is this plan's interest rate hedge ratio, and what swap raises it to 80%? {Example}
+> A DB plan has liabilities of $\$200$ million with modified duration 14. Its $\$200$ million of assets are $\$80$ million of bonds with duration 6 and $\$120$ million of equities, treated as duration 0. A receive-fixed swap has duration 18.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Hedge ratio} &= \frac{80 \times 6}{200 \times 14} \\
-> >                    &= 17.1\% \\
-> > \Delta\text{Surplus} &\approx (480 - 2{,}800)(0.01) \\
-> >                      &= -23.2 \text{ million} \\
-> > \text{Notional} &= \frac{0.8(2{,}800) - 480}{18} \\
-> >                 &= 97.8 \text{ million}
-> > \end{align*}
-> > $$
-> > The plan loses $\$23.2$ million of surplus on a $1\%$ fall; a $\$97.8$ million swap overlay cuts that to about $\$5.6$ million without selling equities.
-
-> [!tip]- How it appears on the exam
-> - **ALTAM** (Pension Plans and Retirement Benefits): compute replacement ratios for FAS, CAE and CARE plans, the DC contribution rate for a target ratio, and use service-table and salary-scale functions to value accrued benefits.
-> - **RET-201 / RET-301** ("differentiate between the various purposes for valuing pension plans"): explain how going-concern, solvency or hypothetical wind-up, termination and accounting valuations differ in purpose, assumptions and method, usually as a written answer for a described plan.
-> - **CP-351** ("asset allocation strategies appropriate to underlying liability profiles such as pension plans"): critique an allocation using duration, hedge ratio and surplus sensitivity, and propose a liability-driven investment strategy.
-
-> [!warning]- Exam traps
-> - **Wrong salary in the replacement ratio.** The denominator is the salary in the year *before* retirement, not the final average salary and not the salary projected to the retirement age itself.
-> - **Counting years of salary increase.** A salary for the year of age 40 to 41 grows $24$ times to reach the year 64 to 65, not $25$.
-> - **Using going-concern assumptions for a wind-up valuation.** Solvency and hypothetical wind-up liabilities use settlement (annuity purchase and commuted value) rates and include no future salary increases; a going-concern discount rate understates them.
-> - **Treating asset share as hedge ratio.** A plan $40\%$ invested in bonds is not $40\%$ hedged; the hedge ratio compares *dollar durations*, and short bonds hedge little of a long liability.
+> > - The hedge ratio is $\frac{80 \times 6}{200 \times 14} = \frac{480}{2{,}800} = 17.1\%$.
+> > - If rates fall $1\%$, the surplus changes by about $(480 - 2{,}800)(0.01) = -\$23.2$ million.
+> > - An $80\%$ hedge needs a dollar duration of $0.8(2{,}800) = 2{,}240$, so the swap notional is $(2{,}240 - 480)/18 = \$97.8$ million.
+> > - The overlay cuts the loss on a $1\%$ fall to about $\$5.6$ million without selling equities.

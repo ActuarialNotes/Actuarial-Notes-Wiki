@@ -26,9 +26,10 @@ export function AnswerOption({
   keyHint,
 }: AnswerOptionProps) {
   // Prevent accidental selection when the user is scrolling over an option.
-  // We track vertical movement: if the pointer/touch moves more than 8px
+  // We track movement either way: if the pointer/touch moves more than 8px
   // between pointerdown and click, we treat it as a scroll gesture and ignore it.
-  const touchStartY = useRef<number | null>(null)
+  // Sideways counts too, since a formula wider than the row scrolls inside it.
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
   const scrolling = useRef(false)
 
   // The options are a ruled list on the page, not tiles on a card: each row is
@@ -93,12 +94,13 @@ export function AnswerOption({
   )
 
   function handlePointerDown(e: React.PointerEvent) {
-    touchStartY.current = e.clientY
+    touchStart.current = { x: e.clientX, y: e.clientY }
     scrolling.current = false
   }
 
   function handlePointerMove(e: React.PointerEvent) {
-    if (touchStartY.current !== null && Math.abs(e.clientY - touchStartY.current) > 8) {
+    const start = touchStart.current
+    if (start && Math.max(Math.abs(e.clientX - start.x), Math.abs(e.clientY - start.y)) > 8) {
       scrolling.current = true
     }
   }
@@ -138,9 +140,12 @@ export function AnswerOption({
       <span aria-hidden="true" className={letterClasses}>
         {optionKey}
       </span>
+      {/* min-w-0 lets the text shrink below its content's width, so a formula
+          wider than the row (one KaTeX can't break, like a bracket raised to a
+          power) scrolls inside the option instead of widening the page. */}
       <MarkdownText
         inline
-        className="flex-1 pt-0.5 [&_p]:my-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-3"
+        className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden pt-0.5 pb-1 [&_p]:my-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-3"
       >
         {text}
       </MarkdownText>

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6e5a4cd45a3cb77f7e21285a93e0a6255aba84c93015d501ffd9613bfedb91e8
+  content_hash: sha256:864abe14bd8581009c40f205094d900d65ae97960ca5cb376281477fc40b1ec1
   sources:
     - "Goldfarb, Risk-Adjusted Performance Measurement for P&C Insurers (CAS study note, rev. Oct 2010), pp.3-5, 9-11, 31-44, sha256:b0ee2f3239c7f53d07401d4c56828d9a1129d5c1f7b660603d811a50019d7b8e — https://www.casact.org/sites/default/files/database/studynotes_goldfarb8.2.pdf"
     - "Robbin, IRR, ROE, and PVI/PVE (CAS Forum Winter 2007), pp.189-191, 201-206, 227-229 (PDF pp.1-3, 13-18, 39-41), sha256:151252827511805261ec416c1454571361957b728d9fcce961f15c7fab268e7c — https://casact.org/sites/default/files/database/forum_07wforum_07w195.pdf"
@@ -19,51 +19,62 @@ verification:
   log: .verify/Concepts/Economic Value.md
 ---
 
-The **Economic Value** of a set of insurance cash flows is their expected value at one date — normally policy inception — after discounting each flow for the [[Time Value of Money|time value of money]] and, where it is risky, for its risk. A policy creates value for its owners when the present value of what it brings in exceeds the present value of everything it commits them to, including a fair return on the capital it ties up.
+The **Economic Value** of a set of insurance cash flows is their expected value at one date, normally policy inception, after discounting each flow for the [[Time Value of Money|time value of money]] and, where it is risky, for its risk. A policy creates value for its owners when the present value of what it brings in exceeds the present value of everything it commits them to, including a fair return on the capital it ties up.
+
+The economic value at inception is
 
 > $$V_0 = \sum_{t} \frac{E[CF_t]}{(1 + r)^{t}}$$
 
-- $CF_t$ is the net [[Cash Flow|cash flow]] at time $t$: premium in; commissions, expenses, claims, LAE and taxes out. The discount rate $r$ must suit the flow. Claim payments are often discounted at a risk-free rate, since for many lines indemnity losses carry little systematic risk (IFRS 17's bottom-up approach adds an illiquidity premium — [[IFRS 17 Discount Rates]]), with their risk priced separately through a [[Risk Loads|risk load]].
-- **Two equivalent views.** The *policy* view values premium less expenses less losses, all in [[Present Value|present value]], and compares the result with the margin the capital requires. The *owners'* view values the equity flows — capital paid in at inception and released as the liabilities run off — at the [[Cost of Capital|cost of capital]], giving a [[Net Present Value|net present value]] or an internal rate of return to compare with a hurdle rate.
-- **Nominal profit misleads.** [[Underwriting Profit]] ignores timing: a long-tail line can create value at a [[Combined Ratio|combined ratio]] above 100% if investment income on its reserves is large enough, and a short-tail line can destroy it below 100% if it holds much capital for a thin margin.
-- **Economic value added** is the margin actually earned less the cost of the capital it uses, $M - k\,Q$ with $k$ the hurdle [[Cost of Capital|cost of capital]]; it is positive only when the return actually earned, $\iota = M/Q$, beats $k$ ([[Insurance Margin]], [[Return on Capital]]).
-- Mildenhall and Major's one-period pricing model collects premium at the start and pays losses at the end, with the risk-free rate set to zero and expenses excluded, so investment income and expenses are dealt with outside it. See [[Insurance Cash Flows]] for the flows themselves and [[Loss Reserve Discounting]] for their reserving counterpart.
+- $CF_t$ is the net [[Cash Flow|cash flow]] at time $t$: premium in; commissions, expenses, claims, LAE and taxes out.
+- $r$ is a discount rate suited to the flow.
 
-> [!example]- Nominal Profit Versus Economic Value {Example}
-> A policy's premium of $100$ is collected at inception, where expenses of $25$ are paid. Losses of $72$ are paid $30\%$, $40\%$ and $30\%$ at the ends of years 1, 2 and 3. The risk-free rate is $4\%$. Compare the nominal underwriting profit with the present value of the policy's cash flows.
+Claim payments are often discounted at a risk-free rate, since for many lines indemnity losses carry little systematic risk, and their risk is priced separately through a [[Risk Loads|risk load]]. IFRS 17's bottom-up approach adds an illiquidity premium to the risk-free rate ([[IFRS 17 Discount Rates]]).
+
+[[Underwriting Profit]] ignores timing. A long-tail line can create value at a [[Combined Ratio|combined ratio]] above 100% if investment income on its reserves is large enough. A short-tail line can destroy value below 100% if it holds much capital for a thin margin.
+
+> [!example]- How does this policy's nominal underwriting profit compare with the present value of its cash flows? {Example}
+> A policy's premium of $100$ is collected at inception, where expenses of $25$ are paid. Losses of $72$ are paid $30\%$, $40\%$ and $30\%$ at the ends of years 1, 2 and 3. The risk-free rate is $4\%$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Nominal profit} &= 100 - 25 - 72 \\
-> > &= 3.00 \\
-> > \text{PV(losses)} &= 72\left(\frac{0.30}{1.04} + \frac{0.40}{1.04^2} + \frac{0.30}{1.04^3}\right) \\
-> > &= 72(0.9250) \\
-> > &= 66.60 \\
-> > V_0 &= 100 - 25 - 66.60 \\
-> > &= 8.40
-> > \end{align*}
-> > $$
-> >
-> > Waiting to pay the losses is worth $5.40$ — the investment income earned on the premium before claims are paid. The policy's economic value is nearly three times its accounting profit. But $8.40$ is not yet profit to the owners: the capital that supports the policy for three years must still earn its cost, which is the owners' view in the next example.
+> > - The nominal underwriting profit is $100 - 25 - 72 = 3.00$.
+> > - The discount factor for the loss payments is $0.30/1.04 + 0.40/1.04^2 + 0.30/1.04^3 = 0.9250$.
+> > - The present value of the losses is $72 \times 0.9250 = 66.60$.
+> > - The present value of the cash flows is $V_0 = 100 - 25 - 66.60 = 8.40$, nearly three times the accounting profit.
+> > - The difference, $5.40$, is the investment income earned on the premium before the claims are paid.
 
-> [!example]- NPV and IRR to the Owners {Example}
-> Premium of $100$ is received at inception and expenses of $20$ are paid then. A single loss payment of $75$ is made at the end of year 2. Owners contribute capital of $50$ at inception, and all funds are invested at the risk-free rate of $4\%$ until the loss is paid, when everything left is released to the owners. Their cost of capital is $12\%$. Ignoring tax, does the policy create value?
+## The policy view and the owners' view
+
+The *policy* view values premium less expenses less losses, all in [[Present Value|present value]], and compares the result with the margin the capital requires. The *owners'* view values the equity flows, capital paid in at inception and released as the liabilities run off, at the [[Cost of Capital|cost of capital]]. It gives a [[Net Present Value|net present value]], or an internal rate of return to compare with a hurdle rate. The two views are equivalent.
+
+> [!example]- Does this policy create value for its owners? {Example}
+> Premium of $100$ is received at inception and expenses of $20$ are paid then. A single loss payment of $75$ is made at the end of year 2. Owners contribute capital of $50$ at inception. All funds are invested at the risk-free rate of $4\%$ until the loss is paid, when everything left is released to the owners. Their cost of capital is $12\%$. Ignore tax.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{Invested at start} &= 100 - 20 + 50 \\
-> > &= 130 \\
-> > \text{Funds after 2 years} &= 130(1.04)^2 \\
-> > &= 140.61 \\
-> > \text{Released after 2 years} &= 140.61 - 75 \\
-> > &= 65.61 \\
-> > \text{NPV} &= -50 + \frac{65.61}{1.12^2} \\
-> > &= 2.30 \\
-> > \text{IRR} &= \sqrt{65.61/50} - 1 \\
-> > &= 14.55\%
-> > \end{align*}
-> > $$
-> >
-> > The owners earn $14.55\%$ a year against a $12\%$ hurdle, so the policy adds $2.30$ of value at inception. Were the same loss paid at the end of year 4 instead, the release would be $130(1.04)^4 - 75 = 77.08$ and the NPV $-50 + 77.08/1.12^4 = -1.01$: two more years of investment income do not pay for two more years of capital that earns $4\%$ but costs $12\%$. The timing of the cash flows, not just their size, decides the value.
+> > - The funds invested at the start are $100 - 20 + 50 = 130$.
+> > - After two years they are $130 \times 1.04^2 = 140.61$, and $140.61 - 75 = 65.61$ is released to the owners.
+> > - The NPV at the cost of capital is $-50 + 65.61/1.12^2 = 2.30$.
+> > - The internal rate of return is $\sqrt{65.61/50} - 1 = 14.55\%$.
+> > - The owners earn $14.55\%$ a year against a $12\%$ hurdle, so the policy adds $2.30$ of value at inception.
+
+Timing decides value as well as size. Were the same loss paid at the end of year 4, the release would be $130 \times 1.04^4 - 75 = 77.08$ and the NPV $-50 + 77.08/1.12^4 = -1.01$. Two more years of investment income do not pay for two more years of capital that earns $4\%$ but costs $12\%$.
+
+Mildenhall and Major's one-period pricing model collects premium at the start and pays losses at the end, with the risk-free rate set to zero and expenses excluded, so investment income and expenses are dealt with outside it.
+
+## Economic value added
+
+**Economic value added** is the margin actually earned less the cost of the capital it uses. With $k$ the hurdle [[Cost of Capital|cost of capital]], it is
+
+> $$\text{EVA} = M - k\,Q$$
+
+- $M$ is the margin earned, the [[Insurance Margin|insurance margin]].
+- $Q$ is the capital the policy or line uses.
+
+It is positive only when the return actually earned, $\iota = M/Q$, beats $k$ ([[Return on Capital]]).
+
+> [!example]- A line earns a margin of $8$ on capital of $50$, and the cost of capital is $12\%$. What is its economic value added? {Example}
+> - The cost of the capital is $0.12 \times 50 = 6$.
+> - The economic value added is $8 - 6 = 2$.
+> - The return earned is $8/50 = 16\%$, above the $12\%$ hurdle, so the line adds value.
+
+> [!trap] Treating the present-value margin as profit to the owners
+> The first policy's $8.40$ is not yet profit to the owners. The capital that supports the policy for three years must still earn its cost before any value is added.

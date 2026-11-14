@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9b34bfb59bdf55d7d07725cc5df8a14710dc8f0a5e2371cc2a7c172fa5ce0e65
+  content_hash: sha256:53bc2f7e6f9f74cba3ef83312d20eb62dad1c576973e2ec25926fa4c7f3e956a
   sources:
     - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶10-13, ¶40-41, ¶127 (PDF pp.438, 444-445, 460), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
     - "Hasnani, 'Insurance and Reinsurance Without Risk Transfer: implementation guidance on SOP 98-7', Journal of Accountancy, March 1999 (fetched 2026-10-10), sha256:c067928007c79ab2d9766cbf61f21baf1d3c21a4c140f1250a1949fb6918e4a7 — https://www.journalofaccountancy.com/issues/1999/mar/hasnani.html"
@@ -14,70 +14,51 @@ verification:
   log: .verify/Concepts/Deposit Accounting.md
 ---
 
-**Deposit Accounting** is the treatment of a reinsurance contract that, despite its form, does not transfer both components of insurance risk: the net consideration paid is recorded as a **deposit asset** by the cedant and a **deposit liability** by the reinsurer, and the contract is accounted for as the financing arrangement it is. It is the alternative to [[Insurance Accounting|reinsurance accounting]] when the [[Risk Transfer|risk transfer]] test fails.
+**Deposit Accounting** is the accounting for a reinsurance contract that does not transfer both components of insurance risk, underwriting risk and timing risk, as the financing arrangement it is. The cedant records the net consideration it pays as a **deposit asset** and the reinsurer records it as a **deposit liability**. It is the alternative to [[Insurance Accounting|reinsurance accounting]] when the [[Risk Transfer|risk transfer]] test fails.
+
+Under SSAP No. 62R, a contract must transfer both underwriting risk and timing risk to be accounted for as reinsurance. The initial deposit is the net consideration, the premium less the ceding commission or other allowances. For the cedant it is an admitted asset only if the reinsurer is qualified in the cedant's state of domicile or the deposit is secured by qualifying funds held. The effective yield $y$ is the rate at which the expected recoveries discount to the initial deposit, so the initial deposit is
 
 > $$\text{Deposit}_0 = \sum_{t} \frac{\text{Expected recoveries}_t}{(1+y)^t}$$
 
+- $\text{Expected recoveries}_t$ is the recovery expected at the end of year $t$.
+
+Each year the deposit accretes at $y$, which the cedant records as interest income and the reinsurer as interest expense, and each recovery draws it down. The deposit at the end of year $t$ is
+
 > $$\text{Deposit}_t = \text{Deposit}_{t-1}(1+y) - \text{Recoveries}_t$$
 
-- **Initial amount.** Net consideration — premium less ceding commission or other allowances (SSAP No. 62R). For the cedant it is an admitted asset only if the reinsurer is qualified in the cedant's state of domicile or the deposit is secured by qualifying funds held.
-- **Effective yield $y$** equates the deposit with the expected amount and timing of recoveries. Each period the balance accretes at $y$ as **interest income** (interest expense for the reinsurer), and cash settlements reduce it. When the actual or expected cash flows change, $y$ is recalculated and the deposit reset to the amount it would have been had the new yield applied since inception, with the difference in interest income or expense.
-- **What does not happen:** no ceded premium, no ceded losses, and **no deduction from the cedant's loss and LAE reserves**. If the underlying losses are revalued upward, the cedant raises its gross reserves through incurred losses and its deposit through interest income — the recovery appears below the underwriting line, never in it.
-- **Consequences for the metrics.** Net written premium, the loss ratio and premium-to-surplus look exactly as they would with no reinsurance, and reserves stay gross. That is the point: a contract that transfers no insurance risk should not improve the measures that describe insurance risk. Nor may deposit accounting be used to avoid recognising a loss — a deposit with no remaining coverage behind it is not recoverable.
-- **GAAP** reaches the same end through ASC 340-30 (originally SOP 98-7), which measures the deposit according to what the contract does transfer — timing risk only, underwriting risk only, neither, or indeterminate. SSAP No. 62R adopts only part of that guidance and uses the effective-yield method above. See also [[Finite Reinsurance]].
+- $\text{Recoveries}_t$ is the recovery received at the end of year $t$.
 
-> [!example]- Interest Method on a Failed Contract {Example}
-> A cedant pays net consideration of $\$20$M under a contract that fails risk transfer. It expects recoveries of $\$10$M at the end of year 1 and $\$11.55$M at the end of year 2.
->
-> Find the effective yield and the deposit balance at each year end. Then suppose that after receiving the year-1 recovery, the year-2 expectation rises to $\$12.10$M.
+When the actual or expected cash flows change, $y$ is recalculated and the deposit is reset to the amount it would have been had the new yield applied since inception. The difference is booked as interest income or expense.
+
+> [!example]- What are this deposit's effective yield and balances, and what happens when the expected recovery rises? {Example}
+> A cedant pays net consideration of $\$20$M under a contract that fails risk transfer. It expects recoveries of $\$10$M at the end of year 1 and $\$11.55$M at the end of year 2. After it receives the year-1 recovery, its year-2 expectation rises to $\$12.10$M.
 >
 > > [!answer]-
-> > Trying $y = 5\%$:
-> >
-> > $$
-> > \begin{align*}
-> > \frac{10}{1.05} + \frac{11.55}{1.05^2} &= 9.524 + 10.476 \\
-> > &= 20.000
-> > \end{align*}
-> > $$
-> >
-> > So $y = 5\%$. Year 1: interest $1.00$, balance $20 + 1.00 - 10 = 11.00$. Year 2: interest $0.55$, balance $11.00 + 0.55 - 11.55 = 0$.
-> >
-> > **Revised estimate.** Solve $20 = \frac{10}{1+y} + \frac{12.10}{(1+y)^2}$, a quadratic in $u = 1 + y$:
-> >
-> > $$
-> > \begin{align*}
-> > u &= \frac{10 + \sqrt{100 + 4(20)(12.10)}}{2(20)} \\
-> > &= 1.0670
-> > \end{align*}
-> > $$
-> >
-> > The yield becomes $6.70\%$, and the deposit is reset to what it would have been at that yield from inception: $20(1.0670) - 10 = 11.34$. The $0.34$ increase is booked as additional interest income now; year 2 then accretes $11.34 \times 0.0670 = 0.76$, bringing the balance to $12.10$, which the final recovery clears. None of it touches premiums, losses or the loss ratio.
+> > - At $y = 5\%$, the recoveries discount to $10/1.05 + 11.55/1.05^2 = 9.524 + 10.476 = 20.000$, so the effective yield is $5\%$.
+> > - Year 1 accretes $20 \times 0.05 = 1.00$ of interest, and the recovery leaves $20 + 1.00 - 10 = 11.00$.
+> > - Year 2 accretes $0.55$, and the recovery leaves $11.00 + 0.55 - 11.55 = 0$.
+> > - With the revised recovery, the yield solves $20 = 10/u + 12.10/u^2$ with $u = 1 + y$, which gives $u = 1.0670$, a yield of $6.70\%$.
+> > - The deposit is reset to $20(1.0670) - 10 = 11.34$, and the $0.34$ increase is booked as additional interest income now.
+> > - Year 2 accretes $11.34 \times 0.0670 = 0.76$, bringing the balance to $12.10$, which the final recovery clears.
+> > - None of it touches premiums, losses or the loss ratio.
 
-> [!example]- What the Cedant's Ratios Show {Example}
-> An insurer has direct earned premium of $\$300$M, direct losses of $\$210$M and surplus of $\$150$M. It paid $\$30$M for a contract expected to recover $\$27$M. Compare its loss ratio and premium-to-surplus if the contract is booked as reinsurance and if it is a deposit (treat written and earned premium as equal).
+## Effect on the cedant's statements
+
+Under deposit accounting there is no ceded premium, no ceded loss and no reduction of the cedant's loss and LAE reserves for the expected recoveries. If the underlying losses are revalued upward, the cedant raises its gross reserves through incurred losses and its deposit through interest income. The recovery appears below the underwriting line, never in it.
+
+Net written premium, the loss ratio and premium-to-surplus therefore look as they would with no reinsurance, and reserves stay gross. A contract that transfers no insurance risk does not improve the measures that describe insurance risk. Deposit accounting may not be used to avoid recognising a loss either: a deposit with no remaining coverage behind it is not recoverable.
+
+> [!example]- How do this cedant's loss ratio and premium-to-surplus differ between reinsurance and deposit accounting? {Example}
+> An insurer has direct earned premium of $\$300$M, direct losses of $\$210$M and surplus of $\$150$M. It paid $\$30$M for a contract expected to recover $\$27$M. Written and earned premium are equal.
 >
 > > [!answer]-
-> > **As reinsurance:**
-> >
-> > $$
-> > \begin{align*}
-> > \text{Net loss ratio} &= \frac{210 - 27}{300 - 30} \\
-> > &= 67.8\% \\
-> > \text{Premium to surplus} &= \frac{270}{150} \\
-> > &= 1.80
-> > \end{align*}
-> > $$
-> >
-> > **As a deposit:** loss ratio $210/300 = 70.0\%$ and premium to surplus $300/150 = 2.00$, with a $\$30$M deposit asset that the $\$27$M of recoveries will draw down.
-> >
-> > Booking a failed contract as reinsurance would flatter the loss ratio by $2.2$ points and leverage by $0.2$ — improvements with no risk behind them. That is precisely the misstatement the risk transfer test and the CEO/CFO attestation exist to prevent.
+> > - As reinsurance, the net loss ratio is $(210 - 27)/(300 - 30) = 67.8\%$ and premium-to-surplus is $270/150 = 1.80$.
+> > - As a deposit, the loss ratio is $210/300 = 70.0\%$ and premium-to-surplus is $300/150 = 2.00$, with a $\$30$M deposit asset that the $\$27$M of recoveries will draw down.
+> > - Booking the failed contract as reinsurance would lower the loss ratio by $2.2$ points and leverage by $0.2$, with no risk behind either improvement.
 
-> [!tip]- How it appears on the exam
-> - **DISC-IA:** The deposit accounting objective asks when a reinsurance contract must be accounted for as a deposit and what that changes: no ceded premium, no ceded losses, no reduction of the loss reserves, and interest income or expense on the deposit.
-> - **Exams 6C and 6U:** Risk transfer testing and the effective-yield method, as in the examples above.
+## GAAP
 
-> [!warning]- Exam traps
-> - **Both components of risk:** A contract must transfer both underwriting risk and timing risk to escape deposit accounting under SSAP No. 62R.
-> - **Recoveries are not ceded losses:** Under deposit accounting a recovery draws down the deposit; it never reduces incurred losses or the loss ratio.
+GAAP reaches the same end through ASC 340-30 (originally SOP 98-7), which measures the deposit according to what the contract does transfer: timing risk only, underwriting risk only, neither, or an indeterminate amount. SSAP No. 62R adopts only part of that guidance and uses the effective-yield method above. [[Finite Reinsurance|Finite reinsurance]], whose purpose is usually timing and financing, sits at the boundary between the two treatments.
 
+> [!trap] Treating a recovery as a ceded loss
+> Under deposit accounting a recovery draws down the deposit asset. It never reduces incurred losses, the loss reserves or the loss ratio.

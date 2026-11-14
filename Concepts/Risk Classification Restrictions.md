@@ -4,42 +4,50 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c30c73e79b9f37b130d8506fba5b8851828426c1a3bcedd7956290b81eb7d7b8
+  content_hash: sha256:8c5827dab66a444ad8d86e69c7466e5cc1cc35e1575b493c215f60723e0fa683
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Classification Restrictions.md
 ---
 
-**Risk Classification Restrictions** are regulatory prohibitions on rating variables an insurer may otherwise find predictive. In Canadian auto insurance the restricted list typically includes age, sex, marital status (in some provinces), credit score, and limits on [[Territorial Rating|territory]] — restrictions imposed on **social** grounds even where the variable is statistically valid.
-
-- The regulator's test is not "does it predict?" but **"is it acceptable to price on this?"** — a distinction candidates must be able to hold. A prohibited variable can be highly correlated with loss and still be prohibited.
-- **Standard criteria** for whether a classification variable is acceptable: actuarial (statistically significant, homogeneous, credible), operational (objective, cheap to verify, not manipulable), social (privacy, causality, affordability, controllability) and legal (permitted in the jurisdiction). Restrictions are the *social* and *legal* criteria overriding the actuarial one.
-- **Consequences of a restriction** are predictable and appear on every exam: the removed variable's signal migrates into correlated **proxy** variables; cross-subsidy flows from the previously low-rated group to the previously high-rated one; [[Adverse Selection|adverse selection]] increases as the accurately-priced group's better risks leave; and [[Residual Market|residual market]] volumes grow if the restriction makes some segments unwritable at approved rates.
-- **Proxy effects cut both ways.** Banning a variable does not remove its influence if a permitted variable stands in for it, which is why territory restrictions and postal-code debates recur — see [[Bias in Actuarial Practice]].
-- Restrictions differ by province, so a national insurer maintains different classification plans by jurisdiction and cannot simply port a model across the country.
-
 ![[Media/Figures/Risk_Classification_Restrictions.svg|340]]
 
-> [!example]- What Happens When a Variable Is Banned {Example}
-> A province bans the use of **age** in private passenger auto rating, effective immediately, with no change to the overall rate level. Currently, drivers under $25$ have a pure premium of $\$1{,}200$ and drivers $25$ and over $\$600$; the under-$25$ group is $12\%$ of exposures.
+**Risk Classification Restrictions** are regulatory prohibitions on [[Rating Variable|rating variables]] an insurer may otherwise find predictive. In Canadian auto insurance the restricted list typically includes age, sex, marital status (in some provinces), credit score, and limits on [[Territorial Rating|territory]], imposed on **social** grounds even where the variable is statistically valid.
+
+The standard criteria for whether a classification variable is acceptable fall into four groups:
+
+1. **Actuarial**: statistically significant, homogeneous and credible.
+2. **Operational**: objective, cheap to verify and not manipulable by the insured.
+3. **Social**: privacy, causality, affordability and controllability.
+4. **Legal**: permitted in the jurisdiction.
+
+A restriction is the social and legal criteria overriding the actuarial one. A prohibited variable can be highly correlated with loss and still be prohibited. Restrictions differ by province, so a national insurer maintains different classification plans by jurisdiction and cannot simply port a model across the country.
+
+## Consequences of a restriction
+
+Removing a rating variable has four predictable effects:
+
+1. **Cross-subsidy.** Premium is averaged across the groups the variable separated, so cross-subsidy flows from the previously low-rated group to the previously high-rated one.
+2. **Proxy variables.** The removed variable's signal migrates into correlated permitted variables. Banning a variable does not remove its influence if a permitted variable stands in for it, which is why territory restrictions and postal-code debates recur ([[Bias in Actuarial Practice]]).
+3. **[[Adverse Selection|Adverse selection]].** The better risks in the group that is now overcharged are the most likely to leave, and an insurer that finds a legal proxy can win them.
+4. **Availability.** Insurers restrict underwriting of segments they can no longer price, and [[Residual Market|residual market]] volumes grow if the restriction makes some segments unwritable at approved rates.
+
+> [!example]- What are the effects of this ban on age? {Example}
+> A province bans the use of age in private passenger auto rating, with no change to the overall rate level. Drivers under $25$ make up $12\%$ of exposures:
 >
-> Describe the effects.
+> | Age group | Share of exposures | Pure premium |
+> | :--- | ---: | ---: |
+> | Under $25$ | $12\%$ | $\$1{,}200$ |
+> | $25$ and over | $88\%$ | $\$600$ |
 >
 > > [!answer]-
-> > The class-free average pure premium:
-> >
-> > $$\begin{align*}
-> > \bar{P} &= 0.12(\$1{,}200) + 0.88(\$600) \\
-> > &= \$144 + \$528 \\
-> > &= \$672
-> > \end{align*}$$
-> >
-> > Effects, in order of appearance:
-> >
-> > 1. **Cross-subsidy.** Under-$25$ drivers pay $\$672$ instead of $\$1{,}200$ — a $44\%$ decrease; over-$25$ drivers pay $\$672$ instead of $\$600$ — a $12\%$ increase. Roughly $\$63$ million per million exposures moves from young drivers to everyone else.
-> > 2. **Proxy substitution.** Insurers reweight toward variables correlated with age — years licensed, vehicle type, marital status where permitted — recovering part of the signal. The ban is therefore *partly* undone in practice, which is why regulators often ban a cluster of variables rather than one.
-> > 3. **[[Adverse Selection]].** Over-$25$ drivers are now overcharged; the best of them are the most likely to shop, and any insurer that finds a legal proxy can skim them. The insurer that moves last is left with the young drivers.
-> > 4. **Availability.** Insurers restrict underwriting of segments they can no longer price, so young-driver risks migrate to the [[Facility Association]] — where they pay more than $\$1{,}200$, defeating the affordability purpose of the ban.
-> >
-> > The honest summary is that a classification ban redistributes cost and degrades market efficiency; whether that trade is worth making is a policy judgement, not an actuarial one. The actuary's role is to quantify it, clearly, before it is made.
+> > - Without age, every driver pays the average pure premium, $0.12 \times \$1{,}200 + 0.88 \times \$600 = \$672$.
+> > - Drivers under $25$ pay $\$672$ instead of $\$1{,}200$, a $44\%$ decrease. Drivers $25$ and over pay $\$672$ instead of $\$600$, a $12\%$ increase.
+> > - Per million exposures, $120{,}000 \times (\$1{,}200 - \$672) = \$63.4$ million moves from drivers $25$ and over to young drivers.
+> > - Insurers reweight toward variables correlated with age, such as years licensed and vehicle type, so part of the signal is recovered.
+> > - The drivers $25$ and over are now overcharged, and the best of them are the most likely to shop, so adverse selection rises.
+> > - Insurers restrict underwriting of young drivers they can no longer price, and those risks migrate to the [[Facility Association]], where they pay more than $\$1{,}200$. That defeats the affordability purpose of the ban.
+
+> [!trap] Getting the direction of the subsidy backwards
+> After a ban, the previously low-rated group pays more and subsidises the previously high-rated group. In the age example the $\$63.4$ million per million exposures flows to the young drivers, not from them.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d83d8ab56b52f1bc6bc33dab2634e2aaba9ccaa3233dfe49efa7d123dd6989a1
+  content_hash: sha256:9c5e1bb4e9ad50a50ba4efc47b4bac33c4368507ec6f61f040cfc86fd4a32661
   sources:
     - "CAS Exam 9 Practice Items and Solutions (2026; retired Spring 2026 items), Items 3 (M&M 11.3: cost of capital i = [g(s)-s]/[1-g(s)], g(s) = (s+i)/(1+i), LR = s/g(s)) and 4 (M&M pp.317-318: Shapley allocation), sha256:9cf61c6c2597a9a1a6d2d548d83f78a1a56e73778226176ab30308aa85f615fb — https://www.casact.org/sites/default/files/2026-08/Exam9_PracticeItems_2026.xlsx"
     - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.1-9 (notation p.5-6), 18-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
@@ -19,52 +19,51 @@ verification:
   log: .verify/Concepts/Insurance Leverage.md
 ---
 
-**Insurance Leverage** is the volume of business written per unit of capital supporting it — in Mildenhall and Major, the premium-to-capital ratio $P/Q$. It is the lever that turns a thin [[Insurance Margin|margin]] into an adequate [[Return on Capital|return]], paid for with a thinner cushion against bad outcomes.
+**Insurance Leverage** is the volume of business written per unit of capital supporting it. In Mildenhall and Major it is the premium-to-capital ratio, so for premium $P$ and capital $Q$ the leverage is
 
 > $$\text{Leverage} = \frac{P}{Q}$$
->
+
+- $Q = a - P$, the assets $a$ not funded by premium.
+
+Leverage can also be stated as premium to assets, $P/a$. Since $Q = a - P$, the two are linked by $P/Q = (P/a)/(1 - P/a)$.
+
+## Leverage and return on capital
+
+Leverage turns a thin [[Insurance Margin|margin]] into an adequate [[Return on Capital|return]]. In the decomposition of [[Insurance Profitability|insurance profitability]], the return on capital, $\iota = M/Q$, is
+
 > $$\iota = \frac{M}{P} \cdot \frac{P}{Q}$$
 
-- $P$ is premium, $Q = a - P$ capital, $a$ assets, $M$ margin and $\iota$ return. Leverage can equally be stated as premium to assets, $P/a$; since $Q = a - P$, the two are linked by $P/Q = (P/a)/(1 - P/a)$.
-- **Return versus safety.** For a given margin ratio, doubling leverage doubles the return — but halves the capital behind each dollar of premium, so a smaller adverse deviation exhausts it. Regulators and rating agencies watch leverage for exactly that reason; statutory screens include premium-to-surplus tests ([[IRIS Ratios]]), alongside risk-based capital requirements ([[Risk-Based Capital]]).
-- **Leverage follows risk.** Diversified, low-volatility business such as personal auto supports high leverage at thin margins. Business whose losses do not diversify — [[Catastrophe Risk|catastrophe]] layers above all — supports little, and needs a high margin ratio to earn the same return. Under distortion pricing a layer whose attachment probability is $s$ has leverage $g(s)/(1 - g(s))$: remote layers are funded almost entirely by capital.
-- **Other capital raises equity leverage.** Debt and [[Reinsurance|reinsurance]] are forms of risk capital with a fixed cost; replacing part of the equity with them raises premium-to-equity leverage and, if they cost less than equity, the return on what equity remains ([[Capital Structure]]).
-- The industry measures leverage from the statutory balance sheet — written premium, and reserves, relative to policyholders' surplus ([[Capital and Surplus]]). Pricing uses capital allocated to the business being priced. See [[Insurance Profitability]].
+- $M$ is the margin, premium less expected loss, and $M/P$ is the margin ratio.
 
-> [!example]- Same Margin, Different Leverage {Example}
-> Two insurers write premium of $100$ with expected loss $94$, a $6\%$ margin ratio. Insurer A holds capital of $66.67$; insurer B holds $33.33$. Compare their leverage, return, and how far losses can exceed expectation before capital is gone.
+For a given margin ratio, doubling leverage doubles the return. The leverage needed for a target return is the target return divided by the margin ratio. Doubling leverage also halves the capital behind each dollar of premium, so a smaller adverse deviation exhausts it.
+
+> [!example]- What return does each of these insurers earn, and how far can losses exceed expectation before each one's capital is gone? {Example}
+> Two insurers each write premium of $100$ with expected loss $94$, a $6\%$ margin ratio. Insurer A holds capital of $66.67$ and insurer B holds $33.33$.
 >
 > > [!answer]-
-> > $$
-> > \begin{align*}
-> > \iota_A &= 0.06 \times \frac{100}{66.67} \\
-> > &= 0.06 \times 1.5 \\
-> > &= 9\% \\
-> > \iota_B &= 0.06 \times \frac{100}{33.33} \\
-> > &= 0.06 \times 3.0 \\
-> > &= 18\%
-> > \end{align*}
-> > $$
-> >
-> > Assets are $166.67$ for A and $133.33$ for B, so losses would have to exceed expectation by $166.67 - 94 = 72.67$ to exhaust A but by only $39.33$ to exhaust B. B's doubled return is bought with a much higher chance of default — which is why a return comparison means nothing without the leverage behind it.
+> > - A's leverage is $100/66.67 = 1.5$, so its return is $0.06 \times 1.5 = 9\%$.
+> > - B's leverage is $100/33.33 = 3.0$, so its return is $0.06 \times 3.0 = 18\%$.
+> > - A's assets are $166.67$, so losses would have to exceed expectation by $166.67 - 94 = 72.67$ to exhaust them.
+> > - B's assets are $133.33$, so an excess of only $39.33$ exhausts them.
+> > - B's doubled return is bought with a much higher chance of default.
 
-> [!example]- Buying Security Lowers Leverage and Raises the Price {Example}
-> A portfolio has expected loss $80$ and investors require $12\%$. Compare the premium, capital and leverage if the capital standard sets assets at $120$ and at $150$.
->
-> > [!answer]-
-> > With $\delta = 0.12/1.12 = 0.10714$ and $P = L + \delta(a - L)$:
-> >
-> > $$
-> > \begin{align*}
-> > P_{120} &= 80 + 0.10714(40) \\
-> > &= 84.29 \\
-> > Q_{120} &= 120 - 84.29 \\
-> > &= 35.71 \\
-> > P_{150} &= 80 + 0.10714(70) \\
-> > &= 87.50 \\
-> > Q_{150} &= 150 - 87.50 \\
-> > &= 62.50
-> > \end{align*}
-> > $$
-> >
-> > Leverage falls from $84.29/35.71 = 2.36$ to $87.50/62.50 = 1.40$ and the loss ratio from $94.9\%$ to $91.4\%$. Policyholders pay $3.21$ more for an insurer that can absorb $30$ more of adverse loss; both prices earn exactly $12\%$.
+## Leverage and risk
+
+Diversified, low-volatility business such as personal auto supports high leverage at thin margins. Business whose losses do not diversify, [[Catastrophe Risk|catastrophe]] layers above all, supports little, and needs a high margin ratio to earn the same return. Under distortion pricing, a layer whose attachment probability is $s$ has leverage
+
+> $$\frac{g(s)}{1 - g(s)}$$
+
+- $g$ is the distortion, and $g(s)$ is the layer's priced probability.
+
+Remote layers are therefore funded almost entirely by capital.
+
+## Debt and reinsurance as capital
+
+Debt and [[Reinsurance|reinsurance]] are forms of risk capital with a fixed cost in an insurer's [[Capital Structure|capital structure]]. Replacing part of the equity with them raises premium-to-equity leverage and, if they cost less than equity, the return on the equity that remains.
+
+## Statutory leverage
+
+The industry measures leverage from the statutory balance sheet: written premium, and reserves, relative to [[Capital and Surplus|policyholders' surplus]]. Regulators and rating agencies watch it because higher leverage leaves less capital to absorb adverse deviation. Statutory screens include premium-to-surplus tests ([[IRIS Ratios|IRIS ratios]]), alongside [[Risk-Based Capital|risk-based capital]] requirements. Pricing measures leverage against the capital allocated to the business being priced.
+
+> [!trap] Comparing returns without the leverage behind them
+> In the example, B earns twice A's return on the same margin ratio only because it holds half the capital. Compare returns together with the leverage and the capital behind each premium dollar.

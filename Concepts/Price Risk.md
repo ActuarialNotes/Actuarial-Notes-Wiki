@@ -4,26 +4,30 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4f2373fd4f0eb52a1fedb9e0f884266615fdbb015639bca5c51065c450099c6f
+  content_hash: sha256:d25c7838828f1316ae61b23e3c546a46b40c850e44dac39f55390c10b60a2111
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Price Risk.md
 ---
 
-**Price risk** (also called **interest rate risk**) is the risk that the market value of a [[Bonds|bond]] or fixed-income portfolio falls due to a rise in interest rates. Its sensitivity to a yield change $\Delta j$ is quantified by [[Modified Duration]] $D_{Mod}$.
+**Price Risk** is the risk that the market value of a [[Bonds|bond]] or fixed-income portfolio falls because interest rates rise. It is also called [[Interest Rate Risk|interest rate risk]].
 
-> $$\frac{\Delta P}{P} \approx -D_{Mod} \cdot \Delta j$$
+For a change $\Delta j$ in yield, the percentage change in the price $P$ of a bond or portfolio is approximately
 
-- Bond prices and yields move in opposite directions, so an unexpected yield increase causes an immediate capital loss for an investor who must sell before maturity.
-- Bonds with longer [[Macaulay Duration]] carry more price risk: a 1% yield rise causes a much larger percentage price drop for a 20-year bond than for a 2-year bond.
-- Price risk is the complement of [[Reinvestment Risk]] — strategies that reduce one typically increase the other.
-- [[Redington Immunization]] and [[Cash Flow Matching]] manage price risk (and reinvestment risk) for institutions with known future liabilities.
+> $$\frac{\Delta P}{P} \approx -D_{Mod}\,\Delta j$$
 
-> [!example]- Price Risk and Duration {Example}
-> Portfolio A has modified duration 10 years; Portfolio B has modified duration 2 years. Both are worth \$$1{,}000{,}000$. Yields rise by 0.5% ($\Delta j = 0.005$). Estimate the loss in value for each portfolio.
->
-> > [!answer]-
-> > $$\Delta P_A \approx -(10)(1{,}000{,}000)(0.005) = -\$50{,}000$$
-> > $$\Delta P_B \approx -(2)(1{,}000{,}000)(0.005) = -\$10{,}000$$
-> > Portfolio A loses five times as much value as Portfolio B for the same rate move, illustrating that longer-duration portfolios bear substantially more price risk. An investor with a 2-year horizon should prefer Portfolio B.
+- $\Delta P$ is the change in price.
+- $D_{Mod}$ is the [[Modified Duration|modified duration]].
+
+Bond prices and yields move in opposite directions, so an unexpected rise in yields is an immediate capital loss for an investor who must sell before maturity. A bond with a longer [[Macaulay Duration|Macaulay duration]] carries more price risk. A 1% rise in yield causes a much larger percentage price drop for a 20-year bond than for a 2-year bond.
+
+> [!example]- Two portfolios worth $\$1{,}000{,}000$ each have modified durations 10 and 2. What does each lose, approximately, when yields rise by 0.5%? {Example}
+> - The change in yield is $\Delta j = 0.005$.
+> - The first portfolio changes by about $-10 \times 0.005 \times 1{,}000{,}000 = -\$50{,}000$.
+> - The second changes by about $-2 \times 0.005 \times 1{,}000{,}000 = -\$10{,}000$.
+> - The first portfolio loses five times as much for the same rise in yields, because its duration is five times as long.
+
+## Price risk and reinvestment risk
+
+Price risk is the complement of [[Reinvestment Risk|reinvestment risk]]. A strategy that reduces one typically increases the other. [[Redington Immunization]] and [[Cash Flow Matching|cash flow matching]] manage both for an institution with known future liabilities.

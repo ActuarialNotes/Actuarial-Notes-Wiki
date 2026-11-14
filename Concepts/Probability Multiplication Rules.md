@@ -4,25 +4,39 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dd9ea18ee148c05c4f5ecbcbe636840dc8052388de5cf6d6aaa867c303fdf3c3
+  content_hash: sha256:428d8051d74c3324e9ea8226161bc33138c2dc5ba41e9b59dba26e2f2be46c5f
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probability Multiplication Rules.md
 ---
 
-The **probability multiplication rules** give the probability of the intersection of two [[Event|events]] in terms of a [[Conditional Probability|conditional probability]].
+The **Probability Multiplication Rules** give the [[Probability|probability]] that two [[Event|events]] both occur from a [[Conditional Probability|conditional probability]]. For events $E$ and $F$, the probability that both occur is
 
-> $$P(A \cap B) = P(A)\,P(B \mid A)$$
+> $$P(E \cap F) = P(E)\,P(F \mid E)$$
 
-> $$= P(B)\,P(A \mid B)$$
+> $$P(E \cap F) = P(F)\,P(E \mid F)$$
 
-- This rearranges the definition of conditional probability, $P(B \mid A) = P(A \cap B)/P(A)$.
-- For [[Independent Events|independent]] events it reduces to $P(A \cap B) = P(A)\,P(B)$.
-- It extends to three events as $P(A \cap B \cap C) = P(A)\,P(B \mid A)\,P(C \mid A \cap B)$.
+- $P(F \mid E)$ is the probability of $F$ given that $E$ has occurred.
 
-> [!example]- Drawing Two Red Marbles Without Replacement {Example}
-> A bag has 5 red and 3 blue marbles. Two are drawn without replacement. What is the probability both are red?
->
-> > [!answer]-
-> > $$\begin{align*} P(R_1 \cap R_2) &= P(R_1)\,P(R_2 \mid R_1) \\ &= \frac{5}{8} \cdot \frac{4}{7} \\ &= \frac{20}{56} = \frac{5}{14} \approx 0.357 \end{align*}$$
+The rule rearranges the definition of conditional probability, $P(F \mid E) = P(E \cap F)/P(E)$. When $E$ and $F$ are [[Independent Events|independent]], it reduces to $P(E \cap F) = P(E)\,P(F)$.
+
+> [!example]- A bag has 5 red and 3 blue marbles. Two are drawn without replacement. What is the probability that both are red? {Example}
+> - Let $E$ be "the first marble is red" and $F$ be "the second marble is red".
+> - Five of the 8 marbles are red, so $P(E) = \frac{5}{8}$.
+> - Without replacement, 4 red marbles remain among 7 after a red is drawn, so $P(F \mid E) = \frac{4}{7}$.
+> - The probability that both are red is $P(E \cap F) = \frac{5}{8} \times \frac{4}{7} = \frac{5}{14} \approx 0.357$.
+
+## The multiplication rule for three events
+
+For three events $E$, $F$ and $G$, the probability that all three occur is
+
+> $$P(E \cap F \cap G) = P(E)\,P(F \mid E)\,P(G \mid E \cap F)$$
+
+- $P(G \mid E \cap F)$ is the probability of $G$ given that both $E$ and $F$ have occurred.
+
+> [!example]- A bag has 5 red and 3 blue marbles. Three are drawn without replacement. What is the probability that all three are red? {Example}
+> - The first is red with probability $\frac{5}{8}$.
+> - Given a red first, the second is red with probability $\frac{4}{7}$.
+> - Given two reds, 3 red marbles remain among 6, so the third is red with probability $\frac{3}{6}$.
+> - The probability that all three are red is $\frac{5}{8} \times \frac{4}{7} \times \frac{3}{6} = \frac{5}{28} \approx 0.179$.

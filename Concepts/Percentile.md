@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:286bd71c19c0201775b385bf3d722259de060859395ccc79774b92cdec1e9253
+  content_hash: sha256:9fde842befe89af57f9b1dbc6f1b86cca8c85dc9a84c0c4e9512df69a0348949
   sources:
     - "Siegrist, 2.7 Distribution and Quantile Functions: quantile of order p, F(x-) <= p <= F(x); F^-1(p) = min{x: F(x) >= p}; continuous F -> F(x) = p; quartiles, HTML fetched 2026-11-06, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
     - "Siegrist, Location-Scale Families: X = a + bZ, b > 0, a + bz is a quantile of order p of X, HTML fetched 2026-11-06, sha256:d9bc65924c926bd13e91d33c7f63a368fff73aa005bddc1aeb595de5d0fbc738 — https://www.randomservices.org/random/special/LocationScale.html"
@@ -45,6 +45,7 @@ The 50th percentile is the [[Median|median]]. Value at Risk at level $p$ is the 
 > [!example]- Losses are exponential with mean 1,000, so $F(x) = 1 - e^{-x/1000}$. What is the 90th percentile? {Example}
 > - Setting the CDF to 0.9 gives $e^{-x/1000} = 0.1$.
 > - Taking logarithms, $x_{0.9} = -1000 \ln 0.1 \approx 2{,}303$.
+> - Since $-\ln a = \ln \frac{1}{a}$, this is $1000 \ln 10$.
 > - In general an [[Exponential Distribution|exponential]] with mean $\theta$ has $x_p = -\theta \ln(1 - p)$.
 
 For a density in pieces, evaluate $F$ at each break first to find which piece holds $x_p$, then solve within that piece.

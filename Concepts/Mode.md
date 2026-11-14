@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3ef2bcee56e7f37d216b682ca9e407a4cc3f34db574005c27313a1fc207b0ac1
+  content_hash: sha256:c06ec5e808b70d19478e0ca9e261c49a0dbff0fbc3685a61caec1a398316bfd2
   sources:
     - "SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), gamma mode = theta(alpha-1) (PDF p.9), exponential mode = 0 and lognormal mode = exp(mu - sigma^2) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Exam P Sample Solutions (2026-05 file), Q137 (PDF p.40: integer Poisson parameter gives equal modes at the parameter and one less; P(N<=4)=0.815 first above 0.75), Q143-Q144 (PDF pp.40-41: constant of proportionality not needed for the mode), Q176 (PDF p.41), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
@@ -28,7 +28,7 @@ A **Mode** of a [[Random Variable|random variable]] $X$ is a value at which its 
 
 - The maximum is taken over the support of $X$, where $f(x) > 0$.
 
-For a [[Discrete Random Variable|discrete]] $X$, the mode is the most likely value. For a [[Continuous Random Variable|continuous]] $X$, it is the peak of the density. A distribution or data set with two equal peaks has two modes.
+For a [[Discrete Random Variable|discrete]] $X$, the mode is the most likely value. For a [[Continuous Random Variable|continuous]] $X$, it is the peak of the density. A distribution or data set with two equal peaks has two modes. No value of a data set occurs more often than its modes, so the frequency at a mode is the largest frequency in the data set.
 
 > [!example]- A fleet's claim counts for twelve months were 1, 2, 3, 3, 3, 4, 4, 4, 5, 2, 6 and 0. What is the mode? {Example}
 > - The mode of a data set is its most frequent value.
@@ -53,6 +53,8 @@ For a [[Binomial Distribution|binomial]] with $n$ trials and success probability
 > $$\lfloor (n + 1)p \rfloor$$
 
 - When $(n + 1)p$ is a whole number, $(n + 1)p - 1$ is a mode as well.
+
+For a [[Geometric Distribution|geometric]] distribution, each probability is $1 - p$ times the one before it, so the probabilities only decrease. Its mode is the smallest value in its support, whatever $p$ is.
 
 > [!example]- A fleet's monthly claim count $N$ is Poisson with mean 3.4. What is the most likely number of claims? {Example}
 > Each probability is the one before it times $\frac{3.4}{k}$:
@@ -80,6 +82,10 @@ Maximizing $\ln f(x)$ gives the same point, and is often easier. A constant in f
 > - Its derivative is $\frac{2}{x} - \frac{1}{500}$, which is 0 at $x = 1{,}000$.
 > - The second derivative, $-\frac{2}{x^2}$, is negative, so this point is a maximum.
 > - The mode is 1,000. This is a [[Gamma|gamma]] density with $\alpha = 3$ and $\theta = 500$, whose mode is $(\alpha - 1)\theta$.
+
+## The mode of a scaled variable
+
+For a constant $c > 0$, the mode of $Y = cX$ is $c$ times the mode of $X$. The value $cx$ of $Y$ has the probability of the value $x$ of $X$, and a density only picks up the constant factor $\frac{1}{c}$, so the largest value moves from $x$ to $cx$.
 
 ## Mode, median and mean
 

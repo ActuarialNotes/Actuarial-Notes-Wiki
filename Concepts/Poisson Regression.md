@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b0eb45db88ee91e60bfc7201d7e7dbf34949735c9db56fef91f79d510f6f01ea
+  content_hash: sha256:791e7c9a6a42cdca3901d8a86032db7def4721198eaed5110b4a8a8ab2226500
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sec.4.6.2 (PDF pp.177-180), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Rodriguez, GLM lecture notes (Princeton), ch.4 secs.4.2.2-4.3 (PDF pp.7-10), sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
@@ -42,7 +42,7 @@ When observation $i$ has exposure $v_i$, such as car-years, the expected count i
 
 - $\ln v_i$ is an [[Offset Variable|offset]], a term in the linear predictor whose coefficient is fixed at 1 rather than estimated.
 
-The expected count is $\mu_i = v_i\, e^{\eta_i}$, where $\eta_i$ is the linear predictor without the offset, so $e^{\eta_i}$ is the expected claim frequency per unit of exposure. Any known multiplicative factor, such as a relativity set in a separate study, enters the offset the same way, as its logarithm. Modelling the frequency $y_i/v_i$ as the response, with weight $v_i$ and no offset, gives the same coefficients, relativities and standard errors.
+The expected count is $\mu_i = v_i\, e^{\eta_i}$, where $\eta_i$ is the linear predictor without the offset, so $e^{\eta_i}$ is the expected claim frequency per unit of exposure. Any known multiplicative factor, such as a relativity set in a separate study, enters the offset the same way, as its logarithm. Modelling the frequency $y_i/v_i$ as the response, with weight $v_i$ and no offset, gives the same coefficients, relativities and standard errors. A weight changes only how variable each record's response is taken to be, $\text{Var}(Y_i) = \phi\,V(\mu_i)/w_i$, and not its mean, so a weight cannot take an effect out of the mean the way an offset or a covariate can.
 
 > [!example]- In the model above, a young urban driver has $0.5$ car-years of exposure. What is the expected claim count? {Example}
 > - The offset is $\ln 0.5 = -0.693$.

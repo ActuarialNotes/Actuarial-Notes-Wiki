@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2ac0277246b7077b8dd08772e99f830e67eda64abc4f7b24b437f893a4941c28
+  content_hash: sha256:cb8eba4193fba4ef7d9269b36338f28ff932240dd63f8c86dafa53cea70edcbc
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Thm 1.1 property 4, Thm 1.2 (pairwise disjoint), Thm 1.3 (P(E)=Σ P(E∩A_i) over a partition), Thm 1.4 with proof 'added twice … subtracted once' (pp.22-24, PDF pp.30-32), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.2 Thm 3.8 Inclusion-Exclusion Principle and proof: an outcome in k sets counted C(k,1)−C(k,2)+…=1 times (pp.104-105, PDF pp.112-113), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -57,6 +57,30 @@ When the union is known, the rule gives the probability that both events occur:
 > - The probability of both is $P(E \cap F)$, which is $0.25 + 0.20 - 0.38 = 0.07$.
 
 For three or more events, the rule extends to the [[Inclusion-Exclusion Principle|inclusion-exclusion principle]].
+
+## Exactly one of two events
+
+The event that exactly one of $E$ and $F$ occurs is the union with the intersection taken out. Its probability is
+
+> $$P(E \cup F) - P(E \cap F)$$
+
+By the addition rule, this is $P(E) + P(F) - 2P(E \cap F)$.
+
+## Exactly two of three events
+
+For three events $E$, $F$ and $G$, each region where exactly two occur is a pairwise intersection less the triple intersection. The probability that exactly two occur is
+
+> $$P(E \cap F) + P(E \cap G) + P(F \cap G) - 3P(E \cap F \cap G)$$
+
+When the triple intersection is empty, the probability that exactly two occur is the sum of the pairwise intersection probabilities.
+
+## When the overlap is not given
+
+If $P(E \cap F)$ is not given, it is only bounded. The intersection lies inside both events, so its probability is at most the smaller of $P(E)$ and $P(F)$. Since $P(E \cup F) \leq 1$, the addition rule forces $P(E \cap F) \geq P(E) + P(F) - 1$. The bounds are
+
+> $$\max(0,\ P(E) + P(F) - 1) \leq P(E \cap F) \leq \min(P(E),\ P(F))$$
+
+So $P(E \cup F)$ ranges from $\max(P(E), P(F))$, when one event contains the other, up to $\min(1, P(E) + P(F))$.
 
 > [!trap] Independent read as mutually exclusive
 > [[Independent Events|Independent]] events with positive probabilities overlap, with $P(E \cap F) = P(E)\,P(F)$. If property and liability claims were independent, the overlap would be $0.30 \times 0.20 = 0.06$ and the union $0.30 + 0.20 - 0.06 = 0.44$. The plain sum, $0.50$, is wrong.

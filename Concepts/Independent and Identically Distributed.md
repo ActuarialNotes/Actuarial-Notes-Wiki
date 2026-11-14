@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:192f1cd1363d3036b95f4b434055eef6b9cec440d983be5c21cb09fba4f85175
+  content_hash: sha256:2e158f028dd917dcf132b16486e3ac37507d032c5ed4d77aa398d911f33e103f
   sources:
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 independent trials process: mutually independent with the same distribution (PDF p.151); Thm 6.7 V(cX) = c^2 V(X) and Thm 6.9 E(S_n) = n mu, V(S_n) = n sigma^2 (PDF pp.267-268); §9.2 Central Limit Theorem (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Order Statistics: F_1(x) = 1 - [1 - F(x)]^n and F_n(x) = [F(x)]^n for an i.i.d. sample, HTML fetched 2026-11-06, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
@@ -74,3 +74,9 @@ Swapping two i.i.d. random variables doesn't change their joint distribution. So
 > - The three lifetimes are i.i.d. and continuous, so ties have probability 0.
 > - Each of the three is equally likely to be the smallest.
 > - The probability is $\frac{1}{3}$.
+
+The symmetry holds after conditioning on an event $G$ that treats the items alike, such as "at least one item is of a given type". Every item then has the same conditional probability of having a property. Writing the number of items with the property as a sum of indicators, linearity gives its conditional mean:
+
+> $$E[N \mid G] = n \cdot P(\text{item 1 has the property} \mid G)$$
+
+- $N$ is the number of the $n$ items with the property.

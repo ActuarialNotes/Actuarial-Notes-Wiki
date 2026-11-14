@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-11-06
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb63fc9cedf5db1f8395c471058a78ee1a2424f888340b6b2861551995e7f112
+  content_hash: sha256:34a4f7bd78c0b6f09192ce427f161aacea427626d1cb09acb59e6c55c5b2c902
   sources:
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 law of iterated expectations (5.7), E[g(X)h(Y)] = E[g(X)]E[h(Y)] for independent, conditional variance, law of total variance (5.10), Var(X) >= E[Var(X|Y)] (5.11), random-sum example (5.12), sha256:1bda829553c761a1ee71ba3210a6510e4780b5bcba0513325b5180b3d4100d82 — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 4.7 Conditional Expected Value: var(Y)=E[var(Y|X)]+var[E(Y|X)]; uniform var(Y|X)=l^2(X)/12, sha256:23e328f9ee55e32522905aba62841f2920eef0d32fb68d7fbb1f4e0b0eaf62f6 — https://www.randomservices.org/random/expect/Conditional.html"
@@ -30,6 +30,10 @@ verification:
 
 - $E[Y \mid X = x]$ and $E[Y^2 \mid X = x]$ are the mean and second moment of the conditional distribution.
 - They are calculated with the conditional probabilities $P(Y = y \mid X = x)$ in place of $P(Y = y)$.
+
+If $Y$ takes only the values 0 and 1, then $Y^2 = Y$. Its second moment, conditional or not, equals its mean:
+
+> $$E[Y^2] = E[Y] = P(Y = 1)$$
 
 > [!example]- A policyholder's numbers of auto claims $X$ and home claims $Y$ in a year have the joint probabilities below. What is $\text{Var}(Y \mid X = 1)$? {Example}
 > | $X$ \ $Y$ | 0 | 1 | 2 |
@@ -80,11 +84,15 @@ When a count $N$ is [[Poisson Distribution|Poisson]] with a mean $\Lambda$ that 
 > [!trap] Stopping at one piece
 > The average of the conditional variances, 1.6 here, is only the spread within each type. The variance of the conditional means, 0.84, is only the spread between the types. The variance of $N$ is their sum, 2.44.
 
+A population made of types, as here, is a [[Mixture Distribution|mixture]]. Any probability or moment of a member chosen at random is the average of the types' values, weighted by the types' probabilities, as in $E[N^2] = \sum_i P(\text{type } i)\,E[N^2 \mid \text{type } i]$.
+
 ## Variance of a random sum
 
 An aggregate loss $S = X_1 + \cdots + X_N$ adds a random number $N$ of claims, each with mean $\mu$ and variance $\sigma^2$, independent of each other and of $N$. Given $N$, $E[S \mid N] = N\mu$ and $\text{Var}(S \mid N) = N\sigma^2$, so the law of total variance gives
 
 > $$\text{Var}(S) = E[N]\,\sigma^2 + \text{Var}(N)\,\mu^2$$
+
+When $N$ is Poisson with mean $\lambda$, $E[N] = \text{Var}(N) = \lambda$, so the variance of this [[Compound Poisson Process|compound Poisson]] sum is $\text{Var}(S) = \lambda\,E[X^2]$, where $E[X^2] = \sigma^2 + \mu^2$ is the second moment of a claim.
 
 > [!example]- The number of claims is Poisson with mean 3. Claim sizes are exponential with mean 100, independent of each other and of the number of claims. What is the standard deviation of aggregate claims? {Example}
 > - An exponential claim with mean 100 has $\mu = 100$ and $\sigma^2 = 100^2 = 10{,}000$.

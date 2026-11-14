@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9f5612c6d2753185f2c08abd8c6c7b950ab2a87dd271336fc04a4b4f37442353
+  content_hash: sha256:1996e813fbbd275f31ad56c5a48de825179a4b537092801755474e351744efb8
   sources:
     - "Odomirok, Kennedy & Pantaleo, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2020), printed pp.63-66 (reinsurance note: unsecured recoverables incl. paid losses billed not collected, ceded reserves and ceded UPR; LOC, trust, funds withheld; disputes; commutation; concentration), pp.111-112 and 119-127 (Schedule F: provision for reinsurance as a liability, change to surplus; authorized/unauthorized; overdue; RBC credit charge), p.244 (RBC R1 fixed income incl. interest rates and default; R3 receivables and reinsurance recoverables), p.376 (treaty and facultative reinsurance; unregistered reinsurance collateral), p.412 glossary (facultative reinsurance), sha256:74917dcb2ca8b1cf210a7fd66b08d4c90d844a13dd14b2c71690a18e51eb4a5c — https://www.casact.org/sites/default/files/2021-03/6U_CAS_Financial_Reporting.pdf"
     - "Pastor, A Statistical Simulation Approach for Estimating the Reserve for Uncollectible Reinsurance (CAS Forum, Fall 2003), pp.306-309 (PDF pp.2-5): uncollectible reinsurance has caused cedant insolvencies; defaults from disputes and inability to pay; catastrophes and market conditions weakening many reinsurers and the cedant together; correlation of failures between reinsurers and over time; timing of recoveries (property sooner, excess WC years later); commutation; Schedule F provision for overdue authorized and unauthorized reinsurance; offsets (funds withheld, LOCs), sha256:55099f51f2acfa78cae67cbc9364ae8dda2cdbce940be3f6405577550d87c01d — https://www.casact.org/sites/default/files/database/forum_03fforum_03ff305.pdf"
@@ -20,60 +20,76 @@ verification:
   log: .verify/Concepts/Reinsurance Credit Risk.md
 ---
 
-**Reinsurance Credit Risk** is the risk that a reinsurer fails to pay, in full or on time, the recoverables it owes under its [[Reinsurance|reinsurance]] contracts — through insolvency, dispute or slow payment — leaving the cedant to bear the loss itself; inability to collect reinsurance has driven cedants into insolvency. It turns part of the insurance risk a cedant has shed back into [[Credit Risk|credit risk]] against its reinsurers.
+**Reinsurance Credit Risk** is the risk that a reinsurer fails to pay, in full or on time, the recoverables it owes under its [[Reinsurance|reinsurance]] contracts, through insolvency, dispute or slow payment, leaving the cedant to bear the loss itself. It turns part of the insurance risk a cedant has shed back into [[Credit Risk|credit risk]] against its reinsurers, and inability to collect reinsurance has driven cedants into insolvency.
+
+The expected credit loss on a cedant's recoverables, summed over its reinsurers $j$, is
 
 > $$E[\text{Credit loss}] = \sum_j PD_j \times LGD_j \times EAD_j$$
 
-> $$EAD_j = \max\bigl(R_j - \text{Collateral}_j,\; 0\bigr)$$
+- $PD_j$ is reinsurer $j$'s probability of default over the whole collection period, not one year.
+- $LGD_j$ is the loss given default, the share of the exposure lost if reinsurer $j$ defaults.
+- $EAD_j$ is the exposure at default.
 
-- $R_j$ is everything due from reinsurer $j$ — ceded paid losses not yet collected, ceded case and IBNR reserves, and ceded unearned premium — and collateral is funds withheld, trust accounts or letters of credit the cedant can draw on. $PD_j$ is the reinsurer's default probability over the whole collection period, not one year.
-- **What makes it distinctive.**
-  - **Long horizon.** Recoverables on long-tailed and excess covers (an excess workers compensation treaty, say) may be collected years after the cession, while property recoverables are collected sooner. A reinsurer vetted at inception can deteriorate before its share of the [[Ceded Losses|ceded losses]] is due.
-  - **Wrong-way risk.** The catastrophes and market conditions that create large recoverables also weaken reinsurers — many of them at once — and the cedant itself, so reinsurer failures are correlated with each other, over time, and with the need to collect.
-  - **Concentration.** Recoverables can be concentrated with one reinsurer ([[Concentration Risk]]), which is why cedants limit their exposure to each.
-  - **Disputes.** A reinsurer may refuse to pay because it disagrees on coverage or amount, not only because it cannot pay; disputes and slow payment cause losses without any insolvency.
-- **Exposure depends on the contract.** Across the [[Types of Reinsurance|types of reinsurance]], a quota share generates a steady stream of recoverables on every claim, while excess and catastrophe covers concentrate them in a few large, late or event-driven recoveries — see [[Reinsurance Recovery]].
-- **Regulatory recognition.** In the U.S., [[Schedule F]] of the statutory annual statement computes a **provision for reinsurance**, a liability whose change is charged directly to surplus, for recoverables from reinsurers that are not authorized in the cedant's state and not adequately secured, and for recoverables that are overdue or in dispute; [[Risk-Based Capital]] adds a credit charge on recoverables. In Canada the [[MCT]] applies [[Credit Risk Margin|credit risk factors]] to recoverables, and cessions to [[Unregistered Reinsurance|unregistered reinsurers]] earn capital credit only against collateral ([[Registered Reinsurance]]).
-- **Managing it.** Select counterparties by [[Rating Agency|rating]] and financial strength (an approved list); set limits by reinsurer; require collateral or letters of credit; include clauses that let the cedant cancel the contract if the reinsurer's rating is downgraded; settle long-dated recoverables early by [[Commutations|commutation]], trading future coverage for certain cash; and use fully collateralised capacity such as [[CAT Bonds]], which protects the cedant from the reinsurer's default, though a bond on a trigger other than the cedant's own losses leaves it basis risk.
+The exposure at default is the recoverable less the collateral the cedant can draw on:
 
-> [!example]- Expected Credit Loss on a Reinsurance Panel {Example}
-> A cedant's recoverables ($\$$M), with default probabilities over the expected collection period:
+> $$EAD_j = \max\left(R_j - \text{Collateral}_j,\ 0\right)$$
+
+- $R_j$ is everything due from reinsurer $j$: ceded paid losses not yet collected, ceded case and IBNR reserves, and ceded unearned premium.
+- $\text{Collateral}_j$ is funds withheld, trust accounts or letters of credit.
+
+> [!example]- What is the expected credit loss on this reinsurance panel? {Example}
+> A cedant's recoverables ($\$$M), with default probabilities over the expected collection period, are:
 >
-> - **Reinsurer A** (AA): recoverable $40$, no collateral, $PD = 0.5\%$, $LGD = 50\%$
-> - **Reinsurer B** (BBB): recoverable $25$, no collateral, $PD = 3\%$, $LGD = 60\%$
-> - **Reinsurer C** (unrated captive): recoverable $20$, trust fund $15$, $PD = 10\%$, $LGD = 80\%$
->
-> Compute the expected credit loss.
+> | Reinsurer | Rating | Recoverable | Collateral | $PD$ | $LGD$ |
+> | :--- | :--- | ---: | ---: | ---: | ---: |
+> | A | AA | 40 | 0 | 0.5% | 50% |
+> | B | BBB | 25 | 0 | 3% | 60% |
+> | C | Unrated captive | 20 | 15 (trust fund) | 10% | 80% |
 >
 > > [!answer]-
-> > Reinsurer C's exposure is $\max(20 - 15, 0) = 5$.
-> >
-> > $$
-> > \begin{align*}
-> > EL_A &= 0.005 \times 0.50 \times 40 \\
-> > &= 0.10 \\
-> > EL_B &= 0.03 \times 0.60 \times 25 \\
-> > &= 0.45 \\
-> > EL_C &= 0.10 \times 0.80 \times 5 \\
-> > &= 0.40
-> > \end{align*}
-> > $$
-> >
-> > Total expected credit loss is $\$0.95$M on $\$85$M of recoverables, about $1.1\%$. Without its trust fund, C alone would cost $0.10 \times 0.80 \times 20 = \$1.6$M — collateral is doing most of the work on the weakest counterparty, while the unsecured BBB reinsurer is now the largest source of expected loss.
+> > - Reinsurer C's exposure is $\max(20 - 15, 0) = 5$.
+> > - $EL_A = 0.005 \times 0.50 \times 40 = 0.10$.
+> > - $EL_B = 0.03 \times 0.60 \times 25 = 0.45$.
+> > - $EL_C = 0.10 \times 0.80 \times 5 = 0.40$.
+> > - The total expected credit loss is $\$0.95$M on $\$85$M of recoverables, about $1.1\%$.
+> > - Without its trust fund, C alone would cost $0.10 \times 0.80 \times 20 = \$1.6$M, so collateral does most of the work on the weakest counterparty, and the unsecured BBB reinsurer is now the largest source of expected loss.
 
-> [!example]- Wrong-Way Risk on a Catastrophe Cover {Example}
-> A catastrophe treaty would pay $\$200$M in a 1-in-100-year event. The reinsurer's unconditional annual default probability is $1\%$, but its default probability given that event is $10\%$. $LGD = 50\%$. Compare the expected credit loss using each default probability.
+## Features of reinsurance credit risk
+
+Recoverables on long-tailed and excess covers (an excess workers compensation treaty, say) may be collected years after the cession, while property recoverables are collected sooner. A reinsurer vetted at inception can deteriorate before its share of the [[Ceded Losses|ceded losses]] is due.
+
+A reinsurer may refuse to pay because it disagrees on coverage or amount, not only because it cannot pay. Disputes and slow payment cause losses without any insolvency.
+
+Recoverables can be concentrated with one reinsurer ([[Concentration Risk|concentration risk]]), which is why cedants limit their exposure to each.
+
+The exposure depends on the contract. Across the [[Types of Reinsurance|types of reinsurance]], a quota share generates a steady stream of recoverables on every claim, while excess and catastrophe covers concentrate them in a few large, late or event-driven recoveries ([[Reinsurance Recovery]]).
+
+## Wrong-way risk
+
+The catastrophes and market conditions that create large recoverables also weaken reinsurers, many of them at once, and the cedant itself. Reinsurer failures are therefore correlated with each other, over time, and with the need to collect.
+
+> [!example]- How much does assuming independence understate the expected credit loss on this catastrophe cover? {Example}
+> A catastrophe treaty would pay $\$200$M in a 1-in-100-year event. The reinsurer's unconditional annual default probability is $1\%$, but its default probability given that event is $10\%$. $LGD = 50\%$.
 >
 > > [!answer]-
-> > The recoverable exists only if the event happens, so the relevant default probability is the conditional one:
-> >
-> > $$
-> > \begin{align*}
-> > EL_{\text{naive}} &= 0.01 \times 0.01 \times 0.50 \times 200 \\
-> > &= \$0.01\text{M} \\
-> > EL_{\text{conditional}} &= 0.01 \times 0.10 \times 0.50 \times 200 \\
-> > &= \$0.10\text{M}
-> > \end{align*}
-> > $$
-> >
-> > Treating the default as independent of the catastrophe understates the expected credit loss tenfold. Given the event, the expected shortfall is $0.10 \times 0.50 \times 200 = \$10$M — arriving when the same event has also struck the cedant.
+> > - Using the unconditional default probability, $EL = 0.01 \times 0.01 \times 0.50 \times 200 = \$0.01$M.
+> > - Using the default probability given the event, $EL = 0.01 \times 0.10 \times 0.50 \times 200 = \$0.10$M.
+> > - Treating the default as independent of the catastrophe understates the expected credit loss tenfold.
+> > - Given the event, the expected shortfall is $0.10 \times 0.50 \times 200 = \$10$M, arriving when the same event has also struck the cedant.
+
+## Regulatory treatment
+
+In the U.S., [[Schedule F]] of the statutory annual statement computes a **provision for reinsurance**, a liability whose change is charged directly to surplus. It covers recoverables from reinsurers that are not authorized in the cedant's state and not adequately secured, and recoverables that are overdue or in dispute. [[Risk-Based Capital]] adds a credit charge on recoverables. In Canada the [[MCT]] applies [[Credit Risk Margin|credit risk factors]] to recoverables, and cessions to [[Unregistered Reinsurance|unregistered reinsurers]] earn capital credit only against collateral ([[Registered Reinsurance]]).
+
+## Managing reinsurance credit risk
+
+A cedant manages the risk in five ways:
+
+1. Select counterparties by [[Rating Agency|rating]] and financial strength (an approved list), and set limits by reinsurer.
+2. Require collateral or letters of credit.
+3. Include clauses that let the cedant cancel the contract if the reinsurer's rating is downgraded.
+4. Settle long-dated recoverables early by [[Commutations|commutation]], trading future coverage for certain cash.
+5. Use fully collateralised capacity such as [[CAT Bonds|catastrophe bonds]], which protects the cedant from the reinsurer's default, though a bond on a trigger other than the cedant's own losses leaves it basis risk.
+
+> [!trap] Using the unconditional default probability on catastrophe recoverables
+> A catastrophe recoverable is collected only after the event that also strains the reinsurer. Pricing its credit risk with the reinsurer's everyday default probability understates the expected loss, tenfold in the example above. Use the default probability given the event.

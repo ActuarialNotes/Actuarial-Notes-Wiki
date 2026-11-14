@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f2e2a72324d0dec5e627afd33294e197ea7dc36adf7ba4a6896b87390eae8a7
+  content_hash: sha256:c3aebad8425b19c8eccde4e640f7ebbbc13a114a77a876b2a92d4eed03ba5b67
   sources:
     - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B, C and D tasks and readings; complete text references (Brehm et al.: D1-D6, Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, 5.4; source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Basel Committee on Banking Supervision, Principles for the Sound Management of Operational Risk (BIS, June 2011), para 10 and fn 5 (PDF p.11: definition, includes legal risk, excludes strategic and reputational); para 39(a)-(f) (PDF pp.19-20: loss data, external data, RCSA, business process mapping, KRIs), sha256:d9491f870b4d8ffafa78b45923ada75b3e93223fca2f0ca069e8e3b708a108fc — https://www.bis.org/publications/201106-guidelines-principles-sound-management-operational-risk.pdf"
@@ -27,85 +27,101 @@ verification:
   log: .verify/Concepts/Operational Risk.md
 ---
 
-**Operational Risk** is the risk of loss resulting from inadequate or failed internal processes, people and systems, or from external events — the Basel Committee's definition, used almost word for word in [[Solvency II]]. It includes legal risk but excludes strategic and reputational risk, and it is classified by **cause**: a loss is operational because of why it happened, not because of the account it lands in.
+**Operational Risk** is the risk of loss resulting from inadequate or failed internal processes, people and systems, or from external events. This is the Basel Committee's definition, used almost word for word in [[Solvency II]]. It includes legal risk but excludes strategic and reputational risk.
+
+Operational risk is classified by **cause**: a loss is operational because of why it happened, not because of the account it lands in. Basel's seven event types are:
+
+1. Internal fraud.
+2. External fraud.
+3. Employment practices and workplace safety.
+4. Clients, products and business practices.
+5. Damage to physical assets.
+6. Business disruption and system failures.
+7. Execution, delivery and process management.
+
+In an insurer these look like claims leakage and fraud, underwriting outside authority, a policy or claims system outage, a cyber attack, mis-selling or bad-faith claims handling, a data or [[Model Risk|model]] error in pricing or reserving, and failure of an outsourced provider. It is largely **incidental** risk. An insurer earns nothing for bearing it, so the aim is to reduce it cost-effectively rather than to exploit it. It also tends to arrive alongside other risks, as when a catastrophe floods the claims office.
+
+> [!example]- Which of these losses are operational? {Example}
+> After a hurricane an insurer records:
+>
+> - (a) $\$400$M of policyholder claims.
+> - (b) $\$6$M to restore its flooded claims centre.
+> - (c) $\$15$M of overpayments because emergency adjusters were given unchecked payment authority.
+> - (d) $\$20$M of prior-year reserve strengthening after a broken spreadsheet link is found.
+> - (e) $\$25$M of prior-year strengthening because construction inflation outran the assumption.
+> - (f) $\$10$M unrecoverable from a failed reinsurer.
+> - (g) The loss of $8\%$ of its renewals after complaints about slow claims service.
+>
+> > [!answer]-
+> > - (a) is insurance (catastrophe) risk, the risk the insurer is paid to take.
+> > - (b) is operational: damage to physical assets and business disruption.
+> > - (c) is operational: execution and process management, a control failure.
+> > - (d) is operational, a process error, even though it appears as reserve development.
+> > - (e) is insurance (reserve) risk, because the estimate was reasonable and the world changed.
+> > - (f) is credit risk, a reinsurance counterparty default.
+> > - (g) is strategic or reputational, outside the Basel definition, but its cause, poor claims handling, is operational, and the fix lies there.
+> > - Items (d) and (e) hit the same line of the income statement. The cause decides the category, and the category decides the remedy: controls for (d), better trend assumptions for (e).
+
+## The loss distribution approach
+
+The **loss distribution approach** models a year's operational losses with the same [[Aggregate Loss Model|aggregate loss model]] actuaries use for claims. With $N$ operational loss events in a year, of severities $X_i$, the annual loss is
 
 > $$L_{\text{op}} = \sum_{i=1}^{N} X_i$$
 
+Its mean is
+
 > $$E[L_{\text{op}}] = E[N]\,E[X]$$
 
-- $N$ is the number of operational loss events in a year and $X_i$ their severities — the **loss distribution approach**, the same [[Aggregate Loss Model|aggregate loss model]] actuaries use for claims. With Poisson frequency at rate $\lambda$, $\text{Var}(L_{\text{op}}) = \lambda\,E[X^2]$ ([[Compound Poisson Process]]). Internal loss data are sparse and severities heavy-tailed, so they are supplemented with external loss data and expert **scenario analysis**.
-- **Basel's seven event types:** internal fraud; external fraud; employment practices and workplace safety; clients, products and business practices; damage to physical assets; business disruption and system failures; execution, delivery and process management.
-- **In an insurer** these look like claims leakage and fraud, underwriting outside authority, a policy or claims system outage, a cyber attack, mis-selling or bad-faith claims handling, a data or [[Model Risk|model]] error in pricing or reserving, and failure of an outsourced provider.
-- **Determining operational risks** is mostly identification and control: process mapping, risk and control self-assessment, a loss-event database, **key risk indicators** that give early warning (system downtime, staff turnover), and internal controls — for U.S. public companies, the [[Sarbanes-Oxley]] regime over financial reporting. Capital regimes charge for it too: the [[Operational Risk Margin|operational risk margin]] in Canada's MCT, a separate capital requirement in Solvency II (Art. 107), and a component of the NAIC [[Risk-Based Capital|RBC]] formula.
-- **Basel II's simpler capital charges** (BCBS, June 2006, paras 649–654) use gross income as a proxy for the scale of operational exposure:
-  - *Basic indicator approach:* capital equals a single fixed percentage $\alpha = 15\%$ of positive annual gross income, averaged over the previous three years, $K_{\text{BIA}} = \alpha \sum \text{GI}_{+} / n$. A year with zero or negative gross income is excluded from both the numerator and the denominator, so $n$ is the number of the three years with positive income. One $\alpha$ for the whole firm, so the mix of business has no effect.
-  - *Standardised approach:* activities are split into eight business lines, each with its own factor $\beta$: $18\%$ for corporate finance, trading and sales, and payment and settlement; $15\%$ for commercial banking and agency services; $12\%$ for retail banking, asset management and retail brokerage. Capital is $K_{\text{TSA}} = \sum_{\text{years }1\text{ to }3} \max\big(\sum_j \beta_j \text{GI}_j,\ 0\big) / 3$, so it depends on the firm's mix of business.
-  - Under the standardised approach a negative charge in one business line offsets positive charges in other lines *within the same year* without limit; a year whose total is negative enters as zero but the divisor stays three. A firm with a loss year, or a loss-making line, can therefore hold less capital than under the basic indicator approach.
-- It is largely **incidental** risk: an insurer earns nothing for bearing it, so the aim is to reduce it cost-effectively rather than to exploit it. It also tends to arrive alongside other risks — the catastrophe that floods the claims office.
+With Poisson frequency at rate $\lambda$, $\text{Var}(L_{\text{op}}) = \lambda\,E[X^2]$ ([[Compound Poisson Process]]). Internal loss data are sparse and severities heavy-tailed, so they are supplemented with external loss data and expert **scenario analysis**.
 
-> [!example]- Which of These Losses Are Operational? {Example}
-> After a hurricane an insurer records: (a) $\$400$M of policyholder claims; (b) $\$6$M to restore its flooded claims centre; (c) $\$15$M of overpayments because emergency adjusters were given unchecked payment authority; (d) $\$20$M of prior-year reserve strengthening after a broken spreadsheet link is found; (e) $\$25$M of prior-year strengthening because construction inflation outran the assumption; (f) $\$10$M unrecoverable from a failed reinsurer; (g) the loss of $8\%$ of its renewals after complaints about slow claims service. Classify each.
+> [!example]- What are the mean and standard deviation of annual loss before and after this control, and is it worth its cost? {Example}
+> Claim-payment errors occur as a Poisson process with $\lambda = 4$ a year. Each costs on average $\$250{,}000$, with standard deviation $\$500{,}000$. A dual-authorisation control costing $\$200{,}000$ a year would cut the frequency to $3$.
 >
 > > [!answer]-
-> > - (a) **Insurance (catastrophe) risk** — the risk the insurer is paid to take.
-> > - (b) **Operational** — damage to physical assets and business disruption.
-> > - (c) **Operational** — execution and process management; a control failure.
-> > - (d) **Operational** — a process error, even though it appears as reserve development.
-> > - (e) **Insurance (reserve) risk** — the estimate was reasonable; the world changed.
-> > - (f) **Credit risk** — reinsurance counterparty default.
-> > - (g) **Strategic / reputational**, outside the Basel definition — but its *cause*, poor claims handling, is operational, and the fix lies there.
-> >
-> > Items (d) and (e) hit the same line of the income statement. The cause decides the category, and the category decides the remedy: controls for (d), better trend assumptions for (e).
+> > - In $\$000$, $E[X^2] = 250^2 + 500^2 = 312{,}500$.
+> > - Before the control, $E[L] = 4 \times 250 = 1{,}000$ and $\text{SD}(L) = \sqrt{4 \times 312{,}500} = 1{,}118$.
+> > - After it, $E[L] = 3 \times 250 = 750$ and $\text{SD}(L) = \sqrt{3 \times 312{,}500} = 968$.
+> > - The control saves $\$250{,}000$ a year in expectation for a cost of $\$200{,}000$ and cuts the standard deviation by $13\%$, so it is worth doing.
+> > - If the concern were the tail rather than the mean, a control capping severity (a payment limit) would do more than one reducing frequency.
 
-> [!example]- Is the Control Worth Its Cost? {Example}
-> Claim-payment errors occur as a Poisson process with $\lambda = 4$ a year; each costs on average $\$250{,}000$ with standard deviation $\$500{,}000$. A dual-authorisation control costing $\$200{,}000$ a year would cut the frequency to $3$. Find the mean and standard deviation of annual loss before and after (in $\$000$).
->
-> > [!answer]-
-> > $E[X^2] = 250^2 + 500^2 = 312{,}500$.
-> >
-> > $$
-> > \begin{align*}
-> > \text{Before:} \quad E[L] &= 4 \times 250 \\
-> > &= 1{,}000 \\
-> > \text{SD}(L) &= \sqrt{4 \times 312{,}500} \\
-> > &= 1{,}118 \\[6pt]
-> > \text{After:} \quad E[L] &= 3 \times 250 \\
-> > &= 750 \\
-> > \text{SD}(L) &= \sqrt{3 \times 312{,}500} \\
-> > &= 968
-> > \end{align*}
-> > $$
-> >
-> > The control saves $\$250{,}000$ a year in expectation for a cost of $\$200{,}000$, and cuts the standard deviation by $13\%$ — worth doing. If the concern were the tail rather than the mean, a control capping severity (a payment limit) would do more than one reducing frequency.
+## Managing operational risk
 
-> [!example]- Basic Indicator Against Standardised Capital {Example}
-> A bank's gross income (\$M) by business line over the last three years:
+Managing operational risk is mostly identification and control. The tools are process mapping, risk and control self-assessment, a loss-event database, **key risk indicators** that give early warning (system downtime, staff turnover), and internal controls. For U.S. public companies the controls over financial reporting fall under the [[Sarbanes-Oxley]] regime. Capital regimes charge for operational risk too: the [[Operational Risk Margin|operational risk margin]] in Canada's MCT, a separate capital requirement in Solvency II (Art. 107), and a component of the NAIC [[Risk-Based Capital|RBC]] formula.
+
+## Basel II capital charges
+
+Basel II's simpler capital charges (BCBS, June 2006, paras 649–654) use gross income as a proxy for the scale of operational exposure. Under the *basic indicator approach*, capital is
+
+> $$K_{\text{BIA}} = \frac{\alpha \sum \text{GI}_{+}}{n}$$
+
+- $\alpha = 15\%$.
+- $\text{GI}_{+}$ is annual gross income in each of the previous three years in which it was positive.
+- $n$ is the number of those three years with positive gross income.
+
+One $\alpha$ applies to the whole firm, so the mix of business has no effect. Under the *standardised approach*, activities are split into eight business lines, each with its own factor $\beta$: $18\%$ for corporate finance, trading and sales, and payment and settlement, $15\%$ for commercial banking and agency services, and $12\%$ for retail banking, asset management and retail brokerage. Capital is
+
+> $$K_{\text{TSA}} = \frac{1}{3}\sum_{t=1}^{3} \max\Big(\sum_j \beta_j \text{GI}_{j,t},\ 0\Big)$$
+
+- $\text{GI}_{j,t}$ is the gross income of business line $j$ in year $t$.
+
+A negative charge in one business line offsets positive charges in other lines within the same year without limit, so the charge depends on the firm's mix of business. A firm with a loss year, or a loss-making line, can therefore hold less capital than under the basic indicator approach.
+
+> [!example]- What is this bank's operational risk capital under the basic indicator and standardised approaches? {Example}
+> The bank's gross income ($\$$M) by business line over the last three years is:
 >
 > | Year | Retail banking | Corporate finance | Total |
-> |---|---|---|---|
-> | 1 | $100$ | $50$ | $150$ |
-> | 2 | $80$ | $-120$ | $-40$ |
-> | 3 | $120$ | $60$ | $180$ |
->
-> Find the operational risk capital under the basic indicator and standardised approaches.
+> | :--- | ---: | ---: | ---: |
+> | 1 | 100 | 50 | 150 |
+> | 2 | 80 | −120 | −40 |
+> | 3 | 120 | 60 | 180 |
 >
 > > [!answer]-
-> > **Basic indicator.** Year 2's total is negative, so it is dropped from the numerator *and* the denominator:
-> >
-> > $$
-> > \begin{align*}
-> > K_{\text{BIA}} &= 0.15 \times \frac{150 + 180}{2} \\
-> > &= 24.75
-> > \end{align*}
-> > $$
-> >
-> > **Standardised.** Retail banking takes $\beta = 12\%$, corporate finance $18\%$. Year by year: $12 + 9 = 21$; $9.6 - 21.6 = -12$, floored at $0$; $14.4 + 10.8 = 25.2$.
-> >
-> > $$
-> > \begin{align*}
-> > K_{\text{TSA}} &= \frac{21 + 0 + 25.2}{3} \\
-> > &= 15.4
-> > \end{align*}
-> > $$
-> >
-> > The standardised charge is lower for two reasons: the retail book carries a smaller factor than $15\%$, and the loss year counts as zero over three years rather than vanishing and leaving the good years to be averaged over two.
+> > - Year 2's total is negative, so the basic indicator approach drops it from the numerator and the denominator.
+> > - $K_{\text{BIA}} = 0.15 \times (150 + 180)/2 = 24.75$.
+> > - Under the standardised approach retail banking takes $\beta = 12\%$ and corporate finance $18\%$.
+> > - The yearly charges are $12 + 9 = 21$, then $9.6 - 21.6 = -12$, floored at $0$, then $14.4 + 10.8 = 25.2$.
+> > - $K_{\text{TSA}} = (21 + 0 + 25.2)/3 = 15.4$.
+> > - The standardised charge is lower because retail banking's factor is below $15\%$ and the loss year counts as zero over three years.
+
+> [!trap] Dividing by three in the basic indicator approach
+> The basic indicator approach drops a year with zero or negative gross income from both the numerator and the denominator, so the good years are averaged over two. The standardised approach floors a negative year at zero and still divides by three. In the example, dividing the basic indicator sum by three would give $16.5$ instead of $24.75$.

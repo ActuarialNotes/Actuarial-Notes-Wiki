@@ -4,40 +4,56 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4113eb8d377e7daf466327841874e7009f8ec05cd536a9d8be1c9390639eee0c
+  content_hash: sha256:304fc910d7425049a9e42d1d6d4b8720e469caeb8571853a524d100a1d1ba129
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Level of Aggregation.md
 ---
 
-**Level of Aggregation** is the [[IFRS 17]] requirement that contracts be measured in **groups**, not individually and not as a whole book. Contracts are first divided into **portfolios** (similar risks, managed together), then each portfolio is split by **annual cohort** (contracts issued no more than twelve months apart), and each cohort is split by **profitability** at initial recognition.
-
-> $$\text{Group} = \text{Portfolio} \; \cap \; \text{Annual cohort} \; \cap \; \text{Profitability bucket}$$
-
-- **The three profitability buckets:** contracts that are [[Onerous Contract|onerous]] at initial recognition; contracts with **no significant possibility of becoming onerous** subsequently; and everything else. Assessment is at initial recognition and the grouping is **never reassessed** afterwards.
-- **The annual cohort requirement** prevents an insurer from mixing new profitable business with older unprofitable business to conceal the latter. It is the single most contested requirement in IFRS 17 and was the subject of an EU carve-out for some contracts — Canada applies it in full.
-- **Why it matters so much:** the [[Onerous Contract|onerous]] test is applied **per group**. Profitable business cannot offset unprofitable business across groups, so losses surface that would have been invisible under a portfolio-wide premium deficiency test.
-- **Practical effect for P&C insurers.** The number of groups multiplies quickly — line by province by cohort by profitability bucket — which drives system complexity, and it makes the choice of **portfolio** definition consequential: a broadly drawn portfolio permits more offsetting within groups, a narrowly drawn one surfaces more losses.
-- **The floor, not the ceiling.** IFRS 17 sets a *minimum* granularity; an insurer may disaggregate further, and some do for management reporting. It may **not** aggregate more coarsely.
-- Contracts within a group are measured together for the [[Contractual Service Margin|CSM]], the [[Loss Component]], and the onerous assessment — but the [[Liability for Incurred Claims|LIC]] can in practice be estimated at a coarser level and allocated, since claims already incurred carry no CSM.
-
 ![[Media/Figures/Level_of_Aggregation.svg|340]]
 
-> [!example]- How Many Groups? {Example}
-> An insurer writes personal automobile in Ontario and Alberta, and commercial property in Ontario. Within personal auto Ontario, one subset of business written in the year is expected to be onerous. All contracts are annual and written throughout the year.
->
-> Determine the minimum number of groups for the year, and explain what the requirement achieves.
+**Level of Aggregation** is the [[IFRS 17]] requirement that contracts be measured in groups, not individually and not as a whole book. Contracts are divided into portfolios of similar risks managed together, each portfolio is split into annual cohorts of contracts issued no more than twelve months apart, and each cohort is split by profitability at initial recognition.
+
+A group of contracts is
+
+> $$\text{Group} = \text{Portfolio} \cap \text{Annual cohort} \cap \text{Profitability bucket}$$
+
+The three profitability buckets are:
+
+1. Contracts that are [[Onerous Contract|onerous]] at initial recognition.
+2. Contracts with no significant possibility of becoming onerous subsequently.
+3. All other contracts.
+
+Contracts are assessed at initial recognition, and the grouping is never reassessed afterwards. IFRS 17 sets a minimum granularity. An insurer may divide its contracts more finely, but not more coarsely.
+
+Contracts within a group are measured together for the [[Contractual Service Margin|CSM]], the [[Loss Component|loss component]] and the onerous assessment. The [[Liability for Incurred Claims|LIC]] can in practice be estimated at a coarser level and allocated, since claims already incurred carry no CSM.
+
+> [!example]- What is the minimum number of groups this insurer must form for the year? {Example}
+> An insurer writes personal automobile in Ontario and Alberta, and commercial property in Ontario. All contracts are annual and written throughout the year. Within personal auto Ontario, one subset of the year's business is expected to be onerous, and the rest of its business is not.
 >
 > > [!answer]-
-> > **Portfolios** — contracts with similar risks managed together. Personal auto Ontario, personal auto Alberta and commercial property Ontario are three distinct portfolios (an insurer could argue personal auto is one portfolio across provinces, but the different regulatory and benefit regimes make separate portfolios the better view, and it is the one a regulator will expect).
-> >
-> > **Cohort** — one, since all contracts are written within the year.
-> >
-> > **Profitability** — personal auto Ontario splits into at least two groups (onerous, and the rest); the other two portfolios have one each, assuming no onerous business.
-> >
-> > $$\text{Minimum groups} = 2 + 1 + 1 = 4$$
-> >
-> > **What it achieves.** Suppose personal auto Ontario is expected to produce a $\$6$ million loss on the onerous subset and a $\$20$ million profit on the rest. Under a portfolio-level test, the portfolio is profitable and no loss is recognised. Under IFRS 17, the onerous group's $\$6$ million loss is recognised **immediately** as a [[Loss Component]], while the profitable group's $\$20$ million emerges over the coverage period.
-> >
-> > That asymmetry — losses now, profits later — is the intended outcome, and it is why the annual cohort requirement matters: without it, next year's profitable business could be pooled with this year's losses and the loss would never appear at all.
+> > - Personal auto Ontario, personal auto Alberta and commercial property Ontario are three portfolios. Their different regulatory and benefit regimes make separate portfolios the better view.
+> > - All contracts are written within the year, so each portfolio has one annual cohort.
+> > - Personal auto Ontario splits into at least two groups, the onerous subset and the rest.
+> > - The other two portfolios have one group each.
+> > - The minimum is $2 + 1 + 1 = 4$ groups.
+
+## The onerous test by group
+
+The onerous test is applied per group. Profitable business cannot offset unprofitable business across groups, so losses surface that a portfolio-wide premium deficiency test would not show. This makes the definition of a portfolio consequential: a broad portfolio permits more offsetting within groups, and a narrow one surfaces more losses. The number of groups multiplies quickly, by line, province, cohort and profitability bucket, which adds to system complexity.
+
+> [!example]- How does the grouping change the loss recognised on this portfolio? {Example}
+> Personal auto Ontario is expected to produce a $\$6$ million loss on its onerous subset and a $\$20$ million profit on the rest.
+>
+> > [!answer]-
+> > - Tested as one portfolio, it is expected to earn $\$20 - \$6 = \$14$ million, so no loss is recognised.
+> > - Under IFRS 17 the onerous subset is its own group, so its $\$6$ million loss is recognised immediately as a [[Loss Component|loss component]].
+> > - The profitable group's $\$20$ million emerges over the coverage period.
+
+## The annual cohort requirement
+
+The annual cohort requirement keeps an insurer from mixing new profitable business with older unprofitable business to conceal the latter. Without it, next year's profitable business could be pooled with this year's losses, and the loss would never appear. It is the most contested requirement in IFRS 17 and was the subject of an EU carve-out for some contracts. Canada applies it in full.
+
+> [!trap] Offsetting an onerous subset against profitable business
+> A portfolio that is profitable overall can still contain an onerous group. Test each group separately and recognise the onerous group's loss at once, whatever the rest of the portfolio earns.

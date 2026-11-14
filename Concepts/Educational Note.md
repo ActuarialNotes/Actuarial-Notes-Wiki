@@ -4,36 +4,49 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:62733324a0f6cd41792c655ee6dc58661c0b91cd319c4982138bc51b3df8cdf1
+  content_hash: sha256:f555a0756747c8168d64272ce5a2be6990d4d0fc5e81ac175bfede19ca764258
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Educational Note.md
 ---
 
-**An Educational Note** is guidance published by the [[Canadian Institute of Actuaries (CIA)]] describing how the [[Standards of Practice]] may be applied in a particular situation. Educational notes are **not binding**: they illustrate accepted practice rather than defining it, and an actuary may depart from one — but must be prepared to explain why.
-
-- **Their place in the hierarchy:** **Rules of Professional Conduct** (binding conduct), **Standards of Practice** (binding practice), **educational notes** (non-binding guidance), and **research and discussion papers** (informational only). Confusing a note with a standard, in either direction, is a common error.
-- **Why they matter in practice.** The standards are principles-based and deliberately do not prescribe methods. Educational notes fill the gap — on [[IFRS 17]] application, [[IFRS 17 Discount Rates|discount rate]] construction, the [[Risk Adjustment for Non-Financial Risk|risk adjustment]], the [[Premium Allocation Approach|PAA]], [[Reinsurance Accounting|reinsurance]] treatment, [[FCT]], [[Runoff|run-off]] and wind-up valuations, [[Materiality]], and [[Subsequent Events]]. In a new area they are frequently the only detailed guidance available.
-- **They are effectively expected.** An actuary who ignores a directly applicable educational note without explanation will be challenged by the [[External Auditor]], by [[OSFI]], and in any [[Peer Review]]. "Non-binding" describes their legal status, not the practical expectation.
-- **They can conflict or lag.** Notes issued at different times may not be fully consistent, and one written before a standard changed may be superseded in part. The actuary must work out which guidance is current, and the standards prevail over any note.
-- **Draft notes** circulated for comment carry less weight than final ones, but in a genuinely new area — as during the [[Transition to IFRS 17]] — a draft note may be the best available statement of emerging practice, and using it with disclosure is defensible.
-
 ![[Media/Figures/Educational_Note.svg|340]]
 
-> [!example]- Departing From an Educational Note {Example}
-> A CIA educational note on constructing the [[IFRS 17 Discount Rates|IFRS 17 discount curve]] describes a bottom-up approach with an illiquidity premium derived from a specified reference portfolio. An insurer's [[Appointed Actuary]] concludes that its liabilities are considerably less liquid than the reference portfolio assumes and uses a higher illiquidity premium, raising the discount rate by $30$ basis points and reducing the [[Liability for Incurred Claims|LIC]] by $\$14$ million.
->
-> Is this acceptable?
+An **Educational Note** is guidance published by the [[Canadian Institute of Actuaries (CIA)]] describing how the [[Standards of Practice]] may be applied in a particular situation. It is not binding, so an actuary may depart from one, but must be prepared to explain why.
+
+Educational notes sit third in the hierarchy of the CIA's guidance:
+
+1. **Rules of Professional Conduct**, binding on conduct.
+2. **Standards of Practice**, binding on practice.
+3. **Educational notes**, non-binding guidance.
+4. **Research and discussion papers**, informational only.
+
+The standards prevail over any note. Confusing a note with a standard, in either direction, is a common error.
+
+> [!example]- May the Appointed Actuary depart from this educational note? {Example}
+> A CIA educational note on constructing the [[IFRS 17 Discount Rates|IFRS 17 discount curve]] describes a bottom-up approach with an illiquidity premium derived from a specified reference portfolio. An insurer's [[Appointed Actuary]] concludes that its liabilities are considerably less liquid than the reference portfolio assumes and uses a higher illiquidity premium. That raises the discount rate by $30$ basis points and reduces the [[Liability for Incurred Claims|LIC]] by $\$14$ million.
 >
 > > [!answer]-
-> > **Yes, potentially — the note is not binding — but it is acceptable only if properly supported and disclosed**, and the burden is entirely on the actuary.
-> >
-> > **What must be present:**
-> >
-> > 1. **A reasoned basis.** [[IFRS 17]] requires the discount rate to reflect the **liquidity characteristics of the insurance contracts**. If this insurer's liabilities genuinely have a different liquidity profile from the reference portfolio, a different premium is not merely permitted — it is required by the standard, which outranks the note.
-> > 2. **Evidence, not assertion.** The claim needs support: the payout profile, the absence of surrender or acceleration options, comparison with observable instruments of similar illiquidity. "Our liabilities feel illiquid" is not a basis.
-> > 3. **Disclosure.** The [[Appointed Actuary's Report]] must state the departure, the reason, and the **$\$14$ million effect**. The financial statement [[Notes to Financial Statements|notes]] must disclose the methodology so readers can compare with other insurers.
-> > 4. **Consistency.** The same reasoning must be applied every year, in both directions. Adopting a higher premium in a year when a lower liability is convenient, and reverting later, is a result-driven selection.
-> >
-> > **The test to apply.** $\$14$ million is [[Materiality|material]] on most balance sheets, and it moves the result in the insurer's favour — so it will attract the auditor's and OSFI's attention. The question the actuary should ask before signing is whether the reasoning would have been adopted had it moved $\$14$ million the *other* way. If not, the departure is not a technical judgement, and the note should have been followed.
+> > - The note is not binding, so a departure is possible, and the burden of supporting it is on the actuary.
+> > - [[IFRS 17]] requires the discount rate to reflect the liquidity characteristics of the insurance contracts, so if these liabilities really are less liquid, the standard, which outranks the note, requires a different premium.
+> > - The claim needs evidence, such as the payout profile, the absence of surrender or acceleration options, and comparison with observable instruments of similar illiquidity.
+> > - The [[Appointed Actuary's Report]] must state the departure, the reason and the $\$14$ million effect, and the financial statement [[Notes to Financial Statements|notes]] must disclose the methodology.
+> > - The same reasoning must be applied every year, in both directions, or the selection is result-driven.
+> > - The $\$14$ million is [[Materiality|material]] and moves the result in the insurer's favour, so the actuary should ask whether the reasoning would have been adopted had it moved the result the other way.
+> > - The departure is acceptable only if it is supported, disclosed and applied consistently.
+
+## Why educational notes matter
+
+The standards are principles-based and deliberately do not prescribe methods. Educational notes fill that gap, on [[IFRS 17]] application, [[IFRS 17 Discount Rates|discount rate]] construction, the [[Risk Adjustment for Non-Financial Risk|risk adjustment]], the [[Premium Allocation Approach|PAA]], [[Reinsurance Accounting|reinsurance]] treatment, the [[FCT]], [[Runoff|run-off]] and wind-up valuations, [[Materiality|materiality]] and [[Subsequent Events|subsequent events]]. In a new area they are frequently the only detailed guidance available.
+
+"Non-binding" describes their legal status, not the practical expectation. An actuary who ignores a directly applicable educational note without explanation will be challenged by the [[External Auditor|external auditor]], by [[OSFI]] and in any [[Peer Review|peer review]].
+
+## Conflicting, outdated and draft notes
+
+Notes issued at different times may not be fully consistent, and one written before a standard changed may be superseded in part. The actuary must work out which guidance is current.
+
+Draft notes circulated for comment carry less weight than final ones. In a new area, as during the [[Transition to IFRS 17|transition to IFRS 17]], a draft note may be the best available statement of emerging practice, and using it with disclosure is defensible.
+
+> [!trap] Treating "non-binding" as "optional"
+> An educational note does not bind the actuary, but departing from a directly applicable one without a documented reason will not survive an auditor's or OSFI's review. Follow it, or explain and disclose the departure.

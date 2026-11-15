@@ -499,6 +499,11 @@ measure in a month is reconsidered.
 
 ## 7. Decisions for the maintainer
 
+**Decided 2026-11-15:** D-DR1 yes, with the third place spelled **Practice** (with a *c*,
+noun and verb alike, wherever the app writes the word); D-DR2 yes; D-DR3 yes; D-DR4 no,
+*Change Answer* goes once an answer is revealed; D-DR5 yes, the Store and Community both.
+"Practise" elsewhere in this document is the proposal as first written.
+
 | ID | Decision | Default if not decided |
 |---|---|---|
 | **D-DR1** | Rename the places: Today, Learn, Practise, Apply? | Regroup the sidebar under the existing names (Dashboard, Study Guides, Quiz) with Tools, Data Sources, Projects and Workflows under one **Apply** heading |

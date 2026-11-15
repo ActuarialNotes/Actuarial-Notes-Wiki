@@ -50,11 +50,15 @@ import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizB
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { SoundPopover } from '@/components/SoundPopover'
 import { cn } from '@/lib/utils'
+import { ExamSwitcher } from '@/components/ExamSwitcher'
+import { useExamFocus } from '@/hooks/useExamFocus'
+import { guidePath, quizPath } from '@/lib/examFocus'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
-function getLastWikiPath(): string {
-  try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
+/** Where Study Guides was left this visit, else the study guide of the exam in focus, else the exam list. */
+function getLastWikiPath(fallback: string): string {
+  try { return sessionStorage.getItem('wiki:last-path') || fallback } catch { return fallback }
 }
 
 function getInitialCollapsed(): boolean {
@@ -307,12 +311,13 @@ const STUDY_GUIDE_PAGES: { id: StudyGuidesSection; to: string; label: string; Ic
 function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
   const { pathname } = useLocation()
   const section = studyGuidesSection(pathname)
+  const { focus } = useExamFocus()
   const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
 
   return (
     <>
       <SidebarItem
-        to={getLastWikiPath()}
+        to={getLastWikiPath(guidePath(focus))}
         label="Study Guides"
         icon={<BookOpen className={iconClass} />}
         collapsed={collapsed}
@@ -393,6 +398,7 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
+  const { focus } = useExamFocus()
   const { cards } = useFlashcards()
   const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
@@ -621,6 +627,10 @@ export default function Sidebar() {
           </button>
         </div>
 
+        {/* The exam in focus, and the way to change it: every tab below opens
+            on this exam (docs/design-review.md §5.3). */}
+        <ExamSwitcher collapsed={collapsed} onNavigate={closeMobile} />
+
         <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
 
           {user && (
@@ -702,7 +712,8 @@ export default function Sidebar() {
             dataFlashcardNav
           />
           <SidebarItem
-            to="/"
+            // The builder of the exam in focus; its back arrow is the exam list.
+            to={quizPath(focus)}
             label="Quiz"
             icon={
               <span className="relative inline-flex items-center justify-center">

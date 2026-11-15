@@ -22,6 +22,8 @@ import { StickyGroupHeading, TrackHeading } from '@/components/TrackHeading'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus, type ExamStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
+import { useExamFocusStore } from '@/hooks/useExamFocus'
+import { ChevronDown } from 'lucide-react'
 
 function examNameToTrackKey(name: string): string {
   const cleaned = name
@@ -30,6 +32,8 @@ function examNameToTrackKey(name: string): string {
     .trim()
   return wikiExamIdToProgressKey(cleaned)
 }
+
+const DEV_OPEN_KEY = 'wiki:in-development-open'
 
 const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA', 'ACIA', 'FCIA']
 
@@ -116,6 +120,8 @@ function ChunkedList({ chunks, cardModels }: { chunks: ExamChunk[]; cardModels: 
 
 function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string }) {
   const { exam, examId, topic, isInProgress, isCompleted, targetDate, contentStatus, readiness, showReadiness } = model
+  // Opening an exam from the list makes it the exam in focus (lib/examFocus.ts).
+  const setFocus = useExamFocusStore(s => s.setFocus)
 
   // The Quiz tab draws the same exam with the same row (components/ExamRow.tsx);
   // only the facts differ. Here they are the reader's own: when the exam is sat,
@@ -129,6 +135,7 @@ function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string
       topic={topic}
       status={contentStatus}
       to={wikiRoute({ kind: 'exam', name: exam.name })}
+      onClick={() => setFocus(exam.name)}
       tourId={tourId}
       meta={isInProgress && (
         <ExamRowMeta
@@ -168,6 +175,20 @@ export default function WikiHome() {
   // so the two tabs cannot drift apart on any of them.
   const [filterOverride, setFilterOverride] = useState<GuideBody | null>(loadGuideBody)
   const filter = filterOverride ?? defaultGuideBody(selectedTrack)
+
+  // Which credentials have their in-development exams unfolded. Kept for the
+  // visit, so Back from one of them returns to the list as it was left.
+  const [openDev, setOpenDev] = useState<ReadonlySet<string>>(() => {
+    try { return new Set(JSON.parse(sessionStorage.getItem(DEV_OPEN_KEY) ?? '[]') as string[]) } catch { return new Set() }
+  })
+  function toggleDev(trackKey: string) {
+    setOpenDev(prev => {
+      const next = new Set(prev)
+      if (!next.delete(trackKey)) next.add(trackKey)
+      try { sessionStorage.setItem(DEV_OPEN_KEY, JSON.stringify([...next])) } catch { /* private mode */ }
+      return next
+    })
+  }
 
   function handleSetFilter(f: GuideBody) {
     saveBody(f)
@@ -370,35 +391,63 @@ export default function WikiHome() {
               </div>
             )}
 
-            {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams, chunks }) => (
-              <div key={track.key}>
-                <TrackHeading track={track} sourcePath="/wiki" />
-
-                {/* One grouped list per credential, a row per exam, two
-                    columns from `sm` up. A credential with elective tracks
-                    (the FSA) is chunked by track instead: a small heading
-                    over each track's own list. */}
-                {chunks ? (
-                  <ChunkedList chunks={chunks} cardModels={cardModels} />
-                ) : (
+            {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams, chunks }) => {
+              // The exams there is something to study from lead; the ones
+              // still in development are folded under one row per credential
+              // (design review §5.3), so the list opens on what a reader came for.
+              const inDev = (exam: WikiIndexItem) => cardModels.get(exam.path)?.contentStatus === 'development'
+              const devCount = trackExams.filter(inDev).length
+              const devOpen = openDev.has(track.key)
+              const list = (keep: (exam: WikiIndexItem) => boolean) => {
+                if (chunks) {
+                  const kept = chunks
+                    .map(c => ({ ...c, exams: c.exams.filter(keep) }))
+                    .filter(c => c.exams.length > 0)
+                  return kept.length > 0 ? <ChunkedList chunks={kept} cardModels={cardModels} /> : null
+                }
+                const kept = trackExams.filter(keep)
+                if (kept.length === 0) return null
+                return (
                   <ListPanel columns={2}>
-                    {trackExams.map(exam => {
+                    {kept.map(exam => {
                       const model = cardModels.get(exam.path)
                       if (!model) return null
                       // The tour's marker stays on the ladder's row, so an
                       // exam in progress doesn't carry it twice.
-                      return (
-                        <ExamGuideRow
-                          key={exam.path}
-                          model={model}
-                          tourId={examTourId(model)}
-                        />
-                      )
+                      return <ExamGuideRow key={exam.path} model={model} tourId={examTourId(model)} />
                     })}
                   </ListPanel>
-                )}
-              </div>
-            ))}
+                )
+              }
+              return (
+                <div key={track.key} className="space-y-3">
+                  <TrackHeading track={track} sourcePath="/wiki" />
+
+                  {/* One grouped list per credential, a row per exam, two
+                      columns from `sm` up. A credential with elective tracks
+                      (the FSA) is chunked by track instead: a small heading
+                      over each track's own list. */}
+                  {list(exam => !inDev(exam))}
+
+                  {devCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => toggleDev(track.key)}
+                      aria-expanded={devOpen}
+                      data-testid={`in-development-${track.key}`}
+                      className="flex w-full items-center justify-between gap-3 rounded-lg bg-card px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <span>{devCount} in development</span>
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        {devOpen ? 'Hide' : 'Show'}
+                        <ChevronDown className={`h-4 w-4 transition-transform ${devOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                      </span>
+                    </button>
+                  )}
+                  {devOpen && list(inDev)}
+                </div>
+              )
+            })}
           </div>
         )}
       </section>

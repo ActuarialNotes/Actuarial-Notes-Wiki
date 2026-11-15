@@ -1,4 +1,4 @@
-import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
 import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
 import { examAccentStyle } from '@/lib/examColors'
@@ -28,6 +28,7 @@ export function ExamStrip({
   studying,
   onChange,
   showAll = true,
+  folded,
   className,
 }: {
   exams: readonly ExamStripItem[]
@@ -36,11 +37,23 @@ export function ExamStrip({
   onChange: (value: string | null) => void
   /** Leads with **All**. Off for a shelf that is always one exam's (the add-flashcards sheet). */
   showAll?: boolean
+  /**
+   * Exams kept behind a **+N** tile until asked for: the ones still in
+   * development, so the strip opens on the exams there is something to study
+   * from (design review §5.3). A chosen exam is always shown, and a strip with
+   * nothing else to show folds nothing.
+   */
+  folded?: ReadonlySet<string>
   /** Overrides the bleed into the page gutter (`-mx-4 px-4`) where the page's gutter differs. */
   className?: string
 }) {
   const groupRef = useRef<HTMLDivElement>(null)
-  const choices: (string | null)[] = [...(showAll ? [null] : []), ...exams.map(e => e.value)]
+  const [unfolded, setUnfolded] = useState(false)
+  const foldable = folded ? exams.filter(e => folded.has(e.value) && e.value !== value) : []
+  const folding = !unfolded && foldable.length > 0 && foldable.length < exams.length
+  const hidden = new Set(folding ? foldable.map(e => e.value) : [])
+  const shown = exams.filter(e => !hidden.has(e.value))
+  const choices: (string | null)[] = [...(showAll ? [null] : []), ...shown.map(e => e.value)]
 
   function onKeyDown(e: ReactKeyboardEvent) {
     const delta = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
@@ -82,14 +95,14 @@ export function ExamStrip({
           </LogoTile>
         </ExamChoice>
       )}
-      {exams.map((exam, i) => (
+      {shown.map((exam, i) => (
         <ExamChoice
           key={exam.value}
           id={exam.value}
           ariaLabel={exam.name}
           active={value === exam.value}
           // With no All and nothing chosen, the first exam keeps the strip reachable by Tab.
-          tabbable={!showAll && i === 0 && !exams.some(e => e.value === value)}
+          tabbable={!showAll && i === 0 && !shown.some(e => e.value === value)}
           dimmed={value !== null && value !== exam.value}
           studying={studying?.has(exam.value)}
           accent={exam.logoKey}
@@ -98,6 +111,20 @@ export function ExamStrip({
           <ExamLogo examKey={exam.logoKey} size="md" />
         </ExamChoice>
       ))}
+      {folding && (
+        <button
+          type="button"
+          onClick={() => setUnfolded(true)}
+          aria-label={`Show ${hidden.size} more exams in development`}
+          title={`${hidden.size} more in development`}
+          data-testid="exam-strip-more"
+          className="flex shrink-0 items-center justify-center rounded-xl p-1.5 transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <LogoTile size="md" className="bg-muted text-[13px] font-bold text-muted-foreground">
+            +{hidden.size}
+          </LogoTile>
+        </button>
+      )}
     </div>
   )
 }

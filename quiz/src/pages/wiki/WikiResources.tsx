@@ -5,6 +5,9 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamStrip } from '@/components/ExamStrip'
+import { useExamFocus } from '@/hooks/useExamFocus'
+import { ALL_EXAMS } from '@/lib/examFocus'
+import { isExamInDevelopment } from '@/lib/examStatus'
 import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { groupExamVariants, variantRegion } from '@/lib/examVariants'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
@@ -17,6 +20,7 @@ import { RESOURCES_ROUTE, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
 import {
   RESOURCE_FACETS,
+  type ResourceFacetSelection,
   RESOURCE_FACET_LABEL,
   bodyForExam,
   emptyResourceFacets,
@@ -182,7 +186,19 @@ export default function WikiResources() {
   )
   const examPages = useMemo(() => index.filter(i => i.category === 'exam').map(i => i.name), [index])
   const examCount = examPages.length
-  const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
+  // With no exam in the address the shelf opens on the exam in focus
+  // (lib/examFocus.ts); `?exam=all` is the reader choosing every exam instead.
+  const { focus } = useExamFocus()
+  const allExams = searchParams.getAll('exam').includes(ALL_EXAMS)
+  const selection = useMemo(() => {
+    const read = resourceFacetsFromParams(searchParams)
+    const exam = new Set([...read.exam].filter(v => v !== ALL_EXAMS))
+    if (exam.size === 0 && !allExams && focus) exam.add(focus.readingsLabel)
+    return { ...read, exam }
+  }, [searchParams, allExams, focus])
+  /** What a filter change writes: the selection, keeping the choice of every exam. */
+  const facetParams = (next: ResourceFacetSelection, from: URLSearchParams) =>
+    resourceFacetsToParams(next.exam.size === 0 && focus && allExams ? { ...next, exam: new Set([ALL_EXAMS]) } : next, from)
   const strips = useMemo(
     () => ({
       SOA: resourceStripExams(examPages, 'SOA'),
@@ -200,6 +216,7 @@ export default function WikiResources() {
   // picker under the strip narrows it to one (`lib/examVariants.ts`).
   const groups = useMemo(() => groupExamVariants(strip), [strip])
   const chosenGroup = chosenExam ? groups.find(g => g.members.some(m => m.label === chosenExam)) ?? null : null
+  const foldedExams = useMemo(() => new Set(groups.filter(g => isExamInDevelopment(g.key)).map(g => g.key)), [groups])
   const chosenVariant = chosenGroup && chosenGroup.members.length > 1 && selection.exam.size === 1 ? chosenExam : null
   const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
@@ -255,13 +272,13 @@ export default function WikiResources() {
   // A filter is the same page showing something else, so it replaces the
   // history entry rather than stacking one per tick.
   function toggle(facet: ResourceFacet, value: string) {
-    setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
+    setSearchParams(facetParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
   }
 
   // One exam at a time — every region of it, or one — or none. A vintage is
   // an edition of one exam's syllabus, so another exam starts at its own newest.
   function chooseExam(label: string | readonly string[] | null) {
-    const exam = new Set(label === null ? [] : typeof label === 'string' ? [label] : label)
+    const exam = new Set(label === null ? (focus ? [ALL_EXAMS] : []) : typeof label === 'string' ? [label] : label)
     const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
     setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
   }
@@ -315,6 +332,7 @@ export default function WikiResources() {
         exams={groups.map(g => ({ value: g.key, name: g.name, logoKey: g.key }))}
         value={chosenGroup?.key ?? null}
         onChange={key => chooseExam(key === null ? null : groups.find(g => g.key === key)!.members.map(m => m.label))}
+        folded={foldedExams}
         className="sm:-mx-6 sm:px-6"
       />
 

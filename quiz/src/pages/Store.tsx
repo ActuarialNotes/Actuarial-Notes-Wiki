@@ -3,6 +3,8 @@ import { Navigate, useSearchParams } from 'react-router-dom'
 import { BookMarked, Calculator, ChevronRight, Columns3, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
 import { ExamStrip } from '@/components/ExamStrip'
+import { useExamFocus } from '@/hooks/useExamFocus'
+import { isExamInDevelopment } from '@/lib/examStatus'
 import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { StoreSearchBar } from '@/components/store/StoreSearchBar'
@@ -115,7 +117,14 @@ export default function Store() {
     () => new Set(Object.entries(progress).filter(([, status]) => status === 'in_progress').map(([key]) => key)),
     [progress],
   )
-  const homeExam = useMemo(() => defaultKitExam(studying, exams.map(e => e.key)), [studying, exams])
+  // With no exam in the address the Store opens on the exam in focus
+  // (lib/examFocus.ts) when it stocks it, else on the first exam being studied.
+  const { focus } = useExamFocus()
+  const homeExam = useMemo(() => {
+    const stocked = exams.map(e => e.key)
+    return (focus && stocked.includes(focus.progressKey) ? focus.progressKey : null) ?? defaultKitExam(studying, stocked)
+  }, [focus, studying, exams])
+  const foldedExams = useMemo(() => new Set(exams.filter(e => isExamInDevelopment(e.key)).map(e => e.key)), [exams])
   const exam = urlExam ?? (allExams || params.get('exam') ? null : homeExam)
   const variants = (exam && storeExam(exam)?.variants) || null
   const regionParam = params.get('region')
@@ -260,6 +269,7 @@ export default function Store() {
           value={exam}
           studying={studying}
           onChange={key => choose({ exam: key })}
+          folded={foldedExams}
           className="sm:-mx-6 sm:px-6"
         />
 

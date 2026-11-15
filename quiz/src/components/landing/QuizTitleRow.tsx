@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 export function QuizTitleRow({
   hasTopic,
   signedIn,
+  title = 'Quiz',
   body,
   onBodyChange,
   concept,
@@ -28,6 +29,8 @@ export function QuizTitleRow({
   /** An exam's builder is open. */
   hasTopic: boolean
   signedIn: boolean
+  /** The exam list's title: the tab's name, or the question a first visit is asked. */
+  title?: string
   /** The examining body the exam list is showing. */
   body: ExamBody
   onBodyChange: (body: ExamBody) => void
@@ -42,7 +45,7 @@ export function QuizTitleRow({
     <div className={cn(hasTopic && 'space-y-2')}>
       {!hasTopic && (
         <div className="flex items-center gap-2">
-          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Quiz</h1>
+          <h1 className="min-w-0 flex-1 text-2xl font-bold tracking-tight">{title}</h1>
           {!signedIn && (
             <Link
               to="/auth"

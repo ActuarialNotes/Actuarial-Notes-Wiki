@@ -1,3 +1,4 @@
+import { useExamFocus } from '@/hooks/useExamFocus'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
@@ -295,6 +296,17 @@ export default function Dashboard() {
       }
     } catch { /* ignore */ }
   }, [inProgressSyllabi])
+
+  // The exam in focus (lib/examFocus.ts) is the one shown, when it is one the
+  // reader is studying: on arrival, and when the switcher changes it. A chip
+  // pressed here changes the focus in turn.
+  const { focus, setFocus } = useExamFocus()
+  const focusFile = focus?.file
+  useEffect(() => {
+    if (!focusFile) return
+    const idx = inProgressSyllabi.findIndex(s => s.fileName === focusFile)
+    if (idx >= 0) setActiveExamIdx(idx)
+  }, [focusFile, inProgressSyllabi])
 
   // The daily email's Listen button links to /dashboard?episode=<exam key>:
   // show that exam, and ask its Play button to open the episode once it is
@@ -747,7 +759,7 @@ export default function Dashboard() {
                     key={s.examId}
                     type="button"
                     data-exam-tab-active={active}
-                    onClick={() => setActiveExamIdx(i)}
+                    onClick={() => { setActiveExamIdx(i); if (s.fileName) setFocus(s.fileName) }}
                     aria-label={s.examLabel}
                     aria-pressed={active}
                     title={s.examLabel}

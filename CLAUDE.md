@@ -396,7 +396,7 @@ before touching that area**:
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
   four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
-  step at the end of every screen. Its §6 says which phases are built (Phases 0 and 1 are) and its §7 the
+  step at the end of every screen. Its §6 says which phases are built (Phases 0 to 2 are) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
@@ -783,6 +783,19 @@ Other important `lib/` modules:
   and bar and the open objective's **Practice this objective**
   (`components/wiki/ObjectiveProgress.tsx`). Pure and tested; the flows are
   `e2e/next-steps.spec.ts`.
+- `examFocus.ts` — **the exam in focus** (design review Phase 2): the one exam the reader is
+  studying, picked once and opened on by every tab. It is stored as the exam page's file name
+  (`hooks/useExamFocus.ts`, localStorage `quiz.examFocus`; with nothing stored, the first exam
+  being studied), and every other name is derived from it (`FocusExam`: progress key, page id,
+  bank, readings label, status, bodies). `components/ExamSwitcher.tsx` is at the head of the
+  sidebar: the reader's exams, the other ready and beta exams of their body, then **All exams**;
+  a pick moves the current page to the same place for the new exam (`focusedPath`). The Quiz row
+  goes to `quizPath(focus)` and Study Guides to `guidePath(focus)`; Resources and the Store read
+  the focus when their address names no exam (`?exam=all` is every exam, `ALL_EXAMS`); the
+  Dashboard's chips follow it and set it; opening an exam from either exam list sets it. A new
+  surface that is about one exam reads `useExamFocus()` instead of keeping its own choice.
+  In-development exams are folded: per credential on the Study Guides list, and behind a **+N**
+  tile on `ExamStrip` (`folded`). Pure and tested; the flows are `e2e/exam-focus.spec.ts`.
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
   **Exams P and FM**, ready again since 2026-10-30, and **MAS-I**, the **three DISCs** and **Exam 7**, since 2026-10-31 — and **MAS-II**, the first beta exam to pass all eight, the same day, and **Exam 9** and **Exam 5** after it: P, FM, MAS-I, the three DISCs and Exam 7 went

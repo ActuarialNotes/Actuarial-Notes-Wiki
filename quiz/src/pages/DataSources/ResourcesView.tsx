@@ -25,6 +25,8 @@ import {
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { ResourceCard, ResourceCardGrid } from '@/components/cowork/ResourceCard'
 import { LibraryPill } from '@/components/cowork/LibraryPill'
+import { usePagedList } from '@/hooks/usePagedList'
+import { ShowMore } from '@/components/ShowMore'
 
 const EMPTY_TITLE: Record<ResourceFacet, string> = {
   exam: 'None of these resources is a syllabus reading',
@@ -86,6 +88,7 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
 
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
   const shown = useMemo(() => filterResources(pool, selection), [pool, selection])
+  const paged = usePagedList(shown, `documents:${libraryOnly ? 'mine' : 'all'}:${searchParams.toString()}`)
   const options = useMemo(
     () =>
       Object.fromEntries(RESOURCE_FACETS.map(facet => [facet, resourceFacetOptions(pool, facet, selection)])) as Record<
@@ -163,8 +166,9 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
           </div>
         )
       ) : (
+        <>
         <ResourceCardGrid>
-          {shown.map(({ resource }) => (
+          {paged.shown.map(({ resource }) => (
             <ResourceCard
               key={resource.id}
               resource={resource}
@@ -176,6 +180,8 @@ export default function ResourcesView({ onOpenResource }: { onOpenResource: (res
             />
           ))}
         </ResourceCardGrid>
+        <ShowMore nextSize={paged.nextSize} remaining={paged.remaining} noun="documents" onShowMore={paged.showMore} />
+        </>
       )}
     </div>
   )

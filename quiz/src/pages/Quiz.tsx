@@ -874,13 +874,18 @@ export default function Quiz() {
 
             {isLocked && (
               <>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={handleChangeAnswer}
-                >
-                  Change Answer
-                </Button>
+                {/* Once the answer and its solution are on screen there is
+                    nothing left to change it to (design review D-DR4). With
+                    answers held to the end, the choice is still the reader's. */}
+                {!showExplanation && (
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleChangeAnswer}
+                  >
+                    Change Answer
+                  </Button>
+                )}
                 {isLastQuestion ? (
                   <Button
                     onClick={handleNextFromAnswer}

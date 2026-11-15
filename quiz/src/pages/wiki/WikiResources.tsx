@@ -42,6 +42,8 @@ import {
 import { syllabusEditions } from '@/data/syllabusVintages'
 import { cn } from '@/lib/utils'
 import { AddedCount, ChangePill, DroppedToggle } from '@/components/wiki/VintageChanges'
+import { usePagedList } from '@/hooks/usePagedList'
+import { ShowMore } from '@/components/ShowMore'
 
 // The Exam filter is the strip of exam logos; the rest are dropdowns.
 const DROPDOWN_FACETS = RESOURCE_FACETS.filter(facet => facet !== 'exam')
@@ -222,6 +224,8 @@ export default function WikiResources() {
     const kept = new Set(filterResources(pool, facetSelection))
     return entries.filter(e => kept.has(e.item))
   }, [entries, pool, facetSelection])
+  // A page of the shelf at a time; the body and the filters make it a different shelf.
+  const paged = usePagedList(filtered, `resources:${body}:${searchParams.toString()}`)
   const options = useMemo(
     () => Object.fromEntries(DROPDOWN_FACETS.map(facet => [
       facet,
@@ -395,8 +399,9 @@ export default function WikiResources() {
           </button>
         </div>
       ) : (
+        <>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map(entry => {
+          {paged.shown.map(entry => {
             const at = opened.indexOf(entry)
             return (
               <ResourceShelfCard
@@ -409,6 +414,8 @@ export default function WikiResources() {
             )
           })}
         </div>
+        <ShowMore nextSize={paged.nextSize} remaining={paged.remaining} noun="resources" onShowMore={paged.showMore} />
+        </>
       )}
     </div>
   )

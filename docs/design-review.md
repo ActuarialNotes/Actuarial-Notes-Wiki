@@ -56,7 +56,8 @@ next. The six findings that cost a learner most:
 3. **Every screen that ends leaves the next step to the reader.** A concept page, an exam
    page, a wrong answer and the results screen all stop without one (F8–F12).
 4. **A wrong answer is painted as an error when it is the lesson.** The worked solution is
-   set on a red ground, and on a phone its equations are cut off (F9).
+   set on a red ground, and on a phone its equations run past the edge with nothing to say
+   they scroll (F9).
 5. **Learning and applying never meet.** Thirty-odd calculators that reproduce the textbook
    exhibits sit under a tab called Workflows; no concept page links to the one that computes
    it (F13).
@@ -167,8 +168,8 @@ Cognitive Load, Von Restorff.*
 After a miss the whole worked solution is set inside a dark red panel headed *Incorrect*.
 Red is the app's colour for wrong (style guide §4.1), and it belongs on the verdict; the
 solution is the most valuable reading on the screen and is the hardest to read. On a phone,
-aligned equations run off the right edge of the panel (seen on `p-005`: the line stops at
-"= N(Your"). Under the options a caption says "Choose any answer to continue" after the
+aligned equations run past the right edge of the panel (seen on `p-005`: the line stops at
+"= N(Your"). They scroll sideways, and nothing on screen says so. Under the options a caption says "Choose any answer to continue" after the
 answer is locked, and a *Change Answer* button stands beside *Next Question* with the correct
 option already lit. The concepts to re-read are two collapsed rows at the bottom, and nothing
 offers another question on the same idea, which is the step the research in
@@ -181,8 +182,9 @@ a ring, then every question printed again in full with its solution open, in the
 asked, right and wrong alike. A 30-question Practice Exam would be about ten times that.
 The one question the reader got wrong is nowhere near the top. The screen opens with a
 *2 Concepts Levelled Up* ceremony over a 33% score, which is true and is not what the reader
-most needs to hear at that moment. Nothing on the page says what to do next: no "fix this
-one", no "next session". The end of a session is what the session is remembered by, and this
+most needs to hear at that moment. The next steps are there, *Try Again* and *New Quiz*, at the very
+foot of the transcript, and *Review Incorrect* in the header filters the list without
+moving the misses to the top. The end of a session is what the session is remembered by, and this
 one ends in a scroll.
 
 **F11. A concept page ends without a next step.** *High. Goal-Gradient, Mental Model.*
@@ -224,8 +226,9 @@ neutral by default.
 
 **F16. Icon-only controls with no label.** *Medium. Cognitive Load (recognition over
 recall), Jakob's Law.*
-The builder's four settings, the quiz header's six, the Dashboard's download / bell / help
-and its "▶ 5 min" pill, the Flashcards bar's "D Σ" menu. Each is a small picture a reader has
+The quiz header's six, the Dashboard's download / bell / help and its "▶ 5 min" pill, the
+Flashcards bar's "D Σ" menu. (The builder's four are a summary row that unfolds into
+labelled settings, which is the right pattern.) Each is a small picture a reader has
 to learn by pressing. A phone has no hover to ask.
 
 **F17. An underline means three things.** *Medium. Similarity, Mental Model.*
@@ -469,7 +472,7 @@ can stop there.
 
 | Phase | What | Findings | Size |
 |---|---|---|---|
-| **0. Repairs** | Solution off the red ground, with the equations scrolling; verdict strip. Results: missed questions first, the rest folded. Start session on the Dashboard's first phone screen. Pages for Resources, Documents and search. Labels on the builder's and Dashboard's icons. Skip link. Empty-state buttons. The "33%" removed | F6, F7, F9, F10, F16, F18, F19 | S–M |
+| **0. Repairs** | Solution off the red ground, with the equations scrolling; verdict strip. Results: missed questions first, the rest folded. Start session on the Dashboard's first phone screen. Pages for Resources, Documents and search. A label on the Dashboard's Start pill. Skip link. Empty-state buttons. The "33%" removed | F6, F7, F9, F10, F16, F18, F19 | S–M |
 | **1. The next step** | The concept page's foot bar with Practice and the tool link. Practice this objective, and progress on the exam page's objective rows. Fix these now on the results. Learn the method on a tool | F10–F13 | M |
 | **2. One exam** | The exam in focus and its switcher; the exam lists and strips replaced; in-development exams folded; a visitor's first question | F2, F4, F5 | M–L |
 | **3. Four places** | The sidebar regrouped; the bottom bar on phones; Flashcards into Practice; the Store and Community behind the avatar; Today open to visitors | F1, F3, F4 | L |
@@ -478,6 +481,27 @@ can stop there.
 Phases 0 and 1 are where the learning is. A candidate who never notices the sidebar changing
 would still read every solution more easily and be handed from a concept to a question to a
 tool.
+
+**Phase 0 was built on 2026-11-15**, with the spelling decision (*practice*):
+
+- The verdict is a strip in its colour and the solution is ordinary text on the card surface
+  (`components/ExplanationPanel.tsx`). A display equation wider than the panel fades at its
+  right edge while there is more to scroll to. Where a solution is only being shown, no
+  verdict is drawn (it used to read "Correct!").
+- *Change Answer* is offered only while answers are held to the end (D-DR4).
+- The results list leads with the missed questions; the ones answered right are under one
+  row, unless nothing was missed (`pages/Review.tsx`).
+- On a phone, Today's session puts its size, steps and Start above the wheel, and the header
+  pill reads "Start · 5 min".
+- Resources, Data Sources' Documents and question search show 24 at a time with **Show more**
+  (`lib/paging.ts`, `hooks/usePagedList.ts`, `components/ShowMore.tsx`); how far a list was
+  opened is kept for the browser session, so Back still lands on the card it left.
+- The quiz header's percentage is gone, a **Skip to content** link is the first tab stop, and
+  an empty deck holds its own **Add flashcards** button.
+
+Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
+continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
+go until the shortcut does.
 
 ### How to tell whether it worked
 

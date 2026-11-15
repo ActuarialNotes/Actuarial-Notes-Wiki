@@ -38,7 +38,7 @@ test('the session lists the day in steps, and Start does the first one', async (
   await page.screenshot({ path: 'test-results/dashboard-session.png', fullPage: true })
 
   // The pinned row carries the same Start, sized.
-  const pill = page.getByRole('button', { name: /^Start session — \d+ questions?, \d+ minutes$/ })
+  const pill = page.getByRole('button', { name: /^Start session · \d+ questions?, \d+ minutes$/ })
   await expect(pill).toBeVisible()
   await expect(pill).toContainText(/\d+ min/)
 

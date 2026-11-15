@@ -105,7 +105,6 @@ export function QuestionAnswerReveal({ question }: { question: Question }) {
           wikiLinks={question.wiki_link}
           verification={question.verification}
           questionId={question.id}
-          isCorrect
           examinerReport={question.examiner_report}
         />
       </div>
@@ -119,7 +118,6 @@ export function QuestionAnswerReveal({ question }: { question: Question }) {
       wikiLinks={question.wiki_link}
       verification={question.verification}
       questionId={question.id}
-      isCorrect
       examinerReport={question.examiner_report}
     />
   )

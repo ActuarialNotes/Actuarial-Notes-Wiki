@@ -157,7 +157,6 @@ function QuestionItem({
               wikiLinks={question.wiki_link}
               verification={question.verification}
               questionId={question.id}
-              isCorrect
             />
           )}
         </div>

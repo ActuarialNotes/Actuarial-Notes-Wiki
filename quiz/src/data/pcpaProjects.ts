@@ -13,7 +13,7 @@
  *   people, data drawn by `lib/pcpaData.ts`. They are written to the framework
  *   the outline describes — "a statement of the business problem, one or two
  *   data sets, scope parameters, and guidelines as to what should be submitted"
- *   — so a candidate practises the shape of the real thing.
+ *   — so a candidate practices the shape of the real thing.
  */
 
 import type { CaseId } from '@/lib/pcpaData'

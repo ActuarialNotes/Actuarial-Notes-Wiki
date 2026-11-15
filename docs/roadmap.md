@@ -420,6 +420,17 @@ order below stands.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **X11: design review and redesign (proposed 2026-11-15; decisions made and Phase 0 built the same day).** A review of every tab at desktop
+  and phone size against the Laws of UX found well-made parts in a frame that lists features
+  where a learner needs a path: up to twelve sidebar destinations, the exam chosen again on five
+  surfaces, screens that end without a next step (a concept page, a wrong answer, the results),
+  a worked solution set on the error colour and cut off on a phone, and no link from a concept
+  to the tool that computes it. `docs/design-review.md` has the 19 findings and the proposal:
+  four places in the order of the path, one exam in focus, a next step on every screen. Five
+  phases. D-DR1 to D-DR5 are decided (its §7): the places are Today, Learn, Practice and Apply,
+  with *practice* spelled with a c everywhere. Phase 0 (repairs) is built; Phases 1–4 are open,
+  one per branch. Mock-ups: `docs/design-review-mockups.html`.
+
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the
@@ -1057,6 +1068,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
+| `docs/design-review.md` | Review: the whole app against the Laws of UX, and a redesign proposal (mock-ups in `design-review-mockups.html`) | X11 (§3.4) | Active. Phase 0 built | 2026-11-15 |
 | `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Active. Phase 1 built | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |

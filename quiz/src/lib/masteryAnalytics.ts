@@ -183,7 +183,7 @@ export function projectReadiness(
 export interface WeakTopic extends SectionReadiness {
   /** All concept names in the topic (canonical — match question wiki_links). */
   conceptNames: string[]
-  /** Concepts not yet at level3 — the ones worth practising. */
+  /** Concepts not yet at level3 — the ones worth practicing. */
   weakConceptNames: string[]
 }
 

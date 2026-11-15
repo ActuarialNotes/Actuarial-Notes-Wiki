@@ -25,7 +25,7 @@ ACTIONS = {
     "read_page": '{"title": "<page title>", "mode": "full" | "skim"}',
     "search": '{"query": "<words>"}  — find study pages',
     "update_notes": '{"notes": "<your COMPLETE notes file, markdown, at most %d words>"}  — replaces the file',
-    "next_question": '{"focus": "<a concept or topic you want to practise, or empty>"}',
+    "next_question": '{"focus": "<a concept or topic you want to practice, or empty>"}',
     "answer": '{"answer": <see the question>, "confidence": <0-100>, '
               '"sources": ["page: <title>", "notes", "prior: <item>", "guess"]}  — the answer as you would submit it',
     "flag_question": '{"reason": "<what is ambiguous, missing or wrong in the question>"}',

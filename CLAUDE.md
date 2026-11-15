@@ -348,7 +348,7 @@ before touching that area**:
   `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
   redirect in `WikiConcept`.
 - `docs/simulated-learner.md` — the **simulated learner** (`simulations/`, `./run-learner`): a model
-  playing a configured student (YAML profiles) who studies the vault and practises questions, so
+  playing a configured student (YAML profiles) who studies the vault and practices questions, so
   reports show where guides and questions fail which learners. The learner may see study pages and
   question stems/options only — enforced by an allowlist loader, a context guard and a tool-less,
   MCP-less headless Claude Code backend, and proven by `simulations/tests/test_isolation.py` (CI).
@@ -393,6 +393,12 @@ before touching that area**:
   word (true to the code or the source, one name per thing, no code words, say it once, and the
   table of tells to cut), written from the UI copy review (`docs/ui-copy-review.md`). Every
   writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
+- `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
+  whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
+  four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
+  step at the end of every screen. Its §6 says which phases are built (Phase 0 is) and its §7 the
+  maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
+  the results screen. *Practice* is spelled with a c everywhere, noun and verb.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1085,7 +1091,7 @@ Other important `lib/` modules:
   nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
   beside any price (the wording is pinned by `amazonPrice.test.ts`).
 - `storeKit.ts` — the Store's **exam kit** (`docs/store.md`, "The kit"): one exam's shelf as
-  steps (register → calculator → learn → practise → review), the first unticked one in the
+  steps (register → calculator → learn → practice → review), the first unticked one in the
   spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
   comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
   `components/store/ExamKit.tsx`; pure and tested.
@@ -1253,6 +1259,11 @@ Other important `lib/` modules:
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite
   directions, so a reader on the DEFAULT track (neither body's) opened one tab on CAS and the
   other on SOA and switching tabs looked like the picker changing itself. Pure and tested.
+- `paging.ts` — a long list a page at a time: 24 items, then **Show more** (`hooks/usePagedList.ts`,
+  `components/ShowMore.tsx`). The Resources shelf and question search use it (Data Sources'
+  catalogue folds each of its groups itself); how far a list was opened is kept per list and filter choice in sessionStorage, so the
+  scroll position the router restores on Back still lands on a card. Add it to any list that can
+  run past a few screens rather than rendering it whole. Pure and tested.
 - `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
   trigger is only a preference: the viewport gets the last word, so a control near an edge has
   the menu shifted back inside, one with no room below has it opened upwards, and the height is

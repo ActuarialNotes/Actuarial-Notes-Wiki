@@ -4,13 +4,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d8dfd8d4f1baf4e15b484001dd9cad82cd714d87ac99f72754e97e0e7d63d7cd
+  content_hash: sha256:bbc10596f9c5f9659ade12b64677d23e636b468b19c4b24a1f006651b2342759
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/ALM Failure.md
 ---
-An **ALM failure** is the collapse, or near collapse, of an insurer, pension fund or bank caused by a mismatch between its assets and liabilities that it did not measure, did not price or could not unwind in time. Each classic case turned an [[ALM Risk|ALM risk]] that looked remote into a loss of solvency or of liquidity, and their lessons shape how [[Asset-Liability Management|asset-liability management]] is practised.
+An **ALM failure** is the collapse, or near collapse, of an insurer, pension fund or bank caused by a mismatch between its assets and liabilities that it did not measure, did not price or could not unwind in time. Each classic case turned an [[ALM Risk|ALM risk]] that looked remote into a loss of solvency or of liquidity, and their lessons shape how [[Asset-Liability Management|asset-liability management]] is practiced.
 
 The failures share four features:
 

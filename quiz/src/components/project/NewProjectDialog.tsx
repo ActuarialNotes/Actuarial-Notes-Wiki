@@ -23,7 +23,7 @@ import { ChoiceCards, Pill, ProjectDialog } from './shared'
  *    wears its exam's colour (`lib/examColors.ts`) — the logo, the brief tiles
  *    and the hover wash — so a brief is recognisably that exam's project. A
  *    brief is chosen, not assigned: the real PCPA project hands each candidate
- *    one case from a pool, but someone *practising* for it wants the case that
+ *    one case from a pool, but someone *practicing* for it wants the case that
  *    exercises what they are weak at.
  * 2. **How to work it.** Only what changes the attempt:
  *    - the mode — a rehearsal is the real conditions (the window, and feedback

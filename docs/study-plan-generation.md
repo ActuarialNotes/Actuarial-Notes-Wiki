@@ -1,6 +1,6 @@
 # Study Plan Generation
 
-The study plan is a personalised daily schedule that tells you which concepts to practise each day. It works backwards from your target ready date, spaces revisits according to how well you know each concept, and adjusts its pacing status so you always know whether you're on track.
+The study plan is a personalised daily schedule that tells you which concepts to practice each day. It works backwards from your target ready date, spaces revisits according to how well you know each concept, and adjusts its pacing status so you always know whether you're on track.
 
 ## Setting Up Your Plan
 
@@ -19,7 +19,7 @@ Once you save a target date, the plan records today as the **plan start date**. 
 
 ### Step 1 — Classify every concept
 
-Each concept is resolved to its current mastery state (New, Level 1, Level 2, Level 3, or Forgotten) after applying any time-based decay that may have accumulated since you last practised it. Concepts at Level 3 are **mastered**; everything else is **unmastered**.
+Each concept is resolved to its current mastery state (New, Level 1, Level 2, Level 3, or Forgotten) after applying any time-based decay that may have accumulated since you last practiced it. Concepts at Level 3 are **mastered**; everything else is **unmastered**.
 
 A concept linked from more than one learning objective (Exam 7's "Reinsurance" appears under
 both *Data Preparation* and *Reinsurance*, for example) is still one concept: it's scheduled
@@ -162,7 +162,7 @@ You mastered "Bond Price" today. It won't decay for 30 days, and your target rea
 
 ### Step 4 — Determine today's concepts
 
-Today's concepts are the deduplicated list of everything scheduled for the current date. If you have already levelled up some concepts earlier in the day (in a prior quiz session), those levelled-up concepts are preserved at the top of the list. Fresh unlearned concepts fill remaining slots. This keeps the plan grounded in what you actually practised rather than replacing it with concepts you haven't touched yet.
+Today's concepts are the deduplicated list of everything scheduled for the current date. If you have already levelled up some concepts earlier in the day (in a prior quiz session), those levelled-up concepts are preserved at the top of the list. Fresh unlearned concepts fill remaining slots. This keeps the plan grounded in what you actually practiced rather than replacing it with concepts you haven't touched yet.
 
 ## The "questions left today" badge
 
@@ -222,7 +222,7 @@ back the same questions. Two rules stop that:
 1. Concepts already finished today (`planDoneConceptSlugs`, above) are dropped from the
    selection, so a re-launch after some wrong answers only re-tests what's left. Once the
    whole plan is done, the selection falls back to the full plan so **Continue Studying**
-   still has something to practise.
+   still has something to practice.
 2. Every question today's quizzes have already served is held back from the draw
    (`CoverageOptions.seenIds` on `selectQuestionsForCoverage` /
    `minQuestionsToCoverConcepts`). Both the covering phase and the fill phase run over the

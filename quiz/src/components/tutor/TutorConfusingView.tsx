@@ -38,7 +38,7 @@ function FindingAction({ finding, actions }: { finding: Finding; actions: TutorA
     case 'kind-gap':
       return (
         <Button size="sm" variant="outline" onClick={() => actions.startSession({ concepts: [], kind: finding.weak })}>
-          Practise {PART_KIND_LABEL[finding.weak].toLowerCase()} parts
+          Practice {PART_KIND_LABEL[finding.weak].toLowerCase()} parts
         </Button>
       )
     case 'calibration':

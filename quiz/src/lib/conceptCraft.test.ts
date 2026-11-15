@@ -287,7 +287,7 @@ describe('practiceQuestions', () => {
     { id: 'other', links: ['Concepts/Z'] },
   ]
 
-  it('practises the questions that test the two together', () => {
+  it('practices the questions that test the two together', () => {
     expect(practiceQuestions({ a: 'P', b: 'Q', questions: ['q1', 'q2'] }, pool)).toEqual(['q1', 'q2'])
   })
 

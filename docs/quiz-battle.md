@@ -159,7 +159,7 @@ exam's draw.
 | The music, played on the app's audio graph | `quiz/src/lib/battleMusicPlayer.ts` |
 | Hooks: the local battle's clock, an online session, a lobby session, the music, `useNow` | `quiz/src/hooks/useBattle.ts` |
 | The page: the way in, the setup, joining, the lobby, and which battle to show | `quiz/src/pages/Battle.tsx` (lazy) |
-| The Deck's facts: the hand of modes, a setting stepped on, each round's points, the lost round to practise — pure, tested | `quiz/src/lib/battleDeck.ts` |
+| The Deck's facts: the hand of modes, a setting stepped on, each round's points, the lost round to practice — pure, tested | `quiz/src/lib/battleDeck.ts` |
 | The intro's once-per-visit flag | `quiz/src/hooks/useBattleIntro.ts` |
 | The screens — the Deck, Quiz Battle's own look | `quiz/src/components/battle/deck/` (`DeckIntro`, `DeckHome`, `DeckLobby`, `DeckRoom`, `DeckLocal`, `DeckDraft` (draw, strike, deal), `DeckCoinFlip`, `DeckRound`, `DeckQuestionCard`, `DeckResults`, and their parts in `DeckParts`) |
 | Pieces the Deck's screens share | `quiz/src/components/battle/` (`BattleActionBar`, `BattleQuestionCard`, `BattleResults`, `PlayerTile`, `OnlineBattle`) |

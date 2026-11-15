@@ -31,6 +31,8 @@ import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
 import { emptyFacets, facetOptions, matchesFacets, toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
+import { usePagedList } from '@/hooks/usePagedList'
+import { ShowMore } from '@/components/ShowMore'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
 
@@ -525,6 +527,8 @@ export default function Search() {
       : filteredBeforeSitting.filter(q => matchesFacets(q, facetSelection))),
     [filteredBeforeSitting, types, sources, sittings, facetSelection],
   )
+  // The results a page at a time. A different result set is a different list.
+  const pagedQuestions = usePagedList(filtered, `search:${filtered.length}:${filtered[0]?.id ?? ''}`)
 
   // How many questions link to each concept, keyed by canonical concept name.
   // This is the wiki_link concept graph that drives concept search.
@@ -1030,7 +1034,7 @@ export default function Search() {
 
             {!loading && filtered.length > 0 && (
               <div className="space-y-2">
-                {filtered.map(q => (
+                {pagedQuestions.shown.map(q => (
                   <QuestionRow
                     key={q.id}
                     question={q}
@@ -1043,6 +1047,7 @@ export default function Search() {
                     attemptsTracked={attemptsTracked}
                   />
                 ))}
+                <ShowMore nextSize={pagedQuestions.nextSize} remaining={pagedQuestions.remaining} noun="questions" onShowMore={pagedQuestions.showMore} />
               </div>
             )}
           </>

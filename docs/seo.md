@@ -145,7 +145,7 @@ answer is banked through `recordReviewAnswers` when the reader leaves the questi
 and the attempt history like any quiz answer, self-grades included. A quiet *Show
 solution* shows the key, the worked solution and the examiners' report without an
 answer, and banks nothing: a skip is not a miss. Once answered or shown, **Next**
-goes to the next question on the paper at its own page, **Practise <concept>**
+goes to the next question on the paper at its own page, **Practice <concept>**
 starts a quiz on the first concept it tests (`conceptQuizUrl`), and a reader who
 isn't signed in is told their answers are only saved in this browser.
 
@@ -157,7 +157,7 @@ each exam page's lists a way into every paper and set in its bank
 marks a question page as a schema.org `Quiz` whose `hasPart` is the `Question`,
 with no `acceptedAnswer` — so it earns no answer-bearing rich result, by design.
 `robots.txt` disallows `/quiz?`, so a crawler indexes the question's page and
-never a quiz address (Practise's included).
+never a quiz address (Practice's included).
 
 A question with an open **critical** finding has no page, as it has no quiz
 (`hasQuestionPage` → `hasCriticalFinding`): its URL is a 404.

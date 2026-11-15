@@ -1006,7 +1006,7 @@ export function ReadinessCard({
   const sessionStartLabel = sessionLaunching
     ? 'Get ready…'
     : sessionAction === 'extra'
-      ? 'Practise more'
+      ? 'Practice more'
       : sessionAction === 'quiz'
         ? 'Start a quiz'
         : stepNow && stepNow.number > 1 && (sessionAction === 'plan' && planStarted)

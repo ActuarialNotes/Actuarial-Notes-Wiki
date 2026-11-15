@@ -32,7 +32,6 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
     () => (segmented ? Array.from({ length: total }, (_, i) => ({ start: i + 1 })) : undefined),
     [segmented, total],
   )
-  const percentage = total > 0 ? Math.min(100, (current / total) * 100) : 0
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
@@ -171,9 +170,6 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
           </button>
         )}
         {info}
-        {/* The bar under the row already says how far in; on a phone the
-            figure gives its width to the controls beside it. */}
-        <span className="hidden shrink-0 pl-2 text-sm tabular-nums sm:inline">{Math.round(percentage)}%</span>
         </div>
       </div>
       {/* The bar is the second way to jump between questions, alongside the

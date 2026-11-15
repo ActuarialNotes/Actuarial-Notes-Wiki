@@ -952,6 +952,23 @@ function AddFlashcardsMenu({
   )
 }
 
+// The deck with nothing in it. The way to fill it is in the card, not a
+// sentence pointing at the "+" in the far corner (design review F18): the
+// button opens the same sheet, whose first section is today's study plan.
+function EmptyDeck() {
+  const { openSheet } = useContext(AddFlashcardsSheetContext)
+  return (
+    <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-4">
+      <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" aria-hidden="true" />
+      <p className="text-sm text-muted-foreground">Your deck is empty.</p>
+      <Button onClick={openSheet}>
+        <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+        Add flashcards
+      </Button>
+    </div>
+  )
+}
+
 // The round primary "+" in the controls footer, and the little menu it opens
 // above itself. The two ways into the deck are not equals: the plan already
 // knows what today is for, so building that deck should be one tap, while
@@ -1983,14 +2000,7 @@ function GalleryPanel({
               cards are added (see TodayStudyPlanSection). */}
 
           {cards.length === 0 ? (
-            <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-2">
-              <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground">Your deck is empty.</p>
-              <p className="text-xs text-muted-foreground">
-                Tap the <span className="font-medium">+</span> button below to add today's
-                study plan, or browse everything.
-              </p>
-            </div>
+            <EmptyDeck />
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
               <SortableContext items={orderedCards.map(c => c.name)} strategy={rectSortingStrategy}>

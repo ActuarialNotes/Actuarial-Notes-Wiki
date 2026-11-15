@@ -175,8 +175,8 @@ def account_tables(F: dict) -> tuple[str, str, str]:
         cells = ""
         for k in range(1, maxoff + 1):
             if k in offs:
-                p = offs[k] in r["practised_returns"]
-                cells += f'<td class="n {"cp" if p else "c1"}" title="{fmt_day(offs[k])}{" · practised" if p else ""}">{"●" if p else "○"}</td>'
+                p = offs[k] in r["practiced_returns"]
+                cells += f'<td class="n {"cp" if p else "c1"}" title="{fmt_day(offs[k])}{" · practiced" if p else ""}">{"●" if p else "○"}</td>'
             else:
                 cells += '<td class="n"></td>'
         first_p = " ●" if "ans" in r["days"].get(r["created"], {}) else ""
@@ -240,7 +240,7 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
     exc_browsers = "; ".join(f"{esc(b)}: {k} of {u} people" for b, k, u in F["exception_browsers"][:4])
     acct_summary, acct_grid, acct_days = account_tables(F)
     acct_table = table(["Of the accounts readers created in the window", "Count"], [
-        ["Created", S["accounts_created"]], ["Answered at least one question", S["accounts_practised"]],
+        ["Created", S["accounts_created"]], ["Answered at least one question", S["accounts_practiced"]],
         ["Set an exam date", S["accounts_exam_date"]],
         ["Built a flashcard deck of 60+ cards but answered nothing", S["accounts_big_deck_no_answers"]],
         ["Never confirmed their email", S["accounts_unconfirmed"]],
@@ -275,7 +275,7 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
     <div class="kpi"><b>{S['first_quiz']}</b><span>opened a quiz</span></div>
     <div class="kpi"><b>{S['question_answered']}</b><span>answered at least one question</span></div>
     <div class="kpi"><b>{S['day2_return']}</b><span>came back on a later day</span></div>
-    <div class="kpi"><b>{S['accounts_created']}</b><span>new accounts, {S['accounts_practised']} of which practised</span></div>
+    <div class="kpi"><b>{S['accounts_created']}</b><span>new accounts, {S['accounts_practiced']} of which practiced</span></div>
     <div class="kpi"><b>{S['paying_subscribers']}</b><span>paying subscriber{'s' if S['paying_subscribers'] != 1 else ''}{f", {S['paying_without_answers']} with no questions answered" if S['paying_without_answers'] else ''}</span></div>
   </div>
 </section>
@@ -349,7 +349,7 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
   {acct_table}
   <ul>
     <li><b>Most active accounts:</b> {top_line or 'none answered anything'}.</li>
-    <li><b>{S['accounts_returned']} of {S['accounts_shown']} accounts came back on a later day</b>, {S['accounts_practised_on_return']} of them to practise. {S['accounts_never_back']} never came back after their first day.</li>
+    <li><b>{S['accounts_returned']} of {S['accounts_shown']} accounts came back on a later day</b>, {S['accounts_practiced_on_return']} of them to practice. {S['accounts_never_back']} never came back after their first day.</li>
     {paying}
     <li><b>Pro access keys:</b> {S['pro_keys_readers']} of {S['pro_keys_total']} reached a reader.</li>
     <li><b>Guests do most of the practice:</b> GA4 counts {S['answer_events']} answers; the database holds {S['db_answers']} from readers' accounts, so at least {S['guest_answer_share_min_pct']}% came from guests. GA4 also misses readers who block it, so treat that as a floor.</li>

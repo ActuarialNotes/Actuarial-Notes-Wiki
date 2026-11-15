@@ -126,7 +126,7 @@ export function ReadinessProjectionSlide({
       <p className="text-xs text-muted-foreground">
         {plan
           ? "This assumes you finish today's study plan every day."
-          : 'With no study plan, this shows your levels stepping down as concepts go unpractised.'}
+          : 'With no study plan, this shows your levels stepping down as concepts go unpracticed.'}
       </p>
     </div>
   )

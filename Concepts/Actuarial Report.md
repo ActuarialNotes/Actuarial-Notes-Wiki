@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:61b8238f459c2e6949771be337c88788f970dc6a5c155a73eebac5e0da864741
+  content_hash: sha256:0bdd6e53c9210351ac3b09b5921492b4cbfe2d377d258e6036e21c52433d1190
   sources: []
   open_findings: 0
   open_critical: 0
@@ -27,7 +27,7 @@ The report is where the [[Reserve Communication]] duties of [[ASOP 43 - Property
 The report has two components:
 
 1. A narrative explaining the findings, recommendations and conclusions, and their significance, to management, the board and the regulator.
-2. A technical component detailed enough for another actuary practising in the same field to evaluate the work, running from the basic data, such as [[Loss Development|loss triangles]], to the conclusions.
+2. A technical component detailed enough for another actuary practicing in the same field to evaluate the work, running from the basic data, such as [[Loss Development|loss triangles]], to the conclusions.
 
 It should meet ASOP No. 41's documentation and disclosure requirements, and ASOP No. 36 points to ASOPs 20, 23, 38, 41, 43 and 56 for its content.
 

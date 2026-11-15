@@ -39,7 +39,7 @@ export function SectionLeaksList({ leaks, examLabel }: { leaks: SectionLeak[]; e
               </span>
               <span className="shrink-0 font-semibold tabular-nums">−{marks(l.marksLost!)}</span>
               <RowChevron />
-              <span className="sr-only">marks of 100. Practise {l.name}</span>
+              <span className="sr-only">marks of 100. Practice {l.name}</span>
             </Link>
           ))}
         </Group>
@@ -53,7 +53,7 @@ export function SectionLeaksList({ leaks, examLabel }: { leaks: SectionLeak[]; e
                 {l.answered > 0 ? `${l.answered} answered · ` : ''}{Math.round(l.share)}%
               </span>
               <RowChevron />
-              <span className="sr-only">Practise {l.name}</span>
+              <span className="sr-only">Practice {l.name}</span>
             </Link>
           ))}
         </Group>

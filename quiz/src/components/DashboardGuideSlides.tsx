@@ -56,7 +56,7 @@ export function HowItWorksSlide() {
       <LoopVisual />
       <p className="text-muted-foreground">
         Every exam's syllabus is split into concepts, about one idea each. Answer quiz questions on a concept and it
-        climbs from New to Level 3. Your study plan picks which concepts to practise each day, and your readiness score
+        climbs from New to Level 3. Your study plan picks which concepts to practice each day, and your readiness score
         adds up your levels across the syllabus, weighted the way the exam weights it. 100% means every concept is at
         Level 3.
       </p>

@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f558b927188d16c75a7712d40d9c3099fb8519b50ace928c11194d9cacd5e6e7
+  content_hash: sha256:ab43447628aa6782697a581a8877e38447c42cfc74ba12da0ecbac28b131a657
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ A brief on microinsurance products designed to protect poor microentrepreneurs f
 - Information on microinsurance programs for asset and livelihood losses after major disasters is sketchy, so it remains unclear whether microinsurance is feasible or effective for highly destructive natural disasters.
 
 ## A Livestock Insurance
-- Requiring insurance when livestock is financed by bank loans is practised in several countries; the Grameen Bank found insuring livestock in rainy months prohibitively costly, partly from limited staff skills and an inability to pool risks and achieve volume.
+- Requiring insurance when livestock is financed by bank loans is practiced in several countries; the Grameen Bank found insuring livestock in rainy months prohibitively costly, partly from limited staff skills and an inability to pool risks and achieve volume.
 - MFIs now partner with specialised insurers: SHEPARD offers group-based livestock insurance with a local agency, and BASIX has offered livestock insurance with Royal Sundaram since 2002; neither scheme has been exposed to a major disaster.
 - Index-based livestock schemes, using weather to gauge damage severity, are being considered to make claim triggers more transparent; the World Bank is piloting one in Mongolia.
 

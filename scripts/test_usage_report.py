@@ -112,7 +112,7 @@ class Compute(unittest.TestCase):
         S = self.S
         self.assertEqual(S["accounts_shown"], 2)                 # the June account is idle in the window
         self.assertEqual(S["accounts_created"], 2)
-        self.assertEqual(S["accounts_practised"], 1)
+        self.assertEqual(S["accounts_practiced"], 1)
         self.assertEqual(S["accounts_returned"], 1)              # the Stripe renewal is not a return visit
         self.assertEqual(S["paying_subscribers"], 1)
         self.assertEqual(S["paying_without_answers"], 1)

@@ -59,7 +59,7 @@ where the subscription is taken through Stripe. It reads *Active* for a reader w
 With an exam chosen and nothing else — no aisle, no search, no refinement — the Shop is that
 exam's **kit** (`components/store/ExamKit.tsx`, `lib/storeKit.ts`): its shelf read as the
 steps a candidate goes through — **Register**, **Calculator**, **Learn the syllabus**
-(manuals, video courses, seminars, courses, bundles), **Practise questions** and **Review on
+(manuals, video courses, seminars, courses, bundles), **Practice questions** and **Review on
 the go** (flashcards) — each holding every product the Shop carries for it, in the shelf's
 order. A step with nothing in it is left out. With no exam in the address the Shop opens on
 the first exam the reader is studying that it stocks (`defaultKitExam`); choosing **All** writes

@@ -266,7 +266,7 @@ function GlobalKeyHandler() {
 function Main({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
-    <main className={`flex-1 min-w-0 lg:pt-0 ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
+    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
       {children}
     </main>
   )
@@ -402,6 +402,18 @@ export default function App({ initialSession }: { initialSession: Session | null
         <FlashcardSync />
         <ExamProgressProvider>
           <AnalyticsTracker />
+          {/* The first tab stop: past the sidebar's dozen links to the page. */}
+          <a
+            href="#main-content"
+            onClick={e => {
+              // Move focus without writing a hash into the address.
+              e.preventDefault()
+              document.getElementById('main-content')?.focus()
+            }}
+            className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[1000] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            Skip to content
+          </a>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
             <Main>

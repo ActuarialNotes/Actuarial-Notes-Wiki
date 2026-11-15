@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8824b93d745dd6ffdd6dcac13ea503f4087ce99068dad523b4d1d68224aab8f4
+  content_hash: sha256:519bce5d3ae081c5ae93da57c2d3992bfaee6854b6895e5332b1ed0dee598bb5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ Each society awards an associateship first and a fellowship on top of it:
 
 The SOA's fellowship is where a candidate picks a practice area, general insurance among them. The CAS's whole path is property and casualty, so its fellowship goes deeper into the same material.
 
-## Practising in Canada
+## Practicing in Canada
 
 The CIA's own path starts from a CIA-accredited degree. An associate-level credential from the SOA or CAS carries credit toward the ACIA, and a fellowship toward the FCIA, so many Canadian actuaries hold two designations. Some roles in Canada, such as the [[Appointed Actuary]], require the FCIA.
 

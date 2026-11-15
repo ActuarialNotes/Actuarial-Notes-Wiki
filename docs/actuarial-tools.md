@@ -67,7 +67,7 @@ exposed to agents, phase by phase.
 | User | Job to be done | Example |
 |---|---|---|
 | **Exam candidate** | "Show me the method working on numbers, step by step, and check my hand calculation." | Works an Exam 5 BF problem by hand, enters the triangle, and compares their result line by line with the tool's **Working**. |
-| **Practising actuary** | "Run the standard method on my data quickly and correctly, with workpapers I can file." | Pastes a paid triangle from Excel into Age-to-Age Factors, then sends the selections on to Development to Ultimate, and from there to Chain Ladder, BF and Cape Cod. Exports each run as an `.xlsx` with the method references for the ASOP 41 documentation. |
+| **Practicing actuary** | "Run the standard method on my data quickly and correctly, with workpapers I can file." | Pastes a paid triangle from Excel into Age-to-Age Factors, then sends the selections on to Development to Ultimate, and from there to Chain Ladder, BF and Cape Cod. Exports each run as an `.xlsx` with the method references for the ASOP 41 documentation. |
 | **Pricing analyst** | "Build the indication from rate history, premium and losses." | Gets on-level factors from the rate history, a trend factor from the selected trend, and the indicated change from the Loss Ratio Method tool. Each step is its own tool. |
 | **Reviewer / regulator / auditor** | "Re-perform a filed calculation from its exhibit numbers." | Enters the filing's factors and checks that the indicated change reproduces. |
 | **Adjacent professional** | "Understand what the number means." | Taps the tool's title, which opens the concept page in the popup, without reading a textbook. |
@@ -370,7 +370,7 @@ source, and MCT Ratio proven against every company's filed ratio.
 
 The Loss Development Data triangles are real filed data, not a worked example, so they're not
 the "Load an example" a card offers (R2 keeps that for cited worked examples). They're what a
-student practises the reserving chain on once the textbook's examples run out, and what an
+student practices the reserving chain on once the textbook's examples run out, and what an
 agent can be asked to analyse when the reader has no triangle of their own.
 
 ### 4.12 Deliberately not tools

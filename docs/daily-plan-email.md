@@ -1,6 +1,6 @@
 # Daily Study-Plan Email
 
-An opt-in daily email that lists the concepts the [study plan](study-plan-generation.md) has scheduled for the day, so students start each day knowing exactly what to practise — before they open the app.
+An opt-in daily email that lists the concepts the [study plan](study-plan-generation.md) has scheduled for the day, so students start each day knowing exactly what to practice — before they open the app.
 
 ## User experience
 

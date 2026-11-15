@@ -236,7 +236,7 @@ def accounts(db: dict, start: str, end: str, S: dict) -> dict:
         rows.append({
             "uid": uid, "masked": meta[uid]["masked"], "created": created,
             "confirmed": meta[uid]["confirmed"], "days": {d: days[d] for d in sorted(days) if d >= start},
-            "returns": returns, "practised_returns": [d for d in returns if "ans" in days[d]],
+            "returns": returns, "practiced_returns": [d for d in returns if "ans" in days[d]],
             "answers": answers, "correct": correct, "exam_date": any(":" in x for x in exams),
             "deck": deck, "key": any("key" in k for k in days.values()),
             "beta": any("beta" in k for k in days.values()),
@@ -248,12 +248,12 @@ def accounts(db: dict, start: str, end: str, S: dict) -> dict:
     A = {
         "accounts_shown": len(rows),
         "accounts_created": len(created_in),
-        "accounts_practised": sum(1 for r in created_in if r["answers"]),
+        "accounts_practiced": sum(1 for r in created_in if r["answers"]),
         "accounts_exam_date": sum(1 for r in created_in if r["exam_date"]),
         "accounts_big_deck_no_answers": sum(1 for r in created_in if r["deck"] >= 60 and not r["answers"]),
         "accounts_unconfirmed": sum(1 for r in created_in if not r["confirmed"]),
         "accounts_returned": sum(1 for r in rows if r["returns"]),
-        "accounts_practised_on_return": sum(1 for r in rows if r["practised_returns"]),
+        "accounts_practiced_on_return": sum(1 for r in rows if r["practiced_returns"]),
         "accounts_never_back": sum(1 for r in rows if not r["returns"] and r["created"] < end),
         "accounts_pro_key": sum(1 for r in rows if r["key"]),
         "accounts_beta": sum(1 for r in rows if r["beta"]),

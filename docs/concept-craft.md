@@ -89,7 +89,7 @@ make concepts and still count toward a pack being complete; a pair the notes bar
 tie makes nothing, scores little and is drawn as a dashed hairline. Since every pair
 connects, finding them all is a matter of time; the **medals** make it a matter of
 judgment — the Pareto rule as a win condition: most of the score is in a few
-connections, and a medal is for finding those few first. Practising a connection
+connections, and a medal is for finding those few first. Practicing a connection
 scores nothing on the board: it is an ordinary quiz, and earns what a quiz earns.
 
 ## The pieces

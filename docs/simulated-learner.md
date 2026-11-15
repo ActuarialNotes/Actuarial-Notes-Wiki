@@ -1,7 +1,7 @@
 # Simulated learner
 
 `simulations/` holds a simulated learner: a model playing a configured student
-who studies the vault's study pages, practises questions, keeps notes, and is
+who studies the vault's study pages, practices questions, keeps notes, and is
 marked. Its logs and reports show where the guides and questions fail
 particular kinds of learner. It never edits the vault.
 

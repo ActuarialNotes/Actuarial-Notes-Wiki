@@ -19,7 +19,7 @@ async function answerFirstOption(page: Page) {
 
 // The verdict banner the explanation panel leads with — the thing reveal='end'
 // must withhold.
-const VERDICT = /Correct!|Incorrect/
+const VERDICT = /^(Correct|Incorrect)$/
 
 test.describe('answer reveal', () => {
   test('reveal=during marks and explains the answer inline', async ({ page }) => {

@@ -88,8 +88,11 @@ export const TodaySessionCard = forwardRef<HTMLDivElement, Props>(function Today
         </svg>
       )}
 
-      <div className="relative space-y-5 px-5 pb-5 pt-3 sm:px-7 sm:pb-7">
-        {wheel}
+      <div className="relative flex flex-col gap-5 px-5 pb-5 pt-5 sm:px-7 sm:pb-7 sm:pt-3">
+        {/* On a phone the wheel goes under Start: the session and the way into
+            it are the first screen, and the picture of the syllabus is a
+            scroll away (design review F7). From `sm` up it leads, as before. */}
+        <div className="order-last sm:order-none">{wheel}</div>
 
         <div className="space-y-3">
           <div className="flex items-center gap-2">

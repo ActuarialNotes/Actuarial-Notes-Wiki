@@ -28,7 +28,7 @@ const syllabus = {
   topics: [
     { name: 'Probability', weight: '20-30%', concepts: [{ name: 'Bayes Theorem', target: 'Bayes Theorem' }] },
     { name: 'Distributions', weight: '70-80%', concepts: [{ name: 'Poisson Distribution', target: 'Poisson Distribution' }] },
-    { name: 'Unpractised', weight: '5%', concepts: [{ name: 'Nothing', target: 'Nothing' }] },
+    { name: 'Unpracticed', weight: '5%', concepts: [{ name: 'Nothing', target: 'Nothing' }] },
   ],
 }
 
@@ -54,7 +54,7 @@ describe('sectionLeaks', () => {
     ]
     const leaks = sectionLeaks(rows, questions, syllabus)
     // Shares: 25, 75, 5 over 105.
-    expect(leaks.map(l => l.name)).toEqual(['Distributions', 'Probability', 'Unpractised'])
+    expect(leaks.map(l => l.name)).toEqual(['Distributions', 'Probability', 'Unpracticed'])
     expect(leaks[0].share).toBeCloseTo(71.43, 1)
     expect(leaks[0].marksLost).toBeCloseTo(71.43 * 0.25, 1)
     expect(leaks[1].marksLost).toBeCloseTo(23.81 * 0.5, 1)
@@ -73,7 +73,7 @@ describe('sectionLeaks', () => {
     expect(leaks.map(l => [l.name, l.marksLost === null])).toEqual([
       ['Probability', false],
       ['Distributions', true],
-      ['Unpractised', true],
+      ['Unpracticed', true],
     ])
   })
 })

@@ -84,7 +84,7 @@ def _due_concepts(ctx: PickContext) -> list[str]:
 
 class Strategy:
     name = "self-directed"
-    brief_text = ("Study however you think best: read, look things up, and practise when you feel ready. "
+    brief_text = ("Study however you think best: read, look things up, and practice when you feel ready. "
                   "Keep your notes up to date.")
 
     def brief(self, ctx: PickContext, show_concepts: bool) -> str:
@@ -112,7 +112,7 @@ class ReadThenPractice(Strategy):
     name = "read-then-practice"
     brief_text = ("Your plan: work through the syllabus in order, picking up where your notes say you left "
                   "off. For each learning objective, read its key concept pages, write what you learned into "
-                  "your notes, then practise questions on what you just read (ask for them by concept). "
+                  "your notes, then practice questions on what you just read (ask for them by concept). "
                   "Move on when you're getting them right.")
 
     def default_candidates(self, ctx: PickContext) -> list[str]:
@@ -134,7 +134,7 @@ class PracticeFirst(Strategy):
 class SpacedReview(Strategy):
     name = "spaced-review"
     brief_text = ("Your plan: begin each session by re-testing what you got wrong before, then read new "
-                  "material and practise it. Keep a short 'to review' list at the top of your notes.")
+                  "material and practice it. Keep a short 'to review' list at the top of your notes.")
 
     def brief(self, ctx: PickContext, show_concepts: bool) -> str:
         due = _due_concepts(ctx)

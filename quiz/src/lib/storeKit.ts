@@ -1,6 +1,6 @@
 // The Shop's **exam kit** (docs/store.md, "The kit"): one exam's shelf read as
 // the steps a candidate goes through — register, get an allowed calculator,
-// learn the syllabus, practise, review — each holding the products that answer
+// learn the syllabus, practice, review — each holding the products that answer
 // it, with the first step not yet sorted put in the spotlight.
 //
 // Nothing here decides what a reader should buy. A step lists every product
@@ -12,6 +12,7 @@
 
 import { STUDY_KIND_ORDER, storeShelf, type StoreItem, type StudyKind } from './store'
 
+// The id 'practise' keeps its old spelling: a reader's ticks are saved under it.
 export type KitStepId = 'register' | 'calculator' | 'learn' | 'practise' | 'review'
 
 /** The steps, in the order a candidate meets them. */
@@ -21,7 +22,7 @@ export const KIT_STEP_TITLE: Record<KitStepId, string> = {
   register: 'Register',
   calculator: 'Calculator',
   learn: 'Learn the syllabus',
-  practise: 'Practise questions',
+  practise: 'Practice questions',
   review: 'Review with flashcards',
 }
 

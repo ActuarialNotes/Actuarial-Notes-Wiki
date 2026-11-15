@@ -6,7 +6,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a08d6e9c9a4a5e12e76794dafe60e9c64be02f0f9c8575aa13f7578007dc55b7
+  content_hash: sha256:667962ccfc60f212da586d2163eb63e6e6acf448da768a99e22555009500345a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,7 @@ It must also meet minimum size and age requirements. These requirements are what
 
 ## Codes of conduct and professionalism
 
-FMAs' codes must contain a common core of general principles and ethical standards. One such principle is that members comply with the applicable qualification and practice standards. Actuaries are bound by their own association's code and may also be subject to the code and standards of the country where they practise.
+FMAs' codes must contain a common core of general principles and ethical standards. One such principle is that members comply with the applicable qualification and practice standards. Actuaries are bound by their own association's code and may also be subject to the code and standards of the country where they practice.
 
 The IAA Professionalism Committee's guideline PG1 groups the high-level principles under knowledge and expertise, values and behaviour, and professional accountability. Qualification standards cover initial education, continuing professional development and experience.
 

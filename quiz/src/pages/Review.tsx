@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, ChevronLeft, LayoutDashboard, X, XCircle } from 'lucide-react'
+import { ArrowUp, ChevronDown, ChevronLeft, LayoutDashboard, X, XCircle } from 'lucide-react'
 import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
@@ -83,6 +83,8 @@ export default function Review() {
   const [levelUpsDone, setLevelUpsDone] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
+  // The questions answered right, unfolded (they start folded when any were missed).
+  const [showRight, setShowRight] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [actionsPinned, setActionsPinned] = useState(false)
   const questionReviewRef = useRef<HTMLDivElement>(null)
@@ -264,11 +266,21 @@ export default function Review() {
   const unanswered = session.questions.map(q =>
     skipsUnanswered(session.mode) && isUnanswered(q, session.responses, session.manualGrades ?? {})
   )
+  // The list leads with what was missed (or left unanswered), in the order
+  // asked, and the questions answered right are folded under one row — a reader
+  // comes here to find out what went wrong, and that used to be wherever the
+  // paper's order happened to put it. With nothing missed there is nothing to
+  // lead with, so the right answers are simply shown.
+  const missedQuestions = session.questions.filter((_, i) => !outcomes[i])
+  const rightQuestions = session.questions.filter((_, i) => outcomes[i])
+  const foldRight = missedQuestions.length > 0 && rightQuestions.length > 0 && !showRight
   const visibleQuestions = selectedQuestion !== null
     ? session.questions.filter((_, i) => i === selectedQuestion)
     : showIncorrectOnly
     ? session.questions.filter((_, i) => !outcomes[i] && !unanswered[i])
-    : session.questions
+    : foldRight
+    ? missedQuestions
+    : [...missedQuestions, ...rightQuestions]
 
   // What "Try Again" re-quizzes: only the questions this session didn't get full
   // credit on. A partial (e.g. a multi-part with some parts missed) counts as
@@ -530,6 +542,20 @@ export default function Review() {
             </div>
           )
         })}
+        {selectedQuestion === null && !showIncorrectOnly && foldRight && (
+          <button
+            type="button"
+            onClick={() => setShowRight(true)}
+            aria-expanded={false}
+            className="flex w-full items-center justify-between gap-3 rounded-lg bg-card px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span>{rightQuestions.length} answered right</span>
+            <span className="flex items-center gap-1 text-muted-foreground">
+              Show
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            </span>
+          </button>
+        )}
       </div>
 
       {/* ── Actions ─────────────────────────────────────────────── */}

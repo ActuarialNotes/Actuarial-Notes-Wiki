@@ -533,7 +533,7 @@ export default function Dashboard() {
   const startPillText = session?.launching
     ? 'Wait…'
     : session && !session.done && session.minutes !== null
-      ? `${session.minutes} min`
+      ? `Start · ${session.minutes} min`
       : session?.done ? 'Extra' : 'Start'
   const startPillLabel = session
     ? `${session.label}${!session.done && session.questions > 0 ? ` · ${session.questions} question${session.questions === 1 ? '' : 's'}${session.minutes !== null ? `, ${session.minutes} minutes` : ''}` : ''}`

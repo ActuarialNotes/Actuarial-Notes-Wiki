@@ -19,7 +19,7 @@ itself, and the exams' published questions are worked through in full. Pages lin
 they depend on, so a definition is always one click from the ideas it is built on and the
 reading it comes from.
 
-It is written for two readers: **candidates** working through the exams, and **practising
+It is written for two readers: **candidates** working through the exams, and **practicing
 actuaries** who want a quick, sourced reference to material they last studied years ago.
 
 ## What's inside

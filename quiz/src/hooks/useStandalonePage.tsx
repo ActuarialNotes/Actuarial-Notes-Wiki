@@ -23,8 +23,8 @@ function dedupe(refs: WikiEntryRef[]): WikiEntryRef[] {
 
 /**
  * A concept or resource page read on its own — reached at its own URL rather
- * than in a study guide — behaves as it does in the popup: its title is the
- * underlined trigger of the page's action menu, and a concept or reading it
+ * than in a study guide — behaves as it does in the popup: its title carries
+ * the More button that opens the page's action menu, and a concept or reading it
  * links opens in the concept popup over the page instead of navigating away.
  * The popup walks the page's own links: a concept's walk is every concept the
  * page links, a reading's every reading.

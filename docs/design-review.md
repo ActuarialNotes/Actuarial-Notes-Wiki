@@ -529,8 +529,8 @@ Left from Phase 1:
 - **Check with <tool>** on a written question (§5.9) needs the question-to-tool mapping.
 - The open objective doesn't list its concepts a second time with their `MasteryBadge`
   (§5.5): the syllabus's own words already link each one, and the row's bar says where they
-  stand. The exam page's title is still its menu, and the concept page's too, until the
-  underline rule of Phase 4 (§5.10) gives them a **More** button.
+  stand. The exam page's title was still its menu, and the concept page's too, until the
+  underline rule of Phase 4 (§5.10) gave them a **More** button.
 
 **Phase 2 was built on 2026-11-15:**
 
@@ -604,15 +604,47 @@ Left from Phase 3:
   phone is inside the drawer the avatar opens.
 - A visitor's **streak, XP and quests** were already kept in the browser and are still not
   handed to an account at sign-in; only the concept levels and the last quiz are.
-- The avatar is in the top-**left** corner, where the hamburger was, because that is where
-  every page's own bar holds it (`lib/mobileNavHost.ts`). Moving it right is Phase 4's header.
+- The avatar was in the top-**left** corner, where the hamburger was. Phase 4 moved it to the
+  right.
 - Today's own page still has its exam chips, the Start pill and the full ReadinessCard under
   the session; the **Progress** fold of §5.4 (ring, analytics, quests one tap down) is not
   built.
 
-Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
-continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
-go until the shortcut does.
+**Phase 4 was built on 2026-11-15:**
+
+- **Two columns from one left edge** (`page-column` and `page-reading` in `index.css`, style
+  guide §5.0b): 720 px for reading and lists, 1,040 px for shelves and boards. The reading
+  column starts where the wide one would, so the seven left edges of F14 are one. Each
+  page's floating search bar is on its page's column.
+- **One page header.** Community's hero (the drifting colour field, the stack of avatars, the
+  gradient on *For you*) is the title and its counts, like every other page; a topic's page
+  is its tile, name and counts with no wash. Topic colours are still on the chips, tiles and
+  tags that name a topic.
+- **An underline is a link.** The title of an exam's study guide, a concept page (in the
+  popup and at its own address) and a resource page is text with a **More** button (⋯) after
+  it (`components/TitleMoreButton.tsx`), which opens the same menu the title used to. A
+  heading that unfolds keeps its chevron and has no underline.
+- **The quiz's header is one row**: Quit, "3 of 12", the timer if timed, and **More**
+  (`components/quiz/QuizMoreMenu.tsx`), whose labelled rows are Flag question, Question info,
+  Mute sounds, Quiz settings and Keyboard shortcuts. The six icons and the exam's logo are
+  gone from above the question; a flagged question has a mark beside its number. The
+  spreadsheet button stays in the row for an exam sat with one, because it is what the
+  question is worked in. The keys (F, I, M, ?) do what they did.
+- **A locked answer does nothing when tapped**, so the "Choose any answer to continue"
+  caption is gone with the shortcut it described (left from Phase 0). Next is the button,
+  Enter or →.
+- **On a phone the avatar is in the top-right corner** on every page (left from Phase 3).
+
+Left from Phase 4:
+
+- Pages still write their own title row. They agree on the type and on "title, then one row
+  of controls", but there is no shared header component, and a tool keeps its breadcrumb and
+  an exam page its strip (F15).
+- Board screens (a workflow's board, Concept Craft, a project's workspace, the flashcard
+  study view) fill the screen and are on neither column.
+- The concept page's **More** holds the whole action menu, Practice included, so Practice is
+  offered twice (the foot bar and the menu).
+- The drawer the avatar opens still slides in from the left.
 
 ### How to tell whether it worked
 

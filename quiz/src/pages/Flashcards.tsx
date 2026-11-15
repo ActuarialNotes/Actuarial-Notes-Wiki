@@ -768,7 +768,7 @@ function AddFlashcardsSheet({
     >
       {/* Search header */}
       <div className="shrink-0 border-b bg-background/95 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="page-column">
           <div className="flex items-center gap-2 h-14">
             {/* Tapping anywhere in the search area (icon included) is what opens
                 the keyboard — the sheet itself never steals focus. */}
@@ -803,7 +803,7 @@ function AddFlashcardsSheet({
 
       {/* Search results while typing, the pack shelf otherwise */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+        <div className="page-column py-4">
           {query.trim() ? (
             <ul className="space-y-0.5">
               {results.length === 0 ? (
@@ -2846,7 +2846,7 @@ function FlashcardsDeck({
           onSelectCard={goToCardByName}
           onCardsAdded={() => setGalleryExpanded(true)}
         />
-        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
+        <div className="page-column py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
           <GalleryPanel
             inline
             onCardsAdded={() => setGalleryExpanded(true)}
@@ -3032,7 +3032,7 @@ function FlashcardsDeck({
         onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >
       <div
-        className="container max-w-4xl mx-auto pb-36"
+        className="page-column !px-0 pb-36"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
         onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >

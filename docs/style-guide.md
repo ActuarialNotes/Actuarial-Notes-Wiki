@@ -374,9 +374,10 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 - Prefer `gap-*` on flex/grid parents over margins on children.
 - Establish a rhythm and stick to it within a view: one gap value for peers, one larger value
   between groups. Don't hand-tune every gap.
-- Page content is centred with a `max-w-*` container: `max-w-4xl` for content pages,
-  `max-w-2xl`/`max-w-lg` for focused flows, `max-w-md`/`max-w-sm` for dialogs. Pad the page
-  gutter (`px-4`) so content never touches the viewport edge on mobile.
+- Page content is on one of **two columns** (§5.0b): `page-column page-reading` (720px) for
+  reading and lists, `page-column` (1,040px) for shelves and boards. Don't give a page a
+  `max-w-*` of its own. `max-w-md`/`max-w-sm` are for dialogs and for a focused block inside
+  a column.
 - Layout is responsive with a **one-sidebar** shell (`Sidebar.tsx`): in flow beside the
   content at `lg`, and below `lg` a full-width drawer. There is no bottom tab bar — a phone
   and a tablet get the same navigation, so a destination is added in exactly one place.
@@ -392,9 +393,10 @@ carries is the reader's **avatar** (`components/MobileNavButton.tsx`; a dashed r
 visitor), which opens the drawer: the exam switcher, every page of every place, and the You
 menu. The button has two
 homes. A page that already pins a bar to the top of the viewport — a floating search bar —
-carries it **on that bar's line**, left of the search icon; every other page gets the app
+carries it **on that bar's line**, at its right end; every other page gets the app
 header (`Sidebar.tsx`), the same `h-14` row plus the wordmark. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
-the avatar is always in the same corner.
+the avatar is always in the same corner, the top right. The button puts itself last on its row
+(`order-last`), so a host only renders it in the row.
 
 `lib/mobileNavHost.ts` is the one place that says which route does which; `App.tsx` reads it
 to decide whether the content reserves `pt-14`, and `Sidebar.tsx` reads it to decide whether
@@ -450,6 +452,37 @@ say which place a path is in and what it lists; add a route there when adding a 
   the taller of the bar and a page's action bar.
 - It is chrome in a page move (`paper-chrome-tabbar`), held still like the rail it stands in
   for.
+
+### 5.0b One frame: two columns, one header
+
+Every page's content is one of two columns, defined once in `index.css`:
+
+| Class | Width | For |
+|---|---|---|
+| `page-column page-reading` | 45rem (720px) | Reading and lists: Today, the Quiz tab and a quiz, the results, Study Guides and every exam, concept and resource page, Search, Tools and a tool, Games, Projects, Upgrade |
+| `page-column` | 65rem (1,040px) | Shelves and boards: Resources, the Store, the Gem Shop, Data Sources, Community, Flashcards, the Workflows library, Settings |
+
+**Both start at the same left edge.** The wide column is centred in the space beside the
+sidebar; the reading column starts where the wide one would and leaves the rest of the line
+empty, so moving between pages never moves the page sideways. The classes carry the gutter
+(`1rem`, `1.5rem` from `sm`), so a page adds only its vertical padding and spacing. A floating
+search bar takes its page's column through `width` (`md` reading, `lg` wide), so the bar and
+the page under it share an edge.
+
+**One page header.** A page opens with its title (`text-2xl font-bold tracking-tight`) and
+then at most one row of controls (search, filters). No hero, no gradient, no decoration:
+Community's header is the same as every other page's, and its topic colours are on the topic
+chips and tiles, where they say which topic something is.
+
+**An underline is a link.** Nothing else is underlined. A title with a menu is plain text
+with a **More** button (⋯) after it (`components/TitleMoreButton.tsx`: an exam's study guide,
+a concept page and the concept popup, a resource page). A heading that unfolds has a chevron
+and no underline (`MarkdownCallout`).
+
+**A quiz's header is one row** (`components/ProgressBar.tsx`): Quit, "3 of 12", the timer if
+timed, the spreadsheet where the exam has one, and **More** (`components/quiz/QuizMoreMenu.tsx`),
+whose labelled rows hold the flag, Question info, sound, the quiz's settings and the keyboard
+shortcuts. A flagged question shows a mark beside its number.
 
 ### 5.1 Fixed bottom action bars
 

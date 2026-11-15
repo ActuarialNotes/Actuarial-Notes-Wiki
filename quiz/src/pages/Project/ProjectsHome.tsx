@@ -103,7 +103,7 @@ export default function ProjectsHome() {
   )
 
   return (
-    <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 pb-24 sm:px-6">
+    <div className="page-column page-reading space-y-8 py-8 pb-24">
       <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold tracking-tight">Projects</h1>
         <Button size="sm" className="gap-1.5 rounded-full pl-2.5 pr-3.5" aria-label="New project" data-sound="press" onClick={() => setCreating(true)}>

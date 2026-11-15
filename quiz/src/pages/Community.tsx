@@ -17,7 +17,7 @@ import {
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { EventCard, FeaturedEvent } from '@/components/community/EventCard'
 import { HomePicker } from '@/components/community/HomePicker'
-import { PlaceCard, PlaceMark } from '@/components/community/PlaceCard'
+import { PlaceCard } from '@/components/community/PlaceCard'
 import { PostRow } from '@/components/community/PostRow'
 import { FollowButton, TopicLink, TopicPicker } from '@/components/community/TopicChips'
 import { topicIcon } from '@/components/community/topicIcons'
@@ -64,10 +64,10 @@ import { cn } from '@/lib/utils'
 // places to join — browsed by topic, and followed. Preview, one account
 // (lib/community/access.ts).
 //
-// The look: every topic wears a hue (lib/community/topicColors.ts) and the
-// page is drawn in them — the hero's drifting colour field, a topic page's
-// wash, an event's date tile, a post's tags — so the page reads as many
-// conversations rather than one list. Cards rise in on arrival; the live dot
+// The look: the page's header is the app's neutral one (a title, then its
+// facts). Every topic wears a hue (lib/community/topicColors.ts), and the hue
+// stays where it says which topic something is: a topic's chip and tile, an
+// event's date tile, a post's tags. Cards rise in on arrival; the live dot
 // breathes. Both stop under reduced motion (index.css, "Community").
 
 type View = 'overview' | 'discussions' | 'events' | 'places'
@@ -182,7 +182,7 @@ export default function Community() {
   const overviewPlaces = [...serving.slice(0, 1), ...placeSplit.near.slice(0, 2).map(n => n.item), ...placeSplit.online].slice(0, 4)
 
   return (
-    <div className="container mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+    <div className="page-column space-y-6 py-6 sm:py-8">
       {topic ? (
         <TopicHero
           topicId={topic.id}
@@ -211,7 +211,7 @@ export default function Community() {
               <span
                 className={cn(
                   'flex h-6 w-6 items-center justify-center rounded-full',
-                  scope === 'following' ? 'bg-background/20' : 'bg-gradient-to-br from-amber-400 via-pink-500 to-violet-500 text-white',
+                  scope === 'following' ? 'bg-background/20' : 'bg-muted text-foreground',
                 )}
               >
                 <Sparkles className="h-3.5 w-3.5" aria-hidden />
@@ -420,34 +420,13 @@ export default function Community() {
  * and the places themselves stacked like faces in a crowd.
  */
 function Hero({ stats, feedLive }: { stats: { today: number; events: number; places: number }; feedLive: boolean }) {
-  const faces = COMMUNITY_PLACES.filter(p => p.online || p.kind === 'local-club').slice(0, 6)
-  const blob = (topic: TopicId, l = 55) => ({ background: `hsl(${topicHue(topic)} 85% ${l}%)` })
   return (
-    <header className="relative isolate overflow-hidden rounded-3xl border bg-card p-5 shadow-[var(--shadow-card)] sm:p-8">
-      <div aria-hidden className="community-drift pointer-events-none absolute inset-0 -z-10">
-        <span className="absolute -left-16 -top-24 h-72 w-72 rounded-full opacity-30 blur-3xl" style={blob('exams')} />
-        <span className="absolute -right-10 -top-16 h-64 w-64 rounded-full opacity-25 blur-3xl" style={blob('life-health', 58)} />
-        <span className="absolute -bottom-28 left-1/3 h-72 w-72 rounded-full opacity-25 blur-3xl" style={blob('careers', 50)} />
-        <span className="absolute -bottom-20 -right-10 h-56 w-56 rounded-full opacity-20 blur-3xl" style={blob('reforms')} />
+    <header className="space-y-3">
+      <div className="flex items-center gap-2.5">
+        <h1 className="text-2xl font-bold tracking-tight">Community</h1>
+        <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">Preview</span>
       </div>
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-2">
-          <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">Preview</span>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Community</h1>
-          <p className="max-w-md text-[15px] text-muted-foreground">
-            r/actuary’s latest posts, upcoming meetings, and the forums and clubs you can join.
-          </p>
-        </div>
-        <div className="flex items-center" aria-hidden>
-          {faces.map((p, i) => (
-            <PlaceMark key={p.id} place={p} size="sm" className={cn('ring-2 ring-card', i > 0 && '-ml-2.5')} />
-          ))}
-          <span className="-ml-2.5 flex h-8 min-w-8 items-center justify-center rounded-full bg-muted px-2 text-[11px] font-bold ring-2 ring-card">
-            +{Math.max(0, stats.places - faces.length)}
-          </span>
-        </div>
-      </div>
-      <div className="mt-5 flex flex-wrap gap-2 text-sm">
+      <div className="flex flex-wrap gap-2 text-sm">
         <Stat>
           <span className={cn('h-2 w-2 rounded-full', feedLive ? 'community-live bg-emerald-500' : 'bg-muted-foreground/40')} aria-hidden />
           {feedLive ? (
@@ -476,10 +455,10 @@ function Hero({ stats, feedLive }: { stats: { today: number; events: number; pla
 }
 
 function Stat({ children }: { children: ReactNode }) {
-  return <span className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1.5 backdrop-blur-sm">{children}</span>
+  return <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5">{children}</span>
 }
 
-/** A topic's page: washed in the topic's colour, with its numbers and its follow button. */
+/** A topic's page: its tile in the topic's colour, its numbers and its follow button. */
 function TopicHero({
   topicId,
   back,
@@ -502,22 +481,20 @@ function TopicHero({
   return (
     <header className="space-y-4" style={topicAccentStyle(topicId)}>
       {back}
-      <div className="relative isolate overflow-hidden rounded-3xl border border-[var(--topic-muted)] bg-card p-5 shadow-[var(--shadow-card)] sm:p-7">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[var(--topic-soft)] via-transparent to-transparent" />
-        <div aria-hidden className="community-drift pointer-events-none absolute -right-20 -top-24 -z-10 h-72 w-72 rounded-full bg-[var(--topic-accent)] opacity-25 blur-3xl" />
-        <div className="flex items-start gap-4">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--topic-vivid)] text-white shadow-md" aria-hidden>
-            <Icon className="h-7 w-7" />
+      <div>
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--topic-vivid)] text-white" aria-hidden>
+            <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0 flex-1">
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{topic.label}</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{topic.label}</h1>
             <p className="mt-0.5 text-sm text-muted-foreground">{topic.blurb}</p>
           </div>
           <span className="hidden sm:block">
             <FollowButton tone="topic" following={following} onToggle={onToggle} label={topic.label} />
           </span>
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <Stat>
             <MessagesSquare className="h-4 w-4 topic-ink" aria-hidden />
             <span>

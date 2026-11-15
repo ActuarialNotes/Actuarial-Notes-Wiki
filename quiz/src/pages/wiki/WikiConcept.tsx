@@ -1,3 +1,4 @@
+import { TitleMoreButton } from '@/components/TitleMoreButton'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { GraduationCap, Loader2 } from 'lucide-react'
@@ -174,18 +175,10 @@ export default function WikiConcept() {
     <div className="space-y-4 relative">
       <h1 className="text-2xl font-bold tracking-tight">
         {content !== null ? (
-          <button
-            ref={standalonePage.titleAction.ref}
-            type="button"
-            data-play-menu-trigger
-            onClick={standalonePage.titleAction.onToggle}
-            aria-haspopup="menu"
-            aria-expanded={standalonePage.titleAction.open}
-            aria-label={standalonePage.titleAction.label}
-            className="action-title-underline text-left"
-          >
-            {conceptName}
-          </button>
+          <>
+                {conceptName}
+                <TitleMoreButton action={standalonePage.titleAction} />
+              </>
         ) : conceptName}
       </h1>
       {content !== null && standalonePage.menu}

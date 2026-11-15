@@ -99,7 +99,7 @@ function Catalogue() {
   return (
     <>
       <ToolsSearchBar kind="catalogue" query={query} area={area} onQuery={q => setParam('q', q)} onArea={a => setParam('area', a)} />
-      <div className="container mx-auto max-w-3xl space-y-6 px-4 py-6">
+      <div className="page-column page-reading space-y-6 py-6">
         <header className="space-y-3">
           <h1 className="text-2xl font-bold tracking-tight">Tools</h1>
           {/* The areas, always on screen: a reader jumps to Credibility without scrolling (v3 §5). */}
@@ -275,7 +275,7 @@ export function ToolPage({ slug }: { slug: string }) {
         crumbs={crumbs}
         pinned={pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
       />
-      <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
+      <div className="page-column page-reading space-y-3 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
         <ToolTemplate
             key={`${slug}${location.search}${location.hash}`}

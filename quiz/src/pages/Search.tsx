@@ -686,7 +686,7 @@ export default function Search() {
   useActionBarHeight(quizBarRef, showQuizBar)
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
+    <div className="page-column page-reading py-8 pb-28 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Search</h1>
 
       {/* Search type toggle */}

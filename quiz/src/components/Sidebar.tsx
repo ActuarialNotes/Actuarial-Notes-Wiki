@@ -529,7 +529,7 @@ export default function Sidebar() {
           which, and `App.tsx` reserves the room from the same call. */}
       {!navHostedByPage && (
         <header className="paper-chrome-header fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
-          <MobileNavButton className="-ml-0.5" />
+          <MobileNavButton className="-mr-0.5" />
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <Link
               to="/dashboard"

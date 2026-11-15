@@ -1,4 +1,5 @@
-import { Suspense, createContext, lazy, useCallback, useContext, useMemo, useRef, type ReactNode, type RefObject } from 'react'
+import { Suspense, createContext, lazy, useCallback, useContext, useMemo, useRef, type ReactNode } from 'react'
+import { TitleMoreButton, type TitleMenuAction } from '@/components/TitleMoreButton'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -48,8 +49,8 @@ export interface WikiArticleProps {
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
   /**
-   * Makes the H1 title a control: pressing it opens the page's action menu,
-   * the way the concept popup's title does (the exam study guide passes its
+   * Gives the H1 title a More button that opens the page's action menu, the
+   * way the concept popup's title has one (the exam study guide passes its
    * menu here). The host owns the menu; the article only draws the trigger.
    */
   titleAction?: WikiTitleAction
@@ -75,14 +76,7 @@ export interface WikiArticleProps {
   stickyHeadings?: boolean
 }
 
-export interface WikiTitleAction {
-  /** The trigger — the host anchors its menu to this element's box. */
-  ref: RefObject<HTMLButtonElement>
-  open: boolean
-  onToggle: () => void
-  /** Accessible name, e.g. "Exam 9 — page actions". */
-  label: string
-}
+export type WikiTitleAction = TitleMenuAction
 
 // The title action reaches the H1 through context rather than through the
 // `components` map: react-markdown treats a new component function as a new
@@ -108,25 +102,17 @@ const SECTION_REHYPE_PLUGINS = [rehypeKatex, rehypeArticleSections]
 const TitleActionContext = createContext<WikiTitleAction | null>(null)
 
 /**
- * The H1's text, as the page's action-menu trigger when the host gave it one.
- * Underlined to say so — the same underline the concept popup's title wears.
+ * The H1's text, with the page's **More** button after it when the host gave
+ * the page a menu. The title itself is text: an underline is a link.
  */
 function ArticleTitle({ children }: { children: ReactNode }) {
   const action = useContext(TitleActionContext)
   if (!action) return <>{children}</>
   return (
-    <button
-      ref={action.ref}
-      type="button"
-      data-play-menu-trigger
-      onClick={action.onToggle}
-      aria-haspopup="menu"
-      aria-expanded={action.open}
-      aria-label={action.label}
-      className="action-title-underline text-left"
-    >
+    <>
       {children}
-    </button>
+      <TitleMoreButton action={action} />
+    </>
   )
 }
 

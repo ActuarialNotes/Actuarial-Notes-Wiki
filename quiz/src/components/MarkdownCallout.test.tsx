@@ -124,7 +124,7 @@ describe('titles with math, and worked examples', () => {
     expect(title).toContain(' at a jump')
   })
 
-  it('underlines a folding title, but not a worked example, which gets no stray "Example" before its math', () => {
+  it('underlines no folding title (an underline is a link), and gives a worked example no stray "Example" before its math', () => {
     const md = (src: string) =>
       renderToStaticMarkup(
         <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} components={calloutComponents}>
@@ -132,7 +132,7 @@ describe('titles with math, and worked examples', () => {
         </ReactMarkdown>,
       )
     const underlined = /[ "]underline[ "]/
-    expect(md('> [!question]- Exam format\n> Three hours.')).toMatch(underlined)
+    expect(md('> [!question]- Exam format\n> Three hours.')).not.toMatch(underlined)
     const example = md('> [!example]- $X$ and $Y$ are each 0 or 1. {Example}\n> Answer.')
     expect(example).not.toMatch(underlined)
     expect(example.match(/Example/g)).toHaveLength(1)

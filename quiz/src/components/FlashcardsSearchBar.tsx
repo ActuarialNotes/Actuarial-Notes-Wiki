@@ -120,7 +120,7 @@ export function FlashcardsSearchBar({
     <>
       {isExpanded && <SearchBackdrop onDismiss={dismiss} />}
 
-      <FloatingSearchBar ref={containerRef}>
+      <FloatingSearchBar ref={containerRef} width="lg">
         <>
           <FloatingSearchInput
             inputRef={inputRef}

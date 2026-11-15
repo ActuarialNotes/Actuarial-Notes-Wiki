@@ -541,7 +541,7 @@ export default function Dashboard() {
         outside the guest blur below so signing in stays reachable. */}
     <DashboardSearchBar questions={allQuestions} />
     <div
-      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-6"
+      className="page-column page-reading py-8 space-y-6"
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}

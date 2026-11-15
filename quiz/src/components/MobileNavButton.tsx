@@ -29,7 +29,9 @@ interface MobileNavButtonProps {
  * already pins a bar to the top of the viewport, by that bar — see
  * `lib/mobileNavHost.ts` for which routes do which. Exactly one of the two
  * mounts it on any given route, so it is always in the same corner whichever
- * page the reader is on.
+ * page the reader is on: the top right, where an account's avatar is in the
+ * apps a reader already uses. It puts itself last on its row (`order-last`),
+ * so a host only has to render it in the row.
  */
 export function MobileNavButton({ collapsed = false, className }: MobileNavButtonProps) {
   const openNav = useMobileNav(s => s.openNav)
@@ -52,7 +54,10 @@ export function MobileNavButton({ collapsed = false, className }: MobileNavButto
       className={cn(
         'relative flex h-10 shrink-0 items-center justify-center overflow-hidden rounded-full',
         'text-muted-foreground transition-[width,opacity,margin] duration-200 lg:hidden',
-        collapsed ? 'pointer-events-none -mr-2 w-0 opacity-0' : 'w-10 opacity-100 hover:bg-accent',
+        // The top-right corner on every page: last on its row, whatever the
+        // row holds, and pushed to the edge where nothing else fills the line.
+        'order-last ml-auto',
+        collapsed ? 'pointer-events-none !-ml-2 w-0 opacity-0' : 'w-10 opacity-100 hover:bg-accent',
         className,
       )}
     >

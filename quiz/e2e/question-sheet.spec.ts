@@ -91,7 +91,7 @@ test.describe('question spreadsheet', () => {
   test('offers no spreadsheet for an exam sat without one', async ({ page }) => {
     await page.goto('/quiz?ids=p-004')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
-    const flag = page.getByRole('button', { name: 'Flag question' })
+    const flag = page.getByTestId('quiz-more')
     await expect(startQuiz.or(flag).first()).toBeVisible()
     if (await startQuiz.isVisible()) await startQuiz.click()
     await expect(flag).toBeVisible()

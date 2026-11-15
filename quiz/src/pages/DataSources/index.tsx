@@ -261,7 +261,7 @@ function Catalogue({ entityId }: { entityId: string | null }) {
       />
 
       <div
-        className="mx-auto w-full max-w-5xl space-y-5 px-4 py-6 sm:px-6"
+        className="page-column space-y-5 py-6"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {entity ? (

@@ -424,9 +424,9 @@ export default function WikiExam() {
     return true
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, openResource, studyPlanRefs, objectives])
 
-  // The title is the page's action-menu trigger, as a concept's title is in the
-  // popup — underlined to say so. It opens the exam form of the same menu:
-  // readiness, how long is left, today's study plan, and Fact Check.
+  // The title carries the page's More button, as a concept's does in the
+  // popup. It opens the exam form of the same menu: readiness, how long is
+  // left, today's study plan, and Fact Check.
   const examEntry = useMemo<WikiEntryRef>(() => ({ kind: 'exam', name: examFileName }), [examFileName])
   const titleRef = useRef<HTMLButtonElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)

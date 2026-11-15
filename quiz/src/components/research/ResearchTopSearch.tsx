@@ -126,7 +126,7 @@ export function ResearchTopSearch({
           <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
             {/* See WikiFloatingSearch — below lg this bar carries the nav
                 button, and searching folds it away. */}
-            <MobileNavButton collapsed={active} className="-ml-1.5" />
+            <MobileNavButton collapsed={active} className="-mr-1.5" />
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
             <input
               ref={inputRef}

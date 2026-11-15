@@ -398,7 +398,7 @@ export default function Review() {
           actionsPinned ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
         }`}
       >
-        <div className="container max-w-2xl mx-auto px-4 py-2 flex items-center gap-3">
+        <div className="page-column page-reading py-2 flex items-center gap-3">
           <span className={`text-xl font-black tabular-nums leading-none ${scoreColorClass(percentage)}`}>
             {percentage}%
           </span>
@@ -439,7 +439,7 @@ export default function Review() {
       </div>
     </div>
 
-    <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <div className="page-column page-reading py-8 space-y-6">
 
       {/* Back to where the quiz was started — an exam's builder, a study guide,
           Concept Craft. The review took the quiz's place in the history, so

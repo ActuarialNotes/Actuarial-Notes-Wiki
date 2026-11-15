@@ -130,9 +130,10 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   row, chip or header tool by hand. See `docs/style-guide.md` §7.0.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
-  concept popup (whose title is its only trigger) and every flashcard surface open that one
+  concept popup (the **More** button after its title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
-  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
+  **More** button after the exam study guide's title (`WikiArticle`'s `titleAction`, drawn by
+  `components/TitleMoreButton.tsx`; a title is never underlined, an underline is a link): the readiness bar
   (`components/ReadinessBar.tsx`) and the countdown to the exam,
   then **Start Quiz** (the exam's bank in the quiz builder, greyed out for an exam with no
   questions — `examQuizTopic`), **Today's Study Plan** (locked for a reader who isn't Pro)
@@ -404,9 +405,12 @@ before touching that area**:
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
   four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
-  step at the end of every screen. Its §6 says which phases are built (Phases 0 to 3 are) and its §7 the
+  step at the end of every screen. Its §6 says which phases are built (all five, 0 to 4, are, each with what it left open) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
+- **Page layout:** a page's content goes on one of two columns from `index.css`, never a
+  `max-w-*` of its own: `page-column page-reading` (720 px, reading and lists) or `page-column`
+  (1,040 px, shelves and boards), which share a left edge (style guide §5.0b).
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -727,7 +731,7 @@ Other important `lib/` modules:
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
   both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
-  an exam page it is the same item in the menu the exam's title opens). The panel leads with
+  an exam page it is the same item in the menu the **More** button beside the exam's title opens). The panel leads with
   the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
   **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes, and on a question
@@ -1058,7 +1062,9 @@ Other important `lib/` modules:
   question its id numbers) and fails a dated `-an-` question. Write a new original question
   with the **question-writer** skill (`.claude/skills/question-writer/`), under an `-an-` id.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
-  (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
+  (`components/QuestionInfoDialog.tsx`, the **Question info** row of the quiz header's **More**
+  menu, `components/quiz/QuizMoreMenu.tsx`; `QuestionInfoButton.tsx` is the button a question
+  search row carries): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
   recovered from the `verification:` block's `log:` path, since the build collects question
   *contents* and an id doesn't map to a filename. Provenance is read off the frontmatter,

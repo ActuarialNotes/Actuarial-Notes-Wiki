@@ -246,7 +246,7 @@ export default function Store() {
   return (
     <>
       <StoreSearchBar query={query} onQuery={q => setParam('q', q || null)} />
-      <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+      <div className="page-column space-y-6 py-8">
         {/* The Resources page's title row, picker and all. */}
         <header className="flex items-center gap-2">
           <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Store</h1>

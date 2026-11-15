@@ -34,12 +34,15 @@ import type { ExamStatus } from '@/lib/examStatus'
  * so one line of chrome measures the same whichever place a reader is in.
  */
 
-/** How wide the bar's content runs — its page's own measure. */
+/**
+ * Which of the app's two columns the bar's content runs on, its page's own:
+ * `md` the reading column, `lg` the wide one (`page-column` in index.css).
+ */
 export type FloatingSearchWidth = 'md' | 'lg'
 
 const WIDTH_CLASS: Record<FloatingSearchWidth, string> = {
-  md: 'max-w-4xl',
-  lg: 'max-w-5xl',
+  md: 'page-column page-reading',
+  lg: 'page-column',
 }
 
 export interface FloatingSearchBarProps {
@@ -86,7 +89,7 @@ export const FloatingSearchBar = forwardRef(function FloatingSearchBar(
       data-floating-search
       className={cn('sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md', className)}
     >
-      <div className={cn('mx-auto px-4 sm:px-6', WIDTH_CLASS[width])}>{children}</div>
+      <div className={WIDTH_CLASS[width]}>{children}</div>
       {banner}
     </div>
   )
@@ -118,7 +121,7 @@ export function FloatingSearchInput({
   useSearchTracking(value)
   return (
     <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
-      <MobileNavButton collapsed={navCollapsed} className="-ml-1.5" />
+      <MobileNavButton collapsed={navCollapsed} className="-mr-1.5" />
       <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <input
         ref={inputRef}

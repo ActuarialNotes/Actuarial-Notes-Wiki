@@ -396,7 +396,7 @@ before touching that area**:
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
   four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
-  step at the end of every screen. Its §6 says which phases are built (Phase 0 is) and its §7 the
+  step at the end of every screen. Its §6 says which phases are built (Phases 0 and 1 are) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
@@ -577,7 +577,7 @@ before touching that area**:
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
   `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
   **after any change under `lib/tools/`, run `npm run tools:bundle`** — `bundle.test.ts` fails
-  on a stale copy. Every tool reproduces published work in CI (§17): Friedland's and Werner &
+  on a stale copy (it also rewrites `src/data/conceptTools.json`, the concept pages' tool links). Every tool reproduces published work in CI (§17): Friedland's and Werner &
   Modlin's exhibits, read off the CAS PDFs by `scripts/tool_fixtures.py` into
   `lib/tools/fixtures/*.json`, and SOA FM / Exam P sample questions and CAS MAS-I/MAS-II past
   papers whose keyed answers (a value, or a range) `checks.test.ts` reads from the bank — a
@@ -770,6 +770,19 @@ Other important `lib/` modules:
   either side of one that shares a paragraph with prose or with more lines of working.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
+- `conceptTools.ts` / `conceptQuestionCounts.ts` / `objectiveProgress.ts` — **the next step**
+  (design review Phase 1). A concept page ends in `components/wiki/ConceptNextSteps.tsx`:
+  **Practice** with its question count, **Open in <tool>**, and the reader's level. The popup is
+  in the first paint, so it loads neither the bank nor the engine: the count is
+  `virtual:concept-question-counts` (what `filterQuestions` would serve, across every bank and
+  per bank; `hooks/useConceptQuestionCounts.ts`), and the tools are `data/conceptTools.json`,
+  `ToolSpec.method.concepts` read the other way, **written by `npm run tools:bundle`** and held
+  to the registry by `conceptTools.test.ts`. On an exam page, `objectiveProgress.ts` is each
+  learning objective's concepts by level; `WikiExam` provides it
+  (`components/wiki/objectiveProgressContext.ts`) and `MarkdownCallout` draws the row's count
+  and bar and the open objective's **Practice this objective**
+  (`components/wiki/ObjectiveProgress.tsx`). Pure and tested; the flows are
+  `e2e/next-steps.spec.ts`.
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
   **Exams P and FM**, ready again since 2026-10-30, and **MAS-I**, the **three DISCs** and **Exam 7**, since 2026-10-31 — and **MAS-II**, the first beta exam to pass all eight, the same day, and **Exam 9** and **Exam 5** after it: P, FM, MAS-I, the three DISCs and Exam 7 went
@@ -1904,6 +1917,9 @@ modules that read directly from the repo root:
   every reader downloads before first paint. **Never import it statically** —
   `npm run size` (`scripts/bundle-budget.mjs`, a CI step) fails a build whose first paint
   (the entry script, what it preloads and its CSS, gzipped) is over budget
+- `virtual:concept-question-counts` — how many served questions each concept has, across the
+  bank and per exam (`lib/conceptQuestionCounts.ts`, ~75 KB, a chunk of its own): what lets a
+  concept page say "Practice · 14 questions" without fetching the bank
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
   along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A

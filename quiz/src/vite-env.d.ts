@@ -111,3 +111,10 @@ declare module 'virtual:resource-timeline' {
   const timeline: TimelineRawEntry[]
   export default timeline
 }
+
+declare module 'virtual:concept-question-counts' {
+  import type { ConceptQuestionCounts } from '@/lib/conceptQuestionCounts'
+  /** Served questions by lowercased concept name — see lib/conceptQuestionCounts.ts. */
+  const counts: ConceptQuestionCounts
+  export default counts
+}

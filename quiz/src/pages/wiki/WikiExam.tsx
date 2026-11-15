@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
@@ -19,9 +19,18 @@ import { examAccentStyle } from '@/lib/examColors'
 import { useExamProgress } from '@/contexts/examProgress'
 import { useAuth } from '@/hooks/useAuth'
 import { todayISO } from '@/lib/studyPlan'
-import { examPageIdFromFile, examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
+import { examPageIdFromFile, examProgressKeyFromFile, examQuizTopic, todaysPlanConcepts } from '@/lib/examMenu'
 import { examStatus } from '@/lib/examStatus'
-import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
+import { buildObjectiveIndex, isSyllabusConcept, parseObjectiveSections } from '@/lib/syllabusChapters'
+import { objectiveProgressByTitle } from '@/lib/objectiveProgress'
+import { questionCeiling } from '@/lib/conceptQuestionCounts'
+import { latestMasteryStates } from '@/lib/mastery'
+import { quizLaunchUrl } from '@/lib/quizBuilder'
+import { loadRevealMode } from '@/lib/revealMode'
+import { loadConceptLinks } from '@/lib/quizConceptLinks'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useConceptQuestionCounts } from '@/hooks/useConceptQuestionCounts'
+import { ObjectiveProgressContext, type ObjectiveProgressValue } from '@/components/wiki/objectiveProgressContext'
 import { documentPathsByName, extractSourceMaterial, sourceEntryRef } from '@/lib/sourceMaterial'
 import { buildWikiIndex } from '@/lib/wikiIndex'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
@@ -31,6 +40,9 @@ import { useBack } from '@/hooks/useBack'
 import type { BackOptions } from '@/lib/navTrail'
 
 const EXAM_LIST_ONLY: BackOptions = { only: path => path.split(/[?#]/)[0] === '/wiki' }
+
+/** How many questions **Practice this objective** draws, when the objective has that many. */
+const OBJECTIVE_QUIZ_SIZE = 10
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Exam status: Not started',
@@ -251,6 +263,37 @@ export default function WikiExam() {
     [content],
   )
 
+  // Where the reader stands on each objective, and a quiz on its concepts: the
+  // objective rows draw both (components/wiki/ObjectiveProgress.tsx). Levels are
+  // this exam's records, the ones its readiness score is computed from.
+  const navigate = useNavigate()
+  const closePopup = useConceptPopup(s => s.close)
+  const { user } = useAuth()
+  const { records: masteryRecords } = useConceptMastery()
+  const questionCounts = useConceptQuestionCounts()
+  const objectiveProgress = useMemo<ObjectiveProgressValue>(() => {
+    const states = latestMasteryStates(masteryRecords.filter(r => r.exam_id === progressKey), new Date())
+    const byTitle = objectiveProgressByTitle(content ? parseObjectiveSections(content) : [], states)
+    const topic = examQuizTopic(examFileName)
+    return {
+      byTitle,
+      tracked: !!user,
+      practice: title => {
+        const concepts = byTitle.get(title)?.concepts
+        if (!topic || !questionCounts || !concepts) return undefined
+        const ceiling = questionCeiling(questionCounts, topic, concepts)
+        if (ceiling === 0) return undefined
+        return () => {
+          closePopup()
+          navigate(quizLaunchUrl(
+            { kind: 'exam', exam: topic, concepts, levels: null, count: Math.min(OBJECTIVE_QUIZ_SIZE, ceiling) },
+            { mode: 'quiz', reveal: loadRevealMode('quiz'), links: loadConceptLinks('quiz') ? '1' : '0', timed: false },
+          ))
+        }
+      },
+    }
+  }, [content, masteryRecords, progressKey, examFileName, user, questionCounts, navigate, closePopup])
+
   // Today's cached plan for this exam, or null when absent/stale.
   const todaysConcepts = useMemo(
     () => todaysPlanConcepts(examRows.find(r => r.exam_id === progressKey)?.study_plan_cache, todayISO()),
@@ -455,13 +498,15 @@ export default function WikiExam() {
         <>
           {/* Scopes the exam's accent, which the learning objectives' weight bars are washed in. */}
           <div style={examAccentStyle(progressKey)}>
-            <WikiArticle
-              markdown={content}
-              sourcePath={`${examFileName}.md`}
-              onWikiLink={onWikiLink}
-              titleBadge={titleBadge}
-              titleAction={titleAction}
-            />
+            <ObjectiveProgressContext.Provider value={objectiveProgress}>
+              <WikiArticle
+                markdown={content}
+                sourcePath={`${examFileName}.md`}
+                onWikiLink={onWikiLink}
+                titleBadge={titleBadge}
+                titleAction={titleAction}
+              />
+            </ObjectiveProgressContext.Provider>
           </div>
           <ConceptActionMenu
             entry={examEntry}

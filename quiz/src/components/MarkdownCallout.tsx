@@ -14,6 +14,8 @@ import {
 import type { ExtraProps } from 'react-markdown'
 import { ExamWeightLabel } from '@/components/ExamWeightLabel'
 import { parseExamWeight, splitWeightTag } from '@/lib/examWeight'
+import { ObjectiveProgressMark, PracticeObjectiveButton } from '@/components/wiki/ObjectiveProgress'
+import { useObjectiveProgress } from '@/components/wiki/objectiveProgressContext'
 
 // Matches an Obsidian callout header at the start of a blockquote paragraph:
 //   [!type]        non-foldable
@@ -516,6 +518,10 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   const displayTitle = baseTitle || (titleRest.length > 0 ? '' : titleCase(type))
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
+  // On an exam page, a learning objective carries the reader's standing on its
+  // concepts and ends in a quiz on them (components/wiki/ObjectiveProgress.tsx).
+  const objective = useObjectiveProgress(type === 'example' && titleRest.length === 0 && !pill ? baseTitle.trim() : null)
+  const practice = objective?.practice && <PracticeObjectiveButton onPractice={objective.practice} />
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
@@ -528,6 +534,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         )}
         {renderTitleLine(displayTitle, titleRest)}
       </span>
+      {objective?.tracked && <ObjectiveProgressMark progress={objective.progress} />}
       {examWeight && <ExamWeightLabel weight={examWeight} bar={false} />}
       {collapsible && hasBody && (
         <ChevronDown
@@ -579,6 +586,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         {hasBody && (
           <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
             {children}
+            {practice}
           </div>
         )}
       </div>
@@ -603,6 +611,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
       {hasBody && (
         <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
           {children}
+          {practice}
         </div>
       )}
     </div>

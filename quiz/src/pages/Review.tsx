@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, ChevronDown, ChevronLeft, LayoutDashboard, X, XCircle } from 'lucide-react'
+import { ArrowUp, ChevronDown, ChevronLeft, LayoutDashboard, RotateCcw, X, XCircle } from 'lucide-react'
 import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
@@ -282,10 +282,10 @@ export default function Review() {
     ? missedQuestions
     : [...missedQuestions, ...rightQuestions]
 
-  // What "Try Again" re-quizzes: only the questions this session didn't get full
-  // credit on. A partial (e.g. a multi-part with some parts missed) counts as
-  // missed, and so does a question left unanswered. Nothing missed → nothing to
-  // retry, so the button drops out and only "New Quiz" remains.
+  // What "Fix these now" re-quizzes: only the questions this session didn't get
+  // full credit on. A partial (e.g. a multi-part with some parts missed) counts
+  // as missed, and so does a question left unanswered (with nothing missed, those
+  // alone are the footer's "Try Again"). Nothing to retry → only "New Quiz".
   const retryIds = session.questions.filter((_, i) => !outcomes[i]).map(q => q.id)
   const unansweredCount = unanswered.filter(Boolean).length
   const missedCount = retryIds.length - unansweredCount
@@ -509,6 +509,23 @@ export default function Review() {
         <Separator />
       </div>
 
+      {/* The next step after a miss: the missed questions again, as one quiz
+          (docs/design-review.md §5.8). */}
+      {missedCount > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-testid="fix-these-now">
+          <p className="text-sm text-muted-foreground">
+            {[
+              `${missedCount} missed`,
+              unansweredCount > 0 ? `${unansweredCount} unanswered` : null,
+            ].filter(Boolean).join(', ')}
+          </p>
+          <Button size="sm" onClick={handleTryAgain}>
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+            Fix these now
+          </Button>
+        </div>
+      )}
+
       <div className="space-y-4">
         {visibleQuestions.map((question) => {
           const idx = session.questions.indexOf(question)
@@ -559,16 +576,19 @@ export default function Review() {
       </div>
 
       {/* ── Actions ─────────────────────────────────────────────── */}
+      {/* With anything missed, the filled button is Fix these now, at the head
+          of the list above; a new quiz is the quieter choice here. */}
       <div className="flex flex-col sm:flex-row gap-3 pb-8">
-        {retryIds.length > 0 && (
+        {missedCount === 0 && unansweredCount > 0 && (
           <Button variant="outline" onClick={handleTryAgain} className="flex-1">
-            Try Again ({[
-              missedCount > 0 ? `${missedCount} missed` : null,
-              unansweredCount > 0 ? `${unansweredCount} unanswered` : null,
-            ].filter(Boolean).join(', ')})
+            Try Again ({unansweredCount} unanswered)
           </Button>
         )}
-        <Button onClick={handleNewQuiz} className="flex-1">
+        <Button
+          variant={missedCount > 0 ? 'outline' : 'default'}
+          onClick={handleNewQuiz}
+          className="flex-1"
+        >
           New Quiz
         </Button>
       </div>

@@ -501,6 +501,37 @@ tool.
 - The quiz header's percentage is gone, a **Skip to content** link is the first tab stop, and
   an empty deck holds its own **Add flashcards** button.
 
+**Phase 1 was built on 2026-11-15:**
+
+- A concept page ends in a bar of next steps, in the popup and at its own address
+  (`components/wiki/ConceptNextSteps.tsx`): **Practice** with the number of questions a quiz
+  on the concept can serve, **Open in <tool>** where a tool names the concept, and the
+  reader's level, which opens Learning Progress. The question count comes from a small table
+  the build makes (`virtual:concept-question-counts`, `lib/conceptQuestionCounts.ts`), and the
+  tools from `data/conceptTools.json`, which `npm run tools:bundle` writes from the registry
+  (`lib/conceptTools.ts`); neither loads the question bank or the engine.
+- An exam page's objective rows carry a signed-in reader's count ("12 of 31", concepts at
+  Level 1 or higher) over a thin bar of the objective's concepts by level, and an open
+  objective ends in **Practice this objective**: ten questions, or as many as there are, from
+  the exam's own bank on that objective's concepts (`lib/objectiveProgress.ts`,
+  `components/wiki/ObjectiveProgress.tsx`, drawn by `MarkdownCallout` from the context
+  `WikiExam` provides).
+- The results list is headed by **Fix these now**, the missed questions again as one quiz. It
+  is the one filled button while anything was missed; *New Quiz* is the quiet one, and *Try
+  Again* is left only for a quiz with nothing missed and questions unanswered.
+- A tool's page has a labelled **Learn the method** button under its name, in place of the
+  book icon in the title.
+
+Left from Phase 1:
+
+- **Try these numbers** on a concept page's worked example (§5.6) needs each example's inputs
+  mapped onto its tool's fields, and no page carries that mapping yet.
+- **Check with <tool>** on a written question (§5.9) needs the question-to-tool mapping.
+- The open objective doesn't list its concepts a second time with their `MasteryBadge`
+  (§5.5): the syllabus's own words already link each one, and the row's bar says where they
+  stand. The exam page's title is still its menu, and the concept page's too, until the
+  underline rule of Phase 4 (§5.10) gives them a **More** button.
+
 Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
 continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
 go until the shortcut does.

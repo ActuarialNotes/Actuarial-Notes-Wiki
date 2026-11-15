@@ -14,6 +14,7 @@ import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
+import { ConceptNextSteps } from '@/components/wiki/ConceptNextSteps'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { figureLabel, pictureImages } from '@/lib/conceptFigures'
@@ -385,6 +386,8 @@ export function ConceptPagePanel({
                   return true
                 }}
               />
+              {/* The page ends in what to do with it: practice, its tool, its level. */}
+              {entry.kind === 'concept' && <ConceptNextSteps concept={entry.name} className="mt-6" />}
             </>
           )
         )}

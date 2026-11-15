@@ -9,6 +9,7 @@ import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { ConceptNextSteps } from '@/components/wiki/ConceptNextSteps'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -233,6 +234,7 @@ export default function WikiConcept() {
           }
         />
       )}
+      {content !== null && <ConceptNextSteps concept={conceptName} />}
     </div>
   )
 }

@@ -1,0 +1,470 @@
+{
+  "age to age factor": [
+    {
+      "name": "Age-to-Age Factors",
+      "path": "/tools/age-to-age-factors"
+    }
+  ],
+  "amortization of premium": [
+    {
+      "name": "Bond Amortization",
+      "path": "/tools/bond-amortization"
+    }
+  ],
+  "amortization schedule": [
+    {
+      "name": "Loan Schedule",
+      "path": "/tools/loan-schedule"
+    }
+  ],
+  "annuity due": [
+    {
+      "name": "Annuity",
+      "path": "/tools/annuity"
+    }
+  ],
+  "annuity immediate": [
+    {
+      "name": "Annuity",
+      "path": "/tools/annuity"
+    }
+  ],
+  "benktander method": [
+    {
+      "name": "Benktander",
+      "path": "/tools/benktander"
+    }
+  ],
+  "bond amortization": [
+    {
+      "name": "Bond Amortization",
+      "path": "/tools/bond-amortization"
+    }
+  ],
+  "bond price": [
+    {
+      "name": "Bond Price",
+      "path": "/tools/bond-price"
+    },
+    {
+      "name": "Bond Yield",
+      "path": "/tools/bond-yield"
+    }
+  ],
+  "bonds": [
+    {
+      "name": "Bond Price",
+      "path": "/tools/bond-price"
+    }
+  ],
+  "book value": [
+    {
+      "name": "Bond Amortization",
+      "path": "/tools/bond-amortization"
+    }
+  ],
+  "bornhuetter-ferguson method": [
+    {
+      "name": "Bornhuetter-Ferguson",
+      "path": "/tools/bornhuetter-ferguson"
+    },
+    {
+      "name": "Benktander",
+      "path": "/tools/benktander"
+    }
+  ],
+  "bühlmann credibility": [
+    {
+      "name": "Bühlmann Credibility",
+      "path": "/tools/buhlmann-credibility"
+    }
+  ],
+  "bühlmann-straub credibility": [
+    {
+      "name": "Bühlmann Credibility",
+      "path": "/tools/buhlmann-credibility"
+    }
+  ],
+  "cape cod method": [
+    {
+      "name": "Cape Cod",
+      "path": "/tools/cape-cod"
+    }
+  ],
+  "capital available": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    },
+    {
+      "name": "Insurer Return",
+      "path": "/data-sources/insurer-return"
+    }
+  ],
+  "chain ladder method": [
+    {
+      "name": "Chain Ladder",
+      "path": "/tools/chain-ladder"
+    }
+  ],
+  "continuous univariate distributions": [
+    {
+      "name": "Distribution",
+      "path": "/tools/distribution"
+    }
+  ],
+  "convexity": [
+    {
+      "name": "Duration & Convexity",
+      "path": "/tools/duration-convexity"
+    }
+  ],
+  "credit risk margin": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    }
+  ],
+  "cumulative development factor": [
+    {
+      "name": "Development to Ultimate",
+      "path": "/tools/development-to-ultimate"
+    }
+  ],
+  "data diagnostic analysis": [
+    {
+      "name": "Ratio Triangle",
+      "path": "/tools/ratio-triangle"
+    }
+  ],
+  "deductible": [
+    {
+      "name": "Expected Payment",
+      "path": "/tools/expected-payment"
+    }
+  ],
+  "development factor": [
+    {
+      "name": "Age-to-Age Factors",
+      "path": "/tools/age-to-age-factors"
+    }
+  ],
+  "development triangle": [
+    {
+      "name": "Ratio Triangle",
+      "path": "/tools/ratio-triangle"
+    }
+  ],
+  "discount function": [
+    {
+      "name": "Present Value",
+      "path": "/tools/present-value"
+    }
+  ],
+  "discrete univariate distributions": [
+    {
+      "name": "Distribution",
+      "path": "/tools/distribution"
+    }
+  ],
+  "diversification credit": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    }
+  ],
+  "earned exposure": [
+    {
+      "name": "Earned Premium",
+      "path": "/tools/earned-premium"
+    }
+  ],
+  "earned premium": [
+    {
+      "name": "Earned Premium",
+      "path": "/tools/earned-premium"
+    }
+  ],
+  "effective discount rate": [
+    {
+      "name": "Interest Converter",
+      "path": "/tools/interest-converter"
+    }
+  ],
+  "effective rate": [
+    {
+      "name": "Interest Converter",
+      "path": "/tools/interest-converter"
+    }
+  ],
+  "expected loss method": [
+    {
+      "name": "Expected Claims",
+      "path": "/tools/expected-claims"
+    }
+  ],
+  "expense provisions": [
+    {
+      "name": "Expense Ratios",
+      "path": "/tools/expense-ratios"
+    }
+  ],
+  "exponential trend": [
+    {
+      "name": "Trend Fit",
+      "path": "/tools/trend-fit"
+    }
+  ],
+  "fixed expenses": [
+    {
+      "name": "Expense Ratios",
+      "path": "/tools/expense-ratios"
+    }
+  ],
+  "force of interest": [
+    {
+      "name": "Interest Converter",
+      "path": "/tools/interest-converter"
+    }
+  ],
+  "full credibility standard": [
+    {
+      "name": "Full Credibility Standard",
+      "path": "/tools/full-credibility-standard"
+    }
+  ],
+  "ibnr": [
+    {
+      "name": "Chain Ladder",
+      "path": "/tools/chain-ladder"
+    }
+  ],
+  "immunization": [
+    {
+      "name": "Redington Immunization",
+      "path": "/tools/redington-immunization"
+    }
+  ],
+  "inflation": [
+    {
+      "name": "Price Index",
+      "path": "/data-sources/price-index"
+    }
+  ],
+  "insurance risk margin": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    }
+  ],
+  "internal rate of return": [
+    {
+      "name": "Internal Rate of Return",
+      "path": "/tools/internal-rate-of-return"
+    }
+  ],
+  "life table": [
+    {
+      "name": "Life Table",
+      "path": "/data-sources/life-table"
+    }
+  ],
+  "limited expected value": [
+    {
+      "name": "Limited Expected Value",
+      "path": "/tools/limited-expected-value"
+    },
+    {
+      "name": "Expected Payment",
+      "path": "/tools/expected-payment"
+    }
+  ],
+  "limited fluctuation credibility": [
+    {
+      "name": "Full Credibility Standard",
+      "path": "/tools/full-credibility-standard"
+    },
+    {
+      "name": "Partial Credibility",
+      "path": "/tools/partial-credibility"
+    }
+  ],
+  "linear trend": [
+    {
+      "name": "Trend Fit",
+      "path": "/tools/trend-fit"
+    }
+  ],
+  "loan amortization": [
+    {
+      "name": "Loan Schedule",
+      "path": "/tools/loan-schedule"
+    }
+  ],
+  "loss elimination ratio": [
+    {
+      "name": "Limited Expected Value",
+      "path": "/tools/limited-expected-value"
+    }
+  ],
+  "loss ratio method": [
+    {
+      "name": "Loss Ratio Method",
+      "path": "/tools/loss-ratio-method"
+    }
+  ],
+  "loss trend": [
+    {
+      "name": "Frequency × Severity Trend",
+      "path": "/tools/combined-trend"
+    },
+    {
+      "name": "Trend Factor",
+      "path": "/tools/trend-factor"
+    },
+    {
+      "name": "Two-Step Loss Trend",
+      "path": "/tools/two-step-trend"
+    },
+    {
+      "name": "Price Index",
+      "path": "/data-sources/price-index"
+    },
+    {
+      "name": "Trend Fit",
+      "path": "/tools/trend-fit"
+    }
+  ],
+  "macaulay duration": [
+    {
+      "name": "Duration & Convexity",
+      "path": "/tools/duration-convexity"
+    }
+  ],
+  "market risk margin": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    }
+  ],
+  "mct": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    },
+    {
+      "name": "Insurer Return",
+      "path": "/data-sources/insurer-return"
+    }
+  ],
+  "modified duration": [
+    {
+      "name": "Duration & Convexity",
+      "path": "/tools/duration-convexity"
+    }
+  ],
+  "mortality": [
+    {
+      "name": "Life Table",
+      "path": "/data-sources/life-table"
+    }
+  ],
+  "nominal interest rate convertible m-thly": [
+    {
+      "name": "Interest Converter",
+      "path": "/tools/interest-converter"
+    }
+  ],
+  "on-leveling": [
+    {
+      "name": "On-Level Factors",
+      "path": "/tools/on-level-factors"
+    }
+  ],
+  "operational risk margin": [
+    {
+      "name": "MCT Ratio",
+      "path": "/tools/mct-ratio"
+    }
+  ],
+  "outstanding balance": [
+    {
+      "name": "Loan Schedule",
+      "path": "/tools/loan-schedule"
+    }
+  ],
+  "overall rate level indication": [
+    {
+      "name": "Pure Premium Method",
+      "path": "/tools/pure-premium-method"
+    }
+  ],
+  "parallelogram method": [
+    {
+      "name": "On-Level Factors",
+      "path": "/tools/on-level-factors"
+    }
+  ],
+  "partial credibility": [
+    {
+      "name": "Partial Credibility",
+      "path": "/tools/partial-credibility"
+    }
+  ],
+  "permissible loss ratio": [
+    {
+      "name": "Permissible Loss Ratio",
+      "path": "/tools/permissible-loss-ratio"
+    },
+    {
+      "name": "Loss Ratio Method",
+      "path": "/tools/loss-ratio-method"
+    }
+  ],
+  "present value": [
+    {
+      "name": "Present Value",
+      "path": "/tools/present-value"
+    }
+  ],
+  "pure premium method": [
+    {
+      "name": "Pure Premium Method",
+      "path": "/tools/pure-premium-method"
+    }
+  ],
+  "redington immunization": [
+    {
+      "name": "Redington Immunization",
+      "path": "/tools/redington-immunization"
+    }
+  ],
+  "spot rate": [
+    {
+      "name": "Yield Curve",
+      "path": "/data-sources/yield-curve"
+    }
+  ],
+  "tail factor": [
+    {
+      "name": "Development to Ultimate",
+      "path": "/tools/development-to-ultimate"
+    }
+  ],
+  "yield curve": [
+    {
+      "name": "Yield Curve",
+      "path": "/data-sources/yield-curve"
+    }
+  ],
+  "yield rate": [
+    {
+      "name": "Internal Rate of Return",
+      "path": "/tools/internal-rate-of-return"
+    },
+    {
+      "name": "Bond Yield",
+      "path": "/tools/bond-yield"
+    }
+  ]
+}

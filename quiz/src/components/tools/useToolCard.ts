@@ -363,7 +363,7 @@ export function useToolCard({ spec, initialInput, onOpenMethod, onResult, embedd
   })
   const download = () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) }
   const menu: ToolMenuItem[] = [
-    ...(onOpenMethod ? [{ key: 'method', label: 'Read about the method', icon: 'method' as const, run: onOpenMethod }] : []),
+    ...(onOpenMethod ? [{ key: 'method', label: 'Learn the method', icon: 'method' as const, run: onOpenMethod }] : []),
     { key: 'link', label: 'Copy link to this run', icon: 'link', run: () => {
       const extra = selecting ? picksFragment(picks) : null
       return `${window.location.origin}${runPath(slug, draft, spec.area)}${extra ? `&${extra}` : ''}`

@@ -87,7 +87,7 @@ export function ExamSwitcher({ collapsed, onNavigate }: { collapsed: boolean; on
         onClick={() => setOpen(v => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={focus ? `Exam: ${focus.name}. Change exam` : 'Choose an exam'}
+        aria-label={focus ? `Exam: ${focus.name}. Switch exam` : 'Choose an exam'}
         title={collapsed ? (focus?.name ?? 'Choose an exam') : undefined}
         data-testid="exam-switcher"
         className={cn(

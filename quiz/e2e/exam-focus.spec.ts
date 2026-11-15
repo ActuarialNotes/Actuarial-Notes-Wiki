@@ -12,7 +12,7 @@ test('a visitor is asked which exam, and the answer is where every tab opens', a
   await page.getByRole('radio', { name: 'CAS' }).click()
   await page.getByRole('button', { name: /Exam 5/ }).first().click()
   await expect(page).toHaveURL(/\/\?topic=Exam(\+|%20)5$/)
-  await expect(switcher).toHaveAccessibleName('Exam: Exam 5. Change exam')
+  await expect(switcher).toHaveAccessibleName('Exam: Exam 5. Switch exam')
 
   // Study Guides opens on the exam's guide, the Quiz tab on its builder.
   const nav = page.getByRole('navigation', { name: 'Main' })
@@ -40,11 +40,11 @@ test('the switcher changes the exam and moves the page to it', async ({ page }) 
   await expect(menu.getByRole('menuitemradio', { name: /Exam 6U/ })).toHaveCount(0)
   await menu.getByRole('menuitemradio', { name: /Exam 7/ }).click()
   await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+7\+\(CAS\)$/)
-  await expect(switcher).toHaveAccessibleName('Exam: Exam 7. Change exam')
+  await expect(switcher).toHaveAccessibleName('Exam: Exam 7. Switch exam')
 
   // Kept across a reload.
   await page.reload()
-  await expect(switcher).toHaveAccessibleName('Exam: Exam 7. Change exam')
+  await expect(switcher).toHaveAccessibleName('Exam: Exam 7. Switch exam')
 
   await switcher.click()
   await page.getByRole('menuitem', { name: 'All exams' }).click()

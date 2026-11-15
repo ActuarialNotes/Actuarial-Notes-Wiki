@@ -138,7 +138,7 @@ describe('placeLabel', () => {
     expect(placeLabel('/store/gems')).toBe('Gem Shop')
     expect(placeLabel('/project/pcpa/p-1?view=report')).toBe('Project')
     expect(placeLabel('/store')).toBe('Store')
-    expect(placeLabel('/data-sources/documents')).toBe('Documents')
+    expect(placeLabel('/data-sources?type=document')).toBe('Data Sources')
     expect(placeLabel('/tools/chain-ladder')).toBe('Tools')
   })
 

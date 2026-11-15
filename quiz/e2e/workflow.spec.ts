@@ -351,8 +351,8 @@ test.describe('workflows', () => {
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 
     // Working from it puts it in the reader's library in Data Sources.
-    await page.goto('/data-sources/documents')
-    await page.getByRole('button', { name: /My Library/ }).click()
+    await page.goto('/data-sources')
+    await page.getByTestId('catalogue-filters').getByRole('button', { name: /My Library/ }).click()
     await expect(page.getByText('Private passenger automobile loss trend benchmarks', { exact: false }).first()).toBeVisible()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })

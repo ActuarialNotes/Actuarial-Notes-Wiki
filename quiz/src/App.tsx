@@ -303,9 +303,9 @@ function CoworkRedirect() {
   const { tab, id } = useParams()
   const to =
     tab === 'sources' && id ? `/data-sources/${id}`
-    : tab === 'resources' ? '/data-sources/documents'
+    : tab === 'resources' ? '/data-sources?type=document'
     : tab === 'workflows' || tab === 'deliverables' ? '/workflows'
-    : '/data-sources/sources'
+    : '/data-sources'
   return <Navigate to={to} replace />
 }
 

@@ -146,10 +146,8 @@ Two consequences for how you write the page:
   that quietly opens an empty panel. If you rename one, grep
   `quiz/src/data/coworkSources.ts` for the old name and update it in the same
   change.
-- **The cover is doing double duty.** `lib/coworkCovers.ts` gives a Cowork resource
-  card its jacket by looking the vault page up *by name*, so a page with no cover
-  leads its card with a bare kind icon in both products. One more reason to run the
-  cover generator rather than omit.
+- **Run the cover generator rather than omit a cover.** A page with none leads its
+  card on the Resources shelf with a bare kind icon.
 
 
 ## Writing for readers

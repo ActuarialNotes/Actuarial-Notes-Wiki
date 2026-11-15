@@ -106,7 +106,7 @@ An item is ✅ only when all of the following are true:
 | **Content vault**: 84 exam pages (15 CAS, 40 SOA, 29 CIA), 1,392 concepts, 806 resources, 3,932 questions (2026-10-25) | Candidates and practitioners | ✅ live. 7 exams ready, 10 beta, 67 in development | `examStatus.ts` | §4.3; `content-plan.md` |
 | **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 76.9% of files verified, every served question among them (2026-10-25); sweeps run by hand (D19) | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
-| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` (calculators) and `/data-sources` (tables, Assumptions Bank), and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
+| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` (calculators) and `/data-sources` (one catalogue of values, tables and documents since 2026-11-15), and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
 | **Workflows** (was Cowork, its own mode until 2026-11-14; Data Sources' sources and documents opened to everyone on 2026-11-14) | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` (`workflowsAccess.ts`) | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
 | **Projects**: the PCPA simulator | PCPA candidates (Pro) | ✅ live, 3 briefs, Pro only | — | `pcpa-project.md` |
 | **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |

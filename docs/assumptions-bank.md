@@ -407,13 +407,13 @@ What Phase 0 left for later, and why:
   checked*, and **Read the source**, which opens the resource page in the concept popup. The
   card leaves the run's unchecked-figure warning out of its own warning list, since the line
   under the field says it.
-- **The shelf** is `/data-sources/assumptions` (`components/assumptions/AssumptionsShelf.tsx`),
-  a section of the Data Sources page beside the published tables (D-AB2; it was
-  `/tools/assumptions`, a row in the Tools catalogue, until 2026-11-14, and that address
-  redirects). It shows every current set, newest first,
-  filtered by kind (`?kind=`). Each set is an `AssumptionSetCard`: its Fact Check badge, its
-  rows with their locators, **Read the source** and the publisher's copy. Each figure has a
-  *Use in a tool* toggle, whose links open a tool with the figure already in it. *(Template v2,
+- **The shelf** is the Data Sources catalogue (`/data-sources`, `lib/dataCatalogue.ts`,
+  `docs/cowork.md` §2): since 2026-11-15 every figure is a **value** row there, filed under
+  what a model needs it for, beside the published tables and documents (it was a section of
+  its own, and before 2026-11-14 `/tools/assumptions`; both addresses redirect). A value opens
+  on its figure, what it means, **Use in <tool>** for every field that takes it, where it was
+  read, its Fact Check, **Read the document** and the publisher's copy; `?set=` narrows the
+  list to one set. *(Template v2,
   2026-11-09, replaced this shape: no exam logo on the banner, "N figures still to enter" in place
   of "N of M figures read", a kind filter that shows only that kind's rows with the rest of the
   document folded into one line and a blank row never first (`shelfRows` in `lib/toolBank.ts`),

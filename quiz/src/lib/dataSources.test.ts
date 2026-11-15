@@ -1,31 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { DATA_SECTIONS, LEGACY_SECTIONS, assumptionSetPath, dataSection, publisherPath, resourceTablePath } from './dataSources'
+import { LEGACY_SECTIONS, assumptionSetPath, legacySectionPath, publisherPath, resourceTablePath } from './dataSources'
 import { decodeRunInput } from './tools/share'
 import { TOOLS, toolBySlug, toolPath, toolSlug } from './tools'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 
 describe('Data Sources addresses', () => {
-  it('reads a section off its segment, and the bare page as Assumptions', () => {
-    expect(dataSection(undefined)).toBe('assumptions')
-    expect(dataSection('sources')).toBe('sources')
-    expect(dataSection('documents')).toBe('documents')
-    expect(dataSection('assumptions')).toBeNull()
-    expect(dataSection('osfi')).toBeNull()
-  })
-
-  it('lists the three sections in the chain’s order', () => {
-    expect(DATA_SECTIONS.map(s => s.label)).toEqual(['Assumptions', 'Sources', 'Documents'])
-  })
-
   it('puts every published table under /data-sources and every calculator under /tools', () => {
     for (const t of TOOLS) {
       expect(toolPath(t)).toBe(t.area === 'data' ? `/data-sources/${toolSlug(t)}` : `/tools/${toolSlug(t)}`)
     }
   })
 
-  it('never lets a section, an old section, a table and a publisher share a segment', () => {
+  it('never lets an old section, a table and a publisher share a segment', () => {
     const segments = [
-      ...DATA_SECTIONS.map(s => s.to.split('/')[2]).filter(Boolean),
       ...Object.keys(LEGACY_SECTIONS),
       ...TOOLS.filter(t => t.area === 'data').map(toolSlug),
       ...COWORK_ENTITIES.map(e => publisherPath(e.id).split('/')[2]),
@@ -33,8 +20,13 @@ describe('Data Sources addresses', () => {
     expect(new Set(segments).size).toBe(segments.length)
   })
 
-  it('sends every old section to a section that exists', () => {
-    for (const to of Object.values(LEGACY_SECTIONS)) expect(DATA_SECTIONS.some(s => s.to === to)).toBe(true)
+  it('sends every old section to the catalogue, as the filter it is now, keeping its query', () => {
+    expect(legacySectionPath('sources', '')).toBe('/data-sources')
+    expect(legacySectionPath('publishers', '')).toBe('/data-sources')
+    expect(legacySectionPath('documents', '')).toBe('/data-sources?type=document')
+    expect(legacySectionPath('tables', '?publisher=osfi')).toBe('/data-sources?publisher=osfi&type=table')
+    expect(legacySectionPath('assumptions', '?set=x')).toBe('/data-sources?set=x')
+    expect(legacySectionPath('osfi', '')).toBeNull()
   })
 
   it('makes every published table a document, under its publisher', () => {
@@ -59,7 +51,7 @@ describe('Data Sources addresses', () => {
     }
   })
 
-  it('narrows the Assumptions section to one set', () => {
+  it('narrows the catalogue to one set', () => {
     expect(assumptionSetPath('OSFI MCT Capital Ratios (2024)')).toBe('/data-sources?set=OSFI%20MCT%20Capital%20Ratios%20(2024)')
   })
 })

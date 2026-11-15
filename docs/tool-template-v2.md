@@ -169,7 +169,7 @@ and the connector export if it carries rows (bump `KNOWLEDGE_BASE_VERSION` /
 
 1. **Colour and logo.** Quantity keys on `split` parts in `lib/toolFigures.ts`, the hue ramp and
    hatch, in-bar labels in `ToolFigure.tsx`, swatches on input rows; remove `ExamLogo` from
-   `ToolTemplate.tsx` and `AssumptionsShelf.tsx`. Tests: `toolFigures.test.ts` pins that no two
+   `ToolTemplate.tsx` (and, until 2026-11-15, the Assumptions shelf). Tests: `toolFigures.test.ts` pins that no two
    parts of one split share a step and that a quantity keeps its step across tools.
 2. **Navigation.** Breadcrumb in the title strip (`ToolsSearchBar`), formula-order inputs,
    reverse `next` index (a pure function beside `lib/toolTemplate.ts`, tested), *Takes from* /

@@ -493,9 +493,11 @@ tool.
   row, unless nothing was missed (`pages/Review.tsx`).
 - On a phone, Today's session puts its size, steps and Start above the wheel, and the header
   pill reads "Start · 5 min".
-- Resources, Data Sources' Documents and question search show 24 at a time with **Show more**
+- Resources and question search show 24 at a time with **Show more**
   (`lib/paging.ts`, `hooks/usePagedList.ts`, `components/ShowMore.tsx`); how far a list was
   opened is kept for the browser session, so Back still lands on the card it left.
+  Data Sources was rebuilt on `main` the same day as one catalogue that folds each of its
+  groups, so its Documents list (F6) needed nothing more.
 - The quiz header's percentage is gone, a **Skip to content** link is the first tab stop, and
   an empty deck holds its own **Add flashcards** button.
 

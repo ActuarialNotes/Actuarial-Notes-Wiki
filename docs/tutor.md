@@ -28,11 +28,11 @@ map.
 
 ## 1. The problem it solves
 
-The app already has everything a candidate needs to practise: a bank of 356 Exam 5 questions
+The app already has everything a candidate needs to practice: a bank of 356 Exam 5 questions
 (752 lettered parts, 731 of them with the examiners' report), a syllabus with its weights, concept pages
 with worked examples, a mastery ladder with decay, a study plan, a mistakes card. What it does
 not have is anyone **deciding**. A candidate has to choose, every day, what to read, what to
-practise, when to come back to it and what their mistakes mean — and the evidence on how
+practice, when to come back to it and what their mistakes mean — and the evidence on how
 people choose is not encouraging. Left alone, learners:
 
 1. **Re-read instead of retrieving.** Re-reading feels productive because the page becomes
@@ -42,7 +42,7 @@ people choose is not encouraging. Left alone, learners:
    the thing the exam actually tests, which is *which method this scenario calls for*.
 4. **Are overconfident.** They don't know what they don't know, and stop studying it.
 5. **Treat a mistake as a score** rather than as information about what to fix.
-6. **Practise the calculations and skip the words.** On a CAS written paper roughly half the
+6. **Practice the calculations and skip the words.** On a CAS written paper roughly half the
    points are for *explaining*, *justifying* and *recommending*; the examiners' reports return
    to it on almost every paper ("candidates often were able to elaborate on only one of the two
    elements").

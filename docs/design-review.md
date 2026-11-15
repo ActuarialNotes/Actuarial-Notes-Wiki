@@ -45,7 +45,7 @@ one of the best short explanations of its kind, and nothing on screen claims mor
 vault can back. Most single screens would pass this review on their own.
 
 What fails is the whole. **The app is organised as a list of features, and the reader's job
-is a path.** Learn a concept, practise it, find out what went wrong, use it on a real problem:
+is a path.** Learn a concept, practice it, find out what went wrong, use it on a real problem:
 each step exists, on a different tab, and the app rarely hands the reader from one to the
 next. The six findings that cost a learner most:
 
@@ -186,7 +186,7 @@ one", no "next session". The end of a session is what the session is remembered 
 one ends in a scroll.
 
 **F11. A concept page ends without a next step.** *High. Goal-Gradient, Mental Model.*
-The page is definition, formula, examples, trap, and then it stops. Practising the concept,
+The page is definition, formula, examples, trap, and then it stops. Practicing the concept,
 adding its card and seeing its level are all in a menu opened by tapping the underlined
 title, which looks like a link to the page the reader is already on. A reader who doesn't
 find the menu has read a page and been offered nothing to do with it.
@@ -290,7 +290,7 @@ one exam they are studying.
 
 ```
             ┌────────────────────────── one exam in focus ──────────────────────────┐
- Today  →   Learn      →     Practise     →     Review      →     Apply
+ Today  →   Learn      →     Practice     →     Review      →     Apply
             read the         answer on          see what            use it on a
             concept          it                 went wrong          real problem
 ```
@@ -305,7 +305,7 @@ where it helps.
 |---|---|---|
 | **Today** | The session for the day, for the exam in focus. Open to a visitor | Dashboard |
 | **Learn** | The exam's study guide, its concepts, its readings | Study Guides (Exams, Resources) |
-| **Practise** | Quiz, Practice Exam, Past Papers, Flashcards, Games | Quiz, Flashcards |
+| **Practice** | Quiz, Practice Exam, Past Papers, Flashcards, Games | Quiz, Flashcards |
 | **Apply** | Tools, Data Sources, Projects, Workflows | Tools, Data Sources, Projects, Workflows |
 | **You** (avatar) | Level, quests and league, Settings, the Store, Community, theme, sound | Store, Community, the Level badge, the sidebar's foot |
 
@@ -315,7 +315,7 @@ four are **a bar at the bottom of the screen**, with the avatar in the top corne
 hamburger goes. The bar hides where the app already hides chrome: in a quiz, a battle, the
 PDF reader, focus mode.
 
-Flashcards moves inside Practise because a card is a way of practising a concept the reader
+Flashcards moves inside Practice because a card is a way of practicing a concept the reader
 has collected; as a top-level tab it reads as a second product. The Store and Community move
 behind the avatar because neither is a step on the path. They keep their addresses.
 
@@ -371,7 +371,7 @@ The study guide keeps its content and gains the reader's standing:
 - Each learning objective row carries a thin bar of its concepts by level, and its count
   ("12 of 31"). Collapsed, the list of objectives is the map of the exam with the reader's
   progress drawn on it, which is what the ring draws, readable in rows.
-- An open objective lists its concepts with their `MasteryBadge`, and ends in **Practise this
+- An open objective lists its concepts with their `MasteryBadge`, and ends in **Practice this
   objective**.
 - The header strip's small Quiz icon becomes a labelled button, and the page's title stops
   being a menu (§5.9).
@@ -381,10 +381,10 @@ The study guide keeps its content and gains the reader's standing:
 A bar at the foot of every concept page, and of the concept popup:
 
 ```
-[ Practise · 14 questions ]   [ Open in Chain Ladder ]   Level 1 ▸
+[ Practice · 14 questions ]   [ Open in Chain Ladder ]   Level 1 ▸
 ```
 
-- **Practise** starts a quiz on the concept (the action menu's first row, brought into view).
+- **Practice** starts a quiz on the concept (the action menu's first row, brought into view).
   A concept with no questions shows none.
 - **Open in <tool>** appears where a tool names the concept (`ToolSpec.concepts`, read the
   other way). On a page whose worked example the tool reproduces, the example's card offers
@@ -470,9 +470,9 @@ can stop there.
 | Phase | What | Findings | Size |
 |---|---|---|---|
 | **0. Repairs** | Solution off the red ground, with the equations scrolling; verdict strip. Results: missed questions first, the rest folded. Start session on the Dashboard's first phone screen. Pages for Resources, Documents and search. Labels on the builder's and Dashboard's icons. Skip link. Empty-state buttons. The "33%" removed | F6, F7, F9, F10, F16, F18, F19 | S–M |
-| **1. The next step** | The concept page's foot bar with Practise and the tool link. Practise this objective, and progress on the exam page's objective rows. Fix these now on the results. Learn the method on a tool | F10–F13 | M |
+| **1. The next step** | The concept page's foot bar with Practice and the tool link. Practice this objective, and progress on the exam page's objective rows. Fix these now on the results. Learn the method on a tool | F10–F13 | M |
 | **2. One exam** | The exam in focus and its switcher; the exam lists and strips replaced; in-development exams folded; a visitor's first question | F2, F4, F5 | M–L |
-| **3. Four places** | The sidebar regrouped; the bottom bar on phones; Flashcards into Practise; the Store and Community behind the avatar; Today open to visitors | F1, F3, F4 | L |
+| **3. Four places** | The sidebar regrouped; the bottom bar on phones; Flashcards into Practice; the Store and Community behind the avatar; Today open to visitors | F1, F3, F4 | L |
 | **4. The frame** | One column, one header, the underline rule, Community's header; the quiz header's ⋯ | F8, F14, F15, F17 | M |
 
 Phases 0 and 1 are where the learning is. A candidate who never notices the sidebar changing
@@ -502,11 +502,10 @@ measure in a month is reconsidered.
 **Decided 2026-11-15:** D-DR1 yes, with the third place spelled **Practice** (with a *c*,
 noun and verb alike, wherever the app writes the word); D-DR2 yes; D-DR3 yes; D-DR4 no,
 *Change Answer* goes once an answer is revealed; D-DR5 yes, the Store and Community both.
-"Practise" elsewhere in this document is the proposal as first written.
 
 | ID | Decision | Default if not decided |
 |---|---|---|
-| **D-DR1** | Rename the places: Today, Learn, Practise, Apply? | Regroup the sidebar under the existing names (Dashboard, Study Guides, Quiz) with Tools, Data Sources, Projects and Workflows under one **Apply** heading |
+| **D-DR1** | Rename the places: Today, Learn, Practice, Apply? | Regroup the sidebar under the existing names (Dashboard, Study Guides, Quiz) with Tools, Data Sources, Projects and Workflows under one **Apply** heading |
 | **D-DR2** | Open Today to visitors, from the browser's record? | Yes. Analytics and the League stay signed-in |
 | **D-DR3** | Fold in-development exams out of the default lists? | Yes, under one "in development" row per credential |
 | **D-DR4** | Keep *Change Answer* after the answer is revealed? | Remove it once answers are shown as the quiz goes; keep it when they are held to the end |

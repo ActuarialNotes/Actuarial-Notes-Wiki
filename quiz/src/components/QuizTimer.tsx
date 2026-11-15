@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
  *
  * It counts down the budget `lib/quizTiming.ts` gives the set and, when that
  * runs out, carries on counting the overrun in red rather than ending the quiz:
- * the point of practising against the clock is knowing how far over you ran,
+ * the point of practicing against the clock is knowing how far over you ran,
  * and a paper snatched away mid-answer teaches nothing the red clock doesn't.
  * The last tenth of the budget reads amber — the "at risk" hue (style guide §4.1).
  *

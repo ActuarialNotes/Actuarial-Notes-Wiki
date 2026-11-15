@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:87893a3fe62a8ea95ed2703b2f0a8c7e7830834ce427144afda19aecf2fba784
+  content_hash: sha256:0df6171e67f66177545fbcf0383b776b62daf90e005233b092a69c9e88766190
   sources: []
   open_findings: 0
   open_critical: 0
@@ -56,7 +56,7 @@ State law may not make an RRG a member of a state insurance guaranty fund, so an
 
 > [!example]- A physicians' RRG fails with $\$40$ million of unpaid claims and $\$15$ million of assets. What protection do claimants have? {Example}
 > - The $\$15$ million of assets is distributed in liquidation under the domiciliary state's supervision.
-> - No guaranty fund responds in any state where the physicians practise.
+> - No guaranty fund responds in any state where the physicians practice.
 > - The $\$40 - \$15 = \$25$ million shortfall falls on the physicians, who face their claims personally, and on the injured claimants.
 > - The members are both owners and insureds, so in a failure they lose their capital and their coverage.
 

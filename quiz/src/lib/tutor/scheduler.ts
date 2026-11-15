@@ -326,7 +326,7 @@ export function extraPractice(input: SchedulerInput): TutorStep {
     const item = pickItem({ ...input, served: [...served] }, concept.name)
     if (item) return { type: 'item', item, concept: concept.name, reason: 'practice' }
   }
-  // Nothing met is left to practise — a candidate who arrives late, in the
+  // Nothing met is left to practice — a candidate who arrives late, in the
   // taper, with little met: asked to keep going, they meet the heaviest of
   // what they haven't, page first as always.
   const servedConcepts = new Set(

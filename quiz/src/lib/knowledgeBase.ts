@@ -807,7 +807,7 @@ export function buildLlmsTxt(kb: KnowledgeBase, connectorUrl: string, skillUrl: 
     ...(general.length ? ['', '## Guides', ...general.map(g => `- [${g.title}](${g.url}): ${g.summary}`)] : []),
     '',
     '## For AI assistants',
-    `- [MCP connector](${connectorUrl}): add this URL as a custom connector in Claude or ChatGPT (no sign-in) to search the notes, read syllabi and concept pages, and practise exam questions with the official solutions.`,
+    `- [MCP connector](${connectorUrl}): add this URL as a custom connector in Claude or ChatGPT (no sign-in) to search the notes, read syllabi and concept pages, and practice exam questions with the official solutions.`,
     `- [Agent skill](${skillUrl}): a SKILL.md package that teaches an assistant to tutor with the connector. Upload it in Claude or ChatGPT.`,
     `- [Knowledge base export](${kb.site}/${KNOWLEDGE_BASE_ASSET}): every page and question above as one JSON file.`,
     '',

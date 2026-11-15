@@ -35,7 +35,7 @@ export function questionRoute(id: string): string {
   return `${QUESTION_ROUTE_PREFIX}${encodeURIComponent(id)}`
 }
 
-/** A quiz on one concept — where a question page's "Practise …" goes once it is answered. */
+/** A quiz on one concept — where a question page's "Practice …" goes once it is answered. */
 export function conceptQuizUrl(concept: string): string {
   return `/quiz?${new URLSearchParams({ concept, mode: 'quiz', reveal: 'during' }).toString()}`
 }

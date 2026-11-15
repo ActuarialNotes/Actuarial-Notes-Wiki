@@ -39,8 +39,8 @@ LABELS = {  # the scalars worth reading first in a diff, in order
     "question_landing_sessions": "Sessions landing on a question page",
     "first_quiz_from_question_pages": "First quizzes from question pages",
     "chatgpt_engaged": "Engaged visitors from ChatGPT", "exception": "People who hit a JS error",
-    "accounts_created": "Accounts created by readers", "accounts_practised": "Accounts that ever practised",
-    "accounts_returned": "Accounts that came back", "accounts_practised_on_return": "Accounts that practised on a return",
+    "accounts_created": "Accounts created by readers", "accounts_practiced": "Accounts that ever practiced",
+    "accounts_returned": "Accounts that came back", "accounts_practiced_on_return": "Accounts that practiced on a return",
     "db_answers": "Answers saved by reader accounts", "paying_subscribers": "Paying subscribers",
     "pro_keys_readers": "Pro keys redeemed by readers", "content_reports": "Content reports from readers",
 }

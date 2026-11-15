@@ -1,7 +1,7 @@
 # The PCPA project simulator
 
 PCPA — Property & Casualty Predictive Analytics — is two parts: a computer-based exam, and a
-**project**. The project is the part no question bank can practise: the CAS opens a 16-day
+**project**. The project is the part no question bank can practice: the CAS opens a 16-day
 window, hands the candidate a business problem, one or two data sets, scope parameters and
 submission guidelines, and the candidate builds a GLM in R, Python or SAS and submits a
 technical report of at most 1,250 words (appendices included), up to five tables or graphics,
@@ -44,7 +44,7 @@ Exam 6's (`BETWEEN_RUNGS` in `lib/examColors.ts`, `docs/style-guide.md` §2.3). 
 leads each attempt's row on the page.
 
 **A brief is chosen, not assigned.** The real project hands each candidate one case from a
-pool, but someone practising for it wants the case that exercises what they are weak at.
+pool, but someone practicing for it wants the case that exercises what they are weak at.
 Choosing one moves the sheet to its second step, which asks only what changes the attempt:
 
 - **How to work it** (`AttemptMode` in `lib/pcpaAttempt.ts`). A **rehearsal** is the real

@@ -45,7 +45,9 @@ a little dry, never selling harder than the thing deserves.
 10. **Not "mastered".** The app's levels are New, Level 1, Level 2, Level 3 and Forgotten.
     Use them.
 11. **A line that doesn't apply to this reader is removed, not reworded.**
-12. **British spelling**, as the app is written: practise (verb), levelled, personalised.
+12. **British spelling**, as the app is written: levelled, personalised. The one exception is
+    **practice**, spelled with a *c* as noun and verb (practice, practiced, practicing), as it
+    is most often written in Canada (decided 2026-11-15).
 
 ## Tells to cut
 

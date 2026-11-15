@@ -10,4 +10,4 @@ The gaps are usually the same four:
 3. Duration and immunization, studied too late
 4. Speed
 
-At four minutes a question, the calculator is where time is won or lost. Practise on the one you will bring.
+At four minutes a question, the calculator is where time is won or lost. Practice on the one you will bring.

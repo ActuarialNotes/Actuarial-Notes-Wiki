@@ -131,7 +131,7 @@ const EXAM_FM: PathItem = {
 const FCIA: PathItem = {
   icon: Award,
   name: 'Fellowship of the CIA (FCIA)',
-  note: 'For practising in Canada. Some signing roles, like appointed actuary, require it.',
+  note: 'For practicing in Canada. Some signing roles, like appointed actuary, require it.',
 }
 
 export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
@@ -199,7 +199,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
           {
             exam: 'CAS-6',
             name: 'Exam 6',
-            note: 'Regulation and financial reporting, in the version for where you practise (Canada, the U.S. or International).',
+            note: 'Regulation and financial reporting, in the version for where you practice (Canada, the U.S. or International).',
             trackIds: ['CAS-6'],
           },
           {
@@ -250,7 +250,7 @@ export const CREDENTIAL_PATHS: Record<GuideBody, CredentialPath> = {
           {
             icon: RefreshCw,
             name: 'The CAS Continuing Education Policy',
-            note: 'You attest at the end of each year, which lets you practise the year after.',
+            note: 'You attest at the end of each year, which lets you practice the year after.',
           },
           {
             icon: MapPin,

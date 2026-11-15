@@ -342,7 +342,7 @@ can't:
 - **Claims development.** If the old annual returns carry the development exhibits the P&C-1 used
   to (to be confirmed against the Data Dictionary, D-OSFI-7), they're a Canadian counterpart to the
   CAS Loss Reserving Database planned as *Loss Development Data* (§4.11): real triangles, by
-  company and line, to practise the reserving chain on. Real filed data, so never the card's
+  company and line, to practice the reserving chain on. Real filed data, so never the card's
   "Load an example".
 
 ### 4.4 Workflows templates

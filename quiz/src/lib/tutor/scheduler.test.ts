@@ -225,7 +225,7 @@ describe('keeping going with nothing met', () => {
   })
 })
 
-describe('practising one kind of part', () => {
+describe('practicing one kind of part', () => {
   it('serves that kind, on the concept that has faded most', () => {
     const events = [answer('pp1#a', 'Pure Premium', 'correct', iso(0)), answer('cl1#a', 'Chain Ladder Method', 'correct', iso(5))]
     const step = kindPractice(input(events, new Date(t0.getTime() + 6 * 86_400_000)), 'explanation')

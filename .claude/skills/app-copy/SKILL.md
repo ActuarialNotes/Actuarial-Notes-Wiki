@@ -119,7 +119,7 @@ One thing, one name. Use these exactly.
 | The assistants | **Claude or ChatGPT** where the connector serves both; **Claude** only where only Claude | AI |
 | An empty filter | "No resources match these filters." | No sources / the current filters |
 | A syllabus change | **Added** | New in |
-| Spelling | British: practise (verb), levelled, personalised | practice (verb), leveled |
+| Spelling | British: levelled, personalised. But **practice** with a *c*, noun and verb (decided 2026-11-15) | practise, leveled |
 
 Inside a game (Quiz Battle, Concept Craft), keep the game's own nouns (card,
 hand, steal) and the figures as the screen shows them (3, 2:00), and put an
@@ -167,6 +167,10 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-11-15 · Everywhere · "Practice" with a c, noun and verb, in the app, the vault
+  and the docs: it is the spelling most recognised in Canada. → practice, practiced,
+  practicing. Never "practise". (The Store kit's saved step id keeps the old spelling;
+  no reader sees it.)
 - 2026-11-08 · Full UI copy review (`docs/ui-copy-review.md`) · Accepted the
   first batch of rewrites. On the guest save prompt, flagged "This quiz only
   lives in this browser" and "Make an account and it comes with you": "lives in"

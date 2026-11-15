@@ -135,7 +135,7 @@ describe('question pages', () => {
     expect(JSON.stringify(head.jsonLd)).not.toMatch(/SECRET|acceptedAnswer|suggestedAnswer/)
   })
 
-  it('puts a concept quiz behind "Practise"', () => {
+  it('puts a concept quiz behind "Practice"', () => {
     expect(conceptQuizUrl('Bayes Theorem')).toBe('/quiz?concept=Bayes+Theorem&mode=quiz&reveal=during')
   })
 

@@ -86,7 +86,7 @@ labelled an estimate. **D32** decides whether it ever becomes the headline numbe
 ### 3.2 Mastery counts remembering a question as knowing the concept (→ L12)
 
 **Evidence.** The testing effect transfers to new problems much less than it helps on the
-same items (Pan & Rickard 2018, meta-analysis), and transfer depends on practising varied,
+same items (Pan & Rickard 2018, meta-analysis), and transfer depends on practicing varied,
 new items (Butler 2010). Answering a remembered question again tests memory of that answer.
 
 **Today.** `mastery.ts` increments `correct_count` on any correct answer. It can't know

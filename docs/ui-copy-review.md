@@ -136,7 +136,7 @@ for this write-up.
 | `lib/tools/input.ts` (on the card) | `"per_year" must be between…`; `Row 3 of "points" is missing "value".` | Field keys on screen | Use the field's label |
 | `lib/workflowBrief.ts:66` | "A judgment left at its default is my call, not a selection" | Reads as the opposite of what it means | "…is one I haven't made yet. List the ones you ran at their defaults." |
 | `cowork/ResourceCard.tsx:132` | "…rather than naming one Cowork carries." | In-house verb ("carries", ×3) | "A stand-in for this kind of document, not a real one." |
-| `lib/tutor/copy.ts:76, 143`; `journey.ts:27` | "Extra practice is still spaced."; "Start underneath"; "what is heavy" | Cryptic | "Nothing due today. You can still practise."; "Get {X} to Level 1 first."; "the heaviest-weighted sections" |
+| `lib/tutor/copy.ts:76, 143`; `journey.ts:27` | "Extra practice is still spaced."; "Start underneath"; "what is heavy" | Cryptic | "Nothing due today. You can still practice."; "Get {X} to Level 1 first."; "the heaviest-weighted sections" |
 | `components/ExamsPopout.tsx:328` | "click to cycle Exam P status" | Code-speak | "Exam P: Not started. Change status" |
 | `store/ProductSheet.tsx:595` | Section "Its twin on the lists" | A clever title for a plain fact | "Also allowed" |
 | `ReadinessCard.tsx:1503` | Popup "Study Guide" | Clashes with the Study Guides tab | "Exam Readiness" |
@@ -165,7 +165,7 @@ each pattern lives.
 - `StudyPlanCompleteOverlay`: "Today's plan complete!" and "Unlock the 2× gem bonus". The button is "Unlock" with a lock icon, but the action is collecting gems.
 - `ReadinessCard`: "All concepts mastered. Great work!"
 - `LeaderboardPanel`: "You were promoted to Gold!", "climb back this week", "take the early lead".
-- `ConceptLevelUpCeremony`: "Collected!" and "Concept Leveled Up!". This one is a ceremony, so it's your call; it also uses US "Leveled" where the app writes "practise".
+- `ConceptLevelUpCeremony`: "Collected!" and "Concept Leveled Up!". This one is a ceremony, so it's your call; it also uses US "Leveled" where the app writes "practice".
 
 **Triads and colon reveals in page intros**
 - Battle: "Two players, the same questions, one scoreboard." It's followed by a second triad that repeats "How points work" just below.
@@ -186,7 +186,7 @@ quiz cost you?"
 - `TutorJourneyView.tsx:105`.
 - `HeatmapInfoPanel.tsx:175` repeats slide 4 on slide 5 (against the log's "each fact on one slide only").
 
-**One word stretched:** "sorted" appears about 8 times in the Store kit ("Practise questions sorted").
+**One word stretched:** "sorted" appears about 8 times in the Store kit ("Practice questions sorted").
 "Done" would do.
 
 **Em dashes** (R9): roughly 100 visible across the app, densest in Flashcards (13),
@@ -214,7 +214,7 @@ Pick one form for each; I'll apply it everywhere and add it to the skill as a gl
 | Ready date | target date (email) · ready date (app) | ready date |
 | Account creation | Sign up · Create Account · Make an account | "Create account" |
 | Levels | Level 1 · L1 · mastered · Decayed | Level 1–3, Forgotten |
-| Spelling | levelled/leveled · personalised · summarising | **?** The app mostly writes British ("practise") |
+| Spelling | levelled/leveled · personalised · summarising | **?** The app mostly writes British ("practice") |
 | Resource empty state | No sources / No resources match these/the current filters | "No resources match these filters." |
 | Syllabus change | Added · New in Fall 2026 | Added |
 

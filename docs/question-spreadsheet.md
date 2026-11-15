@@ -7,7 +7,7 @@ with **Insert**.
 The CAS sits Exams MAS-I, MAS-II and 5–9 in Pearson VUE's test driver, whose spreadsheet is part
 of the exam: "candidates can expect to see this spreadsheet on all CAS exams at Pearson VUE test
 centers", and for Exams 5–9 some answers are typed into it and "the entire spreadsheet, including
-all formulas used, will be sent to the graders" (CAS, *Candidate Know Before You Go*). Practising
+all formulas used, will be sent to the graders" (CAS, *Candidate Know Before You Go*). Practicing
 in that environment is part of preparing for the exam.
 
 ## What the reader sees

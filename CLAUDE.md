@@ -348,7 +348,7 @@ before touching that area**:
   `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
   redirect in `WikiConcept`.
 - `docs/simulated-learner.md` — the **simulated learner** (`simulations/`, `./run-learner`): a model
-  playing a configured student (YAML profiles) who studies the vault and practises questions, so
+  playing a configured student (YAML profiles) who studies the vault and practices questions, so
   reports show where guides and questions fail which learners. The learner may see study pages and
   question stems/options only — enforced by an allowlist loader, a context guard and a tool-less,
   MCP-less headless Claude Code backend, and proven by `simulations/tests/test_isolation.py` (CI).
@@ -1085,7 +1085,7 @@ Other important `lib/` modules:
   nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
   beside any price (the wording is pinned by `amazonPrice.test.ts`).
 - `storeKit.ts` — the Store's **exam kit** (`docs/store.md`, "The kit"): one exam's shelf as
-  steps (register → calculator → learn → practise → review), the first unticked one in the
+  steps (register → calculator → learn → practice → review), the first unticked one in the
   spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
   comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
   `components/store/ExamKit.tsx`; pure and tested.

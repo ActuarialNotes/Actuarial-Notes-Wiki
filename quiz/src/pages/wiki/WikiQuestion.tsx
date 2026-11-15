@@ -170,7 +170,7 @@ function QuestionPractice({ question, next, nextName, concept }: {
   question: Question
   next?: Question
   nextName?: string
-  /** The first concept the question is tagged with — the "Practise" quiz. */
+  /** The first concept the question is tagged with — the "Practice" quiz. */
   concept?: string
 }) {
   const { user } = useAuth()
@@ -277,7 +277,7 @@ function QuestionPractice({ question, next, nextName, concept }: {
             )}
             {concept && (
               <Link to={conceptQuizUrl(concept)} className={buttonVariants({ variant: 'outline', size: 'lg', className: 'min-w-0' })}>
-                <span className="truncate">Practise {concept}</span>
+                <span className="truncate">Practice {concept}</span>
               </Link>
             )}
           </div>

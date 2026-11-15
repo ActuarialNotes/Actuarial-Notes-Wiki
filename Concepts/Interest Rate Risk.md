@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3196116bbeac282602e4a93578dcfaa9f6ad779825dfff540ef42cf44d1f55cf
+  content_hash: sha256:b64e4eb4e6c49c249f951d8af616600d90fa74a9add2d8d4ecb0618ae1419ac1
   sources:
     - "Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re, July 2006), pp.5-11 (model assumptions and notation pp.5-6; P - L - E + (S+P-E)y = kS, P = [S(k-y)+L]/(1+y)+E and C = S+P-E-L/(1+y) p.6; P, L, E followed by P*cr, L*cr, E*cr, d = cr/(1+y), P*d/(1-d) = P*cr/(1+y-cr), perpetuity at cr = 1, F = [P-E-L/(1+y)]*d/(1-d) p.7; k = a + b*y, b = 0 fixed, b = 1 risk-free plus premium, F = cr*S*(a+(b-1)y)/[(1+y)(1+y-cr)] p.8 and D = (a-b+1)/[(1+y)(a+by-y)] + 1/(1+y-cr) p.9, both read from the rendered pages; Table 1, duration of a total = dollar duration / PV, double impact of rates on interest-sensitive premiums p.9; D_V 6.70, 5.18, zero or negative asset duration infeasible and invisible to regulators and rating agencies p.10; pricing strategy a = 10%, b = 1 gives 7.62 and 3.27 p.10), sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf"
     - "OCC, Comptroller's Handbook: Interest Rate Risk, Version 1.0, printed p.1 (PDF p.4: repricing, basis, yield curve risk 'changing rate relationships across the spectrum of maturities', options risk; earnings and capital via NII and market value), printed p.9 (PDF p.12: MBS duration shortens and extends, negative convexity), PDF p.59 (options, futures, swaps, caps and floors), glossary PDF p.78 (effective duration takes into account the way changes in yield affect expected cash flows), sha256:e96b2f0fe28b67db124aa7e56743b1b4e0b30c00d60461f124c1f776d96e2aac — https://www.occ.gov/publications-and-resources/publications/comptrollers-handbook/files/interest-rate-risk/pub-ch-interest-rate-risk.pdf (read this session through WebFetch's saved copy; same sha256 as the earlier pass)"
@@ -58,7 +58,7 @@ For a parallel yield change, the change in total economic value is then
 
 - $V = A - L + F$ is the firm's total economic value.
 
-ALM as usually practised manages only the accounting balance sheet and ignores franchise value, which can be a large share of market value. Franchise value has a long duration, especially when renewal premiums are priced to a fixed target return, because a rate rise then shrinks both the discount factor and the premiums themselves. Hedging it with asset duration alone may require a zero or negative asset duration. That is infeasible, and it alarms regulators and rating agencies who see only the accounting numbers.
+ALM as usually practiced manages only the accounting balance sheet and ignores franchise value, which can be a large share of market value. Franchise value has a long duration, especially when renewal premiums are priced to a fixed target return, because a rate rise then shrinks both the discount factor and the premiums themselves. Hedging it with asset duration alone may require a zero or negative asset duration. That is infeasible, and it alarms regulators and rating agencies who see only the accounting numbers.
 
 Panning's alternative is a **pricing strategy** whose target return moves with interest rates, which shortens the duration of franchise value directly.
 

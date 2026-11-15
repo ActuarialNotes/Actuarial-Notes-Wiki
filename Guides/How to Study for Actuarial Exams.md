@@ -34,7 +34,7 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 >
 > In Canada, the [[Canadian Institute of Actuaries (CIA)]] has its own membership requirements, and some of the work that has to be signed by an actuary goes through the CIA rather than through an SOA or CAS designation alone. Many Canadian actuaries end up holding both.
 >
-> The UK has the Institute and Faculty of Actuaries, and many other countries have a national body with its own exams. Some of these have recognition agreements with the SOA or CAS, but the details differ from one to the next. Check with the body you'd actually be practising under before assuming a credential carries over.
+> The UK has the Institute and Faculty of Actuaries, and many other countries have a national body with its own exams. Some of these have recognition agreements with the SOA or CAS, but the details differ from one to the next. Check with the body you'd actually be practicing under before assuming a credential carries over.
 
 ## The path to a credential
 
@@ -59,7 +59,7 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 >
 > Most people start with [[Exam P-1 (SOA)|Probability]], since so much of the later statistics builds on it. [[Exam FM-2 (SOA)|Financial Mathematics]] usually comes next, and it can overlap with looking for a job.
 >
-> After those two, the order depends on your path, your employer (who will probably have an opinion) and whichever transition rules are in force. On the CAS side a common order is [[Exam MAS-I (CAS)|MAS-I]], [[Exam MAS-II (CAS)|MAS-II]], [[Exam 5 (CAS)|Exam 5]], then Exam 6 for the country you practise in. The SOA side branches more, depending on which fellowship track you're heading toward.
+> After those two, the order depends on your path, your employer (who will probably have an opinion) and whichever transition rules are in force. On the CAS side a common order is [[Exam MAS-I (CAS)|MAS-I]], [[Exam MAS-II (CAS)|MAS-II]], [[Exam 5 (CAS)|Exam 5]], then Exam 6 for the country you practice in. The SOA side branches more, depending on which fellowship track you're heading toward.
 >
 > One small suggestion. Chip away at the VEEs and the online modules in the gaps between sittings. They're much less fun to discover as the last thing standing between you and your associateship.
 
@@ -137,7 +137,7 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 
 > [!question]- Should I read first and do problems later?
 >
-> I'd start doing problems early, before you feel ready for them. These exams test whether you can get to a right answer under time pressure, and reading on its own doesn't really practise that. Your first attempts will be rough. That's fine. The problems you get wrong are usually where the learning happens.
+> I'd start doing problems early, before you feel ready for them. These exams test whether you can get to a right answer under time pressure, and reading on its own doesn't really practice that. Your first attempts will be rough. That's fine. The problems you get wrong are usually where the learning happens.
 >
 > It also helps to test yourself instead of re-reading. Close the manual and try to write out the formula, then check it. Cover up a worked solution and redo it from scratch. Recall practice like this tends to stick better than re-reading does, and it's what the flashcards and quizzes on this wiki are built around.
 
@@ -193,7 +193,7 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 > - Missing the registration deadline, or booking late and ending up at a test centre two hours away.
 > - Reading the whole manual but never sitting a full timed paper.
 > - Spending weeks on a favourite topic that's only a small part of the exam.
-> - Only ever practising untimed, then meeting the clock for the first time on exam day.
+> - Only ever practicing untimed, then meeting the clock for the first time on exam day.
 > - Bringing a calculator that isn't on the list, or the right one with a dying battery.
 > - On written-answer exams, never looking at an examiner's report to see what full credit looks like.
 > - Leaving a multiple-choice question blank when there's no penalty for guessing.

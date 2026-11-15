@@ -6,7 +6,7 @@ order: 7
 The gaps are usually the same four:
 
 1. Section C started too late
-2. Interpretation questions practised only as calculations
+2. Interpretation questions practiced only as calculations
 3. [[Censoring]] versus [[Truncation]] in the likelihood
 4. The survival objectives skipped entirely
 

@@ -147,7 +147,7 @@ export function findingAdvice(f: Finding): string {
     case 'kind-gap':
       return f.weak === 'calculation'
         ? 'Work the page’s worked examples, then the calculations.'
-        : 'CAS gives these points for naming the reason. Practise saying why.'
+        : 'CAS gives these points for naming the reason. Practice saying why.'
     case 'calibration':
       return f.overconfident
         ? 'Pick Sure only when you’d bet on it. Your rating decides what comes back first.'

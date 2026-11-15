@@ -61,7 +61,7 @@ export interface SectionLeak extends Tally {
 /**
  * Each syllabus section with what this span's answers say about it, the
  * costliest first: sections judged (enough answers) by marks lost, then the
- * sections not yet judged by their share of the paper — an unpractised 25%
+ * sections not yet judged by their share of the paper — an unpracticed 25%
  * section is the next biggest unknown.
  */
 export function sectionLeaks(

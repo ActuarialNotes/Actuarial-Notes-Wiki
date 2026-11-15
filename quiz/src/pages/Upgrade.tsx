@@ -82,7 +82,7 @@ function betaCodeMessage(raw: string): string {
 
 export default function Upgrade() {
   const navigate = useNavigate()
-  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
+  const back = useBack({ to: '/dashboard', label: 'Today' })
   const { user } = useAuth()
   const { isPro, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)

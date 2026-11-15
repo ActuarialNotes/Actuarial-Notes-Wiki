@@ -26,7 +26,7 @@ import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
  *
  * It is the wiki's floating search, built from the same parts
  * (`components/FloatingSearchBar.tsx`): the same sticky blurred bar, the same
- * input line with the hamburger folding away as you type, the same dimmed
+ * input line with the menu button folding away as you type, the same dimmed
  * backdrop, the same scope pills, the same result rows. Cowork is a second
  * product, not a second design system, and searching should not feel like a
  * different app on another page.

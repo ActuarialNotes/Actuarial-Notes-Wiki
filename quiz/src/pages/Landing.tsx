@@ -137,7 +137,14 @@ export default function Landing() {
   const { exams: focusable, picked: focusPicked, setFocus } = useExamFocus()
   function openExam(value: string) {
     const exam = focusable.find(e => e.bank === value)
+    // A visitor's answer to "Which exam are you studying?" takes them to
+    // Today, where that exam's first session is waiting (design review §5.3).
+    const firstPick = !user && !focusPicked && !!exam
     if (exam) setFocus(exam.file)
+    if (firstPick) {
+      navigate('/dashboard')
+      return
+    }
     openExamScreen(value)
   }
 
@@ -540,7 +547,7 @@ export default function Landing() {
         hasTopic={hasTopic}
         signedIn={!!user}
         // A visitor who hasn't picked an exam is asked for one: the list is the answer.
-        title={focusPicked || focusable.length === 0 ? 'Quiz' : 'Which exam are you studying?'}
+        title={focusPicked || focusable.length === 0 ? 'Practice' : 'Which exam are you studying?'}
         body={activeFilter}
         onBodyChange={handleSetFilter}
         concept={selectedConcept}

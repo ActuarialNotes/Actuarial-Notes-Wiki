@@ -3,7 +3,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { sanitizeMasteryState, decayIfStale } from '@/lib/mastery'
-import { readLocalMastery, syncLocalMastery } from '@/lib/localMasteryStore'
+import { readGuestMastery, readLocalMastery, syncLocalMastery } from '@/lib/localMasteryStore'
+import { adoptGuestMastery } from '@/stores/quizStore'
 
 export interface UseConceptMasteryResult {
   records: ConceptMasteryRecord[]
@@ -30,7 +31,8 @@ export function useConceptMastery(): UseConceptMasteryResult {
 
   useEffect(() => {
     if (!userId) {
-      setRecords([])
+      // Signed out, the ladder is the browser's own record (lib/guestMastery.ts).
+      setRecords(readGuestMastery())
       setLoading(false)
       return
     }
@@ -39,6 +41,9 @@ export function useConceptMastery(): UseConceptMasteryResult {
 
     const uid = userId
     async function fetchRecords() {
+      // What was done in this browser before signing in goes to the account
+      // first, so the fetch below already reads it.
+      await adoptGuestMastery(uid)
       const { data, error } = await supabase
         .from('concept_mastery')
         .select('*')

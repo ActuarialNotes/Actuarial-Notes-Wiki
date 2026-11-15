@@ -17,7 +17,7 @@ import { searchBy } from '@/lib/appSearch'
  *
  * Same trade as the Dashboard's (see `DashboardSearchBar`): below `lg` this row
  * held the logo and the mode pill, and it now answers the question a deck of a
- * hundred cards makes you ask — *where is that card?* It carries the hamburger
+ * hundred cards makes you ask — *where is that card?* It carries the menu button
  * on its own line, and `lib/mobileNavHost.ts` is what stops `Sidebar` drawing a
  * second row above it.
  *

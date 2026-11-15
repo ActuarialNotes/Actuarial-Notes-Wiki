@@ -14,7 +14,7 @@ test.describe('app shell', () => {
 
     await expect(page).toHaveTitle(/Actuarial Notes/)
     // Primary navigation is present (sidebar on desktop) for signed-out users.
-    await expect(page.getByRole('link', { name: 'Study Guides' }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Learn', exact: true }).first()).toBeVisible()
     await expect(page.getByRole('link', { name: 'Flashcards' }).first()).toBeVisible()
     // The landing rendered content, not the error boundary.
     await expect(page.getByText('Something went wrong')).toHaveCount(0)

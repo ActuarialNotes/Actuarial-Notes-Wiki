@@ -564,6 +564,52 @@ Left from Phase 2:
   exam's colour, which wants a review of each screen in both themes.
 - Opening an exam's page from a link or a search doesn't change the focus; only a pick does.
 
+**Phase 3 was built on 2026-11-15:**
+
+- **The four places** are one definition (`lib/places.ts`): Today, Learn, Practice, Apply,
+  which place and page a path is in, and the pages each lists. The sidebar's rows are the
+  four, each with its pages under it: Exams and Resources under Learn; Quiz, Flashcards and
+  Games under Practice; Tools, Data Sources, Projects and Workflows under Apply. The pages stay
+  on screen under their place on a wide screen. Folding them away until their place is open
+  would put Flashcards two clicks from a study guide, so the pages are grouped and
+  subordinate, not hidden.
+- **On a phone the four are a bar at the bottom** (`components/BottomBar.tsx`). A press opens
+  a place; a press on the place the reader is in lists its pages. The bar is put away in a
+  quiz, a battle, the Concept Craft board, a workflow's board, a project attempt and the
+  sign-in screens, and every overlay (the concept popup, the PDF reader, focus mode) is drawn
+  over it. The hamburger is gone: the top corner holds the reader's **avatar**, which opens
+  the exam switcher, every page, and the You menu.
+- **Flashcards is a page of Practice.** A collected card lights up Practice, in the sidebar
+  and in the bar.
+- **The Store and Community are behind the avatar**: rows of the **You** menu at the
+  sidebar's foot, with the Gem Shop, Exams, Settings and signing in or out. A visitor has the
+  same menu (it used to be a link to Settings).
+- **Today is open to visitors** (D-DR2). A visitor's exam is the one they picked, and their
+  first pick on "Which exam are you studying?" now opens Today. Their concept levels are kept
+  in the browser (`lib/guestMastery.ts`): before this a visitor's levels were recomputed from
+  nothing on every quiz, so there was no record for Today to read. One line offers an account,
+  and signing in hands the levels to it, only for concepts the account has no record of. The
+  exam date a visitor sets is kept in the browser too. Analytics, the League, reminders and
+  the export stay signed-in.
+- **No 0% ring.** Until a question on the exam has been answered, the first step stands where
+  the readiness wheel will be.
+- The names are on screen: **Today**, **Learn**, **Practice**, **Apply** (D-DR1), in the
+  sidebar, the bar and every "Back to …". The exam list under Learn keeps its heading,
+  *Study Guides*, which is what that page is.
+
+Left from Phase 3:
+
+- **Level, quests and the league** are still opened from the Level badge on Today, not from
+  the avatar's menu; theme and sound are still at the sidebar's foot beside it, which on a
+  phone is inside the drawer the avatar opens.
+- A visitor's **streak, XP and quests** were already kept in the browser and are still not
+  handed to an account at sign-in; only the concept levels and the last quiz are.
+- The avatar is in the top-**left** corner, where the hamburger was, because that is where
+  every page's own bar holds it (`lib/mobileNavHost.ts`). Moving it right is Phase 4's header.
+- Today's own page still has its exam chips, the Start pill and the full ReadinessCard under
+  the session; the **Progress** fold of §5.4 (ring, analytics, quests one tap down) is not
+  built.
+
 Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
 continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
 go until the shortcut does.

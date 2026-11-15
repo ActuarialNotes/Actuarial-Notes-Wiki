@@ -1442,7 +1442,11 @@ export function ReadinessCard({
       <TodaySessionCard
         ref={studyPlanCardRef}
         accent={accent}
-        wheel={(
+        // Until a question on this exam has been answered there is nothing to
+        // draw: no 0% ring, the first step in its place (design review §5.4).
+        wheel={!masteryLoading && examRecords.every(r => r.last_attempted_at === null) && sessionSteps.length === 0 ? (
+          <FirstStep examLabel={syllabus.examLabel} />
+        ) : (
           <SessionWheel
             segments={ringSegments}
             pins={sessionPinMap}
@@ -1668,6 +1672,18 @@ export function ReadinessCard({
           }}
         />
       )}
+    </div>
+  )
+}
+
+/** What stands where the readiness wheel will be, for an exam with no answers yet. */
+function FirstStep({ examLabel }: { examLabel: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-border/80 px-5 py-6 text-center" data-testid="today-first-step">
+      <p className="text-base font-semibold">Answer a few questions to begin.</p>
+      <p className="mx-auto mt-1 max-w-xs text-sm text-muted-foreground">
+        How ready you are for {examLabel} is drawn here once you have.
+      </p>
     </div>
   )
 }

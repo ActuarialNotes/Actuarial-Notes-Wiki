@@ -11,12 +11,13 @@ test('a visitor is asked which exam, and the answer is where every tab opens', a
 
   await page.getByRole('radio', { name: 'CAS' }).click()
   await page.getByRole('button', { name: /Exam 5/ }).first().click()
-  await expect(page).toHaveURL(/\/\?topic=Exam(\+|%20)5$/)
+  // A visitor's first pick opens Today, on that exam.
+  await expect(page).toHaveURL(/\/dashboard$/)
   await expect(switcher).toHaveAccessibleName('Exam: Exam 5. Switch exam')
 
-  // Study Guides opens on the exam's guide, the Quiz tab on its builder.
+  // Learn opens on the exam's guide, Practice's Quiz on its builder.
   const nav = page.getByRole('navigation', { name: 'Main' })
-  await nav.getByRole('link', { name: 'Study Guides' }).click()
+  await nav.getByRole('link', { name: 'Learn', exact: true }).click()
   await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+5\+\(CAS\)$/)
   await nav.getByRole('link', { name: 'Quiz' }).click()
   await expect(page).toHaveURL(/\/\?topic=Exam(\+|%20)5$/)

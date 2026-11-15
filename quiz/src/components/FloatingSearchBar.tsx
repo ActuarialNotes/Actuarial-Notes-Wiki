@@ -20,7 +20,7 @@ import type { ExamStatus } from '@/lib/examStatus'
  * live here and the places supply the results:
  *
  *   `FloatingSearchBar`      the sticky, blurred, bordered container
- *   `FloatingSearchInput`    the input line — hamburger, glyph, field, clear
+ *   `FloatingSearchInput`    the input line — menu button, glyph, field, clear
  *   `FloatingSearchStrip`    the second line, for a page that is *about* something
  *   `SearchScopePill`        one pill of the scope row above the results
  *   `SearchBackdrop`         the dim behind an open dropdown

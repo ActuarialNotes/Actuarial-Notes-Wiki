@@ -193,7 +193,7 @@ function EpisodePanel({ id, episode }: { id: string; episode: PodcastEpisode }) 
       </div>
 
       {status === 'error' && (
-        <p className="px-4 pb-2 text-sm text-destructive">The episode didn't load. Check your connection and try again from the Dashboard.</p>
+        <p className="px-4 pb-2 text-sm text-destructive">The episode didn't load. Check your connection and try again from Today.</p>
       )}
 
       <ol className="max-h-56 overflow-y-auto border-t border-border px-2 py-2" aria-label="Chapters">

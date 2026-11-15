@@ -1,4 +1,4 @@
-import { test, expect } from './test'
+import { test, expect, withExamPicked } from './test'
 
 // Loads the wiki from the build-time bundled markdown (virtual:wiki-content),
 // no network required, then drills into an exam study-guide page.
@@ -63,9 +63,10 @@ test.describe('wiki', () => {
     // opens on its guide. The arrow there goes up to the exam list, and the
     // browser's Back walks back the way the reader came: the guide, then the
     // builder as it was left, not the list.
+    await withExamPicked(page)
     await page.goto('/')
     await page.locator('button[data-tour="quiz-exam-p"]').click()
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+P-1\+\(SOA\)$/)
     await page.getByRole('link', { name: /All exams/ }).click()
     await expect(page).toHaveURL(/\/wiki$/)

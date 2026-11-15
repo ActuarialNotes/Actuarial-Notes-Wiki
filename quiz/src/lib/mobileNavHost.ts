@@ -3,7 +3,7 @@
  *
  * Below `lg` every page needs a way into the sidebar drawer, and there are two
  * ways to give it one. A page that already pins a bar to the top of the
- * viewport — a floating search bar — puts the hamburger in that bar, on the
+ * viewport — a floating search bar — puts the menu button in that bar, on the
  * same line as the search input, so the phone spends one 3.5rem row on chrome
  * instead of two. Every other page gets the app header (`Sidebar.tsx`), which
  * is that row plus the wordmark.
@@ -12,7 +12,7 @@
  * whether the content reserves room for a header, and `Sidebar.tsx` reads it to
  * decide whether to render one. Add a route here only when its page renders a
  * bar that hosts `MobileNavButton` — the two have to move together or the page
- * ends up with two hamburgers, or none.
+ * ends up with two menu buttons, or none.
  */
 export function pageHostsNavButton(pathname: string): boolean {
   // The quiz builder (QuizFloatingSearch) — `/` exactly, nothing below it.

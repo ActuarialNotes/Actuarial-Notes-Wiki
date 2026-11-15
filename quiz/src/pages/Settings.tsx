@@ -270,7 +270,7 @@ const ACCOUNT_NAV_ITEMS = [
 
 export default function Settings() {
   const navigate = useNavigate()
-  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
+  const back = useBack({ to: '/dashboard', label: 'Today' })
   const { user, loading: authLoading } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { isPro, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()

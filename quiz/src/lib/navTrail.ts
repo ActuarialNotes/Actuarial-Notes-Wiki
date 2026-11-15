@@ -171,8 +171,8 @@ export function backTarget(trail: NavTrail, options: BackOptions = {}): BackTarg
 }
 
 const STATIC_LABELS: Record<string, string> = {
-  '/': 'Quiz',
-  '/dashboard': 'Dashboard',
+  '/': 'Practice',
+  '/dashboard': 'Today',
   '/wiki': 'Study Guides',
   '/wiki/resources': 'Resources',
   '/flashcards': 'Flashcards',

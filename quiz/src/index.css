@@ -2108,11 +2108,15 @@ summary .katex-display,
 /* The Tutor (docs/tutor.md §9) is chrome the same way: it sits in the corner
    of every page and belongs to none of them. */
 .paper-chrome-tutor { view-transition-name: paper-tutor; }
+/* The bottom bar (components/BottomBar.tsx), the phone's four places: chrome
+   like the rail it stands in for, so a page slides under it. */
+.paper-chrome-tabbar { view-transition-name: paper-tabbar; }
 
 ::view-transition-group(paper-rail),
 ::view-transition-group(paper-header),
 ::view-transition-group(paper-resume),
-::view-transition-group(paper-tutor) {
+::view-transition-group(paper-tutor),
+::view-transition-group(paper-tabbar) {
   z-index: 10;
   animation: none;
 }
@@ -2123,7 +2127,9 @@ summary .katex-display,
 ::view-transition-old(paper-resume),
 ::view-transition-new(paper-resume),
 ::view-transition-old(paper-tutor),
-::view-transition-new(paper-tutor) {
+::view-transition-new(paper-tutor),
+::view-transition-old(paper-tabbar),
+::view-transition-new(paper-tabbar) {
   animation-duration: 180ms;
   animation-timing-function: ease-out;
 }
@@ -2395,13 +2401,27 @@ summary .katex-display,
   .rainbow-glow::after { animation: none; }
 }
 
+/* ── The bottom edge ──
+   Below `lg` the four places are a bar at the bottom of the screen
+   (components/BottomBar.tsx), which marks the body while it shows.
+   `--bottom-nav-height` is its height: the page pads its foot by it, and a
+   page's own action bar stands on top of it. `--bottom-edge` is how much of
+   the bottom of the window is taken, for what floats above (the resume dock,
+   the Tutor): an action bar's height is measured from its top edge to the
+   bottom of the window (hooks/useActionBarHeight.ts), so it already counts
+   the bar under it, and the taller of the two is the edge. */
+body { --bottom-edge: max(var(--action-bar-height, 0px), var(--bottom-nav-height, 0px)); }
+@media (max-width: 1023.98px) {
+  body[data-bottom-bar] { --bottom-nav-height: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+
 /* ── The Tutor's place on the page (docs/tutor.md §9) ──
    The character rides above whatever is parked on the bottom edge — a page's action
    bar or the concept popup's split pane — the way the resume dock does. Its
    panel opens above it on a wide screen, and drops to the bottom of the screen
    when the split pane leaves too little room above; on a phone it is a sheet. */
 .tutor-dock {
-  bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 1rem);
+  bottom: calc(max(var(--concept-split-height, 0px), var(--bottom-edge, 0px)) + 1rem);
 }
 .tutor-panel-frame {
   bottom: 0;
@@ -2409,7 +2429,7 @@ summary .katex-display,
 }
 @media (min-width: 640px) {
   .tutor-panel-frame {
-    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 4.75rem), calc(100vh - 34rem)));
+    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--bottom-edge, 0px)) + 4.75rem), calc(100vh - 34rem)));
     bottom: var(--tutor-panel-bottom);
     max-height: calc(100vh - var(--tutor-panel-bottom) - 1rem);
   }

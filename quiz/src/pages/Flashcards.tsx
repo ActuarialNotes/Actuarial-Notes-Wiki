@@ -604,8 +604,8 @@ function TodayStudyPlanSection({
             'Nothing scheduled for today.'
           ) : (
             <>
-              Set up your study plan on the{' '}
-              <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+              Set up your study plan on{' '}
+              <Link to="/dashboard" className="text-primary hover:underline">Today</Link>{' '}
               to see today's concepts.
             </>
           )}
@@ -2878,7 +2878,7 @@ function FlashcardsDeck({
             and so the + (the only way in with an empty deck) stays reachable.
             Flip / Back content act on the gallery cards; the deck controls
             (sort, manage) stay hidden until there's a deck. */}
-        <div ref={emptyFooterRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        <div ref={emptyFooterRef} className="fixed bottom-[var(--bottom-nav-height,0px)] left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
@@ -3086,8 +3086,9 @@ function FlashcardsDeck({
       {/* Fixed controls footer — always on the bottom edge */}
       <div
         ref={footerRef}
-        className={`fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
-          focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
+        className={`fixed left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
+          // Focus mode covers the phone's bottom bar; otherwise the footer stands on it.
+          focusMode ? 'bottom-0 z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'bottom-[var(--bottom-nav-height,0px)] z-[46]'
         }`}
       >
         {/* Gallery + Focus buttons — standalone pills above the nav. Shown in

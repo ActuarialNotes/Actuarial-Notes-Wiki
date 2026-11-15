@@ -32,7 +32,7 @@ export interface Crumb {
  * The **Tools top bar** (docs/actuarial-tools.md §6.2) — the floating search
  * bar every tab carries, built from the shared parts so a search here feels
  * the same as anywhere else. It is the route's only row of top chrome below
- * `lg` (`lib/mobileNavHost.ts`), so it carries the hamburger.
+ * `lg` (`lib/mobileNavHost.ts`), so it carries the menu button.
  *
  * Two shapes. On the **catalogue** the page *is* the result list: the query
  * and the practice-area pill are lifted to the page (they ride the URL), and

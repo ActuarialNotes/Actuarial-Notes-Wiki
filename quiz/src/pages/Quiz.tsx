@@ -66,7 +66,7 @@ export default function Quiz() {
   const quizFrom = searchParams.get('from')
   const back = useBack({
     to: quizFrom === 'search' ? '/search' : quizFrom === 'dashboard' ? '/dashboard' : '/',
-    label: quizFrom === 'search' ? 'Search' : quizFrom === 'dashboard' ? 'Dashboard' : 'Quiz',
+    label: quizFrom === 'search' ? 'Search' : quizFrom === 'dashboard' ? 'Today' : 'Practice',
   })
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()

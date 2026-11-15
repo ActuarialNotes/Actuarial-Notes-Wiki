@@ -131,8 +131,8 @@ describe('backTarget', () => {
 
 describe('placeLabel', () => {
   it('names the app’s places off their paths', () => {
-    expect(placeLabel('/')).toBe('Quiz')
-    expect(placeLabel('/dashboard')).toBe('Dashboard')
+    expect(placeLabel('/')).toBe('Practice')
+    expect(placeLabel('/dashboard')).toBe('Today')
     expect(placeLabel('/wiki/')).toBe('Study Guides')
     expect(placeLabel('/search?q=x')).toBe('Search')
     expect(placeLabel('/store/gems')).toBe('Gem Shop')

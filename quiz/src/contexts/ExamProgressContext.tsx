@@ -5,6 +5,30 @@ import type { ItemStatus } from '@/data/tracks'
 import type { StudyPlan, StudyPlanConfig } from '@/lib/studyPlan'
 import { ExamProgressContext, type ExamProgressRow, type SectionState } from '@/contexts/examProgress'
 
+const GUEST_EXAM_ROWS_KEY = 'quiz.guestExamRows'
+
+/** A visitor's exam rows: the date they set for an exam and their plan settings, kept in the browser. */
+function loadGuestExamRows(): ExamProgressRow[] {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(GUEST_EXAM_ROWS_KEY) ?? '[]')
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter((r): r is ExamProgressRow => typeof r === 'object' && r !== null && typeof (r as ExamProgressRow).exam_id === 'string')
+      // Never a status: an exam is added to an account, not to a browser.
+      .map(r => ({ exam_id: r.exam_id, status: 'not_started' as ItemStatus, target_date: typeof r.target_date === 'string' ? r.target_date : null, study_plan_config: r.study_plan_config ?? null }))
+  } catch {
+    return []
+  }
+}
+
+function saveGuestExamRows(rows: ExamProgressRow[]): void {
+  try {
+    localStorage.setItem(GUEST_EXAM_ROWS_KEY, JSON.stringify(
+      rows.map(r => ({ exam_id: r.exam_id, target_date: r.target_date, study_plan_config: r.study_plan_config ?? null })),
+    ))
+  } catch { /* private mode, or full */ }
+}
+
 export function ExamProgressProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const [examRows, setExamRows] = useState<ExamProgressRow[]>([])
@@ -89,9 +113,9 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       })
   }, [userId])
 
-  // Initial load
+  // Initial load. A visitor's rows are the browser's own (`loadGuestExamRows`).
   useEffect(() => {
-    if (!userId) { setLoadingExams(false); return }
+    if (!userId) { setExamRows(loadGuestExamRows()); setLoadingExams(false); return }
     let cancelled = false
     setLoadingExams(true)
     supabase
@@ -208,7 +232,18 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     column: Partial<ExamProgressRow>,
     label: string,
   ): Promise<boolean> => {
-    if (!userId) return false
+    if (!userId) {
+      // A visitor's exam date and plan settings are kept in this browser, so
+      // Today counts down to the sitting they set (design review §5.4).
+      setExamRows(prev => {
+        const next = prev.some(r => r.exam_id === examId)
+          ? prev.map(r => r.exam_id === examId ? { ...r, ...column } : r)
+          : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, ...column }]
+        saveGuestExamRows(next)
+        return next
+      })
+      return true
+    }
     writeSeq.current++
     pendingWrites.current++
     setExamRows(prev => prev.some(r => r.exam_id === examId)

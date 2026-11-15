@@ -578,7 +578,7 @@ export default function OnboardingTour() {
       <div
         className={cn(
           'fixed right-3 z-[140] md:right-4 print:hidden',
-          'bottom-[calc(1rem+var(--action-bar-height,0px))]',
+          'bottom-[calc(1rem+var(--bottom-edge,0px))]',
         )}
       >
         <div className="onboarding-launcher-in flex items-center gap-0.5 rounded-full bg-primary p-1 text-primary-foreground shadow-lg ring-1 ring-black/5">
@@ -667,7 +667,7 @@ export default function OnboardingTour() {
           'inset-x-0 md:inset-x-auto md:right-4',
           placeTop
             ? 'top-3 md:top-4'
-            : 'bottom-[calc(1rem+var(--action-bar-height,0px))]',
+            : 'bottom-[calc(1rem+var(--bottom-edge,0px))]',
         )}
       >
         <div

@@ -5,6 +5,7 @@
 
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { sanitizeMasteryState } from '@/lib/mastery'
+import { GUEST_ID, foldGuestMastery, relabelForAccount, type MasteryEvent } from '@/lib/guestMastery'
 
 const KEY = 'actuarial_local_mastery_v1'
 
@@ -50,6 +51,29 @@ export function syncLocalMastery(records: ConceptMasteryRecord[]): void {
     }
   }
   save(store)
+}
+
+/** A visitor's records (lib/guestMastery.ts): what the ladder reads signed out. */
+export function readGuestMastery(): ConceptMasteryRecord[] {
+  return readLocalMastery(GUEST_ID)
+}
+
+/** Fold a visitor's answers into their records, kept in this browser. */
+export function recordGuestMastery(events: readonly MasteryEvent[], now: Date = new Date()): void {
+  if (events.length === 0) return
+  mergeLocalMastery(foldGuestMastery(readGuestMastery(), events, now))
+}
+
+/**
+ * Hand a visitor's records to the account that has just signed in: they are
+ * relabelled in place, so they are taken once, and returned for the caller to
+ * save with the account.
+ */
+export function takeGuestMastery(userId: string): ConceptMasteryRecord[] {
+  const adopted = relabelForAccount(Object.values(load()), userId)
+    .map(r => ({ ...r, state: sanitizeMasteryState(r.state) }))
+  if (adopted.length > 0) mergeLocalMastery(adopted)
+  return adopted
 }
 
 // Clears cached mastery records — either everything (examId omitted) or just

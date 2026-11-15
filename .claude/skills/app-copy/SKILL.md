@@ -102,7 +102,8 @@ One thing, one name. Use these exactly.
 
 | Thing | Say | Not |
 |---|---|---|
-| The products tab | **Store** ("Search the Store") | Shop |
+| The four places (sidebar, and the phone's bottom bar) | **Today**, **Learn**, **Practice**, **Apply** (decided 2026-11-15, D-DR1). The pages under them keep their names: Exams, Resources, Quiz, Flashcards, Games, Tools, Data Sources, Projects, Workflows | Dashboard, Study Guides (as a place), the Quiz tab |
+| The products page | **Store** ("Search the Store") | Shop |
 | The cosmetics page | **Gem Shop** | Store, shop |
 | The daily plan | **Today's Study Plan** as a title, tile or button; "today's study plan" mid-sentence | Today's plan, Custom Study Plan, Study Plan |
 | The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`), beside **Past Papers** | Practice exam, Exam, mock exam |

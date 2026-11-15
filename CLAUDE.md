@@ -6,9 +6,17 @@ Read this first, every session. It should save you a re-discovery pass through t
 
 A two-part product for people studying for actuarial exams (CAS/SOA):
 
-The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
-Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
-**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: one catalogue of
+The app is **one place** with one sidebar, whose rows are the **four places** of the path a
+learner walks (`lib/places.ts`, design review Phase 3): **Today** (`/dashboard`, the day's
+session, open to a visitor from the browser's own record), **Learn** (the study guides and
+Resources), **Practice** (the quiz builder, Flashcards, Games) and **Apply** (Tools, Data
+Sources, Projects, Workflows). On a phone the four are a bar at the bottom of the screen
+(`components/BottomBar.tsx`) and the avatar in the top corner opens the rest; the Store and
+Community are in the **You** menu behind the avatar. In this file "the Dashboard" is Today's
+page, "Study Guides" the pages under Learn and "the Quiz tab" Practice's quiz builder: the
+code keeps those names. What was **Cowork** — a second mode behind a
+Study / Cowork pill until 2026-11-14 — is now pages of Apply: **Workflows** (`/workflows`),
+**Tools** and **Data Sources** (`/data-sources`: one catalogue of
 values, tables and documents, open to everyone). Workflows is open only to approved accounts
 (`PREVIEW_APPROVED_EMAILS` in `lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
 `docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
@@ -396,7 +404,7 @@ before touching that area**:
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
   four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
-  step at the end of every screen. Its §6 says which phases are built (Phases 0 to 2 are) and its §7 the
+  step at the end of every screen. Its §6 says which phases are built (Phases 0 to 3 are) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
@@ -1219,16 +1227,39 @@ Other important `lib/` modules:
   folded page come back where it was left). A page's **Read PDF** stacks its document the
   same way (`PdfPageRef` → `components/wiki/PdfPagePanel.tsx`), whose own page bar and
   footer stand in for the walk's while it is open. See `docs/stacked-pages.md`.
+- `places.ts` — **the four places** (design review Phase 3): Today, Learn, Practice, Apply, in
+  the order of the path; which place and which page a path is in (`placeOf`, `pageOf`), the
+  pages a place lists for what a reader can open (`placePages`), and where the phone's bottom
+  bar is put away (`hidesBottomBar`: a quiz, a battle, the craft and workflow boards, a project
+  attempt, sign-in). `Sidebar.tsx` draws them as four rows with their pages under each
+  (`LearnNav` / `PracticeNav` / `ApplyNav`) and, at its foot, the **You** menu (Store, Community,
+  Gem Shop, Exams, Settings, sign in or out; `data-testid="you-menu"`). Below `lg`
+  `components/BottomBar.tsx` draws them as the bar at the bottom of the screen: a press opens a
+  place, a press on the place the reader is in lists its pages. While the bar shows,
+  `--bottom-nav-height` is its height (`index.css`, off `data-bottom-bar` on the body): `Main`
+  pads by it, a page's fixed bottom bar stands on it, and the resume dock and the Tutor ride
+  above `--bottom-edge`. Add a new route to `placeOf`/`pageOf` and to `deskPlace`. Pure and
+  tested; the flows are `e2e/four-places.spec.ts`. See `docs/style-guide.md` §5.0a.
+- `guestMastery.ts` — **a visitor's concept levels, kept in the browser**, which is what lets
+  Today work signed out. A quiz finished signed out folds its answers into records owned by
+  `GUEST_ID` in the local mastery store (`recordGuestMastery` in `localMasteryStore.ts`, called
+  from `quizStore`), and `useConceptMastery` reads them when there is no account. At sign-in
+  they are handed to the account **once** and only for concepts it has no record of
+  (`takeGuestMastery` → `adoptGuestMastery` in `stores/quizStore.ts`, `ignoreDuplicates`), so an
+  account's own history is never overwritten; a pending guest quiz marked `guestMasteryKept`
+  is not applied a second time. A visitor's exam is the exam in focus, and the date they set
+  for it is kept in `quiz.guestExamRows` (`ExamProgressContext`). Pure and tested.
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
-  it on a given route: a page with a floating search bar carries the hamburger
-  (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
+  it on a given route: a page with a floating search bar carries the avatar button
+  (`components/MobileNavButton.tsx`, the way into the drawer now that the places are the bottom
+  bar) on that bar's line, and every other page gets the app
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
-  `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
+  `<MobileNavButton />` in its bar at the same time, or it ends up with two avatars or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
-  sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
+  sheet and the app is the desk. Pages lie side by side in sidebar order (the four places, each with its pages beside it), so a tab switch
   slides the desk (`next`/`prev`); a link deeper into a tab lays a sheet over the current
   one (`push`); Back — or a link *up* the tab — swipes the top sheet off (`pop`); and within a
   page a quiz's Next/Back flicks the question off the pile or slides it back
@@ -1486,7 +1517,7 @@ Other important `lib/` modules:
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
 - `components/FloatingSearchBar.tsx` — the **floating search bar**, as parts: the sticky
-  blurred container, the input line (the hamburger on the search's own row, folding away as
+  blurred container, the input line (the avatar button on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
   wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar`, `DashboardSearchBar` and

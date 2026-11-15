@@ -40,3 +40,14 @@ export const test = base.extend({
     await use(context)
   },
 })
+
+/**
+ * A reader who has already picked their exam (`quiz.examFocus`, lib/examFocus.ts).
+ * A visitor's *first* pick on the exam list opens Today; for a flow about the
+ * list and the builder behind it, start from a reader past that first pick.
+ */
+export async function withExamPicked(page: Page, file = 'Exam P-1 (SOA)') {
+  await page.addInitScript(f => {
+    try { if (!localStorage.getItem('quiz.examFocus')) localStorage.setItem('quiz.examFocus', f) } catch { /* private mode */ }
+  }, file)
+}

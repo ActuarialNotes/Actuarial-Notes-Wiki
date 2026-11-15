@@ -7,7 +7,7 @@ import { FloatingSearchBar, FloatingSearchInput } from '@/components/FloatingSea
  * shelf *is* the result list: the query rides the URL (`?q=`) and narrows every
  * aisle at once, the way a refinement does (`itemMatchesQuery` in
  * `lib/store.ts`). It is the route's only row of top chrome below `lg`
- * (`lib/mobileNavHost.ts`), so it carries the hamburger.
+ * (`lib/mobileNavHost.ts`), so it carries the menu button.
  */
 export function StoreSearchBar({ query, onQuery }: { query: string; onQuery: (q: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null)

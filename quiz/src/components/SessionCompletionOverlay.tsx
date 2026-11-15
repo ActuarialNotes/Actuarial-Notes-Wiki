@@ -109,7 +109,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
           type="button"
           onClick={onClose}
           className="flex items-center gap-2 text-sm font-semibold hover:text-primary transition-colors py-1 pr-3"
-          aria-label="Back to dashboard"
+          aria-label="Back to Today"
         >
           <ArrowLeft className="h-5 w-5" />
           Back

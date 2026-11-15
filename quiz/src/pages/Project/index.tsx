@@ -18,7 +18,7 @@ import ProjectAttemptPage from './ProjectAttempt'
  * Projects are a **Pro** feature: anyone else — signed out included — gets the
  * locked page at `/project`, and nothing behind it mounts (no sync, no attempt
  * store reads). A link to an attempt goes there too: an attempt's route hosts
- * its own top bar's hamburger (`lib/mobileNavHost.ts`), which the locked page
+ * its own top bar's menu button (`lib/mobileNavHost.ts`), which the locked page
  * doesn't draw.
  */
 export default function Project() {

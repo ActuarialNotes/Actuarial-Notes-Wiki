@@ -24,7 +24,7 @@ import type { Question } from '@/lib/parser'
  * pill), which said what the app is called to someone already inside it and
  * offered nothing to do. The bar answers the two questions the dashboard is
  * actually a doorway to — *where is that concept?* and *where is that
- * question?* — and carries the hamburger on its own line, so the phone still
+ * question?* — and carries the menu button on its own line, so the phone still
  * spends one 3.5rem row on chrome. `lib/mobileNavHost.ts` is what tells
  * `Sidebar` to stand down on this route; the two have to move together.
  *

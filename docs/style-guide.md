@@ -386,18 +386,22 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 
 ### 5.0 One row of top chrome below `lg`
 
-`components/MobileNavButton.tsx` is the hamburger that opens that drawer, and it has two
+Below `lg` the four places are **a bar at the bottom of the screen**
+(`components/BottomBar.tsx`, §5.0a), so the top row no longer carries the navigation. What it
+carries is the reader's **avatar** (`components/MobileNavButton.tsx`; a dashed ring for a
+visitor), which opens the drawer: the exam switcher, every page of every place, and the You
+menu. The button has two
 homes. A page that already pins a bar to the top of the viewport — a floating search bar —
 carries it **on that bar's line**, left of the search icon; every other page gets the app
 header (`Sidebar.tsx`), the same `h-14` row plus the wordmark. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
-the hamburger is always in the same corner.
+the avatar is always in the same corner.
 
 `lib/mobileNavHost.ts` is the one place that says which route does which; `App.tsx` reads it
 to decide whether the content reserves `pt-14`, and `Sidebar.tsx` reads it to decide whether
 to render the header at all. A page whose bar hosts the button starts at the top of the
 viewport (`sticky top-0`); a page with the header offsets by it (`sticky top-14 lg:top-0`).
 Add a route to that module only together with the `<MobileNavButton />` in its bar — the two
-move together, or the page ends up with two hamburgers or none.
+move together, or the page ends up with two avatars or none.
 
 When the search on a hosting bar goes **active**, the button folds to zero width and the
 input grows over it: it is the only thing on that line the reader is not using, and typing
@@ -413,14 +417,39 @@ so the 16rem rail keeps the app's body size and nav text never outranks page tex
 pair rides the group headers, the theme/profile rows in the footer and the popover menus the
 profile row opens — a row is a row wherever it is drawn, so add the `lg:` half
 whenever you add the mobile half. `SidebarItem`'s `base` string is where it lives; the
-hamburger matches it at `h-10 w-10`.
+avatar button matches it at `h-10 w-10`.
 
-**A tab's pages are rows under it, while it is open.** A tab with more than one page lists
-them beneath its own row — indented behind a `border-l` rule (`SubRows` in `Sidebar.tsx`),
-flush under the icon on the collapsed rail — only while the reader is in that tab: an open
-project's Brief / Workspace / Report / Submit under **Projects**, **Exams** and **Resources**
-under **Study Guides**. The page showing is the filled row; the tab's own row is named
-(`text-foreground font-medium`) but not filled, so exactly one row reads as *here*.
+**Four places, each with its pages under it.** The sidebar's rows are the four places of
+`lib/places.ts`, in the order of the path: **Today**, **Learn**, **Practice**, **Apply**. A
+place's pages are rows beneath its own — indented behind a `border-l` rule (`SubRows` in
+`Sidebar.tsx`), flush under the icon on the collapsed rail: **Exams** and **Resources** under
+Learn, **Quiz**, **Flashcards** and **Games** under Practice, **Tools**, **Data Sources**,
+**Projects** and **Workflows** under Apply, and an open project's Brief / Workspace / Report /
+Submit one level further under Projects. The page showing is the filled row; its place's row is
+named (`text-foreground font-medium`) but not filled, so exactly one row reads as *here*. What
+is not a step on the path (the Store, Community, Settings, signing in or out) is in the **You**
+menu the avatar opens at the sidebar's foot, the same for a visitor as for an account.
+
+### 5.0a The bottom bar below `lg`
+
+`components/BottomBar.tsx` is the four places under the thumb: icon over label, the place the
+reader is in marked with the pick (`bg-pick`) behind its icon and `aria-current="page"`. A
+press opens the place on its first page (Learn on the study guide of the exam in focus,
+Practice on its quiz builder); a press on the place the reader is **already in** lists that
+place's pages in a menu above the bar. `placeOf` / `pageOf` / `placePages` in `lib/places.ts`
+say which place a path is in and what it lists; add a route there when adding a page.
+
+- **It is put away where the screen is the work** (`hidesBottomBar`): a quiz, a battle, the
+  Concept Craft board, a workflow's board, a project attempt, the sign-in screens. Every
+  overlay is drawn over it (it sits at `z-30`): the concept popup's pane, the PDF reader, focus
+  mode, each dialog.
+- **`--bottom-nav-height`** is its height while it shows (set in `index.css` off the body's
+  `data-bottom-bar`, `0` at `lg` and where it is put away). `Main` pads its foot by it. A
+  page's own fixed bottom bar stands **on** it (`bottom-[var(--bottom-nav-height,0px)]`, §5.1),
+  and what floats above the bottom edge (the resume dock, the Tutor) reads **`--bottom-edge`**,
+  the taller of the bar and a page's action bar.
+- It is chrome in a page move (`paper-chrome-tabbar`), held still like the rail it stands in
+  for.
 
 ### 5.1 Fixed bottom action bars
 
@@ -429,7 +458,7 @@ screen no longer does: its Start is inside the card, and the setup sheet ends in
 The shape:
 
 ```
-fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0
+fixed bottom-[var(--bottom-nav-height,0px)] left-0 lg:left-[var(--sidebar-width)] right-0
 border-t border-border bg-background/95 backdrop-blur-sm
 ```
 

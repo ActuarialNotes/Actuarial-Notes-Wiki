@@ -8,8 +8,8 @@ A two-part product for people studying for actuarial exams (CAS/SOA):
 
 The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
 Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
-**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: Assumptions,
-Sources and Documents, open to everyone). Workflows is open only to approved accounts
+**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: one catalogue of
+values, tables and documents, open to everyone). Workflows is open only to approved accounts
 (`PREVIEW_APPROVED_EMAILS` in `lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
 `docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
 
@@ -94,7 +94,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: its sections (Assumptions, Sources, Documents), a table's page and a source's page —
+  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: the catalogue of values, tables and documents, a publisher's page (the catalogue narrowed to it) and a table's page —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -196,8 +196,8 @@ before touching that area**:
   `lib/tools/bank.ts`. A number field names the kinds it takes (`bank: ['profit-provision']`),
   and its input may be `{ "assumption": "<set>#<row>" }`, which the run reads in and records:
   the judgment's `source`, a working step, the hash, and a warning until fact checked. The card's
-  **From…** menu lists the figures; the shelf is `/data-sources`, Data Sources' Assumptions section
-  (`components/assumptions/`), with each figure linking into the tools that take it; a resource
+  **From…** menu lists the figures; the shelf is `/data-sources`, the Data Sources catalogue
+  (`lib/dataCatalogue.ts`), where each figure is a **value** row linking into the tools that take it; a resource
   page shows its sets (`ResourceAssumptionsCard`). The MCP tools are Phase 2. Read before adding
   a set or a `bank:` field (and run `npm run tools:bundle` after touching `lib/tools/`).
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
@@ -526,8 +526,8 @@ before touching that area**:
   use it (`TUTOR_STAGE`: preview → beta for Pro → open). Read before touching anything under
   `lib/tutor/`, `components/tutor/` or `tutorStore`.
 - `docs/cowork.md` — **Workflows and Data Sources** (what was Cowork, the second mode): who sees
-  what (`lib/workflowsAccess.ts`), the addresses (`lib/dataSources.ts` — `/data-sources` and its
-  sections, a table at `/data-sources/<slug>` via `toolPath`, a publisher at `/data-sources/<id>`,
+  what (`lib/workflowsAccess.ts`), the addresses (`lib/dataSources.ts` — `/data-sources`, the catalogue
+  (`lib/dataCatalogue.ts`), a table at `/data-sources/<slug>` via `toolPath`, a publisher at `/data-sources/<id>`,
   every old `/cowork` and `/tools/<table>` link redirected), publishers and documents and how they
   meet a workflow (a document as a workflow's source step), and the two rules that hold the whole thing up —
   *nothing is invented* (a source's table comes with blank figures until they are read off the
@@ -1509,15 +1509,16 @@ Other important `lib/` modules:
   `COWORK_ENABLED`; the e2e build opens it to everyone with `VITE_COWORK_PREVIEW=on` →
   `COWORK_OPEN_TO_ALL`). `workflowsAccess.ts` is who may use Workflows and the publishers
   (`canUseWorkflows`, read through `hooks/useWorkflowsAccess.ts` by the sidebar, the Data Sources
-  page and `WorkflowRoute`); `dataSources.ts` is the Data Sources page's sections and addresses.
-  `coworkSources.ts` is the entity/resource model (a resource's `table`, for Workflows), the shelf's filters (`groupSources` for publishers,
-  `filterResources` for the flat document list, both honouring the `entityIds`/`resourceIds`
-  the **My Library** pill passes — `[]` is an empty library, `undefined` is the filter off),
+  page and `WorkflowRoute`); `dataSources.ts` is the Data Sources page's addresses, and
+  `dataCatalogue.ts` the page itself as data: every value, table and document as one item
+  (`buildCatalogue`, from the bank and the source catalogue), the need each is filed under
+  (`NEED_BY_KIND`, `NEEDS_BY_TABLE_TOOL`), the filters and their counted options, the groups the
+  list is drawn in, and the query the filters ride.
+  `coworkSources.ts` is the entity/resource model (a resource's `table`, for Workflows),
   the search bar's two-list lookup (`searchSources`, where each side matches on its *own*
-  account), the per-publisher lookups a source page reads (`entityById` / `entityResources`)
+  account), the per-publisher lookups (`entityById` / `entityResources`)
   and the library reducers (adding a document follows its publisher; dropping a publisher
-  drops its documents); `coworkCovers.ts` finds a resource
-  card's cover in the wiki index, or says there is none. (`xlsx.ts`, the minimal dependency-free
+  drops its documents). (`xlsx.ts`, the minimal dependency-free
   `.xlsx` writer that Cowork's retired Deliverables exported through, stays for the tool card's
   and the Projects tab's exports.) `coworkContent.ts` is the one impure one: it installs
   the wiki bundle's lookup *and* registers Cowork's sample documents as virtual vault files,
@@ -1985,30 +1986,27 @@ private passenger auto **loss trend benchmarks** first) brings it as the step's 
 onto a calculation's inputs the way an uploaded CSV's columns are, so a coverage's trend links
 straight into Trend Factor.
 
-Data Sources (`pages/DataSources/`) is **one chain in three sections** — a *source* publishes
-*documents*, and a document gives its text, **data** (a table the app reads) or **assumptions**
-(figures in the bank) — chosen by one switch whose every move is a step Back undoes:
-**Assumptions** (`/data-sources`, the bank, each set headed *Source › Document*, filtered by Kind
-and by the Tool a figure goes into, a figure's sheet opening on a tap), **Sources**
-(`/data-sources/sources`, one list of publishers, each opening in place on its leading documents)
-and **Documents** (`/data-sources/documents`, document cards filtered by the Study Guides' Exam /
-Publisher / Year through `lib/resourceFilters.ts` and `coworkFacetItem`), the last two led by
-**My Library** (a filter narrowing the shelf to what the reader follows/has taken, not a section
-stacked above it). Every document and source is tagged with what it gives — **Data**,
-**Assumptions** (`resourceOffers`, `components/cowork/OfferTags.tsx`) — and a document's tag opens
-it: Data its table, Assumptions its figures (`?set=`). A published table is a **document** under
-its publisher (`SourceResource.tool` — NCHS, BLS, the US Treasury, Statistics Canada, OSFI);
-there is no Tables section. A table is a tool's page (`ToolPage` from `pages/Tools.tsx`) at
-`/data-sources/<slug>` (`toolPath`); **a publisher is its own page** (`/data-sources/<id>`), the way an exam's study
-guide is, with the publisher's *own* logo in the sticky header (`SourceEntity.logo`, transcribed
-from their site, monogram tile as the fallback) and their catalogue below it; and **a document is
-always a card**, never a row — one component (`components/cowork/ResourceCard.tsx`) draws it
-everywhere, and it is the study guide's resource card. On both kinds of card the **whole card**
-is the target and the one control that doesn't navigate (Follow, Add) sits at its right edge; a
-card carries pills, not a paragraph — a publisher's region and `established` year, a document's
-kind and date. Every old address redirects (`LEGACY_SECTIONS` in `lib/dataSources.ts` for
-`/data-sources/assumptions`, `/publishers` and `/tables`; `CoworkRedirect` in `App.tsx`;
-`/tools/<table>` and `/tools/assumptions` at the top of `pages/Tools.tsx`).
+Data Sources (`pages/DataSources/`) is **one catalogue** (since 2026-11-15; it was three
+sections — Assumptions, Sources, Documents — each a page of its own shape). Everything a model
+can take from a published document is a row of one shape, derived by `lib/dataCatalogue.ts` from
+the bank and the source catalogue: a **value** (a bank figure; a figure per accident year is one
+row), a **table** (a document a tool reads, `SourceResource.tool`, or whose own table a workflow
+takes, `.table`) or a **document** (the rest). The page leads with **what the model needs**
+(`DATA_NEEDS`: trend and inflation, loss development, expenses and profit, mortality, interest
+rates, capital, company results), then one row of filters — the Type switch, Region, Publisher,
+**Ready to use**, My Library — and **the frame never changes**: a filter changes the rows and
+nothing else, and all of it rides the query (`?need=…&type=…&region=…&ready=1&set=…&item=…`).
+A row opens **beside the list** (`components/datasources/CatalogueDetail.tsx`; a sheet below
+`lg`): the value and what it means, **Use in <tool>**, a table's **Open in <tool>**, a
+document's **Read the document**, then where it comes from and its Fact Check. A blank reads
+*Not entered* and sorts last. **A publisher's page is the catalogue narrowed to it**
+(`/data-sources/<id>`), with the publisher's *own* logo (`SourceEntity.logo`, transcribed from
+their site, monogram tile as the fallback), description and Follow above the same frame. A table
+is a tool's page (`ToolPage` from `pages/Tools.tsx`) at `/data-sources/<slug>` (`toolPath`).
+Every old address redirects (`legacySectionPath` in `lib/dataSources.ts` for
+`/data-sources/assumptions`, `/sources`, `/documents`, `/publishers` and `/tables`;
+`CoworkRedirect` in `App.tsx`; `/tools/<table>` and `/tools/assumptions` at the top of
+`pages/Tools.tsx`).
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:

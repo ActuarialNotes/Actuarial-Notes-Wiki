@@ -430,6 +430,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   phases. D-DR1 to D-DR5 are decided (its §7): the places are Today, Learn, Practice and Apply,
   with *practice* spelled with a c everywhere. Phase 0 (repairs) is built; Phases 1–4 are open,
   one per branch. Mock-ups: `docs/design-review-mockups.html`.
+  **The core seven (2026-11-16):** the seven sections in the four places (Today; Learn's Exams
+  and Resources; Practice's Quiz and Flashcards; Apply's Projects; Settings) were reviewed on a
+  build of `main` and redrawn in `docs/exhibit-core/index.html`. The build order, on the
+  redesign branch, is `docs/exhibit-build-plan.md`; nothing of it is built yet.
 
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't

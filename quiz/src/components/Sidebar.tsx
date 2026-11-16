@@ -54,15 +54,12 @@ import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizB
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { SoundPopover } from '@/components/SoundPopover'
 import { cn } from '@/lib/utils'
-import { ExamSwitcher } from '@/components/ExamSwitcher'
-import { useExamFocus } from '@/hooks/useExamFocus'
-import { guidePath, quizPath } from '@/lib/examFocus'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
-/** Where Study Guides was left this visit, else the study guide of the exam in focus, else the exam list. */
-function getLastWikiPath(fallback: string): string {
-  try { return sessionStorage.getItem('wiki:last-path') || fallback } catch { return fallback }
+/** Where Learn was left this visit, else the exam list. */
+function getLastWikiPath(): string {
+  try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
 }
 
 function getInitialCollapsed(): boolean {
@@ -213,13 +210,12 @@ function PageRow({
 }
 
 /**
- * **Learn**: the study guide of the exam in focus (or wherever the reader
- * left off in it this visit), with the exam list and the Resources shelf
+ * **Learn**: the exam list (or wherever the reader left off in the study
+ * guides this visit), with the exam list and the Resources shelf
  * under it, and the flag-gated Research page for a signed-in reader.
  */
 function LearnNav({ collapsed, onNavigate, research }: NavProps & { research: boolean }) {
   const { pathname } = useLocation()
-  const { focus } = useExamFocus()
   const icons: Partial<Record<PlacePageId, React.ReactNode>> = {
     exams: <GraduationCap className={ICON} />,
     resources: <LibraryBig className={ICON} />,
@@ -228,7 +224,7 @@ function LearnNav({ collapsed, onNavigate, research }: NavProps & { research: bo
   return (
     <>
       <SidebarItem
-        to={getLastWikiPath(guidePath(focus))}
+        to={getLastWikiPath()}
         label="Learn"
         icon={<BookOpen className={ICON} />}
         collapsed={collapsed}
@@ -258,14 +254,13 @@ function LearnNav({ collapsed, onNavigate, research }: NavProps & { research: bo
 }
 
 /**
- * **Practice**: the quiz builder of the exam in focus, the deck, and Games
+ * **Practice**: the quiz builder, the deck, and Games
  * (Quiz Battle and Concept Craft). The place's row carries what is left of
  * today's plan and lights up when a card is collected, since the deck is one
  * of its pages.
  */
 function PracticeNav({ collapsed, onNavigate }: NavProps) {
   const { pathname } = useLocation()
-  const { focus } = useExamFocus()
   const { cards } = useFlashcards()
   const collectGlow = useCollectGlow()
   const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
@@ -305,13 +300,10 @@ function PracticeNav({ collapsed, onNavigate }: NavProps) {
     </span>
   ) : null
 
-  const builder = quizPath(focus)
-
   return (
     <>
       <SidebarItem
-        // The builder of the exam in focus; its back arrow is the exam list.
-        to={builder}
+        to="/"
         label="Practice"
         icon={
           <span className="relative inline-flex items-center justify-center">
@@ -334,7 +326,7 @@ function PracticeNav({ collapsed, onNavigate }: NavProps) {
         dataFlashcardNav
       />
       <SubRows collapsed={collapsed}>
-        <PageRow page="quiz" to={builder} label="Quiz" icon={<ListChecks className={ICON} />} collapsed={collapsed} onNavigate={onNavigate} />
+        <PageRow page="quiz" to="/" label="Quiz" icon={<ListChecks className={ICON} />} collapsed={collapsed} onNavigate={onNavigate} />
         <PageRow page="flashcards" to="/flashcards" label="Flashcards" icon={<Layers className={ICON} />} badge={deckBadge} collapsed={collapsed} onNavigate={onNavigate} />
         {GAMES_ENABLED && (
           <PageRow page="games" to="/games" label="Games" icon={<Gamepad2 className={ICON} />} collapsed={collapsed} onNavigate={onNavigate} />
@@ -609,10 +601,6 @@ export default function Sidebar() {
             <X className="h-5 w-5 lg:h-4 lg:w-4" />
           </button>
         </div>
-
-        {/* The exam in focus, and the way to change it: every tab below opens
-            on this exam (docs/design-review.md §5.3). */}
-        <ExamSwitcher collapsed={collapsed} onNavigate={closeMobile} />
 
         <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
 

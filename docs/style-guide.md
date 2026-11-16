@@ -390,7 +390,7 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 Below `lg` the four places are **a bar at the bottom of the screen**
 (`components/BottomBar.tsx`, §5.0a), so the top row no longer carries the navigation. What it
 carries is the reader's **avatar** (`components/MobileNavButton.tsx`; a dashed ring for a
-visitor), which opens the drawer: the exam switcher, every page of every place, and the You
+visitor), which opens the drawer: every page of every place, and the You
 menu. The button has two
 homes. A page that already pins a bar to the top of the viewport — a floating search bar —
 carries it **on that bar's line**, at its right end; every other page gets the app
@@ -436,8 +436,8 @@ menu the avatar opens at the sidebar's foot, the same for a visitor as for an ac
 
 `components/BottomBar.tsx` is the four places under the thumb: icon over label, the place the
 reader is in marked with the pick (`bg-pick`) behind its icon and `aria-current="page"`. A
-press opens the place on its first page (Learn on the study guide of the exam in focus,
-Practice on its quiz builder); a press on the place the reader is **already in** lists that
+press opens the place on its first page (Learn on the exam list or wherever it was left,
+Practice on the Quiz tab); a press on the place the reader is **already in** lists that
 place's pages in a menu above the bar. `placeOf` / `pageOf` / `placePages` in `lib/places.ts`
 say which place a path is in and what it lists; add a route there when adding a page.
 

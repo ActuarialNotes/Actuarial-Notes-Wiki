@@ -1,4 +1,4 @@
-import { test, expect, withExamPicked, type Page } from './test'
+import { test, expect, type Page } from './test'
 
 // Paper on a desk (lib/viewTransition.ts, components/PaperRouter.tsx): every
 // change of page is a view transition — the desk slides between tabs, a sheet
@@ -157,7 +157,6 @@ test.describe('tab-switch view transitions', () => {
     // Practice's exam list and one exam's builder are both `/`: picking
     // an exam lays the builder over the list, opened at its top, and the back
     // arrow swipes it off onto the list as it was left.
-    await withExamPicked(page)
     await page.goto('/')
     const examP = page.locator('button[data-tour="quiz-exam-p"]')
     await expect(examP).toBeVisible()
@@ -228,8 +227,8 @@ test.describe('tab-switch view transitions', () => {
 
   test('the two tabs open on the same shell, and the same examining body', async ({ page }) => {
     await page.goto('/')
-    // A visitor with no exam picked is asked for one; the list is the same shell.
-    await expect(page.getByRole('heading', { name: 'Which exam are you studying?' })).toBeVisible()
+    // Exact: the Quiz Battle card's title is a heading on the same page.
+    await expect(page.getByRole('heading', { name: 'Quiz', exact: true })).toBeVisible()
     const quiz = await shell(page)
     const quizBody = await page.locator('[data-segment][aria-checked="true"]').getAttribute('data-segment')
 

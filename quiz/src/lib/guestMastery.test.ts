@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { GUEST_ID, foldGuestMastery, relabelForAccount, type MasteryEvent } from './guestMastery'
+import { GUEST_ID, foldGuestMastery, guestExamKey, relabelForAccount, type MasteryEvent } from './guestMastery'
 import { emptyRecord } from './mastery'
 
 const at = new Date('2026-11-15T12:00:00Z')
@@ -46,5 +46,20 @@ describe('relabelForAccount', () => {
   it('finds nothing to take a second time', () => {
     const taken = relabelForAccount(foldGuestMastery([], [right('A')], at), 'user-1')
     expect(relabelForAccount(taken, 'user-1')).toEqual([])
+  })
+})
+
+describe('guestExamKey', () => {
+  it('is the exam the visitor last answered a question on, and none before any answer', () => {
+    expect(guestExamKey([])).toBeNull()
+    const first = foldGuestMastery([], [right('Bayes Theorem', 'P')], new Date('2026-11-14T12:00:00Z'))
+    const then = foldGuestMastery(first, [wrong('Loss Ratio', 'CAS-5')], new Date('2026-11-15T12:00:00Z'))
+    expect(guestExamKey(first)).toBe('P')
+    expect(guestExamKey([...first, ...then])).toBe('CAS-5')
+  })
+
+  it('reads only the visitor\'s own records', () => {
+    const account = relabelForAccount(foldGuestMastery([], [right('Bayes Theorem', 'P')], at), 'user-1')
+    expect(guestExamKey(account)).toBeNull()
   })
 })

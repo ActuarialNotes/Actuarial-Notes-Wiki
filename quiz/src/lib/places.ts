@@ -37,7 +37,7 @@ export interface PlacePage {
   id: PlacePageId
   place: PlaceId
   label: string
-  /** Where the page is, when its address doesn't depend on the exam in focus. */
+  /** Where the page is. */
   to: string
 }
 

@@ -5,8 +5,6 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamStrip } from '@/components/ExamStrip'
-import { useExamFocus } from '@/hooks/useExamFocus'
-import { ALL_EXAMS } from '@/lib/examFocus'
 import { isExamInDevelopment } from '@/lib/examStatus'
 import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { groupExamVariants, variantRegion } from '@/lib/examVariants'
@@ -20,7 +18,6 @@ import { RESOURCES_ROUTE, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
 import {
   RESOURCE_FACETS,
-  type ResourceFacetSelection,
   RESOURCE_FACET_LABEL,
   bodyForExam,
   emptyResourceFacets,
@@ -186,19 +183,7 @@ export default function WikiResources() {
   )
   const examPages = useMemo(() => index.filter(i => i.category === 'exam').map(i => i.name), [index])
   const examCount = examPages.length
-  // With no exam in the address the shelf opens on the exam in focus
-  // (lib/examFocus.ts); `?exam=all` is the reader choosing every exam instead.
-  const { focus } = useExamFocus()
-  const allExams = searchParams.getAll('exam').includes(ALL_EXAMS)
-  const selection = useMemo(() => {
-    const read = resourceFacetsFromParams(searchParams)
-    const exam = new Set([...read.exam].filter(v => v !== ALL_EXAMS))
-    if (exam.size === 0 && !allExams && focus) exam.add(focus.readingsLabel)
-    return { ...read, exam }
-  }, [searchParams, allExams, focus])
-  /** What a filter change writes: the selection, keeping the choice of every exam. */
-  const facetParams = (next: ResourceFacetSelection, from: URLSearchParams) =>
-    resourceFacetsToParams(next.exam.size === 0 && focus && allExams ? { ...next, exam: new Set([ALL_EXAMS]) } : next, from)
+  const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
   const strips = useMemo(
     () => ({
       SOA: resourceStripExams(examPages, 'SOA'),
@@ -272,13 +257,13 @@ export default function WikiResources() {
   // A filter is the same page showing something else, so it replaces the
   // history entry rather than stacking one per tick.
   function toggle(facet: ResourceFacet, value: string) {
-    setSearchParams(facetParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
+    setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
   }
 
   // One exam at a time — every region of it, or one — or none. A vintage is
   // an edition of one exam's syllabus, so another exam starts at its own newest.
   function chooseExam(label: string | readonly string[] | null) {
-    const exam = new Set(label === null ? (focus ? [ALL_EXAMS] : []) : typeof label === 'string' ? [label] : label)
+    const exam = new Set(label === null ? [] : typeof label === 'string' ? [label] : label)
     const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
     setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
   }

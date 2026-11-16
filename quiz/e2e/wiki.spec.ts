@@ -1,4 +1,4 @@
-import { test, expect, withExamPicked } from './test'
+import { test, expect } from './test'
 
 // Loads the wiki from the build-time bundled markdown (virtual:wiki-content),
 // no network required, then drills into an exam study-guide page.
@@ -59,24 +59,30 @@ test.describe('wiki', () => {
   })
 
   test('walks back the way the reader came, into the quiz builder as it was left', async ({ page }) => {
-    // Exam P picked on the Quiz tab is the exam in focus, so Study Guides
-    // opens on its guide. The arrow there goes up to the exam list, and the
-    // browser's Back walks back the way the reader came: the guide, then the
-    // builder as it was left, not the list.
-    await withExamPicked(page)
+    // From the Quiz tab's Exam P builder, through Study Guides to the exam:
+    // the arrow names Study Guides and returns there, and the browser's Back
+    // walks on the same way — into the builder as it was left, not the list.
     await page.goto('/')
     await page.locator('button[data-tour="quiz-exam-p"]').click()
     await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
-    await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+P-1\+\(SOA\)$/)
-    await page.getByRole('link', { name: /All exams/ }).click()
+    await page.locator('a[data-tour="exam-p"]').click()
+    const back = page.getByRole('link', { name: 'Back to Study Guides' })
+    await back.click()
     await expect(page).toHaveURL(/\/wiki$/)
     await page.goBack()
-    await expect(page).toHaveURL(/\/wiki\/exam\//)
-    await page.goBack()
     await expect(page).toHaveURL(/\?topic=/)
-    await expect(page.getByRole('button', { name: 'Change exam', exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Change exam' })).toBeVisible()
     await page.goBack()
     await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+  })
+
+  test('folds the exams in development under one row per credential', async ({ page }) => {
+    await page.goto('/wiki')
+    await page.getByRole('radio', { name: 'CAS' }).click()
+    await expect(page.getByRole('link', { name: /Exam 5/ }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: /Exam 6U/ })).toHaveCount(0)
+    await page.getByTestId('in-development-ACAS').click()
+    await expect(page.getByRole('link', { name: /Exam 6U/ })).toBeVisible()
   })
 
   // Resources is the tab's second page: listed under Study Guides in the

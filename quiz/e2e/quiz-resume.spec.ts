@@ -1,4 +1,4 @@
-import { test, expect, withExamPicked, type Page } from './test'
+import { test, expect, type Page } from './test'
 
 // A quiz outlives its page (lib/quizResume.ts): leaving /quiz mid-way keeps the
 // session, a "Return to quiz" pill follows the reader around the app, and it
@@ -78,8 +78,6 @@ test.describe('quiz in progress', () => {
     const examP = page.locator('button[data-tour="quiz-exam-p"]')
     const changeExam = page.getByRole('button', { name: 'Change exam' })
     const start = page.locator('[data-tour="start-quiz"]')
-
-    await withExamPicked(page)
     await page.goto('/')
     await examP.click()
     await start.click()

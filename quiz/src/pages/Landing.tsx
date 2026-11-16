@@ -53,7 +53,6 @@ import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { ConceptGroupList } from '@/components/landing/ConceptGroupList'
 import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
-import { useExamFocus } from '@/hooks/useExamFocus'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
@@ -131,22 +130,7 @@ export default function Landing() {
   }
 
   // The exam list or one exam's setup screen, and the moves between them.
-  const { topic, openExam: openExamScreen, closeExam } = useQuizExamScreen()
-  // Picking an exam from the list is picking the exam in focus: every tab opens
-  // on it from then on (lib/examFocus.ts).
-  const { exams: focusable, picked: focusPicked, setFocus } = useExamFocus()
-  function openExam(value: string) {
-    const exam = focusable.find(e => e.bank === value)
-    // A visitor's answer to "Which exam are you studying?" takes them to
-    // Today, where that exam's first session is waiting (design review §5.3).
-    const firstPick = !user && !focusPicked && !!exam
-    if (exam) setFocus(exam.file)
-    if (firstPick) {
-      navigate('/dashboard')
-      return
-    }
-    openExamScreen(value)
-  }
+  const { topic, openExam, closeExam } = useQuizExamScreen()
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
@@ -546,8 +530,6 @@ export default function Landing() {
       <QuizTitleRow
         hasTopic={hasTopic}
         signedIn={!!user}
-        // A visitor who hasn't picked an exam is asked for one: the list is the answer.
-        title={focusPicked || focusable.length === 0 ? 'Practice' : 'Which exam are you studying?'}
         body={activeFilter}
         onBodyChange={handleSetFilter}
         concept={selectedConcept}

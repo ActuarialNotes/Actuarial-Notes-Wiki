@@ -254,7 +254,7 @@ export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadE
         <CardContent className="py-8 text-center space-y-3">
           <p className="text-sm font-medium">Which exam are you studying?</p>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            Pick one and today&apos;s session appears here.
+            Finish a quiz on it and today&apos;s session appears here.
           </p>
           <Button onClick={choose}>Choose an exam</Button>
         </CardContent>

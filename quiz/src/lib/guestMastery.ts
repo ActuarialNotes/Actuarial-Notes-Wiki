@@ -54,3 +54,17 @@ export function foldGuestMastery(
 export function relabelForAccount(records: readonly ConceptMasteryRecord[], userId: string): ConceptMasteryRecord[] {
   return records.filter(r => r.user_id === GUEST_ID).map(r => ({ ...r, user_id: userId }))
 }
+
+/**
+ * The exam a visitor is studying, as Today reads it: the one they last answered
+ * a question on, by its `exam_progress` key. Nothing is picked or stored for
+ * it; a visitor who has answered nothing has none.
+ */
+export function guestExamKey(records: readonly ConceptMasteryRecord[]): string | null {
+  let latest: ConceptMasteryRecord | null = null
+  for (const r of records) {
+    if (r.user_id !== GUEST_ID || !r.last_attempted_at) continue
+    if (!latest || r.last_attempted_at > (latest.last_attempted_at ?? '')) latest = r
+  }
+  return latest?.exam_id ?? null
+}

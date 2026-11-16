@@ -404,7 +404,7 @@ before touching that area**:
   writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
-  four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
+  four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus (built, then reverted), a next
   step at the end of every screen. Its §6 says which phases are built (all five, 0 to 4, are, each with what it left open) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
@@ -795,19 +795,11 @@ Other important `lib/` modules:
   and bar and the open objective's **Practice this objective**
   (`components/wiki/ObjectiveProgress.tsx`). Pure and tested; the flows are
   `e2e/next-steps.spec.ts`.
-- `examFocus.ts` — **the exam in focus** (design review Phase 2): the one exam the reader is
-  studying, picked once and opened on by every tab. It is stored as the exam page's file name
-  (`hooks/useExamFocus.ts`, localStorage `quiz.examFocus`; with nothing stored, the first exam
-  being studied), and every other name is derived from it (`FocusExam`: progress key, page id,
-  bank, readings label, status, bodies). `components/ExamSwitcher.tsx` is at the head of the
-  sidebar: the reader's exams, the other ready and beta exams of their body, then **All exams**;
-  a pick moves the current page to the same place for the new exam (`focusedPath`). The Quiz row
-  goes to `quizPath(focus)` and Study Guides to `guidePath(focus)`; Resources and the Store read
-  the focus when their address names no exam (`?exam=all` is every exam, `ALL_EXAMS`); the
-  Dashboard's chips follow it and set it; opening an exam from either exam list sets it. A new
-  surface that is about one exam reads `useExamFocus()` instead of keeping its own choice.
-  In-development exams are folded: per credential on the Study Guides list, and behind a **+N**
-  tile on `ExamStrip` (`folded`). Pure and tested; the flows are `e2e/exam-focus.spec.ts`.
+- **No exam in focus.** Design review Phase 2 stored one exam and opened every tab on it, with a
+  switcher at the head of the sidebar; that was taken out on 2026-11-16 at the maintainer's
+  request (`docs/design-review.md` §6). Each surface picks its exam as before. What stays from
+  that phase is the folding of in-development exams: per credential on the Study Guides list,
+  and behind a **+N** tile on `ExamStrip` (`folded`).
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
   **Exams P and FM**, ready again since 2026-10-30, and **MAS-I**, the **three DISCs** and **Exam 7**, since 2026-10-31 — and **MAS-II**, the first beta exam to pass all eight, the same day, and **Exam 9** and **Exam 5** after it: P, FM, MAS-I, the three DISCs and Exam 7 went
@@ -1253,8 +1245,8 @@ Other important `lib/` modules:
   they are handed to the account **once** and only for concepts it has no record of
   (`takeGuestMastery` → `adoptGuestMastery` in `stores/quizStore.ts`, `ignoreDuplicates`), so an
   account's own history is never overwritten; a pending guest quiz marked `guestMasteryKept`
-  is not applied a second time. A visitor's exam is the exam in focus, and the date they set
-  for it is kept in `quiz.guestExamRows` (`ExamProgressContext`). Pure and tested.
+  is not applied a second time. A visitor's exam on Today is the one they last answered a question on
+  (`guestExamKey`), and the date they set for it is kept in `quiz.guestExamRows` (`ExamProgressContext`). Pure and tested.
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
   it on a given route: a page with a floating search bar carries the avatar button
   (`components/MobileNavButton.tsx`, the way into the drawer now that the places are the bottom

@@ -532,37 +532,23 @@ Left from Phase 1:
   stand. The exam page's title was still its menu, and the concept page's too, until the
   underline rule of Phase 4 (§5.10) gave them a **More** button.
 
-**Phase 2 was built on 2026-11-15:**
+**Phase 2 was built on 2026-11-15, and its exam in focus was taken out on 2026-11-16.**
+The maintainer found the switcher's behaviour hard to follow and asked for it reverted, so
+the stored exam, the switcher at the head of the sidebar and every tab opening on that exam
+are gone (`lib/examFocus.ts`, `hooks/useExamFocus.ts` and `components/ExamSwitcher.tsx` are
+deleted). Each tab picks its exam as it did before: the Quiz row and Learn open on their exam
+lists (Learn on wherever it was left this visit), Resources and the Store show every exam
+until one is chosen on the strip, and the Dashboard's chips are its own. F2 is open again.
 
-- **The exam in focus** is one stored choice (`lib/examFocus.ts`, `hooks/useExamFocus.ts`):
-  the exam page's file name, from which its progress key, question bank and readings label
-  are derived. With nothing stored it is the first exam the reader is studying; a visitor
-  who hasn't picked has none.
-- **The switcher** (`components/ExamSwitcher.tsx`) is at the head of the sidebar, and of the
-  drawer on a phone: the exam's logo and name, and a menu of the reader's exams, the other
-  ready and beta exams of their body, and **All exams**. Picking one moves the page the
-  reader is on to the same place for that exam.
-- **Every tab opens on it.** The Quiz row goes to the exam's builder and Study Guides to its
-  guide (the back arrow on either is the exam list). Resources and the Store open narrowed
-  to it, with `?exam=all` the reader's choice of every exam. The Dashboard shows it when it
-  is one of the reader's exams, and a chip pressed there changes it. Opening an exam from
-  either exam list picks it.
+What is left of Phase 2:
+
 - **In-development exams are folded**: one "N in development" row per credential on the
   Study Guides list, and a **+N** tile at the end of the exam strips on Resources and the
   Store.
-- **A visitor's first screen** is the Quiz tab's exam list under "Which exam are you
-  studying?". Their answer opens that exam's builder; it goes to Today once Today is open to
-  visitors (Phase 3).
-
-Left from Phase 2:
-
-- The focus is kept in the browser. Storing it with the account needs a column and a
-  migration, and until then a second device starts on the first exam being studied.
-- The exam lists and strips are still there, behind the back arrow and **All exams**. They
-  are no longer where a tab opens, but they are not removed.
-- The exam's accent does not scope the whole app. Every chosen control would take the
-  exam's colour, which wants a review of each screen in both themes.
-- Opening an exam's page from a link or a search doesn't change the focus; only a pick does.
+- **A visitor's Today** (Phase 3) no longer has a picked exam to show. It shows the exam the
+  visitor last answered a question on, read off the browser's own record (`guestExamKey` in
+  `lib/guestMastery.ts`); a visitor who has answered nothing is asked which exam they are
+  studying and sent to the exam list.
 
 **Phase 3 was built on 2026-11-15:**
 
@@ -578,7 +564,7 @@ Left from Phase 2:
   quiz, a battle, the Concept Craft board, a workflow's board, a project attempt and the
   sign-in screens, and every overlay (the concept popup, the PDF reader, focus mode) is drawn
   over it. The hamburger is gone: the top corner holds the reader's **avatar**, which opens
-  the exam switcher, every page, and the You menu.
+  every page and the You menu.
 - **Flashcards is a page of Practice.** A collected card lights up Practice, in the sidebar
   and in the bar.
 - **The Store and Community are behind the avatar**: rows of the **You** menu at the

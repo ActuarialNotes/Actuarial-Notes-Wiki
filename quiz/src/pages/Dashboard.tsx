@@ -1,4 +1,5 @@
-import { useExamFocus } from '@/hooks/useExamFocus'
+import { bankLabelFor } from '@/lib/examIds'
+import { guestExamKey } from '@/lib/guestMastery'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
@@ -239,23 +240,19 @@ export default function Dashboard() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [profileOpen])
 
-  // The exam in focus (lib/examFocus.ts) is the one shown, when it is one the
-  // reader is studying: on arrival, and when the switcher changes it. A chip
-  // pressed here changes the focus in turn.
-  const { focus, setFocus } = useExamFocus()
-  const focusFile = focus?.file
-
   // All exams that are marked in_progress and have a known syllabus. A
-  // visitor has no account to mark one on: theirs is the exam they picked,
-  // the one in focus, and Today works on it from the browser's own record.
+  // visitor has no account to mark one on: theirs is the exam they last
+  // answered a question on, read off the browser's own record
+  // (`guestExamKey`, lib/guestMastery.ts).
+  const guestExam = useMemo(() => (user ? null : guestExamKey(masteryRecords)), [user, masteryRecords])
   const inProgressSyllabi = useMemo(
     () => user
       ? syllabi.filter(s => {
           const key = wikiExamIdToProgressKey(s.examId)
           return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
         })
-      : syllabi.filter(s => !!focusFile && s.fileName === focusFile),
-    [user, syllabi, examProgress, examVariants, focusFile],
+      : syllabi.filter(s => !!guestExam && wikiExamIdToProgressKey(s.examId) === guestExam && !!bankLabelFor(s)).slice(0, 1),
+    [user, syllabi, examProgress, examVariants, guestExam],
   )
 
   // Exams the learner has marked in progress that this app has no syllabus page
@@ -283,12 +280,6 @@ export default function Dashboard() {
       }
     } catch { /* ignore */ }
   }, [inProgressSyllabi])
-
-  useEffect(() => {
-    if (!focusFile) return
-    const idx = inProgressSyllabi.findIndex(s => s.fileName === focusFile)
-    if (idx >= 0) setActiveExamIdx(idx)
-  }, [focusFile, inProgressSyllabi])
 
   // The daily email's Listen button links to /dashboard?episode=<exam key>:
   // show that exam, and ask its Play button to open the episode once it is
@@ -745,7 +736,7 @@ export default function Dashboard() {
                     key={s.examId}
                     type="button"
                     data-exam-tab-active={active}
-                    onClick={() => { setActiveExamIdx(i); if (s.fileName) setFocus(s.fileName) }}
+                    onClick={() => setActiveExamIdx(i)}
                     aria-label={s.examLabel}
                     aria-pressed={active}
                     title={s.examLabel}

@@ -3,12 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, CalendarCheck, Play, Wrench } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useCollectGlow } from '@/hooks/useCollectGlow'
-import { useExamFocus } from '@/hooks/useExamFocus'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { INK_MENU } from '@/components/ui/ink'
-import { guidePath, quizPath } from '@/lib/examFocus'
 import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
 import { hidesBottomBar, pageOf, placeOf, placePages, PLACES, type PlaceId, type PlacePage } from '@/lib/places'
 import { cn } from '@/lib/utils'
@@ -46,7 +44,6 @@ export function BottomBar() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { focus } = useExamFocus()
   const workflows = useWorkflowsAccess()
   const { total: quizLeft, allComplete: planDone } = useTodayQuizCounts()
   // The deck is a page of Practice, so a collected card lights Practice up.
@@ -91,13 +88,11 @@ export function BottomBar() {
     tools: TOOLS_ENABLED && TOOLS_STORE_NAV_ENABLED,
     workflows,
   }
-  const builder = quizPath(focus)
-  /** A page's address: the exam in focus decides where the quiz builder is. */
-  const pageTo = (p: PlacePage) => (p.id === 'quiz' ? builder : p.to)
+  const pageTo = (p: PlacePage) => p.to
   const placeTo: Record<PlaceId, string> = {
     today: '/dashboard',
-    learn: lastWikiPath(guidePath(focus)),
-    practice: builder,
+    learn: lastWikiPath('/wiki'),
+    practice: '/',
     apply: placePages('apply', access)[0]?.to ?? '/project',
   }
   const menuPages = menu ? placePages(menu, access) : []

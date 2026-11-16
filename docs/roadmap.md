@@ -428,7 +428,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   to the tool that computes it. `docs/design-review.md` has the 19 findings and the proposal:
   four places in the order of the path, one exam in focus, a next step on every screen. Five
   phases. D-DR1 to D-DR5 are decided (its §7): the places are Today, Learn, Practice and Apply,
-  with *practice* spelled with a c everywhere. Phase 0 (repairs), Phase 1 (the next step), Phase 2 (one exam) and Phase 3 (four places: the sidebar regrouped, the phone's bottom bar, the Store and Community behind the avatar, Today open to visitors) and Phase 4 (the frame: two columns from one left edge, one page header, an underline only on a link, the quiz's one-row header with a More menu, the avatar in the top-right corner) are built. What each phase left open is listed in its §6. Mock-ups: `docs/design-review-mockups.html`.
+  with *practice* spelled with a c everywhere. Phase 0 (repairs), Phase 1 (the next step), Phase 2 (one exam; its exam in focus and switcher were reverted on 2026-11-16, the folded in-development exams kept) and Phase 3 (four places: the sidebar regrouped, the phone's bottom bar, the Store and Community behind the avatar, Today open to visitors) and Phase 4 (the frame: two columns from one left edge, one page header, an underline only on a link, the quiz's one-row header with a More menu, the avatar in the top-right corner) are built. What each phase left open is listed in its §6. Mock-ups: `docs/design-review-mockups.html`.
 
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't

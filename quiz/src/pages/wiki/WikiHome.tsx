@@ -22,7 +22,6 @@ import { StickyGroupHeading, TrackHeading } from '@/components/TrackHeading'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus, type ExamStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { useExamFocusStore } from '@/hooks/useExamFocus'
 import { ChevronDown } from 'lucide-react'
 
 function examNameToTrackKey(name: string): string {
@@ -120,8 +119,6 @@ function ChunkedList({ chunks, cardModels }: { chunks: ExamChunk[]; cardModels: 
 
 function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string }) {
   const { exam, examId, topic, isInProgress, isCompleted, targetDate, contentStatus, readiness, showReadiness } = model
-  // Opening an exam from the list makes it the exam in focus (lib/examFocus.ts).
-  const setFocus = useExamFocusStore(s => s.setFocus)
 
   // The Quiz tab draws the same exam with the same row (components/ExamRow.tsx);
   // only the facts differ. Here they are the reader's own: when the exam is sat,
@@ -135,7 +132,6 @@ function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string
       topic={topic}
       status={contentStatus}
       to={wikiRoute({ kind: 'exam', name: exam.name })}
-      onClick={() => setFocus(exam.name)}
       tourId={tourId}
       meta={isInProgress && (
         <ExamRowMeta

@@ -62,39 +62,24 @@ test.describe('on a phone', () => {
 
     await page.goto('/wiki')
     await page.getByRole('button', { name: 'Open menu' }).first().click()
-    await expect(page.getByTestId('exam-switcher')).toBeVisible()
     await page.getByTestId('you-menu').click()
     await expect(page.getByRole('menu', { name: 'You' }).getByRole('menuitem', { name: 'Store' })).toBeVisible()
   })
 })
 
 test.describe('Today, signed out', () => {
-  test('a visitor who has picked no exam is asked for one', async ({ page }) => {
+  test('a visitor who has answered nothing is asked for an exam', async ({ page }) => {
     await page.goto('/dashboard')
     await expect(page.getByText('Which exam are you studying?')).toBeVisible()
     await page.getByRole('main').getByRole('button', { name: 'Choose an exam' }).click()
     await expect(page).toHaveURL(/\/$/)
   })
 
-  test('the first exam picked opens Today, on that exam, from the browser\'s record', async ({ page }) => {
-    await page.goto('/')
-    await page.locator('button[data-tour="quiz-exam-p"]').click()
-    await expect(page).toHaveURL(/\/dashboard$/)
-    await expect(page.getByRole('heading', { name: "Today's session" })).toBeVisible()
-    await expect(page.getByText('Your progress is kept in this browser.')).toBeVisible()
-    // Nothing answered yet: the first step stands where the readiness wheel will be.
-    await expect(page.getByTestId('today-first-step')).toBeVisible()
-
-    // The exam is picked now, so the exam list opens its builder as before.
+  test('a quiz finished signed out moves the visitor\'s levels, and Today shows that exam', async ({ page }) => {
+    // Picking an exam opens its builder; nothing is stored for the pick.
     await page.goto('/')
     await page.locator('button[data-tour="quiz-exam-p"]').click()
     await expect(page).toHaveURL(/\/\?topic=/)
-  })
-
-  test('a quiz finished signed out moves the visitor\'s levels, and Today shows them', async ({ page }) => {
-    await page.goto('/')
-    await page.locator('button[data-tour="quiz-exam-p"]').click()
-    await expect(page).toHaveURL(/\/dashboard$/)
 
     await page.goto('/quiz?ids=p-004')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
@@ -115,6 +100,7 @@ test.describe('Today, signed out', () => {
 
     await page.goto('/dashboard')
     await expect(page.getByRole('heading', { name: "Today's session" })).toBeVisible()
+    await expect(page.getByText('Your progress is kept in this browser.')).toBeVisible()
     await expect(page.getByTestId('today-first-step')).toHaveCount(0)
   })
 })

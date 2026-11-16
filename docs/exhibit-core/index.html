@@ -140,6 +140,20 @@ td:first-child{font-weight:600;min-width:112px}
 .sb span{margin-left:auto;font:600 12px var(--sans);color:var(--ink2)}
 .sb .bdg{background:#E8730C;color:#fff;border-radius:999px;padding:1px 6px;font-size:10px}
 .wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font:600 11px/1.2 var(--sans);color:var(--ink3);text-align:center;flex:none}.wk div{padding:5px 0;border-radius:6px}.wk b{display:block;font-size:14px;color:var(--ink)}.wk em{display:block;font-style:normal;font-size:11px;color:var(--good);margin-top:2px}.wk .now{background:var(--accent-soft);outline:1.5px solid var(--accent)}.wk .now em{color:var(--ink)}
+.ghost{display:block;height:10px;border-radius:5px;background:var(--line)}
+.lock{filter:blur(1.2px);opacity:.75}
+.crow.cur{background:var(--accent-soft);outline:1.5px solid var(--accent);border-radius:6px;font-weight:600;margin:0 -8px;padding:0 8px}
+.crow.read u{background:var(--ink3)}
+.dimd{opacity:.4}
+.stem mark,.rd mark{background:var(--accent-soft);color:inherit;outline:1.5px solid var(--accent);border-radius:4px;padding:0 3px}
+.pane{background:var(--surface);border-top:1px solid var(--line);border-radius:14px 14px 0 0;display:flex;flex-direction:column;min-height:0;flex:none}
+.handle{height:20px;display:flex;align-items:center;justify-content:center;flex:none}.handle u{width:36px;height:4px;border-radius:2px;background:var(--line)}
+.pane .hd{display:flex;align-items:center;padding:0 4px 0 16px;flex:none}.pane .hd b{font:600 21px/1.15 var(--serif);flex:1;min-width:0}
+.rd{padding:6px 16px 10px;flex:1;overflow:hidden;display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.55}.rd p{margin:0}
+.wbar{display:flex;gap:3px;height:4px;flex:none;padding:0}.wbar u{flex:var(--n,1);background:var(--line)}.wbar u.on{background:var(--ink)}
+.nav3{display:grid;grid-template-columns:1fr auto 1fr;flex:none;border-top:1px solid var(--line)}.nav3 span{display:flex;align-items:center;justify-content:center;min-height:52px;font:600 14px var(--sans);padding:0 8px;white-space:nowrap}
+.nav3 .c{font-size:12px;color:var(--ink2)}
+.stk{display:flex;align-items:center;min-height:44px;padding:0 16px;border-bottom:1px solid var(--line);font:600 14px var(--sans);color:var(--ink2);flex:none}.stk span{margin-left:auto}
 .sb .pill{background:var(--ink);color:var(--surface);border-radius:999px;padding:2px 7px;font-size:10px}
 </style>
 
@@ -152,7 +166,7 @@ td:first-child{font-weight:600;min-width:112px}
 <p class="note">The redesign branch (<code>claude/design-review-docs-phase-1-e57itt</code>) already has part of this: the four places, the bottom bar, the exam switcher, a visitor's Today, folded development exams and the one-row quiz header. The <a href="#build">build plan</a> says what is on the branch and what is left.</p>
 
 <nav class="toc" aria-label="Contents">
-<a href="#how">How it was reviewed</a><a href="#fix">What the draft got wrong</a><a href="#frame">The frame</a><a href="#today">Today</a><a href="#exams">Exams</a><a href="#resources">Resources</a><a href="#quiz">Quiz</a><a href="#flashcards">Flashcards</a><a href="#projects">Projects</a><a href="#you">Settings</a><a href="#build">Build plan</a><a href="#decide">Decided</a>
+<a href="#how">How it was reviewed</a><a href="#fix">What the draft got wrong</a><a href="#frame">The frame</a><a href="#today">Today</a><a href="#reader">The reader</a><a href="#exams">Exams</a><a href="#resources">Resources</a><a href="#quiz">Quiz</a><a href="#flashcards">Flashcards</a><a href="#projects">Projects</a><a href="#you">Settings</a><a href="#build">Build plan</a><a href="#decide">Decided</a>
 </nav>
 
 <h2 id="how">How it was reviewed</h2>
@@ -248,6 +262,8 @@ td:first-child{font-weight:600;min-width:112px}
 <li><b>One line under the header</b> carries the level, the streak and the daily goal, and opens the level, quests and league as it does today. Reminders is beside it. Export and help move to Settings; adding an exam is in the switcher.</li>
 <li><b>The session card:</b> its size in questions, points and minutes, the readiness wheel, then numbered steps with a 44 px row per concept showing where it stands now.</li>
 <li><b>The week stays on Today,</b> as seven columns that say something: the date, the questions planned, a tick on a day done. Today is in the exam's colour.</li>
+<li><b>Every concept row opens the reader</b> on that concept and walks the list, as today.</li>
+<li><b>Without Pro there is no session list:</b> the wheel, then Today's Study Plan occluded. A tap on it asks for Pro.</li>
 <li><b>Five states:</b> Pro, without Pro, a visitor, part-way, done.</li>
 </ul></div>
 </div>
@@ -264,26 +280,27 @@ td:first-child{font-weight:600;min-width:112px}
 <p class="grp"><i>2</i>Learn 3 new concepts</p></div></div>
 <div class="foot"><span class="pri">Start session</span></div>
 <div class="tabs"><div class="on">Today</div><div>Learn</div><div>Practice</div><div>Apply</div></div></div></div>
-<p class="ch">Three header controls, one line for the level, streak and goal, the week, the card, the slot. The list scrolls behind the slot. Time comes from points on an exam paced by the point.</p></figure>
+<p class="ch">Three header controls, one line for the level, streak and goal, the week, the card, the slot. The list scrolls behind the slot. A tap on a concept opens it in the reader, drawn in the next section.</p></figure>
 
 <figure><figcaption><span class="tag new">Exhibit</span> Without Pro</figcaption>
 <div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">A</span></div>
-<div class="body"><div class="line1"><span><b>Level 7</b> · 6-day streak · 20 of 30 XP ›</span><span class="grow"></span><span>Reminders</span></div><div class="line1"><span><b>164 days</b> to Exam 5</span></div>
-<div class="card"><div class="hd2"><div class="grow"><div class="big">2<small>to fix</small></div><p class="mnote" style="margin-top:6px">3 points · about 7 min</p></div><div class="wheel"><svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="2.2 1.1"/><circle cx="52" cy="52" r="42" fill="none" stroke="var(--good)" stroke-width="16" stroke-dasharray="2.2 1.1" opacity=".75" style="clip-path:polygon(50% 50%,50% 0,100% 0,100% 100%,62% 100%)"/></svg><div>34%<small>ready</small></div></div></div>
-<p class="grp"><i>1</i>Fix 2 mistakes</p><div class="crow"><u></u>Loss Ratio<span>Level 1</span></div><div class="crow"><u></u>Earned Premium<span class="fg">Forgotten</span></div></div>
-<div class="card lcard"><div class="srow"><div class="grow">Build a quiz<small>486 questions</small></div><span>›</span></div><div class="srow"><div class="grow" style="color:var(--ink2)">Today's Study Plan<small>What to learn and review each day</small></div><span class="pro">Pro</span></div></div></div>
-<div class="foot"><span class="pri">Fix 2 now</span></div>
+<div class="body"><div class="line1"><span><b>Level 7</b> · 6-day streak · 20 of 30 XP ›</span><span class="grow"></span><span>Reminders</span></div><div class="line1"><span><b>164 days</b> to Exam 5</span></div><div class="card" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-block:12px"><div class="wheel" style="width:108px;height:108px"><svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="2.2 1.1"/><circle cx="52" cy="52" r="42" fill="none" stroke="var(--good)" stroke-width="16" stroke-dasharray="2.2 1.1" opacity=".75" style="clip-path:polygon(50% 50%,50% 0,100% 0,100% 100%,62% 100%)"/></svg><div style="font-size:26px">34%<small style="font-size:12px">ready</small></div></div><span class="mnote">Exam Readiness ›</span></div><div class="card"><div style="display:flex;align-items:center"><b class="grow" style="font-size:15px">Today's Study Plan</b><span class="pro">Pro</span></div><div class="lock" aria-hidden="true"><p class="grp"><i>1</i><span class="ghost" style="width:120px"></span></p><div class="crow"><u></u><span class="ghost" style="width:110px;margin:0"></span></div><div class="crow"><u></u><span class="ghost" style="width:150px;margin:0"></span></div><p class="grp"><i>2</i><span class="ghost" style="width:96px"></span></p></div></div>
+<div class="card lcard"><div class="srow"><div class="grow">Build a quiz<small>486 questions</small></div><span>›</span></div></div></div>
 <div class="tabs"><div class="on">Today</div><div>Learn</div><div>Practice</div><div>Apply</div></div></div></div>
-<p class="ch">The session is what this reader has: the mistakes. With none, the slot reads Build a quiz. The week is the plan's, so it is not shown; the plan is locked, as text.</p></figure>
+<p class="ch">The wheel alone, then the plan drawn as a stand-in: the card's shape with nothing of the reader's in it. No session list and no slot. Building a quiz is the row under it.</p></figure>
+
+<figure><figcaption><span class="tag new">Exhibit</span> Without Pro, the plan tapped</figcaption>
+<div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">A</span></div>
+<div class="body"><div class="line1"><span><b>Level 7</b> · 6-day streak · 20 of 30 XP ›</span><span class="grow"></span><span>Reminders</span></div><div class="line1"><span><b>164 days</b> to Exam 5</span></div><div class="card" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-block:12px"><div class="wheel" style="width:108px;height:108px"><svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="2.2 1.1"/><circle cx="52" cy="52" r="42" fill="none" stroke="var(--good)" stroke-width="16" stroke-dasharray="2.2 1.1" opacity=".75" style="clip-path:polygon(50% 50%,50% 0,100% 0,100% 100%,62% 100%)"/></svg><div style="font-size:26px">34%<small style="font-size:12px">ready</small></div></div><span class="mnote">Exam Readiness ›</span></div><div class="card"><div style="display:flex;align-items:center"><b class="grow" style="font-size:15px">Today's Study Plan</b><span class="pro">Pro</span></div><div class="lock" aria-hidden="true"><p class="grp"><i>1</i><span class="ghost" style="width:120px"></span></p><div class="crow"><u></u><span class="ghost" style="width:110px;margin:0"></span></div><div class="crow"><u></u><span class="ghost" style="width:150px;margin:0"></span></div><p class="grp"><i>2</i><span class="ghost" style="width:96px"></span></p></div></div></div><div class="tabs"><div class="on">Today</div><div>Learn</div><div>Practice</div><div>Apply</div></div></div>
+<div class="dim"></div><div class="sheet"><div class="sht">Today's Study Plan</div><p class="stem">A plan for each day until your exam: what to learn, what to review, and about how long it takes.</p><p class="mnote">Part of Pro, with Analytics, Projects and the daily podcast.</p><span class="pri">See Pro</span><span class="pri quiet">Not now</span></div></div>
+<p class="ch">A tap anywhere on the occluded plan asks once, in a sheet. See Pro is the one filled button; Not now is a target of the same size.</p></figure>
 
 <figure><figcaption><span class="tag new">Exhibit</span> A visitor</figcaption>
 <div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">◦</span></div>
-<div class="body"><div class="card"><div class="hd2"><div class="grow"><div class="big">1<small>to fix</small></div><p class="mnote" style="margin-top:6px">From the 3 questions answered in this browser</p></div><div class="wheel"><svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="2.2 1.1"/></svg><div>1%<small>ready</small></div></div></div>
-<p class="grp"><i>1</i>Fix 1 mistake</p><div class="crow"><u></u>Loss Ratio<span>New</span></div></div>
+<div class="body"><div class="line1"><span>Kept in this browser · 3 questions answered</span></div><div class="card" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-block:12px"><div class="wheel" style="width:108px;height:108px"><svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="2.2 1.1"/></svg><div style="font-size:26px">1%<small style="font-size:12px">ready</small></div></div><span class="mnote">Exam Readiness ›</span></div><div class="card"><div style="display:flex;align-items:center"><b class="grow" style="font-size:15px">Today's Study Plan</b><span class="pro">Pro</span></div><div class="lock" aria-hidden="true"><p class="grp"><i>1</i><span class="ghost" style="width:120px"></span></p><div class="crow"><u></u><span class="ghost" style="width:110px;margin:0"></span></div><div class="crow"><u></u><span class="ghost" style="width:150px;margin:0"></span></div><p class="grp"><i>2</i><span class="ghost" style="width:96px"></span></p></div></div>
 <div class="card lcard"><div class="srow"><div class="grow">Build a quiz<small>486 questions</small></div><span>›</span></div><div class="srow"><div class="grow">Create an account<small>Keeps this on every device</small></div><span>›</span></div></div></div>
-<div class="foot"><span class="pri">Fix 1 now</span></div>
 <div class="tabs"><div class="on">Today</div><div>Learn</div><div>Practice</div><div>Apply</div></div></div></div>
-<p class="ch">No wall. The same card, from the browser's record. A first visit with no record asks one question, "Which exam are you studying?", and its slot starts a five-question quiz.</p></figure>
+<p class="ch">No wall. The same page from the browser's record, with one row offering an account. A first visit with no record asks one question, "Which exam are you studying?".</p></figure>
 
 <figure><figcaption><span class="tag new">Exhibit</span> Done</figcaption>
 <div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">A</span></div>
@@ -293,6 +310,71 @@ td:first-child{font-weight:600;min-width:112px}
 <div class="card lcard"><div class="srow"><div class="grow">Listen to today's plan</div><span>9 min ›</span></div><div class="srow"><div class="grow">Analytics</div><span>›</span></div></div></div>
 <div class="tabs"><div class="on">Today</div><div>Learn</div><div>Practice</div><div>Apply</div></div></div></div>
 <p class="ch">A finished list and tomorrow's size. No slot, because there is nothing to press. Part-way, the slot reads Continue · 8 left and answered rows are ticked.</p></figure>
+</div></div>
+
+<div class="col">
+<!-- ============ READER ============ -->
+<h2 id="reader">The reader</h2>
+<p>The pane a concept or a resource opens in, from Today's plan, an exam's objectives, a question, a search result or a link on another page. It is the app's best mechanism, and the redesign keeps it whole.</p>
+<div class="two">
+<div><p class="lbl">Kept exactly as built</p><ul>
+<li><b>The page above scrolls to what is being read,</b> marks it, and dims the rest: a row of Today's plan, or the words in an objective.</li>
+<li><b>Previous and Next walk the list on screen,</b> and each step scrolls and marks the page above again. Arrow keys do the same.</li>
+<li><b>The pane takes the lower half,</b> so the marked row stays in view. The handle drags it taller.</li>
+<li><b>A link followed inside the pane stacks a page</b> on top; the pages behind fold to title bars and keep their scroll.</li>
+<li><b>The progress bar is cut into the syllabus's objectives</b> and can be dragged. The walk's name sits between Previous and Next.</li>
+<li><b>A resource opens in the same pane.</b> There is no second reader.</li>
+</ul></div>
+<div><p class="lbl">Changed</p><ul>
+<li><b>The title is a title.</b> Today it is underlined and opens the action menu; that moves to a More button.</li>
+<li><b>Three controls:</b> Listen, More and Close, each 44 px. The figure toggle and full screen move into More.</li>
+<li><b>The level is beside the title,</b> as pips with its word.</li>
+<li><b>A row already read keeps a filled dot</b> in the list above, so the walk shows how far it has gone.</li>
+<li><b>The page ends in its next step:</b> a Practice row with the question count, and the tool where one teaches the method.</li>
+<li><b>The last concept's Next reads Start session</b> when the walk is Today's plan.</li>
+<li><b>On a desktop</b> the pane is the right half and the text is capped at 720 px.</li>
+</ul></div>
+</div>
+</div>
+
+<div class="wide"><div class="mocks">
+<figure><figcaption><span class="tag live">Live</span> From Today's plan</figcaption><img class="shot" src="shots/reader.png" alt="The reader on main, opened from Today: the plan above with the Probability row outlined and the rest dimmed, and the Probability page in the lower half with Previous and Next."></figure>
+
+<figure><figcaption><span class="tag live">Live</span> From an exam's objective</figcaption><img class="shot" src="shots/reader2.png" alt="The reader on main, opened from an exam page: the word Probability outlined in the objective's sentence above, the rest of the page blurred, and the Probability page in the lower half."></figure>
+
+<figure><figcaption><span class="tag new">Exhibit</span> From Today's plan</figcaption>
+<div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">A</span></div>
+<div class="body" style="flex:1;gap:0;padding-bottom:0"><div class="card" style="flex:1;border-radius:14px 14px 0 0;padding-top:4px"><p class="grp dimd"><i>2</i>Learn 3 new concepts</p><div class="crow read dimd"><u></u>Exposure Base<span>New</span></div><div class="crow cur"><u></u>Pure Premium<span>New</span></div><div class="crow dimd"><u></u>On-Level Premium<span>New</span></div></div></div>
+<div class="pane" style="height:56%"><div class="handle"><u></u></div><div class="hd"><b>Pure Premium</b><span class="ib">♪</span><span class="ib">⋯</span><span class="ib">✕</span></div>
+<div class="rd"><span class="mnote"><span class="pips"><u></u><u></u><u></u></span> New · Exam 5</span><p>A <strong>Pure Premium</strong> is the average loss per unit of exposure: the part of a rate that pays for claims, before expenses and profit.</p><div class="fbox">Pure premium = Losses ÷ Exposures</div><p>It is also the product of how often claims happen and how large they are.</p></div>
+<div class="wbar"><u class="on" style="--n:2"></u><u style="--n:3"></u></div><div class="nav3"><span>‹ Previous</span><span class="c">Today's Study Plan ⌄</span><span>Next ›</span></div></div></div></div>
+<p class="ch">The row being read is marked and scrolled into view; the one before it has its dot filled. The bar is cut at the plan's steps.</p></figure>
+
+<figure><figcaption><span class="tag new">Exhibit</span> From an objective</figcaption>
+<div class="ph"><div class="scr"><div class="top" style="padding-left:4px"><span class="ib">‹</span><b>Exam 5</b><span class="grow"></span><span class="ib">⌕</span><span class="ib">⋯</span></div>
+<div class="body" style="flex:1"><div class="dimd"><b style="font-size:17px">B. Ratemaking: methods</b><p class="sub" style="margin-top:2px">23–30% of the exam · 12 of 31</p></div>
+<p class="stem"><span class="dimd">B1. Calculate an overall rate level indication using the</span> <mark>pure premium method</mark> <span class="dimd">and the <u>loss ratio method</u>.</span></p></div>
+<div class="pane" style="height:56%"><div class="handle"><u></u></div><div class="hd"><b>Pure Premium Method</b><span class="ib">♪</span><span class="ib">⋯</span><span class="ib">✕</span></div>
+<div class="rd"><span class="mnote"><span class="pips"><u class="on"></u><u></u><u></u></span> Level 1 · Exam 5</span><p>The <strong>Pure Premium Method</strong> is the ratemaking method that builds an indicated rate from the expected loss per exposure, loaded for expenses and profit.</p><div class="fbox">Rate = (Pure premium + Fixed expense) ÷ (1 − V − Q)</div></div>
+<div class="wbar"><u class="on" style="--n:19"></u><u class="on" style="--n:6"></u><u style="--n:25"></u><u style="--n:28"></u></div><div class="nav3"><span>‹ Previous</span><span class="c">Entire syllabus ⌄</span><span>Next ›</span></div></div></div></div>
+<p class="ch">The words in the syllabus's own sentence are marked. Next moves the mark to "loss ratio method" and scrolls the page above to it.</p></figure>
+
+<figure><figcaption><span class="tag new">Exhibit</span> A link followed</figcaption>
+<div class="ph"><div class="scr"><div class="top"><span class="tile">5</span><b>Exam 5 ▾</b><span class="grow"></span><span class="ib">⌕</span><span class="av">A</span></div>
+<div class="body" style="flex:1;gap:0;padding-bottom:0"><div class="card" style="flex:1;border-radius:14px 14px 0 0;padding-top:4px"><div class="crow cur" style="margin-top:8px"><u></u>Pure Premium<span>New</span></div></div></div>
+<div class="pane" style="height:72%"><div class="handle"><u></u></div><div class="stk">Pure Premium<span>⌄</span></div><div class="stk">Frequency<span>⌄</span></div><div class="hd" style="padding-top:6px"><b>Exposure</b><span class="ib">⋯</span><span class="ib">✕</span></div>
+<div class="rd"><p>An <strong>Exposure</strong> is the basic unit of risk that underlies the premium.</p><p>Four measures are used: written, earned, unearned and in-force.</p><div class="card lcard" style="background:var(--paper)"><div class="srow"><div class="grow">Practice</div><span>14 questions ›</span></div></div></div>
+<div class="wbar"><u class="on" style="--n:2"></u><u style="--n:3"></u></div><div class="nav3"><span>‹ Previous</span><span class="c">Today's Study Plan ⌄</span><span>Next ›</span></div></div></div></div>
+<p class="ch">Two links deep. The pages behind are 44 px title bars that reopen where they were left. The walk below still belongs to the plan.</p></figure>
+
+<figure><figcaption><span class="tag new">Exhibit</span> A resource</figcaption>
+<div class="ph"><div class="scr"><div class="top" style="padding-left:4px"><span class="ib">‹</span><b>Exam 5</b><span class="grow"></span><span class="ib">⌕</span><span class="ib">⋯</span></div>
+<div class="body" style="flex:1"><p class="lbl dimd" style="margin:0">Readings</p><div class="crow cur" style="min-height:52px"><span class="cov" style="width:30px;height:40px;margin:0"></span>Basic Ratemaking<span>ch. 5, 8</span></div></div>
+<div class="pane" style="height:66%"><div class="handle"><u></u></div><div class="hd"><b>Basic Ratemaking</b><span class="ib">⋯</span><span class="ib">✕</span></div>
+<div class="rd"><div class="hd2"><span class="cov" style="width:54px;height:72px"></span><div class="grow"><p class="sub">Werner &amp; Modlin · 2016 · 5th ed.</p><p class="sub" style="color:var(--good);margin-top:4px">✓ Fact checked</p></div></div>
+<div class="srow" style="border-top:0"><span class="et" style="margin:0">5</span><div class="grow">Exam 5</div><span>ch. 1–16</span></div><div class="srow"><div class="grow">5. Losses and LAE</div><span>›</span></div><div class="srow"><div class="grow">8. Overall Indication</div><span>›</span></div></div>
+<div style="padding:8px 16px 10px;border-top:1px solid var(--line)"><span class="pri">Read PDF</span></div></div></div></div>
+<p class="ch">The same pane. With no walk behind it, the foot holds the page's own action. Read PDF stacks the document as another page of the pane.</p></figure>
 </div></div>
 
 <div class="col">
@@ -661,7 +743,7 @@ td:first-child{font-weight:600;min-width:112px}
 <tr><td>1 The frame</td><td>The four places, the bar, the switcher, the account menu.</td><td>The switcher in the phone header on Today and Practice. A place's pages as an underlined choice; the second press on a tab removed. Apply down to Projects. Theme and sound into Settings. The Quiz badge removed.</td><td>Flashcards is one visible tap from the builder, and every one of the seven starts its content within 120 px.</td></tr>
 <tr><td>2 The quiz's seams</td><td>The one-row header, the verdict strip, Fix these now.</td><td>The pinned slot from the first question to the results. The verdict in place with folding options. New concepts as a row, so one Start. Previous and Next on the count. Keys 1 to 5 and A to E. The results with no dialog and no overlay queue.</td><td>An e2e walk finds the primary button at one height throughout, never scrolls to go on, and meets nothing over the score.</td></tr>
 <tr><td>3 Tokens</td><td>Nothing.</td><td>The neutrals, ink as the action colour, the ramp ending in rose, six type sizes, three radii, motion tokens, System as the default theme. Behind a switch until step 7 ends.</td><td>Lint ceilings on type under 12 px and off-scale radii are in CI and only go down. Contrast is checked in both themes.</td></tr>
-<tr><td>4 Today</td><td>Open to a visitor; no 0% ring.</td><td>One Start, in the slot. The line for level, streak and goal. The week with dates, counts and ticks. The five states.</td><td>One Start on the page, and the session card begins above 200 px.</td></tr>
+<tr><td>4 Today</td><td>Open to a visitor; no 0% ring.</td><td>One Start, in the slot. The line for level, streak and goal. The week with dates, counts and ticks. Without Pro, the wheel and the plan occluded. The reader's title, controls and next step, with its scroll and highlight untouched.</td><td>One Start on the page, and the session card begins above 200 px.</td></tr>
 <tr><td>5 Learn</td><td>Folded exams, More buttons, objective progress, Practice this objective.</td><td>One ladder with no In progress group. The exam's date as text and its controls labelled. Resources as rows with a cover and one line of facts, and one row of filters.</td><td>The ACAS ladder fits one phone screen, and the first reading is above 220 px.</td></tr>
 <tr><td>6 Practice</td><td>The builder opens on the exam in focus.</td><td>The builder on the shared surface with labelled settings. Flashcards as Deck and Study, the turned card's slot, the empty deck.</td><td>A card's face is at least 60% of the screen in Study, and an empty deck shows no control that does nothing.</td></tr>
 <tr><td>7 Apply and Settings</td><td>Nothing.</td><td>Projects as rows, readable without Pro. Settings as grouped lists with pages behind them. The token switch removed.</td><td>Settings is under 1,400 px on a phone, and a reader without Pro can read a brief.</td></tr>

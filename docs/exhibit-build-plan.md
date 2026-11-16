@@ -237,13 +237,57 @@ card starts at 365 px; the week is seven unlabelled grey blocks.
   readiness wheel beside it (score, today's movement, opens Exam Readiness), then the numbered
   steps with a 44 px row per concept. A row shows the concept's state now (New, Level 1 to 3,
   Forgotten in amber), not "→ Level 1".
-- **Five states**, each with an e2e assertion: Pro; signed in without Pro (the mistakes, a
-  Build a quiz row, the plan shown locked as text); a visitor (the same card from the
-  browser's record, a Create an account row; a first visit asks "Which exam are you
-  studying?"); part-way (answered rows ticked, the slot says how many are left); done (steps
+- **Every concept row opens the reader** on that concept and walks the plan, as it does
+  today (`sessionWalk`, `.concept-row-current`). Do not lose this while rebuilding the card.
+- **Without Pro there is no session list** (decided 16 November): the level line, the days
+  left, the readiness wheel alone in its card (it opens Exam Readiness), then **Today's Study
+  Plan occluded**: the plan card's shape as a drawn stand-in with a Pro mark and nothing of
+  the reader's in it or fetched for it (the pattern of `components/analytics/AnalyticsLocked.tsx`).
+  A tap anywhere on it opens one sheet that says what the plan is and offers **See Pro** and
+  **Not now**. Under it, a **Build a quiz** row. No slot, no mistakes list, no week strip.
+- **Five states**, each with an e2e assertion: Pro; signed in without Pro (above); a visitor
+  (the same as without Pro, from the browser's record, with a Create an account row; a first
+  visit asks "Which exam are you studying?"); part-way (answered rows ticked, the slot says how many are left); done (steps
   ticked, tomorrow's size, Listen and Analytics as rows, no slot).
 - **Done when:** there is one Start on the page in every state, the session card begins above
   200 px on a phone with the week shown, and `e2e/dashboard-session.spec.ts` covers the five.
+
+### Step 4b. The reader (the concept popup)
+
+Files: `components/ConceptPopup.tsx`, `components/wiki/ConceptPagePanel.tsx`,
+`components/wiki/ConceptNextSteps.tsx`, `components/ConceptActionMenu.tsx`,
+`components/NavProgressBar.tsx`, `hooks/useConceptHighlight.ts`, `hooks/useConceptPopup.ts`,
+`lib/pageStack.ts`. Read `docs/stacked-pages.md` first.
+
+**The scroll and highlight mechanism is kept exactly as built.** The maintainer called this
+out by name. Opening a concept from a list or from a page's words scrolls the page above to
+that row or mention, marks it and dims the rest; Previous, Next and the arrow keys move the
+mark and scroll again; the progress bar is cut into the syllabus's objectives and can be
+dragged; a followed link stacks a page and the pages behind fold to title bars that keep
+their scroll; a resource opens in the same pane. None of that changes, on Today, an exam
+page, a question's concept mentions, search results or the dashboard. Keep the pane at about
+half the screen by default so the marked row stays in view (the Exhibit draft's "two thirds"
+is withdrawn).
+
+What changes is the pane's own chrome:
+
+- The title is text; the action menu it opens today moves to a **More** button (the branch
+  did this for the page at its own address; do the same in the pane).
+- Three 44 px controls: Listen, More, Close. The figure toggle and full screen go into More.
+- The level beside the title, as pips with its word.
+- A row already read in the list above keeps a filled dot.
+- The page ends in its next step as rows (Practice with its question count, the tool where
+  one teaches the method), from `ConceptNextSteps`. Practice is offered once, not also in
+  More.
+- When the walk is Today's plan, the last concept's Next reads **Start session**.
+- With no walk behind it (a resource opened from a link), the foot holds the page's own
+  action, **Read PDF**, which stacks the document as a page of the pane.
+- Desktop: the right half, text capped at 720 px.
+
+**Done when:** the existing reader flows in `e2e/wiki.spec.ts` and
+`e2e/dashboard-session.spec.ts` ("a tapped row walks the list on screen, the row it is on
+held highlighted") pass unchanged in what they assert about scroll and highlight, and a new
+assertion covers the mention highlight moving on Next from an exam page.
 
 ### Step 5. Learn
 

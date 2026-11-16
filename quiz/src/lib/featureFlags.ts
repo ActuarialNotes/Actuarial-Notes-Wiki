@@ -286,3 +286,13 @@ export const COMMUNITY_OPEN_TO_ALL: boolean = import.meta.env.VITE_COMMUNITY_PRE
  * Re-enabling is a one-line change: set this to `true`.
  */
 export const GAMES_ENABLED: boolean = import.meta.env.VITE_GAMES_PREVIEW === 'on'
+
+/**
+ * Tools, Data Sources and the Store are hidden from the sidebar for now. Their
+ * pages (`/tools`, `/data-sources`, `/store`, the Gem Shop at `/store/gems`)
+ * are left intact and still open by address, and Workflows (Preview) keeps
+ * its own row. Only the e2e suite's build sets `VITE_SIDEBAR_PREVIEW=on`
+ * (playwright.config.ts), so its flows through those rows keep running.
+ * Re-enabling is a one-line change: set this to `true`.
+ */
+export const TOOLS_STORE_NAV_ENABLED: boolean = import.meta.env.VITE_SIDEBAR_PREVIEW === 'on'

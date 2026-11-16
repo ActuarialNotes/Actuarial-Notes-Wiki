@@ -41,7 +41,7 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge, NAME_PILL } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
+import { RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
@@ -239,9 +239,11 @@ function WorkflowsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigat
         onNavigate={onNavigate}
         state={inWorkflows ? 'active' : inTools || inData ? 'within' : 'idle'}
       />
-      <SubRows collapsed={collapsed}>
-        <ToolsNav collapsed={collapsed} onNavigate={onNavigate} />
-      </SubRows>
+      {TOOLS_STORE_NAV_ENABLED && (
+        <SubRows collapsed={collapsed}>
+          <ToolsNav collapsed={collapsed} onNavigate={onNavigate} />
+        </SubRows>
+      )}
     </>
   )
 }
@@ -734,17 +736,19 @@ export default function Sidebar() {
               Data Sources are rows of their own. */}
           {TOOLS_ENABLED && (showWorkflows
             ? <WorkflowsNav collapsed={collapsed} onNavigate={closeMobile} />
-            : <ToolsNav collapsed={collapsed} onNavigate={closeMobile} />)}
+            : TOOLS_STORE_NAV_ENABLED && <ToolsNav collapsed={collapsed} onNavigate={closeMobile} />)}
           {/* Real products — registration, study materials, calculators and
               textbooks — each bought on its seller's own page (docs/store.md).
               The gem shop is a corner of it, so this row stays lit there. */}
-          <SidebarItem
-            to="/store"
-            label="Store"
-            icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
-            collapsed={collapsed}
-            onNavigate={closeMobile}
-          />
+          {TOOLS_STORE_NAV_ENABLED && (
+            <SidebarItem
+              to="/store"
+              label="Store"
+              icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
+          )}
           {/* Where actuaries gather — forums, events and places, by topic
               (docs/community.md). Approved accounts only while in Preview. */}
           {showCommunity && (

@@ -45,7 +45,7 @@ import { GuestAvatar } from '@/components/GuestAvatar'
 import { ProBadge, NAME_PILL } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
+import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
@@ -354,7 +354,9 @@ function PracticeNav({ collapsed, onNavigate }: NavProps) {
 function ApplyNav({ collapsed, onNavigate, workflows }: NavProps & { workflows: boolean }) {
   const { pathname } = useLocation()
   const attempt = useAttemptNav(s => s.current)
-  const pages = placePages('apply', { tools: TOOLS_ENABLED, workflows })
+  // Tools and Data Sources are off the navigation for now (`TOOLS_STORE_NAV_ENABLED`);
+  // their pages still open by address.
+  const pages = placePages('apply', { tools: TOOLS_ENABLED && TOOLS_STORE_NAV_ENABLED, workflows })
   const icons: Partial<Record<PlacePageId, React.ReactNode>> = {
     tools: <Calculator className={ICON} />,
     'data-sources': <Database className={ICON} />,
@@ -658,11 +660,14 @@ export default function Sidebar() {
           <div ref={profileRef} className="relative">
             {profileOpen && (
               <div role="menu" aria-label="You" className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50 lg:min-w-[13rem]">
-                {/* Real products, each bought on its seller's own page (docs/store.md). */}
-                <button type="button" role="menuitem" onClick={() => go('/store')} className={MENU_ROW}>
-                  <ShoppingBag className={MENU_ICON} />
-                  <span>Store</span>
-                </button>
+                {/* Real products, each bought on its seller's own page (docs/store.md).
+                    Off the navigation for now, with Tools and Data Sources. */}
+                {TOOLS_STORE_NAV_ENABLED && (
+                  <button type="button" role="menuitem" onClick={() => go('/store')} className={MENU_ROW}>
+                    <ShoppingBag className={MENU_ICON} />
+                    <span>Store</span>
+                  </button>
+                )}
                 {/* Where actuaries gather (docs/community.md): approved accounts only while in Preview. */}
                 {showCommunity && (
                   <button type="button" role="menuitem" onClick={() => go('/community')} className={MENU_ROW}>

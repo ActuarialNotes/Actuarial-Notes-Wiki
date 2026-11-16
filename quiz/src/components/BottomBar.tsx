@@ -9,7 +9,7 @@ import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { INK_MENU } from '@/components/ui/ink'
 import { guidePath, quizPath } from '@/lib/examFocus'
-import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
+import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
 import { hidesBottomBar, pageOf, placeOf, placePages, PLACES, type PlaceId, type PlacePage } from '@/lib/places'
 import { cn } from '@/lib/utils'
 
@@ -87,7 +87,8 @@ export function BottomBar() {
   const access = {
     research: RESEARCH_TAB_ENABLED && !!user,
     games: GAMES_ENABLED,
-    tools: TOOLS_ENABLED,
+    // Off the navigation for now; the pages still open by address.
+    tools: TOOLS_ENABLED && TOOLS_STORE_NAV_ENABLED,
     workflows,
   }
   const builder = quizPath(focus)

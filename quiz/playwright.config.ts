@@ -37,6 +37,8 @@ const buildEnv = {
   VITE_COMMUNITY_PREVIEW: 'on',
   // Games (Quiz Battle, Concept Craft) are hidden from the Quiz tab while in development.
   VITE_GAMES_PREVIEW: 'on',
+  // Tools, Data Sources and the Store are hidden from the sidebar for now.
+  VITE_SIDEBAR_PREVIEW: 'on',
 }
 
 export default defineConfig({

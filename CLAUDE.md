@@ -1650,7 +1650,7 @@ Other important `lib/` modules:
   modules are tested.
 - `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`; `TOOLS_STORE_NAV_ENABLED` — off: the sidebar's Tools, Data Sources and Store rows are hidden, their pages still open by address and Workflows keeps its row; the e2e build sets `VITE_SIDEBAR_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Settings → Support hides the "Take the tour" row. The component, store and

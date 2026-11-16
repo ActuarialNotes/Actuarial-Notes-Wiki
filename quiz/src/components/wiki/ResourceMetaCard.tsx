@@ -1,3 +1,4 @@
+import { TitleMoreButton } from '@/components/TitleMoreButton'
 import { useState } from 'react'
 import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -42,7 +43,7 @@ interface ResourceMetaCardProps {
    */
   onReadPdf?: (doc: PdfReaderDoc) => void
   /**
-   * Makes the title the page's action-menu trigger, underlined to say so —
+   * Gives the title the More button that opens the page's action menu —
    * a resource page read on its own, the way the popup's title is.
    */
   titleAction?: WikiTitleAction
@@ -111,18 +112,10 @@ export function ResourceMetaCard({
         {meta.title && (
           <h2 className={cn('font-semibold leading-snug tracking-tight', heading)}>
             {titleAction ? (
-              <button
-                ref={titleAction.ref}
-                type="button"
-                data-play-menu-trigger
-                onClick={titleAction.onToggle}
-                aria-haspopup="menu"
-                aria-expanded={titleAction.open}
-                aria-label={titleAction.label}
-                className="action-title-underline text-left"
-              >
+              <>
                 {meta.title}
-              </button>
+                <TitleMoreButton action={titleAction} />
+              </>
             ) : meta.title}
           </h2>
         )}

@@ -604,8 +604,8 @@ function TodayStudyPlanSection({
             'Nothing scheduled for today.'
           ) : (
             <>
-              Set up your study plan on the{' '}
-              <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+              Set up your study plan on{' '}
+              <Link to="/dashboard" className="text-primary hover:underline">Today</Link>{' '}
               to see today's concepts.
             </>
           )}
@@ -768,7 +768,7 @@ function AddFlashcardsSheet({
     >
       {/* Search header */}
       <div className="shrink-0 border-b bg-background/95 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="page-column">
           <div className="flex items-center gap-2 h-14">
             {/* Tapping anywhere in the search area (icon included) is what opens
                 the keyboard — the sheet itself never steals focus. */}
@@ -803,7 +803,7 @@ function AddFlashcardsSheet({
 
       {/* Search results while typing, the pack shelf otherwise */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+        <div className="page-column py-4">
           {query.trim() ? (
             <ul className="space-y-0.5">
               {results.length === 0 ? (
@@ -2846,7 +2846,7 @@ function FlashcardsDeck({
           onSelectCard={goToCardByName}
           onCardsAdded={() => setGalleryExpanded(true)}
         />
-        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
+        <div className="page-column py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
           <GalleryPanel
             inline
             onCardsAdded={() => setGalleryExpanded(true)}
@@ -2878,7 +2878,7 @@ function FlashcardsDeck({
             and so the + (the only way in with an empty deck) stays reachable.
             Flip / Back content act on the gallery cards; the deck controls
             (sort, manage) stay hidden until there's a deck. */}
-        <div ref={emptyFooterRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        <div ref={emptyFooterRef} className="fixed bottom-[var(--bottom-nav-height,0px)] left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
@@ -3032,7 +3032,7 @@ function FlashcardsDeck({
         onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >
       <div
-        className="container max-w-4xl mx-auto pb-36"
+        className="page-column !px-0 pb-36"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
         onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >
@@ -3086,8 +3086,9 @@ function FlashcardsDeck({
       {/* Fixed controls footer — always on the bottom edge */}
       <div
         ref={footerRef}
-        className={`fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
-          focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
+        className={`fixed left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
+          // Focus mode covers the phone's bottom bar; otherwise the footer stands on it.
+          focusMode ? 'bottom-0 z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'bottom-[var(--bottom-nav-height,0px)] z-[46]'
         }`}
       >
         {/* Gallery + Focus buttons — standalone pills above the nav. Shown in

@@ -65,7 +65,7 @@ test.describe('tab-switch view transitions', () => {
           // `root` is the page's own sheet (the html element); the rail, the
           // phone header and the "Return to quiz" pill are the chrome held
           // still over it.
-          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume', 'paper-tutor'])
+          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume', 'paper-tutor', 'paper-tabbar'])
           expect(names.every(n => allowed.has(n)), `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(true)
           expect(new Set(names).size, `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(names.length)
         }
@@ -86,7 +86,7 @@ test.describe('tab-switch view transitions', () => {
       }) as typeof document.startViewTransition
     })
 
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await page.waitForURL('**/wiki')
     await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
     // The wiki route is lazy: the transition must have waited for its chunk,
@@ -118,7 +118,7 @@ test.describe('tab-switch view transitions', () => {
     await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
 
     // Quiz → Study Guides: the tab to the left.
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
     // Study Guides → an exam's page: a sheet laid on top.
     await page.locator('a[data-tour="exam-p"]').click()
@@ -154,7 +154,7 @@ test.describe('tab-switch view transitions', () => {
     const moves = () => page.evaluate(() => (window as unknown as { __moves: string[] }).__moves)
     const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
 
-    // The Quiz tab's exam list and one exam's builder are both `/`: picking
+    // Practice's exam list and one exam's builder are both `/`: picking
     // an exam lays the builder over the list, opened at its top, and the back
     // arrow swipes it off onto the list as it was left.
     await page.goto('/')
@@ -268,7 +268,7 @@ test.describe('reduced motion', () => {
     }) as typeof document.startViewTransition
   })
 
-  await page.getByRole('link', { name: 'Study Guides' }).first().click()
+  await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
   await page.waitForURL('**/wiki')
   await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
   expect(await page.evaluate(() => (window as unknown as { __vtCalls: number }).__vtCalls)).toBe(0)

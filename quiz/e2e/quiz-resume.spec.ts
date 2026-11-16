@@ -28,7 +28,7 @@ test.describe('quiz in progress', () => {
     // Not on the quiz itself — the quiz page has its own header.
     await expect(pill(page)).toHaveCount(0)
 
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await page.waitForURL('**/wiki')
 
     // Where they had got to, and — timed — the clock, still running.
@@ -61,7 +61,7 @@ test.describe('quiz in progress', () => {
     await page.getByRole('button', { name: 'Option A' }).click()
     await page.getByRole('button', { name: 'Confirm Answer' }).click()
 
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await page.waitForURL('**/wiki')
     await pill(page).click()
     await page.getByRole('dialog', { name: 'Quiz in progress' }).getByRole('button', { name: 'Leave' }).click()
@@ -78,7 +78,6 @@ test.describe('quiz in progress', () => {
     const examP = page.locator('button[data-tour="quiz-exam-p"]')
     const changeExam = page.getByRole('button', { name: 'Change exam' })
     const start = page.locator('[data-tour="start-quiz"]')
-
     await page.goto('/')
     await examP.click()
     await start.click()

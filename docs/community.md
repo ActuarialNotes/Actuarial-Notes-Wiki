@@ -77,7 +77,9 @@ list.
   - A post's author wears a steady colour of their own (`nameHue`). That colour is identity,
     never a verdict, like Quiz Battle's player colours.
 - **The overview's layout.**
-  - **Hero:** a drifting field of topic colours, live counts, and the places stacked like faces.
+  - **Header:** the app's neutral page header: the title, then the live counts. It was a
+    hero with a drifting field of topic colours until the design review (F15); the colours
+    stay on what they name.
   - **Events:** the next one as a poster ("Next up", with a large countdown), then a rail of
     the few after it to swipe along.
   - **Discussions:** the most-discussed threads, with a flame on a busy one and a dot on a fresh

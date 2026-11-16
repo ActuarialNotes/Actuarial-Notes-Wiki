@@ -54,9 +54,11 @@ export interface DeskPlace {
   depth: number
 }
 
-// The tabs, left to right, in the order the sidebar lists them — Dashboard,
-// Study Guides, Flashcards, Quiz, Projects — then the pages the rest of the
-// chrome opens. `depth` is how many sheets down the tab a page lies; `below` is
+// The pages, left to right, in the order the sidebar lists them: the four
+// places (lib/places.ts) with each one's pages beside it — Today; Learn's exam
+// guides and Resources; Practice's quiz (with Games over it) and Flashcards; Apply's Tools,
+// Data Sources, Projects and Workflows — then what the avatar's menu and the
+// rest of the chrome open. `depth` is how many sheets down a page lies; `below` is
 // the depth of a page *under* the prefix (`/wiki/exam/Exam P` under
 // `/wiki/exam`), where that differs. The longest matching prefix wins, and a
 // path none of them match is a tab of its own at the far end of the desk.
@@ -66,33 +68,32 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },
   { prefix: '/wiki/question', tab: 1, depth: 2 },
-  // Resources is the Study Guides tab's second page, listed under it in the
-  // sidebar beside the exams, so it lies beside them on the desk; a resource
-  // page is a sheet over that shelf.
+  // Resources is Learn's second page, listed under it in the sidebar beside
+  // the exams, so it lies beside them on the desk; a resource page is a sheet
+  // over that shelf.
   { prefix: '/wiki/resources', tab: 1.2, depth: 0 },
   { prefix: '/wiki/resource', tab: 1.2, depth: 1 },
   { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
-  { prefix: '/flashcards', tab: 2, depth: 0 },
-  { prefix: '/', tab: 3, depth: 0 },
-  { prefix: '/quiz', tab: 3, depth: 1 },
-  // Games is opened from the Quiz tab's exam list, a sheet over it; Quiz
+  // Practice: the quiz builder, a quiz and its results laid over it.
+  { prefix: '/', tab: 2, depth: 0 },
+  { prefix: '/quiz', tab: 2, depth: 1 },
+  // Games is opened from the builder's exam list, a sheet over it; Quiz
   // Battle and Concept Craft are opened from Games, a sheet over that.
-  { prefix: '/games', tab: 3, depth: 1 },
-  { prefix: '/battle', tab: 3, depth: 2 },
-  { prefix: '/craft', tab: 3, depth: 2 },
-  { prefix: '/review', tab: 3, depth: 2 },
-  // The Projects tab; an attempt is a sheet laid over the list of briefs.
-  { prefix: '/project', tab: 4, depth: 0, below: 1 },
-  // The Store, listed after Projects; the gem shop is a sheet laid over it.
+  { prefix: '/games', tab: 2, depth: 1 },
+  { prefix: '/battle', tab: 2, depth: 2 },
+  { prefix: '/craft', tab: 2, depth: 2 },
+  { prefix: '/review', tab: 2, depth: 2 },
+  { prefix: '/flashcards', tab: 2.2, depth: 0 },
+  // Apply: a tool's card is a sheet laid over the catalogue, a table or a
+  // publisher over Data Sources, an attempt over the list of briefs, and a
+  // workflow's board over the library.
+  { prefix: '/tools', tab: 3, depth: 0, below: 1 },
+  { prefix: '/data-sources', tab: 3.2, depth: 0, below: 1 },
+  { prefix: '/project', tab: 3.4, depth: 0, below: 1 },
+  { prefix: '/workflows', tab: 3.6, depth: 0, below: 1 },
+  // Behind the avatar: the Store (the gem shop a sheet laid over it), then
+  // Community (a topic's page a sheet laid over it).
   { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
-  // Workflows, listed after Projects, with Tools and Data Sources under it
-  // and the Store after them. A workflow's board is a sheet laid over the
-  // library, a tool's card over the catalogue, and a table or a publisher
-  // over Data Sources.
-  { prefix: '/workflows', tab: 4.05, depth: 0, below: 1 },
-  { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
-  { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
-  // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
   { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },

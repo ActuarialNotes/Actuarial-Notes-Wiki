@@ -250,7 +250,7 @@ export default function GemShop() {
   // ── Main render ────────────────────────────────────────────────────────────
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
+    <div className="page-column py-8 space-y-6">
 
       {/* Back to where the reader came from, or up to the Store this shop is a
           corner of — either way, back where it was left. */}

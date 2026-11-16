@@ -28,6 +28,7 @@ import { buildSeoPages, countQuestionsByExam, lastModifiedFromGitLog, NOT_FOUND_
 import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 import { bankRunOpenings, buildQuestionSeoPages, CONCEPT_QUESTION_LINKS, questionMarkdown, questionNeighbours, questionPagesByConcept, questionRuns } from './src/lib/seoQuestions'
 import { parseAllQuestions, type Question } from './src/lib/parser'
+import { countQuestionsByConcept } from './src/lib/conceptQuestionCounts'
 import { contentPathFromVerification } from './src/lib/verification'
 import { buildScriptHashes } from './src/lib/podcastScripts'
 
@@ -529,6 +530,22 @@ function questionsContentPlugin(): Plugin {
   }
 }
 
+// How many served questions each concept has (lib/conceptQuestionCounts.ts), so
+// a concept page's Practice button can say so without fetching the bank above.
+// A few tens of kilobytes, in a chunk of its own.
+function conceptQuestionCountsPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:concept-question-counts'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'concept-question-counts',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(countQuestionsByConcept(parseAllQuestions(await collectQuestions())))}`
+    },
+  }
+}
+
 // Comprehension checks: one markdown file per concept under
 // comprehension-checks/<exam-id>/<Concept Name>.md, parsed at runtime by
 // lib/comprehensionCheckParser.ts. Structured just like the question bank above.
@@ -1015,7 +1032,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), assumptionBankPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), coworkVaultPlugin(), assumptionBankPlugin(), podcastScriptsPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), conceptQuestionCountsPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

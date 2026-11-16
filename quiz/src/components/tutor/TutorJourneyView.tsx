@@ -102,7 +102,7 @@ export function TutorJourneyView({ engine, actions, character }: Props) {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          The dashboard and study plan use this date too.
+          Today and the study plan use this date too.
         </p>
       </section>
 

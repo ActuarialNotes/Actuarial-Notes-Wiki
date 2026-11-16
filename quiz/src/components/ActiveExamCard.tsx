@@ -204,8 +204,10 @@ export function ActiveExamCardLoading() {
  * marked in progress have no material in the vault, or they genuinely haven't
  * added one. Say which.
  */
-export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadError }: {
+export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadError, visitor = false }: {
   onChooseExam?: () => void
+  /** A reader who isn't signed in picks an exam rather than adding one to an account. */
+  visitor?: boolean
   /** Exams marked in progress that have no syllabus page, so can't be shown. */
   unsupportedExams?: string[]
   /** Set when the exam syllabi couldn't be loaded at all. */
@@ -246,12 +248,26 @@ export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadE
     )
   }
 
+  if (visitor) {
+    return (
+      <Card className="border-0">
+        <CardContent className="py-8 text-center space-y-3">
+          <p className="text-sm font-medium">Which exam are you studying?</p>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            Finish a quiz on it and today&apos;s session appears here.
+          </p>
+          <Button onClick={choose}>Choose an exam</Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="border-0">
       <CardContent className="py-8 text-center space-y-3">
         <p className="text-sm font-medium">Add the exam you&apos;re studying for.</p>
         <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-          The dashboard fills in once you add one.
+          Today fills in once you add one.
         </p>
         <Button onClick={choose}>Add exam</Button>
       </CardContent>

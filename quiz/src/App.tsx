@@ -14,6 +14,7 @@ import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Flashcards from '@/pages/Flashcards'
 import Sidebar from '@/components/Sidebar'
+import { BottomBar } from '@/components/BottomBar'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
 import PaperRouter from '@/components/PaperRouter'
@@ -266,7 +267,7 @@ function GlobalKeyHandler() {
 function Main({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
-    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
+    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 pb-[var(--bottom-nav-height,0px)] lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
       {children}
     </main>
   )
@@ -416,6 +417,7 @@ export default function App({ initialSession }: { initialSession: Session | null
           </a>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
+            <BottomBar />
             <Main>
               <Routes>
                 <Route path="/" element={<Landing />} />

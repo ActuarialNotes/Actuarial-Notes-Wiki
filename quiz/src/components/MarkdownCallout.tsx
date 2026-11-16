@@ -14,6 +14,8 @@ import {
 import type { ExtraProps } from 'react-markdown'
 import { ExamWeightLabel } from '@/components/ExamWeightLabel'
 import { parseExamWeight, splitWeightTag } from '@/lib/examWeight'
+import { ObjectiveProgressMark, PracticeObjectiveButton } from '@/components/wiki/ObjectiveProgress'
+import { useObjectiveProgress } from '@/components/wiki/objectiveProgressContext'
 
 // Matches an Obsidian callout header at the start of a blockquote paragraph:
 //   [!type]        non-foldable
@@ -425,11 +427,8 @@ interface CalloutProps {
 // Every callout box, folding or not, has the same corners and spans the column,
 // so a page's boxes read as one set.
 const CALLOUT_ROUND = 'rounded-xl'
-// A folding box's title is underlined, so it reads as something to tap — the
-// article's own link underline (the text's colour, the default thickness), so it
-// looks like the concept links around it. A worked example is not: its pill
-// already says what it is.
-const TOGGLE_TITLE = 'underline'
+// A folding box's title is plain text: its chevron says it unfolds. An
+// underline is a link and nothing else (design review F17).
 
 // The hairline under the header and the body's padding below it.
 const BODY_FRAME = 'border-t border-border/40 px-4 pb-4 pt-3'
@@ -516,11 +515,15 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
   const displayTitle = baseTitle || (titleRest.length > 0 ? '' : titleCase(type))
   const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
+  // On an exam page, a learning objective carries the reader's standing on its
+  // concepts and ends in a quiz on them (components/wiki/ObjectiveProgress.tsx).
+  const objective = useObjectiveProgress(type === 'example' && titleRest.length === 0 && !pill ? baseTitle.trim() : null)
+  const practice = objective?.practice && <PracticeObjectiveButton onPractice={objective.practice} />
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>
         {pill && (
           <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
             {pill}
@@ -528,6 +531,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         )}
         {renderTitleLine(displayTitle, titleRest)}
       </span>
+      {objective?.tracked && <ObjectiveProgressMark progress={objective.progress} />}
       {examWeight && <ExamWeightLabel weight={examWeight} bar={false} />}
       {collapsible && hasBody && (
         <ChevronDown
@@ -579,6 +583,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
         {hasBody && (
           <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
             {children}
+            {practice}
           </div>
         )}
       </div>
@@ -603,6 +608,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
       {hasBody && (
         <div data-callout-body hidden={!open} className={`${contentClasses}${streamClass}`}>
           {children}
+          {practice}
         </div>
       )}
     </div>

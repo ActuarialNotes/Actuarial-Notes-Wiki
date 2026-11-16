@@ -215,7 +215,7 @@ describe('canTransition', () => {
 
 describe('deskPlace', () => {
   it('lays the tabs out left to right in the sidebar\'s order', () => {
-    const order = ['/dashboard', '/wiki', '/flashcards', '/', '/project'].map(p => deskPlace(p).tab)
+    const order = ['/dashboard', '/wiki', '/', '/flashcards', '/tools', '/project', '/store'].map(p => deskPlace(p).tab)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
     expect(new Set(order).size).toBe(order.length)
   })
@@ -267,10 +267,11 @@ describe('deskPlace', () => {
     expect(deskPlace('/nowhere').tab).not.toBe(deskPlace('/').tab)
   })
 
-  it('lays Workflows, Tools and Data Sources side by side, in sidebar order, each page a sheet over its list', () => {
-    expect(deskPlace('/workflows').tab).toBeLessThan(deskPlace('/tools').tab)
+  it('lays Apply\'s pages side by side, in sidebar order, each page a sheet over its list', () => {
     expect(deskPlace('/tools').tab).toBeLessThan(deskPlace('/data-sources').tab)
-    expect(deskPlace('/data-sources').tab).toBeLessThan(deskPlace('/store').tab)
+    expect(deskPlace('/data-sources').tab).toBeLessThan(deskPlace('/project').tab)
+    expect(deskPlace('/project').tab).toBeLessThan(deskPlace('/workflows').tab)
+    expect(deskPlace('/workflows').tab).toBeLessThan(deskPlace('/store').tab)
     expect(deskPlace('/workflows/wf-1')).toEqual({ tab: deskPlace('/workflows').tab, depth: 1 })
     expect(deskPlace('/data-sources/osfi')).toEqual({ tab: deskPlace('/data-sources').tab, depth: 1 })
   })

@@ -1,7 +1,7 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard, Bookmark, BookmarkCheck, Info, SlidersHorizontal } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -9,7 +9,6 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
-import { ExamLogo } from '@/components/ExamLogo'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { QuizSignInPrompt } from '@/components/QuizSignInPrompt'
@@ -17,7 +16,7 @@ import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { SelfGradeScreen } from '@/components/SelfGradeScreen'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
-import { QuestionInfoButton } from '@/components/QuestionInfoButton'
+import { QuizMoreMenu } from '@/components/quiz/QuizMoreMenu'
 import { PreQuizConcepts } from '@/components/PreQuizConcepts'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -34,7 +33,7 @@ import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
 import { DIFFICULTY_LEVELS, difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
-import { QuizSettingsButton, QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
+import { QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
 import { moveScreen, REPLACE_AS_PUSH } from '@/lib/viewTransition'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
@@ -54,6 +53,12 @@ import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 
 // Open in Spreadsheet (docs/question-spreadsheet.md): Fortune-sheet is the
 // heaviest thing the quiz can show, so the pane is its own chunk.
+// The Info panel is its own chunk: it opens on a press, with the Fact Check
+// sheet behind it.
+const QuestionInfoDialog = lazy(() =>
+  import('@/components/QuestionInfoDialog').then(m => ({ default: m.QuestionInfoDialog })),
+)
+
 const { Component: QuestionSheet } = lazyRoute(() => import('@/components/quiz/QuestionSheet'))
 
 export default function Quiz() {
@@ -66,7 +71,7 @@ export default function Quiz() {
   const quizFrom = searchParams.get('from')
   const back = useBack({
     to: quizFrom === 'search' ? '/search' : quizFrom === 'dashboard' ? '/dashboard' : '/',
-    label: quizFrom === 'search' ? 'Search' : quizFrom === 'dashboard' ? 'Dashboard' : 'Quiz',
+    label: quizFrom === 'search' ? 'Search' : quizFrom === 'dashboard' ? 'Today' : 'Practice',
   })
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -467,8 +472,8 @@ export default function Quiz() {
     }
   }
 
-  // Next (or Finish) on an answered question — the button, Enter, →, or a tap
-  // on a locked answer. With the answers shown as the quiz goes, written parts
+  // Next (or Finish) on an answered question — the button, Enter or →.
+  // With the answers shown as the quiz goes, written parts
   // still waiting for a self-grade are asked about first.
   function handleNextFromAnswer() {
     if (showExplanation && currentQuestion) {
@@ -667,7 +672,7 @@ export default function Quiz() {
   const setPartGrade = (partLabel: string, grade: SelfGrade) =>
     setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
 
-  // The exam this question is from, as its logo in the header's right corner.
+  // The exam this question is from: the settings popup's logo and accent.
   const examLogoKey = EXAM_LABEL_TO_ID[currentQuestion.exam]
   // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet offers.
   const sheetProfile = spreadsheetProfileFor(examLogoKey)
@@ -676,52 +681,15 @@ export default function Quiz() {
     <>
     <div className="question-sheet-host">
     <div
-      className="container max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5"
+      className="page-column page-reading py-6 sm:py-8 space-y-5"
       // Below lg the concept popup docks as a bottom sheet; keep the question
       // and its buttons scrollable out from under it, as the study guide does.
       style={conceptPopupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
-      <div className="flex items-center justify-between gap-3">
-        <Button
-          variant="ghost"
-          data-tour="quit-quiz"
-          onClick={() => setShowQuitDialog(true)}
-          className="-ml-3 h-11 px-3 text-base text-muted-foreground hover:text-foreground"
-        >
-          <X className="h-5 w-5 mr-1.5" />
-          {/* On a phone the word after Quit gives its room to the settings. */}
-          Quit <span className="sr-only sm:not-sr-only sm:ml-1">{mode === 'mock-exam' ? 'exam' : 'quiz'}</span>
-        </Button>
-
-        <div className="flex min-w-0 items-center gap-2">
-          <QuizSettingsButton settings={quizSettings} open={showSettings} onOpenChange={setShowSettings} />
-          {examLogoKey && <ExamLogo examKey={examLogoKey} size="sm" />}
-          {timer !== null && (
-            <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
-          )}
-          <Button
-            variant="ghost"
-            size="icon"
-            data-sound="none"
-            onClick={() => { toggleSound(); playSound('toggleOn') }}
-            aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
-            className="h-11 w-11 -mr-2 text-muted-foreground hover:text-foreground sm:mr-0"
-          >
-            {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowShortcutsHelp(true)}
-            aria-label="Keyboard shortcuts"
-            title="Keyboard shortcuts (?)"
-            className="h-11 w-11 text-muted-foreground hover:text-foreground hidden sm:flex"
-          >
-            <Keyboard className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-
+      {/* One row above the question: Quit, the count, the timer if timed, and
+          More, which holds what isn't answering — flag, info, sound, the
+          settings (design review F8). The spreadsheet stays out of the menu:
+          it is what the question is worked in. */}
       <div className="pb-2">
         <ProgressBar
           current={currentIndex + 1}
@@ -730,25 +698,64 @@ export default function Quiz() {
           flaggedIds={flaggedIds}
           questionIds={storeQuestions.map(q => q.id)}
           isFlagged={isFlagged}
-          onFlag={() => toggleFlag(currentQuestion.id)}
-          info={
+          leading={
+            <button
+              type="button"
+              data-tour="quit-quiz"
+              onClick={() => setShowQuitDialog(true)}
+              aria-label={`Quit ${mode === 'mock-exam' ? 'exam' : 'quiz'}`}
+              title={`Quit ${mode === 'mock-exam' ? 'exam' : 'quiz'}`}
+              className="-ml-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-5 w-5" aria-hidden />
+            </button>
+          }
+          tools={
             <>
-            {sheetProfile && (
-              <SpreadsheetButton open={sheetOpen} onToggle={() => setSheetOpen(!sheetOpen)} />
-            )}
-            <QuestionInfoButton
-              question={currentQuestion}
-              open={showQuestionInfo}
-              onOpenChange={setShowQuestionInfo}
-              // Topic and difficulty are a hint while the question is live, so
-              // they only join the panel once the answer is committed.
-              showStudyMeta={isLocked}
-              onOpenConcept={openTaggedConcept}
-            />
+              {timer !== null && (
+                <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
+              )}
+              {sheetProfile && (
+                <SpreadsheetButton open={sheetOpen} onToggle={() => setSheetOpen(!sheetOpen)} />
+              )}
+              <QuizMoreMenu
+                items={[
+                  {
+                    key: 'flag',
+                    label: isFlagged ? 'Remove flag' : 'Flag question',
+                    icon: isFlagged ? BookmarkCheck : Bookmark,
+                    shortcut: 'F',
+                    onSelect: () => { toggleFlag(currentQuestion.id); playSound('select') },
+                  },
+                  { key: 'info', label: 'Question info', icon: Info, shortcut: 'I', onSelect: () => setShowQuestionInfo(true) },
+                  {
+                    key: 'sound',
+                    label: soundEnabled ? 'Mute sounds' : 'Unmute sounds',
+                    icon: soundEnabled ? Volume2 : VolumeX,
+                    shortcut: 'M',
+                    onSelect: () => { toggleSound(); playSound('toggleOn') },
+                  },
+                  { key: 'settings', label: 'Quiz settings', icon: SlidersHorizontal, onSelect: () => setShowSettings(true) },
+                  { key: 'shortcuts', label: 'Keyboard shortcuts', icon: Keyboard, shortcut: '?', keyboardOnly: true, onSelect: () => setShowShortcutsHelp(true) },
+                ]}
+              />
             </>
           }
         />
       </div>
+
+      {showQuestionInfo && (
+        <Suspense fallback={null}>
+          <QuestionInfoDialog
+            question={currentQuestion}
+            // Topic and difficulty are a hint while the question is live, so
+            // they only join the panel once the answer is committed.
+            showStudyMeta={isLocked}
+            onOpenConcept={openTaggedConcept}
+            onClose={() => setShowQuestionInfo(false)}
+          />
+        </Suspense>
+      )}
 
       {showSignInPrompt && (
         <QuizSignInPrompt
@@ -826,7 +833,6 @@ export default function Quiz() {
           onAnswer={handleSelectAnswer}
           showExplanation={showExplanation}
           isLocked={isLocked}
-          onNext={isLocked ? handleNextFromAnswer : undefined}
           selfGrade={currentQuestion.type === 'free-entry' ? manualGrades[currentQuestion.id] : undefined}
           onSelfGrade={currentQuestion.type === 'free-entry' ? (grade) => setManualGrade(currentQuestion.id, grade) : undefined}
           // Multi-part grades (both graded free-entry parts and answerless essay

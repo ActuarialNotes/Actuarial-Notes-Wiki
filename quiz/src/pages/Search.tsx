@@ -686,7 +686,7 @@ export default function Search() {
   useActionBarHeight(quizBarRef, showQuizBar)
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
+    <div className="page-column page-reading py-8 pb-28 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Search</h1>
 
       {/* Search type toggle */}
@@ -1086,7 +1086,7 @@ export default function Search() {
 
       {/* Sticky quiz button — Questions mode only */}
       {showQuizBar && (
-        <div ref={quizBarRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
+        <div ref={quizBarRef} className="fixed bottom-[var(--bottom-nav-height,0px)] left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
           <button
             type="button"
             onClick={handleStartQuiz}

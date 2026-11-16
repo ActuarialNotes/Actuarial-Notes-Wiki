@@ -290,7 +290,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
               </div>
               {!loadingExams && !hasStudyingExam && (
                 <p className="text-sm text-foreground">
-                  Add the exam you&apos;re studying for and it appears on your dashboard.
+                  Add the exam you&apos;re studying for and it appears on Today.
                 </p>
               )}
             </div>

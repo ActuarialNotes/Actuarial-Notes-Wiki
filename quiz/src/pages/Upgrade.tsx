@@ -82,7 +82,7 @@ function betaCodeMessage(raw: string): string {
 
 export default function Upgrade() {
   const navigate = useNavigate()
-  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
+  const back = useBack({ to: '/dashboard', label: 'Today' })
   const { user } = useAuth()
   const { isPro, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)
@@ -196,7 +196,7 @@ export default function Upgrade() {
   )
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-10 sm:py-12 space-y-10">
+    <div className="page-column page-reading py-10 sm:py-12 space-y-10">
       <div className="text-center space-y-3">
         <div className="flex items-center justify-center gap-2 text-sm font-semibold text-muted-foreground">
           Actuarial Notes

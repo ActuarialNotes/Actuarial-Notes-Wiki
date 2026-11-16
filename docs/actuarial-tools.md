@@ -1416,7 +1416,8 @@ reader's own figures were easy to lose. What changed (`ToolCard.tsx`, `ToolGrid.
 
 - **The card says what it's for.** The question the tool answers, which only the ⋯ menu used to
   show, is under the title (`Lead`). The title carries a book icon, so a reader can see it opens
-  the method, and the ⋯ menu gains *Read about the method*.
+  the method, and the ⋯ menu gains *Read about the method* (since the design review's Phase 1 a labelled
+  **Learn the method** button under the tool's name, and the same words in an embedded card's menu).
 - **Inputs look like inputs.** A cell that takes typing is drawn as a well (recessed and ringed),
   and a computed cell is shaded and bold. Ratio Triangle's two input triangles and its result
   used to be three identical tables. A scalar's value box is drawn as a field too.

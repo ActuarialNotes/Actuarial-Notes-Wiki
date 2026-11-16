@@ -48,9 +48,9 @@ export function WorkflowLibrary() {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto w-full max-w-5xl space-y-8 px-4 py-4 sm:px-6 sm:py-6">
+      <div className="page-column space-y-8 py-4 sm:py-6">
         <header className="flex items-center gap-2">
-          <MobileNavButton className="-ml-1.5 lg:hidden" />
+          <MobileNavButton className="-mr-1.5 lg:hidden" />
           <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Workflows</h1>
           {all.length > SEARCH_FROM && (
             <label className="relative w-44 sm:w-64">

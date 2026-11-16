@@ -520,7 +520,7 @@ export default function Landing() {
         screen, and keeps its own compact sticky header. */}
     <div
       className={cn(
-        'max-w-4xl mx-auto w-full px-4 sm:px-6',
+        'page-column page-reading',
         hasTopic ? 'pt-4 pb-10 space-y-4' : 'py-8 space-y-8',
       )}
       // Inside an exam the screen is scoped to its colour: the card, the

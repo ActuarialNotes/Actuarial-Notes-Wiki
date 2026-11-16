@@ -35,6 +35,43 @@ test.describe('quiz', () => {
     await expect(page).toHaveURL(/\/review/)
     await expect(page.getByRole('heading', { name: 'Question Review' })).toBeVisible()
   })
+
+  // Design review F8: one row above the question. Everything that isn't
+  // answering is a labelled row of More, and a locked answer is not a button.
+  test('keeps the flag, info and settings in the header\'s More menu', async ({ page }) => {
+    await page.goto('/quiz?ids=p-004,p-005')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const optionA = page.getByRole('button', { name: 'Option A' })
+    await expect(startQuiz.or(optionA).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+
+    await expect(page.getByText('Question 1 of 2')).toBeVisible()
+    const more = page.getByTestId('quiz-more')
+    await more.click()
+    await expect(page.getByRole('menuitem', { name: 'Quiz settings' })).toBeVisible()
+    await page.getByRole('menuitem', { name: 'Flag question' }).click()
+    await expect(page.getByTestId('question-flagged')).toBeVisible()
+    await more.click()
+    await page.getByRole('menuitem', { name: 'Question info' }).click()
+    await expect(page.getByRole('dialog', { name: 'Question info' })).toBeVisible()
+    await page.keyboard.press('Escape')
+
+    // Once the answer is in, tapping an option again goes nowhere: Next does.
+    await optionA.click()
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await optionA.click({ force: true })
+    await expect(page.getByText('Question 1 of 2')).toBeVisible()
+    await page.getByRole('button', { name: /Next Question/ }).click()
+    await expect(page.getByText('Question 2 of 2')).toBeVisible()
+  })
+
+  // Design review F17: a title is text, and its menu is the More button after it.
+  test('opens an exam page\'s menu from the More button beside its title', async ({ page }) => {
+    await page.goto('/wiki/exam/Exam%20P-1%20(SOA)')
+    await expect(page.getByRole('heading', { level: 1, name: /Exam P-1/ })).toBeVisible()
+    await page.getByRole('button', { name: /^Actions for/ }).click()
+    await expect(page.getByRole('button', { name: /Start Quiz/ })).toBeVisible()
+  })
 })
 
 // Each question starts clean: a free-entry answer typed on one question, and the

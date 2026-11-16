@@ -64,7 +64,7 @@ test.describe('wiki', () => {
     // walks on the same way — into the builder as it was left, not the list.
     await page.goto('/')
     await page.locator('button[data-tour="quiz-exam-p"]').click()
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
     await page.locator('a[data-tour="exam-p"]').click()
     const back = page.getByRole('link', { name: 'Back to Study Guides' })
     await back.click()
@@ -74,6 +74,15 @@ test.describe('wiki', () => {
     await expect(page.getByRole('button', { name: 'Change exam' })).toBeVisible()
     await page.goBack()
     await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+  })
+
+  test('folds the exams in development under one row per credential', async ({ page }) => {
+    await page.goto('/wiki')
+    await page.getByRole('radio', { name: 'CAS' }).click()
+    await expect(page.getByRole('link', { name: /Exam 5/ }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: /Exam 6U/ })).toHaveCount(0)
+    await page.getByTestId('in-development-ACAS').click()
+    await expect(page.getByRole('link', { name: /Exam 6U/ })).toBeVisible()
   })
 
   // Resources is the tab's second page: listed under Study Guides in the

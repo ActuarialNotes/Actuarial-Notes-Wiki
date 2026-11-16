@@ -501,9 +501,136 @@ tool.
 - The quiz header's percentage is gone, a **Skip to content** link is the first tab stop, and
   an empty deck holds its own **Add flashcards** button.
 
-Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
-continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
-go until the shortcut does.
+**Phase 1 was built on 2026-11-15:**
+
+- A concept page ends in a bar of next steps, in the popup and at its own address
+  (`components/wiki/ConceptNextSteps.tsx`): **Practice** with the number of questions a quiz
+  on the concept can serve, **Open in <tool>** where a tool names the concept, and the
+  reader's level, which opens Learning Progress. The question count comes from a small table
+  the build makes (`virtual:concept-question-counts`, `lib/conceptQuestionCounts.ts`), and the
+  tools from `data/conceptTools.json`, which `npm run tools:bundle` writes from the registry
+  (`lib/conceptTools.ts`); neither loads the question bank or the engine.
+- An exam page's objective rows carry a signed-in reader's count ("12 of 31", concepts at
+  Level 1 or higher) over a thin bar of the objective's concepts by level, and an open
+  objective ends in **Practice this objective**: ten questions, or as many as there are, from
+  the exam's own bank on that objective's concepts (`lib/objectiveProgress.ts`,
+  `components/wiki/ObjectiveProgress.tsx`, drawn by `MarkdownCallout` from the context
+  `WikiExam` provides).
+- The results list is headed by **Fix these now**, the missed questions again as one quiz. It
+  is the one filled button while anything was missed; *New Quiz* is the quiet one, and *Try
+  Again* is left only for a quiz with nothing missed and questions unanswered.
+- A tool's page has a labelled **Learn the method** button under its name, in place of the
+  book icon in the title.
+
+Left from Phase 1:
+
+- **Try these numbers** on a concept page's worked example (§5.6) needs each example's inputs
+  mapped onto its tool's fields, and no page carries that mapping yet.
+- **Check with <tool>** on a written question (§5.9) needs the question-to-tool mapping.
+- The open objective doesn't list its concepts a second time with their `MasteryBadge`
+  (§5.5): the syllabus's own words already link each one, and the row's bar says where they
+  stand. The exam page's title was still its menu, and the concept page's too, until the
+  underline rule of Phase 4 (§5.10) gave them a **More** button.
+
+**Phase 2 was built on 2026-11-15, and its exam in focus was taken out on 2026-11-16.**
+The maintainer found the switcher's behaviour hard to follow and asked for it reverted, so
+the stored exam, the switcher at the head of the sidebar and every tab opening on that exam
+are gone (`lib/examFocus.ts`, `hooks/useExamFocus.ts` and `components/ExamSwitcher.tsx` are
+deleted). Each tab picks its exam as it did before: the Quiz row and Learn open on their exam
+lists (Learn on wherever it was left this visit), Resources and the Store show every exam
+until one is chosen on the strip, and the Dashboard's chips are its own. F2 is open again.
+
+What is left of Phase 2:
+
+- **In-development exams are folded**: one "N in development" row per credential on the
+  Study Guides list, and a **+N** tile at the end of the exam strips on Resources and the
+  Store.
+- **A visitor's Today** (Phase 3) no longer has a picked exam to show. It shows the exam the
+  visitor last answered a question on, read off the browser's own record (`guestExamKey` in
+  `lib/guestMastery.ts`); a visitor who has answered nothing is asked which exam they are
+  studying and sent to the exam list.
+
+**Phase 3 was built on 2026-11-15:**
+
+- **The four places** are one definition (`lib/places.ts`): Today, Learn, Practice, Apply,
+  which place and page a path is in, and the pages each lists. The sidebar's rows are the
+  four, each with its pages under it: Exams and Resources under Learn; Quiz, Flashcards and
+  Games under Practice; Tools, Data Sources, Projects and Workflows under Apply. The pages stay
+  on screen under their place on a wide screen. Folding them away until their place is open
+  would put Flashcards two clicks from a study guide, so the pages are grouped and
+  subordinate, not hidden.
+- **On a phone the four are a bar at the bottom** (`components/BottomBar.tsx`). A press opens
+  a place; a press on the place the reader is in lists its pages. The bar is put away in a
+  quiz, a battle, the Concept Craft board, a workflow's board, a project attempt and the
+  sign-in screens, and every overlay (the concept popup, the PDF reader, focus mode) is drawn
+  over it. The hamburger is gone: the top corner holds the reader's **avatar**, which opens
+  every page and the You menu.
+- **Flashcards is a page of Practice.** A collected card lights up Practice, in the sidebar
+  and in the bar.
+- **The Store and Community are behind the avatar**: rows of the **You** menu at the
+  sidebar's foot, with the Gem Shop, Exams, Settings and signing in or out. A visitor has the
+  same menu (it used to be a link to Settings).
+- **Today is open to visitors** (D-DR2). A visitor's exam is the one they picked, and their
+  first pick on "Which exam are you studying?" now opens Today. Their concept levels are kept
+  in the browser (`lib/guestMastery.ts`): before this a visitor's levels were recomputed from
+  nothing on every quiz, so there was no record for Today to read. One line offers an account,
+  and signing in hands the levels to it, only for concepts the account has no record of. The
+  exam date a visitor sets is kept in the browser too. Analytics, the League, reminders and
+  the export stay signed-in.
+- **No 0% ring.** Until a question on the exam has been answered, the first step stands where
+  the readiness wheel will be.
+- The names are on screen: **Today**, **Learn**, **Practice**, **Apply** (D-DR1), in the
+  sidebar, the bar and every "Back to …". The exam list under Learn keeps its heading,
+  *Study Guides*, which is what that page is.
+
+Left from Phase 3:
+
+- **Level, quests and the league** are still opened from the Level badge on Today, not from
+  the avatar's menu; theme and sound are still at the sidebar's foot beside it, which on a
+  phone is inside the drawer the avatar opens.
+- A visitor's **streak, XP and quests** were already kept in the browser and are still not
+  handed to an account at sign-in; only the concept levels and the last quiz are.
+- The avatar was in the top-**left** corner, where the hamburger was. Phase 4 moved it to the
+  right.
+- Today's own page still has its exam chips, the Start pill and the full ReadinessCard under
+  the session; the **Progress** fold of §5.4 (ring, analytics, quests one tap down) is not
+  built.
+
+**Phase 4 was built on 2026-11-15:**
+
+- **Two columns from one left edge** (`page-column` and `page-reading` in `index.css`, style
+  guide §5.0b): 720 px for reading and lists, 1,040 px for shelves and boards. The reading
+  column starts where the wide one would, so the seven left edges of F14 are one. Each
+  page's floating search bar is on its page's column.
+- **One page header.** Community's hero (the drifting colour field, the stack of avatars, the
+  gradient on *For you*) is the title and its counts, like every other page; a topic's page
+  is its tile, name and counts with no wash. Topic colours are still on the chips, tiles and
+  tags that name a topic.
+- **An underline is a link.** The title of an exam's study guide, a concept page (in the
+  popup and at its own address) and a resource page is text with a **More** button (⋯) after
+  it (`components/TitleMoreButton.tsx`), which opens the same menu the title used to. A
+  heading that unfolds keeps its chevron and has no underline.
+- **The quiz's header is one row**: Quit, "3 of 12", the timer if timed, and **More**
+  (`components/quiz/QuizMoreMenu.tsx`), whose labelled rows are Flag question, Question info,
+  Mute sounds, Quiz settings and Keyboard shortcuts. The six icons and the exam's logo are
+  gone from above the question; a flagged question has a mark beside its number. The
+  spreadsheet button stays in the row for an exam sat with one, because it is what the
+  question is worked in. The keys (F, I, M, ?) do what they did.
+- **A locked answer does nothing when tapped**, so the "Choose any answer to continue"
+  caption is gone with the shortcut it described (left from Phase 0). Next is the button,
+  Enter or →.
+- **On a phone the avatar is in the top-right corner** on every page (left from Phase 3).
+
+Left from Phase 4:
+
+- Pages still write their own title row. They agree on the type and on "title, then one row
+  of controls", but there is no shared header component, and a tool keeps its breadcrumb and
+  an exam page its strip (F15).
+- Board screens (a workflow's board, Concept Craft, a project's workspace, the flashcard
+  study view) fill the screen and are on neither column.
+- The concept page's **More** holds the whole action menu, Practice included, so Practice is
+  offered twice (the foot bar and the menu).
+- The drawer the avatar opens still slides in from the left.
 
 ### How to tell whether it worked
 

@@ -1,3 +1,4 @@
+import { TitleMoreButton } from '@/components/TitleMoreButton'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { Headphones, ImageIcon, Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
@@ -14,6 +15,7 @@ import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
+import { ConceptNextSteps } from '@/components/wiki/ConceptNextSteps'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { figureLabel, pictureImages } from '@/lib/conceptFigures'
@@ -226,31 +228,24 @@ export function ConceptPagePanel({
           desktop and stay aligned with each other. */}
       <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          {/* The title is the page's one control: pressing the concept's own
-              name opens the action menu, so the largest thing in the header is
-              the way into the page's actions rather than decoration — there is
-              no ▶ button beside it. It is underlined to say so, in the text's
-              own colour. The menu survives focus mode — the page filling the
-              screen is when its actions are most wanted. */}
-          {hasActions ? (
-            <button
-              ref={titleBtnRef}
-              type="button"
-              data-play-menu-trigger
-              data-tour="concept-action"
-              onClick={() => setShowPlayMenu(v => !v)}
-              aria-haspopup="menu"
-              aria-expanded={showPlayMenu}
-              title={entry.name}
-              aria-label={`Actions for ${entry.name}`}
-              className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
-            >
-              {headerTitle}
-            </button>
-          ) : (
-            <span className="truncate font-semibold text-lg sm:text-xl min-w-0">
-              {headerTitle}
-            </span>
+          {/* The title is text, and the page's actions are the More button
+              after it (an underline is a link: design review F17). The menu
+              survives focus mode: the page filling the screen is when its
+              actions are most wanted. */}
+          <span className="truncate font-semibold text-lg sm:text-xl min-w-0" title={entry.name}>
+            {headerTitle}
+          </span>
+          {hasActions && (
+            <TitleMoreButton
+              tour="concept-action"
+              className="!ml-0"
+              action={{
+                ref: titleBtnRef,
+                open: showPlayMenu,
+                onToggle: () => setShowPlayMenu(v => !v),
+                label: `Actions for ${entry.name}`,
+              }}
+            />
           )}
           {hasActions && (
             <ConceptActionMenu
@@ -385,6 +380,8 @@ export function ConceptPagePanel({
                   return true
                 }}
               />
+              {/* The page ends in what to do with it: practice, its tool, its level. */}
+              {entry.kind === 'concept' && <ConceptNextSteps concept={entry.name} className="mt-6" />}
             </>
           )
         )}

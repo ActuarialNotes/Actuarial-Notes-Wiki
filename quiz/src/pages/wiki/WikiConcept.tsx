@@ -1,3 +1,4 @@
+import { TitleMoreButton } from '@/components/TitleMoreButton'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { GraduationCap, Loader2 } from 'lucide-react'
@@ -9,6 +10,7 @@ import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { ConceptNextSteps } from '@/components/wiki/ConceptNextSteps'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -173,18 +175,10 @@ export default function WikiConcept() {
     <div className="space-y-4 relative">
       <h1 className="text-2xl font-bold tracking-tight">
         {content !== null ? (
-          <button
-            ref={standalonePage.titleAction.ref}
-            type="button"
-            data-play-menu-trigger
-            onClick={standalonePage.titleAction.onToggle}
-            aria-haspopup="menu"
-            aria-expanded={standalonePage.titleAction.open}
-            aria-label={standalonePage.titleAction.label}
-            className="action-title-underline text-left"
-          >
-            {conceptName}
-          </button>
+          <>
+                {conceptName}
+                <TitleMoreButton action={standalonePage.titleAction} />
+              </>
         ) : conceptName}
       </h1>
       {content !== null && standalonePage.menu}
@@ -233,6 +227,7 @@ export default function WikiConcept() {
           }
         />
       )}
+      {content !== null && <ConceptNextSteps concept={conceptName} />}
     </div>
   )
 }

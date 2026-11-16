@@ -8,7 +8,6 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
-import { cn } from '@/lib/utils'
 
 /** The settings a quiz was started with — what the setup card's icons showed. */
 export interface QuizSettings {
@@ -21,50 +20,10 @@ export interface QuizSettings {
 }
 
 /**
- * The quiz header's **settings** button: the setup card's four icons, small,
- * as one control, so the settings a quiz was started with stay in sight while
- * it runs. A tap opens `QuizSettingsDialog`, which reads them out. They are
- * chosen before a quiz starts, so the popup changes nothing.
+ * The popup the quiz's More menu opens on **Quiz settings**: one row per
+ * setting, its value at the right and what it does under it. They are chosen
+ * before a quiz starts, so the popup changes nothing.
  */
-export function QuizSettingsButton({
-  settings,
-  open,
-  onOpenChange,
-  className,
-}: {
-  settings: QuizSettings
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  className?: string
-}) {
-  const { levels, timed, revealDuring, conceptLinks } = settings
-  const glyph = 'h-4 w-4'
-  const off = 'opacity-40'
-  return (
-    <button
-      type="button"
-      data-testid="quiz-settings-button"
-      onClick={() => onOpenChange(!open)}
-      aria-label="Quiz settings"
-      aria-haspopup="dialog"
-      aria-expanded={open}
-      title="Quiz settings"
-      className={cn(
-        'flex h-11 items-center gap-1.5 rounded-lg px-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        open && 'text-foreground',
-        className,
-      )}
-    >
-      <DifficultyBars levels={levels} size={16} />
-      {timed ? <Timer className={glyph} aria-hidden /> : <TimerOff className={cn(glyph, off)} aria-hidden />}
-      {revealDuring ? <Eye className={glyph} aria-hidden /> : <EyeOff className={cn(glyph, off)} aria-hidden />}
-      {conceptLinks ? <BookOpen className={glyph} aria-hidden /> : <BookX className={cn(glyph, off)} aria-hidden />}
-    </button>
-  )
-}
-
-/** The popup: one row per setting, its value at the right and what it does under it. */
 export function QuizSettingsDialog({
   settings,
   examKey,

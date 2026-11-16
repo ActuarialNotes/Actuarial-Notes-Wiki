@@ -60,7 +60,7 @@ test('the plan card plays today\'s episode, and it keeps playing across the app'
   await expect(button).toBeVisible({ timeout: 30_000 })
   await expect(button).toContainText("Listen to today's plan")
   await expect(button).toContainText(/\d+ concepts? · \d+ min/)
-  await button.locator('xpath=ancestor::div[contains(@class,"space-y-5")][1]').screenshot({ path: 'test-results/podcast-plan-card.png' })
+  await button.locator('xpath=ancestor::section[1]').screenshot({ path: 'test-results/podcast-plan-card.png' })
   await button.click()
 
   const player = page.getByTestId('podcast-player')
@@ -101,7 +101,7 @@ test('the pill follows the reader around the app', async ({ page }) => {
   await expect(player.getByRole('dialog')).toBeVisible()
   await page.keyboard.press('Escape')
   // …but moving within the app keeps it.
-  await page.getByRole('link', { name: 'Study Guides' }).first().click()
+  await page.getByRole('link', { name: 'Learn', exact: true }).first().click()
   await expect(page).toHaveURL(/\/wiki/)
   await expect(player).toBeVisible()
   await expect(player.getByRole('button', { name: /^(Play|Pause)$/ })).toBeEnabled()

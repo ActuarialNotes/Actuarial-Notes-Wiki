@@ -3,7 +3,8 @@ import { questionCredit } from '@/lib/parser'
 import type { Question, QuizMode, SelfGrade } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
-import { mergeLocalMastery } from '@/lib/localMasteryStore'
+import { mergeLocalMastery, recordGuestMastery, takeGuestMastery } from '@/lib/localMasteryStore'
+import type { MasteryEvent } from '@/lib/guestMastery'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
@@ -148,17 +149,15 @@ function awardXpAndQuests(
   })()
 }
 
-async function upsertMasteryFromResponses(
-  userId: string,
+// The answer events of a quiz, one per (answer, concept), in question order.
+// Within a single quiz a concept may be touched multiple times — they are
+// folded in this order so streak/state arithmetic is deterministic.
+function masteryEvents(
   questions: Question[],
   responses: Record<string, { chosen: string }>,
-  fallbackRecords: ConceptMasteryRecord[] = [],
   manualGrades: Record<string, SelfGrade> = {},
-): Promise<MasteryTransition[]> {
-  // Group answer events by (exam_id, concept_slug). Within a single quiz a
-  // concept may be touched multiple times — fold them in question order so
-  // streak/state arithmetic is deterministic.
-  const events: Array<{ examId: string; conceptSlug: string; isCorrect: boolean; isHard: boolean }> = []
+): MasteryEvent[] {
+  const events: MasteryEvent[] = []
   for (const q of questions) {
     const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
@@ -170,6 +169,37 @@ async function upsertMasteryFromResponses(
       events.push({ examId, conceptSlug, isCorrect, isHard })
     }
   }
+  return events
+}
+
+/**
+ * Hand what a visitor did in this browser to the account that has signed in
+ * (lib/guestMastery.ts): their concept records, saved only where the account
+ * has none of its own. Taken once; a second call finds nothing to take.
+ */
+export async function adoptGuestMastery(userId: string): Promise<void> {
+  const rows = takeGuestMastery(userId)
+  if (rows.length === 0) return
+  const updatedAt = new Date().toISOString()
+  const { error } = await supabase
+    .from('concept_mastery')
+    .upsert(rows.map(r => ({ ...r, updated_at: updatedAt })), {
+      onConflict: 'user_id,exam_id,concept_slug',
+      ignoreDuplicates: true,
+    })
+  // The records stay in the browser under the account either way, where the
+  // ladder still reads them (useConceptMastery's local supplement).
+  if (error) console.error('concept_mastery: saving progress made before sign-in failed:', error.message)
+}
+
+async function upsertMasteryFromResponses(
+  userId: string,
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+  fallbackRecords: ConceptMasteryRecord[] = [],
+  manualGrades: Record<string, SelfGrade> = {},
+): Promise<MasteryTransition[]> {
+  const events = masteryEvents(questions, responses, manualGrades)
   if (events.length === 0) return []
 
   const keys = [...new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))]
@@ -322,6 +352,8 @@ export interface CompletedSession {
   // only written to localStorage and still needs to be persisted to Supabase
   // once the user signs in (see syncPendingSessionToCloud).
   needsCloudSync?: boolean
+  /** Finished signed out, with its answers folded into the visitor's own records (lib/guestMastery.ts). */
+  guestMasteryKept?: boolean
 }
 
 export interface QuizStore {
@@ -714,6 +746,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       const upward = masteryTransitions.filter(
         t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
       )
+      // Keep the visitor's levels in this browser, so the ladder carries on
+      // from here on their next quiz and Today can show where they stand.
+      recordGuestMastery(masteryEvents(questions, responses, manualGrades))
       const completedSession: CompletedSession = {
         questions,
         responses,
@@ -725,6 +760,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         masteryTransitions,
         manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
         needsCloudSync: true,
+        guestMasteryKept: true,
       }
       try {
         localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
@@ -887,11 +923,18 @@ export async function syncPendingSessionToCloud(
   const { questions, responses, mode, correctCount, timeTakenSeconds, manualGrades = {} } = session
 
   let masteryTransitions: MasteryTransition[]
-  try {
-    masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
-  } catch (masteryErr) {
-    console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
-    masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
+  if (session.guestMasteryKept) {
+    // This quiz's answers are already in the visitor's own records, which go
+    // to the account whole. Applying the answers again would count them twice.
+    await adoptGuestMastery(userId)
+    masteryTransitions = session.masteryTransitions ?? []
+  } else {
+    try {
+      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
+    } catch (masteryErr) {
+      console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
+      masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
+    }
   }
 
   const { error } = await persistSessionToCloud(userId, {
@@ -968,6 +1011,7 @@ export async function recordReviewAnswers(
     }
   } else {
     masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
+    recordGuestMastery(masteryEvents(answered, responses, manualGrades))
   }
   masteryTransitions = collectLevelledConcepts(masteryTransitions)
 

@@ -88,7 +88,7 @@ export function ToolCard({
               type="button"
               onClick={onOpenMethod}
               className="group inline-flex items-center gap-1.5 text-left text-base font-semibold leading-tight underline-offset-4 hover:underline"
-              title="Read about the method"
+              title="Learn the method"
             >
               {spec.name}
               <BookOpen className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" aria-hidden />

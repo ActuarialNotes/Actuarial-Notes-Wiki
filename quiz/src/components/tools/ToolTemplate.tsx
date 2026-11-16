@@ -253,22 +253,18 @@ export function ToolTemplate({
             <p className="truncate text-xs text-foreground/75" data-testid="tool-eyebrow">
               {[area, reading].filter(Boolean).join(' · ')}
             </p>
-            {onOpenMethod ? (
+            <h2 className="text-[17px] font-bold leading-tight">{spec.name}</h2>
+            {/* The way back to the page that teaches the method (design review §5.9). */}
+            {onOpenMethod && (
               <button
                 type="button"
                 onClick={onOpenMethod}
-                className="group block text-left text-[17px] font-bold leading-tight underline-offset-4 hover:underline"
-                title="Read about the method"
+                className="-ml-0.5 mt-1.5 inline-flex h-8 items-center gap-1.5 rounded-full bg-background/50 px-3 text-sm font-medium hover:bg-background/80"
+                data-testid="tool-learn-method"
               >
-                {/* The book keeps to the last word, never to a line of its own. */}
-                {spec.name.split(' ').slice(0, -1).join(' ')}{spec.name.includes(' ') ? ' ' : ''}
-                <span className="whitespace-nowrap">
-                  {spec.name.split(' ').pop()}
-                  <BookOpen className="ml-1.5 inline h-3.5 w-3.5 align-[-1px] text-foreground/60 group-hover:text-foreground" aria-hidden />
-                </span>
+                <BookOpen className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                Learn the method
               </button>
-            ) : (
-              <h2 className="text-[17px] font-bold leading-tight">{spec.name}</h2>
             )}
           </div>
           <div className="-mr-1 flex shrink-0 items-center gap-1">
@@ -292,7 +288,7 @@ export function ToolTemplate({
                 <RotateCcw className="h-4 w-4" aria-hidden />
               </button>
             )}
-            <ToolMenu items={m.menu} header={close => <MenuHeader spec={spec} onRead={close} />} />
+            <ToolMenu items={m.menu.filter(item => item.key !== 'method')} header={close => <MenuHeader spec={spec} onRead={close} />} />
           </div>
         </header>
 

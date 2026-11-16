@@ -6,9 +6,17 @@ Read this first, every session. It should save you a re-discovery pass through t
 
 A two-part product for people studying for actuarial exams (CAS/SOA):
 
-The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
-Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
-**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: one catalogue of
+The app is **one place** with one sidebar, whose rows are the **four places** of the path a
+learner walks (`lib/places.ts`, design review Phase 3): **Today** (`/dashboard`, the day's
+session, open to a visitor from the browser's own record), **Learn** (the study guides and
+Resources), **Practice** (the quiz builder, Flashcards, Games) and **Apply** (Tools, Data
+Sources, Projects, Workflows). On a phone the four are a bar at the bottom of the screen
+(`components/BottomBar.tsx`) and the avatar in the top corner opens the rest; the Store and
+Community are in the **You** menu behind the avatar. In this file "the Dashboard" is Today's
+page, "Study Guides" the pages under Learn and "the Quiz tab" Practice's quiz builder: the
+code keeps those names. What was **Cowork** — a second mode behind a
+Study / Cowork pill until 2026-11-14 — is now pages of Apply: **Workflows** (`/workflows`),
+**Tools** and **Data Sources** (`/data-sources`: one catalogue of
 values, tables and documents, open to everyone). Workflows is open only to approved accounts
 (`PREVIEW_APPROVED_EMAILS` in `lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
 `docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
@@ -122,9 +130,10 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   row, chip or header tool by hand. See `docs/style-guide.md` §7.0.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
-  concept popup (whose title is its only trigger) and every flashcard surface open that one
+  concept popup (the **More** button after its title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
-  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
+  **More** button after the exam study guide's title (`WikiArticle`'s `titleAction`, drawn by
+  `components/TitleMoreButton.tsx`; a title is never underlined, an underline is a link): the readiness bar
   (`components/ReadinessBar.tsx`) and the countdown to the exam,
   then **Start Quiz** (the exam's bank in the quiz builder, greyed out for an exam with no
   questions — `examQuizTopic`), **Today's Study Plan** (locked for a reader who isn't Pro)
@@ -395,10 +404,13 @@ before touching that area**:
   writing skill links to it; the app's glossary and decisions log are in the `app-copy` skill.
 - `docs/design-review.md` — **the design review and the redesign in progress** (roadmap X11): the
   whole app held to the Laws of UX, 19 findings, and the proposal being built in five phases —
-  four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus, a next
-  step at the end of every screen. Its §6 says which phases are built (Phase 0 is) and its §7 the
+  four places in the order of the path (Today, Learn, Practice, Apply), one exam in focus (built, then reverted), a next
+  step at the end of every screen. Its §6 says which phases are built (all five, 0 to 4, are, each with what it left open) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
+- **Page layout:** a page's content goes on one of two columns from `index.css`, never a
+  `max-w-*` of its own: `page-column page-reading` (720 px, reading and lists) or `page-column`
+  (1,040 px, shelves and boards), which share a left edge (style guide §5.0b).
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -577,7 +589,7 @@ before touching that area**:
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
   `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
   **after any change under `lib/tools/`, run `npm run tools:bundle`** — `bundle.test.ts` fails
-  on a stale copy. Every tool reproduces published work in CI (§17): Friedland's and Werner &
+  on a stale copy (it also rewrites `src/data/conceptTools.json`, the concept pages' tool links). Every tool reproduces published work in CI (§17): Friedland's and Werner &
   Modlin's exhibits, read off the CAS PDFs by `scripts/tool_fixtures.py` into
   `lib/tools/fixtures/*.json`, and SOA FM / Exam P sample questions and CAS MAS-I/MAS-II past
   papers whose keyed answers (a value, or a range) `checks.test.ts` reads from the bank — a
@@ -719,7 +731,7 @@ Other important `lib/` modules:
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
   both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
-  an exam page it is the same item in the menu the exam's title opens). The panel leads with
+  an exam page it is the same item in the menu the **More** button beside the exam's title opens). The panel leads with
   the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
   **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes, and on a question
@@ -770,6 +782,24 @@ Other important `lib/` modules:
   either side of one that shares a paragraph with prose or with more lines of working.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
+- `conceptTools.ts` / `conceptQuestionCounts.ts` / `objectiveProgress.ts` — **the next step**
+  (design review Phase 1). A concept page ends in `components/wiki/ConceptNextSteps.tsx`:
+  **Practice** with its question count, **Open in <tool>**, and the reader's level. The popup is
+  in the first paint, so it loads neither the bank nor the engine: the count is
+  `virtual:concept-question-counts` (what `filterQuestions` would serve, across every bank and
+  per bank; `hooks/useConceptQuestionCounts.ts`), and the tools are `data/conceptTools.json`,
+  `ToolSpec.method.concepts` read the other way, **written by `npm run tools:bundle`** and held
+  to the registry by `conceptTools.test.ts`. On an exam page, `objectiveProgress.ts` is each
+  learning objective's concepts by level; `WikiExam` provides it
+  (`components/wiki/objectiveProgressContext.ts`) and `MarkdownCallout` draws the row's count
+  and bar and the open objective's **Practice this objective**
+  (`components/wiki/ObjectiveProgress.tsx`). Pure and tested; the flows are
+  `e2e/next-steps.spec.ts`.
+- **No exam in focus.** Design review Phase 2 stored one exam and opened every tab on it, with a
+  switcher at the head of the sidebar; that was taken out on 2026-11-16 at the maintainer's
+  request (`docs/design-review.md` §6). Each surface picks its exam as before. What stays from
+  that phase is the folding of in-development exams: per credential on the Study Guides list,
+  and behind a **+N** tile on `ExamStrip` (`folded`).
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (an exam that passes all eight gates of `scripts/publication_readiness.py --check` —
   **Exams P and FM**, ready again since 2026-10-30, and **MAS-I**, the **three DISCs** and **Exam 7**, since 2026-10-31 — and **MAS-II**, the first beta exam to pass all eight, the same day, and **Exam 9** and **Exam 5** after it: P, FM, MAS-I, the three DISCs and Exam 7 went
@@ -1024,7 +1054,9 @@ Other important `lib/` modules:
   question its id numbers) and fails a dated `-an-` question. Write a new original question
   with the **question-writer** skill (`.claude/skills/question-writer/`), under an `-an-` id.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
-  (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
+  (`components/QuestionInfoDialog.tsx`, the **Question info** row of the quiz header's **More**
+  menu, `components/quiz/QuizMoreMenu.tsx`; `QuestionInfoButton.tsx` is the button a question
+  search row carries): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
   recovered from the `verification:` block's `log:` path, since the build collects question
   *contents* and an id doesn't map to a filename. Provenance is read off the frontmatter,
@@ -1193,16 +1225,39 @@ Other important `lib/` modules:
   folded page come back where it was left). A page's **Read PDF** stacks its document the
   same way (`PdfPageRef` → `components/wiki/PdfPagePanel.tsx`), whose own page bar and
   footer stand in for the walk's while it is open. See `docs/stacked-pages.md`.
+- `places.ts` — **the four places** (design review Phase 3): Today, Learn, Practice, Apply, in
+  the order of the path; which place and which page a path is in (`placeOf`, `pageOf`), the
+  pages a place lists for what a reader can open (`placePages`), and where the phone's bottom
+  bar is put away (`hidesBottomBar`: a quiz, a battle, the craft and workflow boards, a project
+  attempt, sign-in). `Sidebar.tsx` draws them as four rows with their pages under each
+  (`LearnNav` / `PracticeNav` / `ApplyNav`) and, at its foot, the **You** menu (Store, Community,
+  Gem Shop, Exams, Settings, sign in or out; `data-testid="you-menu"`). Below `lg`
+  `components/BottomBar.tsx` draws them as the bar at the bottom of the screen: a press opens a
+  place, a press on the place the reader is in lists its pages. While the bar shows,
+  `--bottom-nav-height` is its height (`index.css`, off `data-bottom-bar` on the body): `Main`
+  pads by it, a page's fixed bottom bar stands on it, and the resume dock and the Tutor ride
+  above `--bottom-edge`. Add a new route to `placeOf`/`pageOf` and to `deskPlace`. Pure and
+  tested; the flows are `e2e/four-places.spec.ts`. See `docs/style-guide.md` §5.0a.
+- `guestMastery.ts` — **a visitor's concept levels, kept in the browser**, which is what lets
+  Today work signed out. A quiz finished signed out folds its answers into records owned by
+  `GUEST_ID` in the local mastery store (`recordGuestMastery` in `localMasteryStore.ts`, called
+  from `quizStore`), and `useConceptMastery` reads them when there is no account. At sign-in
+  they are handed to the account **once** and only for concepts it has no record of
+  (`takeGuestMastery` → `adoptGuestMastery` in `stores/quizStore.ts`, `ignoreDuplicates`), so an
+  account's own history is never overwritten; a pending guest quiz marked `guestMasteryKept`
+  is not applied a second time. A visitor's exam on Today is the one they last answered a question on
+  (`guestExamKey`), and the date they set for it is kept in `quiz.guestExamRows` (`ExamProgressContext`). Pure and tested.
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
-  it on a given route: a page with a floating search bar carries the hamburger
-  (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
+  it on a given route: a page with a floating search bar carries the avatar button
+  (`components/MobileNavButton.tsx`, the way into the drawer now that the places are the bottom
+  bar) on that bar's line, and every other page gets the app
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
-  `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
+  `<MobileNavButton />` in its bar at the same time, or it ends up with two avatars or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
-  sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
+  sheet and the app is the desk. Pages lie side by side in sidebar order (the four places, each with its pages beside it), so a tab switch
   slides the desk (`next`/`prev`); a link deeper into a tab lays a sheet over the current
   one (`push`); Back — or a link *up* the tab — swipes the top sheet off (`pop`); and within a
   page a quiz's Next/Back flicks the question off the pile or slides it back
@@ -1460,7 +1515,7 @@ Other important `lib/` modules:
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
 - `components/FloatingSearchBar.tsx` — the **floating search bar**, as parts: the sticky
-  blurred container, the input line (the hamburger on the search's own row, folding away as
+  blurred container, the input line (the avatar button on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
   wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar`, `DashboardSearchBar` and
@@ -1904,6 +1959,9 @@ modules that read directly from the repo root:
   every reader downloads before first paint. **Never import it statically** —
   `npm run size` (`scripts/bundle-budget.mjs`, a CI step) fails a build whose first paint
   (the entry script, what it preloads and its CSS, gzipped) is over budget
+- `virtual:concept-question-counts` — how many served questions each concept has, across the
+  bank and per exam (`lib/conceptQuestionCounts.ts`, ~75 KB, a chunk of its own): what lets a
+  concept page say "Practice · 14 questions" without fetching the bank
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
   along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A

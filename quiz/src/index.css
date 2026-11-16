@@ -16,6 +16,8 @@
      - `--card` is a step off `--background` rather than the same value, so a
        card (a flashcard above all) reads as a raised surface with no outline. */
   :root {
+    --page-wide: 65rem;
+    --page-reading: 45rem;
     --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.10), 0 2px 10px 0 rgba(0,0,0,0.06);
     --background: 0 0% 95%;
     --foreground: 0 0% 0%;
@@ -754,14 +756,53 @@
   .designation-foil--hero::after { animation: none; }
 }
 
-/* The concept popup's title is a control — it opens the page's action menu —
-   so it is drawn as a link: a 2px underline in the text's own colour. */
-.action-title-underline {
-  background-image: linear-gradient(hsl(var(--foreground)), hsl(var(--foreground)));
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 2px;
-  padding-bottom: 2px;
+/* One frame (docs/design-review.md §5.10, style guide §5.0b): every page's
+   content is one of two columns, and both start at the same left edge, so
+   moving between pages doesn't move the page sideways. `page-column` is the
+   wide one, for shelves and boards; add `page-reading` for reading and lists.
+   The narrow column is not centred on its own: it starts where the wide one
+   would. Both are in the components layer, so a page's own padding utility
+   still wins. */
+@layer components {
+  .page-column {
+    width: 100%;
+    max-width: var(--page-wide);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .page-column { padding-inline: 1.5rem; }
+  }
+  .page-column.page-reading {
+    max-width: var(--page-reading);
+    margin-left: max(0px, calc((100% - var(--page-wide)) / 2));
+    margin-right: auto;
+  }
+}
+
+/* A title that opens a menu is a title with a More button beside it
+   (design review F17: an underline is a link, and nothing else). */
+.title-more {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 2rem;
+  width: 2rem;
+  margin-left: 0.375rem;
+  border-radius: 0.5rem;
+  color: hsl(var(--muted-foreground));
+  transition: background-color 150ms, color 150ms;
+}
+.title-more:hover,
+.title-more[aria-expanded='true'] {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--foreground));
+}
+.title-more:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }
 
 /* A resource page's Contents (lib/resourceContents.ts, docs/resource-page-v2.md):
@@ -2108,11 +2149,15 @@ summary .katex-display,
 /* The Tutor (docs/tutor.md §9) is chrome the same way: it sits in the corner
    of every page and belongs to none of them. */
 .paper-chrome-tutor { view-transition-name: paper-tutor; }
+/* The bottom bar (components/BottomBar.tsx), the phone's four places: chrome
+   like the rail it stands in for, so a page slides under it. */
+.paper-chrome-tabbar { view-transition-name: paper-tabbar; }
 
 ::view-transition-group(paper-rail),
 ::view-transition-group(paper-header),
 ::view-transition-group(paper-resume),
-::view-transition-group(paper-tutor) {
+::view-transition-group(paper-tutor),
+::view-transition-group(paper-tabbar) {
   z-index: 10;
   animation: none;
 }
@@ -2123,7 +2168,9 @@ summary .katex-display,
 ::view-transition-old(paper-resume),
 ::view-transition-new(paper-resume),
 ::view-transition-old(paper-tutor),
-::view-transition-new(paper-tutor) {
+::view-transition-new(paper-tutor),
+::view-transition-old(paper-tabbar),
+::view-transition-new(paper-tabbar) {
   animation-duration: 180ms;
   animation-timing-function: ease-out;
 }
@@ -2395,13 +2442,27 @@ summary .katex-display,
   .rainbow-glow::after { animation: none; }
 }
 
+/* ── The bottom edge ──
+   Below `lg` the four places are a bar at the bottom of the screen
+   (components/BottomBar.tsx), which marks the body while it shows.
+   `--bottom-nav-height` is its height: the page pads its foot by it, and a
+   page's own action bar stands on top of it. `--bottom-edge` is how much of
+   the bottom of the window is taken, for what floats above (the resume dock,
+   the Tutor): an action bar's height is measured from its top edge to the
+   bottom of the window (hooks/useActionBarHeight.ts), so it already counts
+   the bar under it, and the taller of the two is the edge. */
+body { --bottom-edge: max(var(--action-bar-height, 0px), var(--bottom-nav-height, 0px)); }
+@media (max-width: 1023.98px) {
+  body[data-bottom-bar] { --bottom-nav-height: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+
 /* ── The Tutor's place on the page (docs/tutor.md §9) ──
    The character rides above whatever is parked on the bottom edge — a page's action
    bar or the concept popup's split pane — the way the resume dock does. Its
    panel opens above it on a wide screen, and drops to the bottom of the screen
    when the split pane leaves too little room above; on a phone it is a sheet. */
 .tutor-dock {
-  bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 1rem);
+  bottom: calc(max(var(--concept-split-height, 0px), var(--bottom-edge, 0px)) + 1rem);
 }
 .tutor-panel-frame {
   bottom: 0;
@@ -2409,7 +2470,7 @@ summary .katex-display,
 }
 @media (min-width: 640px) {
   .tutor-panel-frame {
-    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 4.75rem), calc(100vh - 34rem)));
+    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--bottom-edge, 0px)) + 4.75rem), calc(100vh - 34rem)));
     bottom: var(--tutor-panel-bottom);
     max-height: calc(100vh - var(--tutor-panel-bottom) - 1rem);
   }
@@ -2469,13 +2530,6 @@ summary .katex-display,
 .community-live {
   animation: community-live 2s ease-out infinite;
 }
-@keyframes community-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50%      { transform: translate3d(-3%, 2%, 0) scale(1.06); }
-}
-.community-drift {
-  animation: community-drift 18s ease-in-out infinite;
-}
 /* A topic's colour as small text: the deep shade on a light page, the light
    one on a dark page, where the deep one sinks into the surface. */
 .topic-ink { color: var(--topic-vivid); }
@@ -2483,7 +2537,6 @@ summary .katex-display,
 @media (prefers-reduced-motion: reduce) {
   .community-rise { animation: none; }
   .community-live { animation: none; }
-  .community-drift { animation: none; }
 }
 
 /* ── Sticky section headings (concept pages) ─────────────────────────────

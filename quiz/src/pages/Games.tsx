@@ -13,7 +13,7 @@ export default function Games() {
   const back = useBack({ to: '/', label: 'Quiz' })
   const label = backLabel(back)
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6">
+    <div className="page-column page-reading space-y-6 py-8">
       <div className="flex items-center gap-2">
         <button
           type="button"

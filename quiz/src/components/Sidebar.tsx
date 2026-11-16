@@ -1,18 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   Calculator,
-  ChevronDown,
+  CalendarCheck,
   ChevronsLeft,
   ChevronsRight,
   Database,
   FlaskConical,
+  Gamepad2,
   Gem,
   GraduationCap,
   Layers,
-  LayoutDashboard,
+  ListChecks,
   LibraryBig,
+  LogIn,
   LogOut,
   Microscope,
   Moon,
@@ -23,6 +25,7 @@ import {
   Sun,
   Users,
   Workflow,
+  Wrench,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
@@ -38,14 +41,15 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useTheme } from '@/hooks/useTheme'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { GuestAvatar } from '@/components/GuestAvatar'
 import { ProBadge, NAME_PILL } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
+import { GAMES_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/lib/featureFlags'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
-import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
+import { pageOf, placeOf, placePages, type PlacePageId } from '@/lib/places'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { SoundPopover } from '@/components/SoundPopover'
@@ -53,6 +57,7 @@ import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
+/** Where Learn was left this visit, else the exam list. */
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
 }
@@ -136,6 +141,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
         className={`${base} ${tone[state]}`}
         onClick={onNavigate}
         data-tour={dataTour}
+        data-flashcard-nav={dataFlashcardNav ? '' : undefined}
       >
         {content}
       </Link>
@@ -158,133 +164,17 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
   )
 }
 
-function SidebarGroup({
-  label,
-  icon,
-  collapsed,
-  isActive,
-  children,
-}: {
-  label: string
-  icon: React.ReactNode
-  collapsed: boolean
-  isActive: boolean
-  children: React.ReactNode
-}) {
-  const [open, setOpen] = useState(isActive)
-
-  // Auto-expand when navigating to a child route
-  useEffect(() => {
-    if (isActive) setOpen(true)
-  }, [isActive])
-
-  // When sidebar is icon-only (collapsed desktop), render children directly
-  if (collapsed) {
-    return <>{children}</>
-  }
-
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => setOpen(v => !v)}
-        className={`w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors lg:rounded-md lg:py-2 lg:text-sm ${
-          isActive
-            ? 'text-foreground font-medium'
-            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-        }`}
-      >
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
-        <span className="flex-1 truncate text-left">{label}</span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 transition-transform duration-200 lg:h-3.5 lg:w-3.5 ${open ? 'rotate-180' : ''}`}
-        />
-      </button>
-      {open && (
-        <div className="ml-4 mt-0.5 border-l border-border pl-2 space-y-0.5">
-          {children}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function isUnder(pathname: string, route: string): boolean {
-  return pathname === route || pathname.startsWith(`${route}/`)
-}
-
 /**
- * The **Workflows** row and the two places a workflow is built from under it:
- * **Tools** (the calculators) and **Data Sources** (the published tables, the
- * Assumptions Bank, the publishers and their documents). Unlike Study Guides'
- * pages, the two are always listed — they are destinations in their own right,
- * not views of an open workflow. For a reader without Workflows (it is in
- * Preview, `lib/workflowsAccess.ts`), Tools and Data Sources stand as rows of
- * their own instead (`ToolsNav`).
- */
-function WorkflowsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  const { pathname } = useLocation()
-  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
-  const inWorkflows = isUnder(pathname, '/workflows')
-  const inTools = isUnder(pathname, '/tools')
-  const inData = isUnder(pathname, '/data-sources')
-
-  return (
-    <>
-      <SidebarItem
-        to="/workflows"
-        label="Workflows"
-        icon={<Workflow className={iconClass} />}
-        collapsed={collapsed}
-        onNavigate={onNavigate}
-        state={inWorkflows ? 'active' : inTools || inData ? 'within' : 'idle'}
-      />
-      {TOOLS_STORE_NAV_ENABLED && (
-        <SubRows collapsed={collapsed}>
-          <ToolsNav collapsed={collapsed} onNavigate={onNavigate} />
-        </SubRows>
-      )}
-    </>
-  )
-}
-
-/** The Tools and Data Sources rows: under Workflows, or on their own for a reader without it. */
-function ToolsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  const { pathname } = useLocation()
-  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
-  return (
-    <>
-      <SidebarItem
-        to="/tools"
-        label="Tools"
-        icon={<Calculator className={iconClass} />}
-        collapsed={collapsed}
-        onNavigate={onNavigate}
-        state={isUnder(pathname, '/tools') ? 'active' : 'idle'}
-      />
-      <SidebarItem
-        to="/data-sources"
-        label="Data Sources"
-        icon={<Database className={iconClass} />}
-        collapsed={collapsed}
-        onNavigate={onNavigate}
-        state={isUnder(pathname, '/data-sources') ? 'active' : 'idle'}
-      />
-    </>
-  )
-}
-
-/**
- * The rows a tab lists under itself while it is open — an attempt's views
- * under Projects, the Study Guides pages under Study Guides — indented behind
- * a rule, so they read as part of the row above.
+ * The pages a place lists under itself, indented behind a rule so they read
+ * as part of the row above. An open attempt's views sit the same way under
+ * Projects.
  */
 function SubRows({ collapsed, children }: { collapsed: boolean; children: React.ReactNode }) {
   return (
     <div
       className={cn(
         'ml-4 mt-0.5 space-y-0.5 border-l border-border pl-2',
-        // The icon-only rail has no room to indent: the rows stand in line under the tab's icon.
+        // The icon-only rail has no room to indent: the rows stand in line under the place's icon.
         collapsed && 'lg:ml-0 lg:border-l-0 lg:pl-0',
       )}
     >
@@ -293,95 +183,226 @@ function SubRows({ collapsed, children }: { collapsed: boolean; children: React.
   )
 }
 
-const STUDY_GUIDE_PAGES: { id: StudyGuidesSection; to: string; label: string; Icon: typeof BookOpen }[] = [
-  { id: 'exams', to: '/wiki', label: 'Exams', Icon: GraduationCap },
-  { id: 'resources', to: RESOURCES_ROUTE, label: 'Resources', Icon: LibraryBig },
-]
+const ICON = 'h-5 w-5 lg:h-4 lg:w-4'
+
+// A row of the You menu, and its icon.
+const MENU_ROW = 'w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm'
+const MENU_ICON = 'h-5 w-5 shrink-0 lg:h-4 lg:w-4'
+
+type NavProps = { collapsed: boolean; onNavigate: () => void }
+
+/** A page's row under its place: filled while the reader is on it. */
+function PageRow({
+  page, to, label, icon, badge, collapsed, onNavigate,
+}: NavProps & { page: PlacePageId; to: string; label: string; icon: React.ReactNode; badge?: React.ReactNode }) {
+  const { pathname } = useLocation()
+  return (
+    <SidebarItem
+      to={to}
+      label={label}
+      icon={icon}
+      badge={badge}
+      collapsed={collapsed}
+      onNavigate={onNavigate}
+      state={pageOf(pathname) === page ? 'active' : 'idle'}
+    />
+  )
+}
 
 /**
- * The Study Guides row and, while the tab is open, its pages under it —
- * **Exams** (the ladder, with the exam and concept pages read from it) and
- * **Resources** (the shelf, with the resource pages opened from it) — drawn
- * the way `ProjectsNav` draws an open attempt's views: the page showing is
- * filled, the tab's own row is named but not filled. Which page a path is
- * under is `studyGuidesSection` (`lib/wikiRoutes.ts`).
+ * **Learn**: the exam list (or wherever the reader left off in the study
+ * guides this visit), with the exam list and the Resources shelf
+ * under it, and the flag-gated Research page for a signed-in reader.
  */
-function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+function LearnNav({ collapsed, onNavigate, research }: NavProps & { research: boolean }) {
   const { pathname } = useLocation()
-  const section = studyGuidesSection(pathname)
-  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
-
+  const icons: Partial<Record<PlacePageId, React.ReactNode>> = {
+    exams: <GraduationCap className={ICON} />,
+    resources: <LibraryBig className={ICON} />,
+    research: <Microscope className={ICON} />,
+  }
   return (
     <>
       <SidebarItem
         to={getLastWikiPath()}
-        label="Study Guides"
-        icon={<BookOpen className={iconClass} />}
+        label="Learn"
+        icon={<BookOpen className={ICON} />}
         collapsed={collapsed}
         onNavigate={onNavigate}
-        state={section ? 'within' : 'idle'}
+        state={placeOf(pathname) === 'learn' ? 'within' : 'idle'}
       />
-      {section && (
-        <SubRows collapsed={collapsed}>
-          {STUDY_GUIDE_PAGES.map(({ id, to, label, Icon }) => (
-            <SidebarItem
-              key={id}
-              to={to}
-              label={label}
-              icon={<Icon className={iconClass} />}
-              collapsed={collapsed}
-              onNavigate={onNavigate}
-              state={id === section ? 'active' : 'idle'}
-            />
-          ))}
-        </SubRows>
-      )}
+      <SubRows collapsed={collapsed}>
+        {placePages('learn', { research }).map(p => (
+          <PageRow
+            key={p.id}
+            page={p.id}
+            to={p.to}
+            label={p.label}
+            icon={icons[p.id]}
+            collapsed={collapsed}
+            onNavigate={onNavigate}
+            badge={p.id === 'research' ? (
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
+                Beta
+              </span>
+            ) : undefined}
+          />
+        ))}
+      </SubRows>
     </>
   )
 }
 
 /**
- * The Projects row — a Pro feature, so it carries the Pro chip for every
- * reader — and, while an attempt is open, that attempt's views under
- * it — Brief, Workspace, Report, Submit (Results once submitted) — mirroring
- * the switcher in the attempt's top bar, which the attempt page publishes to
- * `useAttemptNav`. Choosing one replaces the history entry, as the switcher
- * does: the views are windows of one project, not pages of it.
+ * **Practice**: the quiz builder, the deck, and Games
+ * (Quiz Battle and Concept Craft). The place's row carries what is left of
+ * today's plan and lights up when a card is collected, since the deck is one
+ * of its pages.
  */
-function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
-  const attempt = useAttemptNav(s => s.current)
-  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
+function PracticeNav({ collapsed, onNavigate }: NavProps) {
+  const { pathname } = useLocation()
+  const { cards } = useFlashcards()
+  const collectGlow = useCollectGlow()
+  const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
+  const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
+
+  // Keep daily quiz stats fresh after each quiz completion.
+  useEffect(() => {
+    const refresh = () => setDailyQuizStats(getDailyQuizStats())
+    window.addEventListener(DAILY_QUIZ_EVENT, refresh)
+    window.addEventListener('quiz-session-saved', refresh)
+    return () => {
+      window.removeEventListener(DAILY_QUIZ_EVENT, refresh)
+      window.removeEventListener('quiz-session-saved', refresh)
+    }
+  }, [])
+
+  // Questions left in today's plan (the badge the Start button on Today
+  // carries) alongside today's answered tally.
+  const quizBadge = todayQuizTotal <= 0 && !todayQuizAllComplete && dailyQuizStats.total <= 0 ? null : (
+    <span className="flex items-center gap-1.5">
+      <TodayQuizNavBadge count={todayQuizTotal} complete={todayQuizAllComplete} />
+      {dailyQuizStats.total > 0 && (
+        <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px]">
+          {dailyQuizStats.correct}/{dailyQuizStats.total}
+        </span>
+      )}
+    </span>
+  )
+
+  // Re-keyed on every collect so the pop replays each time the count ticks up.
+  const deckBadge = cards.length > 0 ? (
+    <span
+      key={collectGlow}
+      className={`text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px] ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
+    >
+      {cards.length}
+    </span>
+  ) : null
 
   return (
     <>
       <SidebarItem
-        to="/project"
-        label="Projects"
-        icon={<FlaskConical className={iconClass} />}
+        to="/"
+        label="Practice"
+        icon={
+          <span className="relative inline-flex items-center justify-center">
+            {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
+            <Play key={`icon-${collectGlow}`} className={`${ICON} ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
+            {/* The icon-only rail hides the row badge, so the questions left
+                ride the icon's corner there. */}
+            {collapsed && (
+              <span className="hidden lg:block">
+                <TodayQuizCornerBadge count={todayQuizTotal} complete={todayQuizAllComplete} size="sm" className="-top-1.5 -right-2" />
+              </span>
+            )}
+          </span>
+        }
         collapsed={collapsed}
         onNavigate={onNavigate}
-        state={attempt ? 'within' : undefined}
-        badge={<ProBadge />}
+        state={placeOf(pathname) === 'practice' ? 'within' : 'idle'}
+        badge={quizBadge}
+        dataTour="nav-quiz"
+        dataFlashcardNav
       />
-      {attempt && (
-        <SubRows collapsed={collapsed}>
-          {attempt.views.map(view => {
-            const Icon = ATTEMPT_VIEW_ICON[view]
-            return (
-              <SidebarItem
-                key={view}
-                to={attemptRoute(attempt.attemptId, view)}
-                label={ATTEMPT_VIEW_LABEL[view]}
-                icon={<Icon className={iconClass} />}
-                collapsed={collapsed}
-                onNavigate={onNavigate}
-                state={view === attempt.view ? 'active' : 'idle'}
-                replace
-              />
-            )
-          })}
-        </SubRows>
-      )}
+      <SubRows collapsed={collapsed}>
+        <PageRow page="quiz" to="/" label="Quiz" icon={<ListChecks className={ICON} />} collapsed={collapsed} onNavigate={onNavigate} />
+        <PageRow page="flashcards" to="/flashcards" label="Flashcards" icon={<Layers className={ICON} />} badge={deckBadge} collapsed={collapsed} onNavigate={onNavigate} />
+        {GAMES_ENABLED && (
+          <PageRow page="games" to="/games" label="Games" icon={<Gamepad2 className={ICON} />} collapsed={collapsed} onNavigate={onNavigate} />
+        )}
+      </SubRows>
+    </>
+  )
+}
+
+/**
+ * **Apply**: where what was learned is used. Tools (the calculators) and Data
+ * Sources (published values, tables and documents), Projects (a Pro feature,
+ * so its row carries the Pro chip; an open attempt's views are listed under
+ * it, as its top bar's switcher lists them) and Workflows, for the accounts
+ * its Preview admits (`lib/workflowsAccess.ts`).
+ */
+function ApplyNav({ collapsed, onNavigate, workflows }: NavProps & { workflows: boolean }) {
+  const { pathname } = useLocation()
+  const attempt = useAttemptNav(s => s.current)
+  // Tools and Data Sources are off the navigation for now (`TOOLS_STORE_NAV_ENABLED`);
+  // their pages still open by address.
+  const pages = placePages('apply', { tools: TOOLS_ENABLED && TOOLS_STORE_NAV_ENABLED, workflows })
+  const icons: Partial<Record<PlacePageId, React.ReactNode>> = {
+    tools: <Calculator className={ICON} />,
+    'data-sources': <Database className={ICON} />,
+    projects: <FlaskConical className={ICON} />,
+    workflows: <Workflow className={ICON} />,
+  }
+
+  return (
+    <>
+      <SidebarItem
+        to={pages[0]?.to ?? '/project'}
+        label="Apply"
+        icon={<Wrench className={ICON} />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        state={placeOf(pathname) === 'apply' ? 'within' : 'idle'}
+      />
+      <SubRows collapsed={collapsed}>
+        {pages.map(p => p.id === 'projects' ? (
+          <div key={p.id}>
+            <SidebarItem
+              to={p.to}
+              label={p.label}
+              icon={icons[p.id]}
+              collapsed={collapsed}
+              onNavigate={onNavigate}
+              state={attempt ? 'within' : pageOf(pathname) === 'projects' ? 'active' : 'idle'}
+              badge={<ProBadge />}
+            />
+            {attempt && (
+              <SubRows collapsed={collapsed}>
+                {attempt.views.map(view => {
+                  const Icon = ATTEMPT_VIEW_ICON[view]
+                  return (
+                    <SidebarItem
+                      key={view}
+                      to={attemptRoute(attempt.attemptId, view)}
+                      label={ATTEMPT_VIEW_LABEL[view]}
+                      icon={<Icon className={ICON} />}
+                      collapsed={collapsed}
+                      onNavigate={onNavigate}
+                      state={view === attempt.view ? 'active' : 'idle'}
+                      // The views are windows of one project, not pages of it.
+                      replace
+                    />
+                  )
+                })}
+              </SubRows>
+            )}
+          </div>
+        ) : (
+          <PageRow key={p.id} page={p.id} to={p.to} label={p.label} icon={icons[p.id]} collapsed={collapsed} onNavigate={onNavigate} />
+        ))}
+      </SubRows>
     </>
   )
 }
@@ -395,56 +416,10 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
-  const { cards } = useFlashcards()
-  const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
-  const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
-  // Lights up the Flashcards item whenever a card is collected.
-  const collectGlow = useCollectGlow()
-
-  // Keep daily quiz stats fresh after each quiz completion.
-  useEffect(() => {
-    const refresh = () => setDailyQuizStats(getDailyQuizStats())
-    window.addEventListener(DAILY_QUIZ_EVENT, refresh)
-    window.addEventListener('quiz-session-saved', refresh)
-    return () => {
-      window.removeEventListener(DAILY_QUIZ_EVENT, refresh)
-      window.removeEventListener('quiz-session-saved', refresh)
-    }
-  }, [])
-
-  // Re-keyed on every collect so the pop+glow animation replays each time the
-  // count ticks up, mirroring the gem-balance celebration below.
-  const flashcardBadge = useMemo(() =>
-    cards.length > 0 ? (
-      <span
-        key={collectGlow}
-        className={`text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px] ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
-      >
-        {cards.length}
-      </span>
-    ) : null,
-  [cards.length, collectGlow])
-
-  // Questions left in today's plan (orange, same badge the Quiz tab and the
-  // Dashboard's Start button carry) alongside today's answered tally.
-  const quizBadge = useMemo(() => {
-    if (todayQuizTotal <= 0 && !todayQuizAllComplete && dailyQuizStats.total <= 0) return null
-    return (
-      <span className="flex items-center gap-1.5">
-        <TodayQuizNavBadge count={todayQuizTotal} complete={todayQuizAllComplete} />
-        {dailyQuizStats.total > 0 && (
-          <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px]">
-            {dailyQuizStats.correct}/{dailyQuizStats.total}
-          </span>
-        )}
-      </span>
-    )
-  }, [todayQuizTotal, todayQuizAllComplete, dailyQuizStats.correct, dailyQuizStats.total])
-
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const { open: mobileOpen, closeNav } = useMobileNav()
   // This route pins a bar of its own to the top of the viewport and carries the
-  // hamburger on it, so the app header below would be a second row of chrome.
+  // menu button on it, so the app header below would be a second row of chrome.
   const navHostedByPage = pageHostsNavButton(location.pathname)
   const [profileOpen, setProfileOpen] = useState(false)
   const { open: examsOpen, openExams, closeExams } = useExamsPopout()
@@ -513,13 +488,16 @@ export default function Sidebar() {
 
   const closeMobile = closeNav
 
+  /** A row of the You menu that opens a page. */
+  const go = (to: string) => { navigate(to); setProfileOpen(false); closeMobile() }
+
   const touchStartX = useRef<number | null>(null)
 
   const profileName =
     (user?.user_metadata?.full_name as string | undefined) ||
     (user?.user_metadata?.display_name as string | undefined) ||
     user?.email?.split('@')[0] ||
-    'Profile'
+    'You'
 
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const profileInitials = profileName.slice(0, 2).toUpperCase()
@@ -536,15 +514,16 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Below lg: the app header — the hamburger and the wordmark. It is the row a page gets when it pins nothing
+      {/* Below lg: the app header — the avatar (the way into this menu) and the
+          wordmark. It is the row a page gets when it pins nothing
           to the top of the viewport itself; a page with a floating search bar
-          puts the hamburger on that bar's line instead and this header is not
+          puts the avatar on that bar's line instead and this header is not
           rendered at all, so the phone spends one 3.5rem row on chrome rather
           than two. `lib/mobileNavHost.ts` is the one place that says which is
           which, and `App.tsx` reserves the room from the same call. */}
       {!navHostedByPage && (
         <header className="paper-chrome-header fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
-          <MobileNavButton className="-ml-0.5" />
+          <MobileNavButton className="-mr-0.5" />
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <Link
               to="/dashboard"
@@ -616,7 +595,7 @@ export default function Sidebar() {
           <button
             type="button"
             onClick={closeMobile}
-            aria-label="Close navigation"
+            aria-label="Close menu"
             className="lg:hidden ml-auto h-10 w-10 flex items-center justify-center rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground"
           >
             <X className="h-5 w-5 lg:h-4 lg:w-4" />
@@ -625,141 +604,21 @@ export default function Sidebar() {
 
         <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
 
-          {user && (
-            <SidebarItem
-              to="/dashboard"
-              label="Dashboard"
-              icon={<LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
-          )}
-          {RESEARCH_TAB_ENABLED ? (
-            <SidebarGroup
-              label="Study Guides"
-              icon={<BookOpen className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              isActive={
-                location.pathname.startsWith('/wiki') ||
-                location.pathname.startsWith('/research')
-              }
-            >
-              <SidebarItem
-                to="/wiki"
-                label="Actuarial Exams"
-                icon={<GraduationCap className="h-5 w-5 lg:h-4 lg:w-4" />}
-                collapsed={collapsed}
-                end
-                onNavigate={closeMobile}
-                forceActive={studyGuidesSection(location.pathname) === 'exams'}
-              />
-              <SidebarItem
-                to={RESOURCES_ROUTE}
-                label="Resources"
-                icon={<LibraryBig className="h-5 w-5 lg:h-4 lg:w-4" />}
-                collapsed={collapsed}
-                onNavigate={closeMobile}
-                forceActive={studyGuidesSection(location.pathname) === 'resources'}
-              />
-              {user && (
-                <SidebarItem
-                  to="/research"
-                  label="Research"
-                  icon={<Microscope className="h-5 w-5 lg:h-4 lg:w-4" />}
-                  collapsed={collapsed}
-                  onNavigate={closeMobile}
-                  badge={
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
-                      Beta
-                    </span>
-                  }
-                />
-              )}
-            </SidebarGroup>
-          ) : (
-            <StudyGuidesNav collapsed={collapsed} onNavigate={closeMobile} />
-          )}
+          {/* The four places, in the order of the path (lib/places.ts,
+              docs/design-review.md §5.2): the day's session, the study guide,
+              practice on it, and using it on a real problem. What isn't a
+              step on the path, the Store and Community, is in the menu the
+              avatar opens at the foot. */}
           <SidebarItem
-            to="/flashcards"
-            label="Flashcards"
-            icon={
-              <span className="relative inline-flex items-center justify-center">
-                {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
-                <Layers key={`icon-${collectGlow}`} className={`h-5 w-5 lg:h-4 lg:w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
-                {/* Collapsed sidebar hides the row badge, so mirror the count as a
-                    corner badge on the icon itself when icon-only. */}
-                {collapsed && cards.length > 0 && (
-                  <span
-                    key={`count-${collectGlow}`}
-                    className={`hidden lg:flex absolute -top-1.5 -right-2 h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-primary px-[3px] text-[9px] font-bold leading-none text-primary-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
-                  >
-                    {cards.length}
-                  </span>
-                )}
-              </span>
-            }
+            to="/dashboard"
+            label="Today"
+            icon={<CalendarCheck className={ICON} />}
             collapsed={collapsed}
             onNavigate={closeMobile}
-            badge={flashcardBadge}
-            dataFlashcardNav
           />
-          <SidebarItem
-            to="/"
-            label="Quiz"
-            icon={
-              <span className="relative inline-flex items-center justify-center">
-                <Play className="h-5 w-5 lg:h-4 lg:w-4" />
-                {/* Collapsed sidebar hides the row badge, so mirror the
-                    questions-left count as a corner badge on the icon. */}
-                {collapsed && (
-                  <span className="hidden lg:block">
-                    <TodayQuizCornerBadge count={todayQuizTotal} complete={todayQuizAllComplete} size="sm" className="-top-1.5 -right-2" />
-                  </span>
-                )}
-              </span>
-            }
-            collapsed={collapsed}
-            end
-            // Games — Quiz Battle and Concept Craft — are ways of quizzing, opened from this tab.
-            forceActive={location.pathname === '/games' || location.pathname === '/battle' || location.pathname === '/craft' || location.pathname.startsWith('/craft/')}
-            onNavigate={closeMobile}
-            badge={quizBadge}
-            dataTour="nav-quiz"
-          />
-          {/* A project is its own kind of study — a brief, a data set and a
-              deadline, not a bank of questions — so it is a tab of its own
-              (docs/pcpa-project.md). */}
-          <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
-          {/* Workflows, built from the calculators (docs/actuarial-tools.md —
-              the same engine an AI agent runs through the connector) and the
-              published data. Workflows is in Preview; without it, Tools and
-              Data Sources are rows of their own. */}
-          {TOOLS_ENABLED && (showWorkflows
-            ? <WorkflowsNav collapsed={collapsed} onNavigate={closeMobile} />
-            : TOOLS_STORE_NAV_ENABLED && <ToolsNav collapsed={collapsed} onNavigate={closeMobile} />)}
-          {/* Real products — registration, study materials, calculators and
-              textbooks — each bought on its seller's own page (docs/store.md).
-              The gem shop is a corner of it, so this row stays lit there. */}
-          {TOOLS_STORE_NAV_ENABLED && (
-            <SidebarItem
-              to="/store"
-              label="Store"
-              icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
-          )}
-          {/* Where actuaries gather — forums, events and places, by topic
-              (docs/community.md). Approved accounts only while in Preview. */}
-          {showCommunity && (
-            <SidebarItem
-              to="/community"
-              label="Community"
-              icon={<Users className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
-          )}
+          <LearnNav collapsed={collapsed} onNavigate={closeMobile} research={RESEARCH_TAB_ENABLED && !!user} />
+          <PracticeNav collapsed={collapsed} onNavigate={closeMobile} />
+          <ApplyNav collapsed={collapsed} onNavigate={closeMobile} workflows={showWorkflows} />
         </nav>
 
         <div className="border-t px-3 py-3 space-y-1 lg:px-2">
@@ -783,16 +642,30 @@ export default function Sidebar() {
             <SoundPopover collapsed={collapsed} />
           </div>
 
-          {user ? (
-            <div ref={profileRef} className="relative">
-              {profileOpen && (
-                <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
-                  <button
-                    type="button"
-                    onClick={() => { navigate('/store/gems'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                  >
-                    <ShoppingBag className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
+          {/* You: the avatar and the menu behind it. Everything that isn't a
+              step on the path lives here, the Store and Community with the
+              account's own rows, for a visitor as for a signed-in reader. */}
+          <div ref={profileRef} className="relative">
+            {profileOpen && (
+              <div role="menu" aria-label="You" className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50 lg:min-w-[13rem]">
+                {/* Real products, each bought on its seller's own page (docs/store.md).
+                    Off the navigation for now, with Tools and Data Sources. */}
+                {TOOLS_STORE_NAV_ENABLED && (
+                  <button type="button" role="menuitem" onClick={() => go('/store')} className={MENU_ROW}>
+                    <ShoppingBag className={MENU_ICON} />
+                    <span>Store</span>
+                  </button>
+                )}
+                {/* Where actuaries gather (docs/community.md): approved accounts only while in Preview. */}
+                {showCommunity && (
+                  <button type="button" role="menuitem" onClick={() => go('/community')} className={MENU_ROW}>
+                    <Users className={MENU_ICON} />
+                    <span>Community</span>
+                  </button>
+                )}
+                {user && (
+                  <button type="button" role="menuitem" onClick={() => go('/store/gems')} className={MENU_ROW}>
+                    <Gem className={MENU_ICON} />
                     <span>Gem Shop</span>
                     <span
                       key={gemAnimKey}
@@ -803,111 +676,108 @@ export default function Sidebar() {
                       {gemBalance}
                     </span>
                   </button>
+                )}
+                {user && (
                   <button
                     type="button"
+                    role="menuitem"
                     onClick={() => { openExams(); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
+                    className={MENU_ROW}
                   >
-                    <GraduationCap className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
+                    <GraduationCap className={MENU_ICON} />
                     <span>Exams</span>
                   </button>
+                )}
+                <button type="button" role="menuitem" onClick={() => go('/settings')} className={MENU_ROW}>
+                  <Settings2 className={MENU_ICON} />
+                  <span>Settings</span>
+                </button>
+                {user && !isPro && (
                   <button
                     type="button"
-                    onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
+                    role="menuitem"
+                    onClick={() => go('/upgrade')}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
-                    <Settings2 className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Settings</span>
+                    <Sparkles className={MENU_ICON} />
+                    <span>Upgrade to Pro</span>
                   </button>
-                  {!isPro && (
-                    <button
-                      type="button"
-                      onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                    >
-                      <Sparkles className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                      <span>Upgrade to Pro</span>
-                    </button>
-                  )}
-                  {signOutConfirm ? (
-                    <div className="px-3 py-2 space-y-2">
-                      <p className="text-xs text-muted-foreground">Sign out?</p>
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
-                          className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
-                        >
-                          Sign out
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSignOutConfirm(false)}
-                          className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
+                )}
+                {!user ? (
                   <button
                     type="button"
-                    onClick={() => setSignOutConfirm(true)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
+                    role="menuitem"
+                    onClick={() => { navigate('/auth', { state: { from: location.pathname } }); setProfileOpen(false); closeMobile() }}
+                    className={MENU_ROW}
                   >
-                    <LogOut className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
+                    <LogIn className={MENU_ICON} />
+                    <span>Sign in</span>
+                  </button>
+                ) : signOutConfirm ? (
+                  <div className="px-3 py-2 space-y-2">
+                    <p className="text-xs text-muted-foreground">Sign out?</p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
+                        className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
+                      >
+                        Sign out
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSignOutConfirm(false)}
+                        className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button type="button" role="menuitem" onClick={() => setSignOutConfirm(true)} className={MENU_ROW}>
+                    <LogOut className={MENU_ICON} />
                     <span>Sign out</span>
                   </button>
-                  )}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => setProfileOpen(v => !v)}
-                title={collapsed ? profileName : undefined}
-                className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
-              >
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
-                  <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
-                </span>
-                <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
-                  <span className="truncate">{profileName}</span>
-                  {bannerLabel && (
-                    <span
-                      title={designationBanner?.fullName}
-                      className={cn(
-                        NAME_PILL,
-                        designationBanner
-                          ? 'designation-foil text-foreground'
-                          : equippedBanner?.id === 'beta_tester'
-                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-                          : 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
-                      )}
-                    >
-                      {bannerLabel}
-                    </span>
-                  )}
-                  {isPro && (
-                    <ProBadge title={isBetaTester ? 'Beta Tester' : undefined} />
-                  )}
-                </span>
-              </button>
-            </div>
-          ) : (
+                )}
+              </div>
+            )}
             <button
               type="button"
-              onClick={() => { navigate('/settings'); closeMobile() }}
-              title={collapsed ? 'You' : undefined}
+              onClick={() => setProfileOpen(v => !v)}
+              aria-haspopup="menu"
+              aria-expanded={profileOpen}
+              title={collapsed ? profileName : undefined}
+              data-testid="you-menu"
               className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
             >
               <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
-                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 lg:h-4 lg:w-4">
-                  <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
-                </svg>
+                {user
+                  ? <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
+                  : <GuestAvatar className="h-5 w-5 lg:h-4 lg:w-4" />}
               </span>
-              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>You</span>
+              <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
+                <span className="truncate">{profileName}</span>
+                {bannerLabel && (
+                  <span
+                    title={designationBanner?.fullName}
+                    className={cn(
+                      NAME_PILL,
+                      designationBanner
+                        ? 'designation-foil text-foreground'
+                        : equippedBanner?.id === 'beta_tester'
+                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                        : 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
+                    )}
+                  >
+                    {bannerLabel}
+                  </span>
+                )}
+                {isPro && (
+                  <ProBadge title={isBetaTester ? 'Beta Tester' : undefined} />
+                )}
+              </span>
             </button>
-          )}
+          </div>
         </div>
       </aside>
 

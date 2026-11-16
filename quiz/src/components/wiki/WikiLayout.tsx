@@ -7,6 +7,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiPageContext } from '@/hooks/useWikiPage'
 import wikiBundle from 'virtual:wiki-content'
 import { installWikiBundle } from '@/lib/wikiBundle'
+import { cn } from '@/lib/utils'
 
 installWikiBundle(wikiBundle)
 
@@ -66,10 +67,15 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     }
   }, [location.pathname, location.search, closeOnNavigation])
 
+  // The Resources shelf is a shelf, so it takes the wide column; every other
+  // page of the wiki is read, on the reading column (index.css, `page-column`).
+  const wide = location.pathname === '/wiki/resources'
+
   return (
     <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta }}>
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch
+          width={wide ? 'lg' : 'md'}
           pageRefs={pageRefs}
           pageTitle={pageTitle}
           pageIcon={pageIcon}
@@ -79,7 +85,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
           isBeta={isBeta}
         />
         <div
-          className="flex-1 px-4 sm:px-6 py-8 max-w-4xl mx-auto w-full"
+          className={cn('page-column flex-1 py-8', !wide && 'page-reading')}
           style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
         >
           {children}

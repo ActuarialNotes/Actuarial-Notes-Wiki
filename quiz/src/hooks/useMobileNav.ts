@@ -5,7 +5,7 @@ import { create } from 'zustand'
  *
  * It lives outside `Sidebar` because the button that opens it does too: on a
  * route whose own top bar carries the nav button (see `lib/mobileNavHost.ts`),
- * the hamburger is rendered by that bar — a floating search bar — rather than
+ * the menu button is rendered by that bar — a floating search bar — rather than
  * by the app header. The drawer itself is still `Sidebar`'s.
  */
 interface MobileNavState {

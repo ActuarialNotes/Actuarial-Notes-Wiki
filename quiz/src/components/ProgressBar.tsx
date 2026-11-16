@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, type ReactNode } from 'react'
-import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
+import { ChevronDown, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NavProgressBar } from '@/components/NavProgressBar'
 
@@ -9,14 +9,15 @@ interface ProgressBarProps {
   onNavigate?: (index: number) => void   // called with 0-based index
   flaggedIds?: string[]
   questionIds?: string[]
+  /** The question on screen is flagged: a mark beside its number says so. */
   isFlagged?: boolean
-  onFlag?: () => void
+  /** What leads the row, before the count: the way out (Quit). */
+  leading?: ReactNode
   /**
-   * A control that belongs to the question itself rather than to the run of
-   * them — the info button. Rendered after the flag, in the same row, so the
-   * bar stays the one place a question is identified.
+   * What ends the row: the timer, the spreadsheet where the exam has one, and
+   * the More menu. Everything else about the question is in that menu.
    */
-  info?: ReactNode
+  tools?: ReactNode
 }
 
 /**
@@ -26,7 +27,12 @@ interface ProgressBarProps {
  */
 export const SEGMENTED_MAX = 30
 
-export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info }: ProgressBarProps) {
+/**
+ * The quiz's one row of chrome and the bar under it (design review F8):
+ * Quit, "3 of 12", the timer if timed, and More. Progress is said once in
+ * words and once as the bar.
+ */
+export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, leading, tools }: ProgressBarProps) {
   const segmented = total > 1 && total <= SEGMENTED_MAX
   const segments = useMemo(
     () => (segmented ? Array.from({ length: total }, (_, i) => ({ start: i + 1 })) : undefined),
@@ -99,10 +105,11 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex justify-between items-center gap-2 text-base text-muted-foreground">
+    <div className="space-y-2">
+      <div className="flex items-center gap-1 text-base text-muted-foreground">
+        {leading}
         {onNavigate ? (
-          <div ref={containerRef} className="relative">
+          <div ref={containerRef} className="relative min-w-0">
             <button
               ref={toggleRef}
               type="button"
@@ -110,9 +117,10 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
               aria-haspopup="listbox"
               onClick={() => setOpen(o => !o)}
               onKeyDown={handleToggleKeyDown}
-              className="-ml-2 flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-[15px] sm:text-base font-semibold text-foreground transition-colors hover:bg-accent"
+              className="flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-[15px] sm:text-base font-semibold tabular-nums text-foreground transition-colors hover:bg-accent"
             >
-              Question {current} <span className="font-normal text-muted-foreground">of {total}</span>
+              <span className="sr-only">Question </span>{current} <span className="font-normal text-muted-foreground">of {total}</span>
+              {isFlagged && <BookmarkCheck className="h-4 w-4 text-primary" aria-label="Flagged" data-testid="question-flagged" />}
               <ChevronDown className={cn('h-4 w-4 transition-transform text-muted-foreground', open && 'rotate-180')} />
             </button>
 
@@ -152,25 +160,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
         ) : (
           <span className="px-1 font-medium">Question {current} of {total}</span>
         )}
-        <div className="flex shrink-0 items-center gap-1">
-        {onFlag && (
-          <button
-            type="button"
-            onClick={onFlag}
-            aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
-            className={cn(
-              'flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors hover:bg-accent sm:px-3',
-              isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            {isFlagged
-              ? <BookmarkCheck className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
-              : <Bookmark className="h-[18px] w-[18px] sm:h-4 sm:w-4" />}
-            <span className="sr-only sm:not-sr-only">{isFlagged ? 'Flagged' : 'Flag'}</span>
-          </button>
-        )}
-        {info}
-        </div>
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">{tools}</div>
       </div>
       {/* The bar is the second way to jump between questions, alongside the
           dropdown above it: press or drag along it to go straight to a question,

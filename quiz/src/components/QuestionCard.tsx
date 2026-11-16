@@ -30,7 +30,6 @@ interface QuestionCardProps {
   showExplanation: boolean
   isLocked?: boolean   // true once the answer is confirmed and cannot be changed
   showMeta?: boolean   // show exam/topic/difficulty badges; false during live quiz
-  onNext?: () => void  // when provided, clicking any locked answer advances
   essaySelfGrades?: Record<string, SelfGrade>  // keyed by part label (for essay self-grading)
   onEssaySelfGrade?: (partLabel: string, grade: SelfGrade) => void
   // Manual grade override for free-entry (top-level) and multi-part free-entry parts
@@ -426,7 +425,6 @@ export function QuestionCard({
   showExplanation,
   isLocked = false,
   showMeta = false,
-  onNext,
   essaySelfGrades,
   onEssaySelfGrade,
   selfGrade,
@@ -495,17 +493,10 @@ export function QuestionCard({
                 isDisabled={isLocked}
                 revealAnswer={showExplanation}
                 onClick={onAnswer}
-                onNext={isLocked ? onNext : undefined}
                 keyHint={String(idx + 1)}
               />
             ))}
           </AnswerList>
-
-          {isLocked && onNext && (
-            <p className="text-xs text-center text-muted-foreground pt-1 select-none">
-              Choose any answer to continue
-            </p>
-          )}
 
           {showExplanation && selectedAnswer !== null && (
             <ExplanationPanel

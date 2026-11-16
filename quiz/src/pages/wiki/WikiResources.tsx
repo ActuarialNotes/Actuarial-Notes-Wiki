@@ -5,6 +5,7 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamStrip } from '@/components/ExamStrip'
+import { isExamInDevelopment } from '@/lib/examStatus'
 import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { groupExamVariants, variantRegion } from '@/lib/examVariants'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
@@ -200,6 +201,7 @@ export default function WikiResources() {
   // picker under the strip narrows it to one (`lib/examVariants.ts`).
   const groups = useMemo(() => groupExamVariants(strip), [strip])
   const chosenGroup = chosenExam ? groups.find(g => g.members.some(m => m.label === chosenExam)) ?? null : null
+  const foldedExams = useMemo(() => new Set(groups.filter(g => isExamInDevelopment(g.key)).map(g => g.key)), [groups])
   const chosenVariant = chosenGroup && chosenGroup.members.length > 1 && selection.exam.size === 1 ? chosenExam : null
   const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
@@ -315,6 +317,7 @@ export default function WikiResources() {
         exams={groups.map(g => ({ value: g.key, name: g.name, logoKey: g.key }))}
         value={chosenGroup?.key ?? null}
         onChange={key => chooseExam(key === null ? null : groups.find(g => g.key === key)!.members.map(m => m.label))}
+        folded={foldedExams}
         className="sm:-mx-6 sm:px-6"
       />
 

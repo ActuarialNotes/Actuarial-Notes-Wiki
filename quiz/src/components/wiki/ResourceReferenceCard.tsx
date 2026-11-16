@@ -1,3 +1,4 @@
+import { TitleMoreButton } from '@/components/TitleMoreButton'
 import { useState, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
@@ -79,18 +80,10 @@ export function ResourceReferenceCard({
           )}
           <h2 className={cn('font-semibold leading-tight tracking-tight', compact ? 'text-lg' : 'text-xl sm:text-2xl')}>
             {titleAction ? (
-              <button
-                ref={titleAction.ref}
-                type="button"
-                data-play-menu-trigger
-                onClick={titleAction.onToggle}
-                aria-haspopup="menu"
-                aria-expanded={titleAction.open}
-                aria-label={titleAction.label}
-                className="action-title-underline text-left"
-              >
+              <>
                 {title}
-              </button>
+                <TitleMoreButton action={titleAction} />
+              </>
             ) : title}
           </h2>
           {meta.author && <p className="text-sm leading-snug text-muted-foreground">{meta.author}</p>}

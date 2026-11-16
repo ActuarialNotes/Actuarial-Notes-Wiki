@@ -3,6 +3,7 @@ import { Navigate, useSearchParams } from 'react-router-dom'
 import { BookMarked, Calculator, ChevronRight, Columns3, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
 import { ExamStrip } from '@/components/ExamStrip'
+import { isExamInDevelopment } from '@/lib/examStatus'
 import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { StoreSearchBar } from '@/components/store/StoreSearchBar'
@@ -116,6 +117,7 @@ export default function Store() {
     [progress],
   )
   const homeExam = useMemo(() => defaultKitExam(studying, exams.map(e => e.key)), [studying, exams])
+  const foldedExams = useMemo(() => new Set(exams.filter(e => isExamInDevelopment(e.key)).map(e => e.key)), [exams])
   const exam = urlExam ?? (allExams || params.get('exam') ? null : homeExam)
   const variants = (exam && storeExam(exam)?.variants) || null
   const regionParam = params.get('region')
@@ -237,7 +239,7 @@ export default function Store() {
   return (
     <>
       <StoreSearchBar query={query} onQuery={q => setParam('q', q || null)} />
-      <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+      <div className="page-column space-y-6 py-8">
         {/* The Resources page's title row, picker and all. */}
         <header className="flex items-center gap-2">
           <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Store</h1>
@@ -260,6 +262,7 @@ export default function Store() {
           value={exam}
           studying={studying}
           onChange={key => choose({ exam: key })}
+          folded={foldedExams}
           className="sm:-mx-6 sm:px-6"
         />
 

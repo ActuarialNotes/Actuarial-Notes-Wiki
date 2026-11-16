@@ -1,3 +1,5 @@
+import { bankLabelFor } from '@/lib/examIds'
+import { guestExamKey } from '@/lib/guestMastery'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
@@ -5,14 +7,13 @@ import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { requestProCelebration } from '@/lib/proCelebration'
 import { supabase } from '@/lib/supabase'
-import { Bell, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Bell, Download, Gem, GraduationCap, HelpCircle, Loader2, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard, type SessionSummary } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { MascotWidget } from '@/components/MascotWidget'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
-import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/contexts/examProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -109,28 +110,6 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
 }
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
-
-function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
-  return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-      <div className="pointer-events-auto bg-card rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
-          <LogIn className="h-6 w-6 text-primary" />
-        </div>
-        <p className="text-base font-semibold text-foreground text-center">Sign in to view your dashboard</p>
-        <p className="text-sm text-muted-foreground text-center">See your concept levels and how ready you are for each exam.</p>
-        <button
-          type="button"
-          onClick={onSignIn}
-          className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
-        >
-          <LogIn className="h-4 w-4" />
-          Sign in
-        </button>
-      </div>
-    </div>
-  )
-}
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -261,13 +240,19 @@ export default function Dashboard() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [profileOpen])
 
-  // All exams that are marked in_progress and have a known syllabus
+  // All exams that are marked in_progress and have a known syllabus. A
+  // visitor has no account to mark one on: theirs is the exam they last
+  // answered a question on, read off the browser's own record
+  // (`guestExamKey`, lib/guestMastery.ts).
+  const guestExam = useMemo(() => (user ? null : guestExamKey(masteryRecords)), [user, masteryRecords])
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
+    () => user
+      ? syllabi.filter(s => {
+          const key = wikiExamIdToProgressKey(s.examId)
+          return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+        })
+      : syllabi.filter(s => !!guestExam && wikiExamIdToProgressKey(s.examId) === guestExam && !!bankLabelFor(s)).slice(0, 1),
+    [user, syllabi, examProgress, examVariants, guestExam],
   )
 
   // Exams the learner has marked in progress that this app has no syllabus page
@@ -546,17 +531,8 @@ export default function Dashboard() {
         the dashboard is where a reader arrives looking for something. It sits
         outside the guest blur below so signing in stays reachable. */}
     <DashboardSearchBar questions={allQuestions} />
-    <div className="relative">
-      {/* Blur overlay for logged-out users — covers only the dashboard content, not the nav */}
-      {isGuest && (
-        <SignInOverlay onSignIn={() => navigate('/auth', { state: { from: '/dashboard' } })} />
-      )}
-      <div
-        className={isGuest ? 'pointer-events-none select-none blur-sm opacity-40' : undefined}
-        aria-hidden={isGuest}
-      >
     <div
-      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-6"
+      className="page-column page-reading py-8 space-y-6"
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}
@@ -581,8 +557,21 @@ export default function Dashboard() {
             {!isGuest && !showLevelBadge && (
               <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
             )}
-            {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={40} />}
-            <span className="text-base font-semibold truncate min-w-0">{displayName}</span>
+            {!isGuest && <span className="text-base font-semibold truncate min-w-0">{displayName}</span>}
+            {/* A visitor's Today works from this browser's record; an account keeps it. */}
+            {isGuest && (
+              <p className="min-w-0 text-sm text-muted-foreground">
+                Your progress is kept in this browser.{' '}
+                <button
+                  type="button"
+                  onClick={() => navigate('/auth', { state: { from: '/dashboard' } })}
+                  className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
+                >
+                  Sign in
+                </button>{' '}
+                to keep it with an account.
+              </p>
+            )}
             {!isGuest && (
               <button
                 type="button"
@@ -700,7 +689,7 @@ export default function Dashboard() {
                 onClick={() => setGuideOpen(true)}
                 className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Help"
-                title="How the dashboard works"
+                title="How Today works"
               >
                 <HelpCircle className="h-6 w-6" />
               </button>
@@ -802,7 +791,8 @@ export default function Dashboard() {
           <ActiveExamCardLoading />
         ) : !activeSyllabus ? (
           <ActiveExamCardEmpty
-            onChooseExam={() => setExamsOpen(true)}
+            visitor={isGuest}
+            onChooseExam={isGuest ? () => navigate('/') : () => setExamsOpen(true)}
             unsupportedExams={unsupportedActiveExams}
             loadError={syllabi.length === 0 ? syllabusError : null}
           />
@@ -889,8 +879,6 @@ export default function Dashboard() {
           onClose={() => setOnboardingOpen(false)}
         />
       )}
-    </div>
-    </div>
     </div>
     <ConceptPopup />
     {!isGuest && showWelcome && (

@@ -7,6 +7,7 @@ import {
   FloatingSearchBar,
   FloatingSearchInput,
   FloatingSearchStrip,
+  type FloatingSearchWidth,
   SearchBackdrop,
   SearchScopePill,
 } from '@/components/FloatingSearchBar'
@@ -38,9 +39,11 @@ interface WikiFloatingSearchProps {
   backLink?: React.ReactNode
   isInDevelopment?: boolean
   isBeta?: boolean
+  /** The page's column: the Resources shelf is on the wide one. */
+  width?: FloatingSearchWidth
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, isInDevelopment, isBeta, width = 'md' }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
@@ -202,6 +205,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
 
       <FloatingSearchBar
         ref={containerRef}
+        width={width}
         banner={
           // Status banner — thin, full-width, hidden while a dropdown is open
           pageTitle && !isExpanded

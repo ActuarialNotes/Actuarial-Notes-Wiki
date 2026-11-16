@@ -10,7 +10,6 @@ interface AnswerOptionProps {
   isDisabled: boolean  // true after answer is confirmed
   revealAnswer: boolean
   onClick: (key: string) => void
-  onNext?: () => void  // when locked, clicking any option advances to next question
   keyHint?: string     // keyboard shortcut hint, e.g. "1"
 }
 
@@ -22,7 +21,6 @@ export function AnswerOption({
   isDisabled,
   revealAnswer,
   onClick,
-  onNext,
   keyHint,
 }: AnswerOptionProps) {
   // Prevent accidental selection when the user is scrolling over an option.
@@ -43,8 +41,6 @@ export function AnswerOption({
   // reaches a little past it.
   const baseClasses =
     'w-full text-left px-3 py-3.5 min-h-[56px] text-base font-medium transition-colors flex items-start gap-4 border-b'
-
-  const isNavigable = isDisabled && !!onNext
 
   const revealedRight = isDisabled && revealAnswer && isCorrect
   const revealedWrong = isDisabled && revealAnswer && isSelected && !isCorrect
@@ -75,11 +71,8 @@ export function AnswerOption({
       isDisabled && !isSelected && (!isCorrect || !revealAnswer),
 
     // Cursor: pointer when interactive
-    'cursor-pointer': !isDisabled || isNavigable,
-    'cursor-default': isDisabled && !isNavigable,
-
-    // Subtle hover/active feedback when locked but clickable to navigate
-    'hover:opacity-80 active:opacity-60': isNavigable,
+    'cursor-pointer': !isDisabled,
+    'cursor-default': isDisabled,
   })
 
   // The letter: a ring at rest, a solid disc on the chosen row (the pick's
@@ -107,10 +100,8 @@ export function AnswerOption({
 
   function handleClick() {
     if (scrolling.current) return
-    if (isDisabled) {
-      onNext?.()
-      return
-    }
+    // A locked option does nothing: Next is the button under the question.
+    if (isDisabled) return
     onClick(optionKey)
   }
 
@@ -118,8 +109,8 @@ export function AnswerOption({
     // div+role instead of button so block-level markdown (tables, paragraphs) is valid HTML
     <div
       role="button"
-      tabIndex={isDisabled && !isNavigable ? -1 : 0}
-      aria-disabled={isDisabled && !isNavigable}
+      tabIndex={isDisabled ? -1 : 0}
+      aria-disabled={isDisabled}
       aria-label={`Option ${optionKey}`}
       data-sound="select"
       onPointerDown={handlePointerDown}
@@ -128,11 +119,7 @@ export function AnswerOption({
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          if (isDisabled) {
-            onNext?.()
-          } else {
-            onClick(optionKey)
-          }
+          if (!isDisabled) onClick(optionKey)
         }
       }}
       className={cn(baseClasses, stateClasses)}

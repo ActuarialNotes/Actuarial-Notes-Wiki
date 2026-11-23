@@ -19,8 +19,9 @@ and read by every surface that prints a readiness percentage.
 
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
 the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
-score itself and the surfaces below are unchanged. On the study guide the score now lives one
-tap away: the exam's title opens its action menu, which leads with the readiness bar.
+score itself and the surfaces below are unchanged. Since 2026-11-23 the exam page's header
+prints the score as its syllabus bar, and each learning objective's card prints its own
+(`docs/redesign-spec.md` §7.1); the exam's title is text and opens no menu.
 
 ## One score, everywhere
 
@@ -32,7 +33,7 @@ a readiness percentage calls it, so they can never disagree:
 | Dashboard **exam card** (`NN% Ready` inside a mini ring, beside the days left and the exam date) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** popup, opened by that square (the ring and the criterion bars — the breakdown of that one score) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
-| Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
+| The exam page's header (the syllabus bar) and each objective's card | `pages/wiki/WikiExam.tsx` → `lib/syllabusObjectives.ts`, the figures Today's Syllabus panel prints |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 
 `computeReadiness` (the weighted section score) is an *input* to it, not a second opinion.

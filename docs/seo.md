@@ -169,16 +169,17 @@ the app derives the same record from the question once the bank has loaded
 The parent breadcrumb is the study guide whose bank holds the question
 (`SeoPage.bank` on an exam page, set from `bankLabelFor`).
 
-## Concept URLs: shown to whoever lands on them
+## Concept URLs: shown to whoever opens them
 
 `WikiConcept` used to redirect every concept that belongs to one syllabus into its
-study guide. It still does — **for a link followed inside the app**. A visitor who
-*lands* on the URL (a search result, a shared link, a bookmark, a crawler: the
-router keys the entry it started on `'default'`) is shown the concept page itself,
-with a pill per study guide that opens the guide at that concept. That is what
-lets a concept URL be a search result at all. **Don't reintroduce a redirect on
-landing** — a JavaScript redirect is followed by Google, and the concept would drop
-out of the index.
+study guide. Since 2026-11-23 it never does: a concept's address shows the concept,
+to a reader following a pill from an exam page and to a visitor who lands on it (a
+search result, a shared link, a bookmark, a crawler) alike. Which exam the page is
+read for is `?from=<exam id>`, else the first exam, in ladder order, whose syllabus
+names it; a concept on more than one syllabus lists them under its title. That is
+what lets a concept URL be a search result at all. **Don't reintroduce a redirect**:
+a JavaScript redirect is followed by Google, and the concept would drop out of the
+index.
 
 ## Adding a kind of page
 

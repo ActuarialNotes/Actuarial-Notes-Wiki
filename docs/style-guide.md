@@ -1081,3 +1081,20 @@ sheet from the foot of the screen with a grab handle; from `sm` a panel in the m
 closes on Escape and a press outside, keeps Tab inside itself and gives focus back when it
 closes. `PopupTitle` is its heading. `InfoSheet` (§7.2c) stays for the screens not yet
 redesigned.
+
+### 13.6 Learn's pieces
+
+Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
+
+- **The concept pill** (`ObjectiveCard.tsx`): a 40px outlined pill holding a level square
+  (`sm`) and the concept's name. The outline is the line colour, and 2px in the text colour for
+  a concept in today's session.
+- **The level button** (`ConceptLevelButton.tsx`): the square and the level's name in an
+  outlined control; it opens Learning Progress.
+- **The Practice button** (`PracticeButton.tsx`): the screen's filled action, 58px on a page
+  and 52px in the reader's foot, with a count set lighter beside its label.
+- **A labelled header button** (`LABELLED_HEADER_BUTTON` in `ExamSyllabusButton.tsx`): 44px,
+  outlined in the text colour, an icon and its words.
+- **Example and trap cards** (`MarkdownCallout.tsx`) are outlines on every surface: the
+  example in the line colour with an outlined "Example" pill, the trap in the text colour with
+  its warning icon. Neither carries a hue.

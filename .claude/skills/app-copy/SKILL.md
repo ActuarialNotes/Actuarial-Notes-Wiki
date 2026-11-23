@@ -109,6 +109,14 @@ One thing, one name. Use these exactly.
 | How long a session is | **session length** (10, 25, 45 or 120 minutes) | session size, duration, time budget |
 | The session's three steps | **Fix mistakes**, **Learn**, **Review**, in that order; finished, they read **Fixed**, **Learned**, **Reviewed** | Mistakes, New, Refresh, Revise |
 | The coverage percentage | **Syllabus** on redesigned screens ("Syllabus 42%"): the share of the syllabus covered, 100% meaning every concept at Level 3 | ready, readiness, "NN% ready" on a redesigned screen |
+| Starting a quiz from a concept or an objective | **Practice this** (a concept, with "152 questions" beside it on its page); **Practice General Probability** (an objective, by its name) | Start Quiz, Quiz this, Practice now |
+| A concept's level, as a control | the level itself ("Level 2", "New"), which opens **Learning Progress** | Mastery, Progress |
+| The menu beside a concept's level | **More** (Add to Flashcards, Listen, Fact Check) | Actions, Options |
+| The concept after this one | **Next in General Probability** (the objective, by its name) | Up next, Continue |
+| The exam page's two documents | **Official syllabus**; **Dates and fees** | Syllabus PDF, Info, About |
+| The exam page's foot rows | **Readings**; the page's own titles (**Exam format**); **What you should know first**; **Fact Check** | Source Material, Prerequisite knowledge, Prerequisites |
+| An objective's weight | "23–30% of the exam", as the syllabus prints it | weight, weighting |
+| Adding an exam from its page | **Add exam** | Track, Start, Enrol |
 | The daily plan | **Today's Study Plan** as a title, tile or button; "today's study plan" mid-sentence | Today's plan, Custom Study Plan, Study Plan |
 | The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`), beside **Past Papers** | Practice exam, Exam, mock exam |
 | Fact Check verdicts | **Fact checked** / **Not fact checked**; a problem is an **issue** | Verified, finding |
@@ -171,6 +179,13 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
+
+- 2026-11-23 · Redesign, Learn (`docs/redesign-spec.md` §7, §2.4) · A title is text, never a
+  hidden menu. A concept ends in one filled button, "Practice this", on its page and in the
+  reader; an opened objective ends in "Practice <objective>". The syllabus's sentences are
+  shown as transcribed, with their concepts as pills under them. → No new control hangs off
+  a title. A Practice button names what it practices and starts a quiz; it never says
+  "Start Quiz". Never reword a syllabus sentence to fit a layout.
 
 - 2026-11-23 · Redesign, Today (`docs/redesign-spec.md` R1, R5, R15, §4.4) · The daily
   session is free; Pro sells the plan paced to the exam date, Analytics and the daily

@@ -8,10 +8,12 @@ import { test, expect, type Page } from './test'
 async function openQuestion(page: Page, ids: string) {
   await page.goto(`/quiz?ids=${ids}`)
   const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
-  const open = page.getByRole('button', { name: 'Open in spreadsheet' })
-  await expect(startQuiz.or(open).first()).toBeVisible()
+  // The spreadsheet is a row in the question screen's More menu.
+  const more = page.getByRole('button', { name: 'More', exact: true })
+  await expect(startQuiz.or(more).first()).toBeVisible()
   if (await startQuiz.isVisible()) await startQuiz.click()
-  await open.click()
+  await more.click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Open in spreadsheet' }).click()
   const grid = page.locator('.question-sheet-grid canvas').first()
   await expect(grid).toBeVisible()
   // The grid selects A1 when it is ready.
@@ -49,7 +51,7 @@ test.describe('question spreadsheet', () => {
     await page.keyboard.type('=SUM(B3:E3)', { delay: 30 })
     await page.keyboard.press('Enter')
     // Enter moved down a row; it didn't confirm the answer.
-    await expect(page.getByRole('button', { name: 'Confirm Answer' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Check' })).toBeVisible()
     await page.keyboard.press('ArrowUp')
     await expect(page.getByRole('dialog', { name: 'Spreadsheet for this question' }).locator('footer')).toContainText('G1 · 1600')
   })
@@ -91,11 +93,13 @@ test.describe('question spreadsheet', () => {
   test('offers no spreadsheet for an exam sat without one', async ({ page }) => {
     await page.goto('/quiz?ids=p-004')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
-    const flag = page.getByRole('button', { name: 'Flag question' })
-    await expect(startQuiz.or(flag).first()).toBeVisible()
+    const more = page.getByRole('button', { name: 'More', exact: true })
+    await expect(startQuiz.or(more).first()).toBeVisible()
     if (await startQuiz.isVisible()) await startQuiz.click()
-    await expect(flag).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Open in spreadsheet' })).toHaveCount(0)
+    await more.click()
+    const menu = page.getByRole('dialog')
+    await expect(menu.getByRole('button', { name: 'Flag question' })).toBeVisible()
+    await expect(menu.getByRole('button', { name: 'Open in spreadsheet' })).toHaveCount(0)
   })
 })
 

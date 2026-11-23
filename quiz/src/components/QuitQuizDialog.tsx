@@ -1,59 +1,57 @@
-import { useEffect } from 'react'
+import { useId } from 'react'
 import { Button } from '@/components/ui/button'
+import { Popup, PopupTitle } from '@/components/ui/Popup'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface QuitQuizDialogProps {
   mode: 'quiz' | 'mock-exam'
   onCancel: () => void
+  /** Quit: the answers are discarded. */
   onConfirm: () => void
+  /** Finish now and see the results; absent before anything is answered. */
   onFinish?: () => void
+  /**
+   * Leave with the quiz kept open, to come back to from the Return to quiz
+   * pill. The session screen has no navigation of its own, so this is the way
+   * out that doesn't end it.
+   */
+  onLater?: () => void
 }
 
-export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuizDialogProps) {
+/** What the session's leave cross opens: stay, come back later, finish now, or quit. */
+export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish, onLater }: QuitQuizDialogProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
+  const titleId = useId()
   const label = mode === 'mock-exam' ? PRACTICE_EXAM_LABEL.toLowerCase() : 'quiz'
 
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onCancel()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onCancel])
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
-      onClick={onCancel}
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        className="w-full max-w-sm rounded-lg bg-card text-card-foreground shadow-lg p-5 space-y-4"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="space-y-1">
-          <h2 className="text-base font-semibold">Quit this {label}?</h2>
-          <p className="text-sm text-muted-foreground">
-            Your progress in this session will be lost. This can't be undone.
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={onCancel}>
-            Cancel
+    <Popup onClose={onCancel} labelledBy={titleId}>
+      <PopupTitle id={titleId}>Leave this {label}?</PopupTitle>
+      <p className="text-base">Quitting discards your answers.</p>
+      <div className="flex flex-col gap-2.5">
+        <Button size="main" className="w-full" onClick={onCancel}>
+          Keep going
+        </Button>
+        {onLater && (
+          <Button variant="edge" size="lg" className="h-[52px] w-full text-base" onClick={onLater}>
+            Come back later
           </Button>
-          {onFinish && (
-            <Button variant="default" size="sm" data-tour="dialog-finish" onClick={onFinish}>
-              Finish {label}
-            </Button>
-          )}
-          <Button variant="destructive" size="sm" onClick={onConfirm}>
-            Quit {label}
+        )}
+        {onFinish && (
+          <Button variant="edge" size="lg" className="h-[52px] w-full text-base" data-tour="dialog-finish" onClick={onFinish}>
+            Finish {label}
           </Button>
-        </div>
+        )}
+        <button
+          type="button"
+          onClick={onConfirm}
+          className="min-h-[48px] rounded-full text-base font-semibold text-answer-incorrect focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Quit {label}
+        </button>
       </div>
-    </div>
+    </Popup>
   )
 }

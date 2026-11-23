@@ -39,6 +39,15 @@ export function pageHostsNavButton(pathname: string): boolean {
   return isUnder(pathname, '/wiki') || isUnder(pathname, '/research')
 }
 
+/**
+ * The session (docs/redesign-spec.md §5): a quiz and its results. The app
+ * header and the sidebar are hidden for the whole of it, on every width; the
+ * question screen's own top row has the way out.
+ */
+export function isSessionRoute(pathname: string): boolean {
+  return pathname === '/quiz' || pathname === '/review'
+}
+
 function isUnder(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`)
 }

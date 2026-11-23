@@ -54,6 +54,14 @@ test('Today fits one phone screen down to Start, and Start runs the session as o
   expect(ids[0]).toBe('p-008')
   expect(ids.length).toBeGreaterThan(1)
   expect(ids.length).toBeLessThanOrEqual(4)
+
+  // The quiz asks the session step by step, and its bar is grouped by them:
+  // the first miss to fix is the first question.
+  const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+  const bar = page.getByRole('slider', { name: 'Question' })
+  await expect(startQuiz.or(bar).first()).toBeVisible({ timeout: 30_000 })
+  if (await startQuiz.isVisible()) await startQuiz.click()
+  await expect(bar).toHaveAttribute('aria-valuetext', new RegExp(`^Question 1 of ${ids.length}\\. Fix mistakes: 1 of \\d$`))
 })
 
 test('the session length sheet resizes the session, for today or every day', async ({ page }) => {

@@ -212,7 +212,9 @@ before touching that area**:
   `collectLevelledConcepts` in `stores/quizStore.ts` collects and decks it and marks the
   transition `collected`, which is what makes `ConceptLevelUpCeremony` play the collect
   animation on /review — one card on its own, or several popping into one grid before a
-  summary of them all; the pace is `lib/levelUpCeremony.ts`. Before a quiz, `components/PreQuizConcepts.tsx` lists the quiz's New
+  summary of them all; the pace is `lib/levelUpCeremony.ts`. The ceremony plays only for a
+  card collected for the first time or a concept reaching Level 3 (`ceremonyMoves` in
+  `lib/sessionResults.ts`); every move up is a row under the results' **Levelled up**. Before a quiz, `components/PreQuizConcepts.tsx` lists the quiz's New
   concepts, each opening in the concept popup.
 - `docs/verification.md` — **VERIFY**, the fact-check layer (**Fact Check** is what it is
   called on screen; the vault-side schema and toolchain keep the `verify`/`verification`
@@ -320,8 +322,9 @@ before touching that area**:
   1 kHz ceiling, so a cue can't clash with it). Read before adding or changing a
   sound.
 - `docs/question-spreadsheet.md` — **Open in Spreadsheet**: a question from an exam sat with a
-  spreadsheet (the CAS exams at Pearson VUE — `data/examSpreadsheets.ts`, by progress key) gets a
-  **Spreadsheet** button in the question bar. The sheet opens docked beside the question (right
+  spreadsheet (the CAS exams at Pearson VUE — `data/examSpreadsheets.ts`, by progress key) gets an
+  **Open in spreadsheet** row in the question screen's More menu (and a **Use spreadsheet**
+  button at a part that asks for numbers). The sheet opens docked beside the question (right
   of a wide screen, bottom of a narrow one), pops out into a movable window, and starts with the
   question's own tables (`questionWorkbook` in `lib/questionSheet.ts`, read mechanically, never
   retyped). An **Insert H3** button under an answer box drops the selected cell in at the caret.
@@ -413,10 +416,24 @@ before touching that area**:
   as a neutral shaded square, `lib/levelSquare.ts`), `lib/answerState.ts` (green correct, red
   incorrect, amber partial, grey unanswered) with `components/AnswerDot.tsx`,
   `components/ui/OutlineCard.tsx` (outlined cards and tiles on the one ground),
-  `components/ui/Popup.tsx`, and `Button`'s `edge` variant and `main` size. No screen uses them
+  `components/ui/Popup.tsx`, and `Button`'s `edge` variant and `main` size.
   `pages/DesignBase.tsx` shows them at `/design/base` on the dev server only. **Phase B, Today, is
   built** (its §8 lists what was decided while building it): the daily session is free and sized by
-  time, Pro is the pacing, Analytics and the podcast. See `todaySession.ts` below.
+  time, Pro is the pacing, Analytics and the podcast. See `todaySession.ts` below. **Phase C, the
+  session, is built** (spec §5 and §8; style guide §13.6): `/quiz` and `/review` have no sidebar
+  and no app header (`isSessionRoute`). The question screen (`pages/Quiz.tsx`) has one row above
+  the question: leave, the progress bar, the timer, and **More** (`components/session/`:
+  `SessionProgress`, `SessionMoreMenu`, `AnswerFeedback`), with **Check** and then **Next** at the
+  foot. `lib/sessionProgress.ts` is the bar, one segment per question; `lib/sessionSteps.ts`
+  groups it Fix mistakes / Learn / Review when the quiz is today's session;
+  `lib/similarQuestion.ts` picks **Try a similar one** after a miss (`hooks/useSimilarQuestion.ts`,
+  the store's `queueQuestion`; no button when no other question exists); `lib/sessionResults.ts`
+  is the results (`pages/Review.tsx`): the score, the bar, **To fix** with **Fix these N**,
+  **Levelled up**, the right answers folded, **Back to Today**; `lib/gradeWords.ts` is the words
+  on a written part's grade buttons. Two decisions made with the maintainer: while answers are
+  held to the end, no segment of the bar shows whether an answer was right; and the full-screen
+  `ConceptLevelUpCeremony` plays only for a card collected for the first time or a concept
+  reaching Level 3 (`ceremonyMoves`), every move up being a row under Levelled up.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -736,7 +753,8 @@ Other important `lib/` modules:
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
-  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
+  both the explanation panel's badge (outside a quiz; a quiz's own feedback carries none) and the
+  verdict row in the **Question info** sheet, which a quiz opens from More, and on
   an exam page it is the same item in the menu the exam's title opens). The panel leads with
   the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
@@ -886,7 +904,8 @@ Other important `lib/` modules:
   browser's Back) while any other URL starts a new quiz. `components/QuizResumeButton.tsx`,
   mounted once in `App`, is the **Return to quiz** pill on every other page — position,
   timer when timed — which opens a choice of **Return** or **Leave** (`leaveQuiz`, the same
-  discard the quiz page's Quit does). It is still chrome in a page move (`paper-resume`) and
+  discard the quiz page's Quit does). The quiz screen has no navigation of its own, so its
+  leave dialog's **Come back later** is the way out that keeps the quiz open for the pill. It is still chrome in a page move (`paper-resume`) and
   rides above `--action-bar-height` / `--concept-split-height`, in the **resume dock**
   (`components/ResumeDock.tsx`) it shares with Quiz Battle's **Return to lobby** pill — a
   ready player's place in the battle queue outlives the lobby screen the same way
@@ -915,7 +934,7 @@ Other important `lib/` modules:
   card (`mentionWalk`, walk kind `question`), highlighting and scrolling each one through
   `hooks/useConceptHighlight.ts` — the hook `WikiArticle` uses for the same thing. Only words already
   on screen are marked. On by default for a quiz, off for a practice exam — the setup sheet's
-  *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
+  *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Question info**
   panel's concept rows open the same popup. Pure and tested.
 - `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
   exams it offers and their track headings (`QUIZ_EXAMS`, `quizTrackGroups`), an exam's
@@ -961,7 +980,8 @@ Other important `lib/` modules:
   one section of a sectioned answer, split nothing: both are used within one answer as often as
   between two. `ungradedWrittenParts` is what makes Next (or Finish) on a question with written
   parts still ungraded open `components/GradePartsDialog.tsx`, which takes the grades right there
-  (`components/SelfGradeButtons.tsx`, the one Full credit / Partial / No credit control) — only
+  (`components/SelfGradeButtons.tsx`, the one Full / Partial / None control, in green, amber and
+  red, each button saying the points it gives) — only
   while answers are revealed as the quiz goes. The grades are recorded (`manualGrades`) and
   scored: `questionCredit` counts a self-graded written part like a keyed one (full, half, none),
   each part weighted by its points, leaves an ungraded one out, and gives a question with nothing
@@ -972,7 +992,7 @@ Other important `lib/` modules:
   (`docs/answer-checking.md`): the reader's last figure (`finalFigures`) against the part's
   `### Answer` line (`keyFigures`) or where each sample answer ends, read through markdown and
   LaTeX with labels — AY 2012, 36 months, `($000)` — left out (`parseNumbers`). Within 0.5% is a
-  match (Full credit), within 3% close (Partial), else No credit against a key and nothing against
+  match (Full), within 3% close (Partial), else None against a key and nothing against
   a sample. `components/GradeSuggestion.tsx` says why, as `SelfGradeButtons`' `hint`, and the
   suggested button is outlined until the reader picks — it never grades for them. No model.
   `numericCheckVault.test.ts` holds every key to checking as a match against itself. Pure and tested.
@@ -1041,8 +1061,9 @@ Other important `lib/` modules:
   as the SOA's, and every unlisted undated question with a fact check cites the SOA sample
   question its id numbers) and fails a dated `-an-` question. Write a new original question
   with the **question-writer** skill (`.claude/skills/question-writer/`), under an `-an-` id.
-- `questionSource.ts` — where a question came from, for the quiz's **Info** button
-  (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
+- `questionSource.ts` — where a question came from, for the **Question info** sheet
+  (`components/QuestionInfoDialog.tsx`: in a quiz, a row of the question screen's More menu; on a
+  question list's row, `components/QuestionInfoButton.tsx`): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
   recovered from the `verification:` block's `log:` path, since the build collects question
   *contents* and an id doesn't map to a filename. Provenance is read off the frontmatter,
@@ -1051,8 +1072,8 @@ Other important `lib/` modules:
   The panel hides topic / objective / difficulty until the answer is in, for the same reason
   `QuestionCard` does (`showMeta`). It also carries the question's **Fact Check** row: the
   same verdict, opening the same `FactCheckDialog`, because "where did this come from" and
-  "has anyone checked it" are one question asked twice — and unlike the explanation panel's
-  badge, this one is reachable while the question is still live.
+  "has anyone checked it" are one question asked twice, and it is reachable while the question is still live. In a
+  quiz it is the only way to the question's Fact Check.
 - `factCheckSources.ts` — the sources a page was fact checked *against*, for the Fact Check
   panel's **Checked against** shelf (`components/FactCheckSources.tsx`). `summarizeSource`
   (in `verification.ts`) cuts a citation into the work's name, the chapters/pages the claim
@@ -1196,7 +1217,7 @@ Other important `lib/` modules:
   `components/PdfLinkButton.tsx` is the one PDF button that opens either. The
   rule: *every* PDF the app offers is read in the app, never in a browser tab — the
   past-paper shelf's report and solutions, an exam's syllabus, a resource card's **Read
-  PDF**, the paper behind the question in the quiz's **Info** panel, and the sources on the
+  PDF**, the paper behind the question in the quiz's **Question info** sheet, and the sources on the
   Fact Check panel's *Checked against* shelf. `opensInReader` (in `examPdf.ts`) decides:
   a plain left click reads here, a modified or middle click stays a link, and a source the
   proxy won't serve is left as an out-link rather than opening a panel that can't load. A
@@ -1217,7 +1238,8 @@ Other important `lib/` modules:
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
-  none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
+  none. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
+  sidebar, at any width. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
   sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
@@ -1294,10 +1316,11 @@ Other important `lib/` modules:
   bar is cut into (`navSegments`, YouTube-style: a piece of track per named stretch, the
   run before the first mark unnamed, a plain bar when the marks say nothing). Read by `components/NavProgressBar.tsx`, which is the one
   position bar above every Previous / Next footer and becomes a video-timeline-style control
-  wherever a surface passes `onScrub` — the exam-PDF reader, the quiz's question bar, the
+  wherever a surface passes `onScrub` — the exam-PDF reader, the
   concept popup, flashcard study, the concept detail and mistakes modals, math focus. Bars
   that measure something *earned* (mastery, XP, readiness, quests) deliberately don't get a
-  handler: there is nowhere to drag to. See `docs/style-guide.md` §7.5.
+  handler: there is nowhere to drag to. A quiz's own bar is `SessionProgress`
+  (`components/session/`), pressed or dragged the same way. See `docs/style-guide.md` §7.5.
 - `passRates.ts` — the client half of the live pass-rate pipeline: sanitises what
   `api/pass-rates.js` returns, caches it in localStorage for a week, and `applyPassRates`
   lays the published ratios over the authored catalogue per field (live wins, authored is
@@ -1411,8 +1434,9 @@ Other important `lib/` modules:
   are fetched (Today passes `useAccuracyTrend` a null exam). Beside it, `lib/performanceAnalytics.ts`:
   **marks lost**, each syllabus section's misses weighed by its share of the paper (`sectionLeaks`),
   and **pace**, the median time a question or point took against `quizTiming.ts`'s allowance
-  (`pacing`); the results screen's score **by difficulty** (shown only once
-  the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
+  (`pacing`); a quiz's score **by difficulty** (`scoreByDifficulty`, `difficultyHeadline`), which
+  no screen draws since the results were rebuilt (its one caller, `ConceptCoverageSection`, is
+  unused; Today's Analytics screen reads only the module's `DIFFICULTY_LABEL`); and the
   **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder): within 14 days of the deadline `registrationStatus` reads off the transcribed
   sittings tables, dismissed per sitting in localStorage. Pure and tested; flows in
   `e2e/accuracy.spec.ts`.

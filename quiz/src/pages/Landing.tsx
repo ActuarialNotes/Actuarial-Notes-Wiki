@@ -48,6 +48,7 @@ import {
   type LaunchSettings,
   type QuizSitting,
 } from '@/lib/quizBuilder'
+import { sessionQuizSteps, storeQuizSteps } from '@/lib/sessionSteps'
 import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
 import { useQuizExamScreen } from '@/hooks/useQuizExamScreen'
 import { useBuilderPool } from '@/hooks/useBuilderPool'
@@ -287,7 +288,12 @@ export default function Landing() {
             { seenIds: todayAnsweredIds },
           )
         : []
-      return launchIds(sessionQuizIds(mistakeIds, cover.map(q => q.id)), true)
+      // In step order (Fix mistakes, Learn, Review), with each question's step
+      // left for the quiz page: its progress bar is grouped by them.
+      const { ids, steps } = sessionQuizSteps(mistakeIds, cover, sessionMistakes?.learn ?? [])
+      const launched = launchIds(ids, true)
+      if (launched) storeQuizSteps(steps)
+      return launched
     }
     if (withPlan) {
       const sel = buildTodaysPlanSelection()

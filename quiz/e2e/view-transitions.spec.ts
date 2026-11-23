@@ -198,7 +198,7 @@ test.describe('tab-switch view transitions', () => {
     await expect(startQuiz.or(optionA).first()).toBeVisible()
     if (await startQuiz.isVisible()) await startQuiz.click()
     await optionA.click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
 
     await page.evaluate(() => {
       const w = window as unknown as { __turns: { move?: string; named: boolean }[] }
@@ -216,10 +216,13 @@ test.describe('tab-switch view transitions', () => {
     })
     const turns = () => page.evaluate(() => (window as unknown as { __turns: unknown[] }).__turns)
 
-    await page.getByRole('button', { name: /Next Question/ }).click()
-    await expect(page.getByText('Question 2 of 2')).toBeVisible()
-    await page.getByRole('button', { name: 'Back', exact: true }).click()
-    await expect(page.getByText('Question 1 of 2')).toBeVisible()
+    await page.getByRole('button', { name: 'Next', exact: true }).click()
+    const bar = page.getByRole('slider', { name: 'Question' })
+    await expect(bar).toHaveAttribute('aria-valuetext', 'Question 2 of 2')
+    // Back a question: the row in More (the ← key does the same).
+    await page.getByRole('button', { name: 'More', exact: true }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Previous question' }).click()
+    await expect(bar).toHaveAttribute('aria-valuetext', 'Question 1 of 2')
 
     await expect.poll(turns).toEqual([{ move: 'turn', named: true }, { move: 'return', named: true }])
     await expect(page.locator('.paper-sheet')).toHaveCSS('view-transition-name', 'none')

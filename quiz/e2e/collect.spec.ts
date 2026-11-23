@@ -32,7 +32,7 @@ test.describe('flashcard collection', () => {
     await expect(page.getByRole('complementary', { name: /^Concept: / })).toHaveCount(0)
 
     await page.getByRole('button', { name: 'Option A' }).click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     await page.getByRole('button', { name: /Finish Quiz/i }).click()
 
     await expect(page).toHaveURL(/\/review/)

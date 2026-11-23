@@ -288,9 +288,9 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     openDashboard(allConceptRefs, walk, 'study-plan', idx === -1 ? 0 : idx, { studyPlanLabel: "Today's session" })
   }, [view, allConceptRefs, openDashboard])
 
-  const launch = useCallback((ids: string[], concepts: string[]) => {
+  const launch = useCallback((ids: string[], concepts: string[], learn: string[] = []) => {
     if (!examLabel) return
-    storeSessionMistakes({ ids, plan: false, concepts })
+    storeSessionMistakes({ ids, plan: false, concepts, learn })
     setLaunching(true)
     navigate(`/?topic=${encodeURIComponent(examLabel)}&mode=quiz&autostart=1`)
   }, [examLabel, navigate])
@@ -305,7 +305,10 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
       if (first) openConcept(first)
       return
     }
-    launch(fixIds, askable)
+    const learn = new Set(
+      view.steps.filter(s => s.kind === 'learn').flatMap(s => s.items.map(i => i.key.toLowerCase())),
+    )
+    launch(fixIds, askable, askable.filter(c => learn.has(c.toLowerCase())))
   }, [view, launching, quizzable, launch, openConcept])
 
   const missedToday = useMemo(

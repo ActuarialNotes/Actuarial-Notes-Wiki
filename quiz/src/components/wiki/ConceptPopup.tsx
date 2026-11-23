@@ -18,6 +18,13 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { objectiveMarks } from '@/lib/syllabusChapters'
 import { INK_MENU, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
+import { PracticeButton } from '@/components/learn/PracticeButton'
+import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { conceptPracticeUrl } from '@/lib/practiceLaunch'
+
+/** Previous and Next in the reader's foot: 52px circles, outlined. */
+const FOOT_ARROW =
+  'flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-foreground text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:border-border disabled:opacity-60'
 
 function pageKey(ref: StackPageRef): string {
   return ref.kind === 'pdf' ? `pdf:${ref.url}` : `${ref.kind}:${ref.name.toLowerCase()}`
@@ -239,6 +246,10 @@ export function ConceptPopup() {
     [occurrences, list, objectives],
   )
 
+  // The concept the foot's Practice is about: the open page, when it is one.
+  const practiceConcept = open && activePage?.kind === 'concept' ? activePage.name : null
+  const practiceCount = useConceptQuestionCount(practiceConcept)
+
   if (!open || !current || !activePage) return null
 
   // A document is the open page: its own page bar and footer stand in for the
@@ -290,133 +301,8 @@ export function ConceptPopup() {
     </button>
   )
 
-  return (
-    <aside
-      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
-      data-focus={focusMode}
-      style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
-      role="complementary"
-      aria-label={`${readingStackedPdf ? 'Document' : 'Concept'}: ${activePage.name}`}
-    >
-      {/* Drag handle — hidden in focus mode, visible otherwise */}
-      {!focusMode && (
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize concept panel"
-          onMouseDown={e => {
-            e.preventDefault()
-            beginDrag(e.clientY)
-          }}
-          onTouchStart={e => {
-            if (e.touches[0]) beginDrag(e.touches[0].clientY)
-          }}
-          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-        >
-          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-        </div>
-      )}
-
-      {/* The stack, running down the pane: the trail folded into title bars
-          above the open page, anything stepped back past folded below it. Only
-          one page is open — height is what this pane has least of, and two
-          half-height pages would leave neither readable. */}
-      <div className="flex flex-1 min-h-0 flex-col">
-        {pages.map((page, i) =>
-          i === pageIndex ? (
-            <div
-              key={pageKey(page)}
-              role="group"
-              aria-label={page.name}
-              aria-current="page"
-              // Only a stacked page animates in: the base page is there from
-              // the moment the popup opens, and the aside's own slide-up is
-              // already that page arriving.
-              className={`flex flex-1 flex-col min-h-0 ${i > 0 ? 'page-panel' : ''}`}
-              data-page-open="true"
-            >
-              {page.kind === 'pdf' ? (
-                <PdfPagePanel
-                  entry={page}
-                  focusMode={focusMode}
-                  onClose={() => closePageAt(i)}
-                  trailing={focusToggle}
-                  // The app's reader can still open over the popup (a sheet
-                  // above it has a PDF button of its own); the keys are its.
-                  keyboard={!readingPdf}
-                />
-              ) : (
-                <ConceptPagePanel
-                  entry={page}
-                  focusMode={focusMode}
-                  onOpenLink={openLinkFrom(i)}
-                  onOpenPdf={openPdfFrom(i)}
-                  onClose={() => closePageAt(i)}
-                  trailing={focusToggle}
-                  gallerySeek={gallerySeek}
-                  onGallerySeekResolved={handleGallerySeek}
-                  onGalleryOpenChange={setShowGalleryInPanel}
-                />
-              )}
-            </div>
-          ) : (
-            <PageStackBar
-              key={pageKey(page)}
-              entry={page}
-              above={i < pageIndex}
-              onOpen={() => focusPage(i)}
-              onClose={() => closePageAt(i)}
-            />
-          ),
-        )}
-      </div>
-
-      {/* Footer nav. The bar is the only position readout — there is no "N of
-          M" text under it — so it has to answer "where am I" on every press,
-          including Previous and a wiki-link jump backwards. Its drag bubble
-          names the concept, which is the more useful answer anyway. A document
-          open in the stack brings its own, over its pages, in place of this. */}
-      {!readingStackedPdf && (
-        <>
-          <NavProgressBar
-            current={navCurrent}
-            total={navTotal}
-            label={`Concept ${index + 1} of ${list.length}`}
-            // Dragging is the same walk Previous / Next takes, just several stops at
-            // once, so it goes through `navigate` rather than setting the index
-            // itself — that's what keeps occurrence mode's concept/mention pairing
-            // (and the dashboard's circular list) working from the bar too.
-            onScrub={next => navigate(next - navCurrent)}
-            formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
-            // …and cut into the syllabus's own sections when the walk is an exam's:
-            // a segment per learning objective, so the bar shows that these eight
-            // concepts are General Probability and the next twenty are Univariate
-            // Random Variables. The bubble then names the objective above the
-            // concept. Empty for a walk with no syllabus behind it (the dashboard,
-            // a search result), and the bar is the plain strip it always was.
-            segments={objectiveSegments}
-          />
-          <div className="flex items-stretch h-16 shrink-0 bg-background/60">
-            <button
-              type="button"
-              disabled={!canPrev}
-              data-sound="none"
-              onClick={() => turnPage(-1)}
-              aria-label="Previous"
-              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
-              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Previous</span>
-            </button>
-            {/* The syllabus-filter picker — extra information, so focus mode drops
-                it and leaves the footer as just Previous / Next. The position it
-                used to sit over is read off the bar above instead, which leaves the
-                picker as the one thing here and lets it be sized as a real target.
-                A guide walk (an exam's How to Study tips) drops it too: those pages
-                are not a view of the syllabus, so every filter it offers is either
-                a no-op or a lie about what is being read. */}
-            {showFooterPicker && (
-            <div className="self-center flex flex-col items-center px-1 sm:px-2 min-w-0" ref={viewingRef}>
+  const picker = showFooterPicker ? (
+            <div className="flex min-w-0 flex-col items-center px-1 sm:px-2" ref={viewingRef}>
               <div className="relative max-w-full">
                 <button
                   type="button"
@@ -499,17 +385,161 @@ export function ConceptPopup() {
                 )}
               </div>
             </div>
-            )}
+  ) : null
+
+  // "Practice this": a quiz on the concept being read, when the bank has
+  // questions on it. Starting it leaves the reader.
+  const practice = practiceConcept && practiceCount ? (
+    <PracticeButton
+      size="foot"
+      to={conceptPracticeUrl(practiceConcept, practiceCount, practiceSettings())}
+      onClick={close}
+      className="w-full"
+    >
+      Practice this
+    </PracticeButton>
+  ) : null
+
+  return (
+    <aside
+      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      data-focus={focusMode}
+      style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
+      role="complementary"
+      aria-label={`${readingStackedPdf ? 'Document' : 'Concept'}: ${activePage.name}`}
+    >
+      {/* Drag handle — hidden in focus mode, visible otherwise */}
+      {!focusMode && (
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Resize concept panel"
+          onMouseDown={e => {
+            e.preventDefault()
+            beginDrag(e.clientY)
+          }}
+          onTouchStart={e => {
+            if (e.touches[0]) beginDrag(e.touches[0].clientY)
+          }}
+          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
+        >
+          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
+        </div>
+      )}
+
+      {/* The stack, running down the pane: the trail folded into title bars
+          above the open page, anything stepped back past folded below it. Only
+          one page is open — height is what this pane has least of, and two
+          half-height pages would leave neither readable. */}
+      <div className="flex flex-1 min-h-0 flex-col">
+        {pages.map((page, i) =>
+          i === pageIndex ? (
+            <div
+              key={pageKey(page)}
+              role="group"
+              aria-label={page.name}
+              aria-current="page"
+              // Only a stacked page animates in: the base page is there from
+              // the moment the popup opens, and the aside's own slide-up is
+              // already that page arriving.
+              className={`flex flex-1 flex-col min-h-0 ${i > 0 ? 'page-panel' : ''}`}
+              data-page-open="true"
+            >
+              {page.kind === 'pdf' ? (
+                <PdfPagePanel
+                  entry={page}
+                  focusMode={focusMode}
+                  onClose={() => closePageAt(i)}
+                  trailing={focusToggle}
+                  // The app's reader can still open over the popup (a sheet
+                  // above it has a PDF button of its own); the keys are its.
+                  keyboard={!readingPdf}
+                />
+              ) : (
+                <ConceptPagePanel
+                  entry={page}
+                  focusMode={focusMode}
+                  onOpenLink={openLinkFrom(i)}
+                  onOpenPdf={openPdfFrom(i)}
+                  onClose={() => closePageAt(i)}
+                  trailing={focusToggle}
+                  onToggleFocus={() => setFocusMode(v => !v)}
+                  gallerySeek={gallerySeek}
+                  onGallerySeekResolved={handleGallerySeek}
+                  onGalleryOpenChange={setShowGalleryInPanel}
+                />
+              )}
+            </div>
+          ) : (
+            <PageStackBar
+              key={pageKey(page)}
+              entry={page}
+              above={i < pageIndex}
+              onOpen={() => focusPage(i)}
+              onClose={() => closePageAt(i)}
+            />
+          ),
+        )}
+      </div>
+
+      {/* Footer nav. The bar is the only position readout — there is no "N of
+          M" text under it — so it has to answer "where am I" on every press,
+          including Previous and a wiki-link jump backwards. Its drag bubble
+          names the concept, which is the more useful answer anyway. A document
+          open in the stack brings its own, over its pages, in place of this. */}
+      {!readingStackedPdf && (
+        <>
+          <NavProgressBar
+            current={navCurrent}
+            total={navTotal}
+            label={`Concept ${index + 1} of ${list.length}`}
+            // Dragging is the same walk Previous / Next takes, just several stops at
+            // once, so it goes through `navigate` rather than setting the index
+            // itself — that's what keeps occurrence mode's concept/mention pairing
+            // (and the dashboard's circular list) working from the bar too.
+            onScrub={next => navigate(next - navCurrent)}
+            formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
+            // …and cut into the syllabus's own sections when the walk is an exam's:
+            // a segment per learning objective, so the bar shows that these eight
+            // concepts are General Probability and the next twenty are Univariate
+            // Random Variables. The bubble then names the objective above the
+            // concept. Empty for a walk with no syllabus behind it (the dashboard,
+            // a search result), and the bar is the plain strip it always was.
+            segments={objectiveSegments}
+          />
+          {/* The walk's filter, on a syllabus walk. Beside Practice it takes a line of
+              its own; with no Practice it sits between the arrows. A guide walk and
+              focus mode drop it. */}
+          {showFooterPicker && practice && (
+            <div className="flex shrink-0 justify-center pt-1">{picker}</div>
+          )}
+          {/* The foot (docs/redesign-spec.md §4.2): Previous, Practice this, Next. A
+              concept ends the same way here as on its own page. */}
+          <div className="flex shrink-0 items-center gap-2.5 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+            <button
+              type="button"
+              disabled={!canPrev}
+              data-sound="none"
+              onClick={() => turnPage(-1)}
+              aria-label="Previous"
+              title="Previous"
+              className={FOOT_ARROW}
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+            </button>
+            <div className="flex min-w-0 flex-1 justify-center">
+              {practice ?? (showFooterPicker ? picker : null)}
+            </div>
             <button
               type="button"
               disabled={!canNext}
               data-sound="none"
               onClick={() => turnPage(1)}
               aria-label="Next"
-              className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 sm:px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              title="Next"
+              className={FOOT_ARROW}
             >
-              <span className={showFooterPicker ? 'hidden sm:inline' : undefined}>Next</span>
-              <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
+              <ChevronRight className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
             </button>
           </div>
         </>

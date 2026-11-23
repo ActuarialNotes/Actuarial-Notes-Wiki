@@ -31,7 +31,14 @@ import { examAccentStyle } from '@/lib/examColors'
  * Like `ConceptActionMenu`, the menu portals to <body> and is placed by
  * `placeMenu` — the trigger lives in the sticky header's stacking context.
  */
-export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
+export function ExamVersionMenu({
+  progressKey,
+  layer = 'z-[70]',
+}: {
+  progressKey: string
+  /** The menu's stacking layer; raised when the trigger sits in a dialog. */
+  layer?: string
+}) {
   const { sittings, selected, choose: chooseVersion } = useExamVersion(progressKey)
 
   const [open, setOpen] = useState(false)
@@ -100,7 +107,7 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
       data-exam-version-menu
       role="listbox"
       aria-label="Sitting"
-      className={`fixed w-64 z-[70] overflow-y-auto ${INK_MENU}`}
+      className={`fixed w-64 ${layer} overflow-y-auto ${INK_MENU}`}
       style={{
         // Portalled out of the strip, so it brings the exam's pick with it.
         ...examAccentStyle(progressKey),

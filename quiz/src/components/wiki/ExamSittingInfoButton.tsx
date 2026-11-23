@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, ExternalLink, Info, X } from 'lucide-react'
+import { CalendarDays, ChevronDown, ExternalLink, Info, X } from 'lucide-react'
+import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
+import { LABELLED_HEADER_BUTTON } from '@/components/wiki/ExamSyllabusButton'
 import { ExamLogo } from '@/components/ExamLogo'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { useExamVersion } from '@/hooks/useExamVersion'
@@ -36,11 +38,14 @@ export function ExamSittingInfoButton({
   progressKey,
   wikiExamId,
   examLabel,
+  labelled = false,
 }: {
   progressKey: string
   /** The study guide's own id (`6u-1`) — Exam 6's two guides share a key. */
   wikiExamId: string
   examLabel: string
+  /** The exam page's own header: an outlined button that says "Dates and fees". */
+  labelled?: boolean
 }) {
   const { selected } = useExamVersion(progressKey)
   const [open, setOpen] = useState(false)
@@ -65,10 +70,10 @@ export function ExamSittingInfoButton({
         aria-haspopup="dialog"
         aria-expanded={open}
         title={label}
-        className={inkToolTile(open)}
+        className={labelled ? LABELLED_HEADER_BUTTON : inkToolTile(open)}
       >
-        <Info className="h-[18px] w-[18px]" aria-hidden />
-        <span aria-hidden>Info</span>
+        {labelled ? <CalendarDays aria-hidden /> : <Info className="h-[18px] w-[18px]" aria-hidden />}
+        <span aria-hidden>{labelled ? 'Dates and fees' : 'Info'}</span>
       </button>
       {open && (
         <ExamSittingInfoDialog
@@ -160,6 +165,10 @@ function ExamSittingInfoDialog({
               <p className="mt-0.5 text-xs text-muted-foreground">
                 {sitting ? `${sittingMonthYear(sitting)} sitting · ${FORMAT_LABEL[sitting.format]}` : 'No sitting on file'}
               </p>
+            </div>
+            {/* Which sitting the panel describes, chosen here. */}
+            <div className="shrink-0">
+              <ExamVersionMenu progressKey={progressKey} layer="z-[90]" />
             </div>
             <button
               ref={closeRef}

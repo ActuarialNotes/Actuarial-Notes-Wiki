@@ -6,19 +6,11 @@
 
 import { Link } from 'react-router-dom'
 import { LevelSquareKey, LevelSquares } from '@/components/LevelSquare'
-import type { MasteryState } from '@/lib/mastery'
+import type { SyllabusObjective } from '@/lib/syllabusObjectives'
 import { cn } from '@/lib/utils'
 import { GainMark, SyllabusBar } from './TodayTiles'
 
-export interface SyllabusObjective {
-  name: string
-  /** "23–30%", as the syllabus prints it; null when it prints none. */
-  weight: string | null
-  pct: number
-  states: MasteryState[]
-  /** Indexes of the concepts in today's session. */
-  today: Set<number>
-}
+export type { SyllabusObjective }
 
 export function SyllabusPanel({
   to, pct, gain, tick, objectives, className,

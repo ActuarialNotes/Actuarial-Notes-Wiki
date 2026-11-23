@@ -50,7 +50,6 @@ import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayExam } from '@/hooks/useTodayExam'
 import { useTodaySession } from '@/hooks/useTodaySession'
 import { accuracyPercent } from '@/lib/accuracyTrend'
-import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { questionExamLabel } from '@/lib/examIds'
 import { DAILY_PLAN_EMAIL_ENABLED, PODCAST_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
@@ -62,6 +61,7 @@ import { computeExamReadiness } from '@/lib/readiness'
 import { localDayKey } from '@/lib/streak'
 import { daysBetween, todayISO } from '@/lib/studyPlan'
 import { supabase } from '@/lib/supabase'
+import { syllabusObjectives } from '@/lib/syllabusObjectives'
 import { planTickPct, sessionConceptKeys, weekOf } from '@/lib/todaySession'
 import { cn } from '@/lib/utils'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -316,25 +316,12 @@ export default function Dashboard() {
   ))
   const tick = planTickPct(plan)
   const todayKeys = useMemo(() => sessionConceptKeys(session.view), [session.view])
-  const objectives = useMemo<SyllabusObjective[]>(() => {
-    if (!activeSyllabus || !readiness) return []
-    const lookup = buildMasteryLookup(examRecords)
-    return activeSyllabus.topics.filter(t => t.concepts.length > 0).map(topic => {
-      const today = new Set<number>()
-      const states = topic.concepts.map((c, i) => {
-        if (todayKeys.has(c.name.toLowerCase())) today.add(i)
-        return resolveConceptState(lookup, c, now)
-      })
-      const section = readiness.sections.find(s => s.name === topic.name)
-      return {
-        name: topic.name,
-        weight: topic.weight ? topic.weight.replace(/\s*-\s*/, '–') : null,
-        pct: section ? Math.round(section.readinessPct) : 0,
-        states,
-        today,
-      }
-    })
-  }, [activeSyllabus, readiness, examRecords, todayKeys, now])
+  const objectives = useMemo<SyllabusObjective[]>(
+    () => (activeSyllabus && readiness
+      ? syllabusObjectives(activeSyllabus, readiness, examRecords, todayKeys, now).filter(o => o.states.length > 0)
+      : []),
+    [activeSyllabus, readiness, examRecords, todayKeys, now],
+  )
   const syllabusRoute = activeSyllabus?.fileName ? wikiRoute({ kind: 'exam', name: activeSyllabus.fileName }) : '/wiki'
 
   // ── The week: the account's, whichever exam was studied ───────────────────

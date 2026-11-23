@@ -62,10 +62,11 @@ describe('note cards', () => {
     expect(html).not.toContain('data-callout-body')
   })
 
-  it('draws [!trap] as an amber card titled by its type when untitled', () => {
+  it('draws [!trap] as an outlined card, with no amber, titled by its type when untitled', () => {
     const html = renderMd(['> [!trap]', '> Immediate is not due.'].join('\n'))
     expect(html).toContain('aria-label="Trap"')
-    expect(html).toContain('bg-amber-50')
+    expect(html).toContain('border-[1.5px] border-foreground bg-transparent')
+    expect(html).not.toContain('amber')
     expect(html).toContain('Immediate is not due.')
   })
 })
@@ -104,9 +105,10 @@ describe('titles with math, and worked examples', () => {
     expect(html.slice(html.indexOf('data-callout-body'))).toContain('The sample space has 6 outcomes.')
   })
 
-  it('draws an {Example} callout as a folded green card with an Example pill', () => {
+  it('draws an {Example} callout as a folded outlined card with an Example pill', () => {
     const html = renderMath(['> [!example]- How many committees of 3 from 8? {Example}', '> - 56.'].join('\n'))
-    expect(html).toContain('bg-emerald-50')
+    expect(html).toContain('border border-border bg-transparent')
+    expect(html).not.toContain('emerald')
     expect(html).toContain('>Example</span>')
     expect(html).toContain('aria-expanded="false"')
     expect(html).toContain('hidden=""')
@@ -114,8 +116,9 @@ describe('titles with math, and worked examples', () => {
 
   it('leaves a learning objective (no {Example} tag) in its own style', () => {
     const html = renderMath(['> [!example]- General Probability {23-30%}', '> Understand probability.'].join('\n'))
-    expect(html).not.toContain('bg-emerald-50')
     expect(html).not.toContain('>Example</span>')
+    // …and with no weight bar under its row.
+    expect(html).not.toContain('exam-accent-vivid')
   })
 
   it('keeps math in a note card title', () => {

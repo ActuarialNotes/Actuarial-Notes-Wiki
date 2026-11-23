@@ -20,6 +20,8 @@ export interface WikiPageContextValue {
   setBackLink: (link: ReactNode) => void
   setIsInDevelopment: (v: boolean) => void
   setIsBeta: (v: boolean) => void
+  /** A redesigned page (the exam page, a concept page) sits on the one ground. */
+  setGround: (v: boolean) => void
 }
 
 export const WikiPageContext = createContext<WikiPageContextValue | null>(null)

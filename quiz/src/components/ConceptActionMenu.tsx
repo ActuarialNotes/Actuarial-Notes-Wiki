@@ -1,23 +1,18 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type ReactNode, type RefObject } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, CalendarCheck, CalendarDays, CheckCheck, Lock, Play, TrendingUp } from 'lucide-react'
+import { BookOpen, CheckCheck, Play, TrendingUp } from 'lucide-react'
 import { fetchAllQuestions, fetchWikiFile } from '@/lib/github'
-import { entryRefToRepoPath, examDisplayName, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions, parseAllQuestions } from '@/lib/parser'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useAuth } from '@/hooks/useAuth'
-import { useSubscription } from '@/hooks/useSubscription'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useExamsPopout } from '@/hooks/useExamsPopout'
-import { useExamProgress } from '@/contexts/examProgress'
 import { showAddedToDeck } from '@/hooks/useToast'
 import { playSound } from '@/lib/soundEngine'
-import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { MasteryBadge } from '@/components/MasteryBadge'
-import { ProBadge } from '@/components/ProBadge'
-import { ReadinessBar } from '@/components/ReadinessBar'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
@@ -27,19 +22,7 @@ import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
-import { computeExamReadiness } from '@/lib/readiness'
-import { todayISO } from '@/lib/studyPlan'
-import { getSittingsForExam } from '@/data/examSittings'
-import { isExamInDevelopment } from '@/lib/examStatus'
-import {
-  examCountdown,
-  examPageIdFromFile,
-  examProgressKeyFromFile,
-  examQuizTopic,
-  studyGuidesForResource,
-  todaysPlanConcepts,
-  todaysPlanRowState,
-} from '@/lib/examMenu'
+import { studyGuidesForResource } from '@/lib/examMenu'
 
 /**
  * The concept action menu — the one menu a concept's actions live on, wherever
@@ -65,13 +48,11 @@ import {
  * mobile header, and inside a scroller that clips it. From the body it answers to
  * the viewport alone — which is the one promise this menu has to keep.
  *
- * An **exam** gets its own menu (the study guide's title opens it). An exam
- * isn't a concept — it isn't kept as a card or levelled up — so those rows
- * give way to where the reader stands on it: the readiness bar and how long is
- * left before it is sat (`ExamMenuSummary`), then Start Quiz (the exam's whole
- * bank in the quiz builder, greyed out for an exam with no questions) and
- * today's study plan for it, locked for a reader who isn't Pro
- * (`TodaysPlanRow`). Fact Check closes both menus. The facts are `lib/examMenu.ts`.
+ * Behind a concept's "more" button (`components/learn/ConceptMoreButton.tsx`,
+ * on the concept page and in the reader) it is cut to `rows="more"`: Practice
+ * is those surfaces' foot and the level their own button, so the menu keeps
+ * Add to Flashcards and Fact Check, with the surface's view rows above them.
+ * An exam page has no menu: its title is text (docs/redesign-spec.md §7.1).
  *
  * It stays mounted while closed: the modals it opens (questions, learning
  * progress, fact check) outlive the menu that opened them.
@@ -94,12 +75,11 @@ export interface ConceptActionMenuProps {
   /** Rows below the shared block (the flashcard tile's Remove). */
   trailing?: ReactNode
   /**
-   * Exam entries only: open today's plan where the reader already is — the
-   * exam page passes its own walk of the plan, so the concepts open in the
-   * study guide's popup. Without it the row goes to the Dashboard, which builds
-   * today's plan and opens it there.
+   * `more`: the menu behind a concept's "more" button (docs/redesign-spec.md
+   * §7.2). Practice is the page's foot and the level its own button, so the
+   * menu keeps Add to Flashcards and Fact Check, with the host's rows around them.
    */
-  onOpenStudyPlan?: () => void
+  rows?: 'all' | 'more'
 }
 
 export function ConceptActionMenu({
@@ -111,8 +91,9 @@ export function ConceptActionMenu({
   stopPropagation = false,
   leading,
   trailing,
-  onOpenStudyPlan,
+  rows = 'all',
 }: ConceptActionMenuProps) {
+  const more = rows === 'more'
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showFactCheck, setShowFactCheck] = useState(false)
@@ -141,11 +122,10 @@ export function ConceptActionMenu({
     // Opened at the reading, not the top of the guide (`?resource=`, WikiExam).
     return `${routes[open >= 0 ? open : 0]!}?resource=${encodeURIComponent(entry.name)}`
   }, [syllabi, entry.kind, entry.name, location.pathname])
-  const isExam = entry.kind === 'exam'
   const markdown = content ?? fetchedContent
   // The exam menu leads with a readiness bar and a countdown, so it is given a
   // little more width than the concept menu's list of short rows.
-  const menuWidthPx = isExam ? EXAM_MENU_WIDTH_PX : MENU_WIDTH_PX
+  const menuWidthPx = MENU_WIDTH_PX
 
   // Anchor the menu to whatever opened it. `placeMenu` owns the one rule that
   // matters here — the menu is never off screen — so the trigger is only a
@@ -211,24 +191,20 @@ export function ConceptActionMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, content, fetchedContent, entry.kind, entry.name])
 
-  // The exam's question bank, if it has one — what its Start Quiz row draws from.
-  const examTopic = useMemo(() => (isExam ? examQuizTopic(entry.name) : undefined), [isExam, entry.name])
-
-  // How many questions are tagged to this concept, or are in this exam's bank
-  // (the Start Quiz count). fetchAllQuestions is cached, so this costs one
+  // How many questions are tagged to this concept (the Start Quiz count). fetchAllQuestions is cached, so this costs one
   // parse per entry.
   useEffect(() => {
-    if (!open || (entry.kind !== 'concept' && !examTopic)) return
+    if (!open || more || entry.kind !== 'concept') return
     let cancelled = false
     fetchAllQuestions()
       .then(rawFiles => {
         if (cancelled) return
         const all = parseAllQuestions(rawFiles)
-        setQuestionCount(filterQuestions(all, examTopic ? { exam: examTopic } : { concept: entry.name }).length)
+        setQuestionCount(filterQuestions(all, { concept: entry.name }).length)
       })
       .catch(() => {})
     return () => { cancelled = true }
-  }, [open, entry.kind, entry.name, examTopic])
+  }, [open, more, entry.kind, entry.name])
 
   const masteryState = useMemo<MasteryState | null>(() => {
     const lower = entry.name.toLowerCase()
@@ -240,7 +216,7 @@ export function ConceptActionMenu({
   const verification = useMemo(() => (markdown ? parseVerification(markdown) : null), [markdown])
   const factCheck = useMemo(() => factCheckBadge(verification), [verification])
 
-  const menuClass = `fixed ${isExam ? EXAM_MENU_WIDTH_CLASS : MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 overflow-y-auto`
+  const menuClass = `fixed ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 overflow-y-auto`
 
   // The height comes from the room measured, so a long menu scrolls inside the
   // viewport instead of continuing past its edge.
@@ -260,39 +236,9 @@ export function ConceptActionMenu({
       onPointerDown={stopPropagation ? e => e.stopPropagation() : undefined}
       onClick={stopPropagation ? e => e.stopPropagation() : undefined}
     >
-      {/* For an exam, where the reader stands on it, before what can be done
-          with it. */}
-      {isExam && <ExamMenuSummary entry={entry} masteryRecords={masteryRecords} />}
       {leading}
-      {isExam ? (
-        <>
-          {/* The exam's whole bank, in the Quiz tab's builder. An exam with no
-              questions (6U, PCPA, the DISCs) keeps the row, greyed out, so the
-              menu has the same shape on every exam page. */}
-          <button
-            type="button"
-            disabled={!examTopic || questionCount === 0}
-            title={!examTopic || questionCount === 0 ? 'No practice questions for this exam yet' : undefined}
-            onClick={() => {
-              if (!examTopic) return
-              onClose()
-              closePopup()
-              routerNavigate(`/?topic=${encodeURIComponent(examTopic)}&mode=quiz`)
-            }}
-            className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
-          >
-            <Play className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span className="flex-1 text-left">Start Quiz</span>
-            {examTopic && questionCount !== null && questionCount > 0 && (
-              <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
-                {questionCount}
-              </span>
-            )}
-          </button>
-          <TodaysPlanRow entry={entry} onOpenStudyPlan={onOpenStudyPlan} onClose={onClose} />
-        </>
-      ) : (
-        <>
+      <>
+{!more && (<>
           <button
             type="button"
             onClick={() => { setShowQuestionsModal(true); onClose() }}
@@ -334,6 +280,7 @@ export function ConceptActionMenu({
               Open in Study Guide
             </button>
           )}
+</>)}
           <div className="flex items-center hover:bg-accent transition-colors">
             <button
               type="button"
@@ -369,6 +316,7 @@ export function ConceptActionMenu({
             )}
           </div>
           {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={entry} onNavigate={onClose} />}
+{!more && (
           <button
             type="button"
             onClick={() => { setShowLearningProgress(true); onClose() }}
@@ -380,12 +328,10 @@ export function ConceptActionMenu({
                 how it got there. No record yet is New. */}
             {entry.kind === 'concept' && <MasteryBadge state={masteryState ?? 'new'} compact />}
           </button>
-        </>
-      )}
+)}
+      </>
       {/* Fact Check — what has been checked about this page, against which
-          source, and everything anyone has since said about it. An exam page
-          has one too: its syllabus is transcribed from the examining body's,
-          and the record says what it was checked against. */}
+          source, and everything anyone has since said about it. */}
       {FACT_CHECK_UI_ENABLED && markdown !== null && (
         <button
           type="button"
@@ -419,9 +365,7 @@ export function ConceptActionMenu({
         onClose={() => setShowFactCheck(false)}
         verification={verification}
         contentPath={entryRefToRepoPath(entry)}
-        // An exam is named the way its page titles it — "Exam P-1", not the
-        // file's "Exam P-1 (SOA)".
-        contentName={isExam ? examDisplayName(entry.name) : entry.name}
+        contentName={entry.name}
       />
     </>
   )
@@ -430,8 +374,6 @@ export function ConceptActionMenu({
 /** The menu's width — as a class, and in pixels for the placement maths. */
 const MENU_WIDTH_CLASS = 'w-56'
 const MENU_WIDTH_PX = 224
-const EXAM_MENU_WIDTH_CLASS = 'w-64'
-const EXAM_MENU_WIDTH_PX = 256
 
 /** How tall it grows given the room; past this it scrolls. */
 const MENU_MAX_HEIGHT_PX = 448
@@ -450,157 +392,3 @@ function samePlacement(a: MenuPlacement, b: MenuPlacement): boolean {
  */
 export const ACTION_MENU_ROW_CLASS =
   'w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors'
-
-/**
- * The exam menu's head: the readiness bar — `computeExamReadiness`, the one
- * readiness number, the same score the Study Guides list prints beside an exam
- * in progress — and
- * under it how long is left before the exam is sat. The countdown runs to the
- * reader's own exam date, or without one to the next published sitting (the
- * one the study guide's version button names); with neither there is none.
- */
-function ExamMenuSummary({
-  entry,
-  masteryRecords,
-}: {
-  entry: WikiEntryRef
-  masteryRecords: ConceptMasteryRecord[]
-}) {
-  const { user } = useAuth()
-  const { progress, targetDates } = useExamProgress()
-  const { syllabi } = useWikiSyllabus()
-  const progressKey = useMemo(() => examProgressKeyFromFile(entry.name), [entry.name])
-  const tracked = !!user && progress[progressKey] === 'in_progress'
-  const examDate = tracked ? targetDates[progressKey] : null
-
-  const readiness = useMemo(() => {
-    const syllabus = syllabi.find(s => s.fileName === entry.name)
-    if (!syllabus) return null
-    const records = masteryRecords.filter(r => r.exam_id === progressKey)
-    return computeExamReadiness(syllabus, records, new Date())
-  }, [syllabi, entry.name, masteryRecords, progressKey])
-
-  const countdown = useMemo(
-    () => examCountdown(examDate, getSittingsForExam(progressKey), todayISO()),
-    [examDate, progressKey],
-  )
-
-  if (!readiness && !countdown) return null
-  const whose = countdown?.source === 'exam-date' ? 'Your exam date' : 'Next sitting'
-  return (
-    <div className="px-3 pt-2 pb-2.5 mb-1 space-y-2.5 border-b border-border">
-      {readiness && <ReadinessBar readiness={readiness} />}
-      {countdown && (
-        <div
-          className="flex items-center gap-1.5 text-xs text-muted-foreground"
-          title={`${whose}: ${countdown.dateLabel}`}
-          aria-label={`${whose}, ${countdown.dateLabel}, ${countdown.label}`}
-        >
-          <CalendarDays className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate">{countdown.dateLabel}</span>
-          <span className={`shrink-0 font-medium tabular-nums ${countdown.days < 0 && countdown.source === 'exam-date' ? '' : 'text-foreground'}`}>
-            {countdown.label}
-          </span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/**
- * The exam menu's **Today's Study Plan** row. What pressing it does is
- * `todaysPlanRowState`: open today's plan, have the Dashboard build it, add the
- * exam first, or — for a reader who isn't Pro — the lock and the Pro badge, to
- * Upgrade. On an exam still in development there is nothing to plan, so the row
- * stays in its place, disabled, rather than changing the menu's shape.
- */
-function TodaysPlanRow({
-  entry,
-  onOpenStudyPlan,
-  onClose,
-}: {
-  entry: WikiEntryRef
-  onOpenStudyPlan?: () => void
-  onClose: () => void
-}) {
-  const navigate = useNavigate()
-  const { user } = useAuth()
-  const { isPro, loading: subscriptionLoading } = useSubscription()
-  const { progress, examRows } = useExamProgress()
-  const openExams = useExamsPopout(s => s.openExams)
-  const closePopup = useConceptPopup(s => s.close)
-  const progressKey = useMemo(() => examProgressKeyFromFile(entry.name), [entry.name])
-
-  const planConcepts = todaysPlanConcepts(
-    examRows.find(r => r.exam_id === progressKey)?.study_plan_cache,
-    todayISO(),
-  )
-  const state = todaysPlanRowState({
-    signedIn: !!user,
-    isPro,
-    subscriptionLoading,
-    inDevelopment: isExamInDevelopment(progressKey, examPageIdFromFile(entry.name)),
-    tracked: !!user && progress[progressKey] === 'in_progress',
-    hasPlanToday: planConcepts !== null,
-  })
-
-  // Leaving the wiki takes the popup's stack with it, as the deck's "view" does.
-  function leaveFor(to: string, state?: unknown) {
-    onClose()
-    closePopup()
-    navigate(to, state ? { state } : undefined)
-  }
-
-  function onPress() {
-    switch (state) {
-      case 'locked':
-        leaveFor(user ? '/upgrade' : '/auth')
-        return
-      case 'untracked':
-        onClose()
-        openExams()
-        return
-      case 'open':
-        if (onOpenStudyPlan) {
-          onClose()
-          onOpenStudyPlan()
-          return
-        }
-        leaveFor('/dashboard', { openConceptsFor: progressKey })
-        return
-      case 'build':
-        // The Dashboard builds today's plan for the exam and opens it.
-        leaveFor('/dashboard', { openConceptsFor: progressKey })
-        return
-      default:
-        return
-    }
-  }
-
-  const disabled = state === 'unavailable' || state === 'loading'
-  return (
-    <button
-      type="button"
-      onClick={onPress}
-      disabled={disabled}
-      title={state === 'unavailable' ? 'No study plan while this exam is in development' : undefined}
-      className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
-    >
-      {state === 'locked'
-        ? <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-        : <CalendarCheck className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
-      <span className="flex-1 text-left whitespace-nowrap">Today's Study Plan</span>
-      {state === 'locked' && <ProBadge />}
-      {state === 'open' && planConcepts && (
-        <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
-          {planConcepts.length}
-        </span>
-      )}
-      {state === 'untracked' && (
-        <span className="shrink-0 whitespace-nowrap text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
-          Add exam
-        </span>
-      )}
-    </button>
-  )
-}

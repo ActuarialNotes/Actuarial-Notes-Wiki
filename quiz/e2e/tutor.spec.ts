@@ -54,7 +54,7 @@ test.describe('the Tutor', () => {
     await reveal.click()
 
     // Marked against the sample answer; a miss shows where candidates lose points.
-    const noCredit = panel.getByRole('button', { name: /No credit/ })
+    const noCredit = panel.getByRole('button', { name: /^None|No credit/ })
     if (await noCredit.isVisible()) {
       await noCredit.click()
     }

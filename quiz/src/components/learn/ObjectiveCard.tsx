@@ -17,8 +17,9 @@ import type { SyllabusObjective } from '@/lib/syllabusObjectives'
 import { cn } from '@/lib/utils'
 import { wikiRoute } from '@/lib/wikiRoutes'
 
+// The margin keeps a pill scrolled to clear of the header strip, above the reader.
 const PILL =
-  'inline-flex min-h-10 max-w-full items-center gap-2 rounded-full px-3.5 py-1.5 text-[15px] font-medium leading-tight text-foreground'
+  'scroll-mt-44 inline-flex min-h-10 max-w-full items-center gap-2 rounded-full px-3.5 py-1.5 text-[15px] font-medium leading-tight text-foreground'
 
 export interface PillState {
   state: MasteryState
@@ -26,6 +27,8 @@ export interface PillState {
   today: boolean
   /** The vault has no page for it yet: drawn, not pressable. */
   missing: boolean
+  /** The reader is showing it over the page: the pill is filled. */
+  active?: boolean
 }
 
 function ConceptPill({
@@ -36,12 +39,14 @@ function ConceptPill({
 }: {
   pill: ObjectivePill
   look: PillState
-  /** The exam the concept is being read for: `?from=` on its page. */
+  /** The exam the concept is being read for: `?from=` on its page, for a new tab. */
   from: string
-  /** A reading among the pills opens in the reader instead. */
+  /** Opens the pill in the reader over the page. */
   onOpen: (pill: ObjectivePill, e: React.MouseEvent<HTMLAnchorElement>) => void
 }) {
-  const edge = look.today ? 'border-2 border-foreground' : 'border border-border'
+  const edge = look.active
+    ? 'border-2 border-foreground bg-foreground text-background [&_[data-level]]:outline [&_[data-level]]:outline-1 [&_[data-level]]:outline-background'
+    : look.today ? 'border-2 border-foreground' : 'border border-border'
   const body = (
     <>
       <LevelSquare state={look.state} size="sm" decorative />
@@ -61,7 +66,7 @@ function ConceptPill({
       onClick={e => onOpen(pill, e)}
       aria-label={`${pill.name}, ${levelSquareLabel(look.state, look.today)}`}
       data-pill={pill.name}
-      data-wikiref={`${pill.ref.kind}:${pill.name.toLowerCase()}`}
+      aria-current={look.active ? 'true' : undefined}
       className={cn(
         PILL,
         edge,

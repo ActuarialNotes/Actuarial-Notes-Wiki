@@ -208,7 +208,8 @@ implies. Newest first.
 - 2026-11-23 · Redesign, Learn (`docs/redesign-spec.md` §7, §2.4) · A title is text, never a
   hidden menu. A concept ends in one filled button, "Practice this", on its page and in the
   reader; an opened objective ends in "Practice <objective>". The syllabus's sentences are
-  shown as transcribed, with their concepts as pills under them. → No new control hangs off
+  shown as transcribed, with their concepts as pills under them. A pill opens the concept in
+  the reader over the exam page; it does not leave the page. → No new control hangs off
   a title. A Practice button names what it practices and starts a quiz; it never says
   "Start Quiz". Never reword a syllabus sentence to fit a layout.
 

@@ -1,29 +1,28 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { FlaskConical, Loader2 } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/buttonVariants'
-import { ProBadge } from '@/components/ProBadge'
+import { Navigate, useParams } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { useProjectSync } from '@/hooks/useProjectSync'
 import { useSubscription } from '@/hooks/useSubscription'
 import { visibleTo } from '@/lib/pcpaAttempt'
 import ProjectsHome from './ProjectsHome'
+import BriefPage from './BriefPage'
 import ProjectAttemptPage from './ProjectAttempt'
 
 /**
  * The Projects tab (`docs/pcpa-project.md`): the briefs and attempts at
- * `/project`, one attempt at `/project/pcpa/:attemptId`. One lazy chunk for
- * both, since a candidate who opens one goes to the other.
+ * `/project`, one brief at `/project/brief/:caseId`, one attempt at
+ * `/project/pcpa/:attemptId`. One lazy chunk for all three, since a candidate
+ * who opens one goes to the others.
  *
- * Projects are a **Pro** feature: anyone else — signed out included — gets the
- * locked page at `/project`, and nothing behind it mounts (no sync, no attempt
- * store reads). A link to an attempt goes there too: an attempt's route hosts
- * its own top bar's hamburger (`lib/mobileNavHost.ts`), which the locked page
- * doesn't draw.
+ * Anyone can read a brief (decided 2026-11-23). **Working one is Pro's**: a
+ * reader without Pro, signed out included, finds the briefs at `/project` and
+ * reads any of them, and the button that would start a project leads to
+ * Upgrade. Nothing of an attempt mounts for them (no sync, no attempt store
+ * reads), and a link to an attempt goes back to `/project`.
  */
 export default function Project() {
-  const { attemptId } = useParams()
-  const { user } = useAuth()
+  const { attemptId, caseId } = useParams()
   const { isPro, loading } = useSubscription()
 
   if (loading) {
@@ -33,37 +32,9 @@ export default function Project() {
       </div>
     )
   }
-  if (!isPro) return attemptId ? <Navigate to="/project" replace /> : <ProjectsLocked signedIn={!!user} />
+  if (caseId) return <BriefPage />
+  if (!isPro) return attemptId ? <Navigate to="/project" replace /> : <ProjectsHome canStart={false} />
   return <ProjectTab />
-}
-
-/** What a reader without Pro finds at `/project`: what the tab is, and the way in. */
-function ProjectsLocked({ signedIn }: { signedIn: boolean }) {
-  return (
-    <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-        <FlaskConical className="h-5 w-5 text-primary" aria-hidden />
-      </div>
-      <div>
-        <h1 className="flex items-center justify-center gap-1.5 text-lg font-semibold">
-          Projects
-          <ProBadge />
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Rehearse the PCPA project with R and Python in your browser.
-        </p>
-      </div>
-      {signedIn ? (
-        <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
-          Upgrade to Pro
-        </Link>
-      ) : (
-        <Link to="/auth" state={{ from: '/project' }} className={buttonVariants({ size: 'sm' })}>
-          Sign in
-        </Link>
-      )}
-    </div>
-  )
 }
 
 /**
@@ -79,7 +50,7 @@ function ProjectTab() {
   const heard = useProjectSync(userId)
   const known = usePcpaAttempts(s => !attemptId || s.attempts.some(a => a.id === attemptId && visibleTo(a, userId)))
 
-  if (!attemptId) return <ProjectsHome />
+  if (!attemptId) return <ProjectsHome canStart />
   if (!known && !heard) {
     return (
       <div className="flex items-center gap-2 p-8 text-sm text-muted-foreground">

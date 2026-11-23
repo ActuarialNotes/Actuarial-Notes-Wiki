@@ -521,7 +521,10 @@ settings) and F10 (the results were a transcript).
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
-Phases E to I are not built.
+**Phase I (Apply) was built the same day**: the home's three cards (Projects, Tools,
+Workflows), the Tools screen with a tab for the exam in focus, the tool page's outlined
+answer, "Learn the method" and "Practice this" (the tool link F13 asked for, from the tool's
+side), an attempt's overview, and briefs anyone can read. Phases E to H are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

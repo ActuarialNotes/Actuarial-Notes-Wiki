@@ -350,17 +350,20 @@ function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavig
  */
 function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
   const attempt = useAttemptNav(s => s.current)
+  const { pathname } = useLocation()
   const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
 
   return (
     <>
+      {/* Until the four-place navigation (docs/redesign-spec.md, Phase F) this
+          row is the way to Apply's home, where Projects is the first card. */}
       <SidebarItem
-        to="/project"
+        to="/apply"
         label="Projects"
         icon={<FlaskConical className={iconClass} />}
         collapsed={collapsed}
         onNavigate={onNavigate}
-        state={attempt ? 'within' : undefined}
+        state={attempt ? 'within' : pathname === '/apply' || isUnder(pathname, '/project') ? 'active' : 'idle'}
         badge={<ProBadge />}
       />
       {attempt && (

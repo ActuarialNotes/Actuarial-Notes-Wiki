@@ -50,6 +50,9 @@ const { Component: DataSources, preload: loadDataSources } = lazyRoute(() => imp
 // its editor, its spreadsheet and its data generator are for the candidates
 // who open it.
 const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/pages/Project'))
+// Apply's home (docs/redesign-spec.md §7c): the way into Projects, Tools and
+// Workflows. Lazy: it reads the tools' registry and the briefs.
+const { Component: Apply, preload: loadApply } = lazyRoute(() => import('@/pages/Apply'))
 // Quiz Battle (docs/quiz-battle.md) — a game two players open on purpose, so
 // its engine, its sessions and its screens wait for the click.
 const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pages/Battle'))
@@ -106,6 +109,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
   if (TOOLS_ENABLED && (route === '/workflows' || route.startsWith('/workflows/'))) return loadWorkflowBuilder()
   if (TOOLS_ENABLED && (route === '/data-sources' || route.startsWith('/data-sources/'))) return loadDataSources()
+  if (route === '/apply') return loadApply()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
@@ -478,7 +482,9 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/cowork/:tab/:id" element={<CoworkRedirect />} />
                 {/* The Projects tab: the briefs, and one attempt. `/project/pcpa`
                     was the PCPA portal before projects were a tab of their own. */}
+                <Route path="/apply" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><Apply /></Suspense></ErrorBoundary>} />
                 <Route path="/project" element={<ProjectRoute />} />
+                <Route path="/project/brief/:caseId" element={<ProjectRoute />} />
                 <Route path="/project/pcpa" element={<Navigate to="/project" replace />} />
                 <Route path="/project/pcpa/:attemptId" element={<ProjectRoute />} />
                 <Route path="/wiki" element={

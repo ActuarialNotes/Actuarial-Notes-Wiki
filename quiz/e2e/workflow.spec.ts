@@ -59,6 +59,25 @@ async function openNew(page: Page) {
 }
 
 test.describe('workflows', () => {
+  test('is a card on Apply, with how many are saved and the one edited last', async ({ page }) => {
+    await page.goto('/apply')
+    await expect(page.getByTestId('apply-workflows')).toBeVisible()
+    await expect(page.getByTestId('apply-workflow')).toHaveCount(0)
+
+    await page.goto('/workflows')
+    await page.getByTestId('workflow-new').click()
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-data').click()
+    await page.locator('[data-testid="workflow-add-tool"][data-ref="data.yield_curve"]').click()
+    await expect(page.locator('[data-workflow-step]')).toHaveCount(1)
+
+    await page.goto('/apply')
+    await expect(page.getByTestId('apply-workflows-count')).toHaveText('1 saved')
+    await expect(page.getByTestId('apply-workflow')).toContainText('1 step')
+    await page.getByTestId('apply-workflow').click()
+    await expect(page).toHaveURL(/\/workflows\/wf-/)
+  })
+
   test('opens on the library from the sidebar, and adds a step of each kind through the + menu', async ({ page }) => {
     await page.goto('/data-sources')
     await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Workflows' }).click()

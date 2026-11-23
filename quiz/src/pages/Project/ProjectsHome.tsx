@@ -1,87 +1,162 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Cloud, HardDrive, Plus, Trash2 } from 'lucide-react'
+import { ChevronLeft, Plus, Trash2 } from 'lucide-react'
+import { Chevron, StepBar } from '@/components/apply/ApplyParts'
+import { ExamLogo } from '@/components/ExamLogo'
 import { Button } from '@/components/ui/button'
-import { buttonVariants } from '@/components/ui/buttonVariants'
-import { Card } from '@/components/ui/card'
-import { BriefTile } from '@/components/project/BriefTile'
+import { GROUND, OUTLINE_ROW_RULE, OUTLINE_TILE } from '@/components/ui/OutlineCard'
 import { NewProjectDialog } from '@/components/project/NewProjectDialog'
 import { ProjectDialog } from '@/components/project/shared'
-import { WindowPill } from '@/components/project/ProjectTopBar'
 import { projectCase as findCase } from '@/data/pcpaProjects'
+import { PROJECT_PROGRAMMES, type ProjectProgramme } from '@/data/projects'
 import { useAuth } from '@/hooks/useAuth'
+import { backLabel, useBack } from '@/hooks/useBack'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
-import { attemptRoute, visibleTo, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import { attemptOverview, recordTally } from '@/lib/attemptOverview'
+import { briefRoute } from '@/lib/attemptViews'
+import { attemptPhase, attemptRoute, timeLeft, visibleTo, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { cn } from '@/lib/utils'
+import { wikiRoute } from '@/lib/wikiRoutes'
 
 /**
- * The **Projects** tab: the candidate's own projects, and the **+** that
- * starts a new one (`docs/pcpa-project.md`).
+ * The **Projects** page (`docs/pcpa-project.md`, `docs/redesign-spec.md` §7c),
+ * drawn to the redesign's rules: one ground, outlined tiles, one text colour,
+ * the exam's colour on its logo alone, one filled button.
  *
- * The page is about the reader's work, not the catalogue. The briefs — every
- * one the app has, grouped by the exam it is a project for and coloured by
- * that exam — are the first step of the sheet the + opens
- * (`NewProjectDialog`), which is the only place they are chosen from. What
- * stays on the page is what a candidate comes back for: the attempts still
- * open, then the submitted ones, whose results are kept.
+ * With Pro (`canStart`) it is the candidate's own work: the attempts still
+ * open, each with its four steps, then the submitted ones, and **New project**,
+ * which opens the sheet the briefs are chosen from (`NewProjectDialog`).
  *
- * Where attempts are kept depends on who is reading. Signed in, they are saved
- * to the account and follow the candidate to any device; signed out, they live
- * in this browser alone, and the page says so, with the way to keep them.
+ * Without Pro there are no attempts to come back to, so the page is the
+ * catalogue: every brief, each opening on its own page to be read
+ * (`BriefPage`), where starting it leads to Upgrade.
+ *
+ * Signed in, attempts are saved to the account and follow the candidate to
+ * any device; signed out they live in this browser alone, and the page says so.
  */
 
-/** The one-line heading every group on the page carries — the Study Guides track heading's type. */
-function GroupLabel({ children }: { children: ReactNode }) {
-  return <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{children}</h2>
+const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
+
+/** The page's top row: the way back (to the page left, or up to Apply), its name, and a tag or a button. */
+function PageHeader({ children }: { children?: ReactNode }) {
+  const back = useBack({ to: '/apply', label: 'Apply' })
+  return (
+    <header className="-ml-3 flex items-center gap-1">
+      <Link
+        to={back.to}
+        state={RESTORE_SCROLL}
+        onClick={back.onLinkClick}
+        aria-label={backLabel(back)}
+        title={backLabel(back)}
+        className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-full', FOCUS)}
+      >
+        <ChevronLeft className="h-[22px] w-[22px]" strokeWidth={2.5} aria-hidden />
+      </Link>
+      <h1 className="min-w-0 flex-1 text-[22px] font-bold">Projects</h1>
+      {children}
+    </header>
+  )
+}
+
+function SectionHeading({ children }: { children: ReactNode }) {
+  return <h2 className="pb-1.5 text-[15px] font-bold">{children}</h2>
+}
+
+/** `Sep 15 – 30`, or `Dec 16 – Jan 2` across a month end. */
+function formatSpan(from: Date, to: Date) {
+  const day = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return from.getMonth() === to.getMonth() ? `${day(from)} – ${to.getDate()}` : `${day(from)} – ${day(to)}`
+}
+
+/** One exam's briefs: its logo and published rules, then a row per brief. */
+function ProgrammeBriefs({ programme }: { programme: ProjectProgramme }) {
+  const next = programme.nextWindow?.(new Date())
+  return (
+    <section aria-label={`${programme.label} projects`} className="flex flex-col gap-3.5">
+      <div className="flex items-center gap-3">
+        <ExamLogo examKey={programme.examKey} size="md" />
+        <div className="min-w-0 flex-1">
+          <Link to={wikiRoute({ kind: 'exam', name: programme.examPage })} className="block text-[17px] font-semibold underline-offset-4 hover:underline">
+            {programme.label}
+          </Link>
+          <p className="truncate text-sm">{programme.name}</p>
+        </div>
+      </div>
+      <p className="text-[15px] leading-relaxed">
+        {programme.facts.join(' · ')}
+        {next && <><br /><span className="font-semibold">Next CAS window {formatSpan(next.opens, next.closes)}</span></>}
+        {' · '}
+        <a href={programme.source.url} target="_blank" rel="noreferrer" title={programme.source.label} className="underline underline-offset-4">Source</a>
+      </p>
+      <div className={cn(OUTLINE_TILE, 'flex flex-col px-4')}>
+        {programme.briefs.map(brief => {
+          const files = brief.dictionary.length
+          return (
+            <Link key={brief.id} to={briefRoute(brief.id)} className={cn(OUTLINE_ROW_RULE, 'flex items-center gap-3 py-3.5', FOCUS)} data-testid="brief-row">
+              <span className="min-w-0 flex-1">
+                <span className="block text-[17px] font-semibold leading-snug">{brief.title}</span>
+                <span className="mt-0.5 block text-[15px]">{brief.company}</span>
+                <span className="mt-0.5 block text-sm">{brief.line} · {files === 1 ? '1 data set' : `${files} data sets`}</span>
+              </span>
+              <Chevron />
+            </Link>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/** The page for a reader without Pro: the briefs, each to be read. */
+function BriefsCatalogue() {
+  return (
+    <div className={cn(GROUND, 'min-h-dvh')} data-testid="briefs-catalogue">
+      <div className="mx-auto flex max-w-xl flex-col gap-[22px] px-5 pb-24 pt-6 sm:px-6 lg:pt-10">
+        <PageHeader>
+          <span className="shrink-0 rounded-full border-[1.5px] border-foreground px-2.5 py-0.5 text-[13px] font-bold">Pro</span>
+        </PageHeader>
+        <p className="text-base leading-normal">
+          Read any brief. Working one in R or Python, with its data and a graded report, is part of Pro.
+        </p>
+        {PROJECT_PROGRAMMES.map(p => <ProgrammeBriefs key={p.id} programme={p} />)}
+      </div>
+    </div>
+  )
+}
+
+/** How an attempt stands, in a few words: its time left, that it is practice, or when it went in. */
+function attemptStanding(attempt: ProjectAttempt, now: number): string {
+  if (attempt.submittedAt !== null) return `Submitted ${new Date(attempt.submittedAt).toLocaleDateString()}`
+  if (attempt.deadline === null) return 'Practice'
+  return attemptPhase(attempt, now) === 'closed' ? 'Window closed' : timeLeft(attempt.deadline, now).label
 }
 
 function AttemptRow({ attempt, now, onDelete }: { attempt: ProjectAttempt; now: number; onDelete: () => void }) {
   const submitted = attempt.submittedAt !== null
   const c = findCase(attempt.caseId)
   return (
-    <Card className="flex items-center gap-3 p-3 pr-2">
-      <Link to={attemptRoute(attempt.id, submitted ? 'results' : undefined)} className="flex min-w-0 flex-1 items-center gap-3">
-        <BriefTile caseId={attempt.caseId} size="md" />
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-sm font-semibold">{c?.title ?? attempt.caseId}</span>
-          <span className="block truncate text-xs text-muted-foreground">
-            {new Date(attempt.submittedAt ?? attempt.startedAt).toLocaleDateString()} · {attempt.language === 'r' ? 'R' : 'Python'}
-          </span>
+    <div className={cn(OUTLINE_ROW_RULE, 'relative py-3.5')}>
+      <Link to={attemptRoute(attempt.id, submitted ? 'results' : undefined)} className={cn('flex flex-col gap-2.5 rounded-lg', FOCUS)}>
+        {/* Room on the right for the delete button, which sits over this line. */}
+        <span className="flex min-h-8 items-center gap-3 pr-10">
+          <span className="min-w-0 flex-1 truncate text-[17px] font-semibold">{c?.title ?? attempt.caseId}</span>
+          <span className="shrink-0 text-sm font-semibold tabular-nums">{attemptStanding(attempt, now)}</span>
         </span>
+        {!submitted && c && <StepBar overview={attemptOverview(attempt, c.questions, recordTally(attempt))} size="sm" />}
       </Link>
-      {/* A submitted attempt is under its own heading; its pill would say it again. */}
-      {!submitted && <WindowPill attempt={attempt} now={now} compact />}
-      <button type="button" aria-label="Delete attempt" onClick={onDelete} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-destructive">
-        <Trash2 className="h-4 w-4" />
+      <button type="button" aria-label="Delete attempt" onClick={onDelete} className={cn('absolute right-0 top-3 flex h-9 w-9 items-center justify-end rounded-md', FOCUS)}>
+        <Trash2 className="h-[18px] w-[18px]" aria-hidden />
       </button>
-    </Card>
-  )
-}
-
-/** Where the reader's attempts are kept — and, signed out, how to keep them for good. */
-function StorageNote({ signedIn }: { signedIn: boolean }) {
-  if (signedIn) {
-    return (
-      <p className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Cloud className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Saved to your account. Open your projects on any device you sign in on.
-      </p>
-    )
-  }
-  return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-dashed border-border p-3">
-      <HardDrive className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-      <p className="min-w-0 flex-1 text-xs text-muted-foreground">
-        <span className="font-medium text-foreground">Saved in this browser only.</span>{' '}
-        Clearing site data deletes them, and a private window or another device won't see them.
-      </p>
-      <Link to="/auth" state={{ from: '/project' }} className={buttonVariants({ variant: 'outline', size: 'sm', className: 'h-7 px-2.5 text-xs' })}>
-        Sign in to keep them
-      </Link>
     </div>
   )
 }
 
-export default function ProjectsHome() {
+export default function ProjectsHome({ canStart }: { canStart: boolean }) {
+  return canStart ? <AttemptsHome /> : <BriefsCatalogue />
+}
+
+function AttemptsHome() {
   const { user } = useAuth()
   const userId = user?.id ?? null
   const allAttempts = usePcpaAttempts(s => s.attempts)
@@ -103,49 +178,55 @@ export default function ProjectsHome() {
   )
 
   return (
-    <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 pb-24 sm:px-6">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">Projects</h1>
-        <Button size="sm" className="gap-1.5 rounded-full pl-2.5 pr-3.5" aria-label="New project" data-sound="press" onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4" aria-hidden />
-          <span className="hidden sm:inline">New project</span>
-        </Button>
+    <div className={cn(GROUND, 'flex min-h-dvh flex-col')}>
+      <div className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-[22px] px-5 pb-8 pt-6 sm:px-6 lg:pt-10">
+        <PageHeader />
+
+        {attempts.length === 0 && (
+          <p className="text-base leading-normal">Pick a brief, then build and report on a GLM in R or Python.</p>
+        )}
+
+        {open.length > 0 && (
+          <section>
+            <SectionHeading>In progress</SectionHeading>
+            <div className={cn(OUTLINE_TILE, 'flex flex-col px-4')}>
+              {open.map(a => <AttemptRow key={a.id} attempt={a} now={now} onDelete={() => setDeleting(a.id)} />)}
+            </div>
+          </section>
+        )}
+
+        {submitted.length > 0 && (
+          <section>
+            <SectionHeading>Submitted</SectionHeading>
+            <div className={cn(OUTLINE_TILE, 'flex flex-col px-4')}>
+              {submitted.map(a => <AttemptRow key={a.id} attempt={a} now={now} onDelete={() => setDeleting(a.id)} />)}
+            </div>
+          </section>
+        )}
+
+        {/* Where the attempts are kept and, signed out, how to keep them for good. */}
+        {userId !== null ? (
+          <p className="text-sm">Saved to your account. Open your projects on any device you sign in on.</p>
+        ) : (
+          <p className="text-sm">
+            <span className="font-bold">Saved in this browser only.</span>{' '}
+            Clearing site data deletes them, and a private window or another device won't see them.{' '}
+            <Link to="/auth" state={{ from: '/project' }} className="font-semibold underline underline-offset-4">Sign in to keep them</Link>
+          </p>
+        )}
       </div>
 
-      {attempts.length === 0 && (
+      <div className="sticky bottom-0 shrink-0 border-t border-border bg-ground px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3">
         <button
           type="button"
           onClick={() => setCreating(true)}
           data-sound="press"
-          className="flex w-full flex-col items-center gap-3 rounded-xl border-2 border-dashed border-border px-6 py-12 text-center transition-colors hover:border-primary/40 hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={cn('mx-auto flex h-[58px] w-full max-w-xl items-center justify-center gap-2.5 rounded-full bg-primary px-6 text-lg font-bold text-primary-foreground transition-colors hover:bg-primary/90', FOCUS)}
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
-            <Plus className="h-6 w-6" aria-hidden />
-          </span>
-          <span className="text-base font-semibold">Start a project</span>
-          <span className="max-w-sm text-sm text-muted-foreground">Pick a brief, then build and report on a GLM in R or Python.</span>
+          <Plus className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+          New project
         </button>
-      )}
-
-      {open.length > 0 && (
-        <section className="space-y-3">
-          <GroupLabel>Continue</GroupLabel>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {open.map(a => <AttemptRow key={a.id} attempt={a} now={now} onDelete={() => setDeleting(a.id)} />)}
-          </div>
-        </section>
-      )}
-
-      {submitted.length > 0 && (
-        <section className="space-y-3">
-          <GroupLabel>Submitted</GroupLabel>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {submitted.map(a => <AttemptRow key={a.id} attempt={a} now={now} onDelete={() => setDeleting(a.id)} />)}
-          </div>
-        </section>
-      )}
-
-      <StorageNote signedIn={userId !== null} />
+      </div>
 
       {creating && <NewProjectDialog attempts={attempts} owner={userId ?? undefined} onClose={() => setCreating(false)} />}
 

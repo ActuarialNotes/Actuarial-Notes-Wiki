@@ -855,6 +855,7 @@ const STATIC_TITLES: Record<string, string> = {
   '/dashboard': `Dashboard | ${SITE_NAME}`,
   '/search': `Search | ${SITE_NAME}`,
   '/flashcards': `Flashcards | ${SITE_NAME}`,
+  '/apply': `Apply | ${SITE_NAME}`,
   '/project': `Projects | ${SITE_NAME}`,
   '/games': `Games | ${SITE_NAME}`,
   '/battle': `Quiz Battle | ${SITE_NAME}`,

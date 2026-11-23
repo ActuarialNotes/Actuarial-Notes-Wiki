@@ -113,6 +113,8 @@ export function SubmitView({
       }
     }
     const appendixPaths = attempt.report.appendices.map(a => a.path)
+    // Kept with the attempt, so its overview can say whether the code runs clean.
+    update(attempt.id, { cleanRun: { at: Date.now(), ok } })
     setCheck({
       status: 'done',
       lines: [...lines],

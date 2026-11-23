@@ -557,7 +557,7 @@ once and needs You to exist.
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
-| **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
+| **I. Apply** (built 2026-11-23) | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
 
 **Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
@@ -714,6 +714,72 @@ What was decided while building it:
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
 
+**Phase I is built.** Apply's home is `pages/Apply.tsx` at `/apply`, over `lib/apply.ts` (what
+each card says); the Tools screen and a tool's page are `pages/Tools.tsx`; the attempt's
+overview is `components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`; the
+four-step bar and the labelled row are `components/apply/ApplyParts.tsx`. What was decided
+while building it (the first four with the maintainer, 2026-11-23):
+
+- **A card never disappears and never counts nothing** (§10, question 7). Projects reads the
+  attempts in progress, or how many briefs there are ("3 briefs"). Tools reads the tools the
+  exam in focus covers ("20 for Exam 5"), or the whole catalogue's count when the exam covers
+  none or no exam is in focus ("35 tools"); the Tools screen then draws no tabs and is every
+  tool. Workflows says nothing beside its name until one is saved.
+- **Anyone can read a brief; starting one is Pro's** (§10, question 7). `/project` is the
+  list of briefs for a reader without Pro, each opening on its own page
+  (`/project/brief/<case id>`, `pages/Project/BriefPage.tsx`), whose one button is **Upgrade
+  to start**, or **Start this project** with Pro. The locked page is gone. Attempts stay Pro's:
+  nothing of one mounts without it.
+- **A tool has one concept**: the first page its method names (`toolConcept` in
+  `lib/toolExam.ts`). The level square on its row, **Learn the method** and **Practice this**
+  are all about that page. Practice is the concept page's own button (ten questions or the
+  pool, from every bank, the count beside it) and is not drawn for a concept with no
+  questions. Every tool has some today.
+- **A tool belongs to every exam whose syllabus names one of its concepts** (`toolsForExam`),
+  not only the earliest one, which stays the rule for the colour of a tool's sheets and marks.
+  It takes the exam's own page, since Exam 6's papers share a progress key. Nothing under
+  `lib/tools/` changed, so the connector's bundle is as it was.
+- **The exam in focus** is the one Today shows (`hooks/useTodayExam.ts`) until the switcher
+  (Phase E).
+- **The Tools screen** keeps the floating search bar as its search row ("Search 35 tools");
+  the area chips and "Pick up where you left off" are gone (the areas are the headings, the
+  recent tools are on Apply's card). A row is the tool's name; a search result also says the
+  question the tool answers, where the match may be. The published tables are not counted or
+  listed: they are on Data Sources, the row at the foot.
+- **A tool's page**: the answer card is a 1.5 px outline, and so is the answer pinned in the
+  title strip. The title is text (the book icon is gone). Learn the method is a row under the
+  inputs and opens the concept in the reader, as the icon did. Practice this is fixed to the
+  foot. The exam's colour is still on the template's sheets, chain strip and figure marks: the
+  three changes were the scope.
+- **An attempt opens on its overview**, a view of the attempt's page like the four it leads
+  to (`?view=overview`, the default while the attempt is open). Going into a view replaces the
+  history entry, as switching views always has, so the browser's Back leaves the attempt; a
+  view's arrow leads back to the overview. A submitted attempt has no overview and opens on
+  its results. The switcher in a view's top bar and the sidebar's rows stay.
+- **The steps**: Brief is done once the brief has been opened (`briefReadAt`, new on the
+  attempt's record; an older attempt counts once it holds any work), Workspace once a clean
+  run has passed (`cleanRun`, recorded by the Submit view's check, where the row leads),
+  Report once the body has 150 words and the total is within 1,250 (the Submit view's rule).
+  The current step is the first not done, drawn dashed. A later step can be done before an
+  earlier one, and is drawn solid.
+- **The checklist's rows are buttons** to the view where each is done. Appendices is ticked
+  with one to five attached; none is not an error, and the row doesn't say it is. A rehearsal
+  shows its time left beside the company; one whose window has closed is tagged Window closed
+  and its button opens the report.
+- **On Apply's card** the attempt's steps are read off the record alone (`recordTally`), which
+  can't count the words inside an attached table's file, so within a few words of the limit
+  it can differ from the overview.
+- **Until Phase F** the sidebar's Projects row leads to `/apply`, and the arrows at the top of
+  Projects and Tools lead up to it. The Tools and Workflows rows are as they were.
+- **The Projects page and the brief** are drawn to the same rules (the maintainer's review of
+  the first screenshots, 2026-11-23): one ground, outlined tiles, one text colour, the exam's
+  colour on its logo alone. The Projects page is the attempts in progress, each with its
+  four-step bar, then the submitted ones, and **New project** as its filled button; without
+  Pro it is the briefs as rows of one tile. The brief's sections are outlined tiles with a
+  plain icon, its outline chips are Ink's (the current one solid), and a stakeholder's note
+  is set off by a rule at its left. The start sheet and the workspace are as they were.
+- **Desktop** is not on the canvas: every screen is one column at reading width.
+
 For every phase:
 
 - Reader-facing words follow `docs/writing-style.md` and the `app-copy` skill. *Practice* is
@@ -755,6 +821,6 @@ For every phase:
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).
 6. Whether search defaults to the exam in focus or to every exam (§7a.4 draws every exam).
-7. What Apply shows for an exam with no project and no tools, and what a reader without Pro
-   sees of Projects (§7c). The review's suggestion: let anyone read a brief.
+7. ~~What Apply shows for an exam with no project and no tools, and what a reader without Pro
+   sees of Projects (§7c).~~ Decided 2026-11-23; see §8, Phase I.
 8. Whether the search row also belongs on Learn.

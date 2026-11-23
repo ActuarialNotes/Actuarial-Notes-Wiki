@@ -81,6 +81,9 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/battle', tab: 3, depth: 2 },
   { prefix: '/craft', tab: 3, depth: 2 },
   { prefix: '/review', tab: 3, depth: 2 },
+  // Apply's home, the way into Projects, Tools and Workflows, lies just
+  // before them until the four-place navigation makes them sheets over it.
+  { prefix: '/apply', tab: 3.9, depth: 0 },
   // The Projects tab; an attempt is a sheet laid over the list of briefs.
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
   // The Store, listed after Projects; the gem shop is a sheet laid over it.

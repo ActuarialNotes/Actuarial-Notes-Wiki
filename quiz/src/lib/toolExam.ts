@@ -45,3 +45,34 @@ export function examForResource(resource: string, syllabi: readonly WikiExamSyll
     .map(s => wikiExamIdToProgressKey(s.examId))
   return earliestExam(keys)
 }
+
+// ── Apply (docs/redesign-spec.md §7c) ────────────────────────────────────────
+//
+// The colour rule above gives a tool one exam, the earliest that teaches it.
+// Apply's Tools card and the Tools screen's first tab ask a different
+// question: which tools does *this* exam's syllabus cover? A tool belongs to
+// every exam whose learning objectives name one of its concepts, so a FAM
+// candidate finds Chain Ladder although Exam 5 is not theirs.
+
+/** What these functions read of a tool: its method's concept pages. */
+type WithConcepts = { method: { concepts: readonly string[] } }
+
+/**
+ * A tool's concept: the first page its method names. The level square on its
+ * row, "Learn the method" and "Practice this" are all about this one page.
+ */
+export function toolConcept(spec: WithConcepts): string | null {
+  return spec.method.concepts[0] ?? null
+}
+
+/**
+ * The tools one exam's syllabus covers, in the order given. It takes the
+ * exam's own page, not its progress key: Exam 6's regional papers share a key
+ * and not a syllabus.
+ */
+export function toolsForExam<T extends WithConcepts>(tools: readonly T[], syllabus: WikiExamSyllabus): T[] {
+  const named = new Set<string>()
+  for (const t of syllabus.topics) for (const c of t.concepts) named.add(norm(c.name))
+  if (!named.size) return []
+  return tools.filter(tool => tool.method.concepts.some(c => named.has(norm(c))))
+}

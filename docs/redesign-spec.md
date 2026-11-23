@@ -377,12 +377,17 @@ sidebar**; do not build the four-place navigation until Practice, You and Apply 
 
 | Phase | What | Depends on |
 |---|---|---|
-| **A. Visual base** | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
+| **A. Visual base** (built 2026-11-23) | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
 | **B. Today** | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
 | **C. The session** | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **F. Navigation** | The place bar and rail, the profile button | Designs for Practice, You, Apply |
+
+**Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
+`--ground`, `--level-*` and `--answer-*` tokens, `LevelSquare`, `lib/answerState.ts` and
+`AnswerDot`, `OutlineCard` / `OutlineTile`, the `edge` button variant and `main` size, and
+`Popup`. No screen uses them yet; `/design/base` on the dev server shows them all.
 
 For every phase:
 

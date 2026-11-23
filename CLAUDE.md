@@ -406,7 +406,13 @@ before touching that area**:
   Today, the session's question, feedback and results, the exam switcher, Learn's exam and concept
   pages — mapped to the code it replaces, and the build order (phases A–F). The screens are on a
   design canvas it links to. Where it differs from the design review, it wins (its §9). Read
-  before building any of X11.
+  before building any of X11. **Phase A, the visual base, is built** (style guide §13): the
+  `--ground` / `--level-*` / `--answer-*` tokens, `components/LevelSquare.tsx` (a concept's level
+  as a neutral shaded square, `lib/levelSquare.ts`), `lib/answerState.ts` (green correct, red
+  incorrect, amber partial, grey unanswered) with `components/AnswerDot.tsx`,
+  `components/ui/OutlineCard.tsx` (outlined cards and tiles on the one ground),
+  `components/ui/Popup.tsx`, and `Button`'s `edge` variant and `main` size. No screen uses them
+  yet; `pages/DesignBase.tsx` shows them at `/design/base` on the dev server only.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new

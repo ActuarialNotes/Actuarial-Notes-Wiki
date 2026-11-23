@@ -505,6 +505,10 @@ tool.
 - The quiz header's percentage is gone, a **Skip to content** link is the first tab stop, and
   an empty deck holds its own **Add flashcards** button.
 
+**The build spec's Phase A (the visual base) was built on 2026-11-23**: the level square, the
+answer-state colours, the outline card and tile, the outlined control and main action, and the
+popup (`docs/style-guide.md` §13). Its phases B to F are not built.
+
 Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
 continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
 go until the shortcut does.

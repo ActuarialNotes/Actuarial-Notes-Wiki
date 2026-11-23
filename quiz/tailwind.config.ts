@@ -68,6 +68,19 @@ const config: Config = {
           DEFAULT: 'var(--pick)',
           foreground: 'var(--pick-foreground)',
         },
+        // The redesign's base (style guide §13): the one ground, the level
+        // shades and the answer states.
+        ground: 'hsl(var(--ground))',
+        level: {
+          1: 'hsl(var(--level-1))',
+          2: 'hsl(var(--level-2))',
+        },
+        answer: {
+          correct: 'hsl(var(--answer-correct))',
+          incorrect: 'hsl(var(--answer-incorrect))',
+          partial: 'hsl(var(--answer-partial))',
+          unanswered: 'hsl(var(--answer-unanswered))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

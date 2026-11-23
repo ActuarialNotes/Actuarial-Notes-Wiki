@@ -48,6 +48,21 @@
        Style guide §7.0 (Ink). */
     --pick: hsl(var(--foreground));
     --pick-foreground: hsl(var(--background));
+    /* The redesign's base (docs/redesign-spec.md §2, style guide §13).
+       `--ground` is the one background a redesigned screen and its popups are
+       drawn on: white here, black in the dark theme, with no card surface a
+       step off it. A card there is a 1px outline in `--border`. */
+    --ground: 0 0% 100%;
+    /* Concept levels as neutral shades: Level 1 the lighter grey, Level 2 the
+       darker, Level 3 the text colour itself (`components/LevelSquare.tsx`). */
+    --level-1: 0 0% 58%;
+    --level-2: 0 0% 34%;
+    /* Answer states, the only hues on a redesigned screen. Each clears 4.5:1
+       on the ground, so the ground colour can be text on a fill of one. */
+    --answer-correct: 147 75% 28%;
+    --answer-incorrect: 4 80% 44%;
+    --answer-partial: 32 95% 35%;
+    --answer-unanswered: 0 0% 46%;
   }
 
   .dark {
@@ -75,6 +90,13 @@
     --shadow-sheet: rgba(0,0,0,0.75);
     --pick: hsl(var(--foreground));
     --pick-foreground: hsl(var(--background));
+    --ground: 0 0% 0%;
+    --level-1: 0 0% 36%;
+    --level-2: 0 0% 66%;
+    --answer-correct: 147 69% 55%;
+    --answer-incorrect: 4 100% 64%;
+    --answer-partial: 38 95% 55%;
+    --answer-unanswered: 0 0% 54%;
   }
 }
 

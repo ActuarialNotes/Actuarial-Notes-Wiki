@@ -1156,3 +1156,25 @@ Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 - **Example and trap cards** (`MarkdownCallout.tsx`) are outlines on every surface: the
   example in the line colour with an outlined "Example" pill, the trap in the text colour with
   its warning icon. Neither carries a hue.
+
+### 13.8 Apply
+
+Apply's home, the Tools screen and an attempt's overview (`pages/Apply.tsx`, `pages/Tools.tsx`,
+`components/project/AttemptOverviewView.tsx`; `docs/redesign-spec.md` §7c).
+
+- **An entry card** (`ApplyCard` in `pages/Apply.tsx`): an outlined card whose heading row is
+  the link (a 26px icon, the name at 22px, one count, a chevron). What the reader last touched
+  sits under a hairline as links of its own, never nested in the heading's.
+- **The step bar** (`StepBar` in `components/apply/ApplyParts.tsx`): a project's four steps as
+  one image. A step done is solid in the text colour, the current one dashed with its name in
+  bold, one not reached the line colour.
+- **A labelled row** (`ApplyRow`): 56px, a label at 17px, an optional leading square and
+  trailing value, a chevron. "Learn the method", "Read the brief" and "Data Sources" are all it.
+- **The tabs** on the Tools screen: 38px pills outlined in the text colour, the chosen one
+  solid, each with its count set lighter.
+- **A tool row**: a level square at 16px, the tool's name, a chevron, rows separated by
+  hairlines inside one outlined tile per practice area.
+- **A checklist row**: a 24px disc (solid with a tick when done, an outline when not), the
+  label, its figure in bold, and a 6px bar under a row that counts toward a limit.
+- **A tool's answer card** is a 1.5px outline in the text colour with nothing filled behind
+  the answer; the exam's colour is not on it.

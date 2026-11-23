@@ -1,4 +1,5 @@
 import { test, expect } from './test'
+import { signIn } from './fixtures/signedIn'
 
 // Actuarial Tools (docs/actuarial-tools.md): calculators that each do one
 // thing, one live card each. The smoke checks the tab is in the sidebar, the
@@ -498,13 +499,63 @@ test.describe('tools', () => {
     await expect(page.getByTestId('tool-chain')).toContainText('Expense Ratios')
   })
 
-  test('remembers the tools used last on the catalogue', async ({ page }) => {
-    await page.goto('/tools/bond-price')
-    await expect(page.getByTestId('tool-tile').first()).toHaveText('1,077.95')
-    await page.goto('/tools')
-    await expect(page.getByTestId('tool-recent').first()).toContainText('1,077.95')
-    await page.getByTestId('tool-areas').getByRole('button', { name: 'Credibility' }).click()
-    await expect(page).toHaveURL(/area=credibility/)
+  test('shows one area of the catalogue when a breadcrumb names it', async ({ page }) => {
+    await page.goto('/tools?area=credibility')
+    await expect(page.getByTestId('tool-area')).toHaveCount(1)
     await expect(page.getByTestId('tool-row')).toHaveCount(3)
+  })
+})
+
+// The Tools screen and a tool's page as Apply draws them (docs/redesign-spec.md §7c.2, §7c.3).
+test.describe('tools, in Apply', () => {
+  test('opens on the exam in focus, with a tab for every tool', async ({ page }) => {
+    await signIn(page, { examProgress: [{ exam_id: 'FM', status: 'in_progress', target_date: '2026-12-03' }] })
+    await page.goto('/tools')
+    const tabs = page.getByTestId('tool-tabs')
+    await expect(tabs.getByRole('tab', { name: /^Exam FM/ })).toHaveAttribute('aria-selected', 'true')
+    // FM's syllabus covers the financial mathematics tools and nothing of reserving.
+    await expect(page.getByRole('heading', { name: 'Financial mathematics', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Reserving', exact: true })).toHaveCount(0)
+    const forExam = await page.getByTestId('tool-row').count()
+
+    await tabs.getByRole('tab', { name: /^All/ }).click()
+    await expect(page).toHaveURL(/[?&]tab=all/)
+    await expect(page.getByRole('heading', { name: 'Reserving', exact: true })).toBeVisible()
+    expect(await page.getByTestId('tool-row').count()).toBeGreaterThan(forExam)
+    // Every row leads with the reader's level on the tool's concept.
+    await expect(page.getByTestId('tool-row').first().getByRole('img', { name: 'New' })).toBeVisible()
+  })
+
+  test('is every tool, with no tabs, for a reader with no exam in focus', async ({ page }) => {
+    await page.goto('/tools')
+    await expect(page.getByTestId('tool-tabs')).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Reserving', exact: true })).toBeVisible()
+    await expect(page.getByRole('textbox', { name: 'Search tools' })).toHaveAttribute('placeholder', /^Search \d+ tools$/)
+    await page.getByTestId('tools-back').click()
+    await expect(page).toHaveURL(/\/apply$/)
+  })
+
+  test('outlines the answer, leads to the method with the reader\'s level, and ends in Practice this', async ({ page }) => {
+    await page.goto('/tools/loss-ratio-method')
+    const card = page.getByTestId('tool-card')
+    // An outline in the text colour, with nothing filled behind the answer.
+    const look = await card.getByTestId('tool-answer').evaluate(el => {
+      const cs = getComputedStyle(el)
+      return { fill: cs.backgroundColor, edge: cs.borderTopWidth }
+    })
+    expect(look.fill).toBe('rgba(0, 0, 0, 0)')
+    expect(look.edge).not.toBe('0px')
+
+    const learn = card.getByTestId('tool-learn-method')
+    await expect(learn).toContainText('Learn the method')
+    await expect(learn.getByRole('img', { name: 'New' })).toBeVisible()
+
+    // The one filled button: a quiz on the tool's concept.
+    const practice = page.getByTestId('practice-button')
+    await expect(practice).toContainText(/Practice this\s*\d+ questions/, { timeout: 30_000 })
+    await expect(practice).toHaveAttribute('href', /concept=Loss(\+|%20)Ratio(\+|%20)Method/)
+
+    await learn.click()
+    await expect(page.locator('.concept-popup-aside')).toContainText('Loss Ratio Method')
   })
 })

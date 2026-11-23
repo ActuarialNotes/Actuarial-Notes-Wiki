@@ -1,14 +1,19 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { Cloud, HardDrive, Plus, Trash2 } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ChevronLeft, Cloud, HardDrive, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/buttonVariants'
 import { Card } from '@/components/ui/card'
 import { BriefTile } from '@/components/project/BriefTile'
-import { NewProjectDialog } from '@/components/project/NewProjectDialog'
+import { NewProjectDialog, ProgrammeGroup } from '@/components/project/NewProjectDialog'
 import { ProjectDialog } from '@/components/project/shared'
 import { WindowPill } from '@/components/project/ProjectTopBar'
 import { projectCase as findCase } from '@/data/pcpaProjects'
+import { PROJECT_PROGRAMMES } from '@/data/projects'
+import { ProBadge } from '@/components/ProBadge'
+import { backLabel, useBack } from '@/hooks/useBack'
+import { briefRoute } from '@/lib/attemptViews'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { useAuth } from '@/hooks/useAuth'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { attemptRoute, visibleTo, type ProjectAttempt } from '@/lib/pcpaAttempt'
@@ -23,6 +28,10 @@ import { attemptRoute, visibleTo, type ProjectAttempt } from '@/lib/pcpaAttempt'
  * (`NewProjectDialog`), which is the only place they are chosen from. What
  * stays on the page is what a candidate comes back for: the attempts still
  * open, then the submitted ones, whose results are kept.
+ *
+ * A reader without Pro (`canStart` false) has no attempts to come back to, so
+ * for them the page *is* the catalogue: every brief, each opening on its own
+ * page to be read (`BriefPage`), where starting it leads to Upgrade.
  *
  * Where attempts are kept depends on who is reading. Signed in, they are saved
  * to the account and follow the candidate to any device; signed out, they live
@@ -81,7 +90,47 @@ function StorageNote({ signedIn }: { signedIn: boolean }) {
   )
 }
 
-export default function ProjectsHome() {
+/** The way back: to the page left, or up to Apply's home. */
+function BackLink() {
+  const back = useBack({ to: '/apply', label: 'Apply' })
+  return (
+    <Link
+      to={back.to}
+      state={RESTORE_SCROLL}
+      onClick={back.onLinkClick}
+      aria-label={backLabel(back)}
+      title={backLabel(back)}
+      className="-ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <ChevronLeft className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+    </Link>
+  )
+}
+
+/** The page for a reader without Pro: the briefs, each to be read. */
+function BriefsCatalogue() {
+  const navigate = useNavigate()
+  return (
+    <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 pb-24 sm:px-6" data-testid="briefs-catalogue">
+      <div className="flex items-center gap-1">
+        <BackLink />
+        <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight">Projects <ProBadge /></h1>
+      </div>
+      <p className="max-w-prose text-sm text-muted-foreground">
+        Read any brief. Working one in R or Python, with its data and a graded report, is part of Pro.
+      </p>
+      {PROJECT_PROGRAMMES.map(p => (
+        <ProgrammeGroup key={p.id} programme={p} attempts={[]} onSelect={brief => navigate(briefRoute(brief.id))} />
+      ))}
+    </div>
+  )
+}
+
+export default function ProjectsHome({ canStart }: { canStart: boolean }) {
+  return canStart ? <AttemptsHome /> : <BriefsCatalogue />
+}
+
+function AttemptsHome() {
   const { user } = useAuth()
   const userId = user?.id ?? null
   const allAttempts = usePcpaAttempts(s => s.attempts)
@@ -105,7 +154,10 @@ export default function ProjectsHome() {
   return (
     <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 pb-24 sm:px-6">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">Projects</h1>
+        <div className="flex min-w-0 items-center gap-1">
+          <BackLink />
+          <h1 className="text-2xl font-bold tracking-tight">Projects</h1>
+        </div>
         <Button size="sm" className="gap-1.5 rounded-full pl-2.5 pr-3.5" aria-label="New project" data-sound="press" onClick={() => setCreating(true)}>
           <Plus className="h-4 w-4" aria-hidden />
           <span className="hidden sm:inline">New project</span>

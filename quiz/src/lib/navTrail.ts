@@ -182,6 +182,7 @@ const STATIC_LABELS: Record<string, string> = {
   '/games': 'Games',
   '/battle': 'Quiz Battle',
   '/craft': 'Concept Craft',
+  '/apply': 'Apply',
   '/project': 'Projects',
   '/tools': 'Tools',
   '/data-sources': 'Data Sources',

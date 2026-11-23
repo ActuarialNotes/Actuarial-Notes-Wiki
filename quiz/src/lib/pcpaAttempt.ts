@@ -45,6 +45,10 @@ export interface ProjectAttempt {
   assessment: Pick<AssessmentScore, 'gini' | 'oracleGini' | 'captured' | 'balance' | 'verdict'> | null
   /** Milliseconds spent with the workspace open and in use. */
   activeMs: number
+  /** When the brief was first opened. Absent on an attempt whose brief hasn't been. */
+  briefReadAt?: number
+  /** The last clean run of the code (the Submit view's check): when, and whether every script ran to the end. */
+  cleanRun?: { at: number; ok: boolean }
   /**
    * When the record last changed. Two devices editing one attempt settle on
    * the later of their two records (`lib/project/projectSync.ts`).
@@ -94,6 +98,8 @@ export function normalizeAttempt(raw: unknown): ProjectAttempt | null {
     activeMs: typeof a.activeMs === 'number' ? a.activeMs : 0,
     assessment: a.assessment ?? null,
     updatedAt: typeof a.updatedAt === 'number' ? a.updatedAt : submittedAt ?? startedAt,
+    briefReadAt: typeof a.briefReadAt === 'number' ? a.briefReadAt : undefined,
+    cleanRun: a.cleanRun && typeof a.cleanRun.at === 'number' && typeof a.cleanRun.ok === 'boolean' ? { at: a.cleanRun.at, ok: a.cleanRun.ok } : undefined,
     owner: typeof a.owner === 'string' ? a.owner : undefined,
   }
 }

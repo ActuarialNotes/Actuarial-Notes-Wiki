@@ -143,18 +143,21 @@ function BriefSection({
 }
 
 export function BriefView({
-  attempt,
+  attempt = null,
   projectCase,
   onOpenFile,
 }: {
-  attempt: ProjectAttempt
+  /** The attempt whose brief this is. Absent, the brief is only being read: no deadline, and no files to open. */
+  attempt?: ProjectAttempt | null
   projectCase: ProjectCase
-  onOpenFile: (path: string) => void
+  onOpenFile?: (path: string) => void
 }) {
+  // What the open sections are remembered under: the attempt, or the brief itself.
+  const memoryKey = attempt?.id ?? `brief:${projectCase.id}`
   const files = usePcpaWorkspace(s => s.files)
   const [openDict, setOpenDict] = useState<string | null>(null)
   const sections = sectionsFor(projectCase)
-  const [open, setOpen] = useState<Set<SectionId>>(() => new Set(openByAttempt.get(attempt.id) ?? []))
+  const [open, setOpen] = useState<Set<SectionId>>(() => new Set(openByAttempt.get(memoryKey) ?? []))
   const [active, setActive] = useState<SectionId>(sections[0].id)
   const { memo } = projectCase
 
@@ -166,7 +169,7 @@ export function BriefView({
   /** Until when a chosen section holds the outline while the scroll to it plays. */
   const holdUntil = useRef(0)
 
-  useEffect(() => { openByAttempt.set(attempt.id, open) }, [attempt.id, open])
+  useEffect(() => { openByAttempt.set(memoryKey, open) }, [memoryKey, open])
 
   // Follow the scroll: the outline marks the section being read.
   useEffect(() => {
@@ -287,7 +290,7 @@ export function BriefView({
           <h1 className="text-2xl font-semibold tracking-tight">{projectCase.title}</h1>
           <p className="text-sm text-muted-foreground">
             {projectCase.company}
-            {attempt.deadline !== null ? <> · Submissions close {formatDeadline(attempt.deadline)}</> : ' · Practice, no deadline'}
+            {attempt && (attempt.deadline !== null ? <> · Submissions close {formatDeadline(attempt.deadline)}</> : ' · Practice, no deadline')}
           </p>
         </header>
 
@@ -373,9 +376,11 @@ export function BriefView({
                       <p className="font-mono text-sm font-medium">{d.file}</p>
                       <p className="text-xs text-muted-foreground">{d.description} {d.rows} rows, {d.entries.length} columns.</p>
                     </div>
-                    <button type="button" onClick={() => onOpenFile(path)} className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium hover:bg-accent">
-                      <FolderOpen className="h-3.5 w-3.5" /> Open
-                    </button>
+                    {onOpenFile && (
+                      <button type="button" onClick={() => onOpenFile(path)} className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium hover:bg-accent">
+                        <FolderOpen className="h-3.5 w-3.5" /> Open
+                      </button>
+                    )}
                     {file && (
                       <button type="button" onClick={() => downloadWorkspaceFile(file)} className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium hover:bg-accent">
                         <Download className="h-3.5 w-3.5" /> CSV

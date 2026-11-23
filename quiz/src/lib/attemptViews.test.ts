@@ -26,15 +26,17 @@ describe('resolveAttemptView', () => {
     expect(resolveAttemptView('report', 'submitted')).toBe('report')
   })
 
-  it('opens the brief, or the results once submitted, when none is asked for', () => {
-    expect(resolveAttemptView(null, 'open')).toBe('brief')
-    expect(resolveAttemptView('nonsense', 'closed')).toBe('brief')
+  it('opens the overview, or the results once submitted, when none is asked for', () => {
+    expect(resolveAttemptView(null, 'open')).toBe('overview')
+    expect(resolveAttemptView('nonsense', 'closed')).toBe('overview')
     expect(resolveAttemptView(null, 'submitted')).toBe('results')
   })
 
-  it('has no results before submission', () => {
-    expect(resolveAttemptView('results', 'open')).toBe('brief')
-    expect(resolveAttemptView('results', 'closed')).toBe('brief')
+  it('has no results before submission, and no overview after it', () => {
+    expect(resolveAttemptView('results', 'open')).toBe('overview')
+    expect(resolveAttemptView('results', 'closed')).toBe('overview')
+    expect(resolveAttemptView('overview', 'submitted')).toBe('results')
+    expect(resolveAttemptView('overview', 'open')).toBe('overview')
   })
 })
 
@@ -45,9 +47,9 @@ describe('attemptViewTab', () => {
     expect(attemptViewTab('brief', 'submitted')).toBe('brief')
   })
 
-  it('always lands on a view the attempt lists', () => {
+  it('lands every view but the overview on one the switcher lists', () => {
     for (const phase of ['open', 'closed', 'submitted'] as const) {
-      for (const requested of [null, 'brief', 'workspace', 'report', 'submit', 'results']) {
+      for (const requested of ['brief', 'workspace', 'report', 'submit']) {
         expect(attemptViews(phase)).toContain(attemptViewTab(resolveAttemptView(requested, phase), phase))
       }
     }

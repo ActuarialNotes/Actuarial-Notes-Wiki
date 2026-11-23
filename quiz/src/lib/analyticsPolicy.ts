@@ -136,6 +136,7 @@ const CONTENT_GROUPS: ReadonlyArray<readonly [prefix: string, group: string]> = 
   ['/wiki/resources', 'Resources'],
   ['/wiki/resource', 'Resources'],
   ['/wiki/question', 'Questions'],
+  ['/apply', 'Apply'],
   ['/project', 'Projects'],
   ['/store', 'Store'],
   ['/store/gems', 'Gem Shop'],

@@ -121,6 +121,15 @@ One thing, one name. Use these exactly.
 | A concept's level, as a control | the level itself ("Level 2", "New"), which opens **Learning Progress** | Mastery, Progress |
 | The menu beside a concept's level | **More** (Add to Flashcards, Listen, Fact Check) | Actions, Options |
 | The concept after this one | **Next in General Probability** (the objective, by its name) | Up next, Continue |
+| The place for projects, tools and workflows | **Apply** (the page at `/apply`; its three cards **Projects**, **Tools**, **Workflows**, in that order). The sidebar row stays "Projects" until the navigation phase | Practice (that is quizzes), Lab, Workbench |
+| The Apply cards' counts | "1 in progress", "3 briefs"; "20 for Exam 5", "35 tools"; "2 saved" | active, ongoing, "20 tools for Exam 5", "0 for Exam 9" |
+| A project's four steps | **Brief**, **Workspace**, **Report**, **Submit**; the page that leads into them is the attempt's **overview** (never a fifth step) | Stages, Phases, Dashboard, Summary |
+| The overview's checklist | **Brief read**, **Code runs clean**, **Report**, **Appendices**, **Submission questions**; a row not done reads "Not yet", a failed run "Stopped with an error" | Pending, Incomplete, Failed, TODO |
+| The overview's button | **Continue in Workspace** (the step, by its name); **Read the brief** on a new attempt | Resume, Next step, Go to Workspace |
+| How an attempt is worked, as a tag | **Rehearsal**, **Practice**; **Window closed** once a rehearsal's deadline has passed | Timed, Untimed, Expired |
+| Starting a project without Pro | **Upgrade to start** (on a brief's page); with Pro, **Start this project** | Unlock, Go Pro, Subscribe |
+| The way from a tool to its concept | **Learn the method** (a row, with the reader's level square) | Read about the method as a link under a title, Docs, Theory |
+| The Tools screen's tabs | the exam's own label ("Exam 5") and **All**, each with its count | My exam, Everything, Other |
 | The exam page's two documents | **Official syllabus**; **Dates and fees** | Syllabus PDF, Info, About |
 | The exam page's foot rows | **Readings**; the page's own titles (**Exam format**); **What you should know first**; **Fact Check** | Source Material, Prerequisite knowledge, Prerequisites |
 | An objective's weight | "23–30% of the exam", as the syllabus prints it | weight, weighting |
@@ -188,7 +197,14 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
-<<<<<<< HEAD
+- 2026-11-23 · Redesign, Apply (`docs/redesign-spec.md` §7c) · Four things settled before it was
+  built. A card on Apply never disappears and never counts nothing: an exam with no tools reads
+  the whole catalogue's count ("35 tools"), never "0 for Exam 9". Anyone can read a brief;
+  starting one is the Pro action, and its button says what it does ("Upgrade to start"). A tool
+  has one concept, the first its method names, and the level square, "Learn the method" and
+  "Practice this" are all about it; with no questions "Practice this" is not drawn. A tool
+  belongs to every exam whose syllabus names its concept, so "20 for Exam 5" counts what the
+  exam covers, not what it introduces.
 - 2026-11-23 · Redesign, Learn (`docs/redesign-spec.md` §7, §2.4) · A title is text, never a
   hidden menu. A concept ends in one filled button, "Practice this", on its page and in the
   reader; an opened objective ends in "Practice <objective>". The syllabus's sentences are
@@ -196,7 +212,6 @@ implies. Newest first.
   a title. A Practice button names what it practices and starts a quiz; it never says
   "Start Quiz". Never reword a syllabus sentence to fit a layout.
 
-=======
 - 2026-11-23 · Redesign, the session (`docs/redesign-spec.md` §5.1) · The button that locks
   an answer in is "Check". It replaces "Confirm Answer". → One word for the screen's one
   filled button; "Confirm Answer" is written nowhere.
@@ -207,7 +222,6 @@ implies. Newest first.
 - 2026-11-23 · Redesign, the session (`docs/redesign-spec.md` §5.2) · "Choose any answer to
   continue" is removed, with the shortcut it described. → A caption that explains a control
   goes when the control does; Next is the way on.
->>>>>>> origin/main
 - 2026-11-23 · Redesign, Today (`docs/redesign-spec.md` R1, R5, R15, §4.4) · The daily
   session is free; Pro sells the plan paced to the exam date, Analytics and the daily
   podcast. The free-plan upsell on Today is "Pace my plan to Jan 14" (the reader's own exam

@@ -403,8 +403,10 @@ before touching that area**:
   implementing it: the visual rules (black and white, one filled button a screen, green / red /
   amber / grey for answers only, levels as shaded squares), the decisions (the daily session is
   free and sized by time; Pro is the pacing, Analytics and the podcast), each designed screen —
-  Today, the session's question, feedback and results, the exam switcher, Learn's exam and concept
-  pages — mapped to the code it replaces, and the build order (phases A–F). The screens are on a
+  Today, the session's question, feedback, results and written part, the exam switcher, Learn's
+  exam and concept pages, Practice and its one search, You (profile, league, Settings) and Apply
+  (Projects, Tools, Workflows) — mapped to the code it replaces, and the build order (phases A–I,
+  the navigation last). The screens are on a
   design canvas it links to. Where it differs from the design review, it wins (its §9). Read
   before building any of X11. **Phase A, the visual base, is built** (style guide §13): the
   `--ground` / `--level-*` / `--answer-*` tokens, `components/LevelSquare.tsx` (a concept's level

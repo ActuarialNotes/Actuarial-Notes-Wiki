@@ -1072,7 +1072,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
 | `docs/design-review.md` | Review: the whole app against the Laws of UX, and a redesign proposal (mock-ups in `design-review-mockups.html`) | X11 (§3.4) | Active. Phase 0 built | 2026-11-15 |
-| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–F (screens on a linked design canvas) | X11 (§3.4) | Active. Phase A (the visual base) built; Practice, You and Apply not designed | 2026-11-23 |
+| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phase A (the visual base) built; see the spec | 2026-11-23 |
 | `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Active. Phase 1 built | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |

@@ -1048,12 +1048,15 @@ the `--answer-*` tokens.
 |---|---|---|---|
 | Correct | `--answer-correct` | `#3ddc84` | a deeper green |
 | Incorrect | `--answer-incorrect` | `#ff5247` | a deeper red |
-| Partial | `--answer-partial` | amber | a deeper amber |
-| Unanswered | `--answer-unanswered` | `#8a8a8a` | mid grey |
+| Partial | `--answer-partial` | `#ffb224` | a deeper amber |
+| Unanswered | `--answer-unanswered` | `#8a8a8a` | a mid grey (`#757575`) |
 
 - `ANSWER_FILL` for a segment, bar or dot (`components/AnswerDot.tsx`), `ANSWER_TEXT` for an
   icon or figure, `ANSWER_EDGE` for a row outlined in the state (the reader's wrong answer),
   `ANSWER_SOLID` for a row filled with it, its words in the ground colour (the right answer).
+- **Partial is used**: a self-graded written part marked Partial takes amber on its progress
+  segment (`ANSWER_FILL`) and its grade button, outlined until picked and filled once it is
+  (`ANSWER_EDGE`, `ANSWER_SOLID`).
 - **Not reached yet is not unanswered.** A piece of a bar the reader hasn't got to is the line
   colour (`ANSWER_PENDING`).
 - Every token clears 4.5:1 on the ground in its theme, held by `answerState.test.ts`. The

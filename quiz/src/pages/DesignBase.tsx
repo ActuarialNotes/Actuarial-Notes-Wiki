@@ -223,8 +223,23 @@ export default function DesignBase() {
               <span>D</span>
               <span>0.42</span>
             </div>
-            <div className={cn('flex min-h-[56px] items-center gap-3 rounded-2xl px-4 text-[17px] font-semibold', ANSWER_SOLID.partial)}>
-              <span>Partial</span>
+            {/* A written part's grade: outlined in its colour, filled when picked. */}
+            <div role="radiogroup" aria-label="Grade" className="grid grid-cols-3 gap-2.5">
+              {([['correct', 'Full', '2'], ['partial', 'Partial', '1'], ['incorrect', 'None', '0']] as const).map(([state, label, points]) => (
+                <button
+                  key={state}
+                  type="button"
+                  role="radio"
+                  aria-checked={state === 'partial'}
+                  className={cn(
+                    'flex min-h-[56px] flex-col items-center justify-center rounded-2xl text-[15px] font-semibold',
+                    state === 'partial' ? ANSWER_SOLID[state] : cn(ANSWER_EDGE[state], ANSWER_TEXT[state]),
+                  )}
+                >
+                  {label}
+                  <span className="text-[13px] font-medium tabular-nums">{points} {points === '1' ? 'point' : 'points'}</span>
+                </button>
+              ))}
             </div>
           </div>
           <p className="flex items-baseline gap-3">

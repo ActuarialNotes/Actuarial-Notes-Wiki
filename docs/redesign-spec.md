@@ -1,6 +1,7 @@
-# Redesign spec: Today, the session, the exam switcher and Learn
+# Redesign spec
 
-_Written 2026-11-23 as the handoff for implementation. It follows the review in
+_Written 2026-11-23 as the handoff for implementation, and extended the same day with
+Practice, search, You and Apply (§7a to §7c), which completes the first design of every place. It follows the review in
 `docs/design-review.md` (roadmap X11) and a second review of the Dashboard, Study Guides, Quiz,
 Projects and Settings done the same day. The screens are drawn on a design canvas:
 <https://claude.ai/artifact/Er5o5o1SUw8emHPtV3RQU7>. The canvas is the reference for how a
@@ -23,12 +24,17 @@ differences are listed in §9.
 | The session | Session | `Question`, `Feedback` (after a miss), `Results` | Designed, phone only |
 | Exam switcher | Exam switcher | `Switcher`, `AddExam`, `ExamDate` | Designed, phone only |
 | Learn | Learn | `Exam` (exam page), `Concept` (concept page) | Designed, phone only |
-| Practice (quiz builder, Practice Exam, past papers, flashcards) | | | Not designed. The builder scored best in the review and is expected to change least |
-| You (profile, level, quests, league, Settings) | | | Not designed |
-| Apply (Projects, Tools, Workflows) | | | Not designed |
+| Practice | Practice | `Practice` (home), `Setup` (the quiz setup sheet), `Papers` (past papers, drawn for Exam 5), `Flashcards`, `SearchAll`, `SearchQuestions` | Designed, phone only |
+| A written part | Session | `Written` (self-graded, marked Partial) | Designed, phone only |
+| You | You | `You` (profile), `League`, `Settings` | Designed, phone only |
+| Apply | Apply | `Apply` (home), `ApplyTools`, `Tool`, `Project` (an attempt in progress) | Designed, phone only. `Tool` is a restyle of the existing template, not a redesign |
 
-Also not drawn: the feedback screen after a correct answer, a written (self-graded) question,
-the "Edit" state of the exam switcher, and desktop layouts for anything but Today.
+Not drawn: the feedback screen after a correct answer; the "Edit" state of the exam switcher;
+desktop layouts for anything but Today; a past paper's own screen (pass rate, the paper and
+examiner's report PDFs); the flashcard deck's management (add, remove, reorder, the grid);
+Projects' locked state for a reader without Pro; Apply for an exam with no project and no
+tools; Workflows' own screens (unchanged by this design); the Store, Help and Gem Shop behind
+the profile.
 
 Each canvas file is `project/<Name>.dc.html`: plain HTML with inline styles, readable with the
 Artifact tool's `read` action. Every figure in them is sample data (Exam P at 27%, 52 days,
@@ -59,7 +65,7 @@ design inverted.
 | Exam | the exam's own hue | Only on the exam's logo tile (`ExamLogo`, `examAccentStyle`). Nothing else on a screen takes the exam's colour |
 | Correct | green `#3ddc84` | Answer states only, wherever answers are counted: progress segments, the feedback rows, results, Analytics |
 | Incorrect | red `#ff5247` | Same |
-| Partial | amber | Reserved for a self-graded written part marked Partial. Not drawn yet |
+| Partial | amber `#ffb224` | A self-graded written part marked Partial (canvas: `Written`): its progress segment and its grade button |
 | Unanswered | mid grey `#8a8a8a` | Same places as correct and incorrect. Distinct from "not reached yet", which is the line colour |
 
 Use the app's existing semantic state colours for correct, incorrect and partial
@@ -110,7 +116,7 @@ results' "Levelled up" rows and (later) `ConceptTile`. Green now means "correct"
 |---|---|---|
 | R1 | **The daily session is free.** Pro sells the plan paced to the exam date (the tick on the syllabus bar, "Pace my plan to Jan 14"), Analytics and the daily podcast | Changes what Pro includes today: `Dashboard.tsx` builds no plan for a free account (`studyPlan = isPro ? computedPlan : null`). The Upgrade page and its copy need the same change |
 | R2 | **Four places: Today, Learn, Practice, Apply**, as a bottom bar on phones and a rail on desktop. Projects, Tools and Workflows all live in Apply | Confirms D-DR1. The profile button (top right on a phone, foot of the rail on desktop) opens You |
-| R3 | **Settings is not account-only.** It will also hold exam date, session length, daily goal, reminders and quiz defaults | Not designed yet |
+| R3 | **Settings is not account-only.** It also holds each exam's date, session length, the daily goal and the daily email. **It holds no quiz settings**: when answers show, Timed and tap-to-read concepts stay in the quiz setup sheet, where they are used | §7b |
 | R4 | **A session is sized by time.** The reader picks 10, 25, 45 or 120 minutes; what doesn't fit carries over | Replaces today's uncapped session (`lib/todaySession.ts` takes every outstanding miss) |
 | R5 | **No readiness wheel and no time bar on Today.** The syllabus is one bar with a percentage | The ring's information moves to the Syllabus screen as level squares |
 | R6 | **Syllabus and Analytics are separate screens**, each opened by its own tile on Today | |
@@ -123,6 +129,11 @@ results' "Levelled up" rows and (later) `ConceptTile`. Green now means "correct"
 | R13 | **Levels are shaded squares** in neutral greys | §2.2 |
 | R14 | **Popups are black**, not grey | §2.3 |
 | R15 | Free-plan upsell wording: **"Pace my plan to Jan 14"** (the date is the reader's exam date) | The maintainer's wording |
+| R16 | **The quiz card's settings are icons with their current value beside them** (topics, difficulty, timer, when answers show) | §7a. The icons alone were hard to read on a phone; the words alone were rejected |
+| R17 | **Flashcards is a row inside Practice**, not a place of its own | Confirms `docs/design-review.md` §5.2 |
+| R18 | **One search**, opened from Practice, covering concepts, resources and questions | §7a.4 |
+| R19 | **Apply opens on three entries, in this order: Projects, Tools, Workflows.** Each is tapped into; Apply does not open on the tools list | §7c |
+| R20 | **Delete account is plain red text** at the end of Settings, never a filled button | §7b |
 
 ---
 
@@ -277,6 +288,19 @@ The "Choose any answer to continue" caption and the shortcut it describes are re
 *Change Answer* stays only when answers are held to the end (D-DR4). The state after a
 correct answer is not drawn: same layout, one green row, no "Try a similar one".
 
+**A written part** (`Written`, replaces the layout of `components/AnswerReference.tsx`,
+`SampleChecklist.tsx` and `SelfGradeButtons.tsx`; the logic in `lib/writtenAnswer.ts`,
+`lib/essayChecklist.ts` and `lib/numericCheck.ts` is unchanged):
+
+- The part's label and points, the part as printed, then the reader's answer in an outlined box.
+- The sample answer as the checklist the reader ticks, with how many points are asked for in
+  its heading ("any two").
+- The examiner's report folded in a row below.
+- Three grade buttons, each outlined in its colour and filled when picked: **Full** (green),
+  **Partial** (amber), **None** (red), each with the points it gives. The suggested grade is
+  marked as it is today; the reader still picks.
+- **Next**, filled. The part's progress segment takes the grade's colour.
+
 ### 5.3 Results
 
 Order, top to bottom (`Results`):
@@ -370,10 +394,157 @@ get a monochrome pass is undecided, so leave them as they are.
 
 ---
 
+## 7a. Practice
+
+Canvas: `Practice`, `Setup`, `Papers`, `Flashcards`, `SearchAll`, `SearchQuestions`. Replaces
+the Quiz tab (`pages/Landing.tsx`, `components/landing/`), `pages/Flashcards.tsx` and
+`pages/Search.tsx`. The builder's logic (`lib/quizBuilder.ts`, `lib/quizSetup.ts`,
+`lib/quizDifficulty.ts`, `lib/quizTiming.ts`, `lib/revealMode.ts`) is unchanged.
+
+### 7a.1 Home
+
+The page opens on the exam in focus; there is no exam list.
+
+1. A **search** row (§7a.4).
+2. **The quiz card**, an outline (the exam-coloured fill goes, §2.1): the count with minus
+   and plus, the time it should take, the four settings as pills that each show an icon and
+   the current value ("All topics", "All levels", "Untimed", "As you go"), and **Start**, the
+   filled button. Any pill opens the setup sheet at its section, as now.
+3. Rows: **Practice Exam** (its length and time), **Past papers** (labelled *Sample
+   questions* for an exam with no released sittings, `examSourceLabel`), **Flashcards** (the
+   deck's size).
+
+Today's Study Plan is not on this page; the day's session is on Today. Games stay hidden
+(`GAMES_ENABLED`).
+
+### 7a.2 The setup sheet
+
+`Setup`, a black popup. Topics as checkboxes with their question counts; difficulty as three
+buttons with counts, any combination; three labelled switches (Timed with the exam's pace,
+Show answers after each question, Tap concepts to read them); and its own filled button,
+"Start 12 questions".
+
+### 7a.3 Past papers and flashcards
+
+- **Past papers** (`Papers`): one row per sitting, newest first. A paper the reader has sat
+  shows its last result as a small bar in the answer colours. Older sittings fold under one
+  row. Unconverted papers stay listed and dimmed, as now (`lib/pastExams.ts`). Pass rates and
+  the PDF buttons belong on the screen a paper opens to, which is not drawn.
+- **Flashcards** (`Flashcards`): one card at a time, with the concept's name, its level
+  square, the definition and formula, and a flip mark. The foot is the concept reader's:
+  Previous, **Practice this** (filled), Next. Managing the deck is not drawn.
+
+### 7a.4 Search
+
+One search for the whole app, opened from Practice's search row (and from Apply's Tools
+screen for tools).
+
+- **Everything** (`SearchAll`): the field, then four tabs with counts: All, Concepts,
+  Resources, Questions. Under All, each kind shows its first few results and a row for the
+  rest. A concept row leads with its level square and says where it sits on a syllabus; a
+  resource row has its cover, title, author and year; a question row has two lines of its
+  stem (`lib/questionPreview.ts`), its concept and difficulty. The matched words are
+  highlighted in every row (`components/SearchHighlight.tsx`).
+- **Questions** (`SearchQuestions`): the same search narrowed, with the question filters
+  (`components/QuestionFilterBar.tsx`: Difficulty, Type, Source, Sitting). Each row leads
+  with a dot: green if last answered right, red if missed, an empty ring if not tried
+  (`lib/questionAttempts.ts`). The screen ends in a filled button, **Practice these 38**,
+  which starts a quiz on the results.
+
+Results cover every exam, with a result from another exam labelled by its exam. Whether
+search should default to the exam in focus is open (§10).
+
+---
+
+## 7b. You
+
+Canvas: `You`, `League`, `Settings`. Opened by the profile button at the top right of every
+place (the foot of the rail on desktop). Replaces `components/LevelBadge.tsx`'s popup, the
+Dashboard header's export, reminders and help icons, and `pages/Settings.tsx`.
+
+### 7b.1 Profile
+
+- The reader's character (tapping it changes it), name, Pro tag, and level with its progress
+  to the next (`lib/xp.ts`).
+- Two tiles: the streak in days (`lib/streak.ts`) and gems.
+- A **Today** card: the daily goal as a bar with its figure, which opens the goal picker,
+  then the day's quests (`lib/quests.ts`), each with its progress. A finished quest shows
+  **Collect**, the screen's filled button.
+- Rows: League (tier and rank), Settings, Store, Help.
+
+### 7b.2 League
+
+The week's table for one exam, with the exam switchable in place (leagues are per exam). The
+reader's row is filled. A labelled line marks where promotion ends and another where
+relegation begins (`lib/leagues.ts`). Days left in the week are in the header. Leaving is an
+outlined button at the foot.
+
+### 7b.3 Settings
+
+One screen, grouped, every value shown on its row:
+
+| Group | Rows |
+|---|---|
+| Studying | Each exam with its date; Session length; Daily goal; Daily email |
+| App | Theme; Sound; AI assistants |
+| Account | Name; Email; Password; Pro |
+| Your data | Usage analytics; Export; Reset study history |
+
+Then **Sign out**, outlined, and **Delete account** as plain red text (R20). There is no
+Quizzes group (R3). Theme and sound leave the sidebar's foot and live here only.
+
+---
+
+## 7c. Apply
+
+Canvas: `Apply`, `ApplyTools`, `Tool`, `Project`. Replaces the sidebar's Projects, Tools and
+Workflows rows.
+
+### 7c.1 Home
+
+Three entries, in this order, each a card that is tapped into (R19):
+
+1. **Projects**: how many are in progress, and the open attempt's name with its four-step
+   bar (Brief, Workspace, Report, Submit).
+2. **Tools**: how many belong to the exam in focus, and the reader's recent tools as pills,
+   each with the level square of the concept it computes (`lib/toolRecent.ts`,
+   `ToolSpec.concepts`).
+3. **Workflows**: how many are saved, and the most recent. Shown only to accounts that can
+   use Workflows (`lib/workflowsAccess.ts`).
+
+### 7c.2 Tools
+
+`ApplyTools`: a search row, two tabs (the exam in focus, and All), the tools grouped by
+practice area, each row leading with the level square of its concept, and a row for Data
+sources. Which tools belong to an exam comes from `lib/toolExam.ts`.
+
+### 7c.3 A tool
+
+`Tool` shows the palette on the existing template (`components/tools/ToolTemplate.tsx`) and
+two additions. **Do not rebuild the template from this drawing**: source tags, the keypad
+sheet, chains, figures and the rest of `docs/tool-template-v3.md` stay. What changes:
+
+- The answer card is an outline, not filled with the exam's colour.
+- **Learn the method** is a labelled row leading to the concept, with the reader's level
+  square (it was a book icon).
+- **Practice this**, filled, at the foot, starting a quiz on the tool's concept.
+
+### 7c.4 A project
+
+`Project`, the overview of one attempt, replaces the four equal tabs as the way into it
+(`pages/Project/`). The brief's title and company, the mode as a tag, the four-step bar with
+the current step marked, and the submission checklist with its figures (brief read, code runs
+clean, words written against the limit, appendices, submission questions). The filled button
+is **Continue in <the current step>**. A row reads the brief. The workspace itself is
+unchanged.
+
+---
+
 ## 8. Build order
 
-Each phase is one PR that can ship on its own. Phases A to D work under the **existing
-sidebar**; do not build the four-place navigation until Practice, You and Apply are designed.
+Each phase is one PR that can ship on its own. Phases A to E and G to I work under the
+**existing sidebar**. Phase F, the four-place navigation, goes last: it moves every tab at
+once and needs You to exist.
 
 | Phase | What | Depends on |
 |---|---|---|
@@ -382,7 +553,10 @@ sidebar**; do not build the four-place navigation until Practice, You and Apply 
 | **C. The session** | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
-| **F. Navigation** | The place bar and rail, the profile button | Designs for Practice, You, Apply |
+| **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
+| **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
+| **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
+| **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
 
 **Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
 `--ground`, `--level-*` and `--answer-*` tokens, `LevelSquare`, `lib/answerState.ts` and
@@ -428,3 +602,7 @@ For every phase:
 4. Whether the concept figures go monochrome (§7.2).
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).
+6. Whether search defaults to the exam in focus or to every exam (§7a.4 draws every exam).
+7. What Apply shows for an exam with no project and no tools, and what a reader without Pro
+   sees of Projects (§7c). The review's suggestion: let anyone read a brief.
+8. Whether the search row also belongs on Learn.

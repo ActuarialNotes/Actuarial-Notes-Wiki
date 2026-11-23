@@ -405,7 +405,7 @@ export default function WikiExam() {
   const partOf = (i: number) => page?.objectives[i]?.part ?? null
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col text-foreground" data-testid="exam-page">
+    <div className="flex w-full max-w-2xl flex-col text-foreground" data-testid="exam-page">
       {status === 'loading' && (
         <div className="flex items-center gap-2 text-sm">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading {examDisplayName(examFileName)}…

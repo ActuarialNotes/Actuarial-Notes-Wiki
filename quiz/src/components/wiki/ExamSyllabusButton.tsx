@@ -49,6 +49,7 @@ export function ExamSyllabusButton({
         subtitle={examLabel}
         tooltip={`${examLabel} syllabus (PDF)`}
         chip={false}
+        ariaLabel="Official syllabus (PDF)"
         className={LABELLED_HEADER_BUTTON}
         shortLabel="Official syllabus"
       />

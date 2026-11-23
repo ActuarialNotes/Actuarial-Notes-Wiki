@@ -3,7 +3,7 @@
 // The menu is `ConceptActionMenu` in its `more` form, so the rows are the same
 // ones every other surface opens.
 
-import { useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import { ACTION_MENU_ROW_CLASS, ConceptActionMenu } from '@/components/ConceptActionMenu'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
@@ -24,6 +24,18 @@ export function ConceptMoreButton({
   const ref = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
   const close = () => setOpen(false)
+  // Escape closes the menu and hands focus back to the button.
+  useEffect(() => {
+    if (!open) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return
+      e.stopPropagation()
+      setOpen(false)
+      ref.current?.focus()
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [open])
   return (
     <>
       <button

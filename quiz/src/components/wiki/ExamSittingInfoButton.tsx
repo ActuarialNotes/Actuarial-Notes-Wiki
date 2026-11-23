@@ -51,9 +51,12 @@ export function ExamSittingInfoButton({
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
-  const label = selected
-    ? `About the ${sittingVersionLabel(selected)} sitting`
-    : `About ${examLabel}`
+  // The labelled button is named by the words on it, then the sitting.
+  const label = labelled
+    ? (selected ? `Dates and fees, ${sittingVersionLabel(selected)} sitting` : 'Dates and fees')
+    : selected
+      ? `About the ${sittingVersionLabel(selected)} sitting`
+      : `About ${examLabel}`
 
   function close() {
     setOpen(false)

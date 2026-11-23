@@ -168,9 +168,11 @@ test.describe('source document read from the concept popup', () => {
       route.fulfill({ status: 200, contentType: 'application/pdf', body: SAMPLE_PDF }),
     )
     // A resource page is most often read *inside* the popup, reached from an
-    // exam page's Source Material shelf — which is where a candidate meets it.
+    // exam page's Readings shelf — which is where a candidate meets it.
     // The shelf's card carries the standard's title; its code is in the metadata.
     await page.goto('/wiki/exam/Exam+5+(CAS)')
+    // The shelf is behind the page's Readings row.
+    await page.getByRole('button', { name: /^Readings/ }).click()
     await page.getByRole('link', { name: /Property\/Casualty Unpaid Claim Estimates/ }).first().click()
 
     const concept = page.getByRole('complementary', { name: /^Concept:/ })

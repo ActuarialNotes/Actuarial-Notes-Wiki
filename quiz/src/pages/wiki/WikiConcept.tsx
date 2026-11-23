@@ -152,7 +152,7 @@ export default function WikiConcept() {
   useActionBarHeight(footRef, hasFoot)
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col text-foreground" data-testid="concept-page">
+    <div className="flex w-full max-w-2xl flex-col text-foreground" data-testid="concept-page">
       <div className="-mx-2 -mt-3 flex items-center gap-1">
         <Link
           to={back.to}
@@ -220,7 +220,7 @@ export default function WikiConcept() {
               // Section headings pin just under the floating search bar.
               stickyHeadings
               onWikiLink={standalonePage.onWikiLink}
-              className="learn-article [--sticky-heading-bg:hsl(var(--ground))] [--sticky-heading-top:var(--floating-search-height,0px)]"
+              className="[--sticky-heading-bg:hsl(var(--ground))] [--sticky-heading-top:var(--floating-search-height,0px)]"
             />
           )}
         </div>
@@ -231,12 +231,11 @@ export default function WikiConcept() {
       {hasFoot && (
         <div
           ref={footRef}
-          className="sticky bottom-0 z-30 -mx-4 mt-6 border-t border-border bg-ground px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:-mx-6 sm:px-6"
+          className="sticky bottom-0 z-30 -mx-4 -mb-8 mt-6 border-t border-border bg-ground px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:-mx-6 sm:px-6"
         >
           <PracticeButton
             to={conceptPracticeUrl(conceptName, questionCount, practiceSettings())}
             aside={questionCountLabel(questionCount)}
-            className="mx-auto max-w-2xl"
           >
             Practice this
           </PracticeButton>

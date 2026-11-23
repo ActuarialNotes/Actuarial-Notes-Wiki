@@ -680,12 +680,14 @@ What was decided while building it:
   line is never drawn; its concepts are pills under the sentence above it. A concept with no
   page yet is a pill that doesn't press.
 - **One objective is open at a time**, so the page has one filled button. It shows three lines,
-  then "N more". Which one is open is kept for the browser session, so Back from a concept
-  returns to it, and that history entry is named for it ("Back to General Probability").
-- **A pill goes to the concept's page**, with `?from=<exam>`. `/wiki/concept/…` no longer
-  redirects into the exam page for a link followed inside the app. The reader still opens for
-  Today's session, a link followed inside an article, search, flashcards, a reading, and an old
-  `?concept=` link.
+  then "N more". Which one is open is kept for the browser session, and that history entry is
+  named for it.
+- **A pill opens the concept in the reader**, over the exam page, on the walk of the syllabus
+  (the maintainer's call, 2026-11-23; the first build sent a pill to the concept's page). The
+  open concept's pill is filled, and as Previous and Next move the walk the objective holding
+  the concept opens and its pill scrolls into view. A pill is still a link to the concept's
+  page (`?from=<exam>`), which a new tab, a search result or a shared link opens; that page no
+  longer redirects into the exam page.
 - **Practice** starts a quiz, never the setup: ten questions, or the pool when it holds fewer
   (`lib/practiceLaunch.ts`), with the reader's own quiz settings. The foot says how many
   questions the concept has. The count needs the question bank, which is fetched when a concept

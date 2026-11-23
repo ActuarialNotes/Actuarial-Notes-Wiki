@@ -4,8 +4,8 @@
 //
 // What it draws is `lib/examPage.ts`: the page's own markdown, read. The
 // figures are `lib/syllabusObjectives.ts`, the ones Today's Syllabus panel
-// prints. A pill goes to the concept's page; a reading, and an old `?concept=`
-// link, still open in the reader over this page.
+// prints. A pill opens its concept in the reader over this page, as a reading
+// and an old `?concept=` link do.
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
@@ -240,14 +240,21 @@ export default function WikiExam() {
     return () => { cancelled = true }
   }, [])
 
+  // The concept the reader is showing over this page.
+  const reading = useConceptPopup(s => {
+    const current = s.open && s.sourcePath === `${examFileName}.md` ? s.list[s.index] : undefined
+    return current?.kind === 'concept' ? current.name : null
+  })
+
   const pillState = useMemo(() => {
     const lookup = buildMasteryLookup(examRecords)
     return (name: string): PillState => ({
       state: resolveConceptState(lookup, { name }, now),
       today: todayKeys.has(name.toLowerCase()),
       missing: indexReady && !isInWikiIndex('concept', name),
+      active: reading !== null && reading.toLowerCase() === name.toLowerCase(),
     })
-  }, [examRecords, todayKeys, now, indexReady])
+  }, [examRecords, todayKeys, now, indexReady, reading])
 
   // The bank, for the open objective's Practice button: fetched once an
   // objective is opened, never for a reader who only looks.
@@ -333,10 +340,34 @@ export default function WikiExam() {
 
   const onOpenPill = useCallback((pill: ObjectivePill, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
-    if (pill.ref.kind === 'concept' && isSyllabusConcept(pill.ref)) return
     e.preventDefault()
-    openResource(pill.ref)
-  }, [openResource])
+    if (pill.ref.kind !== 'concept' || !isSyllabusConcept(pill.ref)) {
+      openResource(pill.ref)
+      return
+    }
+    // A concept opens in the reader over this page, on the walk of the syllabus.
+    const idx = conceptList.findIndex(r => r.name.toLowerCase() === pill.name.toLowerCase())
+    openAt(idx >= 0 ? conceptList : [pill.ref], Math.max(idx, 0), `${examFileName}.md`, null, resourceRefs, { objectives })
+  }, [openResource, conceptList, openAt, examFileName, resourceRefs, objectives])
+
+  // The concept the reader is showing over this page: its pill is lit, and the
+  // objective that holds it opens as the walk moves on.
+  useEffect(() => {
+    if (!reading || !page) return
+    const key = reading.toLowerCase()
+    setOpenIndex(prev => {
+      const open = prev !== null ? page.objectives[prev] : undefined
+      if (open?.concepts.some(p => p.name.toLowerCase() === key)) return prev
+      const at = objectiveOf(page.objectives, reading)
+      if (at < 0) return prev
+      saveOpenObjective(examFileName, at)
+      return at
+    })
+    const frame = requestAnimationFrame(() => {
+      document.querySelector(`[data-pill="${CSS.escape(reading)}"]`)?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [reading, page, examFileName])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -401,7 +432,7 @@ export default function WikiExam() {
   const shelfRef = useRef<HTMLDivElement>(null)
   useConceptHighlight(shelfRef, `${examFileName}.md`)
 
-  const focus = conceptParam
+  const focus = reading ?? conceptParam
   const partOf = (i: number) => page?.objectives[i]?.part ?? null
 
   return (

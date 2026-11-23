@@ -433,7 +433,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   **2026-11-23:** the screens were redesigned and `docs/redesign-spec.md` is the build spec, in
   phases A–F. Phase A (the visual base: level squares, answer colours, outlined cards, the popup;
   style guide §13) and Phase B (Today: the daily session sized by time and free to every
-  account, the Syllabus and Analytics tiles, the Analytics screen) are built; C (the session) and
+  account, the Syllabus and Analytics tiles, the Analytics overlay) are built; C (the session) and
   D (Learn) are next.
 
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the

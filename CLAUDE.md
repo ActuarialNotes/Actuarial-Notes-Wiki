@@ -288,8 +288,8 @@ before touching that area**:
   "today's concepts" from the (usually day-old) `study_plan_cache`, the hourly pg_cron →
   edge-function send loop, and the one-time Resend/vault setup checklist.
 - `docs/daily-podcast.md` — the **daily podcast** (Pro): Today's Study Plan read aloud, from the
-  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, under Today's
-  tiles) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
+  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, an outlined row under
+  the Today card) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
   word is the concept page's, through the Listen pipeline, with fixed links between — **no model
   writes anything** (`lib/podcastScripts.ts`: definition, two formulas, a few bullets, *The
   idea*, the first exam trap). A clip is shared by every reader and named by its script's hash
@@ -1334,13 +1334,20 @@ Other important `lib/` modules:
   is **built once a day and kept in the browser** (`StoredSession`, by `hooks/useTodaySession.ts`)
   and read against the day (`readSession`): finished when everything has been tried. Start hands
   the misses and the concepts to the quiz builder (`storeSessionMistakes` with `concepts`), whose
-  autostart launches one quiz. Also here: the week's circles (`weekOf`) and the plan's tick on the
+  autostart launches one quiz. Also here: the week row (`weeksAround`: it scrolls a week at a time,
+  from the first day studied to the exam date) and what the card shows for a day picked in it,
+  under that day's date in place of "Today" (`planDayView`: a paid plan's concepts for a day
+  ahead; `dayNote` / `dayPractice`: one sentence for any other day), and the plan's tick on the
   syllabus bar (`planTickPct`). Pure and tested; the flows are `e2e/dashboard-session.spec.ts`.
-  `hooks/useTodayExam.ts` is which exam Today shows, shared with its Analytics screen
-  (`/dashboard/analytics`, `pages/TodayAnalytics.tsx`, `components/today/AnalyticsScreen.tsx`,
-  the drawing maths in `lib/todayAnalytics.ts`; Pro only).
+  `hooks/useTodayExam.ts` is which exam Today shows. **Syllabus and Analytics open as overlays on
+  Today**, never as screens: `SyllabusOverlay` (`components/today/SyllabusPanel.tsx`: each learning
+  objective's concepts as level squares, with the way to the exam's study guide) and
+  `AnalyticsOverlay` (`components/today/AnalyticsScreen.tsx`, lazy, the drawing maths in
+  `lib/todayAnalytics.ts`; Pro only; `/dashboard/analytics` redirects to Today and opens it). A
+  square (`components/today/ConceptSquares.tsx`) names its concept when pointed at and opens it in
+  the concept popup.
 - `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
-  by difficulty) that Today's Analytics screen draws through `lib/todayAnalytics.ts`. Pure and tested.
+  by difficulty) that Today's Analytics overlay draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
@@ -1407,7 +1414,7 @@ Other important `lib/` modules:
   reader's review: the accuracy figures behind Today's **Analytics** tile and screen (via
   `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
   reader picks, every figure covering that one span), a **Pro** feature: a free account's tile is
-  locked and links to Upgrade, `/dashboard/analytics` sends it there too, and none of its answers
+  locked and links to Upgrade, the old `/dashboard/analytics` address sends it there too, and none of its answers
   are fetched (Today passes `useAccuracyTrend` a null exam). Beside it, `lib/performanceAnalytics.ts`:
   **marks lost**, each syllabus section's misses weighed by its share of the paper (`sectionLeaks`),
   and **pace**, the median time a question or point took against `quizTiming.ts`'s allowance

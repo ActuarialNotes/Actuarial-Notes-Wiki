@@ -1,5 +1,7 @@
-// **Today** (docs/redesign-spec.md §4): the exam, the days to it, the week,
-// today's session with its one Start, and two tiles, Syllabus and Analytics.
+// **Today** (docs/redesign-spec.md §4): the exam, the days to it, the weeks,
+// today's session with its one Start, and the Syllabus and Analytics, each of
+// which opens as an overlay on this page. A day picked in the week row takes
+// the session card's place with that day's plan.
 // The route is still /dashboard and the sidebar row still says Dashboard until
 // the navigation is rebuilt (the spec's Phase F).
 //
@@ -18,9 +20,9 @@ import { MobileNavButton } from '@/components/MobileNavButton'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamSheet } from '@/components/today/ExamSheet'
-import { SessionCard } from '@/components/today/SessionCard'
+import { DayNoteCard, SessionCard } from '@/components/today/SessionCard'
 import { SessionLengthSheet } from '@/components/today/SessionLengthSheet'
-import { SyllabusPanel, type SyllabusObjective } from '@/components/today/SyllabusPanel'
+import { SyllabusOverlay, SyllabusPanel, type SyllabusObjective } from '@/components/today/SyllabusPanel'
 import {
   AnalyticsLockedTile,
   AnalyticsTile,
@@ -62,18 +64,18 @@ import { computeExamReadiness } from '@/lib/readiness'
 import { localDayKey } from '@/lib/streak'
 import { daysBetween, todayISO } from '@/lib/studyPlan'
 import { supabase } from '@/lib/supabase'
-import { planTickPct, sessionConceptKeys, weekOf } from '@/lib/todaySession'
+import { dayNote, dayPractice, dayTitle, planDayView, planTickPct, sessionConceptKeys, sessionWalk, weeksAround } from '@/lib/todaySession'
 import { cn } from '@/lib/utils'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { wikiRoute } from '@/lib/wikiRoutes'
+import { wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { usePodcast } from '@/stores/podcastStore'
 
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
-export const ANALYTICS_ROUTE = '/dashboard/analytics'
 
 // Lazy: none of these is on Today's first paint.
 const AnalyticsTilePeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsTilePeek })))
 const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsSummaryPeek })))
+const AnalyticsOverlay = lazy(() => import('@/components/today/AnalyticsScreen').then(m => ({ default: m.AnalyticsOverlay })))
 const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
 const DashboardRemindersModal = lazy(() => import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
 
@@ -162,12 +164,23 @@ export default function Dashboard() {
 
   const popupOpen = useConceptPopup(s => s.open)
   const closePopup = useConceptPopup(s => s.close)
+  const openDashboard = useConceptPopup(s => s.openDashboard)
   const popupConcept = useConceptPopup(s =>
     s.open && s.dashboardContext?.filter === 'study-plan' ? (s.list[s.index]?.name ?? null) : null)
+  /** The concept the reader is open on, however it was opened: its square is marked. */
+  const readingConcept = useConceptPopup(s => (s.open ? (s.list[s.index]?.name.toLowerCase() ?? null) : null))
 
   const [examSheetOpen, setExamSheetOpen] = useState(false)
   const [examsOpen, setExamsOpen] = useState(false)
   const [lengthOpen, setLengthOpen] = useState(false)
+  const [overlay, setOverlay] = useState<'syllabus' | 'analytics' | null>(null)
+  /** The day the session card shows: today, until a day in the week row is picked. */
+  const [pickedDay, setPickedDay] = useState<string | null>(null)
+  // /dashboard/analytics, the address Analytics had as a screen, lands here as
+  // ?show=analytics: open the overlay, or send a free account to Upgrade.
+  const [analyticsAsked, setAnalyticsAsked] = useState(
+    () => new URLSearchParams(location.search).get('show') === 'analytics',
+  )
   const [planConfigStep, setPlanConfigStep] = useState<1 | 2 | 3 | null>(null)
   const [showWelcomeModal, setShowWelcomeModal] = useState(() => sessionStorage.getItem('show_welcome') === '1')
   const [welcomeDismissed, setWelcomeDismissed] = useState(
@@ -182,7 +195,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
     const params = new URLSearchParams(location.search)
-    if (params.get('reminders') === '1') navigate('/dashboard', { replace: true })
+    if (params.get('reminders') === '1' || params.get('show')) navigate('/dashboard', { replace: true })
     if (params.get('upgraded') === '1') {
       const sessionId = params.get('session_id')
       navigate('/dashboard', { replace: true })
@@ -208,6 +221,14 @@ export default function Dashboard() {
     try { localStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* ignore */ }
   }, [])
 
+  useEffect(() => {
+    if (!analyticsAsked || authLoading || subscriptionLoading) return
+    setAnalyticsAsked(false)
+    if (!user) return
+    if (isPro) setOverlay('analytics')
+    else navigate('/upgrade', { replace: true })
+  }, [analyticsAsked, authLoading, subscriptionLoading, user, isPro, navigate])
+
   // A level-up re-reads mastery, so the session and the syllabus move at once.
   useEffect(() => {
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
@@ -221,6 +242,7 @@ export default function Dashboard() {
 
   // A different exam closes the reader: its walk was the other exam's session.
   useEffect(() => {
+    setPickedDay(null)
     if (useConceptPopup.getState().open) closePopup()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey])
@@ -330,6 +352,7 @@ export default function Dashboard() {
         name: topic.name,
         weight: topic.weight ? topic.weight.replace(/\s*-\s*/, '–') : null,
         pct: section ? Math.round(section.readinessPct) : 0,
+        names: topic.concepts.map(c => c.name),
         states,
         today,
       }
@@ -337,15 +360,44 @@ export default function Dashboard() {
   }, [activeSyllabus, readiness, examRecords, todayKeys, now])
   const syllabusRoute = activeSyllabus?.fileName ? wikiRoute({ kind: 'exam', name: activeSyllabus.fileName }) : '/wiki'
 
-  // ── The week: the account's, whichever exam was studied ───────────────────
+  // A square opens its concept in the reader, walking the whole syllabus; the
+  // reader's own filter still narrows the walk to today's session.
+  const openSyllabusConcept = useCallback((name: string) => {
+    const refs = session.conceptRefs
+    const idx = refs.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
+    if (idx === -1) return
+    setOverlay(null)
+    const walk: WikiEntryRef[] | null = session.view
+      ? sessionWalk(session.view).map(n => ({ kind: 'concept' as const, name: n }))
+      : null
+    openDashboard(refs, walk && walk.length > 0 ? walk : null, 'entire-syllabus', idx, { studyPlanLabel: "Today's session" })
+  }, [session.conceptRefs, session.view, openDashboard])
+
+  // ── The weeks: the account's, whichever exam was studied ──────────────────
   const today = todayISO()
-  const week = useMemo(() => {
+  const { weeks, current: currentWeek } = useMemo(() => {
     const studied = new Set<string>()
     for (const s of sessions) {
       if (s.correct_count > 0) studied.add(localDayKey(new Date(s.completed_at)))
     }
-    return weekOf(today, studied)
-  }, [sessions, today])
+    return weeksAround(today, studied, targetDate)
+  }, [sessions, today, targetDate])
+
+  // ── Another day in the card ───────────────────────────────────────────────
+  const shownDay = pickedDay ?? today
+  const otherDay = shownDay !== today
+  const dayView = useMemo(() => (otherDay && shownDay > today ? planDayView(plan, shownDay) : null), [otherDay, shownDay, today, plan])
+  const selectDay = useCallback((day: string) => {
+    if (useConceptPopup.getState().open) closePopup()
+    setPickedDay(day === todayISO() ? null : day)
+  }, [closePopup])
+  const backToToday = useCallback(() => selectDay(todayISO()), [selectDay])
+  const openDayConcept = useCallback((name: string) => {
+    if (!dayView) return
+    const walk: WikiEntryRef[] = sessionWalk(dayView).map(n => ({ kind: 'concept' as const, name: n }))
+    const idx = walk.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
+    openDashboard(session.conceptRefs, walk, 'study-plan', Math.max(0, idx), { studyPlanLabel: dayTitle(shownDay) })
+  }, [dayView, shownDay, session.conceptRefs, openDashboard])
 
   // ── Days left ─────────────────────────────────────────────────────────────
   const daysLeft = targetDate ? daysBetween(today, targetDate) : null
@@ -418,7 +470,33 @@ export default function Dashboard() {
   const reading = popupConcept !== null
   const dim = cn('transition-opacity', reading && 'opacity-30')
 
-  const sessionCard = session.view ? (
+  const sessionCard = otherDay && dayView ? (
+    <SessionCard
+      view={dayView}
+      onLength={() => {}}
+      onStart={() => {}}
+      launching={false}
+      onConcept={openDayConcept}
+      currentConcept={popupConcept ? popupConcept.toLowerCase() : null}
+      missedToday={0}
+      onFixMissed={() => {}}
+      onKeepGoing={() => {}}
+      expanded={wide}
+      otherDay={{ title: dayTitle(shownDay), onToday: backToToday }}
+    />
+  ) : otherDay ? (
+    <DayNoteCard
+      title={dayTitle(shownDay)}
+      note={dayNote(
+        shownDay,
+        today,
+        dayPractice(sessions, examLabel, shownDay, iso => localDayKey(new Date(iso))),
+        activeSyllabus?.examLabel ?? 'this exam',
+        isPro,
+      )}
+      onToday={backToToday}
+    />
+  ) : session.view ? (
     <SessionCard
       view={session.view}
       onLength={() => setLengthOpen(true)}
@@ -446,12 +524,19 @@ export default function Dashboard() {
     <AnalyticsLockedTile to="/upgrade" />
   ) : (
     <AnalyticsTile
-      to={ANALYTICS_ROUTE}
+      onOpen={() => setOverlay('analytics')}
       accuracyPct={accuracyPct}
       days={TILE_SPAN}
       chart={trends ? <Suspense fallback={<span className="h-4" />}><AnalyticsTilePeek trends={trends} /></Suspense> : undefined}
     />
   )
+
+  // The daily podcast (Pro): today's plan read aloud, under the Today card.
+  const podcast = PODCAST_ENABLED && isPro && activeSyllabus && activeKey && planConcepts.length > 0 ? (
+    <Suspense fallback={null}>
+      <PodcastButton plan={plan} examKey={activeKey} examLabel={activeSyllabus.examLabel} className={cn('mt-2.5', dim)} />
+    </Suspense>
+  ) : null
 
   return (
     <>
@@ -510,24 +595,33 @@ export default function Dashboard() {
             // Desktop: the session on the left with its concepts listed, where
             // the reader stands on the right.
             <div className="flex items-start gap-10">
-              <div className="w-full max-w-[460px] flex-1 basis-[380px]">{sessionCard}</div>
+              <div className="w-full max-w-[460px] flex-1 basis-[380px]">{sessionCard}{podcast}</div>
               <section aria-label="Where you stand" className={cn('flex min-w-0 flex-[999] basis-[420px] flex-col gap-8 pt-2', dim)}>
                 <DaysLeft days={daysLeft} dateLabel={dateLabel} onChangeDate={() => setPlanConfigStep(examDateStep)} />
-                <WeekRow week={week} />
+                <WeekRow weeks={weeks} current={currentWeek} selected={shownDay} onSelect={selectDay} />
                 <div className="border-t border-border pt-7">
-                  <SyllabusPanel to={syllabusRoute} pct={syllabusPct} gain={gain} tick={tick} objectives={objectives} />
+                  <SyllabusPanel
+                    pct={syllabusPct}
+                    gain={gain}
+                    tick={tick}
+                    objectives={objectives}
+                    onConcept={openSyllabusConcept}
+                    current={readingConcept}
+                    onOpen={() => setOverlay('syllabus')}
+                  />
                 </div>
                 {!isPro && !subscriptionLoading && (
                   <PaceMyPlanRow to="/upgrade" dateLabel={shortDate} />
                 )}
                 <div className="border-t border-border pt-7">
                   {isPro && trends && answerRows && accuracyPct !== null && examLabel ? (
-                    <a
-                      href={ANALYTICS_ROUTE}
-                      onClick={e => { e.preventDefault(); navigate(ANALYTICS_ROUTE) }}
+                    <button
+                      type="button"
+                      onClick={() => setOverlay('analytics')}
+                      aria-haspopup="dialog"
                       aria-label={`Analytics, last ${TILE_SPAN} days`}
                       data-testid="today-analytics"
-                      className="flex flex-wrap items-end gap-x-10 gap-y-4 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex w-full flex-wrap items-end gap-x-10 gap-y-4 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <h2 className="flex basis-full items-center gap-2 text-xl font-bold">
                         Analytics
@@ -543,7 +637,7 @@ export default function Dashboard() {
                           accuracyPct={accuracyPct}
                         />
                       </Suspense>
-                    </a>
+                    </button>
                   ) : (
                     <div className="max-w-[240px]">{subscriptionLoading ? null : analyticsTile}</div>
                   )}
@@ -554,26 +648,18 @@ export default function Dashboard() {
             // Phone: everything down to Start on the first screen.
             <>
               <DaysLeft days={daysLeft} dateLabel={dateLabel} onChangeDate={() => setPlanConfigStep(examDateStep)} className={cn('px-2 pt-5', dim)} />
-              <WeekRow week={week} className={cn('px-2 pt-[22px]', dim)} />
-              <div className="pt-[22px]">{sessionCard}</div>
+              <WeekRow weeks={weeks} current={currentWeek} selected={shownDay} onSelect={selectDay} className={cn('-mx-0.5 pt-4', dim)} />
+              <div className="pt-4">{sessionCard}{podcast}</div>
               {!isPro && !subscriptionLoading && (
                 <PaceMyPlanRow to="/upgrade" dateLabel={shortDate} className={cn('mt-2.5', dim)} />
               )}
               <div className={cn('mt-2.5 grid grid-cols-2 gap-2.5', dim)}>
-                <SyllabusTile to={syllabusRoute} pct={syllabusPct} gain={gain} tick={tick} />
+                <SyllabusTile onOpen={() => setOverlay('syllabus')} pct={syllabusPct} gain={gain} tick={tick} />
                 {subscriptionLoading ? <span /> : analyticsTile}
               </div>
             </>
           )}
 
-          {/* The daily podcast (Pro): today's plan read aloud. */}
-          {PODCAST_ENABLED && isPro && activeSyllabus && activeKey && planConcepts.length > 0 && (
-            <div className={cn('mt-4 flex justify-center lg:justify-start', dim)}>
-              <Suspense fallback={null}>
-                <PodcastButton plan={plan} examKey={activeKey} examLabel={activeSyllabus.examLabel} />
-              </Suspense>
-            </div>
-          )}
         </div>
       </div>
     </div>
@@ -588,6 +674,32 @@ export default function Dashboard() {
         onManage={() => setExamsOpen(true)}
         onClose={() => setExamSheetOpen(false)}
       />
+    )}
+    {overlay === 'syllabus' && activeSyllabus && (
+      <SyllabusOverlay
+        pct={syllabusPct}
+        gain={gain}
+        tick={tick}
+        objectives={objectives}
+        onConcept={openSyllabusConcept}
+        current={readingConcept}
+        examLabel={activeSyllabus.examLabel}
+        guideTo={syllabusRoute}
+        onClose={() => setOverlay(null)}
+      />
+    )}
+    {overlay === 'analytics' && isPro && activeSyllabus && activeKey && examLabel && (
+      <Suspense fallback={null}>
+        <AnalyticsOverlay
+          trends={trends}
+          rows={answerRows}
+          examLabel={examLabel}
+          examKey={activeKey}
+          syllabus={activeSyllabus}
+          questions={allQuestions}
+          onClose={() => setOverlay(null)}
+        />
+      </Suspense>
     )}
     {lengthOpen && (
       <SessionLengthSheet

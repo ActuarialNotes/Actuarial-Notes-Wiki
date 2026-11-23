@@ -46,12 +46,17 @@ export interface SessionCardProps {
   onKeepGoing: () => void
   /** List every step's concepts open under it (the desktop layout). */
   expanded?: boolean
+  /**
+   * The card is showing another day's plan: its date ("Mon, Nov 30") is the
+   * title, and where Start would be is the way back to today.
+   */
+  otherDay?: { title: string; onToday: () => void }
   className?: string
 }
 
 export function SessionCard({
   view, onLength, onStart, launching, onConcept, currentConcept,
-  missedToday, onFixMissed, onKeepGoing, expanded = false, className,
+  missedToday, onFixMissed, onKeepGoing, expanded = false, otherDay, className,
 }: SessionCardProps) {
   const alone = view.steps.length === 1 && view.steps[0].count <= OPEN_WHEN_ALONE
   const [open, setOpen] = useState<SessionStepKind | null>(null)
@@ -59,13 +64,13 @@ export function SessionCard({
 
   return (
     <section
-      aria-label="Today's session"
+      aria-label={otherDay ? `Plan for ${otherDay.title}` : "Today's session"}
       data-testid="today-session"
       className={cn(OUTLINE_CARD, 'flex flex-col gap-4 p-5 lg:gap-5 lg:rounded-3xl lg:p-7', className)}
     >
-      <div className={cn('flex items-center justify-between transition-opacity', dim && 'opacity-30')}>
-        <h1 className="text-xl font-bold lg:text-[26px]">Today</h1>
-        {view.finished ? (
+      <div className={cn('flex min-h-9 items-center justify-between transition-opacity lg:min-h-10', dim && 'opacity-30')}>
+        <h1 className="text-xl font-bold lg:text-[26px]">{otherDay ? otherDay.title : 'Today'}</h1>
+        {otherDay ? null : view.finished ? (
           <CheckMark className="h-8 w-8 text-foreground" label="Today's session is done" />
         ) : (
           <Button
@@ -111,7 +116,9 @@ export function SessionCard({
         ))}
       </div>
 
-      {view.finished ? (
+      {otherDay ? (
+        <BackToToday onToday={otherDay.onToday} className={cn('transition-opacity', dim && 'opacity-30')} />
+      ) : view.finished ? (
         <div className={cn('flex flex-col gap-3 transition-opacity', dim && 'opacity-30')}>
           {missedToday > 0 && (
             <Button size="main" className="w-full" data-sound="begin" onClick={onFixMissed} disabled={launching}>
@@ -140,6 +147,29 @@ export function SessionCard({
           Start
         </Button>
       )}
+    </section>
+  )
+}
+
+function BackToToday({ onToday, className }: { onToday: () => void; className?: string }) {
+  return (
+    <Button variant="edge" size="lg" data-testid="today-back" onClick={onToday} className={cn('h-[52px] w-full text-base', className)}>
+      Back to today
+    </Button>
+  )
+}
+
+/** A day with no list to show: its date, one sentence about it, and the way back to today. */
+export function DayNoteCard({ title, note, onToday, className }: { title: string; note: string; onToday: () => void; className?: string }) {
+  return (
+    <section
+      aria-label={title}
+      data-testid="today-session"
+      className={cn(OUTLINE_CARD, 'flex flex-col gap-4 p-5 lg:gap-5 lg:rounded-3xl lg:p-7', className)}
+    >
+      <h1 className="flex min-h-9 items-center text-xl font-bold lg:min-h-10 lg:text-[26px]">{title}</h1>
+      <p className="text-[17px] leading-normal">{note}</p>
+      <BackToToday onToday={onToday} />
     </section>
   )
 }

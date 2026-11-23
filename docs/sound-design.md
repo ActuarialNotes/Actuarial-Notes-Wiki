@@ -280,7 +280,8 @@ Its run is a single sweep, so `handleClearCompleted` calls
 sound like the first card off a deck of twenty.
 
 `levelUpStep` climbs for the same reason, on the quiz-completion ceremony
-(`ConceptLevelUpCeremony`): when several concepts level up in one sitting,
+(`ConceptLevelUpCeremony`, which since 2026-11-23 plays only for cards collected
+for the first time and concepts reaching Level 3): when several concepts level up in one sitting,
 playing the full `levelUp` fanfare for every card stops sounding like several
 wins the moment it repeats. A lone level-up still gets the fanfare; a run of
 them pops into one grid and gets one struck note per card as it lands, a rung

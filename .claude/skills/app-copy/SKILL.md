@@ -108,6 +108,14 @@ One thing, one name. Use these exactly.
 | The day's work on Today | the **session** ("today's session", "your daily session"); free for every account | Today's Study Plan (that is Pro's plan, which paces the session to the exam date) |
 | How long a session is | **session length** (10, 25, 45 or 120 minutes) | session size, duration, time budget |
 | The session's three steps | **Fix mistakes**, **Learn**, **Review**, in that order; finished, they read **Fixed**, **Learned**, **Reviewed** | Mistakes, New, Refresh, Revise |
+| Locking an answer in | **Check** | Confirm Answer, Submit |
+| Going on after an answer | **Next**; on the last question **Finish Quiz** or **Finish Practice Exam** | Continue, Done |
+| Another question on a missed concept | **Try a similar one** | Retry, Try again, Similar question |
+| Grading a written part | **Full**, **Partial**, **None**, each with the points it gives | Full credit, No credit |
+| A written part's panels | **Your answer**, **Sample answer**, **Examiner's report** | Model answer, Solution, Examiners' report |
+| The question screen's menu | **More**, holding **Flag question**, **Question info**, **Quiz settings**, **Previous question** | Options, Menu, Info, Back |
+| Leaving a quiz | "**Leave this quiz?**" with **Keep going**, **Come back later**, **Finish quiz**, **Quit quiz** ("practice exam" in place of "quiz" for a Practice Exam) | Exit, Pause, Resume later, End quiz |
+| The results' sections | **To fix**, **Levelled up**; the buttons **Fix these N** ("Fix this 1" for one) and **Back to Today** | Mistakes, Review mistakes, Try Again, New Quiz, Level ups |
 | The coverage percentage | **Syllabus** on redesigned screens ("Syllabus 42%"): the share of the syllabus covered, 100% meaning every concept at Level 3 | ready, readiness, "NN% ready" on a redesigned screen |
 | Starting a quiz from a concept or an objective | **Practice this** (a concept, with "152 questions" beside it on its page); **Practice General Probability** (an objective, by its name) | Start Quiz, Quiz this, Practice now |
 | A concept's level, as a control | the level itself ("Level 2", "New"), which opens **Learning Progress** | Mastery, Progress |
@@ -180,6 +188,7 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+<<<<<<< HEAD
 - 2026-11-23 · Redesign, Learn (`docs/redesign-spec.md` §7, §2.4) · A title is text, never a
   hidden menu. A concept ends in one filled button, "Practice this", on its page and in the
   reader; an opened objective ends in "Practice <objective>". The syllabus's sentences are
@@ -187,6 +196,18 @@ implies. Newest first.
   a title. A Practice button names what it practices and starts a quiz; it never says
   "Start Quiz". Never reword a syllabus sentence to fit a layout.
 
+=======
+- 2026-11-23 · Redesign, the session (`docs/redesign-spec.md` §5.1) · The button that locks
+  an answer in is "Check". It replaces "Confirm Answer". → One word for the screen's one
+  filled button; "Confirm Answer" is written nowhere.
+- 2026-11-23 · Redesign, a written part (`docs/redesign-spec.md` §5.2) · The grade buttons
+  read "Full", "Partial" and "None", each with the points it gives under it. They replace
+  "Full credit", "Partial" and "No credit". → The points say what the grade is worth, so the
+  label doesn't repeat "credit".
+- 2026-11-23 · Redesign, the session (`docs/redesign-spec.md` §5.2) · "Choose any answer to
+  continue" is removed, with the shortcut it described. → A caption that explains a control
+  goes when the control does; Next is the way on.
+>>>>>>> origin/main
 - 2026-11-23 · Redesign, Today (`docs/redesign-spec.md` R1, R5, R15, §4.4) · The daily
   session is free; Pro sells the plan paced to the exam date, Analytics and the daily
   podcast. The free-plan upsell on Today is "Pace my plan to Jan 14" (the reader's own exam

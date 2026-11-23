@@ -19,6 +19,7 @@ import { filterQuestions, type Question, type QuestionFilter, type QuizMode } fr
 import { planConceptsToday } from '@/lib/planCompletion'
 import { fitsPaperFormat, practiceExamBlueprint } from '@/lib/practiceExam'
 import type { RevealMode } from '@/lib/revealMode'
+import { QUIZ_STEPS_KEY } from '@/lib/sessionSteps'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
@@ -614,6 +615,8 @@ export function saveConcepts(topic: string, concepts: readonly string[]): void {
 export function storeSelectedIds(ids: readonly string[]): void {
   try {
     sessionStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(ids))
+    // A new id list is a new quiz: the last session's steps aren't its.
+    sessionStorage.removeItem(QUIZ_STEPS_KEY)
   } catch { /* ignore */ }
 }
 
@@ -630,6 +633,8 @@ export interface SessionMistakes {
   ids: string[]
   plan: boolean
   concepts?: string[]
+  /** The ones among `concepts` that are the session's Learn step; the rest are Review. */
+  learn?: string[]
 }
 
 /** Hands Start's session to the quiz builder; null clears it. */
@@ -653,8 +658,11 @@ export function peekSessionMistakes(): SessionMistakes | null {
       ? v.concepts.filter((c): c is string => typeof c === 'string')
       : []
     if (ids.length === 0 && concepts.length === 0) return null
+    const learn = Array.isArray(v.learn)
+      ? v.learn.filter((c): c is string => typeof c === 'string')
+      : []
     return concepts.length > 0
-      ? { ids, plan: false, concepts }
+      ? { ids, plan: false, concepts, learn }
       : { ids, plan: v.plan !== false }
   } catch { return null }
 }

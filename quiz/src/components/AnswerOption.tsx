@@ -1,6 +1,7 @@
 import { useRef, type HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 import { MarkdownText } from '@/components/MarkdownText'
+import { ANSWER_SOLID } from '@/lib/answerState'
 
 interface AnswerOptionProps {
   optionKey: string    // "A", "B", "C", "D"
@@ -10,7 +11,6 @@ interface AnswerOptionProps {
   isDisabled: boolean  // true after answer is confirmed
   revealAnswer: boolean
   onClick: (key: string) => void
-  onNext?: () => void  // when locked, clicking any option advances to next question
   keyHint?: string     // keyboard shortcut hint, e.g. "1"
 }
 
@@ -22,7 +22,6 @@ export function AnswerOption({
   isDisabled,
   revealAnswer,
   onClick,
-  onNext,
   keyHint,
 }: AnswerOptionProps) {
   // Prevent accidental selection when the user is scrolling over an option.
@@ -32,66 +31,31 @@ export function AnswerOption({
   const touchStart = useRef<{ x: number; y: number } | null>(null)
   const scrolling = useRef(false)
 
-  // The options are a ruled list on the page, not tiles on a card: each row is
-  // bare, a hairline under it (AnswerList draws the one above the first), and
-  // only a row that means something gets a fill — the chosen one goes solid in
-  // the pick (Ink, style guide §7.0), and once the answer is revealed the right
-  // and wrong rows take their state tints. A filled row is rounded and its
-  // hairline goes transparent, so the fill reads as a pill lying over the rules.
-  // AnswerList pulls the run out a little either side (`-mx-3`) and each row
-  // pads back in, so the letters stay on the stem's left edge while a fill
-  // reaches a little past it.
+  // The options are outlined rows (docs/redesign-spec.md §5.1): a 1.5px edge
+  // in the line colour, the letter at the left. The picked row is filled with
+  // the text colour. Once the answer is revealed the right row is filled green
+  // and the reader's wrong one is outlined red and struck through
+  // (lib/answerState.ts); nothing else on a screen takes those colours.
   const baseClasses =
-    'w-full text-left px-3 py-3.5 min-h-[56px] text-base font-medium transition-colors flex items-start gap-4 border-b'
-
-  const isNavigable = isDisabled && !!onNext
+    'w-full text-left px-4 py-3 min-h-[54px] text-[17px] sm:text-lg transition-colors flex items-center gap-3.5 rounded-[14px] border-[1.5px]'
 
   const revealedRight = isDisabled && revealAnswer && isCorrect
   const revealedWrong = isDisabled && revealAnswer && isSelected && !isCorrect
-  // Chosen and not (yet) marked: before Confirm, or confirmed with the answers
+  // Chosen and not (yet) marked: before Check, or locked in with the answers
   // held back for the end.
   const picked = isSelected && !(isDisabled && revealAnswer)
-  const filled = picked || revealedRight || revealedWrong
 
-  const stateClasses = cn(filled ? 'rounded-xl border-transparent' : 'border-border', {
-    'bg-pick text-pick-foreground': picked,
-
-    // Unselected and available — hoverable
-    'hover:bg-accent/60 cursor-pointer': !isDisabled && !isSelected,
-
-    // Confirmed correct
-    'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100':
-      revealedRight && isSelected,
-
-    // Not selected, but correct (revealed)
-    'bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300':
-      revealedRight && !isSelected,
-
-    // Confirmed wrong
-    'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100': revealedWrong,
-
-    // Not selected, disabled — muted
-    'text-muted-foreground opacity-60':
-      isDisabled && !isSelected && (!isCorrect || !revealAnswer),
-
-    // Cursor: pointer when interactive
-    'cursor-pointer': !isDisabled || isNavigable,
-    'cursor-default': isDisabled && !isNavigable,
-
-    // Subtle hover/active feedback when locked but clickable to navigate
-    'hover:opacity-80 active:opacity-60': isNavigable,
+  const stateClasses = cn({
+    'border-foreground bg-foreground font-semibold text-ground': picked,
+    'border-border hover:border-foreground cursor-pointer': !isDisabled && !isSelected,
+    [`border-transparent font-bold ${ANSWER_SOLID.correct}`]: revealedRight,
+    'border-answer-incorrect': revealedWrong,
+    'border-border': isDisabled && !picked && !revealedRight && !revealedWrong,
+    'cursor-pointer': !isDisabled,
+    'cursor-default': isDisabled,
   })
 
-  // The letter: a ring at rest, a solid disc on the chosen row (the pick's
-  // colours swapped, so it reads on the pill), the row's own colour once marked.
-  const letterClasses = cn(
-    'flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-semibold',
-    picked
-      ? 'bg-pick-foreground text-pick'
-      : filled
-        ? 'border-[1.5px] border-current'
-        : 'border-[1.5px] border-muted-foreground/50 text-muted-foreground',
-  )
+  const letterClasses = 'w-[26px] shrink-0 text-[15px] font-bold'
 
   function handlePointerDown(e: React.PointerEvent) {
     touchStart.current = { x: e.clientX, y: e.clientY }
@@ -106,11 +70,7 @@ export function AnswerOption({
   }
 
   function handleClick() {
-    if (scrolling.current) return
-    if (isDisabled) {
-      onNext?.()
-      return
-    }
+    if (scrolling.current || isDisabled) return
     onClick(optionKey)
   }
 
@@ -118,8 +78,9 @@ export function AnswerOption({
     // div+role instead of button so block-level markdown (tables, paragraphs) is valid HTML
     <div
       role="button"
-      tabIndex={isDisabled && !isNavigable ? -1 : 0}
-      aria-disabled={isDisabled && !isNavigable}
+      tabIndex={isDisabled ? -1 : 0}
+      aria-disabled={isDisabled}
+      aria-pressed={isSelected}
       aria-label={`Option ${optionKey}`}
       data-sound="select"
       onPointerDown={handlePointerDown}
@@ -128,11 +89,7 @@ export function AnswerOption({
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          if (isDisabled) {
-            onNext?.()
-          } else {
-            onClick(optionKey)
-          }
+          if (!isDisabled) onClick(optionKey)
         }
       }}
       className={cn(baseClasses, stateClasses)}
@@ -145,14 +102,17 @@ export function AnswerOption({
           power) scrolls inside the option instead of widening the page. */}
       <MarkdownText
         inline
-        className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden pt-0.5 pb-1 [&_p]:my-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-3"
+        className={cn(
+          'flex-1 min-w-0 overflow-x-auto overflow-y-hidden py-0.5 [&_p]:my-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-3',
+          revealedWrong && 'line-through',
+        )}
       >
         {text}
       </MarkdownText>
       {keyHint && !isDisabled && (
         <kbd
           aria-hidden="true"
-          className="hidden sm:flex self-start mt-1 shrink-0 h-5 min-w-[1.25rem] items-center justify-center rounded border border-border bg-muted/70 text-[10px] font-mono font-semibold text-muted-foreground/70 px-1"
+          className="hidden sm:flex shrink-0 h-6 min-w-[1.5rem] items-center justify-center rounded-md border border-border text-[13px] font-semibold px-1"
         >
           {keyHint}
         </kbd>
@@ -161,13 +121,10 @@ export function AnswerOption({
   )
 }
 
-/**
- * The run of answer options: a ruled list, the hairline over the first row
- * drawn here so every row only owns the one beneath it.
- */
+/** The run of answer options: outlined rows, 8px apart. */
 export function AnswerList({ children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div {...rest} className={cn('-mx-3 border-t border-border', rest.className)}>
+    <div {...rest} className={cn('flex flex-col gap-2', rest.className)}>
       {children}
     </div>
   )

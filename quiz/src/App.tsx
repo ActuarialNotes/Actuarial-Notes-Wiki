@@ -31,7 +31,7 @@ import { ProCelebration } from '@/components/ProCelebration'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { COMMUNITY_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
-import { pageHostsNavButton } from '@/lib/mobileNavHost'
+import { isSessionRoute, pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
 import { buttonVariants } from '@/components/ui/buttonVariants'
@@ -272,7 +272,7 @@ function GlobalKeyHandler() {
 function Main({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
-    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
+    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) || isSessionRoute(pathname) ? '' : 'pt-14'}`}>
       {children}
     </main>
   )

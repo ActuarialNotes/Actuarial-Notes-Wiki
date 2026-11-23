@@ -15,7 +15,12 @@ import { cn } from '@/lib/utils'
  * Measured from a wall-clock start rather than counted tick by tick, so a tab
  * left in the background (where timers are throttled) still reads true.
  */
-export function QuizTimer({ startedAt, allowanceSeconds }: { startedAt: number; allowanceSeconds: number }) {
+export function QuizTimer({ startedAt, allowanceSeconds, plain = false }: {
+  startedAt: number
+  allowanceSeconds: number
+  /** The session's top row: the clock as plain figures, no pill (docs/redesign-spec.md §5.1). */
+  plain?: boolean
+}) {
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
@@ -33,14 +38,20 @@ export function QuizTimer({ startedAt, allowanceSeconds }: { startedAt: number; 
       role="timer"
       aria-label={tone === 'over' ? `${formatClock(remaining)} over time` : `${formatClock(remaining)} remaining`}
       title={`Time allowed: ${formatClock(allowanceSeconds)}`}
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium tabular-nums',
-        tone === 'normal' && 'border-border bg-muted text-muted-foreground',
-        tone === 'low' && 'border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400',
-        tone === 'over' && 'border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400',
-      )}
+      className={plain
+        ? cn(
+            'inline-flex shrink-0 items-center gap-1.5 text-[15px] font-semibold tabular-nums',
+            tone === 'low' && 'text-answer-partial',
+            tone === 'over' && 'text-answer-incorrect',
+          )
+        : cn(
+            'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium tabular-nums',
+            tone === 'normal' && 'border-border bg-muted text-muted-foreground',
+            tone === 'low' && 'border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400',
+            tone === 'over' && 'border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400',
+          )}
     >
-      <Timer className="h-3 w-3" aria-hidden />
+      <Timer className={plain ? 'h-4 w-4' : 'h-3 w-3'} aria-hidden />
       {clock}
     </span>
   )

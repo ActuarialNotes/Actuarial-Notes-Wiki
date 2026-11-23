@@ -23,6 +23,7 @@ import type { RetentionAnswer } from '@/lib/learningSignals'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
 import { scoredQuestions } from '@/lib/quizScore'
+import type { StepKind } from '@/lib/sessionProgress'
 
 // A concept's flashcard is collected the moment it first reaches Level 1 —
 // there is no separate comprehension check (docs/flashcard-collection.md).
@@ -318,6 +319,8 @@ export interface CompletedSession {
   completedAt: string
   masteryTransitions?: MasteryTransition[]
   manualGrades?: Record<string, SelfGrade>
+  /** Today's session: each question's step, in question order (lib/sessionSteps.ts). */
+  steps?: StepKind[]
   // True when this session was completed while signed out, meaning it was
   // only written to localStorage and still needs to be persisted to Supabase
   // once the user signs in (see syncPendingSessionToCloud).
@@ -355,9 +358,19 @@ export interface QuizStore {
   sheets: Record<string, string>
   /** Whether the spreadsheet pane is open; it follows the reader from question to question. */
   sheetOpen: boolean
+  /**
+   * Today's session: the step each question belongs to, in question order, so
+   * the progress bar can group them (lib/sessionSteps.ts). Null for any other quiz.
+   */
+  steps: StepKind[] | null
 
   // Actions
-  startQuiz: (questions: Question[], mode: QuizMode, search?: string) => void
+  startQuiz: (questions: Question[], mode: QuizMode, search?: string, steps?: StepKind[] | null) => void
+  /**
+   * Try a similar one: put `question` straight after the one on screen, in the
+   * same step. Nothing happens if it is already in the quiz.
+   */
+  queueQuestion: (question: Question) => void
   answerQuestion: (questionId: string, chosen: string) => void
   clearAnswer: (questionId: string) => void
   nextQuestion: () => void
@@ -606,20 +619,34 @@ const initialState = {
   conceptListDismissed: false,
   sheets: {} as Record<string, string>,
   sheetOpen: false,
+  steps: null as StepKind[] | null,
 }
 
 export const useQuizStore = create<QuizStore>((set, get) => ({
   ...initialState,
 
-  startQuiz(questions, mode, search = '') {
+  startQuiz(questions, mode, search = '', steps = null) {
     set({
       ...initialState,
       questions,
+      steps: steps && steps.length === questions.length ? steps : null,
       mode,
       search: normalizeSearch(search),
       status: 'active',
       startedAt: new Date(),
       questionStartedAt: new Date(),
+    })
+  },
+
+  queueQuestion(question) {
+    set(state => {
+      if (state.questions.some(q => q.id === question.id)) return state
+      const at = state.currentIndex + 1
+      const questions = [...state.questions.slice(0, at), question, ...state.questions.slice(at)]
+      const steps = state.steps
+        ? [...state.steps.slice(0, at), state.steps[state.currentIndex] ?? 'review', ...state.steps.slice(at)]
+        : null
+      return { questions, steps }
     })
   },
 
@@ -684,7 +711,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
   },
 
   async completeQuiz(userId, priorMasteryRecords = []) {
-    const { questions, responses, mode, startedAt, manualGrades } = get()
+    const { questions, responses, mode, startedAt, manualGrades, steps } = get()
     set({ status: 'complete' })
 
     const totalSeconds = startedAt
@@ -724,6 +751,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         completedAt: new Date().toISOString(),
         masteryTransitions,
         manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
+        steps: steps ?? undefined,
         needsCloudSync: true,
       }
       try {
@@ -781,6 +809,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       completedAt: new Date().toISOString(),
       masteryTransitions,
       manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
+      steps: steps ?? undefined,
     }
     try {
       localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))

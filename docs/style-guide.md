@@ -306,6 +306,9 @@ Info      bg-blue-50   text-blue-900    dark:bg-blue-950   dark:text-blue-100
 For text-only state signals use the mid shades: `text-green-600 dark:text-green-400`,
 `text-amber-600 dark:text-amber-400`, `text-red-600 dark:text-red-400`.
 
+A quiz's answer options, feedback, grade buttons and results no longer use these tints: they
+are drawn in the answer-state tokens (§13.3, §13.6).
+
 **Mastery ladder** — intensity climbs with level:
 
 ```
@@ -398,6 +401,9 @@ to render the header at all. A page whose bar hosts the button starts at the top
 viewport (`sticky top-0`); a page with the header offsets by it (`sticky top-14 lg:top-0`).
 Add a route to that module only together with the `<MobileNavButton />` in its bar — the two
 move together, or the page ends up with two hamburgers or none.
+
+The session is the exception: `/quiz` and `/review` have neither the header nor the sidebar,
+at any width (`isSessionRoute`, §13.6).
 
 When the search on a hosting bar goes **active**, the button folds to zero width and the
 input grows over it: it is the only thing on that line the reader is not using, and typing
@@ -1005,7 +1011,8 @@ redesigned screen this section wins where the two differ** (an outlined card whe
 card needs no outline, an outlined control where §7.0 says a control has no border). Don't mix
 the two on one screen. `/design/base` on the dev server (`pages/DesignBase.tsx`, never in a
 production build) shows every piece in both themes. Today (`pages/Dashboard.tsx`,
-`components/today/`) and its Syllabus and Analytics overlays are the first screens built from them.
+`components/today/`) and its Syllabus and Analytics overlays are the first screens built from
+them; the session (the quiz's question screen and its results, §13.6) is the second.
 
 ### 13.1 One ground, outlined cards
 
@@ -1082,7 +1089,58 @@ closes on Escape and a press outside, keeps Tab inside itself and gives focus ba
 closes. `PopupTitle` is its heading. `InfoSheet` (§7.2c) stays for the screens not yet
 redesigned.
 
-### 13.6 Learn's pieces
+### 13.6 The session
+
+The quiz's question screen and its results (`pages/Quiz.tsx`, `pages/Review.tsx`,
+`components/session/`; `docs/redesign-spec.md` §5). The sidebar and the phone's app header are
+hidden on both (`isSessionRoute` in `lib/mobileNavHost.ts`); the question screen's top row is
+leave, the progress bar, the timer when timed, and More.
+
+**The progress bar** (`SessionProgress` over `lib/sessionProgress.ts`): one segment per
+question, 8px high (10px on the results), grouped by step in today's session.
+
+| Segment | While answers show as the quiz goes | While answers are held to the end |
+|---|---|---|
+| Answered | its answer state's colour (§13.3) | the text colour |
+| Passed with no answer | the unanswered grey | the unanswered grey |
+| On screen | the text colour | drawn taller (16px) |
+| Not reached | the line colour | the line colour |
+
+A written part waiting for its grade is the text colour until graded. A flagged question has a
+dot under its segment. **While answers are held to the end no segment says whether an answer
+was right**; the colours arrive on the results. During a quiz the bar is a control with a 44px
+target: press or drag along it to go to a question.
+
+**Answer options** (`components/AnswerOption.tsx`): outlined rows 8px apart, a 1.5px edge in the
+line colour and 14px corners, the letter at the left. The picked row is filled with the text
+colour. Once the answer shows, the right row is filled green and the reader's wrong one is
+outlined red.
+
+**Answer rows** in the feedback (`AnswerRow` in `components/session/AnswerFeedback.tsx`): the
+same row shape. The right answer is `ANSWER_SOLID` green with a check; the reader's wrong
+answer is `ANSWER_EDGE` red with a cross, struck through. The reader's own row is marked
+"You". A correct answer is one green row.
+
+**A solution** (`SolutionText`): plain text on the ground at 17px, each display formula in a box
+outlined in the line colour with 14px corners that scrolls sideways, its right edge fading
+while there is more to scroll to (`.session-solution` in `index.css`). No tinted panel and no
+verdict strip. `ExplanationPanel` keeps its own look on the surfaces outside the session.
+
+**Grade buttons** (`components/SelfGradeButtons.tsx`): Full, Partial and None in green, amber
+and red, 64px high, each with a 2px outline in its colour (`ANSWER_EDGE`) and filled once
+picked (`ANSWER_SOLID`), the points it gives under its label. A suggested grade carries a
+dashed outline in the text colour, 3px off the button, until the reader picks.
+
+**Checklist boxes** (`components/SampleChecklist.tsx`): each point is a row under a hairline. Its
+box is a 24px rounded square, outlined 1.5px in the text colour when empty and filled with the
+text colour when ticked, inside a 44px target. A box is a tick the reader makes, never a
+verdict, so it takes no answer colour.
+
+**Rows that open something:** a concept and the examiner's report are rows outlined in the line
+colour with a chevron at the right. On the results, a question under To fix is a row parted
+from the next by a hairline, led by its answer dot, that opens its solution in place.
+
+### 13.7 Learn's pieces
 
 Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 

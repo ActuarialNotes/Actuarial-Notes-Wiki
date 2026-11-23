@@ -1,25 +1,14 @@
 import type { ReactNode } from 'react'
 import type { SelfGrade } from '@/lib/parser'
+import { gradePoints } from '@/lib/gradeWords'
+import { cn } from '@/lib/utils'
 
-const GRADES: Record<SelfGrade, { mark: string; label: string; active: string; inactive: string; suggested: string }> = {
-  correct: {
-    mark: '✓', label: 'Full credit',
-    active: 'bg-green-600 hover:bg-green-700 text-white',
-    inactive: 'bg-green-600/10 text-green-700 hover:bg-green-600/20 dark:text-green-400 dark:hover:bg-green-950',
-    suggested: 'outline-green-600 dark:outline-green-400',
-  },
-  partial: {
-    mark: '~', label: 'Partial',
-    active: 'bg-yellow-500 hover:bg-yellow-600 text-white',
-    inactive: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 dark:text-yellow-400 dark:hover:bg-yellow-950',
-    suggested: 'outline-yellow-500 dark:outline-yellow-400',
-  },
-  incorrect: {
-    mark: '✗', label: 'No credit',
-    active: 'bg-red-600 hover:bg-red-700 text-white',
-    inactive: 'bg-red-600/10 text-red-700 hover:bg-red-600/20 dark:text-red-400 dark:hover:bg-red-950',
-    suggested: 'outline-red-600 dark:outline-red-400',
-  },
+// Full / Partial / None in the answer colours (docs/redesign-spec.md §5.2,
+// lib/answerState.ts): each outlined in its colour, filled once picked.
+const GRADES: Record<SelfGrade, { label: string; edge: string; solid: string; share: number }> = {
+  correct: { label: 'Full', edge: 'border-answer-correct', solid: 'bg-answer-correct border-answer-correct text-ground', share: 1 },
+  partial: { label: 'Partial', edge: 'border-answer-partial', solid: 'bg-answer-partial border-answer-partial text-ground', share: 0.5 },
+  incorrect: { label: 'None', edge: 'border-answer-incorrect', solid: 'bg-answer-incorrect border-answer-incorrect text-ground', share: 0 },
 }
 
 interface SelfGradeButtonsProps {
@@ -36,12 +25,14 @@ interface SelfGradeButtonsProps {
   suggested?: SelfGrade | null
   /** Said between the prompt and the buttons: why a grade is suggested (`GradeSuggestion`). */
   hint?: ReactNode
+  /** What the part is worth, so each button says the points it gives. */
+  points?: number
 }
 
 /**
- * Full credit / Partial / No credit — how a reader marks a written answer
- * against the sample answer. Big targets on purpose: this is tapped once per
- * part on a phone, usually with the sample answer still being read above it.
+ * Full / Partial / None: how a reader marks a written answer against the
+ * sample answer. Big targets on purpose: this is tapped once per part on a
+ * phone, usually with the sample answer still being read above it.
  */
 export function SelfGradeButtons({
   value,
@@ -50,12 +41,14 @@ export function SelfGradeButtons({
   label,
   suggested = null,
   hint,
+  points,
 }: SelfGradeButtonsProps) {
+  const worth = points !== undefined && points > 0 ? points : null
   return (
-    <div className="space-y-2.5" role="group" aria-label={prompt ?? label}>
-      {prompt && <p className="text-base font-semibold text-foreground">{prompt}</p>}
+    <div className="space-y-3" role="group" aria-label={prompt ?? label ?? 'Grade your answer'}>
+      {prompt && <p className="text-base font-bold text-foreground">{prompt}</p>}
       {hint}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="flex gap-2">
         {(['correct', 'partial', 'incorrect'] as const).map(grade => {
           const active = value === grade
           const cfg = GRADES[grade]
@@ -66,17 +59,17 @@ export function SelfGradeButtons({
               type="button"
               onClick={() => onChange(grade)}
               aria-pressed={active}
-              className={[
-                'flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-xl px-2 py-3',
-                'sm:min-h-16 sm:flex-row sm:gap-2 sm:px-4',
-                'text-base font-semibold leading-tight text-center transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                active ? `${cfg.active} shadow-sm` : cfg.inactive,
-                hinted ? `outline-dashed outline-2 outline-offset-2 ${cfg.suggested}` : '',
-              ].join(' ')}
+              className={cn(
+                'flex h-16 min-w-0 flex-1 flex-col items-center justify-center gap-px rounded-[18px] border-2 px-1 text-center transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground',
+                active ? cfg.solid : cn(cfg.edge, 'text-foreground hover:bg-foreground/10'),
+                hinted && 'outline-dashed outline-2 outline-offset-[3px] outline-foreground',
+              )}
             >
-              <span aria-hidden="true" className="text-2xl leading-none sm:text-xl">{cfg.mark}</span>
-              <span>{cfg.label}{hinted && <span className="sr-only"> (suggested)</span>}</span>
+              <span className="text-base font-bold leading-tight">
+                {cfg.label}{hinted && <span className="sr-only"> (suggested)</span>}
+              </span>
+              {worth !== null && <span className="text-[13px] leading-tight">{gradePoints(worth, cfg.share)}</span>}
             </button>
           )
         })}

@@ -1,8 +1,10 @@
 # Answer checking — a suggested grade for written parts
 
-A written part of a CAS question is graded by the reader: Full credit, Partial or No credit,
+A written part of a CAS question is graded by the reader: Full, Partial or None,
 against the sample answer and the examiner's report (`components/SelfGradeButtons.tsx`,
-`components/GradePartsDialog.tsx`). This doc is the plan for helping them grade, and what is
+`components/GradePartsDialog.tsx`). The buttons were labelled Full credit / Partial / No credit
+until 2026-11-23; the suggestion's own words (`SUGGESTION_LABEL`, `checklistMessage`) still
+name the grades Full credit and No credit, which is how this doc names a suggestion below. This doc is the plan for helping them grade, and what is
 built so far.
 
 **The rule for all of it:** the app *suggests* a grade and says why; the reader gives it.

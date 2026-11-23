@@ -14,7 +14,7 @@ async function answerFirstOption(page: Page) {
   if (await startQuiz.isVisible()) await startQuiz.click()
   await expect(optionA).toBeVisible()
   await optionA.click()
-  await page.getByRole('button', { name: 'Confirm Answer' }).click()
+  await page.getByRole('button', { name: 'Check' }).click()
 }
 
 // The verdict banner the explanation panel leads with — the thing reveal='end'
@@ -76,7 +76,7 @@ test.describe('end-of-exam self-grading', () => {
       for (const field of await page.getByPlaceholder('Write your response here…').all()) {
         await field.fill('An answer.')
       }
-      await page.getByRole('button', { name: 'Confirm Answer' }).click()
+      await page.getByRole('button', { name: 'Check' }).click()
       const next = page.getByRole('button', { name: /^(Next|Submit Exam|Finish)/ }).last()
       await next.click()
     }
@@ -88,7 +88,7 @@ test.describe('end-of-exam self-grading', () => {
     await expect(first).toHaveAccessibleName(/0 of \d+ parts graded/)
 
     // Grading every part of the open question marks its chip graded.
-    for (const button of await page.getByRole('button', { name: /No credit/ }).all()) {
+    for (const button of await page.getByRole('button', { name: /^None/ }).all()) {
       await button.click()
     }
     await expect(first).toHaveAccessibleName(/graded$/)

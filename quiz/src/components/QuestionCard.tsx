@@ -11,6 +11,8 @@ import { InsertCellButton } from '@/components/quiz/InsertCellButton'
 import { insertAtCaret, partWantsSheet } from '@/lib/questionSheetPart'
 import { SpreadsheetPartButton } from '@/components/quiz/SpreadsheetButton'
 import { cn } from '@/lib/utils'
+import { ANSWER_TEXT } from '@/lib/answerState'
+import { AnswerRow, ConceptRows, FoldedQuestion, Solution } from '@/components/session/AnswerFeedback'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import { useAnswerChecks } from '@/hooks/useAnswerChecks'
 import { RUBRIC } from '@/lib/checklistKeys'
@@ -23,6 +25,21 @@ export type { SelfGrade }
 // reading class a size up, so a part is the thing the eye lands on.
 const PART_STEM_CLASS = cn(READING_MD_CLASS, 'text-[17px] sm:text-lg')
 
+// The question's own stem: 18px at 1.5, on the page.
+const STEM_CLASS = `text-[17px] sm:text-lg leading-normal [&_p]:my-3.5 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`
+
+const PART_HEADING = 'text-sm font-bold text-foreground'
+
+/** "Part b · 1 point": a part's label and what it is worth. */
+function PartLabel({ part }: { part: Part }) {
+  return (
+    <span className={PART_HEADING}>
+      Part {part.label}
+      {part.points > 0 && <> · {part.points} {part.points === 1 ? 'point' : 'points'}</>}
+    </span>
+  )
+}
+
 interface QuestionCardProps {
   question: Question
   selectedAnswer: string | null
@@ -30,7 +47,15 @@ interface QuestionCardProps {
   showExplanation: boolean
   isLocked?: boolean   // true once the answer is confirmed and cannot be changed
   showMeta?: boolean   // show exam/topic/difficulty badges; false during live quiz
-  onNext?: () => void  // when provided, clicking any locked answer advances
+  /**
+   * The session's feedback layout (docs/redesign-spec.md §5.2): once the answer
+   * is shown, the question folds to one line and the reader's answer and the
+   * right one are two rows over the solution. Without it the question stays
+   * open with the explanation panel under it.
+   */
+  feedback?: boolean
+  /** Open one of the question's concepts in the reader; `links` are its `wiki_link` tags. */
+  onOpenConcept?: (links: string[], index: number) => void
   essaySelfGrades?: Record<string, SelfGrade>  // keyed by part label (for essay self-grading)
   onEssaySelfGrade?: (partLabel: string, grade: SelfGrade) => void
   // Manual grade override for free-entry (top-level) and multi-part free-entry parts
@@ -65,9 +90,13 @@ interface FreeEntryInputProps {
   sheetQuestionId?: string
   /** The stem and explanation the answer belongs to, for the numeric check's suggested grade. */
   checkSource?: { stem: string; explanation: string }
+  /** Once the answer is shown, draw it and the right one as two rows in place of the box. */
+  rows?: boolean
+  /** What the answer is worth, for the grade buttons. */
+  points?: number
 }
 
-function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade, sheetQuestionId, checkSource }: FreeEntryInputProps) {
+function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade, sheetQuestionId, checkSource, rows = false, points }: FreeEntryInputProps) {
   const [text, setText] = useState(answer)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -114,8 +143,26 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
     }
   }
 
+  const asRows = rows && showExplanation && isAnswered
   return (
     <div className="space-y-3">
+      {asRows ? (
+        <div className="flex flex-col gap-2">
+          <p role="status" className="sr-only">{isRight ? 'Correct' : selfGrade === 'partial' ? 'Partial' : looksWrong ? 'Incorrect' : 'Check your answer'}</p>
+          <AnswerRow
+            state={isRight || !looksWrong ? 'correct' : selfGrade === 'partial' ? 'partial' : 'incorrect'}
+            solid={autoIsRight}
+            yours
+          >
+            {answer}
+          </AnswerRow>
+          {!autoIsRight && (
+            <AnswerRow state="correct" solid>
+              <MarkdownText inline className="[&_p]:my-0">{correctAnswer}</MarkdownText>
+            </AnswerRow>
+          )}
+        </div>
+      ) : (
       <div className="flex gap-2 items-center">
         <input
           ref={inputRef}
@@ -126,17 +173,16 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
           disabled={isLocked}
           placeholder="Enter your answer…"
           className={[
-            'flex-1 rounded-md border px-3 py-2 text-[16px] sm:text-sm bg-background',
-            'focus:outline-none focus:ring-2 focus:ring-ring',
-            isLocked ? 'opacity-70 cursor-not-allowed' : '',
-            isAnswered && isRight ? 'border-green-400 dark:border-green-600' : '',
-            isAnswered && looksWrong ? 'border-red-400 dark:border-red-600' : '',
+            'min-h-[54px] min-w-0 flex-1 rounded-[14px] border-[1.5px] border-border bg-ground px-4 py-2 text-[17px]',
+            'focus:outline-none focus:border-foreground',
+            isLocked ? 'cursor-not-allowed' : '',
+            showExplanation && isAnswered && isRight ? 'border-answer-correct' : '',
+            showExplanation && isAnswered && looksWrong ? 'border-answer-incorrect' : '',
           ].join(' ')}
         />
         {!isLocked && !autoSubmit && (
           <Button
-            size="sm"
-            variant="outline"
+            variant="edge"
             disabled={!text.trim()}
             onClick={() => text.trim() && onSubmit(text.trim())}
           >
@@ -144,26 +190,29 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
           </Button>
         )}
       </div>
+      )}
       {!isLocked && sheetQuestionId && <InsertCellButton questionId={sheetQuestionId} onInsert={insertCell} />}
 
       {showExplanation && isAnswered && (
-        <div className="space-y-2 text-sm">
-          {!autoIsRight && (
-            <p className="text-muted-foreground">
-              Correct answer: <span className="font-semibold text-foreground">{correctAnswer}</span>
+        <div className="space-y-3 text-base">
+          {!autoIsRight && !asRows && (
+            <p>
+              Correct answer: <span className="font-semibold">{correctAnswer}</span>
             </p>
           )}
           {!autoIsRight && onSelfGrade && (
             <SelfGradeButtons
               value={selfGrade ?? null}
               onChange={onSelfGrade}
+              prompt={null}
+              points={points}
               suggested={check?.suggestion}
               hint={check && checks && <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />}
             />
           )}
           {!autoIsRight && !onSelfGrade && selfGrade && (
-            <p className={`text-xs font-medium ${selfGrade === 'correct' ? 'text-green-600 dark:text-green-400' : selfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'}`}>
-              {selfGrade === 'correct' ? '✓ Marked correct' : selfGrade === 'partial' ? '~ Marked partial' : '✗ Marked incorrect'}
+            <p className={cn('text-sm font-semibold', ANSWER_TEXT[selfGrade === 'correct' ? 'correct' : selfGrade === 'partial' ? 'partial' : 'incorrect'])}>
+              {selfGrade === 'correct' ? 'Marked Full' : selfGrade === 'partial' ? 'Marked Partial' : 'Marked None'}
             </p>
           )}
         </div>
@@ -254,22 +303,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         : null
 
     // No surface of its own: the question sits on the page, and a hairline
-    // above each part is all that sets it off from the one before.
+    // above each part is all that sets it off from the one before
+    // (docs/redesign-spec.md §5.2, canvas `Written`).
     return (
-      <div className="border-t border-border pt-5 space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Part {part.label.toUpperCase()}
-            {part.points > 0 && (
-              <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
-            )}
-          </span>
-          {!isLocked && wantsSheet
-            ? <SpreadsheetPartButton />
-            : <span className="text-sm text-muted-foreground italic">Written response</span>}
+      <div className="border-t border-border pt-5 space-y-5">
+        <div className="space-y-2.5">
+          <div className="flex min-h-8 items-center justify-between gap-2">
+            <PartLabel part={part} />
+            {!isLocked && wantsSheet && <SpreadsheetPartButton />}
+          </div>
+          {part.stem && <MarkdownText className={cn(PART_STEM_CLASS, 'font-semibold')} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
         </div>
-
-        {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
         {!isLocked ? (
           <div className="space-y-2">
@@ -278,35 +322,25 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             value={partAnswer}
             onChange={e => onPartAnswer(part.label, e.target.value)}
             placeholder="Write your response here…"
+            aria-label={isOnlyPart ? 'Your answer' : `Your answer to part ${part.label}`}
             rows={5}
-            className="w-full rounded-md border px-3 py-2 text-base leading-relaxed bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full resize-y rounded-[14px] border-[1.5px] border-border bg-ground px-4 py-3.5 text-base leading-normal focus:border-foreground focus:outline-none"
           />
           <InsertCellButton questionId={questionId} onInsert={insertCell} />
           </div>
         ) : (
-          <div className="space-y-4">
-            {partAnswer.trim() ? (
-              <section aria-label="Your response" className="rounded-xl border border-border p-4 space-y-2">
-                <h4 className="text-sm font-semibold text-foreground">Your response</h4>
-                <p className="text-base leading-relaxed whitespace-pre-wrap text-foreground">{partAnswer}</p>
-              </section>
-            ) : (
-              <p className="text-sm text-muted-foreground italic">No response written</p>
-            )}
+          <>
+            <section aria-label="Your answer" className="space-y-2">
+              <h4 className={PART_HEADING}>Your answer</h4>
+              <p className="whitespace-pre-wrap rounded-[14px] border border-border px-4 py-3.5 text-base leading-normal">
+                {partAnswer.trim() ? partAnswer : 'No answer written'}
+              </p>
+            </section>
 
             {keywordScore !== null && keywordScore.total > 0 && (
-              <div className="flex items-center gap-1.5 text-xs">
-                <span className="text-muted-foreground">Keyword match:</span>
-                <span className={
-                  keywordScore.pct >= 60
-                    ? 'font-medium text-green-600 dark:text-green-400'
-                    : keywordScore.pct >= 30
-                      ? 'font-medium text-yellow-600 dark:text-yellow-400'
-                      : 'text-muted-foreground'
-                }>
-                  {keywordScore.matched}/{keywordScore.total} ({keywordScore.pct}%)
-                </span>
-              </div>
+              <p className="text-sm">
+                Keyword match: <span className="font-semibold tabular-nums">{keywordScore.matched}/{keywordScore.total} ({keywordScore.pct}%)</span>
+              </p>
             )}
 
             {/* The reference first, then the grade: a reader marks themselves
@@ -328,14 +362,16 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               <SelfGradeButtons
                 value={effectiveSelfGrade}
                 onChange={handleSelfGradeClick}
-                prompt={isOnlyPart ? 'How did you do?' : 'How did you do on this part?'}
+                prompt={null}
+                label={isOnlyPart ? 'Grade your answer' : `Grade your answer to part ${part.label}`}
+                points={part.points}
                 suggested={check?.suggestion ?? ticked?.suggestion}
                 hint={checks && (check
                   ? <GradeSuggestion {...checks.numericCheckMessage(check)} from="figure" />
                   : ticked && checklist && <GradeSuggestion {...checks.checklistMessage(ticked, checklist)} from="checklist" />)}
               />
             )}
-          </div>
+          </>
         )}
       </div>
     )
@@ -344,22 +380,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
   // ── Graded part (MC or free-entry) ─────────────────────────────────────────
   return (
     <div className="border-t border-border pt-5 space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Part {part.label.toUpperCase()}
-          {part.points > 0 && (
-            <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
-          )}
-        </span>
+      <div className="flex min-h-8 items-center justify-between gap-2">
+        <PartLabel part={part} />
         {!isLocked && wantsSheet && <SpreadsheetPartButton />}
-        {isAnswered && (
-          <span className={isRight ? 'text-green-600 dark:text-green-400 text-sm font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-sm font-medium' : 'text-red-600 dark:text-red-400 text-sm font-medium'}>
-            {isRight ? '✓ Correct' : effectiveSelfGrade === 'partial' ? '~ Partial' : '✗ Incorrect'}
+        {showExplanation && isAnswered && (
+          <span className={cn('text-sm font-bold', ANSWER_TEXT[isRight ? 'correct' : effectiveSelfGrade === 'partial' ? 'partial' : 'incorrect'])}>
+            {isRight ? 'Correct' : effectiveSelfGrade === 'partial' ? 'Partial' : 'Incorrect'}
           </span>
         )}
       </div>
 
-      {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
+      {part.stem && <MarkdownText className={cn(PART_STEM_CLASS, 'font-semibold')} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
       {part.type === 'multiple-choice' ? (
         <AnswerList>
@@ -388,28 +419,17 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           onSelfGrade={onSelfGrade ? handleSelfGradeClick : undefined}
           sheetQuestionId={questionId}
           checkSource={asked}
+          rows
+          points={part.points}
         />
       )}
 
-      {showExplanation && isAnswered && (part.explanation || (!autoIsRight && part.answer)) && (
-        <div className={[
-          'rounded-xl p-4 space-y-2 text-sm',
-          isRight
-            ? 'bg-green-50 dark:bg-green-950'
-            : effectiveSelfGrade === 'partial'
-              ? 'bg-yellow-50 dark:bg-yellow-950'
-              : 'bg-red-50 dark:bg-red-950',
-        ].join(' ')}>
-          {!autoIsRight && part.answer && (
-            <p className="text-muted-foreground text-xs">
-              Correct answer: <span className="font-semibold text-foreground">{part.answer}</span>
-            </p>
-          )}
-          {part.explanation && (
-            <MarkdownText className={READING_MD_CLASS}>{part.explanation}</MarkdownText>
-          )}
-        </div>
+      {showExplanation && isAnswered && part.type === 'multiple-choice' && !autoIsRight && part.answer && (
+        <p className="text-base">
+          Correct answer: <span className="font-semibold">{part.answer}</span>
+        </p>
       )}
+      {showExplanation && isAnswered && part.explanation && <Solution markdown={part.explanation} />}
       {showExplanation && isAnswered && part.examiner_report && (
         <ExaminerReportCard markdown={part.examiner_report} />
       )}
@@ -426,7 +446,8 @@ export function QuestionCard({
   showExplanation,
   isLocked = false,
   showMeta = false,
-  onNext,
+  feedback = false,
+  onOpenConcept,
   essaySelfGrades,
   onEssaySelfGrade,
   selfGrade,
@@ -460,52 +481,95 @@ export function QuestionCard({
     onAnswer(JSON.stringify(updated))
   }
 
+  const meta = showMeta && (
+    <div className="flex flex-wrap gap-2 mb-3">
+      <TopicBadge label={question.exam} variant="topic" />
+      <TopicBadge label={question.topic} variant="tag" />
+      <TopicBadge label={question.difficulty} variant="difficulty" />
+      {question.originally_exam && (
+        <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
+      )}
+      {question.off_syllabus && (
+        <TopicBadge label="Not on a current syllabus" variant="tag" />
+      )}
+    </div>
+  )
+  const stem = question.stem && (
+    <MarkdownText conceptNames={conceptNames} className={STEM_CLASS}>
+      {question.stem}
+    </MarkdownText>
+  )
+  // What follows the answer rows in the feedback layout: the solution, the
+  // examiner's report folded, and the concepts to read.
+  const lesson = (
+    <>
+      <Solution markdown={question.explanation} />
+      {question.examiner_report && <ExaminerReportCard markdown={question.examiner_report} />}
+      {onOpenConcept && <ConceptRows links={question.wiki_link} onOpen={onOpenConcept} />}
+    </>
+  )
+
   // ── multiple-choice ──────────────────────────────────────────────────────
   if (question.type === 'multiple-choice') {
+    const options = (
+      <AnswerList data-tour="answer-options">
+        {question.options.map((option, idx) => (
+          <AnswerOption
+            key={option.key}
+            optionKey={option.key}
+            text={option.text}
+            isSelected={selectedAnswer === option.key}
+            isCorrect={question.answer === option.key}
+            isDisabled={isLocked}
+            revealAnswer={showExplanation}
+            onClick={onAnswer}
+            keyHint={String(idx + 1)}
+          />
+        ))}
+      </AnswerList>
+    )
+
+    if (feedback && showExplanation) {
+      const mine = question.options.find(o => o.key === selectedAnswer)
+      const right = question.options.find(o => o.key === question.answer)
+      const correct = !!mine && mine.key === question.answer
+      return (
+        <div className="w-full space-y-[26px]">
+          <div className="space-y-3.5">
+            <FoldedQuestion question={question}>
+              <div className="space-y-6">
+                <div>{meta}{stem}</div>
+                {options}
+              </div>
+            </FoldedQuestion>
+            <div className="flex flex-col gap-2">
+              <p role="status" className="sr-only">{correct ? 'Correct' : mine ? 'Incorrect' : 'Unanswered'}</p>
+              {mine && !correct && (
+                <AnswerRow state="incorrect" solid={false} yours>
+                  <MarkdownText inline className="[&_p]:my-0">{mine.text}</MarkdownText>
+                </AnswerRow>
+              )}
+              {right && (
+                <AnswerRow state="correct" solid yours={correct}>
+                  <MarkdownText inline className="[&_p]:my-0">{right.text}</MarkdownText>
+                </AnswerRow>
+              )}
+            </div>
+          </div>
+          {lesson}
+        </div>
+      )
+    }
+
     return (
       <div className="w-full">
         <div className="pb-6">
-          {showMeta && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              <TopicBadge label={question.exam} variant="topic" />
-              <TopicBadge label={question.topic} variant="tag" />
-              <TopicBadge label={question.difficulty} variant="difficulty" />
-              {question.originally_exam && (
-                <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-              )}
-              {question.off_syllabus && (
-                <TopicBadge label="Not on a current syllabus" variant="tag" />
-              )}
-            </div>
-          )}
-          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
-            {question.stem}
-          </MarkdownText>
+          {meta}
+          {stem}
         </div>
 
         <div className="space-y-3">
-          <AnswerList data-tour="answer-options">
-            {question.options.map((option, idx) => (
-              <AnswerOption
-                key={option.key}
-                optionKey={option.key}
-                text={option.text}
-                isSelected={selectedAnswer === option.key}
-                isCorrect={question.answer === option.key}
-                isDisabled={isLocked}
-                revealAnswer={showExplanation}
-                onClick={onAnswer}
-                onNext={isLocked ? onNext : undefined}
-                keyHint={String(idx + 1)}
-              />
-            ))}
-          </AnswerList>
-
-          {isLocked && onNext && (
-            <p className="text-xs text-center text-muted-foreground pt-1 select-none">
-              Choose any answer to continue
-            </p>
-          )}
+          {options}
 
           {showExplanation && selectedAnswer !== null && (
             <ExplanationPanel
@@ -527,44 +591,49 @@ export function QuestionCard({
     const answered = isLocked && selectedAnswer !== null
     const autoCorrect = answered && isAnswerCorrect(question, selectedAnswer!)
     const correct = selfGrade !== undefined ? selfGrade === 'correct' : autoCorrect
+    const input = (
+      <FreeEntryInput
+        // A free-entry answer that was typed but never submitted lives only
+        // in the input's own state, where no prop change would clear it —
+        // so tie the input's identity to the question.
+        key={question.id}
+        answer={selectedAnswer ?? ''}
+        isLocked={isLocked}
+        correctAnswer={question.answer}
+        showExplanation={showExplanation}
+        onSubmit={onAnswer}
+        selfGrade={selfGrade}
+        onSelfGrade={onSelfGrade}
+        sheetQuestionId={question.id}
+        checkSource={question}
+        rows={feedback}
+        points={question.points}
+      />
+    )
+
+    if (feedback && showExplanation && answered) {
+      return (
+        <div className="w-full space-y-[26px]">
+          <div className="space-y-3.5">
+            <FoldedQuestion question={question}>
+              <div>{meta}{stem}</div>
+            </FoldedQuestion>
+            {input}
+          </div>
+          {lesson}
+        </div>
+      )
+    }
 
     return (
       <div className="w-full">
         <div className="pb-6">
-          {showMeta && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              <TopicBadge label={question.exam} variant="topic" />
-              <TopicBadge label={question.topic} variant="tag" />
-              <TopicBadge label={question.difficulty} variant="difficulty" />
-              {question.originally_exam && (
-                <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-              )}
-              {question.off_syllabus && (
-                <TopicBadge label="Not on a current syllabus" variant="tag" />
-              )}
-            </div>
-          )}
-          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
-            {question.stem}
-          </MarkdownText>
+          {meta}
+          {stem}
         </div>
 
         <div className="space-y-3">
-          <FreeEntryInput
-            // A free-entry answer that was typed but never submitted lives only
-            // in the input's own state, where no prop change would clear it —
-            // so tie the input's identity to the question.
-            key={question.id}
-            answer={selectedAnswer ?? ''}
-            isLocked={isLocked}
-            correctAnswer={question.answer}
-            showExplanation={showExplanation}
-            onSubmit={onAnswer}
-            selfGrade={selfGrade}
-            onSelfGrade={onSelfGrade}
-            sheetQuestionId={question.id}
-            checkSource={question}
-          />
+          {input}
 
           {showExplanation && answered && (
             <ExplanationPanel
@@ -587,24 +656,8 @@ export function QuestionCard({
   return (
     <div className="w-full">
       <div className="pb-6">
-        {showMeta && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            <TopicBadge label={question.exam} variant="topic" />
-            <TopicBadge label={question.topic} variant="tag" />
-            <TopicBadge label={question.difficulty} variant="difficulty" />
-            {question.originally_exam && (
-              <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-            )}
-            {question.off_syllabus && (
-              <TopicBadge label="Not on a current syllabus" variant="tag" />
-            )}
-          </div>
-        )}
-        {question.stem && (
-          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
-            {question.stem}
-          </MarkdownText>
-        )}
+        {meta}
+        {stem}
       </div>
 
       <div className="space-y-6">
@@ -639,6 +692,9 @@ export function QuestionCard({
             wantsSheet={spreadsheet && part.type !== 'multiple-choice' && partWantsSheet(part.stem, question.stem)}
           />
         ))}
+        {feedback && showExplanation && onOpenConcept && (
+          <ConceptRows links={question.wiki_link} onOpen={onOpenConcept} />
+        )}
       </div>
     </div>
   )

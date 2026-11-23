@@ -314,8 +314,9 @@ Order, top to bottom (`Results`):
    which starts the existing mistakes quiz on them.
 4. **Levelled up:** each concept that moved, with its before and after squares, and the
    syllabus bar with the gain. This replaces the full-screen `ConceptLevelUpCeremony` for an
-   ordinary level change. Keep the ceremony only for a first collected card or a Level 3
-   (`docs/design-review.md` §5.8).
+   ordinary level change. Keep the ceremony only for a card collected for the first time
+   (any concept's first move from New to Level 1) or a concept reaching Level 3
+   (`docs/design-review.md` §5.8; decided 2026-11-23, see §8, Phase C).
 5. The questions answered right, folded under one row.
 6. **Back to Today**, outlined.
 
@@ -551,7 +552,7 @@ once and needs You to exist.
 |---|---|---|
 | **A. Visual base** (built 2026-11-23) | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
 | **B. Today** (built 2026-11-23) | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
-| **C. The session** | §5: question header, feedback, "Try a similar one", results | A |
+| **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
@@ -562,7 +563,7 @@ once and needs You to exist.
 **Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
 `--ground`, `--level-*` and `--answer-*` tokens, `LevelSquare`, `lib/answerState.ts` and
 `AnswerDot`, `OutlineCard` / `OutlineTile`, the `edge` button variant and `main` size, and
-`Popup`. No screen uses them yet; `/design/base` on the dev server shows them all.
+`Popup`. Today and the session use them; `/design/base` on the dev server shows them all.
 
 **Phase B is built.** Today is `pages/Dashboard.tsx` (still at `/dashboard`, the sidebar row
 still "Dashboard" until Phase F) over `components/today/`, `hooks/useTodaySession.ts` and
@@ -604,6 +605,66 @@ building it:
   otherwise one sentence (`dayNote`: what was practised on a day behind; for a day ahead, that
   nothing is planned, or that a free session is built when the day comes), and "Back to today".
   The daily plan's gem bonus is still paid (`hooks/useDailyPlanBonus.ts`) and is drawn nowhere.
+
+**Phase C is built.** The question screen is `pages/Quiz.tsx` and the results
+`pages/Review.tsx`, over `components/session/` (`SessionProgress`, `SessionMoreMenu`,
+`AnswerFeedback`), `lib/sessionProgress.ts`, `lib/sessionSteps.ts`, `lib/similarQuestion.ts`,
+`lib/sessionResults.ts` and `lib/gradeWords.ts`. What was decided while building it:
+
+- **The ceremony** (decided with the maintainer, 2026-11-23): the full-screen
+  `ConceptLevelUpCeremony` plays only for a card collected for the first time (any concept's
+  first move from New to Level 1) or a concept reaching Level 3, and shows only those concepts
+  (`ceremonyMoves`). Every move up is a row under Levelled up.
+- **The overlays** stay overlays in this phase, in the order they had: the ceremony when it
+  plays, the streak, the quests, the visitor's prompt to save, the plan bonus. With no ceremony
+  the streak overlay opens at once.
+- **Answers held to the end** (decided with the maintainer, 2026-11-23): no segment of the bar
+  shows whether an answer was right until the results. An answered question is the text
+  colour, one passed with no answer is the unanswered grey, one not reached is the line
+  colour, and the question on screen is drawn taller. *Change Answer* is offered only in this
+  mode.
+- **The bar's steps:** Today's Start hands the Learn concepts over with the misses
+  (`SessionMistakes.learn`); the quiz builder orders the questions Fix mistakes, Learn, Review
+  (`sessionQuizSteps`) and leaves each question's step in the browser; the quiz page groups the
+  bar by it only when it names exactly the questions drawn (`orderBySteps`). Any other quiz is
+  one run of segments. A written part waiting for its grade is the text colour until graded,
+  and a flagged question carries a dot under its segment.
+- **Try a similar one** (`pickSimilarQuestion`) is offered after an incorrect or partial
+  answer. It queues a question from the same exam's bank that shares a concept with the miss,
+  straight after it and in the same step, and turns to it. The choice, in order: one sharing
+  the miss's first concept, the most concepts shared, one answered the same way, one the
+  reader hasn't seen, the closest difficulty, the fewest other concepts, the lowest id. Never
+  a question already in the quiz, one kept off the syllabus, or one withheld for an open
+  critical finding. When no other question exists the button is not drawn. The queued question
+  counts in the score and the results like any other, and a timed quiz's allowance is not
+  extended.
+- **Leaving:** the cross opens "Leave this quiz?" with Keep going, **Come back later**, Finish
+  quiz (once something is answered) and Quit quiz. Come back later is new: the session screen
+  has no navigation of its own, so it is the way to leave without ending the quiz, and the
+  Return to quiz pill brings the reader back.
+- **No chrome:** the sidebar and the phone's app header are hidden on `/quiz` and `/review` at
+  every width (`isSessionRoute` in `lib/mobileNavHost.ts`).
+- **More** holds Flag question, Question info (with its Fact Check), the spreadsheet for an
+  exam sat with one, Sound, Quiz settings (with the timer), Keyboard shortcuts and **Previous
+  question**. The Back button at the foot is gone; the ← key still goes back, and the bar can
+  be pressed or dragged to another question.
+- **The foot:** Check, then Next (Finish Quiz or Finish Practice Exam on the last question),
+  beside Try a similar one after a miss or Change Answer while answers are held.
+- **Results:** the score counts points with partial credit ("6 of 9", with "points" on a paper
+  whose questions carry unequal points); the counts under the bar are correct always, and
+  incorrect, partial and unanswered when there are any; To fix lists every question short of
+  full credit, and Fix these N starts a quiz on exactly those; the Syllabus bar's gain is
+  measured against the records as they stood before the quiz. A visitor with no account has no
+  Today, so the last button reads "Back to" where the quiz was started.
+- **Removed:** the six header icons, the "Question N of M" dropdown, the Flag, Info and
+  Spreadsheet buttons in the question bar, "Confirm Answer" (now Check), the "Choose any
+  answer to continue" caption and its shortcut, the Fact Check badge under the explanation
+  (it is in Question info); and from the results the percentage, the stats row, the ring and
+  concept coverage card (with its score by difficulty), the pinned score header, the full
+  transcript, New Quiz, Try Again and the back-to-top button. `ExplanationPanel` still draws
+  the answer on surfaces outside the session (the question page).
+- **Until later phases:** Practice's home, setup sheet and search are Phase G; the navigation
+  is Phase F.
 
 For every phase:
 

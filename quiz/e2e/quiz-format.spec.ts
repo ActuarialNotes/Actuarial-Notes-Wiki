@@ -76,7 +76,7 @@ test.describe('quiz setup', () => {
     await page.getByRole('dialog', { name: 'Practice Exam' })
       .getByRole('button', { name: 'Start Practice Exam' }).click()
     await expect(page).toHaveURL(/mode=mock-exam/)
-    await expect(page.getByRole('button', { name: /Quit exam/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Leave the exam' })).toBeVisible()
   })
 
   test("today's plan is shown locked to a reader without Pro", async ({ page }) => {

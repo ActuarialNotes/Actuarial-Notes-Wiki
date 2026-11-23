@@ -1,4 +1,3 @@
-import { CheckMark } from '@/components/CheckMark'
 import { MarkdownText, READING_MD_CLASS } from '@/components/MarkdownText'
 import type { SampleChecklist as SampleChecklistData } from '@/lib/essayChecklist'
 
@@ -6,8 +5,11 @@ import type { SampleChecklist as SampleChecklistData } from '@/lib/essayChecklis
  * One sample answer with a box beside each of its points (lib/essayChecklist.ts):
  * the reader ticks the points their answer makes, reading the examiners' own
  * words as they do. The paragraph naming the other accepted answers gets a
- * box too, for an answer that made one of those instead. Everything else —
- * headings, lead-ins, formulas — reads as the sample does.
+ * box too, for an answer that made one of those instead. Everything else
+ * (headings, lead-ins, formulas) reads as the sample does.
+ *
+ * Each point is a row under a hairline, its box a rounded square: filled with
+ * the text colour once ticked (docs/redesign-spec.md §5.2).
  */
 export function SampleChecklist({
   sample,
@@ -23,17 +25,17 @@ export function SampleChecklist({
 }) {
   let number = 0
   return (
-    <div className="space-y-2">
+    <div>
       {sample.blocks.map((block, i) => {
         if (block.kind === 'text') {
-          return <MarkdownText key={i} className={READING_MD_CLASS}>{block.markdown}</MarkdownText>
+          return <MarkdownText key={i} className={`${READING_MD_CLASS} border-t border-border py-3`}>{block.markdown}</MarkdownText>
         }
         const on = ticked.includes(block.index)
         // The other accepted answers are a box of their own, not a numbered point.
         const what = block.also ? 'other accepted answers' : `point ${++number}`
         const label = name ? `${name}, ${what}` : what.charAt(0).toUpperCase() + what.slice(1)
         return (
-          <div key={i} className="flex items-start gap-3">
+          <div key={i} className="flex items-start gap-3 border-t border-border py-3">
             <button
               type="button"
               role="checkbox"
@@ -41,13 +43,17 @@ export function SampleChecklist({
               aria-label={label}
               onClick={() => onToggle(block.index)}
               className={[
-                '-m-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
+                '-m-2.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               ].join(' ')}
             >
-              {on
-                ? <CheckMark className="h-6 w-6" />
-                : <span aria-hidden="true" className="h-6 w-6 rounded-full border-2 border-muted-foreground/40 transition-colors hover:border-foreground/60" />}
+              {on ? (
+                <span aria-hidden="true" className="flex h-6 w-6 items-center justify-center rounded-[7px] bg-foreground text-ground">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5 9-10" /></svg>
+                </span>
+              ) : (
+                <span aria-hidden="true" className="h-6 w-6 rounded-[7px] border-[1.5px] border-foreground" />
+              )}
             </button>
             <MarkdownText className={`${READING_MD_CLASS} min-w-0 flex-1`}>{block.markdown}</MarkdownText>
           </div>

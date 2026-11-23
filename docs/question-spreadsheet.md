@@ -12,10 +12,11 @@ in that environment is part of preparing for the exam.
 
 ## What the reader sees
 
-- **The Spreadsheet button** in the question bar, beside Flag and Info. It shows only for a question
-  whose exam has a spreadsheet profile (below). It is solid while the sheet is open, and the sheet
-  stays open from question to question until it is closed. It is outlined and labelled at rest, so
-  it reads as a tool rather than one more grey icon.
+- **Open in spreadsheet**, a row of the question screen's **More** menu
+  (`components/session/SessionMoreMenu.tsx`). It shows only for a question whose exam has a
+  spreadsheet profile (below). The sheet stays open from question to question until it is closed,
+  and while it is open the row reads **Close the spreadsheet**. (It was a button in the question
+  bar, beside Flag and Info, until the session was rebuilt on 2026-11-23.)
 - **Use spreadsheet, at the part.** A part that asks for numbers carries the same toggle beside its
   *Part A* label ("Construct an … triangle", "Calculate the indicated rate change"), so the reader
   is shown where the sheet is meant to be used. Which parts is `partWantsSheet` in
@@ -135,7 +136,7 @@ Sources, read 2026-11-08:
 | A formula's references and their colours, and its text out of Fortune-sheet's HTML (pure, tested) | `quiz/src/lib/formulaRefs.ts` |
 | The references outlined on the grid | `quiz/src/components/quiz/FormulaRefBoxes.tsx` |
 | A range `setSelection` can be given safely (tested) | `quiz/src/lib/sheetSelection.ts` |
-| The question bar's toggle | `quiz/src/components/quiz/SpreadsheetButton.tsx` |
+| The toggle: More's row, and the part's **Use spreadsheet** button | `quiz/src/components/session/SessionMoreMenu.tsx`, `SpreadsheetPartButton` in `quiz/src/components/quiz/SpreadsheetButton.tsx` |
 | Insert | `quiz/src/components/quiz/InsertCellButton.tsx`, wired in `QuestionCard.tsx` |
 | Working per question, open/closed | `quizStore.sheets`, `quizStore.sheetOpen` |
 | Where the pane is, the selected cell | `quiz/src/stores/questionSheetStore.ts` |

@@ -1,15 +1,16 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
+import { Loader2, X, AlertCircle } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
-import { ProgressBar } from '@/components/ProgressBar'
-import { ExamLogo } from '@/components/ExamLogo'
+import { SessionProgress } from '@/components/session/SessionProgress'
+import { SessionMoreMenu } from '@/components/session/SessionMoreMenu'
+import { GROUND } from '@/components/ui/OutlineCard'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { QuizSignInPrompt } from '@/components/QuizSignInPrompt'
@@ -17,7 +18,6 @@ import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { SelfGradeScreen } from '@/components/SelfGradeScreen'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
-import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizConcepts } from '@/components/PreQuizConcepts'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -34,7 +34,7 @@ import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
 import { DIFFICULTY_LEVELS, difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
-import { QuizSettingsButton, QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
+import { QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
 import { moveScreen, REPLACE_AS_PUSH } from '@/lib/viewTransition'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
@@ -46,15 +46,27 @@ import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
 import { LoadingMark } from '@/components/LoadingMark'
-import { SpreadsheetButton } from '@/components/quiz/SpreadsheetButton'
 import { spreadsheetProfileFor } from '@/data/examSpreadsheets'
 import { examAccentStyle } from '@/lib/examColors'
 import { lazyRoute } from '@/lib/lazyRoute'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
+import { progressLabel, segmentGroups, sessionSegments } from '@/lib/sessionProgress'
+import { orderBySteps, readQuizSteps } from '@/lib/sessionSteps'
+import { useSimilarQuestion } from '@/hooks/useSimilarQuestion'
+import { cn } from '@/lib/utils'
 
 // Open in Spreadsheet (docs/question-spreadsheet.md): Fortune-sheet is the
 // heaviest thing the quiz can show, so the pane is its own chunk.
 const { Component: QuestionSheet } = lazyRoute(() => import('@/components/quiz/QuestionSheet'))
+
+// Question info opens from More, and with the Fact Check sheet behind it, it
+// is too much to send every reader before the first question.
+const QuestionInfoDialog = lazy(() =>
+  import('@/components/QuestionInfoDialog').then(m => ({ default: m.QuestionInfoDialog })),
+)
+
+// The words on the session's two foot buttons.
+const FOOT_BUTTON = 'min-w-0 flex-1 px-4 text-[17px]'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -151,6 +163,8 @@ export default function Quiz() {
     completeQuiz,
     resetQuiz,
     leaveQuiz,
+    queueQuestion,
+    steps,
     timer,
     startTimer,
     pending,
@@ -205,7 +219,11 @@ export default function Quiz() {
   // Start the quiz once questions load — guard prevents re-triggering on re-renders
   useEffect(() => {
     if (!loading && questions.length > 0 && status === 'idle' && !leavingRef.current) {
-      startQuiz(questions, mode, search)
+      // Today's session asks its questions step by step (Fix mistakes, Learn,
+      // Review); the steps were left by the launch (lib/sessionSteps.ts) and
+      // apply only when they name exactly these questions.
+      const stepped = orderBySteps(questions, readQuizSteps())
+      startQuiz(stepped?.questions ?? questions, mode, search, stepped?.steps ?? null)
       const exam = questions[0]?.exam ?? 'Unknown'
       trackQuizStarted({ mode, exam, question_count: questions.length })
       trackFirstQuiz({ mode, exam })
@@ -235,6 +253,8 @@ export default function Quiz() {
   const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  // "More": flag, question info, sound and the quiz's settings.
+  const [showMore, setShowMore] = useState(false)
   // Where the current question came from — its sitting and its vault file.
   const [showQuestionInfo, setShowQuestionInfo] = useState(false)
 
@@ -408,7 +428,7 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showSettings || showQuestionInfo || gradePrompt !== null
+  const anyDialogOpen = showMore || showSignInPrompt || showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showSettings || showQuestionInfo || gradePrompt !== null
 
   // Per-part grades for a multi-part question, read back from the store keyed
   // by part label (the store keys them as `${id}__${label}`).
@@ -455,6 +475,13 @@ export default function Quiz() {
   function handleQuit() {
     leavingRef.current = true
     leaveQuiz()
+    back.go()
+  }
+
+  // Out of the quiz with it kept open: the Return to quiz pill brings the
+  // reader back to this question (lib/quizResume.ts).
+  function handleComeBackLater() {
+    setShowQuitDialog(false)
     back.go()
   }
 
@@ -537,6 +564,31 @@ export default function Quiz() {
   // go. That is a choice, not a property of the mode: a practice exam run for
   // feedback reveals too, and a quiz run as a dry run holds everything back.
   const showExplanation = isLocked && reveal === 'during'
+
+  // The progress bar: one segment per question, in its answer's colour while
+  // answers show as the quiz goes (lib/sessionProgress.ts).
+  const segments = useMemo(
+    () => sessionSegments({ questions: storeQuestions, responses, manualGrades, currentIndex, revealed: reveal === 'during' }),
+    [storeQuestions, responses, manualGrades, currentIndex, reveal],
+  )
+  const groups = useMemo(() => segmentGroups(storeQuestions.length, steps), [storeQuestions.length, steps])
+  const flaggedIndexes = useMemo(
+    () => new Set(storeQuestions.flatMap((q, i) => (flaggedIds.includes(q.id) ? [i] : []))),
+    [storeQuestions, flaggedIds],
+  )
+
+  // After a miss, another question on the same concept to queue next
+  // (lib/similarQuestion.ts). None to offer: no button.
+  const currentState = segments[currentIndex]?.state
+  const missed = showExplanation && (currentState === 'incorrect' || currentState === 'partial')
+  const quizIds = useMemo(() => storeQuestions.map(q => q.id), [storeQuestions])
+  const similar = useSimilarQuestion(missed ? (currentQuestion ?? null) : null, quizIds)
+
+  function handleTrySimilar() {
+    if (!similar) return
+    queueQuestion(similar)
+    moveScreen('turn', advanceQuestion)
+  }
 
   async function submitQuiz() {
     if (isSubmitting) return
@@ -641,6 +693,7 @@ export default function Quiz() {
   }
 
   const isFlagged = flaggedIds.includes(currentQuestion.id)
+  const finishLabel = `Finish ${mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}`
 
   // ── Self-grading screen (reveal='end' with written questions) ────────────
   if (showSelfGradeScreen) {
@@ -672,83 +725,79 @@ export default function Quiz() {
   // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet offers.
   const sheetProfile = spreadsheetProfileFor(examLogoKey)
 
+  const examWord = mode === 'mock-exam' ? 'exam' : 'quiz'
+
   return (
     <>
-    <div className="question-sheet-host">
+    <div className={cn(GROUND, 'question-sheet-host min-h-dvh')}>
     <div
-      className="container max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5"
+      className="mx-auto flex min-h-dvh w-full max-w-[680px] flex-col px-5 pb-6 pt-3"
       // Below lg the concept popup docks as a bottom sheet; keep the question
       // and its buttons scrollable out from under it, as the study guide does.
       style={conceptPopupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
-      <div className="flex items-center justify-between gap-3">
-        <Button
-          variant="ghost"
+      {/* One row above the question: leave, the progress bar, more
+          (docs/redesign-spec.md §5.1). */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
           data-tour="quit-quiz"
           onClick={() => setShowQuitDialog(true)}
-          className="-ml-3 h-11 px-3 text-base text-muted-foreground hover:text-foreground"
+          aria-label={`Leave the ${examWord}`}
+          className="-ml-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <X className="h-5 w-5 mr-1.5" />
-          {/* On a phone the word after Quit gives its room to the settings. */}
-          Quit <span className="sr-only sm:not-sr-only sm:ml-1">{mode === 'mock-exam' ? 'exam' : 'quiz'}</span>
-        </Button>
-
-        <div className="flex min-w-0 items-center gap-2">
-          <QuizSettingsButton settings={quizSettings} open={showSettings} onOpenChange={setShowSettings} />
-          {examLogoKey && <ExamLogo examKey={examLogoKey} size="sm" />}
-          {timer !== null && (
-            <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
-          )}
-          <Button
-            variant="ghost"
-            size="icon"
-            data-sound="none"
-            onClick={() => { toggleSound(); playSound('toggleOn') }}
-            aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
-            className="h-11 w-11 -mr-2 text-muted-foreground hover:text-foreground sm:mr-0"
-          >
-            {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowShortcutsHelp(true)}
-            aria-label="Keyboard shortcuts"
-            title="Keyboard shortcuts (?)"
-            className="h-11 w-11 text-muted-foreground hover:text-foreground hidden sm:flex"
-          >
-            <Keyboard className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-
-      <div className="pb-2">
-        <ProgressBar
-          current={currentIndex + 1}
-          total={storeQuestions.length}
-          onNavigate={goToQuestion}
-          flaggedIds={flaggedIds}
-          questionIds={storeQuestions.map(q => q.id)}
-          isFlagged={isFlagged}
-          onFlag={() => toggleFlag(currentQuestion.id)}
-          info={
-            <>
-            {sheetProfile && (
-              <SpreadsheetButton open={sheetOpen} onToggle={() => setSheetOpen(!sheetOpen)} />
-            )}
-            <QuestionInfoButton
-              question={currentQuestion}
-              open={showQuestionInfo}
-              onOpenChange={setShowQuestionInfo}
-              // Topic and difficulty are a hint while the question is live, so
-              // they only join the panel once the answer is committed.
-              showStudyMeta={isLocked}
-              onOpenConcept={openTaggedConcept}
-            />
-            </>
-          }
+          <X aria-hidden="true" strokeWidth={2.5} className="h-[22px] w-[22px]" />
+        </button>
+        <SessionProgress
+          segments={segments}
+          groups={groups}
+          label={progressLabel(currentIndex, storeQuestions.length, steps)}
+          markCurrent={reveal === 'end'}
+          flagged={flaggedIndexes}
+          onJump={goToQuestion}
         />
+        {timer !== null && (
+          <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} plain />
+        )}
+        <button
+          type="button"
+          onClick={() => setShowMore(true)}
+          aria-label="More"
+          aria-haspopup="dialog"
+          aria-expanded={showMore}
+          className="-mr-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>
+        </button>
       </div>
+
+      {showMore && (
+        <SessionMoreMenu
+          onClose={() => setShowMore(false)}
+          flagged={isFlagged}
+          onFlag={() => toggleFlag(currentQuestion.id)}
+          onInfo={() => setShowQuestionInfo(true)}
+          spreadsheet={sheetProfile ? { open: sheetOpen, onToggle: () => setSheetOpen(!sheetOpen) } : undefined}
+          soundOn={soundEnabled}
+          onSound={() => { toggleSound(); playSound('toggleOn') }}
+          onSettings={() => setShowSettings(true)}
+          onShortcuts={() => setShowShortcutsHelp(true)}
+          onPrevious={currentIndex > 0 ? goToPreviousQuestion : undefined}
+        />
+      )}
+
+      {showQuestionInfo && (
+        <Suspense fallback={null}>
+          <QuestionInfoDialog
+            question={currentQuestion}
+            // Topic and difficulty are a hint while the question is live, so
+            // they only join the panel once the answer is committed.
+            showStudyMeta={isLocked}
+            onOpenConcept={openTaggedConcept}
+            onClose={() => setShowQuestionInfo(false)}
+          />
+        </Suspense>
+      )}
 
       {showSignInPrompt && (
         <QuizSignInPrompt
@@ -771,6 +820,7 @@ export default function Quiz() {
           mode={mode}
           onCancel={() => setShowQuitDialog(false)}
           onConfirm={handleQuit}
+          onLater={handleComeBackLater}
           onFinish={Object.keys(responses).length > 0 ? submitQuiz : undefined}
         />
       )}
@@ -794,7 +844,7 @@ export default function Quiz() {
           questionId={currentQuestion.id}
           questionStem={currentQuestion.stem}
           isOnlyPart={(currentQuestion.parts ?? []).length === 1}
-          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}` : 'Next Question'}
+          continueLabel={isLastQuestion ? finishLabel : 'Next'}
           onContinue={() => {
             setGradePrompt(null)
             moveOn()
@@ -815,7 +865,7 @@ export default function Quiz() {
       {/* The question has no card of its own — it lies on the page — but the
           sheet still carries the page's colour, so while Next flicks it off the
           pile the outgoing question covers the one rising beneath it. */}
-      <div ref={cardRef} className="paper-sheet mt-4 bg-background" onClick={handleMentionClick}>
+      <div ref={cardRef} className="paper-sheet mt-6 bg-ground" onClick={handleMentionClick}>
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it
@@ -826,7 +876,8 @@ export default function Quiz() {
           onAnswer={handleSelectAnswer}
           showExplanation={showExplanation}
           isLocked={isLocked}
-          onNext={isLocked ? handleNextFromAnswer : undefined}
+          feedback
+          onOpenConcept={openTaggedConcept}
           selfGrade={currentQuestion.type === 'free-entry' ? manualGrades[currentQuestion.id] : undefined}
           onSelfGrade={currentQuestion.type === 'free-entry' ? (grade) => setManualGrade(currentQuestion.id, grade) : undefined}
           // Multi-part grades (both graded free-entry parts and answerless essay
@@ -843,73 +894,49 @@ export default function Quiz() {
       </div>
 
       {submitError && (
-        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-3">
-          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+        <div role="alert" className="mt-5 flex items-center gap-2 rounded-[14px] border-[1.5px] border-answer-incorrect px-4 py-3 text-base">
+          <AlertCircle className="h-5 w-5 flex-shrink-0 text-answer-incorrect" />
           {submitError}
         </div>
       )}
 
-      {(currentIndex > 0 || status === 'reviewing' || showConfirmButton) && (
-        <div className="flex flex-wrap justify-between items-center gap-2">
-          <div>
-            {currentIndex > 0 && (
-              <Button variant="outline" size="lg" onClick={goToPreviousQuestion}>
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Back
-              </Button>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            {showConfirmButton && (
-              <Button
-                onClick={handleConfirmAnswer}
-                size="lg"
-                data-tour="confirm-answer"
-                className="bg-foreground text-background hover:bg-foreground/90"
-              >
-                Confirm Answer
-              </Button>
-            )}
-
-            {isLocked && (
-              <>
-                {/* Once the answer and its solution are on screen there is
-                    nothing left to change it to (design review D-DR4). With
-                    answers held to the end, the choice is still the reader's. */}
-                {!showExplanation && (
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={handleChangeAnswer}
-                  >
-                    Change Answer
-                  </Button>
-                )}
-                {isLastQuestion ? (
-                  <Button
-                    onClick={handleNextFromAnswer}
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="bg-foreground text-background hover:bg-foreground/90"
-                  >
-                    {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                    Finish {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleNextFromAnswer}
-                    size="lg"
-                    className="bg-foreground text-background hover:bg-foreground/90"
-                  >
-                    Next Question →
-                  </Button>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* The foot: one filled button. Check before the answer is in; after it,
+          Next, beside Try a similar one after a miss, or Change Answer while
+          answers are held to the end (design review D-DR4). */}
+      <div className="mt-auto flex gap-2.5 pt-8">
+        {!isLocked && (
+          <Button
+            onClick={handleConfirmAnswer}
+            size="main"
+            disabled={!showConfirmButton}
+            data-tour="confirm-answer"
+            className="w-full"
+          >
+            Check
+          </Button>
+        )}
+        {isLocked && showExplanation && missed && similar && (
+          <Button variant="edge" size="main" onClick={handleTrySimilar} className={FOOT_BUTTON}>
+            Try a similar one
+          </Button>
+        )}
+        {isLocked && !showExplanation && (
+          <Button variant="edge" size="main" onClick={handleChangeAnswer} className={FOOT_BUTTON}>
+            Change Answer
+          </Button>
+        )}
+        {isLocked && (
+          <Button
+            onClick={handleNextFromAnswer}
+            size="main"
+            disabled={isLastQuestion && isSubmitting}
+            className={FOOT_BUTTON}
+          >
+            {isLastQuestion && isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : null}
+            {isLastQuestion ? finishLabel : 'Next'}
+          </Button>
+        )}
+      </div>
     </div>
     </div>
     {sheetOpen && sheetProfile && (

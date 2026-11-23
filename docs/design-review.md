@@ -509,11 +509,18 @@ tool.
 answer-state colours, the outline card and tile, the outlined control and main action, and the
 popup (`docs/style-guide.md` §13). **Phase B (Today) was built the same day**: the
 session sized by time and free to every account, the Syllabus and Analytics tiles, the session
-length sheet and the Analytics overlay (`docs/redesign-spec.md` §8). Phases C to F are not built.
+length sheet and the Analytics overlay (`docs/redesign-spec.md` §8). **Phase C (the session)
+was built the same day**: one row above the question (leave, the progress bar, the timer, More),
+Check and Next at the foot, feedback that folds the question and leads with the two answers,
+**Try a similar one** after a miss, the written part graded Full / Partial / None, and results
+that run score, bar, To fix with **Fix these N**, Levelled up, the right answers folded, Back to
+Today. The full-screen level-up ceremony now plays only for a card collected for the first time
+or a concept reaching Level 3. It answers F8 (the question shared its screen with the quiz's
+settings) and F10 (the results were a transcript).
+Phases D to F are not built.
 
-Left from Phase 0 for Phase 4, where the quiz header is rebuilt: the "Choose any answer to
-continue" caption, which describes a real shortcut (a tap on any option moves on) and can't
-go until the shortcut does.
+The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
+the shortcut it described (a tap on any option moved on).
 
 ### How to tell whether it worked
 

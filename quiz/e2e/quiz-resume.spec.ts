@@ -23,11 +23,17 @@ test.describe('quiz in progress', () => {
   test('follows the reader around the app and returns them to where they were', async ({ page }) => {
     await openQuiz(page)
     await page.getByRole('button', { name: 'Option A' }).click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
-    await expect(page.getByRole('button', { name: /Next Question/ })).toBeVisible()
+    await page.getByRole('button', { name: 'Check' }).click()
+    await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible()
     // Not on the quiz itself — the quiz page has its own header.
     await expect(pill(page)).toHaveCount(0)
 
+    // The session screen has no navigation of its own: the leave cross's
+    // "Come back later" is the way out that keeps the quiz open.
+    await page.getByRole('button', { name: 'Leave the quiz' }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Come back later' }).click()
+    await page.waitForURL(url => url.pathname === '/')
+    await expect(pill(page)).toBeVisible()
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
     await page.waitForURL('**/wiki')
 
@@ -51,7 +57,7 @@ test.describe('quiz in progress', () => {
     // again, the answer is still locked in, and the clock carried on.
     await expect(page).toHaveURL(/\/quiz\?ids=p-004,p-005&timed=1$/)
     await expect(page.getByRole('button', { name: 'Start Quiz' })).toHaveCount(0)
-    await expect(page.getByRole('button', { name: /Next Question/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible()
     await expect(page.getByRole('timer')).toBeVisible()
     await expect(pill(page)).toHaveCount(0)
   })
@@ -59,8 +65,13 @@ test.describe('quiz in progress', () => {
   test('Leave discards the quiz', async ({ page }) => {
     await openQuiz(page)
     await page.getByRole('button', { name: 'Option A' }).click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
 
+    // The session screen has no navigation of its own: the leave cross's
+    // "Come back later" is the way out that keeps the quiz open.
+    await page.getByRole('button', { name: 'Leave the quiz' }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Come back later' }).click()
+    await page.waitForURL(url => url.pathname === '/')
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
     await page.waitForURL('**/wiki')
     await pill(page).click()
@@ -69,7 +80,7 @@ test.describe('quiz in progress', () => {
 
     // Opening the same quiz again draws it afresh: nothing is answered.
     await openQuiz(page)
-    await expect(page.getByRole('button', { name: /Next Question/ })).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Next', exact: true })).toHaveCount(0)
   })
 
   // Quit leads back to where the quiz was started — here, Exam P's builder,
@@ -88,7 +99,7 @@ test.describe('quiz in progress', () => {
     await expect(startQuiz.or(optionA).first()).toBeVisible()
     if (await startQuiz.isVisible()) await startQuiz.click()
     await expect(optionA).toBeVisible()
-    await page.getByRole('button', { name: /Quit quiz/ }).click()
+    await page.getByRole('button', { name: 'Leave the quiz' }).click()
     await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
     await page.waitForURL(url => url.pathname === '/' && url.searchParams.has('topic'))
     await expect(changeExam).toBeVisible()
@@ -103,7 +114,7 @@ test.describe('quiz in progress', () => {
 
     test('quitting from the quiz leaves no pill behind', async ({ page }) => {
       await openQuiz(page)
-      await page.getByRole('button', { name: /Quit quiz/ }).click()
+      await page.getByRole('button', { name: 'Leave the quiz' }).click()
       await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
       await page.waitForURL(url => url.pathname === '/')
       await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()

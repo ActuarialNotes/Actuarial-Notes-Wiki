@@ -235,10 +235,13 @@ Where the way in sits depends on the surface:
   `/wiki/resource/…` pages, which have no action menu, keep the badge in the
   title row.
 - **Questions** — two ways in, because a question is met at two moments. The
-  badge on the explanation panel catches the student who has just disagreed with
+  badge on the explanation panel (`ExplanationPanel`, on the question page and the
+  other surfaces outside a quiz; a quiz's own feedback no longer carries it)
+  catches the student who has just disagreed with
   a question and is already looking at the discrepancy; the **question info**
-  sheet (`components/QuestionInfoButton.tsx`, the *Info* button in the quiz's
-  question bar) carries the same verdict as a row beside the paper the question
+  sheet (`components/QuestionInfoDialog.tsx`; in a quiz, **Question info** in the
+  question screen's More menu, and the *Info* button on a question list's row)
+  carries the same verdict as a row beside the paper the question
   was sat on and the file it is authored in, and is reachable while the question
   is still live. Provenance and "has anyone checked this?" are the same question
   asked twice, so they answer in the same place. The row opens the same

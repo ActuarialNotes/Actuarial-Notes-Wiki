@@ -23,7 +23,7 @@ test.describe('quiz', () => {
     await expect(optionA).toBeVisible()
     await optionA.click()
 
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
 
     // Answer is now locked and revealed — the explanation panel shows and the
     // finish action appears (single-question quiz).
@@ -33,7 +33,8 @@ test.describe('quiz', () => {
 
     // Completing the quiz navigates to the review/results screen.
     await expect(page).toHaveURL(/\/review/)
-    await expect(page.getByRole('heading', { name: 'Question Review' })).toBeVisible()
+    // The results lead with the score as one figure.
+    await expect(page.getByRole('heading', { name: '1 of 1' })).toBeVisible()
   })
 })
 
@@ -56,17 +57,17 @@ test.describe('open-answer carryover', () => {
     await expect(partAInput).toBeVisible()
     await partAInput.fill('Test')
 
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     // Only part a was filled, so the incomplete-parts guard asks first.
     await page.getByRole('button', { name: 'Submit Anyway' }).click()
 
-    // "Test" is wrong, so the part offers self-grading — take full credit.
-    const fullCredit = page.getByRole('button', { name: /Full credit/ }).first()
+    // "Test" is wrong, so the part offers self-grading: take Full.
+    const fullCredit = page.getByRole('button', { name: /^Full/ }).first()
     await expect(fullCredit).toBeVisible()
     await fullCredit.click()
     await expect(fullCredit).toHaveAttribute('aria-pressed', 'true')
 
-    await page.getByRole('button', { name: 'Next Question →' }).click()
+    await page.getByRole('button', { name: 'Next', exact: true }).click()
     // Both questions have written parts still ungraded, so moving on asks for
     // their grades first — skip them; this test is about what carries over.
     await page.getByRole('dialog').getByRole('button', { name: 'Skip grading' }).click()
@@ -76,18 +77,16 @@ test.describe('open-answer carryover', () => {
     const nextPartAInput = page.getByPlaceholder('Enter your answer…').first()
     await expect(nextPartAInput).toBeVisible()
     await expect(nextPartAInput).toHaveValue('')
-    await expect(page.getByRole('button', { name: /Full credit/ })).toHaveCount(0)
-    await expect(page.getByText('How did you do on this part?')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /^Full/ })).toHaveCount(0)
 
     // …and once this question is answered, its part starts ungraded rather than
     // wearing the grade given to the previous question's part a.
     await nextPartAInput.fill('Wrong')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     await page.getByRole('button', { name: 'Submit Anyway' }).click()
-    const nextFullCredit = page.getByRole('button', { name: /Full credit/ }).first()
+    const nextFullCredit = page.getByRole('button', { name: /^Full/ }).first()
     await expect(nextFullCredit).toBeVisible()
     await expect(nextFullCredit).toHaveAttribute('aria-pressed', 'false')
-    await expect(page.getByText('✓ Correct')).toHaveCount(0)
   })
 })
 
@@ -106,14 +105,17 @@ test.describe('written-answer grading', () => {
     }
 
     await response.fill('More competition lowers rates.')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
 
-    // The sample answer is one panel holding a card per sample; the
-    // examiner's report is a card of its own.
+    // The sample answer is one section holding a card per sample.
     const samples = page.getByRole('region', { name: 'Sample answer' })
     await expect(samples.getByRole('listitem', { name: /^Sample \d+ of \d+$/ })).toHaveCount(4)
     await expect(samples.getByRole('listitem', { name: 'Sample 2 of 4' })).toContainText('Foreign parent failure')
-    await expect(page.getByRole('region', { name: "Examiner's report" })).toContainText('open ended nature')
+    // The examiner's report is folded in a row under the sample; it opens on a tap.
+    const report = page.getByRole('region', { name: "Examiner's report" })
+    await expect(report).not.toContainText('open ended nature')
+    await report.getByRole('button', { name: "Examiner's report" }).click()
+    await expect(report).toContainText('open ended nature')
 
     // Finishing without a grade: the popup holds the move until one is given.
     const finish = page.getByRole('button', { name: 'Finish Quiz' })
@@ -135,24 +137,6 @@ test.describe('written-answer grading', () => {
   })
 })
 
-// The results screen scores the quiz by difficulty, and says so when every
-// question was right and hard (lib/difficultyBreakdown.ts) — a reader with a
-// perfect quiz shouldn't have to open each question to learn it wasn't a fluke.
-test.describe('score by difficulty', () => {
-  test('a perfect quiz of hard questions says they were hard', async ({ page }) => {
-    await page.goto('/quiz?ids=p-027')
-    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
-    const optionA = page.getByRole('button', { name: 'Option A' })
-    await expect(startQuiz.or(optionA).first()).toBeVisible()
-    if (await startQuiz.isVisible()) await startQuiz.click()
-    await optionA.click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
-    await page.getByRole('button', { name: /Finish Quiz/i }).click()
-    await expect(page).toHaveURL(/\/review/)
-    await expect(page.getByText('It was rated Hard.')).toBeVisible()
-  })
-})
-
 // A guest's first finished quiz asks them to save it (lib/guestSavePrompt.ts) —
 // once: after "Not now" the next quiz goes straight to its results.
 test.describe('guest save prompt', () => {
@@ -163,7 +147,7 @@ test.describe('guest save prompt', () => {
     await expect(startQuiz.or(optionA).first()).toBeVisible()
     if (await startQuiz.isVisible()) await startQuiz.click()
     await optionA.click()
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     await page.getByRole('button', { name: /Finish Quiz/i }).click()
     await expect(page).toHaveURL(/\/review/)
   }
@@ -188,7 +172,7 @@ test.describe('guest save prompt', () => {
     await expect(prompt).toHaveCount(0)
 
     await finishOne(page)
-    await expect(page.getByRole('heading', { name: 'Question Review' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: '1 of 1' })).toBeVisible()
     await page.waitForTimeout(1500)
     await expect(prompt).toHaveCount(0)
   })
@@ -217,17 +201,17 @@ test.describe('suggested grade', () => {
     if (await startQuiz.isVisible()) await startQuiz.click()
 
     await input.fill('17,736')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
 
     const suggestion = page.getByRole('note', { name: 'Suggested grade' })
     await expect(suggestion).toHaveCount(1)
     await expect(suggestion).toContainText('Suggested grade: Full credit')
     await expect(suggestion).toContainText('Your final figure, 17,736, matches the answer, 17,735.')
     // Suggested, not given.
-    await expect(page.getByRole('button', { name: /Full credit \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.getByRole('button', { name: /^Full \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
 
-    await page.getByRole('button', { name: /Full credit \(suggested\)/ }).click()
-    await expect(page.getByRole('button', { name: /Full credit/ }).first()).toHaveAttribute('aria-pressed', 'true')
+    await page.getByRole('button', { name: /^Full \(suggested\)/ }).click()
+    await expect(page.getByRole('button', { name: /^Full/ }).first()).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('suggests it in the grading popup, from where the sample answer ends', async ({ page }) => {
@@ -240,15 +224,15 @@ test.describe('suggested grade', () => {
     if (await startQuiz.isVisible()) await startQuiz.click()
 
     await response.fill('BF IBNR = 7,720\nBenktander IBNR = 8,761')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     await page.getByRole('button', { name: /Finish Quiz/ }).click()
 
     const dialog = page.getByRole('dialog')
     const note = dialog.getByRole('note', { name: 'Suggested grade' })
     await expect(note).toHaveCount(1)
     await expect(note).toContainText("Your final figure, 8,761, matches the sample answer's, 8,764.44.")
-    await dialog.getByRole('button', { name: /Full credit \(suggested\)/ }).click()
-    await expect(dialog.getByRole('button', { name: /Full credit/ }).first()).toHaveAttribute('aria-pressed', 'true')
+    await dialog.getByRole('button', { name: /^Full \(suggested\)/ }).click()
+    await expect(dialog.getByRole('button', { name: /^Full/ }).first()).toHaveAttribute('aria-pressed', 'true')
   })
 })
 
@@ -265,12 +249,13 @@ test.describe('essay checklist', () => {
     if (await startQuiz.isVisible()) await startQuiz.click()
 
     await response.fill('Retention will drop as people shop around.')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     const submitAnyway = page.getByRole('button', { name: 'Submit Anyway' })
     if (await submitAnyway.isVisible()) await submitAnyway.click()
 
     const sample = page.getByRole('region', { name: 'Sample answer' }).first()
-    await expect(sample.getByText('Tick each point your answer makes.')).toBeVisible()
+    // The heading says how many of the sample's points the part asks for.
+    await expect(sample.getByRole('heading', { name: /Sample answer/ })).toBeVisible()
     // No ticks, no suggestion.
     await expect(page.getByRole('note', { name: 'Suggested grade' })).toHaveCount(0)
 
@@ -287,7 +272,7 @@ test.describe('essay checklist', () => {
     await page.getByRole('button', { name: /Finish Quiz/ }).click()
     const dialog = page.getByRole('dialog')
     await expect(dialog.getByRole('note', { name: 'Suggested grade' })).toContainText('Full credit')
-    await expect(dialog.getByRole('button', { name: /Full credit \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
+    await expect(dialog.getByRole('button', { name: /^Full \(suggested\)/ })).toHaveAttribute('aria-pressed', 'false')
   })
 })
 
@@ -303,12 +288,11 @@ test.describe('examiner rubric', () => {
     if (await startQuiz.isVisible()) await startQuiz.click()
 
     await response.fill('Proportional, practical, historical precedence. Keep boat-years.')
-    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: 'Check' }).click()
     const submitAnyway = page.getByRole('button', { name: 'Submit Anyway' })
     if (await submitAnyway.isVisible()) await submitAnyway.click()
 
     const report = page.getByRole('region', { name: "Examiner's report" }).first()
-    await expect(report.getByText('Tick each point your answer makes.')).toBeVisible()
     await expect(report.getByRole('checkbox')).toHaveCount(3)
     // The sample answer reads as written, with no boxes of its own.
     await expect(page.getByRole('region', { name: 'Sample answer' }).first().getByRole('checkbox')).toHaveCount(0)

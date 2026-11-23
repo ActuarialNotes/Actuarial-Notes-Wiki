@@ -2569,3 +2569,21 @@ summary .katex-display,
   .loading-mark { animation-duration: 0s }
   .loading-mark-grid > span { animation: none; opacity: 0.5 }
 }
+
+/* The session's solution (components/session/AnswerFeedback.tsx,
+   docs/redesign-spec.md §5.2): each display formula in an outlined box that
+   scrolls sideways, on the page's own ground. */
+.session-solution .katex-display {
+  margin: 0.875rem 0;
+  padding: 0.875rem 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+}
+.session-solution .session-formula {
+  display: block;
+  white-space: nowrap;
+}
+.session-solution .session-formula + br,
+.session-solution br:has(+ .session-formula) {
+  display: none;
+}

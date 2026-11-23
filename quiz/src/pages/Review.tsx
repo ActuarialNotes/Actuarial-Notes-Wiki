@@ -1,21 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, ChevronDown, ChevronLeft, LayoutDashboard, X, XCircle } from 'lucide-react'
-import { backLabel as backName, useBack } from '@/hooks/useBack'
-import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ChevronDown, ChevronRight, Loader2, X } from 'lucide-react'
+import { useBack } from '@/hooks/useBack'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
 import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
-import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
-import { effectiveOutcome, formatScore, isUnanswered, quizPoints, scoreColorClass, scoredQuestions, skipsUnanswered } from '@/lib/quizScore'
+import { AnswerDot } from '@/components/AnswerDot'
+import { LevelSquare } from '@/components/LevelSquare'
+import { ResultsBar } from '@/components/session/SessionProgress'
+import { GainMark, SyllabusBar } from '@/components/today/TodayTiles'
+import { GROUND } from '@/components/ui/OutlineCard'
+import { formatScore, quizPoints, scoredQuestions } from '@/lib/quizScore'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
-import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
+import { buildMasteryLookup, resolveConceptState, slugForLink } from '@/lib/conceptMatch'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
 import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
@@ -28,6 +31,25 @@ import { getDailyGems } from '@/lib/dailyProgressStore'
 import { useGems } from '@/hooks/useGems'
 import { GuestSavePrompt } from '@/components/GuestSavePrompt'
 import { markGuestSavePromptAsked, readGuestSavePromptAsked, shouldAskGuestToSave } from '@/lib/guestSavePrompt'
+import { ANSWER_LABEL } from '@/lib/answerState'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
+import { syllabusForBank } from '@/lib/practiceExam'
+import { computeExamReadiness } from '@/lib/readiness'
+import { answerCounts, countsLabel, finalSegments, partGradesOf, segmentGroups } from '@/lib/sessionProgress'
+import {
+  ceremonyMoves,
+  conceptName,
+  levelledUp,
+  recordsBefore,
+  resultRows,
+  syllabusGain,
+  timeTaken,
+  toFix,
+  type FixRow,
+} from '@/lib/sessionResults'
+import type { Question } from '@/lib/parser'
+import { wikiRoute } from '@/lib/wikiRoutes'
+import { cn } from '@/lib/utils'
 
 // Shared "quiz these exact questions" seam (same key RecentMistakesCard and
 // MasteryAnalyticsCard write) — keeps the retry URL small for a long miss list.
@@ -69,6 +91,10 @@ function PostQuizCelebrations({ streakEligible, onDone }: { streakEligible: bool
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
+// The results (docs/redesign-spec.md §5.3, canvas `Results`), top to bottom:
+// the score as one figure and the time, the bar in its final colours with its
+// counts, what to fix with the one filled button, what levelled up with the
+// syllabus gain, the right answers folded, and the way back to Today.
 export default function Review() {
   const navigate = useNavigate()
   const back = useBack({ to: '/', label: 'Quiz' }, { skip: path => path.split(/[?#]/)[0] === '/quiz' })
@@ -77,58 +103,20 @@ export default function Review() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { balance: gemBalance, loading: gemsLoading } = useGems()
   const { resetQuiz } = useQuizStore()
+  const { syllabi } = useWikiSyllabus()
+  const openConceptAt = useConceptPopup(s => s.openAt)
   const [session, setSession] = useState<CompletedSession | null>(null)
   // Gates the streak/quest/plan celebrations until the level-up ceremony (if any)
   // has been dismissed, so they play one after another rather than stacking.
   const [levelUpsDone, setLevelUpsDone] = useState(false)
-  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
-  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
-  // The questions answered right, unfolded (they start folded when any were missed).
+  // The row whose solution is open, by question id.
+  const [openRow, setOpenRow] = useState<string | null>(null)
+  // The questions answered right, unfolded.
   const [showRight, setShowRight] = useState(false)
-  const [showBackToTop, setShowBackToTop] = useState(false)
-  const [actionsPinned, setActionsPinned] = useState(false)
-  const questionReviewRef = useRef<HTMLDivElement>(null)
-  const actionsRowRef = useRef<HTMLDivElement>(null)
-  const pinnedHeaderRef = useRef<HTMLDivElement>(null)
   const syncingRef = useRef(false)
   // The guest save prompt — asked once, after the celebrations have played.
   const [celebrationsDone, setCelebrationsDone] = useState(false)
   const [guestSaveAsked, setGuestSaveAsked] = useState(() => readGuestSavePromptAsked())
-
-  useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 400)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Reveal the pinned header once the full-size actions row (Go to Dashboard /
-  // Review Incorrect) has scrolled up behind the sticky line — same measurement
-  // the Dashboard uses for its compact actions. The threshold comes from the
-  // pinned header's own wrapper, which is zero-height and always mounted, so it
-  // reads the real sticky offset at every breakpoint and the bar fading in
-  // can't move the threshold and make the state flicker.
-  useEffect(() => {
-    let raf = 0
-    const measure = () => {
-      raf = 0
-      const actions = actionsRowRef.current
-      const anchor = pinnedHeaderRef.current
-      if (!actions || !anchor) {
-        setActionsPinned(false)
-        return
-      }
-      setActionsPinned(actions.getBoundingClientRect().bottom < anchor.getBoundingClientRect().top)
-    }
-    const schedule = () => { if (!raf) raf = requestAnimationFrame(measure) }
-    measure()
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    return () => {
-      if (raf) cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
-    }
-  }, [session])
 
   useEffect(() => {
     const last = readLastSession()
@@ -210,95 +198,64 @@ export default function Review() {
     } catch { /* ignore */ }
   }, [planJustCompleted, progressKey])
 
-  // When user clicks a radial segment, select it and scroll to the question review
-  function handleQuestionSelect(idx: number | null) {
-    setSelectedQuestion(idx)
-    if (idx !== null) {
-      setShowIncorrectOnly(false)
-      // Small delay so React can render before scrolling
-      setTimeout(() => {
-        questionReviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 80)
-    }
-  }
-
-  function handleReviewIncorrect() {
-    setSelectedQuestion(null)
-    setShowIncorrectOnly(true)
-    setTimeout(() => {
-      questionReviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 80)
-  }
+  // ── The syllabus, and how far this quiz moved it ──────────────────────────
+  const syllabus = useMemo(() => {
+    const exam = session?.questions[0]?.exam
+    return exam ? syllabusForBank(syllabi, exam) : null
+  }, [syllabi, session])
+  const syllabusFigures = useMemo(() => {
+    if (!syllabus || !progressKey || masteryLoading || !session) return null
+    const now = new Date()
+    const records = masteryRecords.filter(r => r.exam_id === progressKey)
+    const after = computeExamReadiness(syllabus, records, now)
+    if (after.counts.total === 0) return null
+    const before = computeExamReadiness(
+      syllabus,
+      recordsBefore(records, session.masteryTransitions, now.toISOString()),
+      now,
+    )
+    return syllabusGain(before.overallPct, after.overallPct)
+  }, [syllabus, progressKey, masteryLoading, masteryRecords, session])
 
   if (!session) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className={cn(GROUND, 'flex min-h-dvh items-center justify-center')}>
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
 
-  const { correctCount, totalQuestions, timeTakenSeconds } = session
+  const { correctCount, timeTakenSeconds } = session
+  const manualGrades = session.manualGrades ?? {}
   // Score by points with partial credit: each question earns its fraction of
-  // what it is worth (a 2.5-point question counts five times a 0.5-point one),
-  // rather than counting as a full hit or miss. correctCount stays the
-  // whole-question count that drives gems/streak; points is what the results
-  // screen displays.
+  // what it is worth (a 2.5-point question counts five times a 0.5-point one).
+  // correctCount stays the whole-question count that drives gems and the
+  // streak; points is what the results screen prints.
   // A quiz finished early is scored on what was answered; its untried questions
   // are Unanswered, not wrong. A practice exam scores every question.
   const points = quizPoints(
-    scoredQuestions(session.questions, session.responses, session.mode, session.manualGrades ?? {}),
+    scoredQuestions(session.questions, session.responses, session.mode, manualGrades),
     session.responses,
-    session.manualGrades ?? {},
+    manualGrades,
   )
-  const { percentage } = points
 
-  // Level-ups the quiz produced. They drive the ceremony — where a New concept
-  // reaching Level 1 plays the collect animation — and the results card below.
-  const upwardTransitions = session.masteryTransitions?.filter(
-    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
-  ) ?? []
+  // Every question's final colour, and the bar cut by step in today's session.
+  const states = finalSegments(session.questions, session.responses, manualGrades)
+  const counts = answerCounts(states)
+  const groups = segmentGroups(session.questions.length, session.steps)
+  const fixRows = resultRows(session.questions, states, toFix)
+  const rightRows = resultRows(session.questions, states, state => state === 'correct')
 
-  // Which questions to show in the review list
-  const outcomes = session.questions.map(q =>
-    effectiveOutcome(q, session.responses[q.id]?.chosen, session.manualGrades ?? {})
-  )
-  const unanswered = session.questions.map(q =>
-    skipsUnanswered(session.mode) && isUnanswered(q, session.responses, session.manualGrades ?? {})
-  )
-  // The list leads with what was missed (or left unanswered), in the order
-  // asked, and the questions answered right are folded under one row — a reader
-  // comes here to find out what went wrong, and that used to be wherever the
-  // paper's order happened to put it. With nothing missed there is nothing to
-  // lead with, so the right answers are simply shown.
-  const missedQuestions = session.questions.filter((_, i) => !outcomes[i])
-  const rightQuestions = session.questions.filter((_, i) => outcomes[i])
-  const foldRight = missedQuestions.length > 0 && rightQuestions.length > 0 && !showRight
-  const visibleQuestions = selectedQuestion !== null
-    ? session.questions.filter((_, i) => i === selectedQuestion)
-    : showIncorrectOnly
-    ? session.questions.filter((_, i) => !outcomes[i] && !unanswered[i])
-    : foldRight
-    ? missedQuestions
-    : [...missedQuestions, ...rightQuestions]
+  // Level-ups the quiz produced. Every one is a row under "Levelled up"; the
+  // full-screen ceremony is kept for a card collected for the first time and
+  // for a concept reaching Level 3 (lib/sessionResults.ts).
+  const moves = levelledUp(session.masteryTransitions)
+  const ceremony = ceremonyMoves(session.masteryTransitions)
 
-  // What "Try Again" re-quizzes: only the questions this session didn't get full
-  // credit on. A partial (e.g. a multi-part with some parts missed) counts as
-  // missed, and so does a question left unanswered. Nothing missed → nothing to
-  // retry, so the button drops out and only "New Quiz" remains.
-  const retryIds = session.questions.filter((_, i) => !outcomes[i]).map(q => q.id)
-  const unansweredCount = unanswered.filter(Boolean).length
-  const missedCount = retryIds.length - unansweredCount
+  // What "Fix these N" re-quizzes: the questions this session didn't get full
+  // credit on, a partial and an unanswered one included.
+  const retryIds = fixRows.map(row => row.question.id)
   const retryMode = session.mode
-
-  // A new quiz is set up in the builder this one came from, when it came from
-  // one — back to that exam, its choices as they were — and in the Quiz tab
-  // otherwise.
-  function handleNewQuiz() {
-    resetQuiz()
-    if (back.fromTrail && back.to.split(/[?#]/)[0] === '/') back.go()
-    else navigate('/')
-  }
 
   function handleTryAgain() {
     if (retryIds.length === 0) return
@@ -326,14 +283,14 @@ export default function Review() {
     navigate(`/quiz?${params.toString()}`)
   }
 
-  // Full-screen ceremony for concepts levelled up by this quiz — plays first,
-  // then hands off to the streak/quest/plan celebrations. For signed-in users we
-  // wait for the gem balance to load so the running tally lands on the right
-  // total; guests earn no gems so there's nothing to wait on.
-  const hasLevelUps = upwardTransitions.length > 0
+  // The ceremony plays first, then hands off to the streak, quest and plan
+  // celebrations. For signed-in users we wait for the gem balance to load so
+  // the running tally lands on the right total; guests earn no gems so there's
+  // nothing to wait on. With no ceremony the others start at once.
+  const hasCeremony = ceremony.length > 0
   const levelUpCeremonyReady = !user || !gemsLoading
-  const showLevelUpCeremony = hasLevelUps && !levelUpsDone && levelUpCeremonyReady
-  const celebrationsReady = !hasLevelUps || levelUpsDone
+  const showLevelUpCeremony = hasCeremony && !levelUpsDone && levelUpCeremonyReady
+  const celebrationsReady = !hasCeremony || levelUpsDone
   const showGuestSavePrompt = celebrationsReady && celebrationsDone && !showPlanBonus
     && shouldAskGuestToSave({
       authLoading,
@@ -346,20 +303,54 @@ export default function Review() {
     setGuestSaveAsked(true)
   }
 
+  // A concept row under a solution opens it in the reader, over the question's tags.
+  function openConcept(question: Question, links: string[], index: number) {
+    const refs = links.map(link => ({ kind: 'concept' as const, name: slugForLink(link) ?? link }))
+    openConceptAt(refs, index, `review:${question.id}`, null, null, { walk: 'question' })
+  }
+
+  // Back to Today for an account; a visitor has no Today yet, so back to where
+  // the quiz was started.
+  function leave() {
+    resetQuiz()
+    if (user) navigate('/dashboard')
+    else back.go()
+  }
+  const leaveLabel = user ? 'Back to Today' : `Back to ${back.label}`
+
+  const time = timeTaken(timeTakenSeconds)
+  const scoreUnit = points.unitPoints ? '' : ' points'
+
+  const solution = (row: FixRow<Question>) => (
+    <div className="pb-6 pt-2">
+      <QuestionCard
+        question={row.question}
+        selectedAnswer={session.responses[row.question.id]?.chosen ?? null}
+        onAnswer={() => {/* read-only on the results */}}
+        showExplanation={true}
+        isLocked={true}
+        feedback
+        onOpenConcept={(links, index) => openConcept(row.question, links, index)}
+        selfGrade={row.question.type === 'free-entry' ? manualGrades[row.question.id] : undefined}
+        partManualGrades={row.question.type === 'multi-part' ? partGradesOf(row.question.id, manualGrades) : undefined}
+        essaySelfGrades={row.question.type === 'multi-part' ? partGradesOf(row.question.id, manualGrades) : undefined}
+      />
+    </div>
+  )
+
   return (
     <>
-    {/* Ceremony for each concept levelled up by this quiz. */}
+    {/* The ceremony: a card collected for the first time, or a Level 3. */}
     {showLevelUpCeremony && (
       <ConceptLevelUpCeremony
-        transitions={upwardTransitions}
+        transitions={ceremony}
         gemsEarned={user ? correctCount : 0}
         totalGems={gemBalance}
         onResolved={() => setLevelUpsDone(true)}
       />
     )}
-    {/* Streak flame (if today's streak grew) then quests cleared by this quiz —
-        shown in that order, after the level-up ceremony and before the review
-        content below. */}
+    {/* Streak flame (if today's streak grew) then quests cleared by this quiz,
+        in that order, after the ceremony and over the results below. */}
     {celebrationsReady && (
       <PostQuizCelebrations
         streakEligible={STREAK_ENABLED && correctCount > 0}
@@ -384,205 +375,169 @@ export default function Review() {
     )}
     <ConceptPopup />
 
-    {/* ── Pinned score header ───────────────────────────────────────
-        Mirrors the Dashboard's pinned row: once the score card's actions have
-        scrolled past, the score and icon-only copies of those actions stay at
-        the top of the viewport. The wrapper is `h-0` on purpose so the bar
-        floats over the review content instead of reserving space for itself —
-        and so mounting it costs no layout shift at the top of the page. Sticky
-        offsets match the nav chrome (the fixed top bar below lg, the sidebar at lg). */}
-    <div ref={pinnedHeaderRef} className="sticky top-14 lg:top-0 z-20 h-0">
-      <div
-        aria-hidden={!actionsPinned}
-        className={`border-b border-border/60 bg-background/95 backdrop-blur-md transition-all duration-200 ${
-          actionsPinned ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
-        }`}
-      >
-        <div className="container max-w-2xl mx-auto px-4 py-2 flex items-center gap-3">
-          <span className={`text-xl font-black tabular-nums leading-none ${scoreColorClass(percentage)}`}>
-            {percentage}%
-          </span>
-          <span className="text-xs text-muted-foreground tabular-nums">
-            {formatScore(points.earned)}/{formatScore(points.possible)}{points.unitPoints ? '' : ' pts'}
-          </span>
-          <div className="flex-1" />
-          {user && (
+    <div className={cn(GROUND, 'min-h-dvh')}>
+    <div className="mx-auto flex min-h-dvh w-full max-w-[680px] flex-col gap-6 px-5 pb-6 pt-3">
+
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={leave}
+          aria-label={leaveLabel}
+          className="-ml-3 flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <X aria-hidden="true" strokeWidth={2.5} className="h-[22px] w-[22px]" />
+        </button>
+        {time && <span className="text-[15px] tabular-nums">{time}</span>}
+      </div>
+
+      {/* 1 and 2: the score as one figure, the bar, its counts. */}
+      <section aria-label="Score" className="flex flex-col gap-4">
+        <h1 className="flex items-baseline gap-2.5" aria-label={`${formatScore(points.earned)} of ${formatScore(points.possible)}${scoreUnit}`}>
+          <span className="text-[64px] font-bold leading-none tracking-[-0.03em] tabular-nums">{formatScore(points.earned)}</span>
+          <span className="text-[22px] font-medium">of {formatScore(points.possible)}{scoreUnit}</span>
+        </h1>
+        <ResultsBar states={states} groups={groups} label={countsLabel(counts)} />
+        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-[15px]">
+          {(['correct', 'incorrect', 'partial', 'unanswered'] as const)
+            .filter(state => counts[state] > 0 || state === 'correct')
+            .map(state => (
+              <li key={state} className="flex items-center gap-[7px]">
+                <AnswerDot state={state} decorative />
+                <span><strong className="tabular-nums">{counts[state]}</strong> {ANSWER_LABEL[state].toLowerCase()}</span>
+              </li>
+            ))}
+        </ul>
+      </section>
+
+      {/* 3: what to fix, and the screen's one filled button. */}
+      {fixRows.length > 0 && (
+        <section aria-labelledby="results-to-fix" className="flex flex-col">
+          <h2 id="results-to-fix" className="mb-1 text-lg font-bold">To fix</h2>
+          <ul>
+            {fixRows.map(row => (
+              <ResultRow
+                key={row.question.id}
+                row={row}
+                open={openRow === row.question.id}
+                onToggle={() => setOpenRow(id => (id === row.question.id ? null : row.question.id))}
+              >
+                {solution(row)}
+              </ResultRow>
+            ))}
+          </ul>
+          <Button size="main" className="mt-2.5 w-full" onClick={handleTryAgain}>
+            Fix {retryIds.length === 1 ? 'this 1' : `these ${retryIds.length}`}
+          </Button>
+        </section>
+      )}
+
+      {/* 4: what levelled up, and the syllabus with the gain. */}
+      {(moves.length > 0 || (syllabusFigures && fixRows.length === 0)) && (
+        <section
+          aria-labelledby="results-levelled-up"
+          className={cn('flex flex-col', fixRows.length > 0 && 'border-t border-border pt-5')}
+        >
+          {moves.length > 0 && <h2 id="results-levelled-up" className="mb-1 text-lg font-bold">Levelled up</h2>}
+          <ul>
+            {moves.map(move => (
+              <li key={`${move.examId ?? ''}:${move.conceptSlug}`} className="flex min-h-[42px] items-center gap-2.5">
+                <span className="min-w-0 flex-1 text-base">{conceptName(move.conceptSlug)}</span>
+                <LevelMove from={move.from} to={move.to} />
+              </li>
+            ))}
+          </ul>
+          {syllabusFigures && progressKey && (
             <button
               type="button"
-              onClick={() => navigate('/dashboard')}
-              aria-label="Go to Dashboard"
-              title="Go to Dashboard"
-              tabIndex={actionsPinned ? 0 : -1}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/80"
+              onClick={() => navigate(syllabus?.fileName ? wikiRoute({ kind: 'exam', name: syllabus.fileName }) : '/wiki')}
+              aria-label={`Syllabus: ${syllabusFigures.pct}% covered${syllabusFigures.gain > 0 ? `, up ${syllabusFigures.gain}` : ''}`}
+              className="mt-2 grid min-h-[44px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3.5 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <LayoutDashboard className="h-5 w-5" />
+              <span className="text-[15px]">Syllabus</span>
+              <SyllabusBar pct={syllabusFigures.pct} gain={syllabusFigures.gain} />
+              <span className="flex items-baseline gap-2 text-base font-bold tabular-nums">
+                {syllabusFigures.pct}%
+                <GainMark gain={syllabusFigures.gain} className="text-sm" />
+              </span>
             </button>
           )}
-          {missedCount > 0 && (
-            <div className="relative">
-              <button
-                type="button"
-                onClick={handleReviewIncorrect}
-                aria-label={`Review ${missedCount} incorrect`}
-                title="Review Incorrect"
-                tabIndex={actionsPinned ? 0 : -1}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:bg-primary/80 active:scale-[0.97]"
-              >
-                <XCircle className="h-5 w-5" />
-              </button>
-              <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-orange-500 px-1 text-[11px] font-bold leading-none text-white shadow ring-2 ring-background tabular-nums">
-                {missedCount}
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+        </section>
+      )}
 
-    <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
-
-      {/* Back to where the quiz was started — an exam's builder, a study guide,
-          Concept Craft. The review took the quiz's place in the history, so
-          this is the browser's own Back too. */}
-      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backName(back)} className="-mb-3 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="h-4 w-4" /> {back.label}
-      </Link>
-
-      {/* ── First card: score header + concept coverage ──────────── */}
-      <ConceptCoverageSection
-        questions={session.questions}
-        responses={session.responses}
-        score={{
-          mode: session.mode,
-          percentage,
-          correctCount,
-          scoredPoints: points.earned,
-          totalPoints: points.unitPoints ? undefined : points.possible,
-          totalQuestions,
-          timeTakenSeconds,
-          conceptsLevelledUp: upwardTransitions.length,
-          isLoggedIn: !!user,
-          onSignIn: () => navigate('/auth', { state: { from: '/review' } }),
-        }}
-        selectedQuestion={selectedQuestion}
-        onQuestionSelect={handleQuestionSelect}
-        manualGrades={session.manualGrades}
-        onReviewIncorrect={handleReviewIncorrect}
-        levelUpTransitions={upwardTransitions}
-        actionsRef={actionsRowRef}
-      />
-
-      {/* ── Question review ─────────────────────────────────────── */}
-      {/* Scroll margin clears the pinned header (its own height plus the sticky
-          offset at that breakpoint) so "Review Incorrect" doesn't park this
-          heading underneath the bar it was pressed from. */}
-      <div ref={questionReviewRef} className="space-y-2 scroll-mt-16 md:scroll-mt-28 lg:scroll-mt-16">
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">Question Review</h2>
-          {selectedQuestion !== null && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-              Q{selectedQuestion + 1}
-              <button
-                type="button"
-                onClick={() => setSelectedQuestion(null)}
-                className="hover:opacity-70 transition-opacity"
-                aria-label="Clear filter"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          )}
-          {selectedQuestion === null && showIncorrectOnly && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-              Incorrect only
-              <button
-                type="button"
-                onClick={() => setShowIncorrectOnly(false)}
-                className="hover:opacity-70 transition-opacity"
-                aria-label="Clear filter"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          )}
-        </div>
-        <Separator />
-      </div>
-
-      <div className="space-y-4">
-        {visibleQuestions.map((question) => {
-          const idx = session.questions.indexOf(question)
-          const chosen = session.responses[question.id]?.chosen ?? null
-          const manualGrades = session.manualGrades ?? {}
-          // Per-part grades keyed by label — covers both graded free-entry parts
-          // (partManualGrades) and answerless essay parts (essaySelfGrades), which
-          // the card reads from separate props but are stored under the same key.
-          const partGrades = question.type === 'multi-part' ? Object.fromEntries(
-            Object.entries(manualGrades)
-              .filter(([k]) => k.startsWith(`${question.id}__`))
-              .map(([k, v]) => [k.slice(question.id.length + 2), v])
-          ) : undefined
-          return (
-            <div key={question.id} className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium">
-                Question {idx + 1}
-                {unanswered[idx] && <span className="ml-1.5 text-muted-foreground">· Unanswered</span>}
-              </p>
-              <QuestionCard
-                question={question}
-                selectedAnswer={chosen}
-                onAnswer={() => {/* read-only in review */}}
-                showExplanation={true}
-                showMeta={true}
-                isLocked={true}
-                selfGrade={question.type === 'free-entry' ? manualGrades[question.id] : undefined}
-                partManualGrades={partGrades}
-                essaySelfGrades={partGrades}
-              />
-            </div>
-          )
-        })}
-        {selectedQuestion === null && !showIncorrectOnly && foldRight && (
+      {/* 5: the questions answered right, folded under one row. */}
+      {fixRows.length > 0 && rightRows.length > 0 && (
+        <section aria-label="Answered correctly" className="border-t border-border">
           <button
             type="button"
-            onClick={() => setShowRight(true)}
-            aria-expanded={false}
-            className="flex w-full items-center justify-between gap-3 rounded-lg bg-card px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-expanded={showRight}
+            onClick={() => setShowRight(v => !v)}
+            className="flex h-[52px] w-full items-center gap-3 text-left text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
           >
-            <span>{rightQuestions.length} answered right</span>
-            <span className="flex items-center gap-1 text-muted-foreground">
-              Show
-              <ChevronDown className="h-4 w-4" aria-hidden="true" />
-            </span>
+            <AnswerDot state="correct" decorative />
+            <span className="flex-1">{rightRows.length} correct</span>
+            <ChevronDown aria-hidden="true" strokeWidth={2.5} className={cn('h-4 w-4 transition-transform', showRight && 'rotate-180')} />
           </button>
-        )}
-      </div>
+          {showRight && (
+            <ul>
+              {rightRows.map(row => (
+                <ResultRow
+                  key={row.question.id}
+                  row={row}
+                  open={openRow === row.question.id}
+                  onToggle={() => setOpenRow(id => (id === row.question.id ? null : row.question.id))}
+                >
+                  {solution(row)}
+                </ResultRow>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
-      {/* ── Actions ─────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row gap-3 pb-8">
-        {retryIds.length > 0 && (
-          <Button variant="outline" onClick={handleTryAgain} className="flex-1">
-            Try Again ({[
-              missedCount > 0 ? `${missedCount} missed` : null,
-              unansweredCount > 0 ? `${unansweredCount} unanswered` : null,
-            ].filter(Boolean).join(', ')})
-          </Button>
-        )}
-        <Button onClick={handleNewQuiz} className="flex-1">
-          New Quiz
-        </Button>
-      </div>
+      {/* 6: the way back. */}
+      <Button variant="edge" className="mt-auto h-[52px] w-full text-base" onClick={leave}>
+        {leaveLabel}
+      </Button>
     </div>
+    </div>
+    </>
+  )
+}
 
-      {/* ── Back to top ─────────────────────────────────────────── */}
+/** One question on the results: its dot, its concept and one line of it; a tap opens the solution under it. */
+function ResultRow({ row, open, onToggle, children }: {
+  row: FixRow<Question>
+  open: boolean
+  onToggle: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <li className="border-b border-border last:border-b-0">
       <button
         type="button"
-        aria-label="Back to top"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showBackToTop ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+        aria-expanded={open}
+        onClick={onToggle}
+        className="flex min-h-[64px] w-full items-center gap-3 py-1.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
       >
-        <ArrowUp className="h-4 w-4" />
+        <AnswerDot state={row.state} />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-base font-semibold">{row.concept}</span>
+          <span className="truncate text-[15px]">{row.line}</span>
+        </span>
+        <ChevronRight aria-hidden="true" strokeWidth={2.5} className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-90')} />
       </button>
-    </>
+      {open && children}
+    </li>
+  )
+}
+
+/** A concept's move up: its level before, an arrow, its level after. */
+function LevelMove({ from, to }: { from: MasteryState; to: MasteryState }) {
+  return (
+    <span role="img" aria-label={`${MASTERY_LABEL[from]} to ${MASTERY_LABEL[to]}`} className="flex shrink-0 items-center gap-1.5">
+      <LevelSquare state={from} size="md" decorative className="!h-[18px] !w-[18px] !rounded-[4px]" />
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      <LevelSquare state={to} size="md" decorative className="!h-[18px] !w-[18px] !rounded-[4px]" />
+    </span>
   )
 }

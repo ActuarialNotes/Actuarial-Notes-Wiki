@@ -31,7 +31,7 @@ import { useFlashcards } from '@/hooks/useFlashcards'
 import { useCollectGlow } from '@/hooks/useCollectGlow'
 import { useMobileNav } from '@/hooks/useMobileNav'
 import { MobileNavButton } from '@/components/MobileNavButton'
-import { pageHostsNavButton } from '@/lib/mobileNavHost'
+import { isSessionRoute, pageHostsNavButton } from '@/lib/mobileNavHost'
 import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -446,6 +446,8 @@ export default function Sidebar() {
   // This route pins a bar of its own to the top of the viewport and carries the
   // hamburger on it, so the app header below would be a second row of chrome.
   const navHostedByPage = pageHostsNavButton(location.pathname)
+  // A quiz and its results have no app chrome at all (docs/redesign-spec.md §5).
+  const inSession = isSessionRoute(location.pathname)
   const [profileOpen, setProfileOpen] = useState(false)
   const { open: examsOpen, openExams, closeExams } = useExamsPopout()
   const [signOutConfirm, setSignOutConfirm] = useState(false)
@@ -542,7 +544,7 @@ export default function Sidebar() {
           rendered at all, so the phone spends one 3.5rem row on chrome rather
           than two. `lib/mobileNavHost.ts` is the one place that says which is
           which, and `App.tsx` reserves the room from the same call. */}
-      {!navHostedByPage && (
+      {!navHostedByPage && !inSession && (
         <header className="paper-chrome-header fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
           <MobileNavButton className="-ml-0.5" />
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
@@ -577,7 +579,8 @@ export default function Sidebar() {
         className={[
           // `paper-chrome-rail` keeps the desktop rail still while the page
           // beside it slides (index.css, "Paper on a desk").
-          'paper-chrome-rail flex flex-col bg-background border-r',
+          'paper-chrome-rail flex-col bg-background border-r',
+          inSession ? 'hidden' : 'flex',
           // Mobile: fixed full-width overlay, slides in/out — z-[60] so it sits
           // above the sticky wiki search bar (z-50) and the backdrop (z-[55])
           'fixed inset-y-0 left-0 z-[60] w-full',

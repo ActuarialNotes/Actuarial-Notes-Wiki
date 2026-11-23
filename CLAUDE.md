@@ -399,6 +399,14 @@ before touching that area**:
   step at the end of every screen. Its §6 says which phases are built (Phase 0 is) and its §7 the
   maintainer's decisions. Read before changing navigation, the Dashboard, the answer feedback or
   the results screen. *Practice* is spelled with a c everywhere, noun and verb.
+- `docs/redesign-spec.md` — **the redesign's build spec** (2026-11-23), the handoff for
+  implementing it: the visual rules (black and white, one filled button a screen, green / red /
+  amber / grey for answers only, levels as shaded squares), the decisions (the daily session is
+  free and sized by time; Pro is the pacing, Analytics and the podcast), each designed screen —
+  Today, the session's question, feedback and results, the exam switcher, Learn's exam and concept
+  pages — mapped to the code it replaces, and the build order (phases A–F). The screens are on a
+  design canvas it links to. Where it differs from the design review, it wins (its §9). Read
+  before building any of X11.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new

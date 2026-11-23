@@ -1,0 +1,425 @@
+# Redesign spec: Today, the session, the exam switcher and Learn
+
+_Written 2026-11-23 as the handoff for implementation. It follows the review in
+`docs/design-review.md` (roadmap X11) and a second review of the Dashboard, Study Guides, Quiz,
+Projects and Settings done the same day. The screens are drawn on a design canvas:
+<https://claude.ai/artifact/Er5o5o1SUw8emHPtV3RQU7>. The canvas is the reference for how a
+screen looks; this document is the reference for what was decided, what each screen replaces
+in the code, and the order to build it in._
+
+The goal every screen is held to: **a person learns actuarial science and can apply it.**
+
+Read `docs/design-review.md` §5 first. Its direction stands (four places, one exam in focus, a
+next step at the end of every screen). Where this document differs, this document wins; the
+differences are listed in §9.
+
+---
+
+## 1. What is designed, and what is not
+
+| Area | Canvas page | Screens (file on the canvas) | Status |
+|---|---|---|---|
+| Today | Today | `Main` (Pro), `Free`, `FirstDay`, `Done`, `Open` (concept reader over Today), `Length` (session length sheet), `Syllabus`, `Analytics`, `Desktop` | Designed, phone and desktop |
+| The session | Session | `Question`, `Feedback` (after a miss), `Results` | Designed, phone only |
+| Exam switcher | Exam switcher | `Switcher`, `AddExam`, `ExamDate` | Designed, phone only |
+| Learn | Learn | `Exam` (exam page), `Concept` (concept page) | Designed, phone only |
+| Practice (quiz builder, Practice Exam, past papers, flashcards) | | | Not designed. The builder scored best in the review and is expected to change least |
+| You (profile, level, quests, league, Settings) | | | Not designed |
+| Apply (Projects, Tools, Workflows) | | | Not designed |
+
+Also not drawn: the feedback screen after a correct answer, a written (self-graded) question,
+the "Edit" state of the exam switcher, and desktop layouts for anything but Today.
+
+Each canvas file is `project/<Name>.dc.html`: plain HTML with inline styles, readable with the
+Artifact tool's `read` action. Every figure in them is sample data (Exam P at 27%, 52 days,
+a 25-minute session). The colours are literal hex values because the canvas has no access to
+the app's tokens; §2 says how they map.
+
+---
+
+## 2. Visual rules
+
+The maintainer's brief: high-contrast black and white, text legibility first, design that
+carries the meaning so a caption doesn't have to (see `docs/visual-noise-review.md`), and
+minimal visual noise.
+
+### 2.1 Colour
+
+The canvas is drawn in the dark theme. Build with the app's existing theme tokens
+(`docs/style-guide.md` §2), never the canvas's hex values, so the light theme is the same
+design inverted.
+
+| Role | On the canvas | Rule |
+|---|---|---|
+| Background | `#000000` | One background everywhere. **No filled card surfaces.** A card or tile is a 1 px outline in the line colour |
+| Text and icons | `#ffffff` | One text colour. Hierarchy comes from size and weight, not from a second, greyer text colour |
+| Line | `#444444` | The one neutral: hairlines, empty tracks, outlines of things that are not selected |
+| Control outline | `#ffffff` | Anything pressable that isn't the screen's main action has a 1.5 px outline in the text colour |
+| Main action | white fill, black text | **One per screen** (Start, Check, Next, "Fix these 3", "Practice this"). This is Ink's inverted solid (`components/ui/ink.ts`) |
+| Exam | the exam's own hue | Only on the exam's logo tile (`ExamLogo`, `examAccentStyle`). Nothing else on a screen takes the exam's colour |
+| Correct | green `#3ddc84` | Answer states only, wherever answers are counted: progress segments, the feedback rows, results, Analytics |
+| Incorrect | red `#ff5247` | Same |
+| Partial | amber | Reserved for a self-graded written part marked Partial. Not drawn yet |
+| Unanswered | mid grey `#8a8a8a` | Same places as correct and incorrect. Distinct from "not reached yet", which is the line colour |
+
+Use the app's existing semantic state colours for correct, incorrect and partial
+(`docs/style-guide.md` §4.1) if they are close; the hex values above are what was approved on
+screen.
+
+### 2.2 Concept levels
+
+A concept's level is a small rounded square, shaded:
+
+| State | Square |
+|---|---|
+| New | empty, 1.5 px outline in the line colour |
+| Level 1 | dark grey fill (`#5c5c5c` on black) |
+| Level 2 | light grey fill (`#a8a8a8`) |
+| Level 3 | solid text colour (white on black) |
+| Forgotten | empty, dashed outline in the text colour |
+| In today's session | the same square with a 2 px outline in the text colour, offset 2 px |
+
+This is neutral shading, not the green ramp the readiness ring and `MasteryBadge` use today.
+It was chosen over a fill-from-the-bottom version. Applying it means one shared component for
+the square, used by the Syllabus screen, the exam page, the concept page's level button, the
+results' "Levelled up" rows and (later) `ConceptTile`. Green now means "correct" only.
+
+### 2.3 Type, shape, size
+
+- The app's font. Nothing under 13 px. Body text on reading screens is 16–17 px at 1.5 line height.
+- Big figures (days left, score, percentage) are 34–64 px, bold, with their unit beside them at
+  17–22 px. A figure is never explained by a caption under it.
+- Touch targets are at least 44 px. Main actions are 58 px tall, fully rounded.
+- Cards have a 22 px radius; tiles 18 px; rows inside a card are separated by hairlines.
+- Popups (the session length sheet, the exam switcher, the concept reader) are black with a
+  1.5 px edge in the text colour, and the page behind them is dimmed to about 30%.
+- Icons carry a visible label except close, back and "more" (`docs/design-review.md` §5.10).
+
+### 2.4 What a screen may not do
+
+- More than one filled button.
+- Grey text standing in for design. If a fact needs a sentence under it, redraw the fact.
+- A percentage, a ring and a fraction for the same number.
+- A hidden menu behind a title. A title is text.
+
+---
+
+## 3. Decisions made
+
+| # | Decision | Notes |
+|---|---|---|
+| R1 | **The daily session is free.** Pro sells the plan paced to the exam date (the tick on the syllabus bar, "Pace my plan to Jan 14"), Analytics and the daily podcast | Changes what Pro includes today: `Dashboard.tsx` builds no plan for a free account (`studyPlan = isPro ? computedPlan : null`). The Upgrade page and its copy need the same change |
+| R2 | **Four places: Today, Learn, Practice, Apply**, as a bottom bar on phones and a rail on desktop. Projects, Tools and Workflows all live in Apply | Confirms D-DR1. The profile button (top right on a phone, foot of the rail on desktop) opens You |
+| R3 | **Settings is not account-only.** It will also hold exam date, session length, daily goal, reminders and quiz defaults | Not designed yet |
+| R4 | **A session is sized by time.** The reader picks 10, 25, 45 or 120 minutes; what doesn't fit carries over | Replaces today's uncapped session (`lib/todaySession.ts` takes every outstanding miss) |
+| R5 | **No readiness wheel and no time bar on Today.** The syllabus is one bar with a percentage | The ring's information moves to the Syllabus screen as level squares |
+| R6 | **Syllabus and Analytics are separate screens**, each opened by its own tile on Today | |
+| R7 | **The exam in focus is the one last used**, on every device; the nearest sitting only the first time | |
+| R8 | **Per exam:** countdown, session, syllabus, Analytics. **Per account:** the week's check marks, streak, level, quests | Studying either exam keeps the streak |
+| R9 | **Session length is one setting**, shared by all exams, with "Use this every day" | |
+| R10 | **"Edit" on the exam switcher** holds change date, mark as passed and remove. A passed exam leaves the switcher | Not drawn |
+| R11 | **A visitor's first screen is Add an exam**, with progress kept in the browser | Confirms D-DR2 |
+| R12 | **Answer colours:** green correct, red incorrect, amber partial, grey unanswered | §2.1 |
+| R13 | **Levels are shaded squares** in neutral greys | §2.2 |
+| R14 | **Popups are black**, not grey | §2.3 |
+| R15 | Free-plan upsell wording: **"Pace my plan to Jan 14"** (the date is the reader's exam date) | The maintainer's wording |
+
+---
+
+## 4. Today
+
+Replaces `pages/Dashboard.tsx`, `components/ReadinessCard.tsx`,
+`components/dashboard/TodaySessionCard.tsx` and `SessionWheel.tsx`. Canvas: `Main`, `Free`,
+`FirstDay`, `Done`, `Desktop`.
+
+### 4.1 Layout, top to bottom (phone)
+
+1. **Exam switcher** (logo tile, "Exam P", chevron) and the **profile button**. No search bar,
+   no export, bell or help icons; those move to You.
+2. **Days left** as one large figure, with the exam date beside it. One date only: the
+   reader's own. Tapping the date changes it.
+3. **The week:** seven circles, Monday to Sunday. A day studied is a filled circle with the
+   check (`components/CheckMark.tsx`); today is an outlined circle; the rest are in the line
+   colour. This is the streak's week and is per account (R8).
+4. **The session card** (§4.2).
+5. **Two tiles:** Syllabus (percentage and bar) and Analytics (accuracy and a small green and
+   red chart). Each opens its screen (§4.4, §4.5).
+6. The place bar.
+
+Everything above fits one 390 × 844 screen with the session's Start visible. That is the
+acceptance test for the layout: **Start is on the first screen for every session length.**
+
+On desktop (`Desktop`): the rail on the left; the session card in a left column with its
+concepts listed under each step; the days, week, Syllabus (bar and level squares by objective)
+and an Analytics summary in the right column.
+
+### 4.2 The session card
+
+- Title "Today" and the **session length** control ("25 min", §4.3).
+- A **segmented bar**, one piece per step, each as long as its share of the minutes. Pieces
+  fill with the text colour as steps are finished.
+- Up to three **steps**, in the order they are done: **Fix mistakes**, **Learn**, **Review**,
+  each with an icon, its name and its count. Fix shows "3 of 15" when more misses are waiting
+  than fit. A step with nothing in it is not shown.
+- **Start**, the screen's one filled button. It runs the whole session as one quiz, as today
+  (`nextSessionAction`, `storeSessionMistakes`, `sessionQuizIds`).
+
+Tapping a step unfolds its concepts in place. Tapping a concept opens it in the concept
+reader (`ConceptPopup`), over the lower part of the screen, with the session's concepts as
+the walk (`sessionWalk`). While the reader is open the rest of Today is dimmed and the open
+concept's row stays lit (canvas: `Open`). The reader's footer is Previous, **Practice this**
+(filled) and Next.
+
+**States**
+
+- **First day on an exam** (`FirstDay`): one step, Learn, with its concepts listed open,
+  since there are only three. Syllabus reads 0%; Analytics reads a dash. No empty wheel.
+- **Finished** (`Done`): the bar is full, the title carries a check, the steps become Fixed,
+  Learned, Reviewed with their counts. The filled button is "Fix the 1 you missed" when
+  something was missed; under it an outlined "Keep going · 10 min". The Syllabus tile shows
+  today's gain as a raised end on the bar and a small "▲ 2".
+- **Free plan** (`Free`): the same card and the same session (R1). Under it one outlined row,
+  a lock, "Pace my plan to Jan 14" and a Pro tag, leading to Upgrade. The Analytics tile shows
+  a lock and a Pro tag in place of the figure. There are no other upsells on the screen.
+
+### 4.3 How the session is built
+
+This is the part with new logic. Put it in `lib/todaySession.ts`, pure and tested.
+
+- **Budget:** the chosen minutes divided by the exam's pace (`lib/quizTiming.ts`) gives the
+  number of questions. For an exam paced by the point, or with no pace on file, use a default
+  pace and say so in the code; the maintainer has not ruled on this.
+- **What fills it, in order:** outstanding mistakes (oldest first), then new concepts, then
+  reviews. No single step may take the whole budget while another has work waiting. The split
+  drawn on the canvas for 25 minutes is 3 fix, 2 learn, 4 review. **The exact split rule is
+  not decided.** Propose one in the PR (for example: mistakes up to a third of the budget,
+  the rest to the plan in its own order) and get it confirmed.
+- **Pro:** Learn and Review come from today's study plan (`lib/studyPlan.ts`), as now.
+- **Free:** Learn is the next New concepts in syllabus order (`lib/studyPlanOrder.ts`);
+  Review is the concepts closest to stepping down a level (`decayIfStale` in
+  `lib/mastery.ts`). No pacing to the exam date.
+- **Carry-over:** what doesn't fit stays outstanding and is offered again tomorrow, or by
+  "Keep going" today.
+
+**The session length sheet** (`Length`): four options, 10, 25, 45 and 120 minutes. Each
+shows what fits as dots, one per question, grouped Fix, Learn, Review. A key under the list
+names the three groups. "Use this every day" keeps the choice (R9). The setting is stored
+with the account, and with the browser for a visitor.
+
+### 4.4 Syllabus
+
+Canvas: `Syllabus`. The percentage is `computeExamReadiness` (`lib/readiness.ts`), still the
+one readiness number, now labelled **Syllabus** on every surface. It is coverage, and the old
+label "ready" read as a forecast of passing.
+
+- The percentage with today's movement (`lib/readinessDelta.ts`), and the bar.
+- **Pro:** a tick on the bar where the plan expects the reader to be today. How that position
+  is derived from the study plan is not decided; propose it in the PR.
+- Each learning objective: its name, the reader's percentage, its concepts as level squares
+  (§2.2) with today's outlined, and its share of the exam.
+- A key for the squares.
+
+This screen and the exam page (§7.1) show the same thing. Build them as one: the Syllabus
+tile opens Learn's exam page. Keep `Syllabus` only as the reference for the squares.
+
+The Exam Readiness popup and `StudyGuideRadial` / `readinessRing.ts` have no place in this
+design. Remove them from Today; delete them only once nothing else draws them.
+
+### 4.5 Analytics
+
+Canvas: `Analytics`. Replaces `components/analytics/AnalyticsSection.tsx` and its dialog. Pro
+only (R1); the data and the span picker are what exist today (`lib/analyticsSummary.ts`,
+`lib/performanceAnalytics.ts`).
+
+- A 7 / 30 / 90 day picker.
+- **Accuracy:** the figure, and answers per day as stacked bars, green correct and red missed.
+- **Pace:** the reader's time per question as a dot on a line, with the exam's pace as a tick.
+- **Marks lost:** one bar per section, as long as the section's share of the exam, the lost
+  part in red, with the number.
+- **By difficulty:** three bars.
+
+---
+
+## 5. The session (question, feedback, results)
+
+Replaces the chrome of `pages/Quiz.tsx`, `components/ExplanationPanel.tsx` and
+`pages/Review.tsx`. Canvas: `Question`, `Feedback`, `Results`. The place bar is hidden for
+the whole session.
+
+### 5.1 The question
+
+- One row above the question: **leave** (a cross), the **progress bar**, and **more**. More
+  holds flag, question info (with Fact Check), sound, the timer and the quiz's settings. The
+  six header icons go.
+- The progress bar is the session card's bar cut into one segment per question, grouped by
+  step. A segment turns green or red as it is answered, grey if skipped; the current one is
+  the text colour; the rest are the line colour.
+- The question, then the options as outlined rows with their letter. The picked option is
+  filled.
+- **Check**, the filled button, at the foot.
+
+A timed quiz shows its clock in the top row beside the bar. Keyboard shortcuts and the
+existing resume behaviour (`lib/quizResume.ts`) are unchanged.
+
+### 5.2 After an answer
+
+For a miss (`Feedback`):
+
+- The question folds to one line that can be reopened, so the lesson leads.
+- Two rows: the reader's answer, outlined in red with a cross and struck through; the right
+  answer, filled green with a check.
+- The solution in plain text on the page, formulas in outlined boxes that scroll sideways.
+- A row that opens the concept in the reader.
+- At the foot: **Try a similar one** (outlined) and **Next** (filled). "Try a similar one"
+  queues another question tagged with the same concept; it is new behaviour.
+
+The "Choose any answer to continue" caption and the shortcut it describes are removed.
+*Change Answer* stays only when answers are held to the end (D-DR4). The state after a
+correct answer is not drawn: same layout, one green row, no "Try a similar one".
+
+### 5.3 Results
+
+Order, top to bottom (`Results`):
+
+1. The score as one figure ("6 of 9") and the time taken. No percentage, no ring.
+2. The progress bar in its final colours, and under it the three counts with their dots:
+   correct, incorrect, unanswered.
+3. **To fix:** each missed or unanswered question as a row (its concept, one line of the
+   stem, its dot) that opens the solution. Then the screen's filled button, **Fix these 3**,
+   which starts the existing mistakes quiz on them.
+4. **Levelled up:** each concept that moved, with its before and after squares, and the
+   syllabus bar with the gain. This replaces the full-screen `ConceptLevelUpCeremony` for an
+   ordinary level change. Keep the ceremony only for a first collected card or a Level 3
+   (`docs/design-review.md` §5.8).
+5. The questions answered right, folded under one row.
+6. **Back to Today**, outlined.
+
+With nothing missed, steps 3 and 5 are absent and the page ends on what was gained.
+
+---
+
+## 6. The exam switcher
+
+New. Canvas: `Switcher`, `AddExam`, `ExamDate`. It replaces five separate exam choosers: the
+Dashboard's chips, the exam lists on the Quiz and Study Guides tabs, and the exam strips on
+Resources and the Store.
+
+**State.** One "exam in focus" for the account, stored with it and mirrored in the browser;
+for a visitor, the browser alone. Every place reads it. It is the last exam used (R7). The
+reader's exams are `exam_progress` rows, as now (`contexts/ExamProgress`).
+
+**Flow.**
+
+1. Tap the exam at the top left of any place. A sheet lists the reader's exams, each with its
+   logo, days left and syllabus bar, the current one checked. Tapping one switches every
+   place to it and closes the sheet.
+2. **Add an exam** opens a screen with the SOA / CAS / CIA picker (`lib/bodyFilter.ts`), the
+   ready and beta exams by credential (`lib/examStatus.ts`, `data/tracks.ts`), exams already
+   added shown with a check, and in-development exams folded under one row per credential
+   (D-DR3).
+3. Picking an exam asks **"When is your exam?"**: the next three sittings from the published
+   tables (`data/examSittings.ts`), "Another date" and "Not sure yet". Dates are transcribed,
+   never constructed; an exam with no sittings on file offers only the last two. Confirming
+   adds the exam, makes it the exam in focus and lands on Today in its first-day state.
+
+"Edit" (R10) and the desktop form (a popover from the rail) are not drawn.
+
+---
+
+## 7. Learn
+
+Canvas: `Exam`, `Concept`. Replaces the layout of `pages/wiki/WikiExam.tsx` and
+`pages/wiki/WikiConcept.tsx`; the article rendering (`WikiArticle`), the vault and its
+parsers are untouched.
+
+### 7.1 The exam page
+
+- The exam's subject and format ("30 questions · 3 hours"), the syllabus bar with the
+  percentage and days left, and two labelled buttons: the official syllabus PDF and dates and
+  fees (the existing `ExamSyllabusButton` and `ExamSittingInfoButton`).
+- Each **learning objective** is a card: name, the reader's percentage, its share of the
+  exam. Folded, it shows its concepts as level squares.
+- Opened, it shows the syllabus's own numbered sentences, unchanged (they are transcribed).
+  Under each sentence its concepts are **pills**, each a level square and the concept's name;
+  a concept in today's session has an outline in the text colour. A pill opens the concept.
+  This replaces the paragraph of underlined links, and the weight bar under each objective
+  row that read as progress.
+- An opened objective ends in the page's filled button, **Practice <objective>**.
+- Rows at the foot: Readings (the Source Material shelf), Exam format, What you should know
+  first.
+
+The title is no longer a menu. Its rows move: Start Quiz to the Practice button, Today's
+Study Plan to Today, Fact Check to a "more" button if the page keeps one.
+
+### 7.2 The concept page
+
+- Top row: back to where the reader came from (`hooks/useBack.ts`), the reader's **level as a
+  button** (square and "Level 2") that opens Learning Progress, and **more** (add to
+  flashcards, listen, fact check). The title is plain text; `ConceptActionMenu`'s rows are
+  split between these three controls.
+- The article as it is: figure, definition, formula, examples, trap. The example and trap
+  cards are outlines. The trap card keeps its icon and loses its amber ground, since amber
+  now means Partial.
+- At the end: **Next in <objective>**, the next concept with its level square.
+- A fixed foot: **Practice this · 152 questions**, the filled button. A concept with no
+  questions shows none.
+
+The same foot is in the concept reader (§4.2), so a concept ends the same way wherever it is
+read. The concept figures are generated in colour (`docs/concept-figures.md`); whether they
+get a monochrome pass is undecided, so leave them as they are.
+
+---
+
+## 8. Build order
+
+Each phase is one PR that can ship on its own. Phases A to D work under the **existing
+sidebar**; do not build the four-place navigation until Practice, You and Apply are designed.
+
+| Phase | What | Depends on |
+|---|---|---|
+| **A. Visual base** | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
+| **B. Today** | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
+| **C. The session** | §5: question header, feedback, "Try a similar one", results | A |
+| **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
+| **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
+| **F. Navigation** | The place bar and rail, the profile button | Designs for Practice, You, Apply |
+
+For every phase:
+
+- Reader-facing words follow `docs/writing-style.md` and the `app-copy` skill. *Practice* is
+  spelled with a c. The new nouns (Today, Syllabus, Fix mistakes, Learn, Review) go in the
+  skill's glossary.
+- Logic goes in `lib/` as pure, tested functions; update the e2e specs the change touches
+  (`e2e/dashboard-session.spec.ts`, `e2e/quiz.spec.ts`, `e2e/reveal.spec.ts`,
+  `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`).
+- Check each screen at 390 × 844 and 1440 × 900, in both themes.
+- Update the lines in `CLAUDE.md`, `docs/roadmap.md` (X11), `docs/design-review.md` §6 and
+  the design doc of whatever was changed (`docs/exam-readiness.md`,
+  `docs/study-plan-generation.md`) in the same PR.
+- Keep `npm run size` green: nothing here may pull the question bank or the wiki bundle into
+  the first paint.
+
+---
+
+## 9. Where this differs from `docs/design-review.md`
+
+| There | Here |
+|---|---|
+| §5.4: readiness as a figure under Start; the ring kept under Progress | No ring. One syllabus bar; Syllabus and Analytics are tiles and separate screens (R5, R6) |
+| §5.4: a free reader's session is the quiz builder's own quiz | A free reader gets the same daily session; Pro is the pacing, Analytics and the podcast (R1) |
+| §5.3: the switcher lists the reader's exams, then the body's ready exams, then all | The switcher lists the reader's exams only; adding one is its own screen (§6) |
+| §5.6: the concept page's foot bar holds Practice, a tool link and the level | The level is a button at the top; the foot is Practice alone. The tool link waits for Apply |
+| §5.8: level changes as a row of `ConceptTile`s | Before and after squares beside each concept's name |
+| Colour: the exam's accent scopes the whole app | The exam's colour is on its logo tile only (§2.1) |
+| Levels in green | Levels in neutral shades; green means correct (R12, R13) |
+
+---
+
+## 10. Open questions for the maintainer
+
+1. The split rule for a session's budget (§4.3).
+2. How the plan's tick on the syllabus bar is derived (§4.4).
+3. The pace to use for an exam paced by the point, or with none on file (§4.3).
+4. Whether the concept figures go monochrome (§7.2).
+5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
+   exam page).

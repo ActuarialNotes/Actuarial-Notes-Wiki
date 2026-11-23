@@ -34,6 +34,9 @@ on:
       - 'scripts/validate_content.py'
       - 'scripts/syllabus_*.py'
       - 'scripts/resource_*.py'
+      - 'scripts/assumption_lint.py'
+      - 'scripts/timeline_lint.py'
+      - 'scripts/ontology_lists.py'
       - 'scripts/vault_links.py'
       - 'scripts/publication_readiness.py'
       - 'scripts/answerability_lib.py'
@@ -54,6 +57,9 @@ on:
       - 'scripts/validate_content.py'
       - 'scripts/syllabus_*.py'
       - 'scripts/resource_*.py'
+      - 'scripts/assumption_lint.py'
+      - 'scripts/timeline_lint.py'
+      - 'scripts/ontology_lists.py'
       - 'scripts/vault_links.py'
       - 'scripts/publication_readiness.py'
       - 'scripts/answerability_lib.py'
@@ -127,6 +133,17 @@ jobs:
       # reads a document, is run by whoever transcribes a set, not here.
       - name: Lint assumption sets
         run: python3 scripts/assumption_lint.py
+
+      # The dated timeline pages' jurisdiction and lob, against the Actuarial
+      # Ontology's lists (scripts/ontology_lists.py). Stdlib only.
+      - name: Lint timeline pages
+        run: python3 scripts/timeline_lint.py
+
+      # The lists are a copy of the ontology's. A copy that has fallen behind
+      # is reported, not failed: taking a new list is a change of its own.
+      - name: Ontology lists are current
+        continue-on-error: true
+        run: python3 scripts/ontology_lists.py --check
 
   simulated-learner:
     name: simulated learner isolation

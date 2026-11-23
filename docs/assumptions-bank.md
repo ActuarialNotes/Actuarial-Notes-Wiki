@@ -350,7 +350,9 @@ A7's `get_document` then returns its `assumptions` and `table` from here.
     total 27.8%, ULAE 1.094 and the 6.0% profit provision (p. 7), with the trend and development
     benchmarks as blank rows.
 - **The vocabulary** is `scripts/assumption_vocab.json`, the kinds and the units each may be
-  written in.
+  written in. Every kind but `fact`, every unit and a set's `Jurisdiction` must also be in the
+  Actuarial Ontology's lists (`scripts/ontology_lists.py`), so a new kind is added to the
+  ontology's quantity kinds first.
 - **The gate** is `scripts/assumption_lint.py`, in CI under `content-validation.yml`. It has one
   mode that isn't a shape check: `--against <file>` hashes the file that was read against
   `Source sha256` and checks that every figure, and every fact's words, is printed in its text.

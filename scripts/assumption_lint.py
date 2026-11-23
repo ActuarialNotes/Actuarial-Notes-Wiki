@@ -64,6 +64,7 @@ from dataclasses import dataclass, field
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import ontology_lists as ol  # noqa: E402
 import vault_links as vl  # noqa: E402
 import verify_lib  # noqa: E402
 
@@ -74,6 +75,12 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assumption_v
     _VOCAB = json.load(_fh)
 KINDS: dict[str, list[str]] = _VOCAB["kinds"]
 BASES: list[str] = _VOCAB["bases"]
+#: The Actuarial Ontology's lists (scripts/ontology_lists.py). A set's
+#: jurisdiction, a figure's kind and its unit are each an entry of one;
+#: `fact` is the bank's own kind, the document's words and no quantity.
+JURISDICTIONS = ol.notations("Jurisdiction")
+QUANTITY_KINDS = ol.notations("QuantityKind")
+UNITS = ol.notations("Unit")
 
 #: (key, required) in the order a set writes them, `verification` last.
 KEYS: list[tuple[str, bool]] = [
@@ -243,6 +250,9 @@ def lint(s: AssumptionSet, vault: vl.Vault, body: str) -> list[str]:
             errors.append(f"{key} must be a date, YYYY-MM-DD")
     if m.get("Jurisdiction") and not JURISDICTION_RE.match(m["Jurisdiction"]):
         errors.append("Jurisdiction must be a country code, optionally with a region (CA, CA-ON)")
+    elif m.get("Jurisdiction") and m["Jurisdiction"] not in JURISDICTIONS:
+        errors.append(f"Jurisdiction {m['Jurisdiction']!r} is not in the ontology's list of jurisdictions "
+                      "(scripts/ontology_lists.py)")
     if m.get("Extraction") and m["Extraction"] not in EXTRACTIONS:
         errors.append(f"Extraction must be one of {', '.join(EXTRACTIONS)}")
     if m.get("Document") and not m["Document"].startswith("https://"):
@@ -266,6 +276,12 @@ def lint(s: AssumptionSet, vault: vl.Vault, body: str) -> list[str]:
         if r.kind not in KINDS:
             errors.append(f"{where}: kind {r.kind!r} is not in assumption_vocab.json")
             continue
+        if r.kind != "fact" and r.kind not in QUANTITY_KINDS:
+            errors.append(f"{where}: kind {r.kind!r} is not a quantity kind in the ontology's list "
+                          "(scripts/ontology_lists.py)")
+        if r.unit and r.unit not in UNITS:
+            errors.append(f"{where}: unit {r.unit!r} is not in the ontology's list of units "
+                          "(scripts/ontology_lists.py)")
         if r.unit not in KINDS[r.kind]:
             allowed = ", ".join(u or "(none)" for u in KINDS[r.kind])
             errors.append(f"{where}: unit {r.unit!r} is not one a {r.kind} row takes ({allowed})")

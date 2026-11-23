@@ -1805,6 +1805,14 @@ compile — don't "clean up" the flagged code as dead.
   Questions.md` (per exam: syllabus concepts no question in that exam's bank is tagged with),
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
+- `ontology_lists.py` (+ `ontology_lists.json`, `timeline_lint.py`) — the vault's shared
+  vocabularies are the **Actuarial Ontology**'s controlled lists (a second repo,
+  `Actuarial-Notes/Actuarial-Ontology`, `lists/`): jurisdictions, lines of business, document
+  types, quantity kinds, units. `ontology_lists.json` is a copy of the ontology's
+  `lists/lists.json`, never edited here (`--sync` takes a new one, `--check` compares). It is read
+  by `resource_lint.py` (a resource page's `Type`), `assumption_lint.py` (a set's `Jurisdiction`,
+  a row's kind and unit) and `timeline_lint.py` (a dated page's `jurisdiction` and `lob`, CI). A
+  new value goes in the ontology's list first. Tests: `scripts/test_ontology_lists.py`.
 - `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`
   (+ `mdmath.py`) — the **PDF → question bank** pipeline; see
   `docs/pdf-question-pipeline.md`. `pdf_extract.py` and `resource_extract.py` are the only

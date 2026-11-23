@@ -200,7 +200,9 @@ cover.
 | `Benchmark` | a regulator's or industry body's published benchmarks |
 | `Reference Sheet` | the vault's own reference pages |
 
-The list lives in `TYPES` in `scripts/resource_lint.py`; add a kind there (and here, and
+The list is the Actuarial Ontology's `DocumentType` list, which `scripts/resource_lint.py` reads
+from `scripts/ontology_lists.json` (a copy of the ontology's `lists/lists.json`, taken with
+`python3 scripts/ontology_lists.py --sync`). Add a kind to the ontology's list (and here, and
 its folder in `scripts/resource_folders.py` and `quiz/src/lib/resourceFolders.ts`) rather
 than writing a new value on one page.
 

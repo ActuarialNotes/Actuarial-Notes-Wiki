@@ -420,6 +420,15 @@ order below stands.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
+- **Bind the vault to the Actuarial Ontology (proposed 2026-11-23; its first step built the same
+  day).** The ontology's roadmap (its `docs/ontology-review.md` §9, Phase 3) has three steps on
+  this side. Built: the vault's shared vocabularies are the ontology's lists, kept as a copy in
+  `scripts/ontology_lists.json` and read by `resource_lint.py` (a page's `Type`),
+  `assumption_lint.py` (jurisdiction, kind, unit) and the new `timeline_lint.py` (a dated page's
+  `jurisdiction` and `lob`). Open: a frontmatter-to-RDF export checked against the ontology's
+  shapes in CI, and linking concept pages to its glossary terms. The app's own copies of these
+  lists (`researchOntology.ts`, `resourceFolders.ts`, `assumptionBank.ts`) are not read from it.
+
 - **X11: design review and redesign (proposed 2026-11-15; decisions made and Phase 0 built the same day).** A review of every tab at desktop
   and phone size against the Laws of UX found well-made parts in a frame that lists features
   where a learner needs a path: up to twelve sidebar destinations, the exam chosen again on five

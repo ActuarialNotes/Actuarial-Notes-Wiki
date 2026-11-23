@@ -68,6 +68,7 @@ from dataclasses import dataclass, field
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import syllabus_lib as sl  # noqa: E402
+import ontology_lists as ol  # noqa: E402
 import vault_links as vl  # noqa: E402
 import resource_folders as rf  # noqa: E402
 import verify_lib  # noqa: E402
@@ -91,32 +92,10 @@ DEPRECATED = {
 
 # What kind of document it is — the kicker on the card and the cover. One
 # value per kind, not per publisher's name for it: the lead says "a CIA
-# research paper"; the Type says `Paper`.
-TYPES = (
-    "Textbook",               # a published book
-    "Casebook",               # a book of cases with commentary
-    "Study Note",             # a CAS/SOA study note
-    "Monograph",              # the CAS monograph series
-    "Course",                 # an online course (read through its published syllabus)
-    "Syllabus",               # an examining body's syllabus, when it is itself the source
-    "Paper",                  # a journal, E-Forum, research or working-party paper; an article
-    "Report",                 # a government, committee, consultant or research report
-    "Educational Note",       # CIA educational notes
-    "Standard of Practice",   # ASB ASOPs, the CIA's Standards of Practice
-    "Statement of Principles",
-    "Accounting Standard",    # IFRS, IAS — an accounting standard-setter's standard
-    "Guideline",              # a regulator's guideline or guidance
-    "Regulatory Return",      # a return's forms (a workbook, usually)
-    "Instructions",           # filing instructions, a return's instructions, filing guidelines
-    "Legislation",            # a statute or regulation
-    "Case Law",               # court decisions, compiled
-    "Code of Conduct",
-    "Guide",                  # a guide to a plan or program, for policyholders or insurers
-    "Glossary",
-    "Reference Sheet",        # the vault's own reference pages
-    "Dataset",                # a published table or statistical series
-    "Benchmark",              # a regulator's or industry body's published benchmarks
-)
+# research paper"; the Type says `Paper`. The list is the Actuarial Ontology's
+# `DocumentType` (scripts/ontology_lists.py), which says what each one is; a
+# new type is added there, and given a folder in resource_folders.py.
+TYPES = ol.notations("DocumentType")
 
 VAULT_PUBLISHER = "Actuarial Notes"
 SYLLABUS_CALLOUT = "> [!info] On the syllabus"

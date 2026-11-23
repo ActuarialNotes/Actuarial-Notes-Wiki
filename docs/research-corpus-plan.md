@@ -25,6 +25,8 @@ date: YYYY-MM-DD
 published_date: YYYY-MM-DD        # optional, if different from effective date
 jurisdiction: "CA" | "CA-ON" | "CA-AB" | "CA-QC" | "CA-BC" | "CA-MB" | "CA-SK" | ...
 lob: ["P&C"]                       # or ["Auto-Personal","Auto-Commercial"], ["Property"], etc.
+                                   # jurisdiction and lob values are the Actuarial Ontology's lists
+                                   # (scripts/ontology_lists.py); scripts/timeline_lint.py checks them
 issuing_body: "..."
 impact_level: high | medium | low
 impacted_agents: [...]

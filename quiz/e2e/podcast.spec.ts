@@ -61,6 +61,7 @@ test('Today plays today\'s episode, and it keeps playing across the app', async 
   await expect(button).toContainText("Listen to today's plan")
   await expect(button).toContainText(/\d+ concepts? · \d+ min/)
   await button.screenshot({ path: 'test-results/podcast-plan-card.png' })
+  await page.screenshot({ path: 'test-results/podcast-today.png' })
   await button.click()
 
   const player = page.getByTestId('podcast-player')

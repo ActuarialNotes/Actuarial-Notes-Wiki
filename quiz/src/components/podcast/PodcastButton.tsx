@@ -5,14 +5,17 @@ import { usePodcast } from '@/stores/podcastStore'
 import { episodeMinutesLabel } from '@/lib/podcast'
 import { PODCAST_ENABLED } from '@/lib/featureFlags'
 import type { StudyPlan } from '@/lib/studyPlan'
+import { OUTLINE_TILE, OUTLINE_TILE_PRESSABLE } from '@/components/ui/OutlineCard'
+import { cn } from '@/lib/utils'
 
 /**
  * Today's Study Plan's way into the daily podcast (docs/daily-podcast.md):
  * "Listen to today's plan · 11 min". It renders nothing until there is an
  * episode to play — none of today's concepts recorded yet is no button, not a
- * disabled one. It is only ever drawn on the Pro card, as the plan is Pro.
+ * disabled one. It is only ever drawn for a Pro reader, as the plan is Pro:
+ * an outlined row under the Today card, in the card's own type.
  */
-export function PodcastButton({ plan, examKey, examLabel }: { plan: StudyPlan | null; examKey: string; examLabel: string }) {
+export function PodcastButton({ plan, examKey, examLabel, className }: { plan: StudyPlan | null; examKey: string; examLabel: string; className?: string }) {
   const episode = usePodcastEpisode(plan, examKey, examLabel, PODCAST_ENABLED)
   const play = usePodcast(s => s.play)
   const loaded = usePodcast(s => s.episode)
@@ -34,14 +37,18 @@ export function PodcastButton({ plan, examKey, examLabel }: { plan: StudyPlan | 
       type="button"
       onClick={() => (nowPlaying ? toggle() : play(episode, 'dashboard'))}
       data-testid="podcast-play"
-      className="flex w-full items-center gap-3 rounded-lg bg-muted/60 px-3 py-2.5 text-left transition-colors hover:bg-muted"
+      className={cn(
+        OUTLINE_TILE, OUTLINE_TILE_PRESSABLE,
+        'flex min-h-[64px] w-full items-center gap-3.5 px-5 py-3 text-left lg:rounded-[22px] lg:px-7',
+        className,
+      )}
     >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-        {nowPlaying ? <Pause className="h-4 w-4" aria-hidden /> : <Headphones className="h-4 w-4" aria-hidden />}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-medium">{nowPlaying ? 'Playing today\'s plan' : 'Listen to today\'s plan'}</span>
-        <span className="block text-xs text-muted-foreground">
+      {nowPlaying
+        ? <Pause className="h-[22px] w-[22px] shrink-0 fill-current" aria-hidden />
+        : <Headphones className="h-[22px] w-[22px] shrink-0" aria-hidden />}
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="text-[17px] font-medium">{nowPlaying ? 'Playing today\'s plan' : 'Listen to today\'s plan'}</span>
+        <span className="text-sm tabular-nums">
           {episode.concepts === 1 ? '1 concept' : `${episode.concepts} concepts`} · {episodeMinutesLabel(episode.seconds)}
         </span>
       </span>

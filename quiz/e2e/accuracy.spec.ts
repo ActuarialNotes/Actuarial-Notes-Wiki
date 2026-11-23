@@ -45,31 +45,37 @@ test('the quiz builder carries the same deadline', async ({ page }) => {
   await expect(page.getByText('Registration for the December 3 Exam FM sitting closes in 4 days')).toBeVisible({ timeout: 20_000 })
 })
 
-test('the Analytics screen reads the span: accuracy, pace, marks lost, difficulty', async ({ page }) => {
+test('Analytics opens over Today and reads the span: accuracy, pace, marks lost, difficulty', async ({ page }) => {
+  // The address it had as a screen of its own still opens it.
   await page.goto('/dashboard/analytics')
-  const days = page.getByRole('group', { name: 'Days' })
+  const overlay = page.getByRole('dialog', { name: 'Analytics' })
+  const days = overlay.getByRole('group', { name: 'Days' })
   await expect(days).toBeVisible({ timeout: 30_000 })
   await days.getByRole('button', { name: '7', exact: true }).click()
   await expect(days.getByRole('button', { name: '7', exact: true })).toHaveAttribute('aria-pressed', 'true')
   // 7 of 10 right in the past week.
-  await expect(page.getByText('70%').first()).toBeVisible({ timeout: 30_000 })
-  await expect(page.getByText('accuracy')).toBeVisible()
+  await expect(overlay.getByText('70%').first()).toBeVisible({ timeout: 30_000 })
+  await expect(overlay.getByText('accuracy')).toBeVisible()
   // Every answer took 200 s; Exam FM allows 5:00 a question.
-  await expect(page.getByText('3:20')).toBeVisible()
-  await expect(page.getByText('Exam 5:00')).toBeVisible()
-  await expect(page.getByText('Marks lost', { exact: true })).toBeVisible()
-  await expect(page.getByText('By difficulty')).toBeVisible()
-  await page.screenshot({ path: 'test-results/analytics-screen.png', fullPage: true })
-  // Back goes to Today.
-  await page.getByRole('button', { name: /Today/ }).click()
+  await expect(overlay.getByText('3:20')).toBeVisible()
+  await expect(overlay.getByText('Exam 5:00')).toBeVisible()
+  await expect(overlay.getByText('Marks lost', { exact: true })).toBeVisible()
+  await expect(overlay.getByText('By difficulty')).toBeVisible()
   await expect(page).toHaveURL(/\/dashboard$/)
+  await page.screenshot({ path: 'test-results/analytics-screen.png' })
+  // Closing it leaves Today where it was.
+  await overlay.getByRole('button', { name: 'Close' }).click()
+  await expect(overlay).toBeHidden()
+  await expect(page.getByTestId('today-session')).toBeVisible()
 })
 
-test('Today\'s Analytics tile carries the accuracy and opens the screen', async ({ page }) => {
+test('Today\'s Analytics tile carries the accuracy and opens the overlay', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/dashboard')
   const tile = page.getByTestId('today-analytics')
   await expect(tile).toHaveAccessibleName(/Analytics: \d+% accuracy over 30 days/, { timeout: 30_000 })
   await tile.click()
-  await expect(page).toHaveURL(/\/dashboard\/analytics$/)
+  await expect(page.getByRole('dialog', { name: 'Analytics' }).getByText('accuracy')).toBeVisible({ timeout: 30_000 })
+  await expect(page).toHaveURL(/\/dashboard$/)
+  await page.screenshot({ path: 'test-results/analytics-overlay-phone.png' })
 })

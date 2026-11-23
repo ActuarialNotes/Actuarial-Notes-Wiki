@@ -1005,7 +1005,7 @@ redesigned screen this section wins where the two differ** (an outlined card whe
 card needs no outline, an outlined control where §7.0 says a control has no border). Don't mix
 the two on one screen. `/design/base` on the dev server (`pages/DesignBase.tsx`, never in a
 production build) shows every piece in both themes. Today (`pages/Dashboard.tsx`,
-`components/today/`) and its Analytics screen are the first screens built from them.
+`components/today/`) and its Syllabus and Analytics overlays are the first screens built from them.
 
 ### 13.1 One ground, outlined cards
 

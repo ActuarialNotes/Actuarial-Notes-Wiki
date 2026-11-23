@@ -16,7 +16,7 @@ a brief and a data set and a deadline rather than a bank of questions. The PCPA 
 **Working a project is a Pro feature; reading a brief is not** (decided 2026-11-23,
 `docs/redesign-spec.md` §8, Phase I). The sidebar row carries the Pro chip for every reader.
 `pages/Project/index.tsx` checks `useSubscription().isPro`: a reader without Pro finds the
-briefs at `/project` (`BriefsCatalogue` in `ProjectsHome.tsx`) and reads any of them on its
+briefs at `/project` (`BriefsCatalogue` in `ProjectsHome.tsx`, each brief a row of one outlined tile) and reads any of them on its
 own page, `/project/brief/<case id>` (`BriefPage.tsx`: the brief view with no attempt behind
 it, so no deadline and no files), whose one button is **Upgrade to start**. A link to an
 attempt is sent back to `/project`, and nothing of an attempt runs for them: no sync, no

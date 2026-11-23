@@ -46,10 +46,10 @@ test.describe('pcpa project, without Pro', () => {
     await expect(page.getByRole('button', { name: 'New project' })).toHaveCount(0)
     const briefs = page.getByTestId('briefs-catalogue')
     for (const title of [BRIEF, 'Collision Claim Severity', 'Homeowners Water Damage Loss Cost']) {
-      await expect(briefs.getByRole('button', { name: new RegExp(title) })).toBeVisible()
+      await expect(briefs.getByRole('link', { name: new RegExp(title) })).toBeVisible()
     }
 
-    await briefs.getByRole('button', { name: new RegExp(BRIEF) }).click()
+    await briefs.getByRole('link', { name: new RegExp(BRIEF) }).click()
     await expect(page).toHaveURL(/\/project\/brief\/bop-frequency$/)
     await expect(page.getByRole('heading', { name: BRIEF, level: 1 })).toBeVisible()
     await page.getByRole('button', { name: /^Scope parameters/ }).click()

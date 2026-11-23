@@ -769,6 +769,13 @@ while building it (the first four with the maintainer, 2026-11-23):
   it can differ from the overview.
 - **Until Phase F** the sidebar's Projects row leads to `/apply`, and the arrows at the top of
   Projects and Tools lead up to it. The Tools and Workflows rows are as they were.
+- **The Projects page and the brief** are drawn to the same rules (the maintainer's review of
+  the first screenshots, 2026-11-23): one ground, outlined tiles, one text colour, the exam's
+  colour on its logo alone. The Projects page is the attempts in progress, each with its
+  four-step bar, then the submitted ones, and **New project** as its filled button; without
+  Pro it is the briefs as rows of one tile. The brief's sections are outlined tiles with a
+  plain icon, its outline chips are Ink's (the current one solid), and a stakeholder's note
+  is set off by a rule at its left. The start sheet and the workspace are as they were.
 - **Desktop** is not on the canvas: every screen is one column at reading width.
 
 For every phase:

@@ -74,7 +74,7 @@ function BriefOption({ brief, attempts, onSelect }: { brief: ProjectCase; attemp
   )
 }
 
-export function ProgrammeGroup({
+function ProgrammeGroup({
   programme,
   attempts,
   onSelect,

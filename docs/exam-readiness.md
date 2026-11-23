@@ -1,5 +1,15 @@
 # Exam Readiness Score
 
+> **2026-11-23, the redesign's Phase B (`docs/redesign-spec.md` §4.4).** The score and how it is
+> computed are unchanged. What changed is how it is shown: on Today it is labelled **Syllabus**
+> (it is coverage, and "ready" read as a forecast of passing) and drawn as one bar with its
+> percentage, today's gain as a raised end, and for a paced plan a tick where the plan expects
+> the reader to be (`planTickPct` in `lib/todaySession.ts`). The readiness ring, the wheel on
+> Today's session and the Exam Readiness popup were removed with the old Dashboard
+> (`ReadinessCard`, `SessionWheel`, `lib/readinessRing.ts`); each concept's level is a square
+> (`components/LevelSquare.tsx`) on Today's desktop syllabus panel. The sections below that
+> describe those surfaces are kept as the record of how the old Dashboard worked.
+
 The one number that answers *how ready am I to sit this exam?* It is computed in one place
 and read by every surface that prints a readiness percentage.
 

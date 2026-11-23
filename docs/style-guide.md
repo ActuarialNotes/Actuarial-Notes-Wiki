@@ -1004,7 +1004,8 @@ redesigned screen is made of. **Sections 1 to 12 describe the screens not yet re
 redesigned screen this section wins where the two differ** (an outlined card where §2.2 says a
 card needs no outline, an outlined control where §7.0 says a control has no border). Don't mix
 the two on one screen. `/design/base` on the dev server (`pages/DesignBase.tsx`, never in a
-production build) shows every piece in both themes.
+production build) shows every piece in both themes. Today (`pages/Dashboard.tsx`,
+`components/today/`) and its Analytics screen are the first screens built from them.
 
 ### 13.1 One ground, outlined cards
 

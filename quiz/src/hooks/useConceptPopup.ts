@@ -58,6 +58,8 @@ interface DashboardContext {
   filter: DashboardFilter
   circular: boolean
   fromRadial: boolean
+  /** What the study-plan walk is called in the footer: Today names it "Today's session". */
+  studyPlanLabel?: string
   // Document-ordered occurrences for the "entire syllabus" view (null elsewhere).
   occurrences: OccurrenceRef[] | null
 }
@@ -98,7 +100,7 @@ interface ConceptPopupState {
     studyPlanList: WikiEntryRef[] | null,
     filter: DashboardFilter,
     initialIndex: number,
-    options?: { circular?: boolean; fromRadial?: boolean },
+    options?: { circular?: boolean; fromRadial?: boolean; studyPlanLabel?: string },
   ) => void
   setDashboardFilter: (filter: DashboardFilter) => void
   navigate: (delta: number) => void
@@ -179,6 +181,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
         filter,
         circular: options.circular ?? false,
         fromRadial: options.fromRadial ?? false,
+        studyPlanLabel: options.studyPlanLabel,
         occurrences: null,
       },
     })

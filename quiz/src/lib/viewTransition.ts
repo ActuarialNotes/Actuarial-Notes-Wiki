@@ -62,6 +62,7 @@ export interface DeskPlace {
 // path none of them match is a tab of its own at the far end of the desk.
 const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/dashboard', tab: 0, depth: 0 },
+  { prefix: '/dashboard/analytics', tab: 0, depth: 1 },
   { prefix: '/wiki', tab: 1, depth: 0, below: 1 },
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },

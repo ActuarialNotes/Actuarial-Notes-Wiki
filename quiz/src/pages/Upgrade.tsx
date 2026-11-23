@@ -19,15 +19,17 @@ import { cn } from '@/lib/utils'
 // today, told as what it does for the reader. Keep this list honest: a
 // benefit belongs here only once a surface checks for it (natural-voice
 // Listen and Cowork are off it until they ship), and a reader's own mastery
-// levels are free, so they are not on it (docs/pro-proposal.md §3). The copy
-// follows the app-copy skill (.claude/skills/app-copy/).
+// levels are free, so they are not on it (docs/pro-proposal.md §3). The daily
+// session is free too (docs/redesign-spec.md, R1): what Pro sells of it is the
+// plan that paces it to the exam date. The copy follows the app-copy skill
+// (.claude/skills/app-copy/).
 const HEADLINE_BENEFITS = [
-  'A study plan for every day until your exam',
+  'A study plan paced to your exam date',
   'Study in syllabus order, or the heaviest topics first',
   'Each day’s list in your inbox, at the time you choose',
-  'Quiz yourself on today’s plan in one tap',
+  'Quiz yourself on today’s study plan in one tap',
   'Listen to each day’s plan as a short episode',
-  'See how your accuracy is trending, and where you’re weakest',
+  'Analytics on your accuracy, your pace and the marks you’re losing',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -35,8 +37,8 @@ const HEADLINE_BENEFITS = [
 // a title, a line or two.
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
-    title: 'Follow a Daily Study Plan',
-    body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match. Turn on the daily email and each day’s list is in your inbox before you open the app.',
+    title: 'Pace Your Plan to Your Exam Date',
+    body: 'Set your exam date and the plan works back from it, choosing what each day’s session learns and reviews. Fall behind or start forgetting something, and the plan changes to match. Turn on the daily email and each day’s list is in your inbox before you open the app.',
     Art: StudyPlanArt,
   },
   {
@@ -45,8 +47,8 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: StrategyArt,
   },
   {
-    title: 'Quiz Today’s Plan',
-    body: 'Pick Today’s Plan on the Quiz tab and the questions come from the concepts you’re meant to study today. One quiz to finish the day, or a few questions whenever you have a minute.',
+    title: 'Quiz Today’s Study Plan',
+    body: 'Pick Today’s Study Plan on the Quiz tab and the questions come from the concepts your plan has scheduled for today. One quiz to finish the day, or a few questions whenever you have a minute.',
     Art: PlanQuizArt,
   },
   {
@@ -55,8 +57,8 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: PodcastArt,
   },
   {
-    title: 'Track Your Accuracy',
-    body: 'See how often you get questions right over the last week, month or three months, and whether that’s going up. The syllabus sections costing you the most marks are listed first, each one a tap from a quiz on it.',
+    title: 'Read Your Analytics',
+    body: 'See how often you get questions right over the last week, month or three months, and how your time per question compares with the exam’s. The syllabus sections costing you the most marks are listed first, each one a tap from a quiz on it.',
     Art: AnalyticsArt,
   },
   {
@@ -206,8 +208,8 @@ export default function Upgrade() {
           Know you’re ready before you sit.
         </h1>
         <p className="mx-auto max-w-md text-muted-foreground text-balance">
-          Pro plans what to study each day until your exam, and changes the plan
-          when you fall behind or start to forget.
+          A daily session sized to the time you have is free. Pro paces it to your
+          exam date, and changes the plan when you fall behind or start to forget.
         </p>
       </div>
 

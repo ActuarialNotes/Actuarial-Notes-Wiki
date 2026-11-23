@@ -60,6 +60,9 @@ const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages
 // Actuarial Tools (docs/actuarial-tools.md) — calculators, each one card. Lazy:
 // the engine and its grids are for the readers who open a tool.
 const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages/Tools'))
+// Analytics, the screen Today's tile opens (docs/redesign-spec.md §4.5). Lazy:
+// the answer history and its charts are for the readers who open it.
+const { Component: TodayAnalytics } = lazyRoute(() => import('@/pages/TodayAnalytics'))
 // The redesign's visual base on one page (style guide §13). Development only:
 // `import.meta.env.DEV` is a build-time constant, so a production build drops
 // the import and the chunk with it.
@@ -433,6 +436,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/craft/:topicId" element={<CraftRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
+                <Route path="/dashboard/analytics" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><TodayAnalytics /></Suspense></ErrorBoundary>} />
                 <Route path="/search" element={<Suspense fallback={<WikiFallback />}><Search /></Suspense>} />
                 <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />

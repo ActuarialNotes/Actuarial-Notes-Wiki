@@ -1,15 +1,16 @@
 import { expect, test } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
-// Today's session (lib/todaySession.ts): the Dashboard's wheel, the day's size
-// and its steps — the missed question first, then today's plan — with one Start
-// in the card and its copy in the pinned exam row.
+// Today (docs/redesign-spec.md §4): the session sized by time, its steps, the
+// one Start, the session length sheet and the two tiles.
 
 test.use({ viewport: { width: 390, height: 844 } })
 
-test.beforeEach(async ({ page }) => {
+const MISSED = ['p-008', 'p-012', 'p-020', 'p-031', 'p-044']
+
+async function setUp(page: import('@playwright/test').Page, pro: boolean) {
   await page.clock.setFixedTime(new Date('2026-11-07T10:00:00'))
-  await signIn(page, { pro: true, examProgress: [{ exam_id: 'P', status: 'in_progress', target_date: '2027-01-14' }] })
+  await signIn(page, { pro, examProgress: [{ exam_id: 'P', status: 'in_progress', target_date: '2027-01-14' }] })
   await page.addInitScript(() => {
     localStorage.setItem('actuarial_study_plan_config_v1_P', JSON.stringify({
       targetReadyDate: '2026-12-15', targetStrengthLevel: 'strong_all', planStartDate: '2026-10-20',
@@ -17,58 +18,95 @@ test.beforeEach(async ({ page }) => {
   })
   const rows = [
     { question_id: 'p-004', is_correct: true, answered_at: '2026-11-02T15:00:00Z', time_spent_seconds: 200 },
-    { question_id: 'p-008', is_correct: false, answered_at: '2026-11-03T15:00:00Z', time_spent_seconds: 400 },
+    ...MISSED.map((id, i) => ({ question_id: id, is_correct: false, answered_at: `2026-11-0${i + 1}T15:00:00Z`, time_spent_seconds: 400 })),
   ]
   await page.route(`${PLACEHOLDER}/rest/v1/question_responses*`, route => {
     const before = route.request().url().includes('answered_at=lt.')
     const body = before ? [] : rows.map(r => ({ user_id: USER_ID, ...r }))
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
   })
-})
+}
 
-test('the session lists the day in steps, and Start does the first one', async ({ page }) => {
+test('Today fits one phone screen down to Start, and Start runs the session as one quiz', async ({ page }) => {
+  await setUp(page, true)
   await page.goto('/dashboard')
   const card = page.getByRole('region', { name: "Today's session" })
-  await expect(card).toBeVisible({ timeout: 30_000 })
-  await expect(card.getByRole('heading', { name: 'Fix 1 mistake' })).toBeVisible()
-  await expect(card.getByRole('heading', { name: /^Learn \d+ new concepts?$/ })).toBeVisible()
-  // Exam P is paced at 6:00 a question: the size is questions and minutes.
-  await expect(card).toContainText(/\d+\s*questions?\s*\d+\s*min/)
-  await expect(card.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/i })).toBeVisible()
-  await page.screenshot({ path: 'test-results/dashboard-session.png', fullPage: true })
+  const start = page.getByTestId('today-start')
+  await expect(start).toBeVisible({ timeout: 30_000 })
+  // The acceptance test for the layout: Start is on the first screen.
+  await expect(start).toBeInViewport({ ratio: 1 })
+  await expect(page.getByRole('img', { name: /^This week: \d+ days? studied, today not yet$/ })).toBeVisible()
+  await expect(page.getByText('68', { exact: true })).toBeVisible()
 
-  // The pinned row carries the same Start, sized.
-  const pill = page.getByRole('button', { name: /^Start session · \d+ questions?, \d+ minutes$/ })
-  await expect(pill).toBeVisible()
-  await expect(pill).toContainText(/\d+ min/)
+  // 25 minutes of Exam P at 6:00 a question is four questions: the oldest
+  // miss, then the plan's concepts. More misses wait than fit.
+  await expect(card.getByRole('button', { name: 'Session length, 25 minutes. Change' })).toBeVisible()
+  await expect(card.locator('[data-step="fix"]')).toContainText(/Fix mistakes\s*[1-3]\s*of 5/)
+  const counts = await card.locator('[data-step]').evaluateAll(els => els.map(e => Number(e.querySelector('.font-bold')?.textContent)))
+  expect(counts.reduce((a, b) => a + b, 0)).toBe(4)
+  // One filled button on the screen, and no wheel.
+  await expect(page.getByRole('button', { name: /Exam readiness/i })).toHaveCount(0)
+  await page.screenshot({ path: 'test-results/today.png' })
 
-  // No time bar and no numbered pins on the wheel.
-  await expect(card.getByRole('list', { name: 'Time by step' })).toHaveCount(0)
-
-  // Start runs the whole session as one quiz, the missed question first.
-  await card.getByRole('button', { name: 'Start session' }).click()
+  await start.click()
   await expect(page).toHaveURL(/\/quiz\?selection=stored/, { timeout: 30_000 })
   const ids = await page.evaluate(() => JSON.parse(sessionStorage.getItem('actuarial_selected_ids') ?? '[]') as string[])
   expect(ids[0]).toBe('p-008')
   expect(ids.length).toBeGreaterThan(1)
+  expect(ids.length).toBeLessThanOrEqual(4)
 })
 
-test('a tapped row walks the list on screen, the row it is on held highlighted', async ({ page }) => {
+test('the session length sheet resizes the session, for today or every day', async ({ page }) => {
+  await setUp(page, true)
   await page.goto('/dashboard')
   const card = page.getByRole('region', { name: "Today's session" })
-  await expect(card).toBeVisible({ timeout: 30_000 })
-  const rows = card.locator('[data-study-concept]')
-  const names = await rows.evaluateAll(els => [...new Set(els.map(e => e.getAttribute('data-study-concept')!))])
-  expect(names.length).toBeGreaterThan(2)
-  await rows.first().click()
-  for (const name of names.slice(0, 3)) {
-    await expect(card.locator(`[data-study-concept="${name}"][aria-current="true"]`).first()).toBeVisible()
-    await page.keyboard.press('ArrowRight')
-  }
+  await card.getByRole('button', { name: /Session length, 25 minutes/ }).click({ timeout: 30_000 })
+  const sheet = page.getByRole('dialog', { name: 'How long today?' })
+  await expect(sheet.getByRole('radio')).toHaveCount(4)
+  await expect(sheet.getByRole('radio', { name: /^25 minutes/ })).toBeChecked()
+  await sheet.getByRole('radio', { name: /^45 minutes/ }).click()
+  await sheet.getByRole('checkbox', { name: 'Use this every day' }).uncheck()
+  await sheet.getByRole('button', { name: 'Done' }).click()
+  await expect(sheet).toHaveCount(0)
+  await expect(card.getByRole('button', { name: 'Session length, 45 minutes. Change' })).toBeVisible()
+  // For today only: the every-day length is still 25.
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('actuarial_session_length_v1') ?? '{}'))
+  expect(stored).toEqual({ everyDay: 25, today: { day: '2026-11-07', minutes: 45 } })
 })
 
-test('the wheel opens Exam Readiness', async ({ page }) => {
+test('a step unfolds its concepts, and a tapped one opens in the reader with its row lit', async ({ page }) => {
+  await setUp(page, true)
   await page.goto('/dashboard')
-  await page.getByRole('button', { name: /Exam readiness \d+%.*open the study guide/i }).click({ timeout: 30_000 })
-  await expect(page.getByRole('dialog', { name: 'Exam Readiness' })).toBeVisible()
+  const card = page.getByRole('region', { name: "Today's session" })
+  await expect(page.getByTestId('today-start')).toBeVisible({ timeout: 30_000 })
+  const step = card.locator('[data-step]').last()
+  await step.getByRole('button').first().click()
+  const row = step.locator('[data-study-concept]').first()
+  const name = await row.getAttribute('data-study-concept')
+  await row.click()
+  await expect(card.locator(`[data-study-concept="${name}"][aria-current="true"]`)).toBeVisible()
+  await expect(page.getByRole('button', { name: "Today's session" })).toBeVisible()
+})
+
+test('a free account gets the same session, with one row to Upgrade', async ({ page }) => {
+  await setUp(page, false)
+  await page.goto('/dashboard')
+  const start = page.getByTestId('today-start')
+  await expect(start).toBeVisible({ timeout: 30_000 })
+  await expect(start).toBeInViewport({ ratio: 1 })
+  const card = page.getByRole('region', { name: "Today's session" })
+  await expect(card.locator('[data-step="fix"]')).toBeVisible()
+  await expect(card.locator('[data-step="learn"]')).toBeVisible()
+  await expect(page.getByRole('link', { name: /Pace my plan to Jan 14/ })).toHaveAttribute('href', '/upgrade')
+  // No plan behind it: the syllabus bar has no tick.
+  await expect(page.getByTestId('today-syllabus')).toHaveAccessibleName(/^Syllabus: [^,]+$/)
+  await start.click()
+  await expect(page).toHaveURL(/\/quiz\?selection=stored/, { timeout: 30_000 })
+})
+
+test('the Syllabus tile opens the exam\'s page', async ({ page }) => {
+  await setUp(page, true)
+  await page.goto('/dashboard')
+  await page.getByTestId('today-syllabus').click({ timeout: 30_000 })
+  await expect(page).toHaveURL(/\/wiki\/exam\//)
 })

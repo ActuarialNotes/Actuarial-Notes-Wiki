@@ -273,7 +273,7 @@ export function ConceptPopup() {
   // ("Today's Study Plan") that Previous / Next drop their words and keep
   // their arrows, or Next is pushed off the right edge of a phone.
   const showFooterPicker = !focusMode && hasSyllabusToFilter
-  const todayLabel = "Today's Study Plan"
+  const todayLabel = dashboardContext?.studyPlanLabel ?? "Today's Study Plan"
 
   // Focus mode's toggle is the only control that survives it, so there's always
   // a way back out (Esc also works). It rides in the active page's header.

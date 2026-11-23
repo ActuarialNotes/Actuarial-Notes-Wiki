@@ -40,6 +40,7 @@ import {
   selectGroup,
   clearSessionMistakes,
   peekSessionMistakes,
+  questionsOnConcepts,
   sessionQuizIds,
   storeSelectedIds,
   takeConceptOverride,
@@ -273,6 +274,21 @@ export default function Landing() {
     const mistakeIds = (sessionMistakes?.ids ?? []).filter(id => known.has(id))
     const withPlan = sessionMistakes?.plan !== false && planReady
     clearSessionMistakes()
+    // Today's session, sized by time: the fewest questions that cover the
+    // concepts it named, after the misses it fixes. No plan is needed, so a
+    // free reader's session launches the same way.
+    const sessionConcepts = sessionMistakes?.concepts ?? []
+    if (sessionConcepts.length > 0) {
+      const pool = questionsOnConcepts(allQuestions, topic, sessionConcepts)
+      const cover = pool.length > 0
+        ? selectQuestionsForCoverage(
+            pool, sessionConcepts,
+            minQuestionsToCoverConcepts(pool, sessionConcepts, { seenIds: todayAnsweredIds }),
+            { seenIds: todayAnsweredIds },
+          )
+        : []
+      return launchIds(sessionQuizIds(mistakeIds, cover.map(q => q.id)), true)
+    }
     if (withPlan) {
       const sel = buildTodaysPlanSelection()
       if (sel && launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }), true, mistakeIds)) {
@@ -280,13 +296,13 @@ export default function Landing() {
       }
     }
     return launchIds(mistakeIds, true)
-  }, [allQuestions, sessionMistakes, planReady, buildTodaysPlanSelection, launchTodaysPlan, launchIds, todayAnsweredIds])
+  }, [allQuestions, topic, sessionMistakes, planReady, buildTodaysPlanSelection, launchTodaysPlan, launchIds, todayAnsweredIds])
   const isAutostarting = useDashboardAutostart({
     signedIn: !!user,
     isQuiz: initialMode !== 'mock-exam',
     topic,
     loading: masteryLoading || conceptsLoading || planLoading || subLoading,
-    eligible: allQuestions.length > 0 && (planReady || (sessionMistakes?.ids.length ?? 0) > 0),
+    eligible: allQuestions.length > 0 && (planReady || !!sessionMistakes),
     launch: autostartLaunch,
   })
 

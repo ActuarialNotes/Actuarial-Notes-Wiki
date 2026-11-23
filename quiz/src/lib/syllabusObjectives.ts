@@ -13,6 +13,8 @@ export interface SyllabusObjective {
   /** "23–30%", as the syllabus prints it; null when it prints none. */
   weight: string | null
   pct: number
+  /** The objective's concepts, in syllabus order, and each one's level. */
+  names: string[]
   states: MasteryState[]
   /** Indexes of the concepts in today's session. */
   today: Set<number>
@@ -38,6 +40,7 @@ export function syllabusObjectives(
       name: topic.name,
       weight: topic.weight ? topic.weight.replace(/\s*-\s*/, '–') : null,
       pct: section ? Math.round(section.readinessPct) : 0,
+      names: topic.concepts.map(c => c.name),
       states,
       today,
     }

@@ -433,7 +433,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   **2026-11-23:** the screens were redesigned and `docs/redesign-spec.md` is the build spec, in
   phases A–F. Phase A (the visual base: level squares, answer colours, outlined cards, the popup;
   style guide §13) and Phase B (Today: the daily session sized by time and free to every
-  account, the Syllabus and Analytics tiles, the Analytics screen) are built, and so is Phase D
+  account, the Syllabus and Analytics tiles, the Analytics overlay) are built, and so is Phase D
   (Learn: the exam page's objectives as cards with their concepts as pills, the concept page,
   and "Practice this" at the foot of a concept there and in the reader). C (the session) and
   E (the exam switcher) are next.

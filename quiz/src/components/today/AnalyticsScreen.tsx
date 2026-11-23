@@ -1,4 +1,4 @@
-// The redesigned **Analytics** screen (docs/redesign-spec.md §4.5): how one
+// **Analytics** (docs/redesign-spec.md §4.5), an overlay on Today: how one
 // exam's practice is going over a span of 7, 30 or 90 days. Accuracy with the
 // answers day by day, the reader's pace against the exam's, the marks each
 // section is losing, and accuracy by difficulty. Presentational: the rows and
@@ -6,8 +6,7 @@
 // already compute (`accuracyTrend.ts`, `performanceAnalytics.ts`); the heights
 // and positions are `lib/todayAnalytics.ts`.
 
-import { useMemo, useState } from 'react'
-import { ChevronLeft } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
 import {
   ACCURACY_SPANS, DIFFICULTY_ORDER, accuracyPercent, isThin, type AccuracySpan, type AnswerRow,
 } from '@/lib/accuracyTrend'
@@ -25,6 +24,9 @@ import type { AccuracyTrends } from '@/hooks/useAccuracyTrend'
 import type { Question } from '@/lib/parser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { ExamLogo } from '@/components/ExamLogo'
+import { LoadingMark } from '@/components/LoadingMark'
+import { Popup } from '@/components/ui/Popup'
+import { CloseButton } from './SyllabusPanel'
 
 function loadSpan(): AccuracySpan {
   try { return spanFromStored(localStorage.getItem(ANALYTICS_SPAN_KEY)) } catch { return spanFromStored(null) }
@@ -61,22 +63,38 @@ export function AnalyticsTileChart({ columns }: { columns: readonly ChartColumn[
 }
 
 export interface AnalyticsScreenProps {
-  trends: AccuracyTrends
-  rows: readonly AnswerRow[]
+  /** Null while the answers are being read. */
+  trends: AccuracyTrends | null
+  rows: readonly AnswerRow[] | null
   /** The question bank's exam label (`questionExamLabel`). */
   examLabel: string
   /** The `exam_progress` key, for the exam's logo. */
   examKey: string
   syllabus: WikiExamSyllabus
   questions: readonly Question[]
-  onBack: () => void
-  /** The back arrow's name: "Back to Today". */
-  backLabel: string
+  onClose: () => void
 }
 
-export function AnalyticsScreen({
-  trends, rows, examLabel, examKey, syllabus, questions, onBack, backLabel,
-}: AnalyticsScreenProps) {
+/** The overlay Today's Analytics tile opens. */
+export function AnalyticsOverlay({ trends, rows, onClose, ...rest }: AnalyticsScreenProps) {
+  const titleId = useId()
+  return (
+    <Popup onClose={onClose} labelledBy={titleId} className="sm:max-w-[640px]">
+      {trends && rows ? (
+        <AnalyticsBody trends={trends} rows={rows} onClose={onClose} titleId={titleId} {...rest} />
+      ) : (
+        <div className="flex min-h-[240px] items-center justify-center">
+          <h2 id={titleId} className="sr-only">Analytics</h2>
+          <LoadingMark />
+        </div>
+      )}
+    </Popup>
+  )
+}
+
+function AnalyticsBody({
+  trends, rows, examLabel, examKey, syllabus, questions, onClose, titleId,
+}: Omit<AnalyticsScreenProps, 'trends' | 'rows'> & { trends: AccuracyTrends; rows: readonly AnswerRow[]; titleId: string }) {
   const [span, setSpanState] = useState<AccuracySpan>(loadSpan)
   const setSpan = (s: AccuracySpan) => { setSpanState(s); saveSpan(s) }
 
@@ -97,19 +115,10 @@ export function AnalyticsScreen({
   const percent = accuracyPercent(total)
 
   return (
-    <div className="min-h-screen bg-ground text-foreground">
-      <div className="mx-auto flex max-w-[640px] flex-col gap-[26px] px-5 pb-6 pt-3">
+      <div data-testid="analytics-overlay" className="flex flex-col gap-[26px]">
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label={backLabel}
-            className="-ml-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-          >
-            <ChevronLeft aria-hidden="true" size={22} strokeWidth={2.5} />
-          </button>
           <ExamLogo examKey={examKey} size="sm" />
-          <h1 className="min-w-0 flex-1 text-xl font-bold">Analytics</h1>
+          <h2 id={titleId} className="min-w-0 flex-1 text-xl font-bold">Analytics</h2>
           <div role="group" aria-label="Days" className="flex shrink-0 gap-0.5">
             {ACCURACY_SPANS.map(s => (
               <button
@@ -126,6 +135,7 @@ export function AnalyticsScreen({
               </button>
             ))}
           </div>
+          <CloseButton onClose={onClose} />
         </div>
 
         {total.answered === 0 || percent === null ? (
@@ -236,6 +246,5 @@ export function AnalyticsScreen({
           </>
         )}
       </div>
-    </div>
   )
 }

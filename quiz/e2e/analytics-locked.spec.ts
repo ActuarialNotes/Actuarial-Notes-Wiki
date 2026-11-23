@@ -28,7 +28,7 @@ test('a free account sees Analytics locked, and nothing is read for it', async (
   await expect(page).toHaveURL(/\/upgrade/)
 })
 
-test('the Analytics screen sends a free account to Upgrade', async ({ page }) => {
+test('the Analytics address sends a free account to Upgrade', async ({ page }) => {
   await signIn(page, { examProgress: [{ exam_id: 'FM', status: 'in_progress', target_date: '2026-12-03' }] })
   await page.goto('/dashboard/analytics')
   await expect(page).toHaveURL(/\/upgrade/, { timeout: 30_000 })

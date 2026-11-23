@@ -119,7 +119,7 @@ results' "Levelled up" rows and (later) `ConceptTile`. Green now means "correct"
 | R3 | **Settings is not account-only.** It also holds each exam's date, session length, the daily goal and the daily email. **It holds no quiz settings**: when answers show, Timed and tap-to-read concepts stay in the quiz setup sheet, where they are used | §7b |
 | R4 | **A session is sized by time.** The reader picks 10, 25, 45 or 120 minutes; what doesn't fit carries over | Replaces today's uncapped session (`lib/todaySession.ts` takes every outstanding miss) |
 | R5 | **No readiness wheel and no time bar on Today.** The syllabus is one bar with a percentage | The ring's information moves to the Syllabus screen as level squares |
-| R6 | **Syllabus and Analytics are separate screens**, each opened by its own tile on Today | |
+| R6 | **Syllabus and Analytics are overlays on Today**, each opened by its own tile (changed 2026-11-23; the canvas draws them as separate screens) | |
 | R7 | **The exam in focus is the one last used**, on every device; the nearest sitting only the first time | |
 | R8 | **Per exam:** countdown, session, syllabus, Analytics. **Per account:** the week's check marks, streak, level, quests | Studying either exam keeps the streak |
 | R9 | **Session length is one setting**, shared by all exams, with "Use this every day" | |
@@ -230,8 +230,9 @@ label "ready" read as a forecast of passing.
   (§2.2) with today's outlined, and its share of the exam.
 - A key for the squares.
 
-This screen and the exam page (§7.1) show the same thing. Build them as one: the Syllabus
-tile opens Learn's exam page. Keep `Syllabus` only as the reference for the squares.
+Built as an overlay on Today (`SyllabusOverlay`, changed 2026-11-23): the Syllabus tile, and
+the Syllabus heading on desktop, open it, and it ends in a link to the exam's study guide
+(§7.1). A square names its concept when pointed at and opens it in the concept popup.
 
 The Exam Readiness popup and `StudyGuideRadial` / `readinessRing.ts` have no place in this
 design. Remove them from Today; delete them only once nothing else draws them.
@@ -565,8 +566,9 @@ once and needs You to exist.
 
 **Phase B is built.** Today is `pages/Dashboard.tsx` (still at `/dashboard`, the sidebar row
 still "Dashboard" until Phase F) over `components/today/`, `hooks/useTodaySession.ts` and
-`lib/todaySession.ts`; Analytics is `/dashboard/analytics` (`pages/TodayAnalytics.tsx`,
-`components/today/AnalyticsScreen.tsx`, `lib/todayAnalytics.ts`). What was decided while
+`lib/todaySession.ts`; Analytics is an overlay on it (`AnalyticsOverlay` in
+`components/today/AnalyticsScreen.tsx`, `lib/todayAnalytics.ts`; `/dashboard/analytics`
+redirects to Today and opens it). What was decided while
 building it:
 
 - **The budget** is the minutes at the exam's own pace, rounded to the nearest question and
@@ -588,12 +590,18 @@ building it:
   (`user_metadata.session_minutes`).
 - **Until later phases:** the exam at the top opens a plain list of the reader's exams
   (`ExamSheet`; the switcher is Phase E); the date opens the study plan's settings on the date
-  step; the Syllabus tile opens the existing exam page (Phase D redraws it); the level badge
+  step; the Syllabus overlay links to the exam page; the level badge
   stands in for the profile button; a visitor still gets the sign-in card (R11 is Phase E).
 - **Moved or removed:** the daily email's settings and the guide are rows in Settings (export
   was already there); the search bar, the schedule strip, the day panel and its quiz history,
   the Exam Readiness popup and the registration nudge are off Today (the nudge is still on the
-  quiz builder). The daily podcast's button (Pro) sits under the tiles; it is not on the canvas.
+  quiz builder). The daily podcast's button (Pro) is an outlined row under the Today card; it is
+  not on the canvas.
+- **The week row scrolls** (`weeksAround`), a week at a time, from the first day studied to the
+  exam date; a week that isn't this one shows dates in place of the letters. A day picked in it
+  takes the session card under its date: a paid plan's concepts for a day ahead (`planDayView`),
+  otherwise one sentence (`dayNote`: what was practised on a day behind; for a day ahead, that
+  nothing is planned, or that a free session is built when the day comes), and "Back to today".
   The daily plan's gem bonus is still paid (`hooks/useDailyPlanBonus.ts`) and is drawn nowhere.
 
 **Phase D is built.** The exam page is `pages/wiki/WikiExam.tsx` over `lib/examPage.ts`
@@ -664,7 +672,7 @@ For every phase:
 
 | There | Here |
 |---|---|
-| §5.4: readiness as a figure under Start; the ring kept under Progress | No ring. One syllabus bar; Syllabus and Analytics are tiles and separate screens (R5, R6) |
+| §5.4: readiness as a figure under Start; the ring kept under Progress | No ring. One syllabus bar; Syllabus and Analytics are tiles that open overlays (R5, R6) |
 | §5.4: a free reader's session is the quiz builder's own quiz | A free reader gets the same daily session; Pro is the pacing, Analytics and the podcast (R1) |
 | §5.3: the switcher lists the reader's exams, then the body's ready exams, then all | The switcher lists the reader's exams only; adding one is its own screen (§6) |
 | §5.6: the concept page's foot bar holds Practice, a tool link and the level | The level is a button at the top; the foot is Practice alone. The tool link waits for Apply |

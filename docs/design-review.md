@@ -509,7 +509,7 @@ tool.
 answer-state colours, the outline card and tile, the outlined control and main action, and the
 popup (`docs/style-guide.md` §13). **Phase B (Today) was built the same day**: the
 session sized by time and free to every account, the Syllabus and Analytics tiles, the session
-length sheet and the Analytics screen (`docs/redesign-spec.md` §8). **Phase D (Learn) was built
+length sheet and the Analytics overlay (`docs/redesign-spec.md` §8). **Phase D (Learn) was built
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).

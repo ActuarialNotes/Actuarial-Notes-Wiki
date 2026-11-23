@@ -441,11 +441,13 @@ before touching that area**:
   counts (`examPage.test.ts` holds every exam page to it) — with `components/learn/ObjectiveCard.tsx`
   (one open at a time, ending in **Practice <objective>**), the labelled **Official syllabus**
   and **Dates and fees** buttons (the sitting picker is in that panel), and foot rows for
-  Readings (the Source Material shelf), the page's notes and Fact Check. A pill goes to the
-  concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
-  the exam page: back to where the reader came from, the level button, more, the article,
-  **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next.
+  Readings (the Source Material shelf), the page's notes and Fact Check. **A pill opens the
+  concept in the concept popup**, over the exam page, never by navigating; the open concept's
+  pill is filled and the walk opens the objective that holds it. The popup's foot is Previous,
+  Practice this, Next. The concept's own page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`: a
+  new tab, a search result, a shared link) no longer redirects into the exam page and ends the
+  same way: back to where the reader came from, the level button, more, the article, **Next in
+  <objective>** and the fixed **Practice this**.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new

@@ -1146,7 +1146,8 @@ Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 
 - **The concept pill** (`ObjectiveCard.tsx`): a 40px outlined pill holding a level square
   (`sm`) and the concept's name. The outline is the line colour, and 2px in the text colour for
-  a concept in today's session.
+  a concept in today's session. The pill of the concept open in the reader is filled with the
+  text colour.
 - **The level button** (`ConceptLevelButton.tsx`): the square and the level's name in an
   outlined control; it opens Learning Progress.
 - **The Practice button** (`PracticeButton.tsx`): the screen's filled action, 58px on a page

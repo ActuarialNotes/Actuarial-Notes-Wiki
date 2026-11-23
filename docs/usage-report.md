@@ -148,6 +148,7 @@ browsers will still lose the tag.
 | Daily returns (D1, D2, …) | Active users by `firstSessionDate` × `date`: people first seen on day X and active again n days later. Someone back on several days counts in several columns. The day's "New" equals `first_visit`, which is the check that this is right. |
 | Search / social / ChatGPT rows | `sessionDefaultChannelGroup` of the session in which each event fired. |
 | Accounts | Supabase `auth.users` minus `team_emails`. An account is listed if it did anything in the window other than a subscription update (a Stripe renewal isn't a visit). A *return* is any later day with activity. *Practised on a return* is a later day with an answer. |
+| Weekly activity (section 1a) | Monday-to-Sunday weeks. *Pages read* = `page_view` + `content_view` events (a concept popup or the PDF reader has no URL of its own); *Questions answered* = `question_answered` events; *Quizzes finished* = `quiz_completed` events, all in the human segment. *Answers saved to accounts* = `question_responses` rows from listed accounts, which includes readers GA4 never sees. Each panel has its own scale. |
 | Answers saved by reader accounts | `question_responses` rows from listed accounts in the window. |
 | Guest share of answers | 1 − database answers ÷ GA4 `question_answered` events: a floor (see **Traps**). |
 

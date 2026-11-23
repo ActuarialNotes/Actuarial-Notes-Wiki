@@ -26,6 +26,8 @@ def synthetic() -> dict:
         "daily": [["20261101", "60", "40"], ["20261102", "40", "30"]],
         "daily_engaged": [["20261101", "30"], ["20261102", "20"]],
         "weekly_engaged": [["202644", "30"], ["202645", "20"]],
+        "weekly_events": [["202644", "page_view", "50"], ["202644", "content_view", "7"],
+                          ["202645", "question_answered", "40"], ["202645", "quiz_completed", "3"]],
         "events": [["user_engagement", "50", "60"], ["first_visit", "90", "90"], ["first_quiz", "20", "20"],
                    ["question_answered", "8", "40"], ["quiz_completed", "3", "3"], ["day2_return", "9", "9"],
                    ["exception", "5", "6"], ["sign_up", "1", "1"]],
@@ -107,6 +109,15 @@ class Compute(unittest.TestCase):
     def test_cohort_counts(self):
         self.assertEqual(self.S["cohort_new"], 95)
         self.assertEqual(self.S["cohort_d1"], 3)
+
+    def test_weekly_activity(self):
+        w = self.F["weekly_activity"]
+        # Nov 1 2026 is a Sunday (ISO week 44), Nov 2 a Monday (week 45)
+        self.assertEqual([x["week"] for x in w], ["202644", "202645"])
+        self.assertEqual(w[0]["pages"], 57)  # page_view + content_view
+        self.assertEqual((w[1]["answered"], w[1]["saved"], w[1]["quizzes"]), (40, 10, 3))
+        self.assertEqual(self.F["scalars"]["pages_read"], 57)
+        self.assertIn("1a. What people do", render.render(self.F, "", "2026-11-02 10:00 EST"))
 
     def test_accounts(self):
         S = self.S

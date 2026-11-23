@@ -16,6 +16,9 @@ from segments import (BOT_RESOLUTIONS, E2E_HOST, INTERNAL, PROD, event, f_and, f
 
 FUNNEL_EVENTS = ["first_visit", "user_engagement", "first_quiz", "question_answered",
                  "quiz_completed", "day2_return", "sign_up"]
+# What people do, week by week: pages (page_view, plus content_view for a concept
+# popup or the PDF reader, which have no URL of their own), answers and finished quizzes.
+ACTIVITY_EVENTS = ["page_view", "content_view", "question_answered", "quiz_completed"]
 
 
 class Puller:
@@ -72,6 +75,9 @@ def pull_ga(p: Puller) -> dict:
     g["weekly_engaged"] = p.ga(["isoYearIsoWeek"], ["totalUsers"], extra=eng,
                                order=[{"dimension": {"dimensionName": "isoYearIsoWeek"}}])
     g["events"] = p.ga(["eventName"], ["totalUsers", "eventCount"])
+    g["weekly_events"] = p.ga(["isoYearIsoWeek", "eventName"], ["eventCount"],
+                              extra=[f_in("eventName", ACTIVITY_EVENTS)],
+                              order=[{"dimension": {"dimensionName": "isoYearIsoWeek"}}])
     fun = [f_in("eventName", FUNNEL_EVENTS)]
     g["ev_channel"] = p.ga(["sessionDefaultChannelGroup", "eventName"], ["totalUsers"], extra=fun)
     g["ev_device"] = p.ga(["deviceCategory", "eventName"], ["totalUsers"], extra=fun)

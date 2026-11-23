@@ -93,6 +93,10 @@ def compute(data: dict) -> dict:
         S["engaged_peak_week"] = max(w[1] for w in weeks)
         F["peak_week"] = max(weeks, key=lambda w: w[1])[0]
 
+    F["weekly_activity"] = weekly_activity(g, db, data["start"], data["end"])
+    S["pages_read"] = sum(w["pages"] for w in F["weekly_activity"])
+    S["quiz_completed_events"] = ev.get("quiz_completed", (0, 0))[1]
+
     # funnel by device and channel
     def by(rows):
         d = collections.defaultdict(dict)
@@ -212,6 +216,40 @@ def compute(data: dict) -> dict:
 
 
 # ── accounts (Supabase) ────────────────────────────────────────────────────────
+
+
+def iso_week(d: dt.date) -> str:
+    y, w, _ = d.isocalendar()
+    return f"{y}{w:02d}"
+
+
+def weekly_activity(g: dict, db: dict, start: str, end: str) -> list[dict]:
+    """One row per Monday-to-Sunday week in the window: what people did.
+
+    pages, answered and quizzes are GA4 event counts in the human segment (pages =
+    page_view + content_view); saved is answers saved to reader accounts in Supabase,
+    which includes readers GA4 never sees (Trap 3). The first and last weeks can be
+    partial: the window cuts them.
+    """
+    ev: dict = collections.defaultdict(dict)
+    for wk, name, count in g.get("weekly_events", []):
+        ev[wk][name] = i(count)
+    saved: dict = collections.Counter()
+    for r in db.get("activity", []):
+        if r["k"] == "ans" and start <= r["d"] <= end:
+            saved[iso_week(day(r["d"]))] += int(r["n"])
+    s, e = day(start), day(end)
+    monday = s - dt.timedelta(days=s.weekday())
+    out = []
+    while monday <= e:
+        wk = iso_week(monday)
+        x = ev.get(wk, {})
+        out.append({"week": wk, "monday": monday.isoformat(),
+                    "pages": x.get("page_view", 0) + x.get("content_view", 0),
+                    "answered": x.get("question_answered", 0), "saved": saved.get(wk, 0),
+                    "quizzes": x.get("quiz_completed", 0)})
+        monday += dt.timedelta(days=7)
+    return out
 
 
 def accounts(db: dict, start: str, end: str, S: dict) -> dict:

@@ -93,6 +93,83 @@ def funnel_chart(S: dict) -> str:
 # ── tables ─────────────────────────────────────────────────────────────────────
 
 
+ACTIVITY_PANELS = [
+    ("pages", "Pages read", "page views and concept or PDF reads in the popup (GA4)"),
+    ("answered", "Questions answered", "every reader GA4 sees, guests included"),
+    ("saved", "Answers saved to accounts", "Supabase, including readers GA4 can't see"),
+    ("quizzes", "Quizzes finished", "GA4 <code>quiz_completed</code>"),
+]
+
+
+def compact(v: int) -> str:
+    """An axis label that fits a narrow gutter: 1500 -> 1.5k."""
+    return f"{v/1000:g}k" if v >= 1000 else str(v)
+
+
+def nice_max(v: int) -> int:
+    """A round axis top at or above v: 1, 2 or 5 times a power of ten."""
+    if v <= 0:
+        return 1
+    m = 10 ** (len(str(int(v))) - 1)
+    for k in (1, 2, 5, 10):
+        if v <= k * m:
+            return k * m
+    return 10 * m
+
+
+def activity_panel(weeks: list[dict], key: str, title: str, partial: bool) -> str:
+    """One small multiple: a week-by-week bar chart of one measure, on its own axis."""
+    vals = [w[key] for w in weeks]
+    mx = nice_max(max(vals + [1]))
+    W, H, L, R, T, B = 360, 150, 34, 6, 10, 24
+    pw, ph = W - L - R, H - T - B
+    bw = pw / max(len(weeks), 1)
+    s = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="{esc(title)} per week" class="chart">']
+    for v in (0, mx // 2, mx):
+        y = T + ph - ph * v / mx
+        s.append(f'<line x1="{L}" x2="{W-R}" y1="{y:.1f}" y2="{y:.1f}" class="grid"/>'
+                 f'<text x="{L-5}" y="{y+4:.1f}" class="tick" text-anchor="end">{compact(v)}</text>')
+    last = len(weeks) - 1
+    for k, w in enumerate(weeks):
+        v = w[key]
+        x, bwid = L + k * bw + bw * 0.14, bw * 0.72
+        h = ph * v / mx
+        y = T + ph - h
+        cls = "bar-a" if (partial and k == last) else "bar-b"
+        so_far = " so far" if (partial and k == last) else ""
+        r = min(4, bwid / 2, h)
+        # 4px rounded data end, square at the baseline
+        path = (f"M{x:.2f},{T+ph:.1f} V{y+r:.1f} Q{x:.2f},{y:.1f} {x+r:.2f},{y:.1f} H{x+bwid-r:.2f} "
+                f"Q{x+bwid:.2f},{y:.1f} {x+bwid:.2f},{y+r:.1f} V{T+ph:.1f} Z") if h > 0 else ""
+        tip = f"<title>Week of {fmt_day(w['monday'], False)}: {n(v)}{so_far}</title>"
+        # a hit target the full height of the plot, so short bars are easy to hover
+        s.append(f'<g class="hit"><rect x="{L + k*bw:.2f}" y="{T}" width="{bw:.2f}" height="{ph}" fill="transparent"/>'
+                 + (f'<path d="{path}" class="{cls}"/>' if path else "") + f"{tip}</g>")
+        if k == last:  # the newest week, anchored to its bar's right edge so it isn't clipped
+            s.append(f'<text x="{x+bwid:.1f}" y="{H-6}" class="tick" text-anchor="end">{fmt_day(w["monday"], False)}</text>')
+        elif k % 4 == 0 and last - k >= 3:
+            s.append(f'<text x="{x+bwid/2:.1f}" y="{H-6}" class="tick" text-anchor="middle">{fmt_day(w["monday"], False)}</text>')
+    s.append("</svg>")
+    return "".join(s)
+
+
+def activity_chart(F: dict, partial: bool) -> str:
+    weeks = F.get("weekly_activity", [])
+    if not weeks:
+        return ""
+    cells = []
+    for key, title, sub in ACTIVITY_PANELS:
+        total = sum(w[key] for w in weeks)
+        cells.append(f'<div class="mult"><div class="mult-head"><span>{esc(title)}</span><b>{n(total)}</b></div>'
+                     f'<div class="mult-sub">{sub}</div>{activity_panel(weeks, key, title, partial)}</div>')
+    rows = "".join(f"<tr><td>{fmt_day(w['monday'], False)}</td>" + "".join(f'<td class="n">{n(w[k])}</td>' for k, _, _ in ACTIVITY_PANELS) + "</tr>"
+                   for w in weeks)
+    head = "".join(f'<th class="n">{esc(t)}</th>' for _, t, _ in ACTIVITY_PANELS)
+    data_table = (f'<details class="small"><summary>Show the numbers</summary><div class="tbl"><table>'
+                  f'<thead><tr><th>Week of</th>{head}</tr></thead><tbody>{rows}</tbody></table></div></details>')
+    return f'<div class="multiples">{"".join(cells)}</div>{data_table}'
+
+
 def table(head: list[str], rows: list[list], numeric_from=1, cls="") -> str:
     th = "".join(f'<th class="n">{esc(h)}</th>' if k >= numeric_from else f"<th>{esc(h)}</th>" for k, h in enumerate(head))
     body = "".join("<tr>" + "".join(
@@ -198,6 +275,13 @@ def account_tables(F: dict) -> tuple[str, str, str]:
 # ── the page ───────────────────────────────────────────────────────────────────
 
 EXTRA_CSS = """
+.multiples{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media (max-width:640px){.multiples{grid-template-columns:1fr}}
+.mult{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 14px 6px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.mult-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px}
+.mult-head b{font-family:var(--mono);font-weight:500;font-size:22px;font-variant-numeric:tabular-nums}
+.mult-sub{font-size:12.5px;color:var(--muted);line-height:1.35}
+.chart .hit:hover path{opacity:.75}
+details summary{cursor:pointer;color:var(--muted)} details .tbl{margin-top:8px}
 .tbl.acct td.who{width:30%;background:var(--surface)} .tbl.acct td.day{white-space:nowrap;width:1%}
 .tbl.acct tr.grp td{border-top:2px solid var(--line)} .tbl.acct td code,.tbl td code{font-size:12px;color:var(--muted)}
 .scroll{max-height:560px;overflow:auto} .scroll thead th{position:sticky;top:0;background:var(--surface);z-index:1}
@@ -299,6 +383,12 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
     <li><b>Device:</b> {S['mobile_share_pct']}% of people are on mobile, but they produce only {S['mobile_time_pct']}% of engagement time.</li>
     <li><b>Concentration:</b> five devices produced {S['top5_device_time_pct']}% of all engagement time ({S['engaged_hours']} hours in total).</li>
   </ul>
+</section>
+
+<section>
+  <h2>1a. What people do</h2>
+  <p class="muted small">Week by week, Monday to Sunday, each measure on its own scale. {"The last bar (lighter) is this week so far. " if partial else ""}The number beside each title is the window's total. Pages include the single page each distributed-bot visit loads.</p>
+  {activity_chart(F, partial)}
 </section>
 
 <section>

@@ -445,7 +445,9 @@ before touching that area**:
   concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
   the exam page: back to where the reader came from, the level button, more, the article,
   **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next.
+  Previous, Practice this, Next. **Phase E, the exam switcher, is being built** a
+  place at a time (§8): the exam in focus, the sheet, Add an exam and the date question are on
+  Today and the exam page (`examFocus.ts` below).
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1376,13 +1378,31 @@ Other important `lib/` modules:
   under that day's date in place of "Today" (`planDayView`: a paid plan's concepts for a day
   ahead; `dayNote` / `dayPractice`: one sentence for any other day), and the plan's tick on the
   syllabus bar (`planTickPct`). Pure and tested; the flows are `e2e/dashboard-session.spec.ts`.
-  `hooks/useTodayExam.ts` is which exam Today shows. **Syllabus and Analytics open as overlays on
+  Which exam Today shows is the exam in focus (`hooks/useExamInFocus.ts`, `examFocus.ts` below). **Syllabus and Analytics open as overlays on
   Today**, never as screens: `SyllabusOverlay` (`components/today/SyllabusPanel.tsx`: each learning
   objective's concepts as level squares, with the way to the exam's study guide) and
   `AnalyticsOverlay` (`components/today/AnalyticsScreen.tsx`, lazy, the drawing maths in
   `lib/todayAnalytics.ts`; Pro only; `/dashboard/analytics` redirects to Today and opens it). A
   square (`components/today/ConceptSquares.tsx`) names its concept when pointed at and opens it in
   the concept popup.
+- `examFocus.ts` — the **exam in focus** and the **exam switcher** (`docs/redesign-spec.md` §6
+  and §8, Phase E; step 1 built: Today and the exam page read it, the Study Guides and Quiz
+  lists and the Resources and Store strips don't yet). One exam every place opens on: always one
+  of the reader's exams, the one last used (`resolveFocus`; the nearest date the first time),
+  kept on the account (`user_metadata.exam_in_focus`) and mirrored in the browser by
+  `contexts/ExamProgressContext.tsx`, where the account's value wins on load and on return to
+  the tab. `hooks/useExamInFocus.ts` is the hook. An address naming one of the reader's exams
+  puts it in focus; any other exam page is a **visit** and leaves the focus alone
+  (`addressFocus`). The module is also what the sheet lists (`switcherRows`), what Add an exam
+  lists (`addExamSections`: ready and beta exams by credential, in-development ones folded) and
+  which sittings "When is your exam?" offers (`offeredSittings`: rows of `data/examSittings.ts`,
+  never made up). A **visitor's exams live in the browser** (`quiz.browserExams`, read and
+  written by the same context, joined to the account once on sign-in), so `useExamProgress`
+  works signed out and Today is open to a visitor. The screens are `components/switcher/`:
+  `ExamSwitcherButton` (the control: logo, name, chevron), `ExamSwitcherSheet` (Your exams, with
+  Edit: change date, mark as passed, remove) and `AddExamFlow`, mounted once by
+  `ExamSwitcherHost` and opened through `stores/examSwitcher.ts`. Pure and tested; the flows are
+  `e2e/exam-switcher.spec.ts`.
 - `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
   by difficulty) that Today's Analytics overlay draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator

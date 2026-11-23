@@ -23,11 +23,10 @@ import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { PrivacySettingsCard } from '@/components/PrivacySettingsCard'
 import { AiConnectorCard } from '@/components/AiConnectorCard'
 import { DAILY_PLAN_EMAIL_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { matchesSelectedVariant } from '@/data/examSittings'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
@@ -48,29 +47,18 @@ const DashboardRemindersModal = lazy(() =>
 const DashboardGuideModal = lazy(() =>
   import('@/components/DashboardGuideModal').then(m => ({ default: m.DashboardGuideModal })))
 
-/** The exam the Dashboard was last showing (it writes this key). */
-const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
 /**
- * The dashboard guide, for the exam the Dashboard last showed. Its last slide
+ * The dashboard guide, for the exam in focus. Its last slide
  * reads that exam's syllabus, levels and plan, so they are derived here the way
  * the Dashboard derives them, and only while the guide is open: this mounts
  * with the guide and is gone when it closes.
  */
 function DashboardGuide({ isPro, onClose }: { isPro: boolean; onClose: () => void }) {
-  const { syllabi } = useWikiSyllabus()
-  const { progress, targetDates, examVariants } = useExamProgress()
+  const { targetDates } = useExamProgress()
   const { records, loading: masteryLoading } = useConceptMastery()
 
-  const syllabus = useMemo(() => {
-    const inProgress = syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return progress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    })
-    let saved: string | null = null
-    try { saved = localStorage.getItem(ACTIVE_EXAM_KEY) } catch { /* ignore */ }
-    return inProgress.find(s => s.examId === saved) ?? inProgress[0] ?? null
-  }, [syllabi, progress, examVariants])
+  const syllabus = useExamInFocus().active
 
   const progressKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
   const examDate = progressKey ? (targetDates[progressKey] ?? null) : null

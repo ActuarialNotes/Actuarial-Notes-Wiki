@@ -628,15 +628,14 @@ export default function Sidebar() {
 
         <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
 
-          {user && (
-            <SidebarItem
-              to="/dashboard"
-              label="Dashboard"
-              icon={<LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
-          )}
+          {/* Open to a visitor too: their exams and session are the browser's (R11). */}
+          <SidebarItem
+            to="/dashboard"
+            label="Dashboard"
+            icon={<LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />}
+            collapsed={collapsed}
+            onNavigate={closeMobile}
+          />
           {RESEARCH_TAB_ENABLED ? (
             <SidebarGroup
               label="Study Guides"

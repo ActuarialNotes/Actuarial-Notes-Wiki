@@ -521,7 +521,11 @@ settings) and F10 (the results were a transcript).
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
-Phases E to I are not built.
+**Phase E (the exam switcher) is in progress**: the exam in focus, kept with the account, the
+sheet of the reader's exams, Add an exam and the date question are on Today and the exam page,
+and a visitor's first screen on Today is Add an exam (F2's first step, D-DR2). The exam lists
+and strips are replaced a place at a time (`docs/redesign-spec.md` §8). Phases F to I are not
+built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

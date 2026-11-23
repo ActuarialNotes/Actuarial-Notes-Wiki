@@ -554,7 +554,7 @@ once and needs You to exist.
 | **B. Today** (built 2026-11-23) | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
 | **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
-| **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
+| **E. Exam switcher** (step 1 built 2026-11-23: the state, the sheet, Today and the exam page) | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
@@ -589,10 +589,10 @@ building it:
   minutes from what is still waiting.
 - **The session length** is kept in the browser and, for "Use this every day", on the account
   (`user_metadata.session_minutes`).
-- **Until later phases:** the exam at the top opens a plain list of the reader's exams
-  (`ExamSheet`; the switcher is Phase E); the date opens the study plan's settings on the date
+- **Until later phases:** the date opens the study plan's settings on the date
   step; the Syllabus overlay links to the exam page; the level badge
-  stands in for the profile button; a visitor still gets the sign-in card (R11 is Phase E).
+  stands in for the profile button. The exam at the top is the exam switcher and a visitor has
+  Today (Phase E, below).
 - **Moved or removed:** the daily email's settings and the guide are rows in Settings (export
   was already there); the search bar, the schedule strip, the day panel and its quiz history,
   the Exam Readiness popup and the registration nudge are off Today (the nudge is still on the
@@ -712,13 +712,58 @@ What was decided while building it:
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
 
+**Phase E is being built, one step per PR.** Step 1 (2026-11-23) is the state and the sheet,
+on Today and the exam page. The rules are `lib/examFocus.ts`; the stored half is
+`contexts/ExamProgressContext.tsx`, the hook `hooks/useExamInFocus.ts`, the screens
+`components/switcher/` (mounted once by `ExamSwitcherHost` in `App.tsx`, opened through
+`stores/examSwitcher.ts`). What was decided with the maintainer before building it:
+
+- **Where it is stored.** A signed-in account's exam in focus is
+  `user_metadata.exam_in_focus` (an exam page's id: `P-1`, `6C`), mirrored in the browser under
+  the key Today always used. The account's value wins when the app loads and each time the tab
+  is returned to, so a second device opens on the exam last used anywhere; a quiz or its review
+  is never switched under the reader. No migration.
+- **Focus is only ever one of the reader's exams.** With nothing stored, or a stored exam the
+  reader no longer has, it is the exam with the nearest date still to come, then the first.
+- **Addresses.** An address that names one of the reader's exams makes it the exam in focus.
+  An address that names any other exam is a **visit**: the page reads and practises as before,
+  the switcher at its top left names that exam, the sheet offers "Add Exam X" above "Add an
+  exam", and the focus stays where it was. Reading an exam page never requires adding it.
+- **A reader with no exams** sees Add an exam as the whole of Today (and, once the Quiz tab
+  adopts the switcher, of Quiz). Study Guides keeps the general guide and the credentials.
+- **Visitors (R11).** A visitor's exams and dates are kept in the browser
+  (`quiz.browserExams`), so `useExamProgress` works signed out; Today is open to them with a
+  Sign in button where the level badge is. On sign-in the exams the account has no row for are
+  added to it once, the account's own rows win, and the browser's list is cleared.
+- **Add an exam** lists exam pages, so a regional exam's page says its region (picking Exam 6C
+  sets the Canadian variant); ready and beta exams are rows, in-development ones are folded
+  under one row per credential and each opens its study guide instead of the date question.
+  It is the full ladder.
+- **When is your exam?** offers at most three rows of `data/examSittings.ts`, one per start
+  date; a row longer than a sitting's window (FAM's year-long registration span) is not a
+  sitting and is left out. The date recorded is the window's first day (today, for a window
+  already open). "Another date" takes any day from today on; "Not sure yet" records none.
+- **Edit** (R10, not drawn): each exam becomes a card with Change date, Mark as passed and
+  Remove. Passed is the `completed` status and Remove is `not_started`; either leaves the
+  switcher and neither deletes the reader's record of the exam's concepts.
+- **The sheet's order** is the soonest exam first, undated exams last. A date with nothing to
+  come reads "No date".
+- **Desktop** (not drawn): the same sheet as a panel in the middle; Add an exam and the date
+  question are full screens on a phone and the same panel on desktop.
+- **Search engines:** nothing changes. The static pages, the hub's exam links and the sitemap
+  are built from the vault (`lib/seo.ts`), not from any exam list in the app.
+- **Still to do, a place per PR:** the exam list on Study Guides, the exam list on the Quiz
+  tab, and the exam strips on Resources and the Store. Settings' "Add exams" still opens the
+  old exams panel (`ExamsPopout`), which also holds the credential track; it goes with You
+  (Phase H).
+
 For every phase:
 
 - Reader-facing words follow `docs/writing-style.md` and the `app-copy` skill. *Practice* is
   spelled with a c. The new nouns (Today, Syllabus, Fix mistakes, Learn, Review) go in the
   skill's glossary.
 - Logic goes in `lib/` as pure, tested functions; update the e2e specs the change touches
-  (`e2e/dashboard-session.spec.ts`, `e2e/quiz.spec.ts`, `e2e/reveal.spec.ts`,
+  (`e2e/dashboard-session.spec.ts`, `e2e/exam-switcher.spec.ts`, `e2e/quiz.spec.ts`, `e2e/reveal.spec.ts`,
   `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`).
 - Check each screen at 390 × 844 and 1440 × 900, in both themes.
 - Update the lines in `CLAUDE.md`, `docs/roadmap.md` (X11), `docs/design-review.md` §6 and

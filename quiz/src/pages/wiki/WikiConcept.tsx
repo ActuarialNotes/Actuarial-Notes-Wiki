@@ -231,7 +231,7 @@ export default function WikiConcept() {
       {hasFoot && (
         <div
           ref={footRef}
-          className="sticky bottom-0 z-30 -mx-4 -mb-8 mt-6 border-t border-border bg-ground px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:-mx-6 sm:px-6"
+          className="sticky bottom-0 z-30 -mx-4 -mb-8 mt-6 border-t border-border bg-ground px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:mx-0 sm:px-0"
         >
           <PracticeButton
             to={conceptPracticeUrl(conceptName, questionCount, practiceSettings())}

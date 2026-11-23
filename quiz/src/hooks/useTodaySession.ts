@@ -117,6 +117,8 @@ export interface TodaySession {
   keepGoing: () => void
   /** Open a concept of the session in the reader, walking the session's concepts. */
   openConcept: (name: string) => void
+  /** Every concept on the syllabus, once each, in syllabus order: the reader's full walk. */
+  conceptRefs: WikiEntryRef[]
 }
 
 export function useTodaySession(input: TodaySessionInput): TodaySession {
@@ -324,5 +326,5 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     build(KEEP_GOING_LENGTH)
   }, [length, today, saveLength, build])
 
-  return { minutes, setMinutes, view, empty, countsByLength, launching, start, missedToday, fixMissed, keepGoing, openConcept }
+  return { minutes, setMinutes, view, empty, countsByLength, launching, start, missedToday, fixMissed, keepGoing, openConcept, conceptRefs: allConceptRefs }
 }

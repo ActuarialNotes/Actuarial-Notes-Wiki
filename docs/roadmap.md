@@ -433,7 +433,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   **2026-11-23:** the screens were redesigned and `docs/redesign-spec.md` is the build spec, in
   phases A–F. Phase A (the visual base: level squares, answer colours, outlined cards, the popup;
   style guide §13) and Phase B (Today: the daily session sized by time and free to every
-  account, the Syllabus and Analytics tiles, the Analytics screen) are built. Phase C (the
+  account, the Syllabus and Analytics tiles, the Analytics overlay) are built. Phase C (the
   session: one row above the question, the progress bar, feedback with Try a similar one, the
   written part's Full / Partial / None, the results with To fix and Levelled up) was built the
   same day; D (Learn) is next.

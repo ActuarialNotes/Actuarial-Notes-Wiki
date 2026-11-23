@@ -447,19 +447,28 @@ function dayKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-/**
- * The week holding `today`, Monday to Sunday. A day studied is `studied`
- * (today included, once it is); today not yet studied is `today`; every other
- * day, behind or ahead, is `open`.
- */
-export function weekOf(today: string, studied: ReadonlySet<string>): WeekDay[] {
-  const [y, m, d] = today.split('-').map(Number)
-  const date = new Date(y, m - 1, d, 12)
-  const monday = new Date(date)
-  monday.setDate(date.getDate() - ((date.getDay() + 6) % 7))
+function noon(day: string): Date {
+  const [y, m, d] = day.split('-').map(Number)
+  return new Date(y, m - 1, d, 12)
+}
+
+/** "Mon, Nov 23": a day as the card's title and the week row's labels name it. */
+export function dayTitle(day: string): string {
+  return noon(day).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+}
+
+/** The Monday of the week holding `day`. */
+export function mondayOf(day: string): string {
+  const date = noon(day)
+  date.setDate(date.getDate() - ((date.getDay() + 6) % 7))
+  return dayKey(date)
+}
+
+function weekFrom(monday: string, today: string, studied: ReadonlySet<string>): WeekDay[] {
+  const start = noon(monday)
   return WEEK_LETTERS.map((letter, i) => {
-    const cell = new Date(monday)
-    cell.setDate(monday.getDate() + i)
+    const cell = new Date(start)
+    cell.setDate(start.getDate() + i)
     const day = dayKey(cell)
     const isToday = day === today
     return {
@@ -469,6 +478,123 @@ export function weekOf(today: string, studied: ReadonlySet<string>): WeekDay[] {
       state: studied.has(day) ? 'studied' : isToday ? 'today' : 'open',
     }
   })
+}
+
+/**
+ * The week holding `today`, Monday to Sunday. A day studied is `studied`
+ * (today included, once it is); today not yet studied is `today`; every other
+ * day, behind or ahead, is `open`.
+ */
+export function weekOf(today: string, studied: ReadonlySet<string>): WeekDay[] {
+  return weekFrom(mondayOf(today), today, studied)
+}
+
+/** How far the week row scrolls: half a year back, a year ahead. */
+export const WEEKS_BACK_MAX = 26
+export const WEEKS_AHEAD_MAX = 52
+
+/**
+ * Every week the row scrolls through, oldest first: from the week of the first
+ * day studied to the week of the exam date, this week always among them. With
+ * no day studied it starts at this week; with no exam date (or one that has
+ * passed) it ends there.
+ */
+export function weeksAround(
+  today: string,
+  studied: ReadonlySet<string>,
+  examDate: string | null,
+): { weeks: WeekDay[][]; current: number } {
+  const thisMonday = noon(mondayOf(today))
+  const weeksBetween = (day: string) => Math.round((noon(mondayOf(day)).getTime() - thisMonday.getTime()) / (7 * 86_400_000))
+  let back = 0
+  for (const day of studied) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(day)) back = Math.max(back, -weeksBetween(day))
+  }
+  back = Math.min(back, WEEKS_BACK_MAX)
+  const ahead = examDate && /^\d{4}-\d{2}-\d{2}$/.test(examDate)
+    ? Math.min(Math.max(0, weeksBetween(examDate)), WEEKS_AHEAD_MAX)
+    : 0
+  const weeks: WeekDay[][] = []
+  for (let w = -back; w <= ahead; w++) {
+    const monday = new Date(thisMonday)
+    monday.setDate(thisMonday.getDate() + w * 7)
+    weeks.push(weekFrom(dayKey(monday), today, studied))
+  }
+  return { weeks, current: back }
+}
+
+// ── Another day in the Today card ────────────────────────────────────────────
+
+/**
+ * What a paced plan holds for one day, in the session card's shape: the
+ * concepts it introduces that day under Learn, the ones it brings back under
+ * Review. Null when the plan has nothing on that day. Nothing is tried yet, so
+ * nothing reads as done.
+ */
+export function planDayView(
+  plan: { assignments: readonly { conceptName: string; scheduledDate: string; initialState: string }[]; status: string } | null,
+  day: string,
+): SessionView | null {
+  if (!plan) return null
+  const learn: string[] = []
+  const review: string[] = []
+  const seen = new Set<string>()
+  for (const a of plan.assignments) {
+    if (a.scheduledDate !== day) continue
+    const key = a.conceptName.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    if (a.initialState === 'new' && plan.status !== 'review_mode') learn.push(a.conceptName)
+    else review.push(a.conceptName)
+  }
+  const step = (kind: SessionStepKind, names: string[]): SessionStep => ({
+    kind,
+    items: names.map(name => ({ key: name, concept: name, attempted: false, achieved: false })),
+    count: names.length,
+    of: null,
+    attempted: 0,
+    achieved: 0,
+    finished: false,
+  })
+  const steps = [step('learn', learn), step('review', review)].filter(s => s.count > 0)
+  if (steps.length === 0) return null
+  return { minutes: DEFAULT_SESSION_LENGTH, steps, questions: learn.length + review.length, started: false, finished: false }
+}
+
+/** One exam's practice on one day: questions answered and how many were right. */
+export function dayPractice(
+  sessions: readonly { exam: string | null; total_questions: number; correct_count: number; completed_at: string }[],
+  examLabel: string | null,
+  day: string,
+  dayOf: (iso: string) => string,
+): { answered: number; correct: number } {
+  let answered = 0
+  let correct = 0
+  for (const s of sessions) {
+    if (s.exam !== examLabel || dayOf(s.completed_at) !== day) continue
+    answered += s.total_questions
+    correct += s.correct_count
+  }
+  return { answered, correct }
+}
+
+/**
+ * The one sentence the card says about a day that has no list to show: a day
+ * behind (what was practised), or a day ahead with nothing planned.
+ */
+export function dayNote(
+  day: string,
+  today: string,
+  practice: { answered: number; correct: number },
+  examName: string,
+  paced: boolean,
+): string {
+  if (day < today) {
+    if (practice.answered === 0) return `No practice on ${examName} this day.`
+    const q = practice.answered === 1 ? '1 question' : `${practice.answered} questions`
+    return `${q} answered, ${practice.correct} right.`
+  }
+  return paced ? 'Nothing is planned for this day.' : "This day's session is built when the day comes."
 }
 
 /** "This week: three days studied, today not yet". */

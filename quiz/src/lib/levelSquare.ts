@@ -28,17 +28,19 @@ export const LEVEL_SQUARE_LOOK: Record<MasteryState, string> = {
   forgotten: 'border-[1.5px] border-dashed border-foreground',
 }
 
-export type LevelSquareSize = 'xs' | 'sm' | 'md'
+export type LevelSquareSize = 'xs' | 'sm' | 'md' | 'lg'
 
 /**
  * `xs` (10px) sits inside a pill beside a concept's name, `sm` (14px) is the
  * key's and a row's, `md` (20px) is the grid an objective's concepts are drawn
- * as. The radius tracks the edge.
+ * as, and `lg` (28px) is that grid where each square is tapped with a finger.
+ * The radius tracks the edge.
  */
 export const LEVEL_SQUARE_SIZE: Record<LevelSquareSize, string> = {
   xs: 'h-2.5 w-2.5 rounded-[3px]',
   sm: 'h-3.5 w-3.5 rounded-[3px]',
   md: 'h-5 w-5 rounded-[5px]',
+  lg: 'h-7 w-7 rounded-[7px]',
 }
 
 /** The outline a square takes while its concept is in today's session. */

@@ -2,7 +2,8 @@ import { expect, test } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
 // Today (docs/redesign-spec.md §4): the session sized by time, its steps, the
-// one Start, the session length sheet and the two tiles.
+// one Start, the session length sheet, the week row's days, and the Syllabus
+// overlay with its squares.
 
 test.use({ viewport: { width: 390, height: 844 } })
 
@@ -35,7 +36,7 @@ test('Today fits one phone screen down to Start, and Start runs the session as o
   await expect(start).toBeVisible({ timeout: 30_000 })
   // The acceptance test for the layout: Start is on the first screen.
   await expect(start).toBeInViewport({ ratio: 1 })
-  await expect(page.getByRole('img', { name: /^This week: \d+ days? studied, today not yet$/ })).toBeVisible()
+  await expect(page.getByRole('group', { name: /^This week: \d+ days? studied, today not yet$/ })).toBeVisible()
   await expect(page.getByText('68', { exact: true })).toBeVisible()
 
   // 25 minutes of Exam P at 6:00 a question is four questions: the oldest
@@ -112,9 +113,66 @@ test('a free account gets the same session, with one row to Upgrade', async ({ p
   await expect(page).toHaveURL(/\/quiz\?selection=stored/, { timeout: 30_000 })
 })
 
-test('the Syllabus tile opens the exam\'s page', async ({ page }) => {
+test('the Syllabus tile opens the squares by learning objective, and a square opens its concept', async ({ page }) => {
   await setUp(page, true)
   await page.goto('/dashboard')
   await page.getByTestId('today-syllabus').click({ timeout: 30_000 })
-  await expect(page).toHaveURL(/\/wiki\/exam\//)
+  const overlay = page.getByRole('dialog', { name: 'Syllabus' })
+  await expect(overlay).toBeVisible()
+  await expect(page).toHaveURL(/\/dashboard$/)
+  // One section per learning objective, its concepts as squares.
+  const objective = overlay.getByRole('region').first()
+  await expect(objective.locator('[data-concept-square]').first()).toBeVisible()
+  await expect(overlay.getByRole('link', { name: /study guide/ })).toHaveAttribute('href', /\/wiki\/exam\//)
+  await page.screenshot({ path: 'test-results/today-syllabus-overlay.png' })
+
+  const square = objective.locator('[data-concept-square]').first()
+  const name = await square.getAttribute('data-concept-square')
+  await square.click()
+  await expect(overlay).toBeHidden()
+  await expect(page.locator('.concept-popup-aside')).toContainText(name!, { timeout: 30_000 })
+})
+
+test('on desktop a square names its concept when pointed at, and opens it', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await setUp(page, true)
+  await page.goto('/dashboard')
+  await expect(page.getByTestId('today-start')).toBeVisible({ timeout: 30_000 })
+  const square = page.getByRole('region', { name: 'Syllabus' }).locator('[data-concept-square]').nth(3)
+  const name = await square.getAttribute('data-concept-square')
+  await square.hover()
+  await expect(page.getByRole('tooltip')).toHaveText(name!)
+  await page.screenshot({ path: 'test-results/today-desktop.png' })
+  await square.click()
+  await expect(page.getByRole('tooltip')).toHaveCount(0)
+  await expect(page.locator('.concept-popup-aside')).toContainText(name!, { timeout: 30_000 })
+  await expect(square).toHaveAttribute('aria-current', 'true')
+})
+
+test('a day in the week row takes the card, under its date, and Back to today returns', async ({ page }) => {
+  await setUp(page, true)
+  await page.goto('/dashboard')
+  await expect(page.getByTestId('today-start')).toBeVisible({ timeout: 30_000 })
+  const card = page.getByTestId('today-session')
+  // 2026-11-07 is a Saturday: tomorrow is in the week showing.
+  await page.locator('[data-day="2026-11-08"]').click()
+  await expect(card.getByRole('heading', { level: 1 })).toHaveText('Sun, Nov 8')
+  await expect(page.getByTestId('today-start')).toHaveCount(0)
+  // The plan's concepts for that day, each opening in the reader.
+  await expect(card.locator('[data-step]').first()).toBeVisible()
+  await page.screenshot({ path: 'test-results/today-other-day.png' })
+
+  // A day behind says what was practised.
+  await page.locator('[data-day="2026-11-03"]').click()
+  await expect(card.getByRole('heading', { level: 1 })).toHaveText('Tue, Nov 3')
+  await expect(card).toContainText('No practice on Exam P this day.')
+
+  await card.getByRole('button', { name: 'Back to today' }).click()
+  await expect(card.getByRole('heading', { level: 1 })).toHaveText('Today')
+  await expect(page.getByTestId('today-start')).toBeVisible()
+
+  // The row scrolls a week at a time; the weeks ahead run to the exam.
+  await page.locator('[data-day="2026-11-11"]').click()
+  await expect(card.getByRole('heading', { level: 1 })).toHaveText('Wed, Nov 11')
+  await page.screenshot({ path: 'test-results/today-next-week.png' })
 })

@@ -509,7 +509,7 @@ tool.
 answer-state colours, the outline card and tile, the outlined control and main action, and the
 popup (`docs/style-guide.md` §13). **Phase B (Today) was built the same day**: the
 session sized by time and free to every account, the Syllabus and Analytics tiles, the session
-length sheet and the Analytics screen (`docs/redesign-spec.md` §8). **Phase C (the session)
+length sheet and the Analytics overlay (`docs/redesign-spec.md` §8). **Phase C (the session)
 was built the same day**: one row above the question (leave, the progress bar, the timer, More),
 Check and Next at the foot, feedback that folds the question and leads with the two answers,
 **Try a similar one** after a miss, the written part graded Full / Partial / None, and results

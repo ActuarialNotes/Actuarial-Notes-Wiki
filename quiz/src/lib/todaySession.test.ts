@@ -20,6 +20,10 @@ import {
   sessionWalk,
   splitSession,
   weekOf,
+  weeksAround,
+  planDayView,
+  dayPractice,
+  dayNote,
   weekSummary,
   withLength,
   type ConceptStanding,
@@ -272,6 +276,73 @@ describe('the week', () => {
     expect(week[0].day).toBe('2026-11-23')
     expect(week[6]).toMatchObject({ isToday: true, state: 'studied' })
     expect(weekSummary(week)).toBe('This week: 1 day studied, today done')
+  })
+})
+
+describe('the weeks the row scrolls through', () => {
+  it('run from the first day studied to the exam date, this week among them', () => {
+    const { weeks, current } = weeksAround('2026-11-26', new Set(['2026-11-10', '2026-11-24']), '2026-12-09')
+    expect(weeks.map(w => w[0].day)).toEqual(['2026-11-09', '2026-11-16', '2026-11-23', '2026-11-30', '2026-12-07'])
+    expect(current).toBe(2)
+    expect(weeks[0][1].state).toBe('studied')
+    expect(weeks[2][3]).toMatchObject({ isToday: true, state: 'today' })
+    expect(weeks[3].every(d => d.state === 'open')).toBe(true)
+  })
+
+  it('are this week alone with nothing studied and no date ahead', () => {
+    expect(weeksAround('2026-11-26', new Set(), null).weeks).toHaveLength(1)
+    expect(weeksAround('2026-11-26', new Set(), '2026-01-01')).toMatchObject({ current: 0 })
+    expect(weeksAround('2026-11-26', new Set(), '2026-01-01').weeks).toHaveLength(1)
+  })
+
+  it('stop half a year back and a year ahead', () => {
+    const { weeks, current } = weeksAround('2026-11-26', new Set(['2020-01-01']), '2030-01-01')
+    expect(current).toBe(26)
+    expect(weeks).toHaveLength(26 + 1 + 52)
+  })
+})
+
+describe('another day in the card', () => {
+  const plan = {
+    status: 'on_track',
+    assignments: [
+      { conceptName: 'Annuity', scheduledDate: '2026-11-27', initialState: 'new' },
+      { conceptName: 'Bond', scheduledDate: '2026-11-27', initialState: 'level1' },
+      { conceptName: 'Annuity', scheduledDate: '2026-11-27', initialState: 'new' },
+      { conceptName: 'Duration', scheduledDate: '2026-11-28', initialState: 'new' },
+    ],
+  }
+
+  it('lists a plan day as Learn and Review, nothing done', () => {
+    const view = planDayView(plan, '2026-11-27')!
+    expect(view.steps.map(s => [s.kind, s.items.map(i => i.concept)])).toEqual([['learn', ['Annuity']], ['review', ['Bond']]])
+    expect(view.finished).toBe(false)
+    expect(planDayView(plan, '2026-11-29')).toBeNull()
+    expect(planDayView(null, '2026-11-27')).toBeNull()
+  })
+
+  it('puts everything under Review once the plan only reviews', () => {
+    const view = planDayView({ ...plan, status: 'review_mode' }, '2026-11-28')!
+    expect(view.steps.map(s => s.kind)).toEqual(['review'])
+  })
+
+  it('counts one exam\'s practice on a day', () => {
+    const sessions = [
+      { exam: 'Exam FM', total_questions: 5, correct_count: 3, completed_at: '2026-11-24T10:00:00' },
+      { exam: 'Exam FM', total_questions: 2, correct_count: 2, completed_at: '2026-11-24T18:00:00' },
+      { exam: 'Exam P', total_questions: 9, correct_count: 9, completed_at: '2026-11-24T10:00:00' },
+      { exam: 'Exam FM', total_questions: 4, correct_count: 1, completed_at: '2026-11-25T10:00:00' },
+    ]
+    const practice = dayPractice(sessions, 'Exam FM', '2026-11-24', iso => iso.slice(0, 10))
+    expect(practice).toEqual({ answered: 7, correct: 5 })
+    expect(dayNote('2026-11-24', '2026-11-26', practice, 'Exam FM', true)).toBe('7 questions answered, 5 right.')
+  })
+
+  it('says what a day with no list holds', () => {
+    const none = { answered: 0, correct: 0 }
+    expect(dayNote('2026-11-24', '2026-11-26', none, 'Exam FM', false)).toBe('No practice on Exam FM this day.')
+    expect(dayNote('2026-11-28', '2026-11-26', none, 'Exam FM', true)).toBe('Nothing is planned for this day.')
+    expect(dayNote('2026-11-28', '2026-11-26', none, 'Exam FM', false)).toBe("This day's session is built when the day comes.")
   })
 })
 

@@ -21,12 +21,17 @@ export const buttonVariants = cva(
         secondary: `font-semibold text-foreground hover:bg-muted ${QUIET_PICK}`,
         ghost: `text-muted-foreground hover:bg-muted hover:text-foreground ${QUIET_PICK}`,
         link: 'text-primary underline-offset-4 hover:underline',
+        // The redesign's outlined control (style guide §13.4): anything
+        // pressable that isn't the screen's main action.
+        edge: 'border-[1.5px] border-foreground font-semibold text-foreground hover:bg-foreground/10 active:bg-foreground/10',
       },
       size: {
         default: 'h-11 px-5 text-[15px]',
         sm: 'h-9 px-4 text-sm',
         lg: 'h-12 px-7 text-[15px]',
         icon: 'h-10 w-10',
+        // The redesign's main action: 58px, one per screen.
+        main: 'h-[58px] gap-2.5 px-8 text-lg font-bold',
       },
     },
     defaultVariants: {

@@ -548,8 +548,8 @@ once and needs You to exist.
 
 | Phase | What | Depends on |
 |---|---|---|
-| **A. Visual base** | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
-| **B. Today** | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
+| **A. Visual base** (built 2026-11-23) | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
+| **B. Today** (built 2026-11-23) | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
 | **C. The session** | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
@@ -557,6 +557,45 @@ once and needs You to exist.
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
+
+**Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
+`--ground`, `--level-*` and `--answer-*` tokens, `LevelSquare`, `lib/answerState.ts` and
+`AnswerDot`, `OutlineCard` / `OutlineTile`, the `edge` button variant and `main` size, and
+`Popup`. No screen uses them yet; `/design/base` on the dev server shows them all.
+
+**Phase B is built.** Today is `pages/Dashboard.tsx` (still at `/dashboard`, the sidebar row
+still "Dashboard" until Phase F) over `components/today/`, `hooks/useTodaySession.ts` and
+`lib/todaySession.ts`; Analytics is `/dashboard/analytics` (`pages/TodayAnalytics.tsx`,
+`components/today/AnalyticsScreen.tsx`, `lib/todayAnalytics.ts`). What was decided while
+building it:
+
+- **The budget** is the minutes at the exam's own pace, rounded to the nearest question and
+  never none: Exam P's 6:00 gives 2, 4, 8 and 20 questions for the four lengths. The canvas's
+  dots (nine questions in 25 minutes) are sample data. A paper paced by the point prices a
+  question at its seconds per point times the points an average question of its bank carries;
+  an exam with no pace on file uses 5 minutes a question, a default kept in the code
+  (`DEFAULT_SECONDS_PER_QUESTION`) and never shown as the exam's pace.
+- **The split** (`splitSession`): Fix a third of the budget, Learn a third of the rest, Review
+  the rest; every step with work gets one question when the budget allows; a share a step
+  can't fill goes to Review, then Fix, then Learn. A Learn or Review concept costs one question.
+- **The plan's tick** (`planTickPct`): a straight line from 0% on the plan's first day to 100%
+  on its ready date; absent once the target has passed or the plan is in review mode.
+- **The session is frozen for the day** in the browser once built (`StoredSession`), because a
+  list rebuilt from the record would never finish. It is finished when everything has been
+  tried; "Fix the N you missed" is the questions missed today; "Keep going" builds ten more
+  minutes from what is still waiting.
+- **The session length** is kept in the browser and, for "Use this every day", on the account
+  (`user_metadata.session_minutes`).
+- **Until later phases:** the exam at the top opens a plain list of the reader's exams
+  (`ExamSheet`; the switcher is Phase E); the date opens the study plan's settings on the date
+  step; the Syllabus tile opens the existing exam page (Phase D redraws it); the level badge
+  stands in for the profile button; the reader keeps its own footer (Phase D adds "Practice
+  this"); a visitor still gets the sign-in card (R11 is Phase E).
+- **Moved or removed:** the daily email's settings and the guide are rows in Settings (export
+  was already there); the search bar, the schedule strip, the day panel and its quiz history,
+  the Exam Readiness popup and the registration nudge are off Today (the nudge is still on the
+  quiz builder). The daily podcast's button (Pro) sits under the tiles; it is not on the canvas.
+  The daily plan's gem bonus is still paid (`hooks/useDailyPlanBonus.ts`) and is drawn nowhere.
 
 For every phase:
 
@@ -591,9 +630,10 @@ For every phase:
 
 ## 10. Open questions for the maintainer
 
-1. The split rule for a session's budget (§4.3).
-2. How the plan's tick on the syllabus bar is derived (§4.4).
-3. The pace to use for an exam paced by the point, or with none on file (§4.3).
+1. ~~The split rule for a session's budget (§4.3).~~ Decided 2026-11-23; see §8, Phase B.
+2. ~~How the plan's tick on the syllabus bar is derived (§4.4).~~ Decided 2026-11-23.
+3. ~~The pace to use for an exam paced by the point, or with none on file (§4.3).~~ Decided
+   2026-11-23: the exam's pace.
 4. Whether the concept figures go monochrome (§7.2).
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).

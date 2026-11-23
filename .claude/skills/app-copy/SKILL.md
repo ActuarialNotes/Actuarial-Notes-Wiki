@@ -104,6 +104,11 @@ One thing, one name. Use these exactly.
 |---|---|---|
 | The products tab | **Store** ("Search the Store") | Shop |
 | The cosmetics page | **Gem Shop** | Store, shop |
+| The screen that was the Dashboard | **Today** (the redesigned screen and its session card's title). The sidebar row stays "Dashboard" until the navigation phase | Home, Dashboard for the redesigned screen |
+| The day's work on Today | the **session** ("today's session", "your daily session"); free for every account | Today's Study Plan (that is Pro's plan, which paces the session to the exam date) |
+| How long a session is | **session length** (10, 25, 45 or 120 minutes) | session size, duration, time budget |
+| The session's three steps | **Fix mistakes**, **Learn**, **Review**, in that order; finished, they read **Fixed**, **Learned**, **Reviewed** | Mistakes, New, Refresh, Revise |
+| The coverage percentage | **Syllabus** on redesigned screens ("Syllabus 42%"): the share of the syllabus covered, 100% meaning every concept at Level 3 | ready, readiness, "NN% ready" on a redesigned screen |
 | The daily plan | **Today's Study Plan** as a title, tile or button; "today's study plan" mid-sentence | Today's plan, Custom Study Plan, Study Plan |
 | The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`), beside **Past Papers** | Practice exam, Exam, mock exam |
 | Fact Check verdicts | **Fact checked** / **Not fact checked**; a problem is an **issue** | Verified, finding |
@@ -166,6 +171,14 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
+
+- 2026-11-23 · Redesign, Today (`docs/redesign-spec.md` R1, R5, R15, §4.4) · The daily
+  session is free; Pro sells the plan paced to the exam date, Analytics and the daily
+  podcast. The free-plan upsell on Today is "Pace my plan to Jan 14" (the reader's own exam
+  date). The coverage percentage is labelled "Syllabus", because "ready" read as a forecast
+  of passing. → Copy never says the daily session is Pro, and a redesigned screen never
+  prints "ready" beside the percentage. The Upgrade page may say in one sentence what is
+  free, so the reader can tell the session from the plan.
 
 - 2026-11-15 · Everywhere · "Practice" with a c, noun and verb, in the app, the vault
   and the docs: it is the spelling most recognised in Canada. → practice, practiced,

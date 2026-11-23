@@ -1,62 +1,84 @@
+// **Today** (docs/redesign-spec.md §4): the exam, the days to it, the week,
+// today's session with its one Start, and two tiles, Syllabus and Analytics.
+// The route is still /dashboard and the sidebar row still says Dashboard until
+// the navigation is rebuilt (the spec's Phase F).
+//
+// Everything on the screen is for the exam showing (`useTodayExam`), except
+// the week, which is the account's.
+
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
-import { useProgress } from '@/hooks/useProgress'
-import { useSubscription } from '@/hooks/useSubscription'
-import { requestProCelebration } from '@/lib/proCelebration'
-import { supabase } from '@/lib/supabase'
-import { Bell, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
-import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
-import { ReadinessCard, type SessionSummary } from '@/components/ReadinessCard'
-import ExamsPopout from '@/components/ExamsPopout'
-import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { MascotWidget } from '@/components/MascotWidget'
-import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ChevronDown, ChevronRight, GraduationCap, Loader2, LogIn, PlusCircle, X } from 'lucide-react'
+import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveExamCard'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useExamProgress } from '@/contexts/examProgress'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { questionsNeededForPlan } from '@/lib/todayPlanCount'
-import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
-import { CompletionCornerBadge } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { examAccentStyle } from '@/lib/examColors'
-import { questionExamLabel } from '@/lib/examIds'
-import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import type { QuestContext } from '@/lib/quests'
+import ExamsPopout from '@/components/ExamsPopout'
+import { LevelBadge } from '@/components/LevelBadge'
+import { MobileNavButton } from '@/components/MobileNavButton'
+import type { LeagueExamOption } from '@/components/LeaderboardPanel'
+import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { ExamSheet } from '@/components/today/ExamSheet'
+import { SessionCard } from '@/components/today/SessionCard'
+import { SessionLengthSheet } from '@/components/today/SessionLengthSheet'
+import { SyllabusPanel, type SyllabusObjective } from '@/components/today/SyllabusPanel'
+import {
+  AnalyticsLockedTile,
+  AnalyticsTile,
+  DaysLeft,
+  PaceMyPlanRow,
+  SyllabusTile,
+  WeekRow,
+} from '@/components/today/TodayTiles'
+import { GROUND, OUTLINE_CARD } from '@/components/ui/OutlineCard'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { useExamProgress } from '@/contexts/examProgress'
+import { LOCALIZED_EXAMS } from '@/data/examSittings'
+import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
+import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
+import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { useAuth } from '@/hooks/useAuth'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useDailyPlanBonus } from '@/hooks/useDailyPlanBonus'
+import { useIsMobile } from '@/hooks/useIsMobile'
+import { useProgress } from '@/hooks/useProgress'
+import { useReadinessDelta } from '@/hooks/useReadinessDelta'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useSubscription } from '@/hooks/useSubscription'
+import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
+import { useTodayExam } from '@/hooks/useTodayExam'
+import { useTodaySession } from '@/hooks/useTodaySession'
+import { accuracyPercent } from '@/lib/accuracyTrend'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
-import { planDoneConceptSlugs } from '@/lib/planCompletion'
-import { todayISO } from '@/lib/studyPlan'
-import { useTodayCompletions } from '@/hooks/useTodayCompletions'
-import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
-import { matchesSelectedVariant } from '@/data/examSittings'
-import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
-import { useGems } from '@/hooks/useGems'
-import { LevelBadge } from '@/components/LevelBadge'
-import type { LeagueExamOption } from '@/components/LeaderboardPanel'
-import { DashboardExportModal } from '@/components/DashboardExportModal'
-import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
+import { questionExamLabel } from '@/lib/examIds'
+import { DAILY_PLAN_EMAIL_ENABLED, PODCAST_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { decayIfStale } from '@/lib/mastery'
+import { planConceptsToday, planDoneConceptSlugs } from '@/lib/planCompletion'
+import { requestProCelebration } from '@/lib/proCelebration'
+import type { QuestContext } from '@/lib/quests'
+import { computeExamReadiness } from '@/lib/readiness'
+import { localDayKey } from '@/lib/streak'
+import { daysBetween, todayISO } from '@/lib/studyPlan'
+import { supabase } from '@/lib/supabase'
+import { planTickPct, sessionConceptKeys, weekOf } from '@/lib/todaySession'
+import { cn } from '@/lib/utils'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import { usePodcast } from '@/stores/podcastStore'
-import { DashboardGuideModal } from '@/components/DashboardGuideModal'
-import { DashboardSearchBar } from '@/components/DashboardSearchBar'
-import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
-import { DAILY_PLAN_EMAIL_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
-const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
+export const ANALYTICS_ROUTE = '/dashboard/analytics'
 
-// ── Welcome Modal ─────────────────────────────────────────────────────────────
+// Lazy: none of these is on Today's first paint.
+const AnalyticsTilePeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsTilePeek })))
+const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsSummaryPeek })))
+const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
+const DashboardRemindersModal = lazy(() => import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
 
-// Lazy: it reads the Store's registration tables, which stay out of first paint.
-const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
-// Lazy too: below the fold, and drawn only once there are answers to draw.
-const AnalyticsLocked = lazy(() => import('@/components/analytics/AnalyticsLocked').then(m => ({ default: m.AnalyticsLocked })))
-const AnalyticsSection = lazy(() => import('@/components/analytics/AnalyticsSection').then(m => ({ default: m.AnalyticsSection })))
+/** The span the Analytics tile's figure covers, in days. */
+const TILE_SPAN = 30
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
@@ -77,10 +99,6 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
 
         <div className="text-center space-y-1.5">
           <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes</h2>
-          {/* No promise of a study plan here — that's Pro, and a free
-              account seeing it promised and then locked is a worse first
-              minute than not hearing about it. Everything named below is
-              free. */}
           <p className="text-sm text-muted-foreground leading-relaxed">
             Start by adding the exam you&apos;re studying for. Your concepts, quizzes and progress
             all follow from it.
@@ -108,8 +126,6 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
   )
 }
 
-// ── Dashboard ─────────────────────────────────────────────────────────────────
-
 function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -117,8 +133,8 @@ function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
         <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
           <LogIn className="h-6 w-6 text-primary" />
         </div>
-        <p className="text-base font-semibold text-foreground text-center">Sign in to view your dashboard</p>
-        <p className="text-sm text-muted-foreground text-center">See your concept levels and how ready you are for each exam.</p>
+        <p className="text-base font-semibold text-foreground text-center">Sign in to see Today</p>
+        <p className="text-sm text-muted-foreground text-center">Your daily session, your syllabus and the days left to your exam.</p>
         <button
           type="button"
           onClick={onSignIn}
@@ -135,57 +151,53 @@ function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
 export default function Dashboard() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading: authLoading, signOut } = useAuth()
-  const { sessions, loading: sessionsLoading } = useProgress()
-  const { syllabi, loading: syllabusLoading, error: syllabusError } = useWikiSyllabus()
-  const { progress: examProgress, targetDates, examVariants, updateTargetDate, loadingExams } = useExamProgress()
+  const { user, loading: authLoading } = useAuth()
+  const { sessions } = useProgress()
+  const { targetDates, progress: examProgress, updateTargetDate } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPro, loading: subscriptionLoading, refresh: refreshSubscription } = useSubscription()
-  const { balance: gemBalance } = useGems()
-  const { questions: allQuestions } = useAllQuestions()
+  const { questions: allQuestions, loading: questionsLoading } = useAllQuestions()
+  const exam = useTodayExam()
+  const wide = !useIsMobile(1023)
 
   const popupOpen = useConceptPopup(s => s.open)
   const closePopup = useConceptPopup(s => s.close)
+  const popupConcept = useConceptPopup(s =>
+    s.open && s.dashboardContext?.filter === 'study-plan' ? (s.list[s.index]?.name ?? null) : null)
 
-  const [activeExamIdx, setActiveExamIdx] = useState(0)
+  const [examSheetOpen, setExamSheetOpen] = useState(false)
   const [examsOpen, setExamsOpen] = useState(false)
-  const [onboardingOpen, setOnboardingOpen] = useState(false)
-  const [showWelcomeModal, setShowWelcomeModal] = useState(
-    () => sessionStorage.getItem('show_welcome') === '1',
-  )
-  // Dismissing the welcome modal is remembered, so the fallback below can offer
-  // it to anyone who still has nothing set up without ever nagging.
+  const [lengthOpen, setLengthOpen] = useState(false)
+  const [planConfigStep, setPlanConfigStep] = useState<1 | 2 | 3 | null>(null)
+  const [showWelcomeModal, setShowWelcomeModal] = useState(() => sessionStorage.getItem('show_welcome') === '1')
   const [welcomeDismissed, setWelcomeDismissed] = useState(
     () => { try { return localStorage.getItem(WELCOME_DISMISSED_KEY) === '1' } catch { return false } },
   )
-  const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
-  const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
-  const [startQuizCounter, setStartQuizCounter] = useState(0)
-  const [startSessionCounter, setStartSessionCounter] = useState(0)
-  const [session, setSession] = useState<SessionSummary | null>(null)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [signOutConfirm, setSignOutConfirm] = useState(false)
-  const [exportOpen, setExportOpen] = useState(false)
-  // The daily email's footer links to /dashboard?reminders=1 — the bell's modal
-  // is the one place the preference is set, so the link opens it.
+  // The daily email's footer links to /dashboard?reminders=1. The email's
+  // settings live in Settings now; the link still opens them here.
   const [remindersOpen, setRemindersOpen] = useState(
     () => new URLSearchParams(location.search).get('reminders') === '1',
   )
-  const [guideOpen, setGuideOpen] = useState(false)
-  const profileRef = useRef<HTMLDivElement>(null)
-  // ReadinessCard portals its cards into this slot so they render at the top of
-  // the page: the Exam readiness card, which is the answer to the question the
-  // dashboard exists to answer and carries the schedule strip and the primary
-  // actions that act on it, then Today's Study Plan and the Study Guide ring.
-  const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
-  // The exam switcher pins to the top of the viewport, and carries the Start
-  // of today's session at its right end, so the day's work is one tap away
-  // from anywhere on the page.
-  const examTabsScrollRef = useRef<HTMLDivElement>(null)
-  const [tabsOverflowRight, setTabsOverflowRight] = useState(false)
 
   useEffect(() => {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
+    const params = new URLSearchParams(location.search)
+    if (params.get('reminders') === '1') navigate('/dashboard', { replace: true })
+    if (params.get('upgraded') === '1') {
+      const sessionId = params.get('session_id')
+      navigate('/dashboard', { replace: true })
+      // Back from Stripe: welcome them once the subscription reads Pro.
+      requestProCelebration({ confirmed: false })
+      if (sessionId) {
+        supabase.functions
+          .invoke('stripe-sync-session', { body: { sessionId } })
+          .then(({ error }) => {
+            if (error) console.error('stripe-sync-session failed:', error)
+            refreshSubscription()
+          })
+      }
+    }
+    return () => closePopup()
   // Only run once on mount.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -196,308 +208,196 @@ export default function Dashboard() {
     try { localStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* ignore */ }
   }, [])
 
-  useEffect(() => {
-    if (new URLSearchParams(location.search).get('reminders') === '1') {
-      navigate('/dashboard', { replace: true })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    if (params.get('upgraded') === '1') {
-      const sessionId = params.get('session_id')
-      navigate('/dashboard', { replace: true })
-      // Back from Stripe: welcome them once the subscription reads Pro.
-      requestProCelebration({ confirmed: false })
-      if (sessionId) {
-        supabase.functions
-          .invoke('stripe-sync-session', { body: { sessionId } })
-          .then(({ error }) => {
-            if (error) {
-              console.error('stripe-sync-session failed:', error)
-            }
-            // Refresh regardless — Realtime may have already updated state, but an
-            // explicit re-fetch ensures the hook reflects the new tier immediately.
-            refreshSubscription()
-          })
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Close the concept popup when navigating away from the dashboard.
-  useEffect(() => {
-    return () => closePopup()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Close the concept popup when the user switches active exams.
-  useEffect(() => {
-    if (popupOpen) closePopup()
-  // Only trigger on exam index change, not on every popupOpen toggle.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeExamIdx])
-
-  // Re-fetch mastery after a quiz completes so masteryStateByName reflects
-  // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
-  // with the "Completed today" list).
+  // A level-up re-reads mastery, so the session and the syllabus move at once.
   useEffect(() => {
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
     return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
   }, [refreshMastery])
 
+  const activeSyllabus = exam.active
+  const activeKey = exam.activeKey
+  const examLabel = activeSyllabus ? questionExamLabel(activeSyllabus) : null
+  const targetDate = activeKey ? (targetDates[activeKey] ?? null) : null
+
+  // A different exam closes the reader: its walk was the other exam's session.
   useEffect(() => {
-    if (!profileOpen) {
-      setSignOutConfirm(false)
-      return
-    }
-    function handleClickOutside(e: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
-        setProfileOpen(false)
+    if (useConceptPopup.getState().open) closePopup()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeKey])
+
+  // Keep the row the reader is open on in view, above the reader's pane. The
+  // pane mounts and slides up after the store opens, so look again once it
+  // has settled.
+  useEffect(() => {
+    if (!popupConcept) return
+    const place = () => {
+      const pane = document.querySelector<HTMLElement>('.concept-popup-aside')
+      const row = document.querySelector<HTMLElement>('[data-study-concept][aria-current="true"]')
+      if (!pane || !row) return
+      const visible = pane.getBoundingClientRect().top
+      const rect = row.getBoundingClientRect()
+      if (rect.top < 72 || rect.bottom > visible - 24) {
+        window.scrollBy({ top: rect.top - visible / 2 + rect.height / 2, behavior: 'smooth' })
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [profileOpen])
-
-  // All exams that are marked in_progress and have a known syllabus
-  const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
-  )
-
-  // Exams the learner has marked in progress that this app has no syllabus page
-  // for (the credential tracks list far more exams than the vault covers). They
-  // can never become a dashboard tab, so the empty state names them rather than
-  // leaving "I added an exam and nothing happened" unexplained.
-  const unsupportedActiveExams = useMemo(() => {
-    if (syllabi.length === 0) return []
-    const covered = new Set(syllabi.map(s => wikiExamIdToProgressKey(s.examId)))
-    return Object.entries(examProgress)
-      .filter(([key, status]) => status === 'in_progress' && !covered.has(key))
-      .map(([key]) => EXAM_ID_TO_TRACK_NAME[key] ?? key)
-  }, [syllabi, examProgress])
-
-  // Restore active exam from localStorage once syllabi are loaded
-  const restoredRef = useRef(false)
-  useEffect(() => {
-    if (restoredRef.current || inProgressSyllabi.length === 0) return
-    restoredRef.current = true
-    try {
-      const savedId = localStorage.getItem(ACTIVE_EXAM_KEY)
-      if (savedId) {
-        const idx = inProgressSyllabi.findIndex(s => s.examId === savedId)
-        if (idx >= 0) setActiveExamIdx(idx)
-      }
-    } catch { /* ignore */ }
-  }, [inProgressSyllabi])
+    const ids = [120, 600].map(ms => window.setTimeout(place, ms))
+    return () => ids.forEach(id => window.clearTimeout(id))
+  }, [popupConcept])
 
   // The daily email's Listen button links to /dashboard?episode=<exam key>:
-  // show that exam, and ask its Play button to open the episode once it is
-  // built (stores/podcastStore.ts, `request`). After the restore above, so the
-  // link's exam wins over the one last viewed.
+  // show that exam and ask for its episode (stores/podcastStore.ts).
   const episodeParamRef = useRef(new URLSearchParams(location.search).get('episode'))
+  const { exams, selectByKey } = exam
   useEffect(() => {
     const key = episodeParamRef.current
-    if (!key || inProgressSyllabi.length === 0) return
+    if (!key || exams.length === 0) return
     episodeParamRef.current = null
-    const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
-    if (idx >= 0) setActiveExamIdx(idx)
+    selectByKey(key)
     usePodcast.getState().request(key)
     navigate('/dashboard', { replace: true })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inProgressSyllabi])
+  }, [exams])
 
-  // Continuous (wrap-around) index
-  const clampedIdx = inProgressSyllabi.length > 0
-    ? ((activeExamIdx % inProgressSyllabi.length) + inProgressSyllabi.length) % inProgressSyllabi.length
-    : 0
-  const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
-  const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
-  const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
-  const accuracyExam = activeSyllabus ? questionExamLabel(activeSyllabus) : null
-  // Analytics is Pro: no one else's answers are read for it.
-  const { trends: accuracy, rows: answerRows } = useAccuracyTrend(isPro ? accuracyExam : null, allQuestions)
+  // ── The plan, the record, the session ─────────────────────────────────────
+  const { plan: computedPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan } =
+    useStudyPlan(activeSyllabus, masteryRecords, targetDate, masteryLoading)
+  // Pacing to the exam date is what Pro buys (R1). A free reader has a session
+  // every day and no plan behind it.
+  const plan = isPro ? computedPlan : null
 
-  // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
-  // keyed by exam_progress key so they match what quizStore credits XP to.
+  const examRecords = useMemo(
+    () => (activeKey ? masteryRecords.filter(r => r.exam_id === activeKey) : []),
+    [masteryRecords, activeKey],
+  )
+  const completedToday = useTodayCompletions(activeKey)
+  const planDone = useMemo(
+    () => planDoneConceptSlugs({
+      plan, syllabus: activeSyllabus, masteryRecords, examProgressKey: activeKey, levelUps: completedToday, today: todayISO(),
+    }),
+    [plan, activeSyllabus, masteryRecords, activeKey, completedToday],
+  )
+  const todayAnsweredIds = useTodayAnsweredQuestions()
+
+  const session = useTodaySession({
+    userId: user?.id ?? null,
+    accountMinutes: user?.user_metadata?.session_minutes,
+    syllabus: activeSyllabus,
+    examKey: activeKey,
+    examLabel,
+    examRecords,
+    plan,
+    planDone,
+    questions: allQuestions,
+    todayAnsweredIds,
+    loading: masteryLoading || questionsLoading || subscriptionLoading || (isPro && planLoading),
+  })
+
+  // A link that asks the Dashboard for an exam's plan ("Today's Study Plan" on
+  // an exam's menu) shows that exam; the session card is the plan now.
+  useEffect(() => {
+    const st = location.state as Record<string, unknown> | null
+    const key = (st?.openConceptsFor ?? st?.autoStartQuiz) as string | undefined
+    if (!key) return
+    selectByKey(key)
+    navigate(location.pathname, { state: null, replace: true })
+  }, [location.state, location.pathname, navigate, selectByKey])
+
+  // ── The syllabus ──────────────────────────────────────────────────────────
+  const now = useMemo(() => new Date(), [])
+  const readiness = useMemo(
+    () => (activeSyllabus ? computeExamReadiness(activeSyllabus, examRecords, now) : null),
+    [activeSyllabus, examRecords, now],
+  )
+  const syllabusPct = readiness && readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
+  const gain = Math.max(0, useReadinessDelta(
+    user?.id ?? null,
+    activeKey,
+    readiness && !masteryLoading && readiness.counts.total > 0 ? readiness.overallPct : null,
+  ))
+  const tick = planTickPct(plan)
+  const todayKeys = useMemo(() => sessionConceptKeys(session.view), [session.view])
+  const objectives = useMemo<SyllabusObjective[]>(() => {
+    if (!activeSyllabus || !readiness) return []
+    const lookup = buildMasteryLookup(examRecords)
+    return activeSyllabus.topics.filter(t => t.concepts.length > 0).map(topic => {
+      const today = new Set<number>()
+      const states = topic.concepts.map((c, i) => {
+        if (todayKeys.has(c.name.toLowerCase())) today.add(i)
+        return resolveConceptState(lookup, c, now)
+      })
+      const section = readiness.sections.find(s => s.name === topic.name)
+      return {
+        name: topic.name,
+        weight: topic.weight ? topic.weight.replace(/\s*-\s*/, '–') : null,
+        pct: section ? Math.round(section.readinessPct) : 0,
+        states,
+        today,
+      }
+    })
+  }, [activeSyllabus, readiness, examRecords, todayKeys, now])
+  const syllabusRoute = activeSyllabus?.fileName ? wikiRoute({ kind: 'exam', name: activeSyllabus.fileName }) : '/wiki'
+
+  // ── The week: the account's, whichever exam was studied ───────────────────
+  const today = todayISO()
+  const week = useMemo(() => {
+    const studied = new Set<string>()
+    for (const s of sessions) {
+      if (s.correct_count > 0) studied.add(localDayKey(new Date(s.completed_at)))
+    }
+    return weekOf(today, studied)
+  }, [sessions, today])
+
+  // ── Days left ─────────────────────────────────────────────────────────────
+  const daysLeft = targetDate ? daysBetween(today, targetDate) : null
+  const examDay = targetDate ? new Date(`${targetDate}T00:00:00`) : null
+  const dateLabel = examDay ? examDay.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : null
+  const shortDate = examDay ? examDay.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null
+  const examDateStep: 1 | 2 = activeKey && (LOCALIZED_EXAMS[activeKey]?.length ?? 0) > 0 ? 2 : 1
+
+  // ── Analytics (Pro): no one else's answers are read for it ────────────────
+  const { trends, rows: answerRows } = useAccuracyTrend(isPro ? examLabel : null, allQuestions)
+  const accuracyPct = trends ? accuracyPercent(trends[TILE_SPAN].total) : null
+
+  // ── What used to ride the plan card ───────────────────────────────────────
+  const planConcepts = useMemo(() => planConceptsToday(plan), [plan])
+  const gemsToday = useMemo(
+    () => sessions
+      .filter(s => s.exam === examLabel && localDayKey(new Date(s.completed_at)) === today)
+      .reduce((n, s) => n + s.correct_count, 0),
+    [sessions, examLabel, today],
+  )
+  useDailyPlanBonus({
+    userId: user?.id ?? null,
+    examKey: activeKey,
+    planDone: planConcepts.length > 0 && planConcepts.every(c => planDone.has(c.toLowerCase())),
+    gemsToday,
+  })
+
   const leagueExams = useMemo<LeagueExamOption[]>(() => {
     const seen = new Set<string>()
     const out: LeagueExamOption[] = []
-    for (const s of inProgressSyllabi) {
+    for (const s of exam.exams) {
       const id = wikiExamIdToProgressKey(s.examId)
       if (seen.has(id)) continue
       seen.add(id)
       out.push({ id, label: s.examLabel })
     }
     return out
-  }, [inProgressSyllabi])
+  }, [exam.exams])
 
-  // Mastery records scoped to the active exam — feeds the mastery-analytics card (P2.5).
-  const activeExamRecords = useMemo(
-    () => (activeProgressKey ? masteryRecords.filter(r => r.exam_id === activeProgressKey) : []),
-    [masteryRecords, activeProgressKey],
-  )
-
-  // Persist active exam to localStorage when it changes
-  useEffect(() => {
-    if (!activeSyllabus) return
-    try {
-      localStorage.setItem(ACTIVE_EXAM_KEY, activeSyllabus.examId)
-    } catch { /* ignore */ }
-  }, [activeSyllabus])
-
-  // Handle navigation state from header pill quick-actions
-  useEffect(() => {
-    const st = location.state as Record<string, unknown> | null
-    if (!st?.openConceptsFor && !st?.autoStartQuiz) return
-    if (st.openConceptsFor) {
-      const key = st.openConceptsFor as string
-      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
-      if (idx >= 0) setActiveExamIdx(idx)
-      setConceptsOpenCounter(c => c + 1)
-    }
-    if (st.autoStartQuiz) {
-      const key = st.autoStartQuiz as string
-      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
-      if (idx >= 0) setActiveExamIdx(idx)
-      setStartQuizCounter(c => c + 1)
-    }
-    navigate(location.pathname, { state: null, replace: true })
-  }, [location.state, location.pathname, navigate, inProgressSyllabi])
-
-  const handleTargetDateChange = useCallback((date: string | null) => {
-    if (activeProgressKey) updateTargetDate(activeProgressKey, date)
-  }, [activeProgressKey, updateTargetDate])
-
-  // ── Study plan ─────────────────────────────────────────────────────────────
-  const { plan: computedPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
-    useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate, masteryLoading)
-  // The daily plan is what Pro buys. A free account has none — not a hidden
-  // one steering the page from behind the lock: Read concepts opens the whole
-  // syllabus, Start Quiz carries no count and opens the quiz builder with
-  // nothing picked, and no quest, heatmap or guide reads a plan's concepts.
-  const studyPlan = isPro ? computedPlan : null
-
-  // Fewest questions needed to complete today's plan — shown as a badge on the
-  // "Start Quiz" button (the exact size of the quiz that button
-  // launches, scoped to the active exam) and hidden once the plan is complete.
-  // The Quiz-tab nav badge sums this same per-exam count across every active
-  // exam, so the two numbers stay consistent.
-  //
-  // What's left is measured with the same rule that ticks a concept off in the
-  // Today card's checklist — advanced today on any device, or already sitting at
-  // today's target — so the badge can never ask for a concept the user sees
-  // struck through. See lib/planCompletion.
-  const completedToday = useTodayCompletions(activeProgressKey)
-  const doneConceptSlugs = useMemo(
-    () => planDoneConceptSlugs({
-      plan: studyPlan,
-      syllabus: activeSyllabus,
-      masteryRecords,
-      examProgressKey: activeProgressKey,
-      levelUps: completedToday,
-      today: todayISO(),
-    }),
-    [studyPlan, activeSyllabus, masteryRecords, activeProgressKey, completedToday],
-  )
-  // Questions today's quizzes already served — the launch prefers unseen ones,
-  // so the badge has to size itself the same way.
-  const todayAnsweredIds = useTodayAnsweredQuestions()
-  // Per-exam plan state for the tab strip — the active exam's own count is
-  // computed just below, but the tabs need every exam's.
-  const { byExam: todayQuizByExam } = useTodayQuizCounts()
-  const todaysQuizBadgeCount = useMemo(() => {
-    if (!activeSyllabus) return 0
-    return questionsNeededForPlan(studyPlan, questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds)
-  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
-
-  // Sizes one step of today's session: the same count as the plan's, for some
-  // of its concepts (lib/todaySession.ts).
-  const questionsFor = useCallback((concepts: readonly string[]) => {
-    if (!activeSyllabus || !studyPlan) return 0
-    const subset = [...concepts]
-    return questionsNeededForPlan(
-      { ...studyPlan, status: 'on_track', todaysConcepts: subset, reviewConcepts: subset },
-      questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds,
-    )
-  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
-  const handleStartSession = useCallback(() => setStartSessionCounter(c => c + 1), [])
-
-  // The tab strip's trailing edge only fades while there are more tabs to the
-  // right of it — fading a tab that's already the last one just makes the active
-  // pill look cut off.
-  const measureTabsOverflow = useCallback(() => {
-    const scroller = examTabsScrollRef.current
-    if (!scroller) return
-    setTabsOverflowRight(scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1)
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener('resize', measureTabsOverflow)
-    return () => window.removeEventListener('resize', measureTabsOverflow)
-  }, [measureTabsOverflow])
-
-  // Keep the selected exam visible in the tab strip — it scrolls horizontally
-  // once the compact actions claim the right end of the pinned row.
-  useEffect(() => {
-    const scroller = examTabsScrollRef.current
-    if (!scroller) return
-    measureTabsOverflow()
-    const active = scroller.querySelector<HTMLElement>('[data-exam-tab-active="true"]')
-    if (!active) return
-    const left = active.offsetLeft - (scroller.clientWidth - active.offsetWidth) / 2
-    scroller.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
-  }, [clampedIdx, inProgressSyllabi.length, measureTabsOverflow])
-
-  // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
-  const masteryStateByName = useMemo(() => {
-    const now = new Date()
-    const map = new Map<string, MasteryState>()
-    if (!activeSyllabus || !activeProgressKey) return map
-    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
-    const lookup = buildMasteryLookup(examRecords)
-
-    for (const topic of activeSyllabus.topics) {
-      for (const c of topic.concepts) {
-        map.set(c.name.toLowerCase(), resolveConceptState(lookup, c, now))
-      }
-    }
-    return map
-  }, [activeSyllabus, activeProgressKey, masteryRecords])
-
-  // Mascot context — summarise mastery for the active exam
-  const mascotContext = useMemo(() => {
-    if (!activeSyllabus || !activeProgressKey) return {}
-    const totalTopics = activeSyllabus.topics.reduce((n, t) => n + t.concepts.length, 0)
-    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
-    const topicsMastered = examRecords.filter(r =>
-      r.state === 'level3' || r.state === 'level2'
-    ).length
-    const daysRemaining = computedPlan?.daysRemaining ?? null
-    return { daysRemaining, topicsMastered, totalTopics }
-  }, [activeSyllabus, activeProgressKey, masteryRecords, computedPlan])
-
-  // Personalization signals for the daily-quest board: how many concepts have
-  // decayed to Forgotten (revive quests only appear when there's something to
-  // revive) and today's study-plan concepts (focus-quest candidates). Left
-  // undefined until mastery + plan have loaded so the board isn't seeded from
-  // an empty context.
   const questContext = useMemo<QuestContext | undefined>(() => {
     if (masteryLoading || planLoading) return undefined
-    const now = new Date()
-    const forgottenDue = masteryRecords.filter(
-      r => decayIfStale(r, now).state === 'forgotten',
-    ).length
-    const planConcepts = studyPlan?.status === 'review_mode'
-      ? studyPlan.reviewConcepts
-      : studyPlan?.todaysConcepts ?? []
+    const forgottenDue = masteryRecords.filter(r => decayIfStale(r, new Date()).state === 'forgotten').length
     return { forgottenDue, planConcepts }
-  }, [masteryLoading, planLoading, masteryRecords, studyPlan])
+  }, [masteryLoading, planLoading, masteryRecords, planConcepts])
+
+  const unsupportedActiveExams = useMemo(() => {
+    if (exam.syllabi.length === 0) return []
+    const covered = new Set(exam.syllabi.map(s => wikiExamIdToProgressKey(s.examId)))
+    return Object.entries(examProgress)
+      .filter(([key, status]) => status === 'in_progress' && !covered.has(key))
+      .map(([key]) => EXAM_ID_TO_TRACK_NAME[key] ?? key)
+  }, [exam.syllabi, examProgress])
 
   if (authLoading) {
     return (
@@ -510,394 +410,220 @@ export default function Dashboard() {
   const isGuest = !user
   const displayName = isGuest
     ? 'Guest'
-    : (user.user_metadata?.display_name as string | undefined)
-        ?? user.email?.split('@')[0]
-        ?? 'You'
-
+    : (user.user_metadata?.display_name as string | undefined) ?? user.email?.split('@')[0] ?? 'You'
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
-  const initials = displayName.slice(0, 2).toUpperCase()
+  const hasExams = exam.exams.length > 0
+  const showWelcome = !welcomeDismissed && (showWelcomeModal || (!exam.loading && !hasExams))
+  // The reader is open on one of the session's concepts: the rest of Today steps back.
+  const reading = popupConcept !== null
+  const dim = cn('transition-opacity', reading && 'opacity-30')
 
-  const hasActiveExams = inProgressSyllabi.length > 0
-  const showLevelBadge = XP_ENABLED && !isGuest
+  const sessionCard = session.view ? (
+    <SessionCard
+      view={session.view}
+      onLength={() => setLengthOpen(true)}
+      onStart={session.start}
+      launching={session.launching}
+      onConcept={session.openConcept}
+      currentConcept={popupConcept ? popupConcept.toLowerCase() : null}
+      missedToday={session.missedToday.length}
+      onFixMissed={session.fixMissed}
+      onKeepGoing={session.keepGoing}
+      expanded={wide}
+    />
+  ) : session.empty ? (
+    <section aria-label="Today's session" className={cn(OUTLINE_CARD, 'flex flex-col gap-3 p-5 lg:rounded-3xl lg:p-7')}>
+      <h1 className="text-xl font-bold lg:text-[26px]">Today</h1>
+      <p className="text-[17px] leading-normal">Nothing is waiting: no mistakes to fix, and every concept is learned and fresh.</p>
+    </section>
+  ) : (
+    <section aria-label="Today's session" aria-busy="true" className={cn(OUTLINE_CARD, 'flex min-h-[260px] items-center justify-center p-5 lg:rounded-3xl')}>
+      <Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" />
+    </section>
+  )
 
-  // The welcome modal fires off the signup confirmation, but that signal
-  // depends on the auth flow the deployment happens to use. The condition that
-  // actually matters is "signed in with nothing to study", so an account that
-  // reaches the dashboard with no exam gets the same introduction either way —
-  // once, since dismissing it is remembered.
-  const showWelcome =
-    !welcomeDismissed &&
-    (showWelcomeModal || (!syllabusLoading && !loadingExams && !hasActiveExams))
-
-  // The header's Start: today's session's size, or what its next step is.
-  const startPillText = session?.launching
-    ? 'Wait…'
-    : session && !session.done && session.minutes !== null
-      ? `Start · ${session.minutes} min`
-      : session?.done ? 'Extra' : 'Start'
-  const startPillLabel = session
-    ? `${session.label}${!session.done && session.questions > 0 ? ` · ${session.questions} question${session.questions === 1 ? '' : 's'}${session.minutes !== null ? `, ${session.minutes} minutes` : ''}` : ''}`
-    : 'Start'
+  const analyticsTile = !isPro ? (
+    <AnalyticsLockedTile to="/upgrade" />
+  ) : (
+    <AnalyticsTile
+      to={ANALYTICS_ROUTE}
+      accuracyPct={accuracyPct}
+      days={TILE_SPAN}
+      chart={trends ? <Suspense fallback={<span className="h-4" />}><AnalyticsTilePeek trends={trends} /></Suspense> : undefined}
+    />
+  )
 
   return (
     <>
-    {/* The dashboard's top chrome. Below `lg` it stands in for the app header
-        (see lib/mobileNavHost.ts): a search bar rather than the wordmark, since
-        the dashboard is where a reader arrives looking for something. It sits
-        outside the guest blur below so signing in stays reachable. */}
-    <DashboardSearchBar questions={allQuestions} />
-    <div className="relative">
-      {/* Blur overlay for logged-out users — covers only the dashboard content, not the nav */}
-      {isGuest && (
-        <SignInOverlay onSignIn={() => navigate('/auth', { state: { from: '/dashboard' } })} />
-      )}
+    <div className={cn(GROUND, 'relative min-h-dvh')}>
+      {isGuest && <SignInOverlay onSignIn={() => navigate('/auth', { state: { from: '/dashboard' } })} />}
       <div
-        className={isGuest ? 'pointer-events-none select-none blur-sm opacity-40' : undefined}
-        aria-hidden={isGuest}
+        className={cn(isGuest && 'pointer-events-none select-none blur-sm opacity-40')}
+        aria-hidden={isGuest || undefined}
       >
-    <div
-      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-6"
-      style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
-    >
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Avatar + name — clicking opens the profile dropdown (same as desktop sidebar) */}
-          <div
-            ref={profileRef}
-            className="relative flex items-center gap-2.5 min-w-0"
-            onClick={() => !isGuest && setProfileOpen(v => !v)}
-            style={{ cursor: isGuest ? 'default' : 'pointer' }}
-          >
-            {!isGuest && showLevelBadge && (
-              <LevelBadge
-                avatarUrl={avatarUrl}
-                size={40}
-                questContext={questContext}
-                leagueExams={leagueExams}
-                activeExamId={activeProgressKey}
-              />
-            )}
-            {!isGuest && !showLevelBadge && (
-              <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
-            )}
-            {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={40} />}
-            <span className="text-base font-semibold truncate min-w-0">{displayName}</span>
-            {!isGuest && (
+        <div
+          className="mx-auto w-full max-w-[460px] px-3 pb-6 pt-3 lg:max-w-[1104px] lg:px-8 lg:pb-14 lg:pt-10"
+          style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+          data-testid="today"
+        >
+          {/* The exam showing, and the reader. */}
+          {/* Below `lg` this row is the page's top chrome, so it carries the
+              way into the navigation (lib/mobileNavHost.ts). */}
+          <div className={cn('flex items-center gap-1 px-1 lg:mb-8 lg:px-0', dim, !(hasExams && activeSyllabus && activeKey) && 'lg:hidden')}>
+            <MobileNavButton className="h-11 w-11" />
+            {hasExams && activeSyllabus && activeKey && (
+              <>
               <button
                 type="button"
-                onClick={e => { e.stopPropagation(); setExamsOpen(true) }}
-                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-                aria-label="Add or manage exams"
-                title="Add or manage exams"
+                onClick={() => setExamSheetOpen(true)}
+                aria-haspopup="dialog"
+                aria-label={`Switch exam, ${activeSyllabus.examLabel}`}
+                data-testid="today-exam"
+                className="flex h-11 min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <PlusCircle className="h-6 w-6" />
+                <ExamLogo examKey={activeKey} size="md" />
+                <span className="truncate text-[17px] font-semibold">{activeSyllabus.examLabel}</span>
+                <ChevronDown className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
               </button>
-            )}
-
-            {/* Profile dropdown */}
-            {profileOpen && !isGuest && (
-              <div
-                className="absolute top-full left-0 mt-1 z-50 min-w-[180px] rounded-md bg-popover shadow-md py-1"
-                onClick={e => e.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  onClick={() => { navigate('/store/gems'); setProfileOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
-                >
-                  <ShoppingBag className="h-4 w-4 shrink-0" />
-                  <span className="flex-1 text-left">Gem Shop</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                    <Gem className="h-3 w-3" />
-                    {gemBalance}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setExamsOpen(true); setProfileOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
-                >
-                  <GraduationCap className="h-4 w-4 shrink-0" />
-                  <span>Exams</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { navigate('/settings'); setProfileOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
-                >
-                  <Settings2 className="h-4 w-4 shrink-0" />
-                  <span>Settings</span>
-                </button>
-                {!isPro && (
-                  <button
-                    type="button"
-                    onClick={() => { navigate('/upgrade'); setProfileOpen(false) }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
-                  >
-                    <Sparkles className="h-4 w-4 shrink-0" />
-                    <span>Upgrade to Pro</span>
-                  </button>
+              <span className="ml-auto flex shrink-0 items-center">
+                {!isGuest && (
+                  XP_ENABLED ? (
+                    <LevelBadge avatarUrl={avatarUrl} size={44} questContext={questContext} leagueExams={leagueExams} activeExamId={activeKey} />
+                  ) : (
+                    <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
+                  )
                 )}
-                {signOutConfirm ? (
-                  <div className="px-3 py-2 space-y-2">
-                    <p className="text-xs text-muted-foreground">Sign out?</p>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false) }}
-                        className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
-                      >
-                        Sign out
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSignOutConfirm(false)}
-                        className="flex-1 rounded-md bg-muted text-xs py-1.5 font-medium hover:bg-accent transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSignOutConfirm(true)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4 shrink-0" />
-                    <span>Sign out</span>
-                  </button>
-                )}
-              </div>
+              </span>
+              </>
             )}
           </div>
 
-          {!isGuest && (
-            <div className="ml-auto flex items-center gap-1.5 shrink-0">
-              <button
-                type="button"
-                onClick={() => setExportOpen(true)}
-                className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                aria-label="Export your data"
-                title="Export your data"
-              >
-                <Download className="h-6 w-6" />
-              </button>
-              {DAILY_PLAN_EMAIL_ENABLED && (
-                <button
-                  type="button"
-                  onClick={() => setRemindersOpen(true)}
-                  className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  aria-label="Daily study plan email"
-                  title="Daily study plan email"
-                >
-                  <Bell className="h-6 w-6" />
-                </button>
+          {exam.loading ? (
+            <ActiveExamCardLoading />
+          ) : !activeSyllabus || !activeKey ? (
+            <ActiveExamCardEmpty
+              onChooseExam={() => setExamsOpen(true)}
+              unsupportedExams={unsupportedActiveExams}
+              loadError={exam.syllabi.length === 0 ? exam.syllabusError : null}
+            />
+          ) : wide ? (
+            // Desktop: the session on the left with its concepts listed, where
+            // the reader stands on the right.
+            <div className="flex items-start gap-10">
+              <div className="w-full max-w-[460px] flex-1 basis-[380px]">{sessionCard}</div>
+              <section aria-label="Where you stand" className={cn('flex min-w-0 flex-[999] basis-[420px] flex-col gap-8 pt-2', dim)}>
+                <DaysLeft days={daysLeft} dateLabel={dateLabel} onChangeDate={() => setPlanConfigStep(examDateStep)} />
+                <WeekRow week={week} />
+                <div className="border-t border-border pt-7">
+                  <SyllabusPanel to={syllabusRoute} pct={syllabusPct} gain={gain} tick={tick} objectives={objectives} />
+                </div>
+                {!isPro && !subscriptionLoading && (
+                  <PaceMyPlanRow to="/upgrade" dateLabel={shortDate} />
+                )}
+                <div className="border-t border-border pt-7">
+                  {isPro && trends && answerRows && accuracyPct !== null && examLabel ? (
+                    <a
+                      href={ANALYTICS_ROUTE}
+                      onClick={e => { e.preventDefault(); navigate(ANALYTICS_ROUTE) }}
+                      aria-label={`Analytics, last ${TILE_SPAN} days`}
+                      data-testid="today-analytics"
+                      className="flex flex-wrap items-end gap-x-10 gap-y-4 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <h2 className="flex basis-full items-center gap-2 text-xl font-bold">
+                        Analytics
+                        <ChevronRight className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+                      </h2>
+                      <Suspense fallback={null}>
+                        <AnalyticsSummaryPeek
+                          trends={trends}
+                          rows={answerRows}
+                          examLabel={examLabel}
+                          syllabus={activeSyllabus}
+                          questions={allQuestions}
+                          accuracyPct={accuracyPct}
+                        />
+                      </Suspense>
+                    </a>
+                  ) : (
+                    <div className="max-w-[240px]">{subscriptionLoading ? null : analyticsTile}</div>
+                  )}
+                </div>
+              </section>
+            </div>
+          ) : (
+            // Phone: everything down to Start on the first screen.
+            <>
+              <DaysLeft days={daysLeft} dateLabel={dateLabel} onChangeDate={() => setPlanConfigStep(examDateStep)} className={cn('px-2 pt-5', dim)} />
+              <WeekRow week={week} className={cn('px-2 pt-[22px]', dim)} />
+              <div className="pt-[22px]">{sessionCard}</div>
+              {!isPro && !subscriptionLoading && (
+                <PaceMyPlanRow to="/upgrade" dateLabel={shortDate} className={cn('mt-2.5', dim)} />
               )}
-              <button
-                type="button"
-                onClick={() => setGuideOpen(true)}
-                className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                aria-label="Help"
-                title="How the dashboard works"
-              >
-                <HelpCircle className="h-6 w-6" />
-              </button>
+              <div className={cn('mt-2.5 grid grid-cols-2 gap-2.5', dim)}>
+                <SyllabusTile to={syllabusRoute} pct={syllabusPct} gain={gain} tick={tick} />
+                {subscriptionLoading ? <span /> : analyticsTile}
+              </div>
+            </>
+          )}
+
+          {/* The daily podcast (Pro): today's plan read aloud. */}
+          {PODCAST_ENABLED && isPro && activeSyllabus && activeKey && planConcepts.length > 0 && (
+            <div className={cn('mt-4 flex justify-center lg:justify-start', dim)}>
+              <Suspense fallback={null}>
+                <PodcastButton plan={plan} examKey={activeKey} examLabel={activeSyllabus.examLabel} />
+              </Suspense>
             </div>
           )}
         </div>
       </div>
+    </div>
 
-      {/* Exam switcher — pinned to the top of the viewport so the active exam
-          is always visible. Sticky offsets match the nav chrome: the fixed top
-          bar below lg is 3.5rem tall, and the lg sidebar is beside the
-          content.
+    <ConceptPopup />
 
-          This row, the study-schedule slot and the primary actions are direct
-          children of the page container *on purpose*: a sticky element only
-          sticks inside its own containing block, so wrapping them in a header
-          <div> would un-pin the tabs the moment that wrapper scrolled past
-          (i.e. at the top of Today's Study Plan) and would leave the compact
-          actions below no room to ever show. Don't re-wrap them. */}
-      {hasActiveExams && (
-        <div className="sticky top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
-          <div className="flex items-center gap-2">
-            <div
-              ref={examTabsScrollRef}
-              onScroll={measureTabsOverflow}
-              className={`exam-tab-strip flex flex-1 min-w-0 gap-3 overflow-x-auto px-1 py-1.5${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
-            >
-              {inProgressSyllabi.map((s, i) => {
-                // The tab strip is the one place every active exam is visible
-                // at once, so it's where "which of my exams are done for today"
-                // gets answered. Inline rather than a corner badge: the strip
-                // scrolls under `overflow-x-auto`, which would clip an overhang.
-                const planDone = todayQuizByExam[wikiExamIdToProgressKey(s.examId)]?.complete ?? false
-                // The tab is the exam's logo — its monogram and ladder colour
-                // say which exam without printing the name (the card below
-                // names it). The active one is drawn full-strength and ringed
-                // in its own colour, the same hue the readiness card under it
-                // is washed in, so tab and card read as one object; the rest
-                // are held back to a tint of their colour.
-                const active = i === clampedIdx
-                const key = wikiExamIdToProgressKey(s.examId)
-                return (
-                  <button
-                    key={s.examId}
-                    type="button"
-                    data-exam-tab-active={active}
-                    onClick={() => setActiveExamIdx(i)}
-                    aria-label={s.examLabel}
-                    aria-pressed={active}
-                    title={s.examLabel}
-                    style={examAccentStyle(key)}
-                    className={`relative shrink-0 rounded-[13px] p-[3px] transition-[box-shadow,transform] ${
-                      active
-                        ? 'ring-2 ring-[var(--exam-accent,hsl(var(--primary)))]'
-                        : 'hover:scale-105'
-                    }`}
-                  >
-                    <ExamLogo examKey={key} size="md" muted={!active} />
-                    {planDone && (
-                      <CompletionCornerBadge label={`${s.examLabel}: today's study plan complete`} />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Today's session, one tap from anywhere: its size, and Start.
-                The same button as the card's, which always does the next step. */}
-            {activeSyllabus && session && (
-              <button
-                type="button"
-                data-sound="begin"
-                onClick={handleStartSession}
-                disabled={session.launching}
-                aria-label={startPillLabel}
-                title={startPillLabel}
-                className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.97] disabled:opacity-80"
-              >
-                <Play className={`h-3.5 w-3.5 shrink-0 fill-current ${session.launching ? 'animate-pulse' : ''}`} aria-hidden="true" />
-                <span className="tabular-nums">{startPillText}</span>
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-      {/* The week and Today's session — portaled here by ReadinessCard (below)
-          so they lead the dashboard: when the exam is and what has been done
-          about it, then the wheel and the day's work with its one Start. */}
-      {!isGuest && activeProgressKey && (
-        <Suspense fallback={null}>
-          <RegistrationNudge examKey={activeProgressKey} />
-        </Suspense>
-      )}
-      {activeSyllabus && <div ref={setReadinessSlotEl} />}
-
-      {/* Readiness card — only shown when there is an active exam */}
-      <div>
-        {syllabusLoading || sessionsLoading || masteryLoading || loadingExams ? (
-          <ActiveExamCardLoading />
-        ) : !activeSyllabus ? (
-          <ActiveExamCardEmpty
-            onChooseExam={() => setExamsOpen(true)}
-            unsupportedExams={unsupportedActiveExams}
-            loadError={syllabi.length === 0 ? syllabusError : null}
-          />
-        ) : (
-          <ReadinessCard
-            syllabus={activeSyllabus}
-            masteryRecords={masteryRecords}
-            sessions={sessions}
-            plan={studyPlan}
-            masteryStateByName={masteryStateByName}
-            config={planConfig}
-            loading={planLoading}
-            masteryLoading={masteryLoading}
-            examDate={activeTargetDate}
-            onConfigChange={updatePlanConfig}
-            onRegenerate={regeneratePlan}
-            onReplaceConcepts={replaceTodaysConcepts}
-            onExamDateChange={handleTargetDateChange}
-            onOpenOnboarding={(step = 1) => { setOnboardingStep(step); setOnboardingOpen(true) }}
-            openConceptsTrigger={conceptsOpenCounter}
-            startQuizTrigger={startQuizCounter}
-            isPro={isPro}
-            readinessSlot={readinessSlotEl}
-            planQuestionCount={todaysQuizBadgeCount}
-            questionsFor={questionsFor}
-            startSessionTrigger={startSessionCounter}
-            onSessionChange={setSession}
-          />
-        )}
-      </div>
-
-      {/* Analytics (Pro): how this exam's practice is going — accuracy, where
-          marks are lost, pacing — over the last 7, 30 or 90 days. */}
-      {!isGuest && !isPro && !subscriptionLoading && activeSyllabus && (
-        <Suspense fallback={null}>
-          <AnalyticsLocked />
-        </Suspense>
-      )}
-      {!isGuest && isPro && accuracyExam && accuracy && answerRows && activeSyllabus && accuracy[90].days.length > 0 && (
-        <Suspense fallback={null}>
-          <AnalyticsSection
-            trends={accuracy}
-            rows={answerRows}
-            examLabel={accuracyExam}
-            syllabus={activeSyllabus}
-            questions={allQuestions}
-          />
-        </Suspense>
-      )}
-
-      {!isGuest && user && (
-        <DashboardExportModal open={exportOpen} onClose={() => setExportOpen(false)} user={user} />
-      )}
-      {!isGuest && DAILY_PLAN_EMAIL_ENABLED && (
+    {examSheetOpen && (
+      <ExamSheet
+        exams={exam.exams}
+        activeId={activeSyllabus?.examId ?? null}
+        onPick={exam.select}
+        onManage={() => setExamsOpen(true)}
+        onClose={() => setExamSheetOpen(false)}
+      />
+    )}
+    {lengthOpen && (
+      <SessionLengthSheet
+        minutes={session.minutes}
+        countsByLength={session.countsByLength}
+        onPick={session.setMinutes}
+        onClose={() => setLengthOpen(false)}
+      />
+    )}
+    {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
+    {!isGuest && planConfigStep !== null && activeSyllabus && (
+      <StudyPlanConfigModal
+        config={planConfig}
+        examDate={targetDate}
+        examLabel={activeSyllabus.examLabel}
+        examId={activeKey ?? undefined}
+        initialStep={planConfigStep}
+        isPro={isPro}
+        onSave={next => { updatePlanConfig(next); regeneratePlan() }}
+        onExamDateChange={date => { if (activeKey) updateTargetDate(activeKey, date) }}
+        onClose={() => setPlanConfigStep(null)}
+      />
+    )}
+    {!isGuest && DAILY_PLAN_EMAIL_ENABLED && remindersOpen && (
+      <Suspense fallback={null}>
         <DashboardRemindersModal
-          open={remindersOpen}
+          open
           onClose={() => setRemindersOpen(false)}
           email={user?.email ?? ''}
           isPro={isPro}
           subscriptionLoading={subscriptionLoading}
         />
-      )}
-      {!isGuest && (
-        <DashboardGuideModal
-          open={guideOpen}
-          onClose={() => setGuideOpen(false)}
-          syllabus={activeSyllabus}
-          masteryRecords={activeExamRecords}
-          examDate={activeTargetDate}
-          plan={studyPlan}
-        />
-      )}
-      {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
-      {!isGuest && onboardingOpen && activeSyllabus && (
-        <StudyPlanConfigModal
-          config={planConfig}
-          examDate={activeTargetDate}
-          examLabel={activeSyllabus.examLabel}
-          examId={activeProgressKey ?? undefined}
-          initialStep={onboardingStep}
-          isPro={isPro}
-          onSave={updatePlanConfig}
-          onExamDateChange={handleTargetDateChange}
-          onClose={() => setOnboardingOpen(false)}
-        />
-      )}
-    </div>
-    </div>
-    </div>
-    <ConceptPopup />
+      </Suspense>
+    )}
     {!isGuest && showWelcome && (
-      <WelcomeModal
-        onAddExam={() => { dismissWelcome(); setExamsOpen(true) }}
-        onClose={dismissWelcome}
-      />
+      <WelcomeModal onAddExam={() => { dismissWelcome(); setExamsOpen(true) }} onClose={dismissWelcome} />
     )}
     </>
   )

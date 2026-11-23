@@ -991,3 +991,93 @@ Before shipping a screen or component, confirm:
 - [ ] Works in light **and** dark, and separates by surface (`bg-card`/`bg-muted`) before
       reaching for a `border`.
 - [ ] `npm run build` (strict TS) and `npm run lint` pass — no unused imports.
+- [ ] On a redesigned screen (§13): one ground, outlined cards, one filled button, no grey
+      text standing in for design, levels as `LevelSquare`, hue only for an answer state.
+
+---
+
+## 13. The redesign's base
+
+`docs/redesign-spec.md` (roadmap X11) redraws the app screen by screen in high-contrast black
+and white. Its shared pieces were built first (Phase A, 2026-11-23) and are what every
+redesigned screen is made of. **Sections 1 to 12 describe the screens not yet redesigned; on a
+redesigned screen this section wins where the two differ** (an outlined card where §2.2 says a
+card needs no outline, an outlined control where §7.0 says a control has no border). Don't mix
+the two on one screen. `/design/base` on the dev server (`pages/DesignBase.tsx`, never in a
+production build) shows every piece in both themes. Today (`pages/Dashboard.tsx`,
+`components/today/`) and its Analytics screen are the first screens built from them.
+
+### 13.1 One ground, outlined cards
+
+| Role | Token / class | Rule |
+|---|---|---|
+| Ground | `--ground`, `bg-ground` (`GROUND`) | The one background: white in light, black in dark. No filled card surfaces on it |
+| Text and icons | `text-foreground` | One text colour. Hierarchy is size and weight, never `text-muted-foreground` |
+| Line | `border-border` | The one neutral: hairlines, empty tracks, the outline of anything not selected |
+| Card | `OutlineCard` / `OUTLINE_CARD` | A 1px outline in the line colour, 22px corners. Rows inside are parted by hairlines (`OUTLINE_ROW_RULE`) |
+| Tile | `OutlineTile` / `OUTLINE_TILE` | The same at 18px corners. One that is a link or button adds `OUTLINE_TILE_PRESSABLE` |
+
+All in `components/ui/OutlineCard.tsx`. The exam's hue appears on its `ExamLogo` and nowhere
+else on a redesigned screen.
+
+### 13.2 Concept levels: the level square
+
+A concept's level is a small rounded square in neutral shades, `components/LevelSquare.tsx`
+over `lib/levelSquare.ts`:
+
+| State | Square |
+|---|---|
+| New | empty, 1.5px outline in the line colour |
+| Level 1 | `bg-level-1`, the grey nearer the ground |
+| Level 2 | `bg-level-2`, the grey nearer the text |
+| Level 3 | the text colour, solid |
+| Forgotten | empty, dashed outline in the text colour |
+| In today's session | the same square with a 2px outline in the text colour, 2px off it (`today`) |
+
+`LevelSquares` draws a row of them as one image with one sentence for a screen reader
+(`levelSquaresSummary`); `LevelSquareKey` is the key. Sizes are `xs` (10px, inside a pill),
+`sm` (14px) and `md` (20px). The squares carry no hue because green now means a correct
+answer. `MasteryBadge` and the green ladder of §4.2 stay on the screens not yet redesigned.
+
+### 13.3 Answer states
+
+The only hues on a redesigned screen, and only where answers are counted (progress segments,
+feedback rows, results, Analytics). `lib/answerState.ts` holds the class maps; the values are
+the `--answer-*` tokens.
+
+| State | Token | Dark | Light |
+|---|---|---|---|
+| Correct | `--answer-correct` | `#3ddc84` | a deeper green |
+| Incorrect | `--answer-incorrect` | `#ff5247` | a deeper red |
+| Partial | `--answer-partial` | `#ffb224` | a deeper amber |
+| Unanswered | `--answer-unanswered` | `#8a8a8a` | a mid grey (`#757575`) |
+
+- `ANSWER_FILL` for a segment, bar or dot (`components/AnswerDot.tsx`), `ANSWER_TEXT` for an
+  icon or figure, `ANSWER_EDGE` for a row outlined in the state (the reader's wrong answer),
+  `ANSWER_SOLID` for a row filled with it, its words in the ground colour (the right answer).
+- **Partial is used**: a self-graded written part marked Partial takes amber on its progress
+  segment (`ANSWER_FILL`) and its grade button, outlined until picked and filled once it is
+  (`ANSWER_EDGE`, `ANSWER_SOLID`).
+- **Not reached yet is not unanswered.** A piece of a bar the reader hasn't got to is the line
+  colour (`ANSWER_PENDING`).
+- Every token clears 4.5:1 on the ground in its theme, held by `answerState.test.ts`. The
+  light theme's values are deeper than the dark theme's for that reason.
+
+### 13.4 Controls
+
+- **The main action** is `Button` at `size="main"`: 58px, fully rounded, the inverted solid.
+  **One per screen.**
+- **Anything else pressable** is `variant="edge"`: a 1.5px outline in the text colour.
+- A selected option in a list (a session length) takes a 2px outline in the text colour and
+  the `CheckMark` in `text-foreground`; the others are outlined in the line colour.
+- Touch targets are 44px or more. Nothing is set under 13px. A big figure (34–64px, bold) has
+  its unit beside it at 17–22px and no caption under it.
+
+### 13.5 The popup
+
+`components/ui/Popup.tsx`: the ground colour with a 1.5px edge in the text colour and 22px
+corners, over a page dimmed to about a third (`bg-ground/70`, no blur). Below `sm` it is a
+sheet from the foot of the screen with a grab handle; from `sm` a panel in the middle. It
+closes on Escape and a press outside, keeps Tab inside itself and gives focus back when it
+closes. `PopupTitle` is its heading. `InfoSheet` (§7.2c) stays for the screens not yet
+redesigned.

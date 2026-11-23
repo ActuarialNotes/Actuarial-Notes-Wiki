@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { Link, useNavigate } from 'react-router-dom'
@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail, Plus } from 'lucide-react'
+import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail, Plus, Bell, HelpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
@@ -22,7 +22,12 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { PrivacySettingsCard } from '@/components/PrivacySettingsCard'
 import { AiConnectorCard } from '@/components/AiConnectorCard'
-import { TOUR_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
@@ -33,6 +38,62 @@ import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { ContactDialog } from '@/components/ContactDialog'
 import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv, exportScopeSlug } from '@/lib/exportData'
 import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from '@/lib/exportPdf'
+
+// The daily email's settings and the dashboard guide were opened from the
+// Dashboard's header until Today replaced it (docs/redesign-spec.md §8, Phase B).
+// They are opened from here until the You page exists. Each is fetched when
+// its row is pressed.
+const DashboardRemindersModal = lazy(() =>
+  import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
+const DashboardGuideModal = lazy(() =>
+  import('@/components/DashboardGuideModal').then(m => ({ default: m.DashboardGuideModal })))
+
+/** The exam the Dashboard was last showing (it writes this key). */
+const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
+
+/**
+ * The dashboard guide, for the exam the Dashboard last showed. Its last slide
+ * reads that exam's syllabus, levels and plan, so they are derived here the way
+ * the Dashboard derives them, and only while the guide is open: this mounts
+ * with the guide and is gone when it closes.
+ */
+function DashboardGuide({ isPro, onClose }: { isPro: boolean; onClose: () => void }) {
+  const { syllabi } = useWikiSyllabus()
+  const { progress, targetDates, examVariants } = useExamProgress()
+  const { records, loading: masteryLoading } = useConceptMastery()
+
+  const syllabus = useMemo(() => {
+    const inProgress = syllabi.filter(s => {
+      const key = wikiExamIdToProgressKey(s.examId)
+      return progress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+    })
+    let saved: string | null = null
+    try { saved = localStorage.getItem(ACTIVE_EXAM_KEY) } catch { /* ignore */ }
+    return inProgress.find(s => s.examId === saved) ?? inProgress[0] ?? null
+  }, [syllabi, progress, examVariants])
+
+  const progressKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
+  const examDate = progressKey ? (targetDates[progressKey] ?? null) : null
+  const { plan } = useStudyPlan(syllabus, records, examDate, masteryLoading)
+  const examRecords = useMemo(
+    () => (progressKey ? records.filter(r => r.exam_id === progressKey) : []),
+    [records, progressKey],
+  )
+
+  return (
+    <Suspense fallback={null}>
+      <DashboardGuideModal
+        open
+        onClose={onClose}
+        syllabus={syllabus}
+        masteryRecords={examRecords}
+        examDate={examDate}
+        // Only a Pro account has a plan (as on the Dashboard).
+        plan={isPro ? plan : null}
+      />
+    </Suspense>
+  )
+}
 
 // ---- Exam status icons ----
 
@@ -293,6 +354,7 @@ export default function Settings() {
   const navItems = [
     ...(user ? [] : [{ id: 'signin', label: 'Sign in' }]),
     ...(user ? ACCOUNT_NAV_ITEMS : []),
+    ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'reminders', label: 'Reminders' }] : []),
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
     { id: 'ai', label: 'AI assistants' },
@@ -304,6 +366,8 @@ export default function Settings() {
   // ---- Onboarding tour (replayable from Support) ----
   const restartTour = useOnboardingTour(s => s.restart)
   const [showContact, setShowContact] = useState(false)
+  const [showReminders, setShowReminders] = useState(false)
+  const [showGuide, setShowGuide] = useState(false)
 
   // ---- Section refs for scroll-nav ----
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -520,6 +584,18 @@ export default function Settings() {
   return (
     <>
       {showContact && <ContactDialog onClose={() => setShowContact(false)} />}
+      {user && DAILY_PLAN_EMAIL_ENABLED && showReminders && (
+        <Suspense fallback={null}>
+          <DashboardRemindersModal
+            open
+            onClose={() => setShowReminders(false)}
+            email={user.email ?? ''}
+            isPro={isPro}
+            subscriptionLoading={subLoading}
+          />
+        </Suspense>
+      )}
+      {user && showGuide && <DashboardGuide isPro={isPro} onClose={() => setShowGuide(false)} />}
 
       <ConfirmModal
         open={showResetModal}
@@ -798,7 +874,7 @@ export default function Settings() {
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Pro plans what to study each day until your exam.
+                        Pro paces your daily session to your exam date.
                       </p>
                       <div className="flex flex-wrap gap-3">
                         <Link to="/upgrade">
@@ -894,6 +970,38 @@ export default function Settings() {
               </Card>
             </section>
 
+            {/* ---- Reminders (docs/daily-plan-email.md) ---- */}
+            {DAILY_PLAN_EMAIL_ENABLED && (
+              <section ref={el => { sectionRefs.current.reminders = el }} id="reminders">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Reminders</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium flex items-center gap-1.5">
+                          Daily study plan email
+                          {!isPro && !subLoading && <ProBadge />}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          The concepts your study plan has scheduled for the day, emailed at the hour you choose.
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowReminders(true)}
+                        className="shrink-0"
+                      >
+                        <Bell className="h-4 w-4 mr-2" />
+                        Email settings
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </section>
+            )}
+
             </> /* end user && */}
 
             {/* ---- Appearance ---- */}
@@ -974,6 +1082,24 @@ export default function Settings() {
                       >
                         <GraduationCap className="h-4 w-4 mr-2" />
                         Start tour
+                      </Button>
+                    </div>
+                  )}
+                  {user && (
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium">How the dashboard works</p>
+                        <p className="text-xs text-muted-foreground">
+                          Concept levels, today&rsquo;s study plan and how your readiness score is counted.
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowGuide(true)}
+                        className="shrink-0"
+                      >
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Open guide
                       </Button>
                     </div>
                   )}

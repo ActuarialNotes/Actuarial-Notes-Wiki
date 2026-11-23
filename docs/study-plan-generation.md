@@ -1,5 +1,13 @@
 # Study Plan Generation
 
+> **2026-11-23, the redesign's Phase B (`docs/redesign-spec.md` §4.3).** The plan is generated as
+> described here. What changed is what it feeds: Today's session is sized by the time the reader
+> picks, so on a given day it takes as many of the plan's concepts as fit (`lib/todaySession.ts`)
+> and the rest are offered again by "Keep going" or tomorrow. The plan is Pro's; a free reader
+> has a daily session with no plan behind it. The schedule strip, the day panel and the
+> schedule-forming sweep described below were on the old Dashboard's `ReadinessCard` and are no
+> longer drawn.
+
 The study plan is a personalised daily schedule that tells you which concepts to practice each day. It works backwards from your target ready date, spaces revisits according to how well you know each concept, and adjusts its pacing status so you always know whether you're on track.
 
 ## Setting Up Your Plan

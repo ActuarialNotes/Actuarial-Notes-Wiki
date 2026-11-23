@@ -1,0 +1,110 @@
+// The redesign's popup (docs/redesign-spec.md §2.3, R14; style guide §13.5):
+// the ground colour with a 1.5px edge in the text colour, over a page dimmed
+// to about a third. Below `sm` it is a sheet rising from the foot of the
+// screen with a grab handle; from `sm` it is a panel in the middle.
+//
+// The session length sheet and the exam switcher are built from it. An info
+// popup on a screen not yet redesigned stays `InfoSheet`.
+
+import { useEffect, useRef, type ReactNode } from 'react'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { cn } from '@/lib/utils'
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+export function Popup({
+  onClose,
+  label,
+  labelledBy,
+  children,
+  layer = 'z-[80]',
+  className,
+}: {
+  onClose: () => void
+  label?: string
+  labelledBy?: string
+  children: ReactNode
+  /** The overlay's stacking layer (style guide §8.2). */
+  layer?: string
+  className?: string
+}) {
+  const panelRef = useRef<HTMLDivElement>(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
+  // Focus moves into the popup, stays there, and goes back where it was.
+  useEffect(() => {
+    const before = document.activeElement as HTMLElement | null
+    const panel = panelRef.current
+    panel?.focus()
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        onCloseRef.current()
+        return
+      }
+      if (e.key !== 'Tab' || !panel) return
+      const stops = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
+      if (stops.length === 0) {
+        e.preventDefault()
+        return
+      }
+      const first = stops[0]
+      const last = stops[stops.length - 1]
+      const active = document.activeElement
+      if (e.shiftKey && (active === first || active === panel)) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown, true)
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKeyDown, true)
+      document.body.style.overflow = overflow
+      before?.focus?.()
+    }
+  }, [])
+
+  return (
+    <OverlayPortal>
+      <div className={cn('fixed inset-0 flex items-end justify-center sm:items-center sm:p-4 paper-scrim', layer)}>
+        {/* The page behind, dimmed to about 30%. No blur: it stays readable as a page. */}
+        <div className="fixed inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
+        <div
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={label}
+          aria-labelledby={labelledBy}
+          tabIndex={-1}
+          className={cn(
+            'relative z-10 flex max-h-[92dvh] w-full flex-col gap-[18px] overflow-y-auto bg-ground text-foreground outline-none',
+            'rounded-t-[22px] border-[1.5px] border-b-0 border-foreground px-5 pb-7 pt-2.5',
+            'sm:max-w-md sm:rounded-[22px] sm:border-b-[1.5px] sm:p-6',
+            className,
+          )}
+        >
+          <span aria-hidden="true" className="h-1 w-10 shrink-0 self-center rounded-full bg-foreground sm:hidden" />
+          {children}
+        </div>
+      </div>
+    </OverlayPortal>
+  )
+}
+
+/** A popup's title: 22px, bold. Pass its `id` to the popup's `labelledBy`. */
+export function PopupTitle({ id, children, className }: { id?: string; children: ReactNode; className?: string }) {
+  return (
+    <h2 id={id} className={cn('text-[22px] font-bold leading-tight', className)}>
+      {children}
+    </h2>
+  )
+}

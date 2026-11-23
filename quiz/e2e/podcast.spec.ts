@@ -53,14 +53,14 @@ async function setUp(page: Page) {
     route.fulfill({ status: 200, contentType: 'audio/mpeg', body: CLIP }))
 }
 
-test('the plan card plays today\'s episode, and it keeps playing across the app', async ({ page }) => {
+test('Today plays today\'s episode, and it keeps playing across the app', async ({ page }) => {
   await setUp(page)
   await page.goto('/dashboard')
   const button = page.getByTestId('podcast-play')
   await expect(button).toBeVisible({ timeout: 30_000 })
   await expect(button).toContainText("Listen to today's plan")
   await expect(button).toContainText(/\d+ concepts? · \d+ min/)
-  await button.locator('xpath=ancestor::div[contains(@class,"space-y-5")][1]').screenshot({ path: 'test-results/podcast-plan-card.png' })
+  await button.screenshot({ path: 'test-results/podcast-plan-card.png' })
   await button.click()
 
   const player = page.getByTestId('podcast-player')
@@ -127,6 +127,6 @@ test('a recording made from an older page is not played', async ({ page }) => {
   await page.route(`${PLACEHOLDER}/storage/v1/object/public/podcast/index.json`, route =>
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(stale) }))
   await page.goto('/dashboard')
-  await expect(page.getByRole('heading', { name: "Today's session" })).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByTestId('today-start')).toBeVisible({ timeout: 30_000 })
   await expect(page.getByTestId('podcast-play')).toHaveCount(0)
 })

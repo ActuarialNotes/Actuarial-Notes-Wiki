@@ -288,8 +288,8 @@ before touching that area**:
   "today's concepts" from the (usually day-old) `study_plan_cache`, the hourly pg_cron →
   edge-function send loop, and the one-time Resend/vault setup checklist.
 - `docs/daily-podcast.md` — the **daily podcast** (Pro): Today's Study Plan read aloud, from the
-  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, in
-  `ReadinessCard`) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
+  plan card's *Listen to today's plan* (`components/podcast/PodcastButton.tsx`, lazy, under Today's
+  tiles) and the daily email's Listen button (`/dashboard?episode=<exam key>`). Every
   word is the concept page's, through the Listen pipeline, with fixed links between — **no model
   writes anything** (`lib/podcastScripts.ts`: definition, two formulas, a few bullets, *The
   idea*, the first exam trap). A clip is shared by every reader and named by its script's hash
@@ -408,7 +408,15 @@ before touching that area**:
   (Projects, Tools, Workflows) — mapped to the code it replaces, and the build order (phases A–I,
   the navigation last). The screens are on a
   design canvas it links to. Where it differs from the design review, it wins (its §9). Read
-  before building any of X11.
+  before building any of X11. **Phase A, the visual base, is built** (style guide §13): the
+  `--ground` / `--level-*` / `--answer-*` tokens, `components/LevelSquare.tsx` (a concept's level
+  as a neutral shaded square, `lib/levelSquare.ts`), `lib/answerState.ts` (green correct, red
+  incorrect, amber partial, grey unanswered) with `components/AnswerDot.tsx`,
+  `components/ui/OutlineCard.tsx` (outlined cards and tiles on the one ground),
+  `components/ui/Popup.tsx`, and `Button`'s `edge` variant and `main` size. No screen uses them
+  `pages/DesignBase.tsx` shows them at `/design/base` on the dev server only. **Phase B, Today, is
+  built** (its §8 lists what was decided while building it): the daily session is free and sized by
+  time, Pro is the pacing, Analytics and the podcast. See `todaySession.ts` below.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1299,12 +1307,10 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the Dashboard's **Today's
-  session** wheel (`components/dashboard/SessionWheel.tsx`, `NN%` ready in the middle of the
-  ring, today's concepts outlined on it), the **Exam Readiness**
-  popup the wheel opens (the ring and the
-  criterion bar — it sits under the concept popup, ending where that pane begins, so a
-  tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
+  tally); every surface that prints the percentage calls it — Today's **Syllabus** tile and
+  desktop panel (`components/today/`, where the number is labelled *Syllabus*: it is coverage, and
+  "ready" read as a forecast), the exam grid and the readiness projection. The readiness wheel and
+  the Exam Readiness popup were removed with the old Dashboard. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessDelta.ts` — the **movement arrow** beside that KPI: how far the score has moved
@@ -1315,37 +1321,26 @@ Other important `lib/` modules:
   shows as a red arrow, while a gap longer than a day starts flat rather than blaming today for
   a week of decay. The delta is measured between the *rounded* scores so it always agrees with
   the number on screen. See `docs/exam-readiness.md`.
-- `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
-  concept, each section sized by its exam weight, each arc filled by that concept's mastery
-  state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Exam Readiness popup (`StudyGuideRadial`, with `SessionWheel` — the arcs round the score, today's
-  concepts outlined — on Today's session, which opens it in `components/ReadinessCard.tsx`, with a legend,
-  curved section labels and a middle that prints the score until a concept is hovered or
-  selected, then that concept's readout) and the exam page's title-row badge
-  (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
-  about the shape of a syllabus. Geometry is in a fixed 280-unit viewBox; pick a size by
-  scaling the SVG, not by editing the constants.
-- `todaySession.ts` — **Today's session**, the Dashboard's one card of work for the day
-  (`components/dashboard/TodaySessionCard.tsx`, under the week strip): its **steps** in the
-  order they are done — *Fix N mistakes* (the missed questions not yet answered right),
-  *Learn N new concepts* and *Review N concepts* (today's plan, split by the state each
-  concept was scheduled in) — each a numbered checklist, its concepts outlined on the wheel
-  (`sessionPins`); its **size**, the plan quiz's own count (`questionsNeededForPlan`) plus
-  the mistakes, in minutes at the exam's pace (`sessionMinutes` — none for an exam paced by
-  the point); the walk a tapped row opens in the concept popup — every row's concept in the
-  order listed, each once (`sessionWalk`), the row the popup is on held highlighted
-  (`.concept-row-current`); and what **Start** does (`nextSessionAction`). Start runs the
-  whole session as **one quiz**: the missed questions' ids go to the quiz builder through
-  `storeSessionMistakes` (`lib/quizBuilder.ts`) and its autostart puts them ahead of the
-  fewest questions that complete today's plan (`sessionQuizIds`) — or launches them alone
-  once the plan is done or there is none. The pinned exam row carries a copy of Start
-  (`startSessionTrigger` / `onSessionChange` between the Dashboard and `ReadinessCard`).
-  Pure and tested.
-- `analyticsSummary.ts` — the head of the Dashboard's **Analytics** section
-  (`components/analytics/AnalyticsSummary.tsx`): four tiles (accuracy, the marks the
-  costliest section is losing, first tries, pace), the span day by day (`dailyColumns`) and
-  accuracy by difficulty. It is the whole section: the *Marks at risk* tile opens
-  `SectionLeaksCard` in a popup (`components/analytics/SectionLeaksDialog.tsx`). Pure and tested.
+- `todaySession.ts` — **Today's session** (`docs/redesign-spec.md` §4), the one card of work on
+  Today (`pages/Dashboard.tsx`, `components/today/SessionCard.tsx`). A session is **sized by
+  time**: the reader's length (10 / 25 / 45 / 120 minutes, one setting for every exam —
+  `StoredLength`) at the exam's own pace is a budget of questions (`secondsPerQuestion`,
+  `sessionBudget`; a paper paced by the point prices a question at its bank's average points, an
+  exam with no pace uses a 5-minute default kept in the code), shared between **Fix mistakes**,
+  **Learn** and **Review** by `splitSession` (a third to Fix, a third of the rest to Learn, the
+  rest to Review; a floor of one each; unused shares to Review, Fix, Learn). A paid plan's Learn
+  and Review are today's study plan; a free reader's are the next New concepts in syllabus order
+  and the concepts closest to stepping down (`learnCandidates`, `reviewCandidates`). The session
+  is **built once a day and kept in the browser** (`StoredSession`, by `hooks/useTodaySession.ts`)
+  and read against the day (`readSession`): finished when everything has been tried. Start hands
+  the misses and the concepts to the quiz builder (`storeSessionMistakes` with `concepts`), whose
+  autostart launches one quiz. Also here: the week's circles (`weekOf`) and the plan's tick on the
+  syllabus bar (`planTickPct`). Pure and tested; the flows are `e2e/dashboard-session.spec.ts`.
+  `hooks/useTodayExam.ts` is which exam Today shows, shared with its Analytics screen
+  (`/dashboard/analytics`, `pages/TodayAnalytics.tsx`, `components/today/AnalyticsScreen.tsx`,
+  the drawing maths in `lib/todayAnalytics.ts`; Pro only).
+- `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
+  by difficulty) that Today's Analytics screen draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
@@ -1409,22 +1404,16 @@ Other important `lib/` modules:
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
-  reader's review: the Dashboard's accuracy figures (via `hooks/useAccuracyTrend.ts` — one exam's
-  `question_responses` over a 7 / 30 / 90-day span the reader picks, every figure covering that
-  one span; any rate under 10 answers stepped back to grey), drawn by the summary
-  (`lib/analyticsSummary.ts`) that is the Dashboard's **Analytics** section — the full Accuracy
-  card with its rolling line and day dialog was removed (its rolling-window and day helpers stay
-  in the lib, tested) — signed-in and Pro only, lazy, a **Pro** feature: anyone else gets `components/analytics/AnalyticsLocked.tsx`
-  (the locked study-plan card's shape, a drawn stand-in, nothing of theirs fetched — the Dashboard
-  passes `useAccuracyTrend` a null exam) — `components/analytics/AnalyticsSection.tsx`, whose
-  header's span picker covers every card; beside it, `lib/performanceAnalytics.ts`: **where you're losing marks**,
-  each syllabus section's misses weighed by its share of the paper (`sectionLeaks`, sections
-  matched through the questions' `wiki_link` concepts), **pacing**, the median time a question
-  or point took against `quizTiming.ts`'s allowance (`pacing`), and the card's **first try vs
-  retry** split (`attempts`, from the ids answered before the fetch window)), the results screen's score **by difficulty** (shown only once
+  reader's review: the accuracy figures behind Today's **Analytics** tile and screen (via
+  `hooks/useAccuracyTrend.ts` — one exam's `question_responses` over a 7 / 30 / 90-day span the
+  reader picks, every figure covering that one span), a **Pro** feature: a free account's tile is
+  locked and links to Upgrade, `/dashboard/analytics` sends it there too, and none of its answers
+  are fetched (Today passes `useAccuracyTrend` a null exam). Beside it, `lib/performanceAnalytics.ts`:
+  **marks lost**, each syllabus section's misses weighed by its share of the paper (`sectionLeaks`),
+  and **pace**, the median time a question or point took against `quizTiming.ts`'s allowance
+  (`pacing`); the results screen's score **by difficulty** (shown only once
   the quiz is over, like `showMeta`; a perfect quiz on Hard questions says so), and the
-  **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder and
-  the Dashboard): within 14 days of the deadline `registrationStatus` reads off the transcribed
+  **registration deadline nudge** (`components/RegistrationNudge.tsx`, lazy, on the quiz builder): within 14 days of the deadline `registrationStatus` reads off the transcribed
   sittings tables, dismissed per sitting in localStorage. Pure and tested; flows in
   `e2e/accuracy.spec.ts`.
 - `learningSignals.ts` — the **learning instrumentation** (roadmap L1): whether studying
@@ -1473,23 +1462,18 @@ Other important `lib/` modules:
   blurred container, the input line (the hamburger on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
-  wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar`, `DashboardSearchBar` and
+  wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar` and
   `FlashcardsSearchBar` are all built from these and a
   search feels the same wherever a reader is. `components/SearchHighlight.tsx` is the matched run,
   marked — the one implementation the wiki search, the search panel, the Search page and
   Cowork all call. (The quiz builder's `QuizFloatingSearch` still draws its own.)
-- `appSearch.ts` — the matching behind the **Dashboard** and **Flashcards** top bars
-  (`components/DashboardSearchBar.tsx`, `components/FlashcardsSearchBar.tsx`), which stand
-  where the app header's wordmark and mode pill used to be — those two routes are in
-  `mobileNavHost.ts` now, so `Sidebar` draws no header over them. `rankMatch` / `searchBy`
-  are the ranking every one of those lists shares (a name that *starts* with the query, then
-  one that contains it, then one every query word appears in; a hit on a later field —
-  an author, a question's prose — never outranks one on the name). `buildStudyIndex` is what
-  the Dashboard's Concepts and Resources pills search: the bundled exam pages
-  (`useWikiSyllabus`), deliberately **not** `buildWikiIndex`, whose fallback is GitHub's
-  rate-limited Contents API — the first screen of the app has to find things offline. What
-  the bundle can't answer, the foot of the results hands to the Search page, which now takes
-  `?type=` and `?q=`. Pure and tested.
+- `appSearch.ts` — the matching behind the **Flashcards** top bar
+  (`components/FlashcardsSearchBar.tsx`): `rankMatch` / `searchBy` are the ranking its lists share
+  (a name that *starts* with the query, then one that contains it, then one every query word
+  appears in; a hit on a later field never outranks one on the name), and `buildStudyIndex` searches
+  the bundled exam pages, never GitHub's rate-limited API. Today has no search bar (the Dashboard's
+  was removed with it); its top row carries the phone's navigation button instead
+  (`mobileNavHost.ts`). Pure and tested.
 - `conceptGraph.ts` / `conceptRecipes.ts` / `conceptCraft.ts` / `craftMedals.ts` / `craftLayout.ts` — **Concept Craft**
   (`docs/concept-craft.md`). `conceptGraph.ts` is the derived graph: `pageMentions` (what a page
   says about other concepts — every link, and every topic concept named in its text, longest

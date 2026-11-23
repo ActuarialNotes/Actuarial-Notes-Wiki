@@ -446,7 +446,7 @@ export function todayConceptChips(plan: StudyPlan | null): Set<string> {
 }
 
 /** The concept a question's `wiki_link` entry names, lower-cased. */
-function linkedConcept(link: string): string {
+export function linkedConcept(link: string): string {
   const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
   return clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
 }
@@ -618,26 +618,30 @@ export function storeSelectedIds(ids: readonly string[]): void {
 }
 
 /**
- * Where the Dashboard's **Start session** leaves the missed questions it wants
- * in the same quiz as today's plan (`lib/todaySession.ts`): their ids, and
- * whether the plan's questions follow them (false once the plan is done).
+ * What Today's **Start** hands the quiz builder (`lib/todaySession.ts`): the
+ * missed questions the session fixes, and what follows them. `concepts` names
+ * the session's Learn and Review concepts, and the quiz is then the fewest
+ * questions that cover them; without it, `plan` says whether today's whole
+ * study plan follows (the older hand-off, kept for a link that still uses it).
  */
 export const SESSION_MISTAKES_KEY = 'actuarial_session_mistakes'
 
 export interface SessionMistakes {
   ids: string[]
   plan: boolean
+  concepts?: string[]
 }
 
-/** Hands Start session's missed questions to the quiz builder; null clears them. */
+/** Hands Start's session to the quiz builder; null clears it. */
 export function storeSessionMistakes(value: SessionMistakes | null): void {
   try {
-    if (value && value.ids.length > 0) sessionStorage.setItem(SESSION_MISTAKES_KEY, JSON.stringify(value))
-    else sessionStorage.removeItem(SESSION_MISTAKES_KEY)
+    if (value && (value.ids.length > 0 || (value.concepts?.length ?? 0) > 0)) {
+      sessionStorage.setItem(SESSION_MISTAKES_KEY, JSON.stringify(value))
+    } else sessionStorage.removeItem(SESSION_MISTAKES_KEY)
   } catch { /* ignore */ }
 }
 
-/** Start session's missed questions, read without removing them; null when there are none. */
+/** Start's session, read without removing it; null when there is none. */
 export function peekSessionMistakes(): SessionMistakes | null {
   try {
     const raw = sessionStorage.getItem(SESSION_MISTAKES_KEY)
@@ -645,7 +649,13 @@ export function peekSessionMistakes(): SessionMistakes | null {
     const v = JSON.parse(raw) as Partial<SessionMistakes>
     if (!Array.isArray(v.ids)) return null
     const ids = v.ids.filter((id): id is string => typeof id === 'string')
-    return ids.length > 0 ? { ids, plan: v.plan !== false } : null
+    const concepts = Array.isArray(v.concepts)
+      ? v.concepts.filter((c): c is string => typeof c === 'string')
+      : []
+    if (ids.length === 0 && concepts.length === 0) return null
+    return concepts.length > 0
+      ? { ids, plan: false, concepts }
+      : { ids, plan: v.plan !== false }
   } catch { return null }
 }
 

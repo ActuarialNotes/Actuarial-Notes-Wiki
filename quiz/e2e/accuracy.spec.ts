@@ -1,7 +1,7 @@
 import { expect, test, type Page } from './test'
 import { PLACEHOLDER, USER_ID, signIn } from './fixtures/signedIn'
 
-// The Dashboard's Analytics summary (lib/analyticsSummary.ts) and the registration
+// Today's Analytics tile and screen (lib/todayAnalytics.ts) and the registration
 // deadline nudge (lib/registrationNudge.ts), for an FM candidate four days
 // before the December 2026 sitting's registration closes.
 
@@ -39,49 +39,37 @@ test.beforeEach(async ({ page }) => {
   await serveAnswers(page, rows)
 })
 
-test('the Marks at risk tile opens where the marks are lost, each row a quiz', async ({ page }) => {
-  await page.goto('/dashboard')
-  const analytics = page.getByRole('region', { name: 'Analytics' })
-  await expect(analytics).toBeVisible({ timeout: 20_000 })
-  await analytics.getByRole('button', { name: /Marks at risk/ }).click()
-  const dialog = page.getByRole('dialog', { name: "Where you're losing marks" })
-  await expect(dialog).toBeVisible()
-  await expect(dialog).toContainText('of the exam')
-  await dialog.screenshot({ path: 'test-results/analytics-leaks.png' })
-  await dialog.getByRole('link').first().click()
-  await expect(page).toHaveURL(/\/quiz\?exam=Financial\+Mathematics&concepts=/)
-})
-
-test('the registration deadline shows four days out, and stays dismissed', async ({ page }) => {
-  await page.goto('/dashboard')
-  const nudge = page.getByRole('status').filter({ hasText: 'Registration for the December 3 Exam FM sitting closes in 4 days' })
-  await expect(nudge).toBeVisible({ timeout: 20_000 })
-  await expect(nudge).toContainText('November 4, 10:00 AM U.S. Central')
-  await nudge.getByRole('button', { name: 'Dismiss' }).click()
-  await expect(nudge).toHaveCount(0)
-  await page.reload()
-  await expect(page.getByRole('region', { name: 'Analytics' })).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByText('Registration for the December 3 Exam FM sitting')).toHaveCount(0)
-})
-
 test('the quiz builder carries the same deadline', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?topic=Financial%20Mathematics')
   await expect(page.getByText('Registration for the December 3 Exam FM sitting closes in 4 days')).toBeVisible({ timeout: 20_000 })
 })
 
-test('the summary leads Analytics: the span’s tiles, day by day', async ({ page }) => {
-  await page.goto('/dashboard')
-  const analytics = page.getByRole('region', { name: 'Analytics' })
-  await expect(analytics).toBeVisible({ timeout: 20_000 })
-  await analytics.getByRole('radio', { name: 'Past 7 days' }).click()
-  await expect(analytics.getByRole('heading', { name: /Past week/ })).toBeVisible()
-  await expect(analytics).toContainText(/Accuracy\s*70%\s*7 of 10 right/)
+test('the Analytics screen reads the span: accuracy, pace, marks lost, difficulty', async ({ page }) => {
+  await page.goto('/dashboard/analytics')
+  const days = page.getByRole('group', { name: 'Days' })
+  await expect(days).toBeVisible({ timeout: 30_000 })
+  await days.getByRole('button', { name: '7', exact: true }).click()
+  await expect(days.getByRole('button', { name: '7', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  // 7 of 10 right in the past week.
+  await expect(page.getByText('70%').first()).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByText('accuracy')).toBeVisible()
   // Every answer took 200 s; Exam FM allows 5:00 a question.
-  await expect(analytics).toContainText(/Pace\s*3:20/)
-  await expect(analytics.getByRole('img', { name: /October 30: 4 of 5 right/ })).toBeVisible()
-  // The summary is the whole section: no full cards, no All analytics.
-  await expect(analytics.getByRole('region', { name: 'Accuracy' })).toHaveCount(0)
-  await expect(analytics.getByRole('button', { name: 'All analytics' })).toHaveCount(0)
-  await analytics.screenshot({ path: 'test-results/analytics-summary.png' })
+  await expect(page.getByText('3:20')).toBeVisible()
+  await expect(page.getByText('Exam 5:00')).toBeVisible()
+  await expect(page.getByText('Marks lost', { exact: true })).toBeVisible()
+  await expect(page.getByText('By difficulty')).toBeVisible()
+  await page.screenshot({ path: 'test-results/analytics-screen.png', fullPage: true })
+  // Back goes to Today.
+  await page.getByRole('button', { name: /Today/ }).click()
+  await expect(page).toHaveURL(/\/dashboard$/)
+})
+
+test('Today\'s Analytics tile carries the accuracy and opens the screen', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/dashboard')
+  const tile = page.getByTestId('today-analytics')
+  await expect(tile).toHaveAccessibleName(/Analytics: \d+% accuracy over 30 days/, { timeout: 30_000 })
+  await tile.click()
+  await expect(page).toHaveURL(/\/dashboard\/analytics$/)
 })

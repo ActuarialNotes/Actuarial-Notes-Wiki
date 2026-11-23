@@ -17,7 +17,7 @@
 export function pageHostsNavButton(pathname: string): boolean {
   // The quiz builder (QuizFloatingSearch) — `/` exactly, nothing below it.
   if (pathname === '/') return true
-  // The Dashboard (DashboardSearchBar) and Flashcards (FlashcardsSearchBar) —
+  // Today (its own top row, beside the exam) and Flashcards (FlashcardsSearchBar) —
   // both exactly, nothing below them.
   if (pathname === '/dashboard' || pathname === '/flashcards') return true
   // A project attempt (ProjectTopBar) — every page *under* the Projects tab.

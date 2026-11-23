@@ -1,115 +1,115 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { Loader2, CalendarDays } from 'lucide-react'
+// Learn's exam page (docs/redesign-spec.md §7.1): the header (subject and
+// format, the syllabus bar, the official syllabus and the dates), each
+// learning objective as a card, and the rows at the foot.
+//
+// What it draws is `lib/examPage.ts`: the page's own markdown, read. The
+// figures are `lib/syllabusObjectives.ts`, the ones Today's Syllabus panel
+// prints. A pill goes to the concept's page; a reading, and an old `?concept=`
+// link, still open in the reader over this page.
+
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { ChevronDown, ChevronRight, ChevronUp, Loader2, PlusCircle } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
+import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { WikiArticle, type WikiTitleAction } from '@/components/wiki/WikiArticle'
-import { ConceptActionMenu } from '@/components/ConceptActionMenu'
-import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
-import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
+import { useConceptHighlight } from '@/hooks/useConceptHighlight'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useSubscription } from '@/hooks/useSubscription'
+import { storedSessionConcepts } from '@/hooks/useTodaySession'
+import { countQuestions, practiceSettings, useQuestionBank } from '@/hooks/usePractice'
+import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
+import { ExamSyllabusButton, LABELLED_HEADER_BUTTON } from '@/components/wiki/ExamSyllabusButton'
 import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
-import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
-import { ExamQuizButton } from '@/components/wiki/ExamQuizButton'
 import { ExamLogo } from '@/components/ExamLogo'
+import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FloatingSearchBack } from '@/components/FloatingSearchBar'
-import { examAccentStyle } from '@/lib/examColors'
+import { ObjectiveCard, type PillState } from '@/components/learn/ObjectiveCard'
+import { PracticeButton } from '@/components/learn/PracticeButton'
+import { SyllabusBar } from '@/components/today/TodayTiles'
 import { useExamProgress } from '@/contexts/examProgress'
 import { useAuth } from '@/hooks/useAuth'
-import { todayISO } from '@/lib/studyPlan'
-import { examPageIdFromFile, examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
+import { daysBetween, todayISO } from '@/lib/studyPlan'
+import { examPageIdFromFile, examProgressKeyFromFile, examQuizTopic, todaysPlanConcepts } from '@/lib/examMenu'
+import { examFootNotes, linesShown, objectiveOf, parseExamPage, type ObjectivePill } from '@/lib/examPage'
 import { examStatus } from '@/lib/examStatus'
+import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
+import { objectivePracticeUrl } from '@/lib/practiceLaunch'
+import { formatExamLength, formatExamUnits } from '@/lib/quizBankInfo'
+import { paceForExam } from '@/lib/quizTiming'
+import { computeExamReadiness } from '@/lib/readiness'
+import { examPillLabel } from '@/lib/resourceExams'
 import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
-import { documentPathsByName, extractSourceMaterial, sourceEntryRef } from '@/lib/sourceMaterial'
-import { buildWikiIndex } from '@/lib/wikiIndex'
+import { syllabusObjectives } from '@/lib/syllabusObjectives'
+import { documentPathsByName, extractSourceMaterial, parseSyllabusObjectives, sourceEntryRef } from '@/lib/sourceMaterial'
+import { planTickPct } from '@/lib/todaySession'
+import { factCheckBadge, parseVerification } from '@/lib/verification'
+import { buildWikiIndex, isInWikiIndex } from '@/lib/wikiIndex'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
-import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { useBack } from '@/hooks/useBack'
+import { useBack, usePageLabel } from '@/hooks/useBack'
 import type { BackOptions } from '@/lib/navTrail'
+import { stripFrontmatter } from '@/lib/wikiMarkdown'
+import { cn } from '@/lib/utils'
 
 const EXAM_LIST_ONLY: BackOptions = { only: path => path.split(/[?#]/)[0] === '/wiki' }
 
-const STATUS_TITLE: Record<ItemStatus, string> = {
-  not_started: 'Exam status: Not started',
-  in_progress: 'Exam status: In progress',
-  completed: 'Exam status: Passed',
+/** Which objective was open on an exam's page, so Back from a concept returns to it. */
+const OPEN_OBJECTIVE_KEY = 'wiki:exam-objective:'
+
+function readOpenObjective(file: string): number | null {
+  try {
+    const raw = sessionStorage.getItem(OPEN_OBJECTIVE_KEY + file)
+    return raw === null ? null : Number(raw)
+  } catch { return null }
 }
 
-// Compact exam-day label for the in-progress badge; the year is only worth the
-// space when the sitting isn't in the current year.
-function formatExamDate(iso: string): string {
-  const d = new Date(iso + 'T12:00:00')
-  if (Number.isNaN(d.getTime())) return ''
-  const sameYear = d.getFullYear() === new Date().getFullYear()
-  return d.toLocaleDateString(undefined, sameYear
-    ? { month: 'short', day: 'numeric' }
-    : { month: 'short', day: 'numeric', year: 'numeric' })
+function saveOpenObjective(file: string, index: number | null) {
+  try {
+    if (index === null) sessionStorage.removeItem(OPEN_OBJECTIVE_KEY + file)
+    else sessionStorage.setItem(OPEN_OBJECTIVE_KEY + file, String(index))
+  } catch { /* private window */ }
 }
 
-// Only the two statuses worth a mark of their own. A not-started exam shows
-// nothing beside its title — the dashed-plus icon it used to show read as an
-// "add" control rather than a status.
-function ExamStatusIcon({ status }: { status: Exclude<ItemStatus, 'not_started'> }) {
-  const cls = 'h-7 w-7'
-  if (status === 'completed') {
-    return (
-      <svg className={`${cls} text-green-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2" />
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-        <polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
-  }
+/** A row at the foot of the page: a label that unfolds what it names, in place. */
+function FootRow({
+  label,
+  aside,
+  open,
+  onToggle,
+  children,
+}: {
+  label: string
+  aside?: ReactNode
+  open: boolean
+  onToggle: () => void
+  children: ReactNode
+}) {
+  const Chevron = open ? ChevronUp : ChevronDown
   return (
-    <svg className={`${cls} text-amber-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
-    </svg>
+    <div className="border-t border-border" data-foot-row={label}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="flex min-h-14 w-full items-center gap-3.5 text-left text-[17px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <span className="min-w-0 flex-1">{label}</span>
+        {aside}
+        <Chevron className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+      </button>
+      {open && <div className="pb-6">{children}</div>}
+    </div>
   )
 }
 
-function ExamStatusBadge({ progressKey }: { progressKey: string }) {
-  const { user } = useAuth()
-  const { progress, targetDates } = useExamProgress()
-  const currentStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
-  const openExams = useExamsPopout(s => s.openExams)
-
-  // An in-progress exam with a date set says *when* it is rather than showing a
-  // status icon the date already implies.
-  const examDate = currentStatus === 'in_progress' ? targetDates[progressKey] : null
-  const examDateLabel = examDate ? formatExamDate(examDate) : ''
-  const title = user
-    ? (examDateLabel ? `Exam on ${examDateLabel}` : STATUS_TITLE[currentStatus])
-    : 'Sign in to track progress'
-
-  // Nothing beside the title until the exam is actually being tracked; the
-  // status itself is set from the exams popout (sidebar profile menu, Settings).
-  if (currentStatus === 'not_started') return null
-
-  return (
-    <button
-      type="button"
-      onClick={openExams}
-      title={title}
-      aria-label={title}
-      className="inline-flex items-center justify-center shrink-0 rounded-full transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose"
-    >
-      {examDateLabel ? (
-        <span
-          className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-600 dark:text-amber-500"
-        >
-          <CalendarDays className="h-3.5 w-3.5" />
-          {examDateLabel}
-        </span>
-      ) : (
-        <ExamStatusIcon status={currentStatus} />
-      )}
-    </button>
-  )
-}
+const FOOT_LINK =
+  'flex min-h-14 w-full items-center gap-3.5 border-t border-border text-left text-[17px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
 export default function WikiExam() {
   const { slug = '' } = useParams()
@@ -118,7 +118,7 @@ export default function WikiExam() {
   // A resource to open on arrival — the action menu's Open in Study Guide.
   const resourceParam = searchParams.get('resource')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta, setGround } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -128,52 +128,13 @@ export default function WikiExam() {
   // where the page was left (lib/routeScrollMemory.ts).
 
   const progressKey = useMemo(() => examProgressKeyFromFile(examFileName), [examFileName])
+  const { user } = useAuth()
+  const { isPro } = useSubscription()
+  const { examRows, progress, targetDates } = useExamProgress()
+  const openExams = useExamsPopout(s => s.openExams)
 
-  const { examRows } = useExamProgress()
-
-  // The wiki exam id (`p-1`, `5-1`, `mas-i`) — how the guide cards and the
-  // syllabus link are keyed.
+  // The wiki exam id (`p-1`, `5-1`, `mas-i`) — how the syllabus link is keyed.
   const wikiExamId = useMemo(() => examIdFromFile(examFileName), [examFileName])
-
-  // The page's own `# ` heading, with the examining-body suffix the vault
-  // filenames carry stripped off — "Exam MAS-I", never "Exam MAS-I (CAS)".
-  // Which body sets an exam is the syllabus's job to say, not the title's.
-  const extractedTitle = useMemo(() => {
-    if (!content) return null
-    const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
-    const match = withoutFm.match(/^#\s+(.+)$/m)
-    return match ? examDisplayName(match[1].trim()) : null
-  }, [content])
-
-  // Beside the exam's title: its status/date. The examining body's syllabus
-  // rides the sticky header instead (below), so it stays in reach down the
-  // page. No fact-check badge here: the page's Fact Check is a row of the
-  // action menu its title opens (below).
-  const titleBadge = useMemo(() => (
-    <span className="inline-flex items-center gap-2 not-prose">
-      <ExamStatusBadge progressKey={progressKey} />
-    </span>
-  ), [progressKey])
-
-  // What the sticky header shows instead of the exam's name: the exam's own
-  // logo, the same tile its row carries on the Study Guides and Quiz tabs —
-  // so the strip says which exam you are in with the object you
-  // picked it with, rather than restating the heading a few pixels below it.
-  const pageIcon = useMemo(() => (
-    <ExamLogo examKey={progressKey} size="strip" />
-  ), [progressKey])
-
-  // Always back to the exam list: the browser's Back when the reader came
-  // from it (its filters and scroll intact), and up to it from anywhere else —
-  // the Dashboard, the quiz builder, a search, or outside the app.
-  const back = useBack({ to: '/wiki', label: 'All exams' }, EXAM_LIST_ONLY)
-  const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
-
-  // How far along this exam's material is — 'ready' (P/FM), 'beta', or
-  // 'development' (the DISCs and Exam 6U: syllabus outline only). Drives the
-  // status banner under the sticky header. The page's own id, since 6C and 6U
-  // share a progress key and not a status.
-  const contentStatus = examStatus(progressKey, examPageIdFromFile(examFileName))
 
   useEffect(() => {
     let cancelled = false
@@ -194,96 +155,139 @@ export default function WikiExam() {
     }
   }, [examFileName])
 
-  const pageRefs = useMemo(
-    () => (content ? extractWikiLinksFromText(content) : []),
-    [content],
+  const page = useMemo(() => (content ? parseExamPage(content) : null), [content])
+
+  // The page's own `# ` heading, with the examining-body suffix the vault
+  // filenames carry stripped off — "Exam MAS-I", never "Exam MAS-I (CAS)".
+  const title = page?.title ? examDisplayName(page.title) : examDisplayName(examFileName)
+
+  // ── The reader's standing ─────────────────────────────────────────────────
+  const { syllabi } = useWikiSyllabus()
+  const syllabus = useMemo(() => syllabi.find(s => s.fileName === examFileName) ?? null, [syllabi, examFileName])
+  const { records: masteryRecords } = useConceptMastery()
+  const examRecords = useMemo(
+    () => masteryRecords.filter(r => r.exam_id === progressKey),
+    [masteryRecords, progressKey],
+  )
+  const now = useMemo(() => new Date(), [])
+  const today = todayISO()
+  const readiness = useMemo(
+    () => (syllabus ? computeExamReadiness(syllabus, examRecords, now) : null),
+    [syllabus, examRecords, now],
+  )
+  const syllabusPct = readiness && readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
+  const todayKeys = useMemo(
+    () => storedSessionConcepts(user?.id ?? null, progressKey, today),
+    [user?.id, progressKey, today],
+  )
+  const figures = useMemo(
+    () => (syllabus && readiness ? syllabusObjectives(syllabus, readiness, examRecords, todayKeys, now) : null),
+    [syllabus, readiness, examRecords, todayKeys, now],
   )
 
-  // The Source Material callout lists readings, not concepts — however they
-  // are named — so the concept walk is read off the rest of the page. The
-  // callout is the page's last section, so leaving it out moves no mention
-  // the occurrence walk counts before it.
-  const sourceMaterial = useMemo(
-    () => (content ? extractSourceMaterial(content) : null),
-    [content],
-  )
+  // A paced plan's place on the bar (Pro), from today's cached plan.
+  const tick = useMemo(() => {
+    const cache = examRows.find(r => r.exam_id === progressKey)?.study_plan_cache
+    return isPro && cache && todaysPlanConcepts(cache, today) ? planTickPct(cache) : null
+  }, [examRows, progressKey, isPro, today])
 
-  const conceptList = useMemo(
-    () => (sourceMaterial ? extractWikiLinksFromText(sourceMaterial.markdown).filter(isSyllabusConcept) : []),
-    [sourceMaterial],
-  )
+  const examState = progress[progressKey] ?? 'not_started'
+  const examDate = examState === 'in_progress' ? targetDates[progressKey] : null
+  const daysLeft = examDate ? daysBetween(today, examDate) : null
 
-  // Resource pages by name, from the wiki index: what tells a reading named
-  // `[[OSFI MCT]]` apart from a concept (see `sourceEntryRef`).
+  // "Probability · 30 questions · 3 hours": the subject, and the paper's size
+  // where the pace table holds it.
+  const bankLabel = examQuizTopic(examFileName)
+  const pace = paceForExam(bankLabel)
+  const subjectLine = [
+    syllabus?.examTopic,
+    pace ? formatExamUnits(pace) : null,
+    pace ? formatExamLength(pace.minutes) : null,
+  ].filter(Boolean).join(' · ')
+
+  // ── The objectives ────────────────────────────────────────────────────────
+  const [openIndex, setOpenIndex] = useState<number | null>(() => readOpenObjective(examFileName))
+  const [showAll, setShowAll] = useState<number | null>(null)
+  useEffect(() => { setOpenIndex(readOpenObjective(examFileName)); setShowAll(null) }, [examFileName])
+  const toggleObjective = useCallback((i: number) => {
+    setOpenIndex(prev => {
+      const next = prev === i ? null : i
+      saveOpenObjective(examFileName, next)
+      return next
+    })
+    setShowAll(null)
+  }, [examFileName])
+
+  const openObjective = page && openIndex !== null ? page.objectives[openIndex] ?? null : null
+  // This entry of the history is named for what is open on it, so a concept's
+  // back control says "General Probability".
+  usePageLabel(openObjective?.name ?? title)
+
+  // The resource pages by name, from the wiki index: what tells a reading
+  // named `[[OSFI MCT]]` apart from a concept, and a written page from one
+  // the syllabus names ahead of it.
   const [documentPaths, setDocumentPaths] = useState<Map<string, string>>(() => new Map())
+  const [indexReady, setIndexReady] = useState(false)
   useEffect(() => {
     let cancelled = false
     buildWikiIndex()
-      .then(items => { if (!cancelled) setDocumentPaths(documentPathsByName(items)) })
+      .then(items => {
+        if (cancelled) return
+        setDocumentPaths(documentPathsByName(items))
+        setIndexReady(true)
+      })
       .catch(() => {})
     return () => { cancelled = true }
   }, [])
 
-  // Document-ordered concept mentions (dimmed repeats included), each tagged
-  // with its occurrence index among same-name links. Drives which mention the
-  // popup highlights and lets prev/next stop on every occurrence — while the
-  // concept count stays the deduped `conceptList.length`.
-  const conceptOccurrences = useMemo(() => {
-    if (!sourceMaterial) return []
-    const counts = new Map<string, number>()
-    const out: { name: string; occurrence: number }[] = []
-    for (const r of extractWikiLinkOccurrences(sourceMaterial.markdown)) {
-      if (!isSyllabusConcept(r)) continue
-      const key = r.name.toLowerCase()
-      const occ = counts.get(key) ?? 0
-      counts.set(key, occ + 1)
-      out.push({ name: r.name, occurrence: occ })
-    }
-    return out
-  }, [sourceMaterial])
+  const pillState = useMemo(() => {
+    const lookup = buildMasteryLookup(examRecords)
+    return (name: string): PillState => ({
+      state: resolveConceptState(lookup, { name }, now),
+      today: todayKeys.has(name.toLowerCase()),
+      missing: indexReady && !isInWikiIndex('concept', name),
+    })
+  }, [examRecords, todayKeys, now, indexReady])
 
-  // Which learning objective each concept belongs to — the syllabus's own
-  // sections, read off the `[!example]` callouts. The popup uses it to cut its
-  // walk's progress bar into chapters, so stepping through forty concepts shows
-  // which part of the syllabus you are in.
+  // The bank, for the open objective's Practice button: fetched once an
+  // objective is opened, never for a reader who only looks.
+  const questions = useQuestionBank(openObjective !== null && !!bankLabel)
+  const practice = useMemo(() => {
+    if (!openObjective || !bankLabel) return null
+    const concepts = openObjective.concepts.map(p => p.name)
+    const available = countQuestions(questions, { exam: bankLabel, concepts })
+    if (!available) return null
+    return (
+      <PracticeButton to={objectivePracticeUrl(bankLabel, concepts, available, practiceSettings())}>
+        Practice {openObjective.name}
+      </PracticeButton>
+    )
+  }, [openObjective, bankLabel, questions])
+
+  // ── The reader over this page: readings, and old `?concept=` links ────────
+  const pageRefs = useMemo(
+    () => (content ? extractWikiLinksFromText(content) : []),
+    [content],
+  )
+  const sourceMaterial = useMemo(
+    () => (content ? extractSourceMaterial(stripFrontmatter(content)) : null),
+    [content],
+  )
+  const conceptList = useMemo(
+    () => (sourceMaterial ? extractWikiLinksFromText(sourceMaterial.markdown).filter(isSyllabusConcept) : []),
+    [sourceMaterial],
+  )
   const objectives = useMemo(
     () => (content ? buildObjectiveIndex(content) : null),
     [content],
   )
-
-  // Today's cached plan for this exam, or null when absent/stale.
-  const todaysConcepts = useMemo(
-    () => todaysPlanConcepts(examRows.find(r => r.exam_id === progressKey)?.study_plan_cache, todayISO()),
-    [examRows, progressKey],
+  // The shelf's Learning objective filter, named from the page's own numbered objectives.
+  const shelfObjectives = useMemo(
+    () => (sourceMaterial && sourceMaterial.entries.length > 0 && sourceMaterial.objectiveFilter
+      ? parseSyllabusObjectives(sourceMaterial.markdown)
+      : []),
+    [sourceMaterial],
   )
-
-  const studyPlanRefs = useMemo(() => {
-    if (!todaysConcepts) return null
-    const planSet = new Set(todaysConcepts.map(n => n.toLowerCase()))
-    const refs = conceptList.filter(r => planSet.has(r.name.toLowerCase()))
-    return refs.length > 0 ? refs : null
-  }, [todaysConcepts, conceptList])
-
-  // The sticky header's right-hand end: the version — which sitting of the
-  // exam the page is being read for — and what that sitting asks for and when
-  // (registration, the window, results), then the examining body's own
-  // syllabus, the document this whole page is a reading of, and the way to a
-  // quiz on the exam's bank. PCPA adds its project, the requirement's second
-  // half.
-  const smallTitleBadge = useMemo(() => {
-    const examLabel = extractedTitle ?? examDisplayName(examFileName)
-    return (
-      // The exam's scope, so what is chosen in the strip fills with its colour.
-      <span className="inline-flex items-center gap-0.5 not-prose shrink-0" style={examAccentStyle(progressKey)}>
-        <ExamVersionMenu progressKey={progressKey} />
-        <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={examLabel} />
-        <ExamSyllabusButton examId={wikiExamId} examLabel={examLabel} />
-        <ExamQuizButton examFileName={examFileName} />
-        {/* PCPA's second part: the project, which the syllabus page can't be. */}
-        {progressKey === 'CAS-PCPA' && <ExamProjectButton />}
-      </span>
-    )
-  }, [progressKey, wikiExamId, extractedTitle, examFileName])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()
@@ -308,168 +312,218 @@ export default function WikiExam() {
     return refs.length > 0 ? refs : null
   }, [pageRefs, sourceMaterial, documentPaths])
 
-  useEffect(() => {
-    setExamId(wikiExamId)
-    setPageRefs(pageRefs)
-  }, [pageRefs, wikiExamId, setExamId, setPageRefs])
-
-  useEffect(() => {
-    setPageTitle(extractedTitle)
-    setIsInDevelopment(contentStatus === 'development')
-    setIsBeta(contentStatus === 'beta')
-  }, [extractedTitle, contentStatus, setPageTitle, setIsInDevelopment, setIsBeta])
-
-  useEffect(() => {
-    setPageIcon(pageIcon)
-  }, [pageIcon, setPageIcon])
-
-  useEffect(() => {
-    setPageTitleBadge(smallTitleBadge)
-  }, [smallTitleBadge, setPageTitleBadge])
-
-  useEffect(() => {
-    setBackLink(backLink)
-  }, [backLink, setBackLink])
-
-  // A reading opens in the popup on the Source Material walk, the way a card on
-  // the page's shelf does.
+  // A reading opens in the reader on the Source Material walk.
   const openResource = useCallback((ref: WikiEntryRef) => {
     const listed = resourceRefs ?? []
     const at = listed.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
     const resList = at >= 0 ? listed : [{ ...ref, kind: ref.kind === 'concept' ? 'resource' as const : ref.kind }]
-    openAt(resList, Math.max(at, 0), `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
-  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
+    openAt(resList, Math.max(at, 0), `${examFileName}.md`, null, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, objectives })
+  }, [conceptList, resourceRefs, examFileName, openAt, objectives])
 
+  // A link in a foot row, or a card on the shelf: a reading opens in the
+  // reader, a concept goes to its page.
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (ref.kind === 'exam') return false
     if (ref.kind === 'resource' || / \([^)]*\d{4}\)$/.test(ref.name)) {
       e.preventDefault()
       openResource(ref)
       return true
     }
-    if (ref.kind !== 'concept') return false
+    return false
+  }, [openResource])
+
+  const onOpenPill = useCallback((pill: ObjectivePill, e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    if (pill.ref.kind === 'concept' && isSyllabusConcept(pill.ref)) return
     e.preventDefault()
-    const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
-    // Which mention was clicked? Count same-name links preceding this anchor in
-    // the article so the highlight lands on the clicked dup, not the first one.
-    const key = `concept:${ref.name.toLowerCase()}`
-    const root = e.currentTarget.closest('[data-source-page]')
-    let clickedOcc = 0
-    if (root) {
-      const sameKey = Array.from(root.querySelectorAll('[data-wikiref]')).filter(
-        el => el.getAttribute('data-wikiref') === key,
-      )
-      const pos = sameKey.indexOf(e.currentTarget)
-      if (pos >= 0) clickedOcc = pos
-    }
-    const occurrenceIndex = Math.max(
-      0,
-      conceptOccurrences.findIndex(
-        o => o.name.toLowerCase() === ref.name.toLowerCase() && o.occurrence === clickedOcc,
-      ),
-    )
-    // A concept off the walk (one linked only as a reading) opens on its own
-    // rather than at the walk's first stop.
-    openAt(
-      idx >= 0 ? conceptList : [ref],
-      Math.max(idx, 0),
-      `${examFileName}.md`,
-      studyPlanRefs,
-      resourceRefs,
-      { occurrences: conceptOccurrences, occurrenceIndex, objectives },
-    )
-    return true
-  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, openResource, studyPlanRefs, objectives])
-
-  // The title is the page's action-menu trigger, as a concept's title is in the
-  // popup — underlined to say so. It opens the exam form of the same menu:
-  // readiness, how long is left, today's study plan, and Fact Check.
-  const examEntry = useMemo<WikiEntryRef>(() => ({ kind: 'exam', name: examFileName }), [examFileName])
-  const titleRef = useRef<HTMLButtonElement>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const closeMenu = useCallback(() => setMenuOpen(false), [])
-  useEffect(() => { setMenuOpen(false) }, [examFileName])
-  const titleAction = useMemo<WikiTitleAction>(() => ({
-    ref: titleRef,
-    open: menuOpen,
-    onToggle: () => setMenuOpen(v => !v),
-    label: `Actions for ${extractedTitle ?? examDisplayName(examFileName)}`,
-  }), [menuOpen, extractedTitle, examFileName])
-
-  // The menu's Today's Study Plan, walked right here: the popup opens on the
-  // plan, with the rest of the syllabus a filter away, exactly as a link on
-  // this page would open it.
-  const openStudyPlan = useCallback(() => {
-    if (!studyPlanRefs) return
-    openAt(studyPlanRefs, 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
-      initialFilter: 'study-plan',
-      fullList: conceptList,
-      occurrences: conceptOccurrences,
-      objectives,
-    })
-  }, [studyPlanRefs, examFileName, resourceRefs, conceptList, conceptOccurrences, objectives, openAt])
+    openResource(pill.ref)
+  }, [openResource])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
     popupOpenedRef.current = false
   }, [examFileName, conceptParam, resourceParam])
 
-  // When arriving from search with ?concept=, open the popup once pageRefs load.
+  // An old link with `?concept=`: its objective opens, and the concept opens
+  // in the reader over the page.
   useEffect(() => {
-    if (!conceptParam || pageRefs.length === 0 || popupOpenedRef.current) return
+    if (!conceptParam || !page || popupOpenedRef.current) return
     popupOpenedRef.current = true
-    const idx = conceptList.findIndex(
-      r => r.name.toLowerCase() === conceptParam.toLowerCase(),
-    )
+    const at = objectiveOf(page.objectives, conceptParam)
+    if (at >= 0) {
+      setOpenIndex(at)
+      saveOpenObjective(examFileName, at)
+    }
+    const idx = conceptList.findIndex(r => r.name.toLowerCase() === conceptParam.toLowerCase())
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
-    const occurrenceIndex = Math.max(
-      0,
-      conceptOccurrences.findIndex(o => o.name.toLowerCase() === conceptParam.toLowerCase()),
-    )
-    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
-      occurrences: conceptOccurrences,
-      occurrenceIndex,
-      objectives,
-    })
-  }, [conceptParam, pageRefs, conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs, objectives])
+    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, null, resourceRefs, { objectives })
+  }, [conceptParam, page, conceptList, examFileName, openAt, resourceRefs, objectives])
 
-  // Likewise with ?resource=: the reading opens in the popup over its study guide.
+  // Likewise with `?resource=`: the reading opens in the reader over its study guide.
   useEffect(() => {
     if (!resourceParam || pageRefs.length === 0 || popupOpenedRef.current) return
     popupOpenedRef.current = true
     openResource({ kind: 'resource', name: resourceParam })
   }, [resourceParam, pageRefs, openResource])
 
+  // ── The strip above the page ──────────────────────────────────────────────
+  const pageIcon = useMemo(() => <ExamLogo examKey={progressKey} size="strip" />, [progressKey])
+  // Always back to the exam list: the browser's Back when the reader came
+  // from it (its filters and scroll intact), and up to it from anywhere else.
+  const back = useBack({ to: '/wiki', label: 'All exams' }, EXAM_LIST_ONLY)
+  const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
+  // How far along this exam's material is. The page's own id, since 6C and 6U
+  // share a progress key and not a status.
+  const contentStatus = examStatus(progressKey, examPageIdFromFile(examFileName))
+
+  useEffect(() => {
+    setExamId(wikiExamId)
+    setPageRefs(pageRefs)
+  }, [pageRefs, wikiExamId, setExamId, setPageRefs])
+
+  useEffect(() => {
+    setPageTitle(page ? title : null)
+    setIsInDevelopment(contentStatus === 'development')
+    setIsBeta(contentStatus === 'beta')
+    setGround(true)
+  }, [page, title, contentStatus, setPageTitle, setIsInDevelopment, setIsBeta, setGround])
+
+  useEffect(() => { setPageIcon(pageIcon) }, [pageIcon, setPageIcon])
+  useEffect(() => { setPageTitleBadge(null) }, [setPageTitleBadge])
+  useEffect(() => { setBackLink(backLink) }, [backLink, setBackLink])
+
+  // ── The foot rows ─────────────────────────────────────────────────────────
+  const [openRow, setOpenRow] = useState<string | null>(null)
+  useEffect(() => { setOpenRow(resourceParam ? 'Readings' : null) }, [examFileName, resourceParam])
+  const toggleRow = (label: string) => setOpenRow(prev => (prev === label ? null : label))
+  const notes = useMemo(() => (page ? examFootNotes(page) : []), [page])
+  const verification = useMemo(() => (content ? parseVerification(content) : null), [content])
+  const [showFactCheck, setShowFactCheck] = useState(false)
+  const shelfRef = useRef<HTMLDivElement>(null)
+  useConceptHighlight(shelfRef, `${examFileName}.md`)
+
+  const focus = conceptParam
+  const partOf = (i: number) => page?.objectives[i]?.part ?? null
+
   return (
-    <div className="space-y-4">
+    <div className="flex w-full max-w-2xl flex-col text-foreground" data-testid="exam-page">
       {status === 'loading' && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Loading {examFileName}…
+        <div className="flex items-center gap-2 text-sm">
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading {examDisplayName(examFileName)}…
         </div>
       )}
-      {status === 'error' && (
-        <p className="text-sm text-muted-foreground">Couldn't load {examFileName}.</p>
-      )}
+      {status === 'error' && <p className="text-sm">Couldn't load {examDisplayName(examFileName)}.</p>}
 
-      {content !== null && (
+      {page && (
         <>
-          {/* Scopes the exam's accent, which the learning objectives' weight bars are washed in. */}
-          <div style={examAccentStyle(progressKey)}>
-            <WikiArticle
-              markdown={content}
-              sourcePath={`${examFileName}.md`}
-              onWikiLink={onWikiLink}
-              titleBadge={titleBadge}
-              titleAction={titleAction}
-            />
+          <header className="flex flex-col gap-[18px] px-1">
+            <div className="flex flex-col gap-1.5">
+              <h1 className="text-[30px] font-bold leading-tight tracking-tight">{title}</h1>
+              {subjectLine && <p className="text-base">{subjectLine}</p>}
+            </div>
+
+            <div
+              role="img"
+              aria-label={[
+                `${syllabusPct}% of the syllabus covered`,
+                tick !== null ? `plan target ${tick}%` : null,
+                examState === 'completed' ? 'passed' : daysLeft !== null && daysLeft >= 0 ? `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left` : null,
+              ].filter(Boolean).join(', ')}
+              data-testid="exam-syllabus"
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3.5"
+            >
+              <span className="text-2xl font-bold tabular-nums">{syllabusPct}%</span>
+              <SyllabusBar pct={syllabusPct} tick={tick} thick />
+              <span className="text-[15px] tabular-nums">
+                {examState === 'completed'
+                  ? 'Passed'
+                  : daysLeft !== null && daysLeft >= 0
+                    ? `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}`
+                    : null}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              <ExamSyllabusButton examId={wikiExamId} examLabel={title} labelled />
+              <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={title} labelled />
+              {user && examState === 'not_started' && (
+                <button type="button" onClick={openExams} className={LABELLED_HEADER_BUTTON}>
+                  <PlusCircle aria-hidden="true" />
+                  Add exam
+                </button>
+              )}
+            </div>
+          </header>
+
+          <div className="-mx-1 mt-[26px] flex flex-col gap-2.5 sm:mx-0">
+            {page.objectives.map((objective, i) => (
+              <div key={`${objective.name}-${i}`} className="contents">
+                {objective.part && objective.part !== partOf(i - 1) && (
+                  <h2 className="px-2 pt-3 text-base font-bold">{objective.part}</h2>
+                )}
+                <ObjectiveCard
+                  objective={objective}
+                  figures={figures?.[i] ?? null}
+                  open={openIndex === i}
+                  onToggle={() => toggleObjective(i)}
+                  shown={linesShown(objective, showAll === i, openIndex === i ? focus : null)}
+                  onShowAll={() => setShowAll(i)}
+                  pillState={pillState}
+                  from={wikiExamId}
+                  onOpenPill={onOpenPill}
+                  practice={openIndex === i ? practice : null}
+                />
+              </div>
+            ))}
           </div>
-          <ConceptActionMenu
-            entry={examEntry}
-            open={menuOpen}
-            onClose={closeMenu}
-            anchorRef={titleRef}
-            content={content}
-            onOpenStudyPlan={studyPlanRefs ? openStudyPlan : undefined}
+
+          <div className={cn('mt-4 flex flex-col px-1', page.objectives.length === 0 && 'mt-6')}>
+            {sourceMaterial && sourceMaterial.entries.length > 0 && (
+              <FootRow
+                label="Readings"
+                aside={<span className="font-bold tabular-nums">{sourceMaterial.entries.length}</span>}
+                open={openRow === 'Readings'}
+                onToggle={() => toggleRow('Readings')}
+              >
+                <div ref={shelfRef} data-source-page={`${examFileName}.md`}>
+                  <SourceMaterialGallery
+                    entries={sourceMaterial.entries}
+                    objectives={shelfObjectives}
+                    exam={examPillLabel(examFileName)}
+                    onOpen={(ref, e) => {
+                      e.preventDefault()
+                      if (!onWikiLink(ref, e)) openResource(ref)
+                    }}
+                  />
+                </div>
+              </FootRow>
+            )}
+            {notes.map(note => (
+              <FootRow key={note.title} label={note.title} open={openRow === note.title} onToggle={() => toggleRow(note.title)}>
+                <WikiArticle markdown={note.markdown} onWikiLink={onWikiLink} className="text-foreground" />
+              </FootRow>
+            ))}
+            {/* PCPA's second part: the project, which the syllabus page can't be. */}
+            {progressKey === 'CAS-PCPA' && (
+              <Link to="/project" className={FOOT_LINK}>
+                <span className="min-w-0 flex-1">Project</span>
+                <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+              </Link>
+            )}
+            {FACT_CHECK_UI_ENABLED && (
+              <button type="button" onClick={() => setShowFactCheck(true)} aria-haspopup="dialog" className={FOOT_LINK}>
+                <span className="min-w-0 flex-1">Fact Check</span>
+                <span className="text-[15px] font-medium">{factCheckBadge(verification).label}</span>
+                <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+
+          <FactCheckDialog
+            open={showFactCheck}
+            onClose={() => setShowFactCheck(false)}
+            verification={verification}
+            contentPath={`${examFileName}.md`}
+            contentName={title}
           />
         </>
       )}

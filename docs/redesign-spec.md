@@ -553,7 +553,7 @@ once and needs You to exist.
 | **A. Visual base** (built 2026-11-23) | The shared pieces: the level square, the answer-state colours, the outline card and tile, the black popup. Update `docs/style-guide.md` | |
 | **B. Today** (built 2026-11-23) | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
 | **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
-| **D. Learn** | §7: exam page and concept page, the reader's "Practice this" | A |
+| **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
@@ -591,9 +591,8 @@ building it:
   (`user_metadata.session_minutes`).
 - **Until later phases:** the exam at the top opens a plain list of the reader's exams
   (`ExamSheet`; the switcher is Phase E); the date opens the study plan's settings on the date
-  step; the Syllabus overlay links to the existing exam page (Phase D redraws it); the level badge
-  stands in for the profile button; the reader keeps its own footer (Phase D adds "Practice
-  this"); a visitor still gets the sign-in card (R11 is Phase E).
+  step; the Syllabus overlay links to the exam page; the level badge
+  stands in for the profile button; a visitor still gets the sign-in card (R11 is Phase E).
 - **Moved or removed:** the daily email's settings and the guide are rows in Settings (export
   was already there); the search bar, the schedule strip, the day panel and its quiz history,
   the Exam Readiness popup and the registration nudge are off Today (the nudge is still on the
@@ -665,6 +664,53 @@ building it:
   the answer on surfaces outside the session (the question page).
 - **Until later phases:** Practice's home, setup sheet and search are Phase G; the navigation
   is Phase F.
+
+**Phase D is built.** The exam page is `pages/wiki/WikiExam.tsx` over `lib/examPage.ts`
+(the page's markdown read into objectives, lines and pills), `components/learn/ObjectiveCard.tsx`
+and `lib/syllabusObjectives.ts` (the figures, shared with Today's Syllabus panel). The concept
+page is `pages/wiki/WikiConcept.tsx`; its level button, "more" and Practice button are
+`components/learn/`, and the reader (`ConceptPopup`, `ConceptPagePanel`) draws the same three.
+What was decided while building it:
+
+- **A concept is one pill in its objective**, under the first line that names it: the rule
+  `parseExamSyllabus` counts by, so the pills, a folded card's squares and the objective's
+  percentage are about the same set (`examPage.test.ts` holds every exam page to it). A later
+  sentence whose concepts were all shown already has no pills. A concept in two objectives has
+  a pill in each. The opening sentence is shown, unnumbered, with its pills. A `*Key concepts:*`
+  line is never drawn; its concepts are pills under the sentence above it. A concept with no
+  page yet is a pill that doesn't press.
+- **One objective is open at a time**, so the page has one filled button. It shows three lines,
+  then "N more". Which one is open is kept for the browser session, so Back from a concept
+  returns to it, and that history entry is named for it ("Back to General Probability").
+- **A pill goes to the concept's page**, with `?from=<exam>`. `/wiki/concept/…` no longer
+  redirects into the exam page for a link followed inside the app. The reader still opens for
+  Today's session, a link followed inside an article, search, flashcards, a reading, and an old
+  `?concept=` link.
+- **Practice** starts a quiz, never the setup: ten questions, or the pool when it holds fewer
+  (`lib/practiceLaunch.ts`), with the reader's own quiz settings. The foot says how many
+  questions the concept has. The count needs the question bank, which is fetched when a concept
+  is opened or an objective unfolded; a count built with the app would spare that download.
+- **The title is the exam's name** ("Exam P-1") with the subject and the paper's size under it
+  ("Probability · 30 questions · 3 hours", the size from `lib/quizTiming.ts`'s pace table, absent
+  for an exam with none). The canvas titles the page with the subject because the switcher
+  above it names the exam; the switcher is Phase E.
+- **The extras:** the sitting picker is at the top of the Dates and fees panel; the In
+  Development and Beta banners are where they were; Fact Check is a row at the foot with its
+  verdict; PCPA's project is a row at the foot; a passed exam reads "Passed" where the days
+  left would be. The lead paragraph opens the row about the exam (Exam format, About the
+  exam). The rows unfold in place.
+- **No record** reads 0% with every square New. A signed-in reader who hasn't added the exam
+  gets a third outlined button, "Add exam". The plan's tick is drawn for a Pro reader from
+  today's cached plan. A concept is outlined as in today's session once Today has built the
+  day's session in this browser.
+- **In the reader**, a concept's header is its name, the level button and "more", which also
+  holds Listen, the figure and focus mode; the walk's filter sits on a line above the foot when
+  there is a Practice button, and between the arrows when there isn't. A reading's header is
+  unchanged.
+- **Removed:** the exam title's menu and its exam form in `ConceptActionMenu`
+  (`ReadinessBar`, the countdown and plan-row helpers in `lib/examMenu.ts`), the strip's quiz and
+  project buttons, the weight bar under an objective row, the dimmed repeat links.
+- **Desktop** is not on the canvas: both pages are one column at reading width.
 
 For every phase:
 

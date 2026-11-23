@@ -14,8 +14,9 @@ test.describe('wiki', () => {
     await examLink.click()
 
     await expect(page).toHaveURL(/\/wiki\/exam\//)
-    // The exam page renders wiki article content (a heading of some kind).
-    await expect(page.locator('h1, h2').first()).toBeVisible()
+    // The exam page: its title, and its learning objectives as cards.
+    await expect(page.getByTestId('exam-page').getByRole('heading', { level: 1 })).toBeVisible()
+    await expect(page.locator('[data-objective]').first()).toBeVisible()
   })
 
   // Leaving a page and coming back returns to where it was left — by Back, or
@@ -133,7 +134,7 @@ test.describe('exam sitting info', () => {
   test('opens from the study guide header and closes on Escape', async ({ page }) => {
     await page.goto('/wiki/exam/Exam+5+(CAS)')
 
-    const info = page.getByRole('button', { name: /^About / })
+    const info = page.getByRole('button', { name: /^Dates and fees/ })
     await expect(info).toBeVisible()
     await info.click()
 
@@ -173,5 +174,115 @@ test.describe('resource page', () => {
     const contents = page.getByRole('region', { name: /Contents/ })
     await expect(contents).toBeVisible()
     await expect(contents.locator('details')).toHaveCount(0)
+  })
+})
+
+// Learn (docs/redesign-spec.md §7): the exam page's objectives and pills, the
+// concept page a pill opens, and the foot a concept ends in.
+test.describe('learn', () => {
+  const EXAM = '/wiki/exam/Exam+P-1+(SOA)'
+
+  test('an objective unfolds the syllabus sentences with their concepts as pills', async ({ page }) => {
+    await page.goto(EXAM)
+    const exam = page.getByTestId('exam-page')
+    // The title is text, not a menu.
+    await expect(exam.getByRole('heading', { level: 1, name: 'Exam P-1' })).toBeVisible()
+    await expect(exam.getByRole('heading', { level: 1 }).getByRole('button')).toHaveCount(0)
+    await expect(exam).toContainText('Probability · 30 questions · 3 hours')
+    // No record: nothing covered, and every square is New.
+    await expect(page.getByTestId('exam-syllabus')).toHaveAccessibleName('0% of the syllabus covered')
+    await expect(exam.getByRole('link', { name: /Official syllabus/ })).toBeVisible()
+
+    const general = page.locator('[data-objective="General Probability"]')
+    await expect(general).toContainText('23–30% of the exam')
+    await expect(general.getByRole('img', { name: /^\d+ concepts: \d+ new$/ })).toBeVisible()
+    await general.getByRole('button', { name: /General Probability/ }).click()
+
+    // The sentence as the syllabus words it, its concepts under it.
+    await expect(general).toContainText('Define set functions, Venn diagrams, sample space, and events.')
+    await expect(general.getByRole('link', { name: 'Sample Space, New' })).toBeVisible()
+    // A concept is one pill in its objective, however often it is named.
+    await expect(general.locator('[data-pill="Probability"]')).toHaveCount(1)
+    // The rest is behind "N more"; the objective ends in the page's one filled button.
+    await general.getByRole('button', { name: /^\d+ more$/ }).click()
+    await expect(general.getByRole('link', { name: 'Bayes Theorem, New' })).toBeVisible()
+    await expect(general.getByRole('link', { name: 'Practice General Probability' }))
+      .toHaveAttribute('href', /^\/quiz\?exam=Probability&.*concepts=.*&count=10$/, { timeout: 30_000 })
+    await expect(page.getByTestId('practice-button')).toHaveCount(1)
+
+    // One objective is open at a time.
+    const uni = page.locator('[data-objective="Univariate Random Variables"]')
+    await uni.getByRole('button', { name: /Univariate Random Variables/ }).click()
+    await expect(uni.getByRole('button', { name: /Univariate Random Variables/ })).toHaveAttribute('aria-expanded', 'true')
+    await expect(general.getByRole('button', { name: /General Probability/ })).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('the foot rows hold the readings, the format, the prerequisites and the fact check', async ({ page }) => {
+    await page.goto(EXAM)
+    const exam = page.getByTestId('exam-page')
+    await exam.getByRole('button', { name: /^Readings/ }).click()
+    await expect(exam.locator('[data-foot-row="Readings"] a[href^="/wiki/"]').first()).toBeVisible()
+    await exam.getByRole('button', { name: 'Exam format' }).click()
+    await expect(exam).toContainText('Each question has five answer choices')
+    await exam.getByRole('button', { name: 'What you should know first' }).click()
+    await expect(exam.locator('[data-foot-row="What you should know first"]')).toContainText('Calculus')
+    await exam.getByRole('button', { name: /^Fact Check/ }).click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+  })
+
+  test('a pill opens the concept page, which ends in Practice this and leads back', async ({ page }) => {
+    await page.goto(EXAM)
+    const general = page.locator('[data-objective="General Probability"]')
+    await general.getByRole('button', { name: /General Probability/ }).click()
+    await general.getByRole('button', { name: /^\d+ more$/ }).click()
+    await general.getByRole('link', { name: 'Conditional Probability, New' }).click()
+    await expect(page).toHaveURL(/\/wiki\/concept\/Conditional\+Probability\?from=P-1$/i)
+
+    const concept = page.getByTestId('concept-page')
+    // The title is text; the level is a button that opens Learning Progress.
+    await expect(concept.getByRole('heading', { level: 1, name: 'Conditional Probability' })).toBeVisible()
+    await expect(concept.getByRole('heading', { level: 1 }).getByRole('button')).toHaveCount(0)
+    await concept.getByRole('button', { name: 'New. Open Learning Progress' }).click()
+    const progress = page.getByRole('dialog')
+    await expect(progress).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(progress).toBeHidden()
+
+    // More: add to flashcards, listen, fact check.
+    await concept.getByRole('button', { name: 'More for Conditional Probability' }).click()
+    const menu = page.locator('[data-play-menu]')
+    await expect(menu.getByRole('button', { name: /Add to Flashcards/ })).toBeVisible()
+    await expect(menu.getByRole('menuitem', { name: 'Listen' })).toBeVisible()
+    await expect(menu.getByRole('button', { name: /Fact Check/ })).toBeVisible()
+    await expect(menu.getByText('Start Quiz')).toHaveCount(0)
+    await page.keyboard.press('Escape')
+
+    // The end of the page: the next concept of the objective, and the foot.
+    await expect(page.getByTestId('concept-next')).toContainText(/Next in General Probability/)
+    const practice = page.getByTestId('practice-button')
+    await expect(practice).toContainText(/Practice this\s*\d+ questions/, { timeout: 30_000 })
+    await expect(practice).toHaveAttribute('href', /^\/quiz\?concept=Conditional\+Probability&/)
+    await expect(practice).toBeInViewport()
+
+    // Back is the page the reader came from, named for the objective left open.
+    await concept.getByRole('link', { name: 'Back to General Probability' }).click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await expect(general.getByRole('button', { name: /General Probability/ })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  test('the reader ends a concept the same way: Previous, Practice this, Next', async ({ page }) => {
+    await page.goto(`${EXAM}?concept=Conditional+Probability`)
+    const reader = page.getByRole('complementary', { name: 'Concept: Conditional Probability' })
+    await expect(reader).toBeVisible()
+    // Its objective is open on the page behind.
+    await expect(page.locator('[data-objective="General Probability"]').getByRole('button', { name: /General Probability/ }))
+      .toHaveAttribute('aria-expanded', 'true')
+    await expect(reader.getByRole('heading', { level: 2, name: 'Conditional Probability' })).toBeVisible()
+    await expect(reader.getByRole('button', { name: 'New. Open Learning Progress' })).toBeVisible()
+    await expect(reader.getByRole('button', { name: 'Previous' })).toBeVisible()
+    await expect(reader.getByRole('link', { name: 'Practice this' }))
+      .toHaveAttribute('href', /^\/quiz\?concept=Conditional\+Probability&/, { timeout: 30_000 })
+    await reader.getByRole('button', { name: 'Next' }).click()
+    await expect(page.getByRole('complementary', { name: /^Concept: (?!Conditional Probability)/ })).toBeVisible()
   })
 })

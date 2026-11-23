@@ -76,6 +76,17 @@ function readStoredSession(key: string): StoredSession | null {
   } catch { return null }
 }
 
+/**
+ * The concepts of today's session for an exam, lower-cased, as the browser
+ * holds it: what the exam page outlines. Empty until Today has built the day's
+ * session.
+ */
+export function storedSessionConcepts(userId: string | null, examKey: string, today: string): Set<string> {
+  const session = readStoredSession(sessionKey(userId, examKey))
+  if (!session || session.day !== today) return new Set()
+  return new Set([...session.learn, ...session.review].map(name => name.toLowerCase()))
+}
+
 export interface TodaySessionInput {
   userId: string | null
   /** `user_metadata.session_minutes`, when the account carries one. */

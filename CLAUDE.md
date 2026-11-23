@@ -121,19 +121,20 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   committing action the inverted solid. Reach for its helpers before styling a trigger, menu
   row, chip or header tool by hand. See `docs/style-guide.md` §7.0.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
-  learning progress, fact check — and the owner of the modals those rows open; the
-  concept popup (whose title is its only trigger) and every flashcard surface open that one
-  component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
-  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
-  (`components/ReadinessBar.tsx`) and the countdown to the exam,
-  then **Start Quiz** (the exam's bank in the quiz builder, greyed out for an exam with no
-  questions — `examQuizTopic`), **Today's Study Plan** (locked for a reader who isn't Pro)
-  and Fact Check — the facts
-  are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
-  Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
-  modes) are each surface's own control, never menu rows. It always portals to the body and
-  is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
-  clip it.
+  learning progress, fact check — and the owner of the modals those rows open; every flashcard
+  surface opens it whole, and a reading's title in the concept popup is still its trigger. **A
+  concept's title is text** (`docs/redesign-spec.md` §7.2): on the concept page and in the popup
+  the menu's rows are split between three controls in `components/learn/` — the reader's level
+  as a button that opens Learning Progress (`ConceptLevelButton`), **more**
+  (`ConceptMoreButton`, the same menu cut down with `rows="more"`: Add to Flashcards and Fact
+  Check, under the surface's own Listen, figure and focus-mode rows) and the filled **Practice
+  this** at the foot (`PracticeButton`, `lib/practiceLaunch.ts`, the count from
+  `hooks/usePractice.ts`). **An exam's title is text too and opens no menu**: the exam page
+  (`pages/wiki/WikiExam.tsx`) prints the syllabus bar in its header, starts a quiz from an
+  opened objective's **Practice <objective>**, and keeps Fact Check as a row at its foot. A
+  surface adds only rows about *itself* (a card's Study and Remove) through `leading` /
+  `trailing`. The menu always portals to the body and is placed by `lib/menuPlacement.ts`, so
+  no host's stacking context or viewport edge can clip it.
   `components/ExamRow.tsx` is **the** exam row — logo, name with its Beta / In Development
   tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
   Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
@@ -346,10 +347,10 @@ before touching that area**:
   concept's opening definition, an exam's counts, a textbook's facts and chapters),
   used three ways — the live head (`hooks/useWikiPageHead.ts`), a static
   `dist/wiki/<kind>/<slug>/index.html` per page with that head and a crawlable copy of
-  the article, and the generated `sitemap.xml`. Also why a concept URL is shown, not
-  redirected, to whoever *lands* on it. Read before touching `lib/seo*.ts`,
-  `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
-  redirect in `WikiConcept`.
+  the article, and the generated `sitemap.xml`. Also why a concept URL shows the concept
+  and never redirects. Read before touching `lib/seo*.ts`,
+  `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or
+  `WikiConcept`.
 - `docs/simulated-learner.md` — the **simulated learner** (`simulations/`, `./run-learner`): a model
   playing a configured student (YAML profiles) who studies the vault and practices questions, so
   reports show where guides and questions fail which learners. The learner may see study pages and
@@ -433,7 +434,18 @@ before touching that area**:
   on a written part's grade buttons. Two decisions made with the maintainer: while answers are
   held to the end, no segment of the bar shows whether an answer was right; and the full-screen
   `ConceptLevelUpCeremony` plays only for a card collected for the first time or a concept
-  reaching Level 3 (`ceremonyMoves`), every move up being a row under Levelled up.
+  reaching Level 3 (`ceremonyMoves`), every move up being a row under Levelled up. **Phase D,
+  Learn, is built** (§8 again): the exam page is `pages/wiki/WikiExam.tsx` over `lib/examPage.ts`
+  — the page's markdown read into objectives, their lines and each line's concepts as pills, a
+  concept once per objective under the first line that names it, the set `parseExamSyllabus`
+  counts (`examPage.test.ts` holds every exam page to it) — with `components/learn/ObjectiveCard.tsx`
+  (one open at a time, ending in **Practice <objective>**), the labelled **Official syllabus**
+  and **Dates and fees** buttons (the sitting picker is in that panel), and foot rows for
+  Readings (the Source Material shelf), the page's notes and Fact Check. A pill goes to the
+  concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
+  the exam page: back to where the reader came from, the level button, more, the article,
+  **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
+  Previous, Practice this, Next.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -752,10 +764,11 @@ Other important `lib/` modules:
   `verification:` block off any content file (`parseVerification`, and `Question.verification`
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
-  resource page the way in is the *Fact Check* item of the action menu, on a question it is
+  resource page the way in is the *Fact Check* item of the action menu (a concept's **more**
+  button), on a question it is
   both the explanation panel's badge (outside a quiz; a quiz's own feedback carries none) and the
   verdict row in the **Question info** sheet, which a quiz opens from More, and on
-  an exam page it is the same item in the menu the exam's title opens). The panel leads with
+  an exam page it is the **Fact Check** row at the page's foot). The panel leads with
   the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
   what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
   **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes, and on a question
@@ -1169,7 +1182,7 @@ Other important `lib/` modules:
   is the shared "this link is a concept, not a source" predicate the exam page walks too, so
   both sides count the same mentions. Pure and tested. See `docs/style-guide.md` §7.5.
 - `sittingTimeline.ts` — **one sitting, as a timeline**: the study guide header's info
-  button (`components/wiki/ExamSittingInfoButton.tsx`, beside the version menu) shows the
+  button (`components/wiki/ExamSittingInfoButton.tsx`, **Dates and fees** on the exam page, with the version menu at the top of its panel) shows the
   selected sitting's registration dates, window and results in date order, a check on what
   has passed and a countdown on what comes next. This module merges a sittings row's own
   window / registration deadline with what `data/examSittingDetails.ts` transcribes (a
@@ -1333,8 +1346,9 @@ Other important `lib/` modules:
   tally); every surface that prints the percentage calls it — Today's **Syllabus** tile and
   desktop panel (`components/today/`, where the number is labelled *Syllabus*: it is coverage, and
   "ready" read as a forecast), the exam grid and the readiness projection. The readiness wheel and
-  the Exam Readiness popup were removed with the old Dashboard. The exam study guide shows no
-  readiness card (removed along with the orientation row). `computeReadiness` is the
+  the Exam Readiness popup were removed with the old Dashboard. The exam page prints it as the
+  syllabus bar in its header, and each objective's own on its card (`lib/syllabusObjectives.ts`,
+  the figures Today's Syllabus panel prints). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessDelta.ts` — the **movement arrow** beside that KPI: how far the score has moved
   *today*, green up / red down, absent when it hasn't moved. A mastery record carries no
@@ -1695,7 +1709,8 @@ compile — don't "clean up" the flagged code as dead.
   Concept Craft's recipe reader (`pageOpening`, which skips a leading figure) and the SEO lead.
   `Resources/Books/` pages have their own skill, `resource-pages`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
-  percentages, e.g. `{23-30%}`.
+  percentages, e.g. `{23-30%}`. The app draws each as a card (`lib/examPage.ts`): the lines
+  as written, the concepts they link as pills under them.
 - The study tips under `Guides/<exam page>/` are still bundled (`virtual:exam-guides`) but no
   surface renders them: the exam page's orientation row — the **Exam Readiness Score** card
   beside the **How to Study** card — was removed, along with the `<div class="exam-guides"></div>`

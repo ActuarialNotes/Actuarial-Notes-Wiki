@@ -517,7 +517,11 @@ that run score, bar, To fix with **Fix these N**, Levelled up, the right answers
 Today. The full-screen level-up ceremony now plays only for a card collected for the first time
 or a concept reaching Level 3. It answers F8 (the question shared its screen with the quiz's
 settings) and F10 (the results were a transcript).
-Phases D to F are not built.
+**Phase D (Learn) was built
+the same day**: the exam page's objectives as cards with the syllabus's sentences and their
+concepts as pills, "Practice <objective>", the concept page's level button, "more" and
+"Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
+Phases E to I are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

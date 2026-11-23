@@ -13,22 +13,12 @@ import { LevelSquareKey } from '@/components/LevelSquare'
 import { buttonVariants } from '@/components/ui/buttonVariants'
 import { Popup } from '@/components/ui/Popup'
 import type { LevelSquareSize } from '@/lib/levelSquare'
-import type { MasteryState } from '@/lib/mastery'
+import type { SyllabusObjective } from '@/lib/syllabusObjectives'
 import { cn } from '@/lib/utils'
 import { ConceptSquares } from './ConceptSquares'
 import { GainMark, SyllabusBar } from './TodayTiles'
 
-export interface SyllabusObjective {
-  name: string
-  /** "23–30%", as the syllabus prints it; null when it prints none. */
-  weight: string | null
-  pct: number
-  /** The objective's concepts, in syllabus order, and each one's level. */
-  names: string[]
-  states: MasteryState[]
-  /** Indexes of the concepts in today's session. */
-  today: Set<number>
-}
+export type { SyllabusObjective }
 
 interface SyllabusProps {
   pct: number

@@ -2,6 +2,10 @@ import { getSyllabusPdfLink } from '@/data/examPdfLinks'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { inkToolTile } from '@/components/ui/ink'
 
+/** A labelled control in the exam page's header: 44px, outlined in the text colour. */
+export const LABELLED_HEADER_BUTTON =
+  'inline-flex h-11 min-h-0 items-center gap-2 whitespace-nowrap rounded-full border-[1.5px] border-foreground bg-transparent px-3.5 py-0 text-sm font-semibold text-foreground shadow-none transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:text-current'
+
 /**
  * The publisher's syllabus for this exam, in the study guide's sticky header.
  *
@@ -27,12 +31,30 @@ import { inkToolTile } from '@/components/ui/ink'
 export function ExamSyllabusButton({
   examId,
   examLabel,
+  labelled = false,
 }: {
   examId: string
   examLabel: string
+  /** The exam page's own header: an outlined button that says "Official syllabus". */
+  labelled?: boolean
 }) {
   const link = getSyllabusPdfLink(examId)
   if (!link) return null
+
+  if (labelled) {
+    return (
+      <PdfLinkButton
+        url={link.url}
+        label={link.label}
+        subtitle={examLabel}
+        tooltip={`${examLabel} syllabus (PDF)`}
+        chip={false}
+        ariaLabel="Official syllabus (PDF)"
+        className={LABELLED_HEADER_BUTTON}
+        shortLabel="Official syllabus"
+      />
+    )
+  }
 
   return (
     <PdfLinkButton

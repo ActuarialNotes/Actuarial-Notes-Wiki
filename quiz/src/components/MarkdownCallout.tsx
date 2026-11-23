@@ -82,18 +82,17 @@ const EXAMPLE_STYLE: CalloutStyle = {
   contentClass: 'text-base text-muted-foreground',
 }
 
-// A concept page's worked example — one marked `{Example}` in its title. A green
-// card with an "Example" pill, folded so the reader meets the question first:
-// green sits beside the violet idea card and the amber trap card without
-// meaning *correct* there, because it is a card of its own shape, never a verdict
-// on an answer.
+// A concept page's worked example — one marked `{Example}` in its title. An
+// outlined card with an "Example" pill, folded so the reader meets the question
+// first. No fill and no hue (docs/redesign-spec.md §7.2): on a redesigned
+// screen green means a correct answer and nothing else.
 const WORKED_EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
   borderClass: '',
-  accentClass: 'text-emerald-950 dark:text-emerald-50',
+  accentClass: 'text-foreground',
   noBorder: true,
-  bgClass: 'bg-emerald-50 dark:bg-emerald-950/40',
-  hoverClass: 'hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40',
+  bgClass: 'border border-border bg-transparent',
+  hoverClass: 'hover:bg-foreground/5',
   contentClass: 'text-base text-foreground',
   plainBody: true,
 }
@@ -169,12 +168,13 @@ const IDEA_STYLE: CalloutStyle = {
 }
 
 // A trap set beside the idea it distorts, rather than folded into the page's
-// closing "Exam traps" list. Amber: the caution hue.
+// closing "Exam traps" list. An outline in the text colour with its warning
+// icon: amber is a Partial answer's colour now, so the card carries none.
 const TRAP_STYLE: CalloutStyle = {
   icon: AlertTriangle,
   borderClass: '',
-  accentClass: 'text-amber-900 dark:text-amber-100',
-  bgClass: 'bg-amber-50 dark:bg-amber-950/50',
+  accentClass: 'text-foreground',
+  bgClass: 'border-[1.5px] border-foreground bg-transparent',
   card: true,
 }
 
@@ -522,7 +522,7 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
       <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}${collapsible && hasBody && !pill ? ` ${TOGGLE_TITLE}` : ''}`}>
         {pill && (
-          <span className="mr-2 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-0.5 align-middle text-xs font-semibold text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
+          <span className="mr-2 inline-flex items-center rounded-full border-[1.5px] border-foreground px-2 py-px align-middle text-xs font-bold text-foreground">
             {pill}
           </span>
         )}
@@ -552,16 +552,6 @@ function FoldingCallout({ type, fold, title, titleRest = [], style, pill, childr
     return (
       <div className={`not-prose my-4 ${CALLOUT_ROUND} overflow-hidden bg-background`}>
         <div className="relative bg-card">
-          {/* The objective is a card like the page's other rows, and its share of
-              the exam is a line along its bottom edge in the exam's own colour
-              (the logo's `--exam-accent-vivid`, scoped by `WikiExam`): drawn to
-              the percentage while collapsed, run the full width when open.
-              Plain foreground grey wherever no exam is in scope. */}
-          <div
-            aria-hidden
-            className={`absolute left-0 bottom-0 transition-all duration-300 bg-[color:var(--exam-accent-vivid,hsl(var(--muted-foreground)))] h-[3px]`}
-            style={{ width: open ? '100%' : `${examPercentage}%` }}
-          />
           {collapsible && hasBody ? (
             <button
               type="button"

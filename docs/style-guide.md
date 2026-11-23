@@ -1139,3 +1139,20 @@ verdict, so it takes no answer colour.
 **Rows that open something:** a concept and the examiner's report are rows outlined in the line
 colour with a chevron at the right. On the results, a question under To fix is a row parted
 from the next by a hairline, led by its answer dot, that opens its solution in place.
+
+### 13.7 Learn's pieces
+
+Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
+
+- **The concept pill** (`ObjectiveCard.tsx`): a 40px outlined pill holding a level square
+  (`sm`) and the concept's name. The outline is the line colour, and 2px in the text colour for
+  a concept in today's session.
+- **The level button** (`ConceptLevelButton.tsx`): the square and the level's name in an
+  outlined control; it opens Learning Progress.
+- **The Practice button** (`PracticeButton.tsx`): the screen's filled action, 58px on a page
+  and 52px in the reader's foot, with a count set lighter beside its label.
+- **A labelled header button** (`LABELLED_HEADER_BUTTON` in `ExamSyllabusButton.tsx`): 44px,
+  outlined in the text colour, an icon and its words.
+- **Example and trap cards** (`MarkdownCallout.tsx`) are outlines on every surface: the
+  example in the line colour with an outlined "Example" pill, the trap in the text colour with
+  its warning icon. Neither carries a hue.

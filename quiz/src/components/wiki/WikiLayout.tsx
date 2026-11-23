@@ -19,6 +19,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const [backLink, setBackLinkState] = useState<ReactNode>(null)
   const [isInDevelopment, setIsInDevelopmentState] = useState(false)
   const [isBeta, setIsBetaState] = useState(false)
+  const [ground, setGroundState] = useState(false)
   const location = useLocation()
   const closeOnNavigation = useConceptPopup(s => s.closeOnNavigation)
   const popupOpen = useConceptPopup(s => s.open)
@@ -31,6 +32,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setBackLink = useCallback((link: ReactNode) => setBackLinkState(link), [])
   const setIsInDevelopment = useCallback((v: boolean) => setIsInDevelopmentState(v), [])
   const setIsBeta = useCallback((v: boolean) => setIsBetaState(v), [])
+  const setGround = useCallback((v: boolean) => setGroundState(v), [])
 
   // A layout effect so this reset always commits before the descendant page's
   // own useEffect calls that populate pageTitle/pageTitleBadge/backLink on the
@@ -57,6 +59,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     setBackLinkState(null)
     setIsInDevelopmentState(false)
     setIsBetaState(false)
+    setGroundState(false)
 
     // Only close the popup when genuinely navigating to a different page within
     // the wiki. On a return visit (same pathname, component remounted) the popup
@@ -67,8 +70,8 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta }}>
-      <div className="min-h-screen flex flex-col">
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta, setGround }}>
+      <div className={`min-h-screen flex flex-col ${ground ? 'bg-ground' : ''}`}>
         <WikiFloatingSearch
           pageRefs={pageRefs}
           pageTitle={pageTitle}

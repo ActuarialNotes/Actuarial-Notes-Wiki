@@ -72,8 +72,12 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/wiki/resources', tab: 1.2, depth: 0 },
   { prefix: '/wiki/resource', tab: 1.2, depth: 1 },
   { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
-  { prefix: '/flashcards', tab: 2, depth: 0 },
   { prefix: '/', tab: 3, depth: 0 },
+  // Practice's own screens are sheets laid over it: the past papers, the
+  // flashcards and the one search (docs/redesign-spec.md §7a).
+  { prefix: '/papers', tab: 3, depth: 1 },
+  { prefix: '/flashcards', tab: 3, depth: 1 },
+  { prefix: '/search', tab: 3, depth: 1 },
   { prefix: '/quiz', tab: 3, depth: 1 },
   // Games is opened from the Quiz tab's exam list, a sheet over it; Quiz
   // Battle and Concept Craft are opened from Games, a sheet over that.
@@ -94,7 +98,6 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
   // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
-  { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
   { prefix: '/settings', tab: 8, depth: 0 },
   { prefix: '/auth', tab: 11, depth: 0 },

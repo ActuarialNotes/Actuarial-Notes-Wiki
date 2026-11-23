@@ -1,1103 +1,532 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { highlightMatch } from '@/components/SearchHighlight'
+// The one search (docs/redesign-spec.md §7a.4, R18): one field over concepts,
+// resources and questions, opened from Practice's search row. What a query
+// finds, the order it comes in and the address it rides are lib/oneSearch.ts;
+// this page draws them.
+//
+// Four tabs with counts. All shows each kind's first few results and a row for
+// the rest; Questions adds the question filters and ends in the screen's one
+// filled button, which starts a quiz on the results.
+
+import { PRACTICE_EXAM_KEY } from '@/lib/practiceHome'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { X, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
-import { ConceptPageIcon } from '@/components/ConceptPageIcon'
-import { CheckMark } from '@/components/CheckMark'
-import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions, filterQuestions } from '@/lib/parser'
-import type { Question, Difficulty } from '@/lib/parser'
-import { questionPreview } from '@/lib/questionPreview'
-import { hrefToEntryRef, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
-import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { findSyllabiForConcept } from '@/lib/conceptMatch'
-import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
-import { useTopics } from '@/hooks/useTopics'
-import { useAuth } from '@/hooks/useAuth'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { useSubscription } from '@/hooks/useSubscription'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { LatexText } from '@/components/LatexText'
+import { ChevronRight, Play, Search as SearchIcon, X } from 'lucide-react'
+import { AnswerDot } from '@/components/AnswerDot'
+import { LevelSquare } from '@/components/LevelSquare'
 import { MarkdownText } from '@/components/MarkdownText'
-import { ProBadge } from '@/components/ProBadge'
-import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
-import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
-import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
-import { trackSearchQuery } from '@/lib/analytics'
-import { useSearchTracking } from '@/hooks/useSearchTracking'
-import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { PracticeBack } from '@/components/practice/PracticeHeader'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
-import { emptyFacets, facetOptions, matchesFacets, toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
-import { usePagedList } from '@/hooks/usePagedList'
+import { QuestionInfoButton } from '@/components/QuestionInfoButton'
+import { INK_MARK, highlightMatch } from '@/components/SearchHighlight'
 import { ShowMore } from '@/components/ShowMore'
+import { Button } from '@/components/ui/button'
+import { GROUND } from '@/components/ui/OutlineCard'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { useConceptLevels } from '@/hooks/useConceptLevels'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { usePagedList } from '@/hooks/usePagedList'
+import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
+import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
+import { useSearchTracking } from '@/hooks/useSearchTracking'
+import { useTodayExam } from '@/hooks/useTodayExam'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { bankLabelFor } from '@/lib/examIds'
+import {
+  ALL_TAB_PREVIEW,
+  ATTEMPT_DOT_LABEL,
+  PRACTICE_LIMIT,
+  SEARCH_TABS,
+  attemptDot,
+  conceptPlaceLine,
+  practiceIds,
+  previewOf,
+  questionMetaLine,
+  resourceMetaLine,
+  runSearch,
+  searchParamsFromState,
+  searchStateFromParams,
+  tabCounts,
+  type ConceptResult,
+  type QuestionResult,
+  type ResourceResult,
+  type SearchFocus,
+  type SearchState,
+} from '@/lib/oneSearch'
+import type { MasteryState } from '@/lib/mastery'
+import { toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
+import { questionPreview } from '@/lib/questionPreview'
+import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
+import { cn } from '@/lib/utils'
+import { installWikiBundle } from '@/lib/wikiBundle'
+import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
+import { examDisplayName, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 
-type SearchType = 'concepts' | 'questions' | 'resources'
+/** The filters the Questions tab offers. Results span exams, so Exam is one of them. */
+const QUESTION_FACETS_SHOWN: readonly QuestionFacet[] = ['difficulty', 'type', 'source', 'exam', 'sitting']
+const QUESTION_FACETS_WITH_CONCEPT: readonly QuestionFacet[] = ['difficulty', 'type', 'concept', 'source', 'exam', 'sitting']
 
-function linkMatchesConcept(link: string, conceptName: string): boolean {
-  const lower = conceptName.toLowerCase()
-  const ref = hrefToEntryRef(link)
-  if (ref?.name.toLowerCase() === lower) return true
-  const lastSegment = link.split('/').filter(Boolean).pop()
-  return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
-}
+const ROW_FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
+/** A row shows two lines of a question, so the preview is cut to about that much. */
+const PREVIEW_CHARS = 72
+/** Rows parted by hairlines, the first with none above it. */
+const ROW_RULE = 'border-t border-border first:border-t-0'
 
-/** The shared filters this page draws as dropdowns; its Exam stays a row of pills. */
-const TYPE_FACET: readonly QuestionFacet[] = ['type']
-const SOURCE_FACET: readonly QuestionFacet[] = ['source']
-const SITTING_FACET: readonly QuestionFacet[] = ['sitting']
-
-const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
-  { value: '', label: 'All' },
-  { value: 'easy', label: 'Easy' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'hard', label: 'Hard' },
-]
-
-const SEARCH_TYPES: { value: SearchType; label: string }[] = [
-  { value: 'concepts', label: 'Concepts' },
-  { value: 'questions', label: 'Questions' },
-  { value: 'resources', label: 'Resources' },
-]
-
-const SEARCH_STATE_KEY = 'actuarial_search_state'
-
-interface QuestionRowProps {
-  question: Question
-  selected: boolean
-  onToggleSelect: (id: string) => void
-  activeDifficulty: Difficulty | ''
-  activeTopic: string
-  activeSubtopics: string[]
-  attemptSummary?: QuestionAttemptSummary
-  attemptsTracked: boolean
-}
-
-function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, activeTopic, activeSubtopics, attemptSummary, attemptsTracked }: QuestionRowProps) {
-  const [expanded, setExpanded] = useState(false)
-  const [showAnswer, setShowAnswer] = useState(false)
-
-  return (
-    <div
-      className={`rounded-lg p-4 space-y-2 transition-colors ${
-        selected ? 'bg-primary/5' : 'hover:bg-accent/30'
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center flex-wrap gap-2 min-w-0">
-          <button
-            type="button"
-            onClick={() => onToggleSelect(question.id)}
-            aria-label={`Select question ${question.id}`}
-            className={`h-6 w-6 shrink-0 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-              selected ? '' : 'border-2 border-input hover:border-primary'
-            }`}
-          >
-            {selected && <CheckMark className="h-6 w-6" />}
-          </button>
-          <QuestionAttemptBadge summary={attemptSummary} showNew={attemptsTracked} />
-          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
-            activeTopic && question.exam === activeTopic
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground bg-muted'
-          }`}>
-            {question.exam}
-          </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
-            activeSubtopics.length > 0 && activeSubtopics.includes(question.topic)
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground bg-muted'
-          }`}>
-            {question.topic}
-          </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 capitalize transition-colors ${
-            activeDifficulty && question.difficulty === activeDifficulty
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground bg-muted'
-          }`}>
-            {question.difficulty}
-          </span>
-          {question.author && (
-            <span className="text-xs text-muted-foreground shrink-0">by {question.author}</span>
-          )}
-          {question.year && (
-            <span className="text-xs text-muted-foreground shrink-0">{question.year}</span>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={() => setExpanded(v => !v)}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
-        >
-          {expanded ? 'Collapse' : 'Expand'}
-        </button>
-      </div>
-
-      <div className="text-sm text-muted-foreground leading-relaxed">
-        {expanded ? (
-          <LatexText>{question.stem}</LatexText>
-        ) : (
-          // A few lines of the question's prose, clamped — see
-          // lib/questionPreview.ts. Rendered as markdown so a stem's escaped
-          // currency (`\$400`) reads as a dollar sign.
-          <MarkdownText inline className="line-clamp-3">{questionPreview(question)}</MarkdownText>
-        )}
-      </div>
-
-      {expanded && (
-        <div className="pt-2 space-y-1">
-          {question.options.map(opt => {
-            const isCorrect = showAnswer && opt.key === question.answer
-            return (
-              <div
-                key={opt.key}
-                className={`flex gap-2 text-sm rounded px-2 py-1 ${
-                  isCorrect ? 'bg-green-100 dark:bg-green-950 text-green-900 dark:text-green-200' : ''
-                }`}
-              >
-                <span className="font-medium text-muted-foreground shrink-0">{opt.key})</span>
-                <span><LatexText>{opt.text}</LatexText></span>
-              </div>
-            )
-          })}
-
-          <div className="pt-2">
-            {!showAnswer ? (
-              <button
-                type="button"
-                onClick={() => setShowAnswer(true)}
-                className="text-xs px-3 py-1 rounded-md hover:bg-accent transition-colors"
-              >
-                Show answer
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowAnswer(false)}
-                className="text-xs px-3 py-1 rounded-md hover:bg-accent transition-colors"
-              >
-                Hide answer
-              </button>
-            )}
-          </div>
-
-          {showAnswer && <QuestionAnswerReveal question={question} />}
-        </div>
-      )}
-    </div>
-  )
-}
-
-
-function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query: string; syllabi: WikiExamSyllabus[] }) {
-  const navigate = useNavigate()
-  const [showChooser, setShowChooser] = useState(false)
-  const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
-
-  const matchingSyllabi = item.category === 'concept' ? findSyllabiForConcept(syllabi, item.name) : []
-  const isAmbiguous = matchingSyllabi.length > 1
-
-  let route = wikiRoute(ref)
-  if (matchingSyllabi.length === 1) {
-    const examRoute = wikiRoute({ kind: 'exam', name: matchingSyllabi[0]!.fileName ?? matchingSyllabi[0]!.examLabel })
-    route = `${examRoute}?concept=${encodeURIComponent(item.name)}`
-  }
-
-  function goToSyllabus(s: WikiExamSyllabus) {
-    setShowChooser(false)
-    const examRoute = wikiRoute({ kind: 'exam', name: s.fileName ?? s.examLabel })
-    navigate(`${examRoute}?concept=${encodeURIComponent(item.name)}`)
-  }
-
-  const Icon =
-    item.category === 'exam' ? GraduationCap :
-    item.category === 'concept' ? FileText :
-    BookMarked
-  const iconColor =
-    item.category === 'exam' ? 'text-teal-500' :
-    'text-muted-foreground'
-  const display = item.title ?? item.name
-
-  return (
-    <>
-      <Link
-        to={route}
-        onClick={e => { if (isAmbiguous) { e.preventDefault(); setShowChooser(true) } }}
-        className="flex items-start gap-3 px-4 py-3 hover:bg-accent/60 transition-colors"
-      >
-        {item.category === 'concept'
-          ? <ConceptPageIcon concept={item.name} className="mt-0.5" />
-          : <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />}
-        <div className="min-w-0 flex-1">
-          <div className="text-sm truncate">{highlightMatch(display, query)}</div>
-          {(item.author || item.year) && (
-            <div className="text-[11px] text-muted-foreground truncate mt-0.5">
-              {[item.author, item.year].filter(Boolean).join(' · ')}
-            </div>
-          )}
-        </div>
-        {item.questionCount ? (
-          <span className="shrink-0 text-[11px] text-muted-foreground self-center tabular-nums">
-            {item.questionCount} {item.questionCount === 1 ? 'question' : 'questions'}
-          </span>
-        ) : null}
-      </Link>
-      {showChooser && (
-        <ChooseSyllabusModal
-          conceptName={item.name}
-          syllabi={matchingSyllabi}
-          onChoose={goToSyllabus}
-          onClose={() => setShowChooser(false)}
-        />
-      )}
-    </>
-  )
+/** The exam in focus, as each index spells it. Null for a reader studying no exam. */
+function useSearchFocus(): SearchFocus | null {
+  const { active, syllabi } = useTodayExam()
+  return useMemo(() => {
+    // The exam Today shows; for a reader studying none, the exam last opened
+    // on Practice in this browser (hooks/useQuizExamScreen.ts).
+    let exam: (typeof syllabi)[number] | null = active
+    if (!exam) {
+      let remembered = ''
+      try { remembered = localStorage.getItem(PRACTICE_EXAM_KEY) ?? '' } catch { /* private window */ }
+      exam = (remembered && syllabi.find(s => bankLabelFor(s) === remembered)) || null
+    }
+    if (!exam) return null
+    return {
+      examId: exam.examId,
+      bank: bankLabelFor(exam),
+      resourceLabel: examDisplayName(exam.fileName ?? `Exam ${exam.examId}`),
+    }
+  }, [active, syllabi])
 }
 
 export default function Search() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
-  const { user } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const state = useMemo(() => searchStateFromParams(searchParams), [searchParams])
+  const { query, tab, facets } = state
+  useSearchTracking(query)
+
+  // A change of query, tab or filter rewrites this entry: Back leaves the search.
+  const update = useCallback((next: Partial<SearchState>) => {
+    setSearchParams(searchParamsFromState({ ...state, ...next }), { replace: true })
+  }, [state, setSearchParams])
+
+  const { questions, loading: questionsLoading, error: questionsError } = useAllQuestions()
   const { syllabi } = useWikiSyllabus()
-  const { isPro } = useSubscription()
-  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
+  const focus = useSearchFocus()
+  const { levelOf } = useConceptLevels()
+  const { byQuestionId: attempts, tracked } = useQuestionAttempts()
+  const quizSettings = useQuizBuilderSettings('quiz')
 
-  const [allQuestions, setAllQuestions] = useState<Question[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [retryCount, setRetryCount] = useState(0)
-
-  // `?type=` and `?q=` are how another surface hands its query over — the
-  // Dashboard's top bar, whose dropdown shows what the bundled index can answer
-  // and sends "search all of it" here. An unknown type falls back to questions,
-  // the page's own default.
-  const [searchType, setSearchType] = useState<SearchType>(() => {
-    const requested = searchParams.get('type')
-    return SEARCH_TYPES.some(t => t.value === requested) ? (requested as SearchType) : 'questions'
-  })
-  const [textQuery, setTextQuery] = useState(() => searchParams.get('q') ?? '')
-  useSearchTracking(textQuery)
-  const [wikiIndex, setWikiIndex] = useState<WikiIndexItem[]>([])
-  const [wikiLoading, setWikiLoading] = useState(false)
-  const wikiIndexFetchedRef = useRef(false)
-
-  const [topic, setTopic] = useState('')
-  const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
-  const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
-  const [types, setTypes] = useState<ReadonlySet<string>>(new Set())
-  const [sources, setSources] = useState<ReadonlySet<string>>(new Set())
-  const [sittings, setSittings] = useState<ReadonlySet<string>>(new Set())
-  const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
-  const [useTodaysPlan, setUseTodaysPlan] = useState(false)
-
+  const [index, setIndex] = useState<WikiIndexItem[]>([])
+  const [indexLoading, setIndexLoading] = useState(true)
   useEffect(() => {
-    setLoading(true)
-    setError(null)
-    fetchAllQuestions()
-      .then(raw => setAllQuestions(parseAllQuestions(raw)))
-      .catch(err => { console.error('search: loading questions failed:', err); setError('The questions didn’t load. Check your connection.') })
-      .finally(() => setLoading(false))
-  }, [retryCount])
-
-  useEffect(() => {
-    if (searchType === 'questions') return
-    if (wikiIndexFetchedRef.current) return
-    wikiIndexFetchedRef.current = true
-    setWikiLoading(true)
-    buildWikiIndex()
-      .then(items => setWikiIndex(items))
+    let cancelled = false
+    // The vault's pages come with the build, as a chunk of their own: installed
+    // first, the index and the reader are answered from it and never from the
+    // network (lib/wikiBundle.ts).
+    import('virtual:wiki-content')
+      .then(({ default: bundle }) => installWikiBundle(bundle))
       .catch(() => {})
-      .finally(() => setWikiLoading(false))
-  }, [searchType])
-
-  // Restore filter state saved before launching quiz
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(SEARCH_STATE_KEY)
-      if (!raw) return
-      sessionStorage.removeItem(SEARCH_STATE_KEY)
-      const s = JSON.parse(raw) as {
-        topic?: string; selectedSubtopics?: string[]
-        difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
-        types?: string[]; sources?: string[]; sittings?: string[]
-      }
-      if (s.topic)               setTopic(s.topic)
-      if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
-      if (s.difficulty)          setDifficulty(s.difficulty)
-      if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
-      if (s.types?.length)       setTypes(new Set(s.types))
-      if (s.sources?.length)     setSources(new Set(s.sources))
-      if (s.sittings?.length)    setSittings(new Set(s.sittings))
-      if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
-    } catch { /* ignore */ }
+      .then(() => buildWikiIndex())
+      .then(items => { if (!cancelled) setIndex(items) })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setIndexLoading(false) })
+    return () => { cancelled = true }
   }, [])
 
-  function toggleSubtopic(subtopic: string) {
-    setUseTodaysPlan(false)
-    setSelectedSubtopics(prev =>
-      prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
+  const results = useMemo(
+    () => runSearch({ query, index, questions, syllabi, focus, facets }),
+    [query, index, questions, syllabi, focus, facets],
+  )
+  // The pool the filters count their options over: the query's questions, unfiltered.
+  const questionPool = useMemo(
+    () => runSearch({ query, index: [], questions, syllabi: [], focus: null }).questions.map(r => r.question),
+    [query, questions],
+  )
+  const counts = tabCounts(results)
+  const hasQuery = query.trim() !== ''
+  const loading = questionsLoading || indexLoading
+
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (!hasQuery) inputRef.current?.focus()
+    // Only on arrival: the field is not taken back while the reader works the tabs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // A concept opens in the reader, which walks the concepts found.
+  const openAt = useConceptPopup(s => s.openAt)
+  const conceptRefs = useMemo<WikiEntryRef[]>(
+    () => results.concepts.map(c => pathToEntryRef(c.item.path) ?? { kind: 'concept', name: c.item.name }),
+    [results.concepts],
+  )
+  const openConcept = useCallback((i: number) => openAt(conceptRefs, i), [openAt, conceptRefs])
+
+  const paged = usePagedList(
+    results.questions,
+    `one-search:${query}:${searchParamsFromState({ ...state, query: '', tab: 'all' }).toString()}`,
+  )
+
+  const practiceCount = Math.min(results.questions.length, PRACTICE_LIMIT)
+  const showPractice = tab === 'questions' && !questionsLoading && practiceCount > 0
+  const practiceBarRef = useRef<HTMLDivElement>(null)
+  useActionBarHeight(practiceBarRef, showPractice)
+
+  function startPractice() {
+    const ids = practiceIds(results.questions)
+    if (ids.length === 0) return
+    storeSelectedIds(ids)
+    const url = new URL(
+      quizLaunchUrl(
+        { kind: 'plan', count: ids.length },
+        {
+          mode: 'quiz',
+          reveal: quizSettings.reveal,
+          links: quizSettings.conceptLinks ? '1' : '0',
+          timed: quizSettings.timed,
+        },
+      ),
+      window.location.origin,
     )
+    // Quitting the quiz comes back here, to this query.
+    url.searchParams.set('from', 'search')
+    navigate(`${url.pathname}${url.search}`)
   }
 
-  function toggleTopicGroup(groupName: string) {
-    setOpenTopicGroups(prev => {
-      const next = new Set(prev)
-      next.has(groupName) ? next.delete(groupName) : next.add(groupName)
-      return next
-    })
-  }
-
-  function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
-    e.stopPropagation()
-    setUseTodaysPlan(false)
-    const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-    setSelectedSubtopics(prev =>
-      allSelected
-        ? prev.filter(s => !group.subtopics.includes(s))
-        : [...new Set([...prev, ...group.subtopics])]
-    )
-  }
-
-  function toggleSelectQuestion(id: string) {
-    setSelectedIds(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  function clearFilters() {
-    setTopic('')
-    setSelectedSubtopics([])
-    setDifficulty('')
-    setSelectedIds(new Set())
-    setConceptFilter('')
-    setTypes(new Set())
-    setSources(new Set())
-    setSittings(new Set())
-    setTextQuery('')
-    setUseTodaysPlan(false)
-    setOpenTopicGroups(new Set())
-  }
-
-  // Every exam the bank holds, up the ladder — read off the bank rather than
-  // listed here, which is how this row once offered only three of them.
-  const examOptions = useMemo(
-    () => [{ value: '', label: 'All Exams' }, ...facetOptions(allQuestions, 'exam', emptyFacets())],
-    [allQuestions],
+  const conceptRow = (c: ConceptResult, i: number) => (
+    <ConceptRow
+      key={c.item.path}
+      result={c}
+      query={query}
+      level={levelOf(c.item.name)}
+      href={wikiRoute(conceptRefs[i]!)}
+      onOpen={() => openConcept(i)}
+    />
+  )
+  const resourceRow = (r: ResourceResult) => <ResourceRow key={r.item.path} result={r} query={query} />
+  const questionRow = (r: QuestionResult) => (
+    <QuestionRow
+      key={r.question.id}
+      result={r}
+      query={query}
+      dot={tracked ? attemptDot(attempts.get(r.question.id)) : null}
+    />
   )
 
-  const subtopics = useMemo(
-    () => (topic ? (subtopicsByTopic[topic] ?? []) : []),
-    [topic, subtopicsByTopic],
+  const concepts = previewOf(results.concepts, ALL_TAB_PREVIEW.concepts)
+  const resources = previewOf(results.resources, ALL_TAB_PREVIEW.resources)
+  const questionsPreview = previewOf(results.questions, ALL_TAB_PREVIEW.questions)
+
+  const nothing = (kind: string) => (
+    <p className="py-6 text-[16px]">
+      {hasQuery ? `No ${kind} match “${query.trim()}”.` : `Type a word to search ${kind}.`}
+    </p>
   )
-
-  const syllabusForTopic = useMemo(
-    () => syllabi.find(s => s.examTopic === topic || s.examLabel === topic) ?? null,
-    [syllabi, topic],
-  )
-
-  const orderedSubtopics = useMemo(() => {
-    if (!syllabusForTopic) return subtopics
-    const conceptToIdx = new Map<string, number>()
-    syllabusForTopic.topics.forEach((t, idx) => {
-      conceptToIdx.set(t.name.toLowerCase(), idx)
-      t.concepts.forEach(c => conceptToIdx.set(c.name.toLowerCase(), idx))
-    })
-    const getIdx = (st: string): number => {
-      const exact = conceptToIdx.get(st.toLowerCase())
-      if (exact !== undefined) return exact
-      const stLower = st.toLowerCase()
-      for (const [key, idx] of conceptToIdx) {
-        if (stLower.includes(key) || key.includes(stLower)) return idx
-      }
-      return Number.MAX_SAFE_INTEGER
-    }
-    return [...subtopics].sort((a, b) => {
-      const diff = getIdx(a) - getIdx(b)
-      return diff !== 0 ? diff : a.localeCompare(b)
-    })
-  }, [subtopics, syllabusForTopic])
-
-  const groupedSubtopics = useMemo(() => {
-    if (!syllabusForTopic) {
-      return [{ name: 'All Topics', weight: undefined as string | undefined, subtopics: orderedSubtopics }]
-    }
-    const subtopicToIdx = new Map<string, number>()
-    syllabusForTopic.topics.forEach((wt, idx) => {
-      for (const st of orderedSubtopics) {
-        if (subtopicToIdx.has(st)) continue
-        const stL = st.toLowerCase()
-        if (stL === wt.name.toLowerCase()) { subtopicToIdx.set(st, idx); continue }
-        for (const c of wt.concepts) {
-          const cL = c.name.toLowerCase()
-          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
-            subtopicToIdx.set(st, idx); break
-          }
-        }
-      }
-    })
-    const groups = syllabusForTopic.topics.map(t => ({
-      name: t.name, weight: t.weight as string | undefined, subtopics: [] as string[]
-    }))
-    const ungrouped: string[] = []
-    for (const st of orderedSubtopics) {
-      const idx = subtopicToIdx.get(st)
-      if (idx !== undefined) groups[idx].subtopics.push(st)
-      else ungrouped.push(st)
-    }
-    const result = groups.filter(g => g.subtopics.length > 0)
-    if (ungrouped.length > 0) result.push({ name: 'Other', weight: undefined, subtopics: ungrouped })
-    return result
-  }, [syllabusForTopic, orderedSubtopics])
-
-  const { plan } = useStudyPlan(syllabusForTopic, masteryRecords, null, masteryLoading)
-
-  const todaySubtopics = useMemo(() => {
-    if (!plan?.todaysConcepts?.length) return new Set<string>()
-    const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
-    const result = new Set<string>()
-    for (const q of allQuestions) {
-      if (q.exam !== topic) continue
-      for (const link of q.wiki_link) {
-        const ref = hrefToEntryRef(link)
-        const name = ref?.name ?? (link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '')
-        if (todaySet.has(name.toLowerCase())) {
-          result.add(q.topic)
-          break
-        }
-      }
-    }
-    return result
-  }, [plan, allQuestions, topic])
-
-  const planConceptCount = useMemo(() => {
-    if (!plan) return 0
-    return plan.status === 'review_mode'
-      ? (plan.reviewConcepts?.length ?? 0)
-      : plan.todaysConcepts.length
-  }, [plan])
-
-  // Every filter but Sitting — the pool the Sitting dropdown offers and counts.
-  const filteredBeforeSitting = useMemo(() => {
-    let result = filterQuestions(allQuestions, {
-      exam: topic || undefined,
-      topics: selectedSubtopics.length ? selectedSubtopics : undefined,
-      difficulty: difficulty || undefined,
-      search: textQuery.trim() || undefined,
-      // The search page lists the bank, questions kept only for the record included.
-      includeOffSyllabus: true,
-    })
-    if (conceptFilter) {
-      result = result.filter(q =>
-        q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
-      )
-    }
-    if (useTodaysPlan && plan) {
-      const displayConcepts = plan.status === 'review_mode'
-        ? (plan.reviewConcepts ?? [])
-        : plan.todaysConcepts
-      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-      result = result.filter(q => q.wiki_link.some(link => {
-        const ref = hrefToEntryRef(link)
-        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
-        return todaySet.has(n)
-      }))
-    }
-    return result
-  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
-
-  // The page's exam rides along as the facet's Exam, so a sitting of a chosen
-  // exam means that exam's paper — the shared rule (lib/questionFilters.ts).
-  const facetSelection = useMemo(
-    () => ({ ...emptyFacets(), type: types, source: sources, exam: new Set(topic ? [topic] : []), sitting: sittings }),
-    [types, sources, topic, sittings],
-  )
-
-  const filtered = useMemo(
-    () => (types.size === 0 && sources.size === 0 && sittings.size === 0
-      ? filteredBeforeSitting
-      : filteredBeforeSitting.filter(q => matchesFacets(q, facetSelection))),
-    [filteredBeforeSitting, types, sources, sittings, facetSelection],
-  )
-  // The results a page at a time. A different result set is a different list.
-  const pagedQuestions = usePagedList(filtered, `search:${filtered.length}:${filtered[0]?.id ?? ''}`)
-
-  // How many questions link to each concept, keyed by canonical concept name.
-  // This is the wiki_link concept graph that drives concept search.
-  const conceptQuestionCounts = useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const question of allQuestions) {
-      const seen = new Set<string>()
-      for (const link of question.wiki_link) {
-        const ref = hrefToEntryRef(link)
-        const name = ref?.kind === 'concept' && ref.name
-          ? ref.name
-          : (link.split('/').filter(Boolean).pop() ?? '').replace(/-/g, ' ')
-        const key = name.toLowerCase()
-        if (!key || seen.has(key)) continue
-        seen.add(key)
-        counts.set(key, (counts.get(key) ?? 0) + 1)
-      }
-    }
-    return counts
-  }, [allQuestions])
-
-  const wikiResults = useMemo(() => {
-    if (searchType === 'questions') return []
-    const q = textQuery.trim().toLowerCase()
-    if (!q) return []
-
-    if (searchType === 'resources') {
-      return wikiIndex
-        .filter(it => it.category === 'document')
-        .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
-        .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
-        .slice(0, 30)
-    }
-
-    // Concepts: surface the concepts referenced by question wiki_links. Start
-    // from the indexed exam/concept pages, attach a question count, then add any
-    // wiki_link concept that has no page yet so it's still discoverable.
-    const items: WikiIndexItem[] = wikiIndex
-      .filter(it => it.category === 'exam' || it.category === 'concept')
-      .map(it => it.category === 'concept'
-        ? { ...it, questionCount: conceptQuestionCounts.get(it.name.toLowerCase()) ?? 0 }
-        : it)
-
-    const indexedConcepts = new Set(
-      items.filter(it => it.category === 'concept').map(it => it.name.toLowerCase()),
-    )
-    for (const [key, count] of conceptQuestionCounts) {
-      if (indexedConcepts.has(key)) continue
-      const display = allQuestions
-        .flatMap(qq => qq.wiki_link)
-        .map(l => hrefToEntryRef(l))
-        .find(r => r?.kind === 'concept' && r.name.toLowerCase() === key)?.name
-      if (!display) continue
-      items.push({ category: 'concept', name: display, path: `Concepts/${display}.md`, questionCount: count })
-    }
-
-    return items
-      .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
-      .sort((a, b) => {
-        // Concepts that have questions rank first, by descending question count.
-        const ca = a.questionCount ?? 0
-        const cb = b.questionCount ?? 0
-        if ((cb > 0 ? 1 : 0) !== (ca > 0 ? 1 : 0)) return (cb > 0 ? 1 : 0) - (ca > 0 ? 1 : 0)
-        if (cb !== ca) return cb - ca
-        return (a.title ?? a.name).localeCompare(b.title ?? b.name)
-      })
-      .slice(0, 30)
-  }, [wikiIndex, textQuery, searchType, conceptQuestionCounts, allQuestions])
-
-  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || types.size || sources.size || sittings.size || textQuery
-
-  function handleStartQuiz() {
-    trackSearchQuery({ query: textQuery.trim(), exam: topic, difficulty: difficulty })
-    const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'search' })
-
-    try {
-      sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
-        topic, selectedSubtopics, difficulty, conceptFilter,
-        types: [...types],
-        sources: [...sources],
-        sittings: [...sittings],
-        selectedIds: [...selectedIds],
-      }))
-    } catch { /* ignore */ }
-
-    if (selectedIds.size > 0) {
-      const ids = [...selectedIds]
-      const storageExam = allQuestions.find(q => selectedIds.has(q.id))?.exam ?? 'Probability'
-      try {
-        sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
-      } catch {
-        params.set('ids', ids.join(','))
-      }
-      params.set('selection', 'stored')
-      params.set('exam', storageExam)
-      navigate(`/quiz?${params.toString()}`)
-      return
-    }
-
-    // The quiz URL has no way to name a type, a publisher or several papers, so
-    // a list narrowed to any of them is started as it stands: its questions are
-    // the selection.
-    if ((types.size > 0 || sources.size > 0 || sittings.size > 0) && filtered.length > 0) {
-      try {
-        sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(filtered.map(q => q.id)))
-      } catch { /* ignore */ }
-      params.set('selection', 'stored')
-      params.set('exam', topic || filtered[0].exam)
-      navigate(`/quiz?${params.toString()}`)
-      return
-    }
-
-    if (useTodaysPlan && plan) {
-      const displayConcepts = plan.status === 'review_mode'
-        ? (plan.reviewConcepts ?? [])
-        : plan.todaysConcepts
-      if (displayConcepts.length > 0) {
-        const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-        const todayQs = allQuestions.filter(q => {
-          if (q.exam !== topic) return false
-          return q.wiki_link.some(link => {
-            const ref = hrefToEntryRef(link)
-            const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
-            return todaySet.has(n)
-          })
-        })
-        if (todayQs.length > 0) {
-          try {
-            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(todayQs.map(q => q.id)))
-          } catch { /* ignore */ }
-          params.set('selection', 'stored')
-          params.set('exam', topic)
-          navigate(`/quiz?${params.toString()}`)
-          return
-        }
-      }
-    }
-
-    if (topic) params.set('exam', topic)
-    else params.set('exam', 'Probability')
-    if (selectedSubtopics.length) params.set('topics', selectedSubtopics.join(','))
-    if (difficulty) params.set('difficulty', difficulty)
-    navigate(`/quiz?${params.toString()}`)
-  }
-
-  const searchPlaceholder =
-    searchType === 'questions' ? 'Search question text…' :
-    searchType === 'concepts' ? 'Search concepts and exams…' :
-    'Search resources…'
-
-  // The quiz button's bar, measured for whatever else is parked on the bottom
-  // edge — the "Return to quiz" pill rides above it (style guide §5.1).
-  const showQuizBar = searchType === 'questions' && !loading && filtered.length > 0
-  const quizBarRef = useRef<HTMLDivElement>(null)
-  useActionBarHeight(quizBarRef, showQuizBar)
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Search</h1>
-
-      {/* Search type toggle */}
-      <div className="flex gap-2 flex-wrap">
-        {SEARCH_TYPES.map(({ value, label }) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => {
-              setSearchType(value)
-              setTextQuery('')
-            }}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              searchType === value
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-accent'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Filters</CardTitle>
-            {hasFilters && (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          {/* Text search input */}
-          <div className="flex items-center gap-2 border border-input rounded-md px-3 py-2">
-            <SearchIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+    <div className={cn(GROUND, 'min-h-screen')}>
+      <div className={cn('mx-auto w-full max-w-xl px-5 pt-3', showPractice ? 'pb-36' : 'pb-16')}>
+        <div className="flex items-center gap-2">
+          <PracticeBack />
+          <label className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full border-[1.5px] border-foreground pl-4 pr-1.5 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-ground">
+            <SearchIcon className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
             <input
-              type="text"
-              value={textQuery}
-              onChange={e => setTextQuery(e.target.value)}
-              placeholder={searchPlaceholder}
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-base text-foreground placeholder:text-muted-foreground"
+              ref={inputRef}
+              type="search"
+              aria-label="Search"
+              placeholder="Search"
+              value={query}
+              onChange={e => update({ query: e.target.value })}
+              enterKeyHint="search"
               autoComplete="off"
               spellCheck={false}
+              className="h-full w-0 min-w-0 flex-1 bg-transparent text-[17px] text-foreground outline-none placeholder:text-foreground/60 [&::-webkit-search-cancel-button]:hidden"
             />
-            {textQuery && (
+            {query && (
               <button
                 type="button"
-                onClick={() => setTextQuery('')}
-                aria-label="Clear search"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear"
+                onClick={() => { update({ query: '' }); inputRef.current?.focus() }}
+                className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full', ROW_FOCUS)}
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
               </button>
             )}
-          </div>
+          </label>
+        </div>
 
-          {/* Question-specific filters */}
-          {searchType === 'questions' && (
+        <div role="tablist" aria-label="Show" className="-mx-5 mt-3.5 flex gap-1 overflow-x-auto px-5 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {SEARCH_TABS.map(t => {
+            const on = t.value === tab
+            // A count says what the query found; with no query only Questions has one.
+            const count = hasQuery || t.value === 'questions' ? counts[t.value] : null
+            return (
+              <button
+                key={t.value}
+                type="button"
+                role="tab"
+                id={`search-tab-${t.value}`}
+                aria-selected={on}
+                aria-label={count !== null && !loading ? `${t.label} ${count}` : t.label}
+                aria-controls="search-results"
+                data-sound="tick"
+                onClick={() => update({ tab: t.value })}
+                className={cn(
+                  'flex h-[38px] flex-auto items-center justify-center gap-1 whitespace-nowrap rounded-full border-[1.5px] border-foreground px-1.5 text-[13px] font-bold tracking-tight transition-colors',
+                  on ? 'bg-foreground text-ground' : 'text-foreground hover:bg-foreground/10',
+                  ROW_FOCUS,
+                )}
+              >
+                {t.label}
+                {count !== null && !loading && <span className="font-medium tabular-nums">{count}</span>}
+              </button>
+            )
+          })}
+        </div>
+
+        <div id="search-results" role="tabpanel" aria-labelledby={`search-tab-${tab}`} className="pt-[18px]">
+          {questionsError && tab !== 'concepts' && tab !== 'resources' && (
+            <p role="alert" className="pb-4 text-[16px]">{questionsError}</p>
+          )}
+
+          {tab === 'all' && hasQuery && (
+            loading && counts.all === 0 ? (
+              <p className="py-6 text-[16px]" aria-live="polite">Searching…</p>
+            ) : counts.all === 0 ? (
+              <p className="py-6 text-[16px]">Nothing matches “{query.trim()}”.</p>
+            ) : (
+              <div className="flex flex-col gap-4 [&>section+section]:border-t [&>section+section]:border-border [&>section+section]:pt-3.5">
+                {results.concepts.length > 0 && (
+                  <Section title="Concepts" more={concepts.more} onMore={() => update({ tab: 'concepts' })}>
+                    {concepts.shown.map(conceptRow)}
+                  </Section>
+                )}
+                {results.resources.length > 0 && (
+                  <Section title="Resources" more={resources.more} onMore={() => update({ tab: 'resources' })}>
+                    {resources.shown.map(resourceRow)}
+                  </Section>
+                )}
+                {results.questions.length > 0 && (
+                  <Section title="Questions" more={questionsPreview.more} onMore={() => update({ tab: 'questions' })}>
+                    {questionsPreview.shown.map(questionRow)}
+                  </Section>
+                )}
+              </div>
+            )
+          )}
+
+          {tab === 'concepts' && (
+            results.concepts.length === 0
+              ? (indexLoading ? <p className="py-6 text-[16px]" aria-live="polite">Searching…</p> : nothing('concepts'))
+              : <ul className="flex flex-col">{results.concepts.map(conceptRow)}</ul>
+          )}
+
+          {tab === 'resources' && (
+            results.resources.length === 0
+              ? (indexLoading ? <p className="py-6 text-[16px]" aria-live="polite">Searching…</p> : nothing('resources'))
+              : <ul className="flex flex-col">{results.resources.map(resourceRow)}</ul>
+          )}
+
+          {tab === 'questions' && (
             <>
-              {/* Active concept filter pill */}
-              {conceptFilter && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">Concept</span>
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
-                    {conceptFilter}
-                    <button
-                      type="button"
-                      onClick={() => setConceptFilter('')}
-                      aria-label="Remove concept filter"
-                      className="hover:text-foreground transition-colors"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                </div>
+              <div className="pb-2">
+                <QuestionFilterBar
+                  pool={questionPool}
+                  selection={facets}
+                  onToggle={(facet, value) => update({ facets: toggleFacet(facets, facet, value) })}
+                  facets={facets.concept.size > 0 ? QUESTION_FACETS_WITH_CONCEPT : QUESTION_FACETS_SHOWN}
+                />
+              </div>
+              {questionsLoading ? (
+                <p className="py-6 text-[16px]" aria-live="polite">Loading the questions…</p>
+              ) : results.questions.length === 0 ? (
+                <p className="py-6 text-[16px]">
+                  {hasQuery ? `No questions match “${query.trim()}” with these filters.` : 'No questions match these filters.'}
+                </p>
+              ) : (
+                <>
+                  <ul className="flex flex-col">{paged.shown.map(questionRow)}</ul>
+                  <ShowMore nextSize={paged.nextSize} remaining={paged.remaining} noun="questions" onShowMore={paged.showMore} />
+                </>
               )}
-
-              {/* Exam */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Exam</label>
-                <div className="flex flex-wrap gap-2">
-                  {examOptions.map(exam => (
-                    <button
-                      key={exam.value}
-                      type="button"
-                      onClick={() => {
-                        setTopic(exam.value)
-                        setSelectedSubtopics([])
-                        setSelectedIds(new Set())
-                        setConceptFilter('')
-                        setSittings(new Set())
-                        setUseTodaysPlan(false)
-                        setOpenTopicGroups(new Set())
-                      }}
-                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                        topic === exam.value
-                          ? 'bg-primary text-primary-foreground'
-                          : 'hover:bg-accent'
-                      }`}
-                    >
-                      {exam.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Type — multiple choice, short answer or written */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Type</label>
-                <QuestionFilterBar
-                  pool={filteredBeforeSitting}
-                  selection={facetSelection}
-                  onToggle={(facet, value) => setTypes(toggleFacet(facetSelection, facet, value).type)}
-                  facets={TYPE_FACET}
-                />
-              </div>
-
-              {/* Source — who published the question: SOA, CAS or the vault's own */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Source</label>
-                <QuestionFilterBar
-                  pool={filteredBeforeSitting}
-                  selection={facetSelection}
-                  onToggle={(facet, value) => setSources(toggleFacet(facetSelection, facet, value).source)}
-                  facets={SOURCE_FACET}
-                />
-              </div>
-
-              {/* Sitting — the paper a question was set on, newest first */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Sitting</label>
-                <QuestionFilterBar
-                  pool={filteredBeforeSitting}
-                  selection={facetSelection}
-                  onToggle={(facet, value) => setSittings(toggleFacet(facetSelection, facet, value).sitting)}
-                  facets={SITTING_FACET}
-                />
-              </div>
-
-              {/* Subtopics — only shown when a specific exam is selected */}
-              {topic && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Topics
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">
-                      {useTodaysPlan && planConceptCount > 0
-                        ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
-                        : selectedSubtopics.length === 0
-                          ? '(all)'
-                          : `${selectedSubtopics.length} selected`}
-                    </span>
-                  </label>
-
-                  {/* Today's Study Plan quick-select */}
-                  {user && (
-                    isPro && plan && planConceptCount > 0 ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = !useTodaysPlan
-                          setUseTodaysPlan(next)
-                          if (next) setSelectedSubtopics([])
-                        }}
-                        className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors ${
-                          useTodaysPlan
-                            ? 'bg-primary/5 text-primary font-medium'
-                            : 'bg-muted/40 hover:bg-accent text-foreground'
-                        }`}
-                      >
-                        <CalendarCheck className="h-4 w-4 shrink-0" />
-                        <span className="flex-1 text-left">Today's Study Plan</span>
-                        {useTodaysPlan && <CheckMark className="h-3.5 w-3.5" />}
-                        <span className={`text-xs shrink-0 ${useTodaysPlan ? 'text-primary/70' : 'text-muted-foreground'}`}>
-                          {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
-                        </span>
-                      </button>
-                    ) : !isPro ? (
-                      <Link
-                        to="/upgrade"
-                        className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-muted/30 text-sm text-muted-foreground hover:bg-muted/40 transition-colors"
-                      >
-                        <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
-                        <span className="flex-1 text-left">Today's Study Plan</span>
-                        <ProBadge />
-                      </Link>
-                    ) : null
-                  )}
-
-                  {subtopicsLoading && subtopics.length === 0 ? (
-                    <p className="text-xs text-muted-foreground">Loading topics…</p>
-                  ) : subtopics.length === 0 ? (
-                    <p className="text-xs text-muted-foreground">No topics available.</p>
-                  ) : (
-                    <div className={`rounded-lg bg-muted/10 transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
-                      {groupedSubtopics.map(group => {
-                        const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-                        const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
-                        const isOpen = openTopicGroups.has(group.name)
-                        const hasToday = group.subtopics.some(s => todaySubtopics.has(s))
-                        return (
-                          <div key={group.name}>
-                            <button
-                              type="button"
-                              onClick={() => toggleTopicGroup(group.name)}
-                              className="flex items-center gap-2 w-full py-3.5 px-4 text-left hover:bg-muted/40 transition-colors"
-                              aria-expanded={isOpen}
-                            >
-                              <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
-                              <span className="text-sm font-semibold flex-1 min-w-0 truncate">
-                                {group.name}
-                                {group.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{group.weight}</span>}
-                              </span>
-                              {hasToday && <span className="text-[10px] text-primary/70 shrink-0">today</span>}
-                              <button
-                                type="button"
-                                data-sound="tick"
-                                onClick={e => selectAllInGroup(group, e)}
-                                className={`shrink-0 ml-1 px-3 py-1.5 rounded text-xs transition-colors ${
-                                  allSelected
-                                    ? 'bg-primary text-primary-foreground'
-                                    : someSelected
-                                      ? 'bg-primary/10 text-primary'
-                                      : 'bg-background text-muted-foreground hover:bg-accent'
-                                }`}
-                              >
-                                {allSelected ? 'All ✓' : someSelected ? 'Some' : 'Select all'}
-                              </button>
-                            </button>
-                            {isOpen && (
-                              <div className="pb-2 px-4 pl-11 space-y-0.5 bg-muted/20">
-                                {group.subtopics.map(subtopic => {
-                                  const isSelected = selectedSubtopics.includes(subtopic)
-                                  const isToday = todaySubtopics.has(subtopic)
-                                  return (
-                                    <button
-                                      key={subtopic}
-                                      type="button"
-                                      data-sound="tick"
-                                      onClick={() => toggleSubtopic(subtopic)}
-                                      className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
-                                    >
-                                      {isSelected ? (
-                                        <CheckMark className="h-5 w-5" />
-                                      ) : (
-                                        <div className="h-5 w-5 shrink-0 rounded-full border border-input bg-background" />
-                                      )}
-                                      <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
-                                        {subtopic}
-                                      </span>
-                                      {isToday && <span className="text-xs text-primary/60 shrink-0">today</span>}
-                                    </button>
-                                  )
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Difficulty */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Difficulty</label>
-                <div className="flex flex-wrap gap-2">
-                  {DIFFICULTIES.map(d => (
-                    <button
-                      key={d.value}
-                      type="button"
-                      onClick={() => setDifficulty(d.value)}
-                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                        difficulty === d.value
-                          ? 'bg-primary text-primary-foreground'
-                          : 'hover:bg-accent'
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Results */}
-      <div className="space-y-3">
-        {searchType === 'questions' ? (
-          <>
-            <p className="text-sm text-muted-foreground">
-              {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
-              {selectedIds.size > 0 && (
-                <span className="ml-2 text-foreground font-medium">
-                  · {selectedIds.size} selected
-                  <button
-                    type="button"
-                    onClick={() => setSelectedIds(new Set())}
-                    className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
-                  >
-                    clear
-                  </button>
-                </span>
-              )}
-            </p>
-
-            {error && (
-              <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
-                <span>{error}</span>
-                <button
-                  type="button"
-                  onClick={() => setRetryCount(c => c + 1)}
-                  className="shrink-0 text-xs font-medium underline underline-offset-2 hover:no-underline"
-                >
-                  Try again
-                </button>
-              </div>
-            )}
-
-            {loading && (
-              <div className="space-y-2">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="rounded-lg bg-muted/20 p-4 animate-pulse">
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-3 bg-muted rounded w-1/2 mt-2" />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {!loading && filtered.length === 0 && !error && (
-              <div className="text-center py-12 text-muted-foreground text-sm">
-                No questions match your filters.
-              </div>
-            )}
-
-            {!loading && filtered.length > 0 && (
-              <div className="space-y-2">
-                {pagedQuestions.shown.map(q => (
-                  <QuestionRow
-                    key={q.id}
-                    question={q}
-                    selected={selectedIds.has(q.id)}
-                    onToggleSelect={toggleSelectQuestion}
-                    activeDifficulty={difficulty}
-                    activeTopic={topic}
-                    activeSubtopics={selectedSubtopics}
-                    attemptSummary={attemptsByQuestionId.get(q.id)}
-                    attemptsTracked={attemptsTracked}
-                  />
-                ))}
-                <ShowMore nextSize={pagedQuestions.nextSize} remaining={pagedQuestions.remaining} noun="questions" onShowMore={pagedQuestions.showMore} />
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {!textQuery.trim() ? (
-              <p className="text-sm text-muted-foreground">Enter a search term above.</p>
-            ) : wikiLoading ? (
-              <div className="space-y-2">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="rounded-lg bg-muted/20 p-4 animate-pulse">
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-3 bg-muted rounded w-1/2 mt-2" />
-                  </div>
-                ))}
-              </div>
-            ) : wikiResults.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground text-sm">
-                No matches found.
-              </div>
-            ) : (
-              <>
-                <p className="text-sm text-muted-foreground">
-                  {wikiResults.length} result{wikiResults.length !== 1 ? 's' : ''} found
-                </p>
-                <div className="rounded-lg overflow-hidden bg-muted/10">
-                  {wikiResults.map(item => (
-                    <ConceptResultRow key={`${item.category}:${item.path}`} item={item} query={textQuery} syllabi={syllabi} />
-                  ))}
-                </div>
-              </>
-            )}
-          </>
-        )}
+        </div>
       </div>
 
-      {/* Sticky quiz button — Questions mode only */}
-      {showQuizBar && (
-        <div ref={quizBarRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
-          <button
-            type="button"
-            onClick={handleStartQuiz}
-            className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium shadow-lg"
-          >
-            {selectedIds.size > 0
-              ? `Start quiz with ${selectedIds.size} selected`
-              : 'Start quiz with this selection'}
-          </button>
+      {showPractice && (
+        <div
+          ref={practiceBarRef}
+          className="fixed bottom-0 left-0 right-0 z-40 bg-ground px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3 lg:left-[var(--sidebar-width)]"
+        >
+          <Button size="main" data-sound="begin" onClick={startPractice} className="mx-auto flex w-full max-w-xl rounded-full">
+            <Play className="h-[18px] w-[18px] fill-current" aria-hidden="true" />
+            {results.questions.length > PRACTICE_LIMIT
+              ? `Practice the first ${practiceCount}`
+              : practiceCount === 1 ? 'Practice this question' : `Practice these ${practiceCount}`}
+          </Button>
         </div>
       )}
+
+      <ConceptPopup />
     </div>
+  )
+}
+
+/** One kind's results under All: a heading, its first rows, and a row for the rest. */
+function Section({
+  title,
+  more,
+  onMore,
+  children,
+}: {
+  title: string
+  more: number
+  onMore: () => void
+  children: ReactNode
+}) {
+  return (
+    <section aria-label={title} className="flex flex-col">
+      <h2 className="mb-0.5 text-[15px] font-bold">{title}</h2>
+      <ul className="flex flex-col">{children}</ul>
+      {more > 0 && (
+        <button
+          type="button"
+          onClick={onMore}
+          className={cn('flex h-11 items-center gap-2.5 rounded-lg text-left text-[15px] font-semibold', ROW_FOCUS)}
+        >
+          <span className="flex-1">{more} more</span>
+          <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+        </button>
+      )}
+    </section>
+  )
+}
+
+function ConceptRow({
+  result,
+  query,
+  level,
+  href,
+  onOpen,
+}: {
+  result: ConceptResult
+  query: string
+  level: MasteryState
+  href: string
+  onOpen: () => void
+}) {
+  const place = conceptPlaceLine(result)
+  return (
+    <li className={ROW_RULE}>
+      <Link
+        to={href}
+        // A plain click opens the concept in the reader; a modified one keeps the link.
+        onClick={e => {
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+          e.preventDefault()
+          onOpen()
+        }}
+        className={cn('flex min-h-14 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS)}
+      >
+        <LevelSquare state={level} size="sm" />
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="text-[16px] font-semibold leading-snug">
+            {highlightMatch(result.item.title ?? result.item.name, query, INK_MARK)}
+          </span>
+          {place && <span className="truncate text-[14px] leading-snug">{place}</span>}
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+      </Link>
+    </li>
+  )
+}
+
+function ResourceRow({ result, query }: { result: ResourceResult; query: string }) {
+  const { item } = result
+  const ref = pathToEntryRef(item.path) ?? { kind: 'resource' as const, name: item.name }
+  const meta = resourceMetaLine(result)
+  return (
+    <li className={ROW_RULE}>
+      <Link to={wikiRoute(ref)} className={cn('flex min-h-16 items-center gap-3 rounded-lg py-2', ROW_FOCUS)}>
+        {item.coverImage ? (
+          <img
+            src={item.coverImage}
+            alt=""
+            loading="lazy"
+            className="h-11 w-8 shrink-0 rounded-[4px] border border-border object-cover"
+          />
+        ) : (
+          <span aria-hidden="true" className="h-11 w-8 shrink-0 rounded-[4px] border-[1.5px] border-foreground" />
+        )}
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="text-[16px] font-semibold leading-snug">
+            {highlightMatch(item.title ?? item.name, query, INK_MARK)}
+          </span>
+          {meta && <span className="truncate text-[14px] leading-snug">{highlightMatch(meta, query, INK_MARK)}</span>}
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+      </Link>
+    </li>
+  )
+}
+
+/** Two lines of the question, with the match marked (lib/questionPreview.ts). */
+function Preview({ result, query }: { result: QuestionResult; query: string }) {
+  const text = questionPreview(result.question, query, PREVIEW_CHARS) || result.question.id
+  const q = query.trim()
+  const idx = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1
+  if (idx < 0) return <MarkdownText inline>{text}</MarkdownText>
+  const before = text.slice(0, idx)
+  const after = text.slice(idx + q.length)
+  // The renderer drops a piece's outer spaces, so the ones beside the mark are written here.
+  return (
+    <>
+      {before.trim() && <MarkdownText inline>{before}</MarkdownText>}
+      {/\s$/.test(before) && ' '}
+      <mark className={INK_MARK}>{text.slice(idx, idx + q.length)}</mark>
+      {/^\s/.test(after) && ' '}
+      {after.trim() && <MarkdownText inline>{after}</MarkdownText>}
+    </>
+  )
+}
+
+function QuestionRow({
+  result,
+  query,
+  dot,
+}: {
+  result: QuestionResult
+  query: string
+  /** The reader's record on it; null when there is no record to read (signed out). */
+  dot: ReturnType<typeof attemptDot> | null
+}) {
+  const [infoOpen, setInfoOpen] = useState(false)
+  const { question } = result
+  return (
+    <li className={cn(ROW_RULE, 'flex items-start gap-1')} data-testid="search-question">
+      <Link
+        to={`/wiki/question/${encodeURIComponent(question.id)}`}
+        className={cn('flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3', ROW_FOCUS)}
+      >
+        {dot === 'untried' ? (
+          <span
+            role="img"
+            aria-label={ATTEMPT_DOT_LABEL.untried}
+            className="mt-[7px] box-border h-2.5 w-2.5 shrink-0 rounded-full border-[1.5px] border-foreground"
+          />
+        ) : dot ? (
+          <span role="img" aria-label={ATTEMPT_DOT_LABEL[dot]} className="mt-[7px] flex shrink-0">
+            <AnswerDot state={dot} decorative />
+          </span>
+        ) : null}
+        <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
+          <span className="line-clamp-2 text-[16px] leading-[1.45]"><Preview result={result} query={query} /></span>
+          <span className="truncate text-[14px]">{questionMetaLine(result)}</span>
+        </span>
+      </Link>
+      <QuestionInfoButton
+        question={question}
+        open={infoOpen}
+        onOpenChange={setInfoOpen}
+        className="mt-1 shrink-0 text-foreground"
+      />
+    </li>
   )
 }

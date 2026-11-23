@@ -19,6 +19,7 @@ export function Popup({
   labelledBy,
   children,
   layer = 'z-[80]',
+  suspended = false,
   className,
 }: {
   onClose: () => void
@@ -27,11 +28,18 @@ export function Popup({
   children: ReactNode
   /** The overlay's stacking layer (style guide §8.2). */
   layer?: string
+  /**
+   * Something opened from the popup has the keyboard (the PDF reader over a
+   * past paper): Escape and Tab are left to it until it closes.
+   */
+  suspended?: boolean
   className?: string
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
   onCloseRef.current = onClose
+  const suspendedRef = useRef(suspended)
+  suspendedRef.current = suspended
 
   // Focus moves into the popup, stays there, and goes back where it was.
   useEffect(() => {
@@ -40,6 +48,7 @@ export function Popup({
     panel?.focus()
 
     function onKeyDown(e: KeyboardEvent) {
+      if (suspendedRef.current) return
       if (e.key === 'Escape') {
         e.stopPropagation()
         onCloseRef.current()

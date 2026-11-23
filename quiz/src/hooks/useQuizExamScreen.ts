@@ -1,69 +1,66 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useNavTrail } from '@/hooks/useBack'
-import { isExamList } from '@/lib/quizBuilder'
-import { moveScreen } from '@/lib/viewTransition'
+import { useTodayExam } from '@/hooks/useTodayExam'
+import { bankLabelFor } from '@/lib/examIds'
+import { PRACTICE_EXAM_KEY, practiceTopic } from '@/lib/practiceHome'
+import { quizExamFor } from '@/lib/quizBuilder'
+
+function remembered(): string {
+  try { return localStorage.getItem(PRACTICE_EXAM_KEY) ?? '' } catch { return '' }
+}
 
 /**
- * Which screen the Quiz tab is on: the exam list, or one exam's builder
- * (`topic`, a bank label; '' for the list).
+ * Which exam Practice is showing (`topic`, a bank label; '' for the exam
+ * list), and the moves between them (docs/redesign-spec.md §7a.1).
  *
- * Picking an exam lays its builder over the exam list, and the back arrow
- * swipes it off again. Both are this one address, so the router never sees
- * the move; the page names it (`moveScreen`, lib/viewTransition.ts). The
- * builder opens at its top, the way a new page does, and the list comes back
- * scrolled to where it was left — set in a layout effect, so the new screen
- * is in place before the transition takes its picture.
+ * The page opens on the exam in focus: the one Today shows when the reader is
+ * studying an exam with a question bank, else the exam last practised in this
+ * browser (`practiceTopic`, lib/practiceHome.ts). `?topic=` names an exam
+ * outright, which is how a quiz quit or finished comes back to the exam it
+ * was started from, and `?exams=1` is the exam list, the way to another exam
+ * until the exam switcher (§6, Phase E) replaces it. Each is an entry of its
+ * own, so the browser's Back undoes the move.
  *
- * The exam is in the address all the same (`?topic=`), as an entry of its
- * own: the browser's Back closes the builder, a quiz quit or finished comes
- * back to *this exam's* builder rather than the list, and the builder is
- * named on the trail (`hooks/useBack.ts`) so the pages after it say so.
+ * Opening an exam makes it the exam in focus: remembered here, and shown on
+ * Today too when it is one the reader is studying.
  */
 export function useQuizExamScreen() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const [topic, setTopic] = useState(() => searchParams.get('topic') ?? '')
+  const { active, selectByKey, loading } = useTodayExam()
 
-  const listScrollRef = useRef(0)
-  const trail = useNavTrail()
-  function openExam(value: string) {
-    listScrollRef.current = window.scrollY
-    moveScreen('push', () => {
-      setTopic(value)
-      navigate(`/?topic=${encodeURIComponent(value)}`)
-    })
-  }
-  function closeExam() {
-    // Opened from the list just before: Back to it, the browser's own Back.
-    const previous = trail.entries[trail.index - 1]
-    if (previous && isExamList(previous.path)) {
-      navigate(-1)
-      return
-    }
-    moveScreen('pop', () => {
-      setTopic('')
-      navigate('/', { replace: true })
-    })
-  }
-  // Back and Forward move the address under the page: follow it, as the same
-  // move a click would have made.
   const urlTopic = searchParams.get('topic') ?? ''
-  const topicRef = useRef(topic)
-  topicRef.current = topic
+  const showList = searchParams.get('exams') === '1'
+  const focus = active ? bankLabelFor(active) ?? '' : ''
+  const topic = practiceTopic({
+    urlTopic,
+    showList,
+    focus,
+    remembered: remembered(),
+    offered: label => !!quizExamFor(label),
+  })
+
+  // The exam on screen is the one to open on next time.
   useEffect(() => {
-    if (urlTopic === topicRef.current) return
-    if (urlTopic) listScrollRef.current = window.scrollY
-    moveScreen(urlTopic ? 'push' : 'pop', () => setTopic(urlTopic))
-  }, [urlTopic])
+    if (!topic || !quizExamFor(topic)) return
+    try { localStorage.setItem(PRACTICE_EXAM_KEY, topic) } catch { /* private window */ }
+  }, [topic])
 
-  const hasTopic = topic !== ''
-  const shownHasTopic = useRef(hasTopic)
+  const openExam = useCallback((value: string) => {
+    const exam = quizExamFor(value)
+    if (exam) selectByKey(exam.progressKey)
+    navigate(`/?topic=${encodeURIComponent(value)}`)
+  }, [navigate, selectByKey])
+
+  const showExams = useCallback(() => navigate('/?exams=1'), [navigate])
+
+  // A change of exam, or to the list, opens at the top like a new page.
+  const shown = useRef(topic)
   useLayoutEffect(() => {
-    if (shownHasTopic.current === hasTopic) return
-    shownHasTopic.current = hasTopic
-    window.scrollTo(0, hasTopic ? 0 : listScrollRef.current)
-  }, [hasTopic])
+    if (shown.current === topic) return
+    shown.current = topic
+    window.scrollTo(0, 0)
+  }, [topic])
 
-  return { topic, openExam, closeExam }
+  return { topic, openExam, showExams, focusLoading: loading && !urlTopic && !showList }
 }

@@ -19,7 +19,10 @@ export function pageHostsNavButton(pathname: string): boolean {
   if (pathname === '/') return true
   // Today (its own top row, beside the exam) and Flashcards (FlashcardsSearchBar) —
   // both exactly, nothing below them.
-  if (pathname === '/dashboard' || pathname === '/flashcards') return true
+  if (pathname === '/dashboard') return true
+  // Practice's own screens draw their top row themselves: the way back to
+  // Practice, which is where the navigation button is.
+  if (pathname === '/flashcards' || pathname === '/papers' || pathname === '/search') return true
   // A project attempt (ProjectTopBar) — every page *under* the Projects tab.
   // The tab's own list of briefs is a plain page under the app header.
   if (pathname.startsWith('/project/')) return true

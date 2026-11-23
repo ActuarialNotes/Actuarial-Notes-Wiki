@@ -1,56 +1,48 @@
 import { test, expect } from './test'
 
-// The quiz setup screen (pages/Landing.tsx): a card for the reader's own quiz,
-// whose pills open the setup sheet, and tiles for the whole papers — a
-// practice exam drawn to the paper's shape, and the past papers. And, in the
-// quiz, a concept the question names opens in the concept popup —
-// highlighted on the card, the way a study guide's link is.
+// Practice's home (pages/Landing.tsx, docs/redesign-spec.md §7a): the quiz
+// card, whose pills open the setup popup, and rows for a Practice Exam, the
+// past papers and the flashcards. And, in the quiz, a concept the question
+// names opens in the concept popup, highlighted on the card, the way a study
+// guide's link is.
 
-test.describe('quiz setup', () => {
-  test('the topic pill opens a sheet of topics alone', async ({ page }) => {
+test.describe('practice home', () => {
+  test('a pill opens the setup popup, with topics, difficulty and the switches', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    await page.getByTestId('quiz-pill').first().click()
+    const card = page.getByRole('region', { name: 'Your quiz' })
+    await expect(card.getByRole('group', { name: 'Settings' }).getByRole('button')).toHaveCount(4)
+    await expect(card).toContainText('All topics')
+    await expect(card).toContainText('All levels')
+
+    await page.getByTestId('quiz-pill').click()
     const sheet = page.getByRole('dialog', { name: 'Your quiz' })
     await expect(sheet).toBeVisible()
-    await expect(sheet.getByText('Topics', { exact: true })).toBeVisible()
-    // The count and the settings are the card's, not the sheet's.
-    await expect(sheet.getByRole('radio', { name: '5 questions' })).toHaveCount(0)
-    await expect(sheet.getByRole('switch')).toHaveCount(0)
+    await expect(sheet.getByRole('heading', { name: 'Topics' })).toBeVisible()
+    await expect(sheet.getByRole('switch')).toHaveCount(3)
+
+    // Unticking one topic leaves the others, and the card says how many.
+    const topics = sheet.locator('[data-sheet-section="topics"]').getByRole('checkbox')
+    await expect(topics.first()).toHaveAttribute('aria-checked', 'true')
+    await topics.first().click()
+    await expect(topics.first()).toHaveAttribute('aria-checked', 'false')
+
+    // Difficulty is a filter: Hard out changes the pill.
+    const hard = sheet.getByRole('group', { name: 'Difficulty' }).getByRole('checkbox', { name: /Hard/ })
+    await hard.click()
+    await expect(hard).toHaveAttribute('aria-checked', 'false')
+
+    const timed = sheet.getByRole('switch', { name: 'Timed' })
+    await timed.click()
+    await expect(timed).toHaveAttribute('aria-checked', 'true')
 
     await sheet.getByRole('button', { name: 'Close' }).click()
     await expect(sheet).toBeHidden()
+    await expect(card).toContainText('Easy + Medium')
+    await expect(card).toContainText('Timed')
+    await expect(card).not.toContainText('All topics')
   })
 
-  test('the count opens its choices on the card, which take any number', async ({ page }) => {
-    await page.goto('/?topic=Exam%205')
-    const card = page.getByRole('region', { name: 'Your quiz' })
-    await page.getByTestId('quiz-count').click()
-    await expect(page.getByRole('dialog', { name: 'Your quiz' })).toHaveCount(0)
-    await card.getByRole('radio', { name: '5 questions' }).click()
-    await expect(card).toContainText('5questions')
-    await card.getByRole('textbox', { name: /Other number of questions/ }).fill('12')
-    await expect(card).toContainText('12questions')
-  })
-
-  test("the card's settings unfold from their icons and switch in place", async ({ page }) => {
-    await page.goto('/?topic=Exam%205')
-    const card = page.getByRole('region', { name: 'Your quiz' })
-    const toggle = page.getByTestId('quiz-settings-toggle')
-    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    await expect(card.getByRole('switch', { name: 'Timed' })).toHaveCount(0)
-    await toggle.click()
-    const timed = card.getByRole('switch', { name: 'Timed' })
-    const was = await timed.getAttribute('aria-checked')
-    await timed.click()
-    await expect(timed).toHaveAttribute('aria-checked', was === 'true' ? 'false' : 'true')
-    await expect(page.getByRole('dialog', { name: 'Your quiz' })).toHaveCount(0)
-
-    const hard = card.getByRole('checkbox', { name: /Hard/ })
-    await hard.click()
-    await expect(hard).toHaveAttribute('aria-checked', 'false')
-  })
-
-  test('the − and + either side of the count step it by one', async ({ page }) => {
+  test('the minus and plus step the count, and the count takes any number', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     const card = page.getByRole('region', { name: 'Your quiz' })
     await card.getByRole('button', { name: 'One question more' }).click()
@@ -58,32 +50,89 @@ test.describe('quiz setup', () => {
     await card.getByRole('button', { name: 'One question fewer' }).click()
     await card.getByRole('button', { name: 'One question fewer' }).click()
     await expect(card).toContainText('2questions')
+
+    await page.getByTestId('quiz-count').click()
+    await card.getByRole('textbox', { name: /Number of questions/ }).fill('12')
+    await page.keyboard.press('Enter')
+    await expect(card).toContainText('12questions')
   })
 
-  test('a past paper is sat whole, as a practice exam', async ({ page }) => {
+  test('Start launches the quiz the card describes', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    await page.getByRole('button', { name: /Past Papers/ }).click()
-    const sheet = page.getByRole('dialog', { name: 'Past Papers' })
-    await sheet.getByRole('radio', { name: /Spring 2019/ }).click()
-    await sheet.getByRole('button', { name: 'Start Spring 2019' }).click()
+    await page.getByRole('region', { name: 'Your quiz' }).getByRole('button', { name: 'Start' }).click()
+    await expect(page).toHaveURL(/\/quiz\?exam=Exam\+5&mode=quiz/)
+    await expect(page).toHaveURL(/count=3/)
+  })
+
+  test('a past paper opens its popup and is sat whole, as a Practice Exam', async ({ page }) => {
+    await page.goto('/?topic=Exam%205')
+    await page.getByRole('link', { name: /Past papers/ }).click()
+    await expect(page).toHaveURL(/\/papers\?topic=Exam/)
+    await expect(page.getByRole('heading', { name: 'Past papers' })).toBeVisible()
+
+    // The older sittings are folded under one row.
+    const older = page.getByRole('button', { name: /\d{4} to \d{4}/ })
+    await expect(older).toHaveAttribute('aria-expanded', 'false')
+
+    await page.getByRole('button', { name: /Spring 2019/ }).click()
+    const paper = page.getByRole('dialog', { name: 'Spring 2019' })
+    await expect(paper).toContainText('questions')
+    await expect(paper.getByRole('link', { name: /Examiner/ })).toBeVisible()
+    await paper.getByRole('button', { name: 'Start Practice Exam' }).click()
     await expect(page).toHaveURL(/mode=mock-exam/)
     await expect(page).toHaveURL(/year=2019/)
   })
 
-  test('a practice exam is drawn from the whole bank', async ({ page }) => {
+  test('a paper already sat shows its last result as a bar', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('actuarial_paper_results_v1', JSON.stringify({
+        'Exam 5|2019|Spring': { correct: 14, incorrect: 7, partial: 0, unanswered: 3, at: '2026-11-20T00:00:00Z' },
+      }))
+    })
+    await page.goto('/papers?topic=Exam%205')
+    await expect(page.getByRole('img', { name: 'Last sat: 14 correct, 7 incorrect, 3 unanswered' })).toBeVisible()
+  })
+
+  test('an exam with no released sittings offers its sample questions', async ({ page }) => {
+    await page.goto('/?topic=Probability')
+    await expect(page.getByRole('link', { name: /Past papers/ })).toHaveCount(0)
+    await page.getByRole('button', { name: /Sample questions/ }).click()
+    const popup = page.getByRole('dialog', { name: 'Sample questions' })
+    await expect(popup.getByRole('button', { name: 'Start Practice Exam' })).toBeVisible()
+  })
+
+  test('a Practice Exam is drawn from the whole bank', async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    await page.getByRole('button', { name: /Practice exam/i }).click()
+    await page.getByRole('button', { name: /Practice Exam/ }).click()
     await page.getByRole('dialog', { name: 'Practice Exam' })
       .getByRole('button', { name: 'Start Practice Exam' }).click()
     await expect(page).toHaveURL(/mode=mock-exam/)
     await expect(page.getByRole('button', { name: 'Leave the exam' })).toBeVisible()
   })
 
-  test("today's plan is shown locked to a reader without Pro", async ({ page }) => {
+  test("today's plan is not on the page, and the rows lead to Flashcards and Search", async ({ page }) => {
     await page.goto('/?topic=Exam%205')
-    const plan = page.getByTestId('todays-plan-tile')
-    await expect(plan).toHaveAttribute('aria-disabled', 'true')
-    await expect(plan).toContainText('Pro')
+    await expect(page.getByTestId('practice')).toBeVisible()
+    await expect(page.getByTestId('todays-plan-tile')).toHaveCount(0)
+    await expect(page.getByText("Today's Study Plan")).toHaveCount(0)
+    await expect(page.getByTestId('practice').getByRole('link', { name: /Flashcards/ })).toHaveAttribute('href', '/flashcards')
+    await page.getByTestId('practice-search').click()
+    await expect(page).toHaveURL(/\/search/)
+    await expect(page.getByRole('textbox', { name: 'Search' })).toBeVisible()
+  })
+
+  test('the page opens on the exam last practised, and the exam at the top leads to the others', async ({ page }) => {
+    // A first visit has no exam in focus: the exam list.
+    await page.goto('/')
+    await expect(page.getByRole('heading', { name: 'Quiz' })).toBeVisible()
+    await page.goto('/?topic=Exam%205')
+    await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
+    // Now it is the exam in focus.
+    await page.goto('/')
+    await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
+    await page.getByTestId('practice-exam').click()
+    await expect(page).toHaveURL(/exams=1/)
+    await expect(page.getByRole('heading', { name: 'Quiz' })).toBeVisible()
   })
 })
 

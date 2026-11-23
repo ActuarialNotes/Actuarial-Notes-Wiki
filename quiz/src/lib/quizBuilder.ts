@@ -134,16 +134,7 @@ export function formatTargetDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
 }
 
-/** The Quiz tab's exam list — `/` with no exam open. */
-export function isExamList(path: string): boolean {
-  const [pathname, search = ''] = path.split('?')
-  return pathname === '/' && !new URLSearchParams(search.split('#')[0]).get('topic')
-}
-
 // ─── The builder's choices ────────────────────────────────────────────────────
-
-/** The question counts a quiz offers, beside today's plan's "Full plan". */
-export const QUICK_COUNTS = [1, 3, 5, 10]
 
 /**
  * Where the builder's questions come from: today's plan, a hand-picked set of
@@ -290,29 +281,6 @@ export function drawSignature(input: {
     [...input.concepts].sort().join(','),
     input.levelsParam ?? '',
   ].join('§')
-}
-
-/**
- * The filter the search bar opens on: the exam (and paper) as its Exam /
- * Sitting choices, ticked, and the concepts as the pool.
- */
-export function quizSearchFilter(input: {
-  topic: string
-  source: QuizSource
-  sitting: QuizSitting
-  concept: string
-  concepts: readonly string[]
-  /** Today's plan, when it is the source in use. */
-  todaysPlan: StudyPlan | null
-}): QuestionFilter {
-  const { topic, source, sitting, concept, concepts, todaysPlan } = input
-  if (concept) return { concept }
-  if (!topic) return {}
-  // Past papers: the shelf's selection is the pool. Opening the search while
-  // Spring 2019 is picked should show that paper, not the whole exam.
-  if (source === 'papers') return papersFilter(topic, sitting)
-  if (todaysPlan) return conceptsFilter(topic, planConceptsToday(todaysPlan))
-  return conceptsFilter(topic, concepts)
 }
 
 // ─── The syllabus ─────────────────────────────────────────────────────────────

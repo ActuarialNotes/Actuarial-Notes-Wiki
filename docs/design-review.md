@@ -5,6 +5,10 @@ proposed from it. Its items are on the roadmap as **X11** (§3.4 *Proposed*), wi
 decisions, D-DR1 to D-DR5 (§7 below). Mock-ups of the proposed screens:
 `docs/design-review-mockups.html`._
 
+_**2026-11-23:** the screens were redesigned with the maintainer and the build spec is
+`docs/redesign-spec.md`. Build from that document. Where it differs from §5 here, it wins; its
+§9 lists the differences._
+
 The goal the review holds the app to: **a person learns actuarial science and can apply it.**
 A screen is judged by whether it moves a reader along that path, and a feature by whether a
 reader on the path meets it at the moment it helps.

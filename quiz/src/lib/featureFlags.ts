@@ -235,6 +235,16 @@ export const COWORK_OPEN_TO_ALL: boolean = import.meta.env.VITE_COWORK_PREVIEW =
 export const TOOLS_ENABLED: boolean = true
 
 /**
+ * The Tools card on Apply's home (`pages/Apply.tsx`) is hidden for now. The
+ * pages themselves (`/tools`, a tool's page, `/data-sources`) still open by
+ * address, so the connector's `app_url` links keep working. Only the e2e
+ * suite's build sets `VITE_TOOLS_PREVIEW=on` (playwright.config.ts), so its
+ * flows through the card keep running. Re-enabling is a one-line change: set
+ * this to `true`.
+ */
+export const TOOLS_LISTED: boolean = import.meta.env.VITE_TOOLS_PREVIEW === 'on'
+
+/**
  * **The Tutor** (docs/tutor.md) — the reader's own Gem Shop character as a
  * quiet companion that walks a candidate
  * through their exam: it serves a past-paper part at the moment it is worth

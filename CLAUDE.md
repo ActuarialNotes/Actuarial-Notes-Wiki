@@ -1649,7 +1649,11 @@ Other important `lib/` modules:
   **Practice's own search row no longer opens it**: `components/practice/PracticeSearch.tsx` is a
   field under the top row that searches questions only, its Exam filter starting on the exam
   the page shows, with the results laid over the page (`PracticeSearchPanel`, lazy; the rows are
-  `components/search/QuestionRow.tsx`, shared with the page). Learn's search is laid out the same
+  `components/search/QuestionRow.tsx`, shared with the page). **Its panel opens when the field is
+  entered**, on the exam's questions and their filters, before a word is typed; the page under it
+  is held still (`hooks/useBodyScrollLock.ts`) and the panel is as tall as the room under the
+  field, so one thing scrolls; and what was typed and filtered is kept for the history entry
+  (sessionStorage), so Back from a question finds the panel as it was left. Learn's search is laid out the same
   way on a phone: the app's top row, then the field as a pill under it (`WikiFloatingSearch`). It
   replaced the old Search page, the Quiz tab's floating search and the Flashcards bar. The field,
   then four tabs with counts — All, Concepts, Resources, Questions — over every exam, the exam in
@@ -1660,8 +1664,25 @@ Other important `lib/` modules:
   **Practice these N**, which starts a quiz on the results (the first 100). Query, tab and filters
   ride the URL (`?q=&tab=&difficulty=…`; the old `?type=` and `?concept=` links still land).
   `appSearch.ts` is the ranking (`rankMatch` / `searchBy`: a name that *starts* with the query,
-  then one that contains it, then one every query word appears in). Pure and tested; the flows
-  are `e2e/question-search.spec.ts`.
+  then one that contains it, then its initials — "bf", "glm" — then one every query word appears
+  in; both sides folded by `foldText`, so accents, apostrophes and hyphens never decide a match;
+  `near: true` offers the names a typing slip away when nothing matches). **Learn's bar uses the
+  same ranking.** Questions are ranked by `matchQuestions` (the id itself, then tagged with a
+  concept the query names, then holding the query as written, then every word of it; a question's
+  parts are read as well as its stem). **Typing must stay instant**, and four things keep it so:
+  the field is the page's own state, the results follow through `useDeferredValue` and the
+  address is written after a pause (never per keystroke); a concept's place on a syllabus is
+  looked up in a map built once (`placements`), never by scanning the syllabi per concept; the
+  questions are matched once per query and passed to `runSearch` as `matched`; and the parsed
+  bank is shared (`lib/parsedQuestions.ts`, `loadParsedQuestions`) — don't `parseAllQuestions`
+  again in a new search surface. Every long list is paged. A snippet always holds its match and
+  is never cut inside `$…$` (`stemSnippet`, `matchedRun` in `questionPreview.ts`). The field and
+  tabs are sticky and new results start at the top; before anything is typed the page offers the
+  reader's recent searches (`lib/recentSearches.ts`, remembered when a search led somewhere) and
+  a row to all the questions. Every search answers the same keys
+  (`components/search/resultKeys.ts`: Down and Up walk the rows marked `data-result`, Enter opens
+  the first, Escape closes an overlay). Pure and tested; the flows are
+  `e2e/question-search.spec.ts`.
 - `conceptGraph.ts` / `conceptRecipes.ts` / `conceptCraft.ts` / `craftMedals.ts` / `craftLayout.ts` — **Concept Craft**
   (`docs/concept-craft.md`). `conceptGraph.ts` is the derived graph: `pageMentions` (what a page
   says about other concepts — every link, and every topic concept named in its text, longest

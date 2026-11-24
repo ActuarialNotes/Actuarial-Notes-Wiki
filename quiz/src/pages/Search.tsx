@@ -10,13 +10,14 @@
 // Practice button opens this tab on the concept's questions.
 
 import { PRACTICE_EXAM_KEY } from '@/lib/practiceHome'
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronRight, Play, Search as SearchIcon, X } from 'lucide-react'
+import { ChevronRight, GraduationCap, History, Play, Search as SearchIcon, X } from 'lucide-react'
 import { LevelSquare } from '@/components/LevelSquare'
 import { PracticeBack } from '@/components/practice/PracticeHeader'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
-import { PracticeCount, QuestionRow, ROW_FOCUS, ROW_RULE } from '@/components/search/QuestionRow'
+import { PracticeCount, QuestionRow, ROW_FOCUS, ROW_RULE, ROW_SCROLL } from '@/components/search/QuestionRow'
+import { handleResultKeys } from '@/components/search/resultKeys'
 import { INK_MARK, highlightMatch } from '@/components/SearchHighlight'
 import { ShowMore } from '@/components/ShowMore'
 import { Button } from '@/components/ui/button'
@@ -40,6 +41,7 @@ import {
   attemptDot,
   conceptPlaceLine,
   drawIds,
+  matchQuestions,
   pickedIds,
   practiceCount,
   previewOf,
@@ -49,12 +51,14 @@ import {
   searchStateFromParams,
   tabCounts,
   type ConceptResult,
+  type ExamResult,
   type QuestionResult,
   type ResourceResult,
   type SearchFocus,
   type SearchState,
 } from '@/lib/oneSearch'
 import type { MasteryState } from '@/lib/mastery'
+import { loadRecentSearches, saveRecentSearches, withRecentSearch } from '@/lib/recentSearches'
 import { toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
 import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
 import { cn } from '@/lib/utils'
@@ -88,17 +92,45 @@ function useSearchFocus(): SearchFocus | null {
   }, [active, syllabi])
 }
 
+/** How long the field is left alone before what it holds is written to the address. */
+const ADDRESS_SETTLE_MS = 200
+
 export default function Search() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const state = useMemo(() => searchStateFromParams(searchParams), [searchParams])
-  const { query, tab, facets } = state
+  const { tab, facets } = state
+
+  // The field is the page's own state, so a keystroke is drawn at once: the
+  // results follow it when the browser has a moment (a deferred value), and
+  // the address follows a pause in the typing. Writing the address on every
+  // key made each one a navigation, and searching inside it held the key up.
+  const [text, setText] = useState(state.query)
+  const written = useRef(state.query)
+  useEffect(() => {
+    // The address changed under the page (Back, Forward, a link): take its query.
+    if (state.query !== written.current) {
+      written.current = state.query
+      setText(state.query)
+    }
+  }, [state.query])
+  const query = useDeferredValue(text)
   useSearchTracking(query)
 
-  // A change of query, tab or filter rewrites this entry: Back leaves the search.
+  const write = useCallback((next: SearchState) => {
+    written.current = next.query
+    setSearchParams(searchParamsFromState(next), { replace: true })
+  }, [setSearchParams])
+  useEffect(() => {
+    if (text === written.current) return
+    const timer = setTimeout(() => write({ query: text, tab, facets }), ADDRESS_SETTLE_MS)
+    return () => clearTimeout(timer)
+  }, [text, tab, facets, write])
+  // A change of tab or filter rewrites this entry at once: Back leaves the search.
   const update = useCallback((next: Partial<SearchState>) => {
-    setSearchParams(searchParamsFromState({ ...state, ...next }), { replace: true })
-  }, [state, setSearchParams])
+    if (next.query !== undefined) setText(next.query)
+    write({ query: text, tab, facets, ...next })
+  }, [write, text, tab, facets])
 
   const { questions, loading: questionsLoading, error: questionsError } = useAllQuestions()
   const { syllabi } = useWikiSyllabus()
@@ -124,15 +156,26 @@ export default function Search() {
     return () => { cancelled = true }
   }, [])
 
+  // The query's questions, unfiltered: what the filters count their options
+  // over, and what the results are narrowed from. Found once per query.
+  const questionPool = useMemo(() => matchQuestions(questions, query), [questions, query])
   const results = useMemo(
-    () => runSearch({ query, index, questions, syllabi, focus, facets }),
-    [query, index, questions, syllabi, focus, facets],
+    () => runSearch({ query, index, questions, syllabi, focus, facets, matched: questionPool }),
+    [query, index, questions, syllabi, focus, facets, questionPool],
   )
-  // The pool the filters count their options over: the query's questions, unfiltered.
-  const questionPool = useMemo(
-    () => runSearch({ query, index: [], questions, syllabi: [], focus: null }).questions.map(r => r.question),
-    [query, questions],
-  )
+  // What a question is matched on is read the first time it is searched
+  // (lib/oneSearch.ts). Done while the reader is still reaching for the
+  // keyboard, the first letter typed doesn't wait for four thousand of them.
+  useEffect(() => {
+    if (questions.length === 0) return
+    const warm = () => { matchQuestions(questions, 'warm') }
+    if (typeof requestIdleCallback === 'function') {
+      const id = requestIdleCallback(warm)
+      return () => cancelIdleCallback(id)
+    }
+    const timer = setTimeout(warm, 200)
+    return () => clearTimeout(timer)
+  }, [questions])
   const counts = tabCounts(results)
   const hasQuery = query.trim() !== ''
   const loading = questionsLoading || indexLoading
@@ -143,6 +186,37 @@ export default function Search() {
     // Only on arrival: the field is not taken back while the reader works the tabs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  // Ctrl/⌘ K on the search itself goes to the field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'k') return
+      e.preventDefault()
+      inputRef.current?.focus()
+      inputRef.current?.select()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  // New results start at their top. Not on arrival: coming Back to the search
+  // returns to where it was left (lib/routeScrollMemory.ts).
+  const facetKey = searchParamsFromState({ query: '', tab: 'all', facets }).toString()
+  const arrived = useRef(false)
+  useEffect(() => {
+    if (!arrived.current) { arrived.current = true; return }
+    window.scrollTo(0, 0)
+  }, [query, tab, facetKey])
+
+  // What the reader searched for lately, offered before anything is typed.
+  const [recent, setRecent] = useState<string[]>(loadRecentSearches)
+  const remember = useCallback(() => {
+    setRecent(prev => {
+      const next = withRecentSearch(prev, text)
+      if (next.join('\n') !== prev.join('\n')) saveRecentSearches(next)
+      return next
+    })
+  }, [text])
+  const forget = useCallback(() => { setRecent([]); saveRecentSearches([]) }, [])
 
   // A concept opens in the reader, which walks the concepts found.
   const openAt = useConceptPopup(s => s.openAt)
@@ -152,10 +226,9 @@ export default function Search() {
   )
   const openConcept = useCallback((i: number) => openAt(conceptRefs, i), [openAt, conceptRefs])
 
-  const paged = usePagedList(
-    results.questions,
-    `one-search:${query}:${searchParamsFromState({ ...state, query: '', tab: 'all' }).toString()}`,
-  )
+  const paged = usePagedList(results.questions, `one-search:${query}:${facetKey}`)
+  const pagedConcepts = usePagedList(results.concepts, `one-search-concepts:${query}`)
+  const pagedResources = usePagedList(results.resources, `one-search-resources:${query}`)
 
   // The questions ticked, and the count drawn when none are. Both are this
   // visit's: a tick on a question the filters hide waits for it to come back.
@@ -178,6 +251,7 @@ export default function Search() {
 
   function startPractice(ids: readonly string[]) {
     if (ids.length === 0) return
+    remember()
     storeSelectedIds(ids)
     const url = new URL(
       quizLaunchUrl(
@@ -218,6 +292,7 @@ export default function Search() {
     />
   )
 
+  const exams = previewOf(results.exams, ALL_TAB_PREVIEW.exams)
   const concepts = previewOf(results.concepts, ALL_TAB_PREVIEW.concepts)
   const resources = previewOf(results.resources, ALL_TAB_PREVIEW.resources)
   const questionsPreview = previewOf(results.questions, ALL_TAB_PREVIEW.questions)
@@ -229,69 +304,130 @@ export default function Search() {
   )
 
   return (
-    <div className={cn(GROUND, 'min-h-screen')}>
-      <div className={cn('mx-auto w-full max-w-xl px-5 pt-3', showPractice ? 'pb-36' : 'pb-16')}>
-        <div className="flex items-center gap-2">
-          <PracticeBack />
-          <label className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full border-[1.5px] border-foreground pl-4 pr-1.5 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-ground">
-            <SearchIcon className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
-            <input
-              ref={inputRef}
-              type="search"
-              aria-label="Search"
-              placeholder="Search"
-              value={query}
-              onChange={e => update({ query: e.target.value })}
-              enterKeyHint="search"
-              autoComplete="off"
-              spellCheck={false}
-              className="h-full w-0 min-w-0 flex-1 bg-transparent text-[17px] text-foreground outline-none placeholder:text-foreground/60 [&::-webkit-search-cancel-button]:hidden"
-            />
-            {query && (
-              <button
-                type="button"
-                aria-label="Clear"
-                onClick={() => { update({ query: '' }); inputRef.current?.focus() }}
-                className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full', ROW_FOCUS)}
-              >
-                <X className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-              </button>
-            )}
-          </label>
+    <div
+      className={cn(GROUND, 'min-h-screen')}
+      onKeyDown={e => handleResultKeys(e, inputRef.current, { enterOpens: tab !== 'questions', onEnter: remember })}
+    >
+      <div className={cn('mx-auto w-full max-w-xl px-5', showPractice ? 'pb-36' : 'pb-16')}>
+        {/* The field and the tabs stay in reach however far the results run. */}
+        <div className="sticky top-0 z-30 -mx-5 bg-ground px-5 pb-2 pt-3">
+          <div className="flex items-center gap-2">
+            <PracticeBack />
+            <label className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full border-[1.5px] border-foreground pl-4 pr-1.5 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-ground">
+              <SearchIcon className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
+              <input
+                ref={inputRef}
+                type="search"
+                aria-label="Search"
+                placeholder="Search"
+                value={text}
+                onChange={e => setText(e.target.value)}
+                enterKeyHint="search"
+                autoComplete="off"
+                spellCheck={false}
+                className="h-full w-0 min-w-0 flex-1 bg-transparent text-[17px] text-foreground outline-none placeholder:text-foreground/60 [&::-webkit-search-cancel-button]:hidden"
+              />
+              {text && (
+                <button
+                  type="button"
+                  aria-label="Clear"
+                  onClick={() => { update({ query: '' }); inputRef.current?.focus() }}
+                  className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full', ROW_FOCUS)}
+                >
+                  <X className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+                </button>
+              )}
+            </label>
+          </div>
+
+          <div role="tablist" aria-label="Show" className="-mx-5 mt-3.5 flex gap-1 overflow-x-auto px-5 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {SEARCH_TABS.map(t => {
+              const on = t.value === tab
+              // A count says what the query found; with no query only Questions has one.
+              const count = hasQuery || t.value === 'questions' ? counts[t.value] : null
+              return (
+                <button
+                  key={t.value}
+                  type="button"
+                  role="tab"
+                  id={`search-tab-${t.value}`}
+                  aria-selected={on}
+                  aria-label={count !== null && !loading ? `${t.label} ${count}` : t.label}
+                  aria-controls="search-results"
+                  data-sound="tick"
+                  onClick={() => update({ tab: t.value })}
+                  className={cn(
+                    'flex h-[38px] flex-auto items-center justify-center gap-1 whitespace-nowrap rounded-full border-[1.5px] border-foreground px-1.5 text-[13px] font-bold tracking-tight transition-colors',
+                    on ? 'bg-foreground text-ground' : 'text-foreground hover:bg-foreground/10',
+                    ROW_FOCUS,
+                  )}
+                >
+                  {t.label}
+                  {count !== null && !loading && <span className="font-medium tabular-nums">{count}</span>}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        <div role="tablist" aria-label="Show" className="-mx-5 mt-3.5 flex gap-1 overflow-x-auto px-5 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SEARCH_TABS.map(t => {
-            const on = t.value === tab
-            // A count says what the query found; with no query only Questions has one.
-            const count = hasQuery || t.value === 'questions' ? counts[t.value] : null
-            return (
-              <button
-                key={t.value}
-                type="button"
-                role="tab"
-                id={`search-tab-${t.value}`}
-                aria-selected={on}
-                aria-label={count !== null && !loading ? `${t.label} ${count}` : t.label}
-                aria-controls="search-results"
-                data-sound="tick"
-                onClick={() => update({ tab: t.value })}
-                className={cn(
-                  'flex h-[38px] flex-auto items-center justify-center gap-1 whitespace-nowrap rounded-full border-[1.5px] border-foreground px-1.5 text-[13px] font-bold tracking-tight transition-colors',
-                  on ? 'bg-foreground text-ground' : 'text-foreground hover:bg-foreground/10',
-                  ROW_FOCUS,
-                )}
-              >
-                {t.label}
-                {count !== null && !loading && <span className="font-medium tabular-nums">{count}</span>}
-              </button>
-            )
-          })}
-        </div>
-
-        <div id="search-results" role="tabpanel" aria-labelledby={`search-tab-${tab}`} className="pt-[18px]">
+        <div
+          id="search-results"
+          role="tabpanel"
+          aria-labelledby={`search-tab-${tab}`}
+          className="pt-2.5"
+          // A search that led somewhere is one to offer again.
+          onClickCapture={e => { if ((e.target as HTMLElement).closest?.('[data-result]')) remember() }}
+        >
           {questionsError && tab !== 'concepts' && tab !== 'resources' && (
             <p role="alert" className="pb-4 text-[16px]">{questionsError}</p>
+          )}
+
+          {tab === 'all' && !hasQuery && (
+            <div className="flex flex-col gap-4 [&>section+section]:border-t [&>section+section]:border-border [&>section+section]:pt-3.5">
+              {recent.length > 0 && (
+                <section aria-label="Recent searches" className="flex flex-col">
+                  <div className="mb-0.5 flex items-center">
+                    <h2 className="flex-1 text-[15px] font-bold">Recent searches</h2>
+                    <button type="button" onClick={forget} className={cn('h-9 rounded-lg px-1 text-[14px] font-semibold underline underline-offset-2', ROW_FOCUS)}>
+                      Clear
+                    </button>
+                  </div>
+                  <ul className="flex flex-col">
+                    {recent.map(term => (
+                      <li key={term} className={ROW_RULE}>
+                        <button
+                          type="button"
+                          data-result
+                          onClick={() => update({ query: term })}
+                          className={cn('flex min-h-12 w-full items-center gap-3 rounded-lg py-1.5 text-left', ROW_FOCUS, ROW_SCROLL)}
+                        >
+                          <History className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
+                          <span className="min-w-0 flex-1 truncate text-[16px]">{term}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              <section aria-label="Browse" className="flex flex-col">
+                <h2 className="mb-0.5 text-[15px] font-bold">Browse</h2>
+                <ul className="flex flex-col">
+                  <li className={ROW_RULE}>
+                    <button
+                      type="button"
+                      data-result
+                      onClick={() => update({ tab: 'questions' })}
+                      className={cn('flex min-h-12 w-full items-center gap-3 rounded-lg py-1.5 text-left', ROW_FOCUS, ROW_SCROLL)}
+                    >
+                      <span className="min-w-0 flex-1 text-[16px] font-semibold">
+                        {questionsLoading ? 'All questions' : `All ${counts.questions} questions`}
+                      </span>
+                      <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                    </button>
+                  </li>
+                </ul>
+              </section>
+            </div>
           )}
 
           {tab === 'all' && hasQuery && (
@@ -301,6 +437,11 @@ export default function Search() {
               <p className="py-6 text-[16px]">Nothing matches “{query.trim()}”.</p>
             ) : (
               <div className="flex flex-col gap-4 [&>section+section]:border-t [&>section+section]:border-border [&>section+section]:pt-3.5">
+                {results.exams.length > 0 && (
+                  <Section title="Study guides" more={0} onMore={() => {}}>
+                    {exams.shown.map(e => <ExamRow key={e.item.path} result={e} query={query} />)}
+                  </Section>
+                )}
                 {results.concepts.length > 0 && (
                   <Section title="Concepts" more={concepts.more} onMore={() => update({ tab: 'concepts' })}>
                     {concepts.shown.map(conceptRow)}
@@ -323,13 +464,23 @@ export default function Search() {
           {tab === 'concepts' && (
             results.concepts.length === 0
               ? (indexLoading ? <p className="py-6 text-[16px]" aria-live="polite">Searching…</p> : nothing('concepts'))
-              : <ul className="flex flex-col">{results.concepts.map(conceptRow)}</ul>
+              : (
+                <>
+                  <ul className="flex flex-col">{pagedConcepts.shown.map(conceptRow)}</ul>
+                  <ShowMore nextSize={pagedConcepts.nextSize} remaining={pagedConcepts.remaining} noun="concepts" onShowMore={pagedConcepts.showMore} />
+                </>
+              )
           )}
 
           {tab === 'resources' && (
             results.resources.length === 0
               ? (indexLoading ? <p className="py-6 text-[16px]" aria-live="polite">Searching…</p> : nothing('resources'))
-              : <ul className="flex flex-col">{results.resources.map(resourceRow)}</ul>
+              : (
+                <>
+                  <ul className="flex flex-col">{pagedResources.shown.map(resourceRow)}</ul>
+                  <ShowMore nextSize={pagedResources.nextSize} remaining={pagedResources.remaining} noun="resources" onShowMore={pagedResources.showMore} />
+                </>
+              )
           )}
 
           {tab === 'questions' && (
@@ -393,7 +544,7 @@ export default function Search() {
                   <span className="truncate">
                     {found === 1
                       ? 'Practice this question'
-                      : count === found ? `Practice all ${count}` : `Practice ${count} at random`}
+                      : count === found ? `Practice all ${count}` : `Practice ${count}`}
                   </span>
                 </Button>
               </>
@@ -461,7 +612,8 @@ function ConceptRow({
           e.preventDefault()
           onOpen()
         }}
-        className={cn('flex min-h-14 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS)}
+        data-result
+        className={cn('flex min-h-14 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS, ROW_SCROLL)}
       >
         <LevelSquare state={level} size="sm" />
         <span className="flex min-w-0 flex-1 flex-col">
@@ -476,13 +628,34 @@ function ConceptRow({
   )
 }
 
+/** An exam's study guide, found by the exam's name. */
+function ExamRow({ result, query }: { result: ExamResult; query: string }) {
+  const { item } = result
+  return (
+    <li className={ROW_RULE}>
+      <Link
+        to={wikiRoute({ kind: 'exam', name: item.name })}
+        state={FROM_SEARCH}
+        data-result
+        className={cn('flex min-h-14 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS, ROW_SCROLL)}
+      >
+        <GraduationCap className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
+        <span className="min-w-0 flex-1 text-[16px] font-semibold leading-snug">
+          {highlightMatch(item.title ?? item.name, query, INK_MARK)}
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+      </Link>
+    </li>
+  )
+}
+
 function ResourceRow({ result, query }: { result: ResourceResult; query: string }) {
   const { item } = result
   const ref = pathToEntryRef(item.path) ?? { kind: 'resource' as const, name: item.name }
   const meta = resourceMetaLine(result)
   return (
     <li className={ROW_RULE}>
-      <Link to={wikiRoute(ref)} state={FROM_SEARCH} className={cn('flex min-h-16 items-center gap-3 rounded-lg py-2', ROW_FOCUS)}>
+      <Link to={wikiRoute(ref)} state={FROM_SEARCH} data-result className={cn('flex min-h-16 items-center gap-3 rounded-lg py-2', ROW_FOCUS, ROW_SCROLL)}>
         {item.coverImage ? (
           <img
             src={item.coverImage}

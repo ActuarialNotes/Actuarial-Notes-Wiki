@@ -2,7 +2,7 @@
 // Practice button: drawn by the one search's page (pages/Search.tsx) and by
 // Practice's own search (components/practice/PracticeSearchPanel.tsx).
 
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Minus, Plus } from 'lucide-react'
 import { AnswerDot } from '@/components/AnswerDot'
@@ -11,7 +11,7 @@ import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { INK_MARK } from '@/components/SearchHighlight'
 import { TickBox } from '@/components/ui/TickBox'
 import { ATTEMPT_DOT_LABEL, attemptDot, questionMetaLine, type QuestionResult } from '@/lib/oneSearch'
-import { questionPreview } from '@/lib/questionPreview'
+import { matchedRun, questionPreview } from '@/lib/questionPreview'
 import { cn } from '@/lib/utils'
 
 export const ROW_FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
@@ -44,24 +44,29 @@ export function PracticeCount({ count, most, onChange }: { count: number; most: 
 /** Two lines of the question, with the match marked (lib/questionPreview.ts). */
 function Preview({ result, query }: { result: QuestionResult; query: string }) {
   const text = questionPreview(result.question, query, PREVIEW_CHARS) || result.question.id
-  const q = query.trim()
-  const idx = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1
-  if (idx < 0) return <MarkdownText inline>{text}</MarkdownText>
-  const before = text.slice(0, idx)
-  const after = text.slice(idx + q.length)
+  const run = matchedRun(text, query)
+  // A match inside a formula is left to the formula: cutting `$…$` in two to
+  // mark it would print both halves as raw LaTeX.
+  const inMath = run ? (text.slice(0, run.index).match(/(?<!\\)\$/g)?.length ?? 0) % 2 === 1 : false
+  if (!run || inMath) return <MarkdownText inline>{text}</MarkdownText>
+  const before = text.slice(0, run.index)
+  const after = text.slice(run.index + run.length)
   // The renderer drops a piece's outer spaces, so the ones beside the mark are written here.
   return (
     <>
       {before.trim() && <MarkdownText inline>{before}</MarkdownText>}
       {/\s$/.test(before) && ' '}
-      <mark className={INK_MARK}>{text.slice(idx, idx + q.length)}</mark>
+      <mark className={INK_MARK}>{text.slice(run.index, run.index + run.length)}</mark>
       {/^\s/.test(after) && ' '}
       {after.trim() && <MarkdownText inline>{after}</MarkdownText>}
     </>
   )
 }
 
-export function QuestionRow({
+/** The keyboard's and the sticky rows' margins: a row brought into view clears the field above and the button below. */
+export const ROW_SCROLL = 'scroll-mt-36 scroll-mb-28'
+
+export const QuestionRow = memo(function QuestionRow({
   result,
   query,
   dot,
@@ -95,7 +100,8 @@ export function QuestionRow({
       )}
       <Link
         to={`/wiki/question/${encodeURIComponent(question.id)}`}
-        className={cn('flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3', ROW_FOCUS)}
+        data-result
+        className={cn('flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3', ROW_FOCUS, ROW_SCROLL)}
       >
         {dot === 'untried' ? (
           <span
@@ -121,4 +127,4 @@ export function QuestionRow({
       />
     </li>
   )
-}
+})

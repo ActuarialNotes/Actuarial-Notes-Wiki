@@ -89,12 +89,38 @@ function withEllipsis(text: string): string {
   return /[.!?:;,]$/.test(text) ? `${text} …` : `${text}…`
 }
 
+/** Where the unescaped `$` signs sit: `\$480` is a price, not a math delimiter. */
+function mathMarks(text: string): number[] {
+  const marks: number[] = []
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '$' && text[i - 1] !== '\\') marks.push(i)
+  }
+  return marks
+}
+
+/**
+ * A cut that lands inside `$…$` leaves a formula with no end: the renderer
+ * then prints raw LaTeX, or typesets the prose after it as an equation. The
+ * unfinished formula is dropped instead.
+ */
+function closeMath(text: string): string {
+  const marks = mathMarks(text)
+  if (marks.length % 2 === 0) return text
+  return text.slice(0, marks[marks.length - 1]).replace(/[\s•]+$/, '')
+}
+
+/** `index`, moved back to the start of the formula it falls inside, if it does. */
+function outsideMath(text: string, index: number): number {
+  const before = mathMarks(text.slice(0, index))
+  return before.length % 2 === 0 ? index : before[before.length - 1]!
+}
+
 /** Cuts at the last word boundary inside `maxChars`, ellipsis appended. */
 function truncate(text: string, maxChars: number): string {
   if (text.length <= maxChars) return text
   const cut = text.slice(0, maxChars)
   const lastSpace = cut.lastIndexOf(' ')
-  const kept = lastSpace > 0 ? cut.slice(0, lastSpace) : cut
+  const kept = closeMath(lastSpace > 0 ? cut.slice(0, lastSpace) : cut)
   return withEllipsis(kept.replace(/[\s•]+$/, ''))
 }
 
@@ -114,28 +140,50 @@ export function stemPreview(stem: string, maxChars: number = STEM_PREVIEW_CHARS)
 }
 
 /**
+ * What of `query` a preview can show: the query as written, or, for a query
+ * whose words are apart in the text, the first of its words the text holds.
+ */
+export function matchedRun(text: string, query: string): { index: number; length: number } | null {
+  const hay = text.toLowerCase()
+  const whole = query.trim().toLowerCase()
+  if (!whole) return null
+  for (const needle of [whole, ...whole.split(/\s+/)]) {
+    const index = needle ? hay.indexOf(needle) : -1
+    if (index >= 0) return { index, length: needle.length }
+  }
+  return null
+}
+
+/**
  * The same preview, but windowed onto a search match that falls past it — so
  * searching for a term buried in the third sentence shows that sentence rather
- * than an opening the term isn't in.
+ * than an opening the term isn't in. The window always holds the match: a
+ * short preview keeps less of the run-up, never a run-up with no match after it.
  */
 export function stemSnippet(
   stem: string,
   query: string,
   maxChars: number = STEM_PREVIEW_CHARS,
 ): string {
-  const needle = query.trim()
-  if (!needle) return stemPreview(stem, maxChars)
-
+  const plain = stemPreview(stem, maxChars)
   const { text, omitted } = flattenStem(stem)
-  const idx = text.toLowerCase().indexOf(needle.toLowerCase())
+  const run = matchedRun(text, query)
   // No match in the prose (it may sit in a dropped table), or a match the
-  // ordinary preview already reaches: nothing to window.
-  if (idx < 0 || idx + needle.length <= maxChars) return stemPreview(stem, maxChars)
+  // ordinary preview already shows: nothing to window.
+  if (!run) return plain
+  const needle = text.slice(run.index, run.index + run.length).toLowerCase()
+  if (plain.toLowerCase().includes(needle)) return plain
 
-  const start = wordStart(text, Math.max(0, idx - SNIPPET_LEAD_CHARS))
-  const tail = text.slice(start)
-  const cut = truncate(tail, maxChars)
-  return `…${cut === tail && omitted ? withEllipsis(tail) : cut}`
+  const lead = Math.min(SNIPPET_LEAD_CHARS, Math.floor(Math.max(0, maxChars - run.length) * 0.4))
+  const window = (from: number) => {
+    const start = outsideMath(text, wordStart(text, Math.max(0, from)))
+    const tail = text.slice(start)
+    const cut = truncate(tail, maxChars)
+    return `${start > 0 ? '…' : ''}${cut === tail && omitted ? withEllipsis(tail) : cut}`
+  }
+  const led = window(run.index - lead)
+  // A long formula before the match can use the window up: start at the match.
+  return led.toLowerCase().includes(needle) ? led : window(run.index)
 }
 
 /**

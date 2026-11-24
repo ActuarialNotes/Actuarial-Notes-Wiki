@@ -8,8 +8,8 @@
  * that exam (decided with the maintainer, 2026-11-23).
  */
 
-import { rankMatch, searchBy } from './appSearch'
-import { filterQuestions, type Question } from './parser'
+import { foldText, nearMatch, rankMatch, searchBy } from './appSearch'
+import type { Question } from './parser'
 import {
   QUESTION_FACETS,
   conceptLabel,
@@ -21,7 +21,7 @@ import {
 import type { AttemptCounts } from './questionAttempts'
 import type { AnswerState } from './answerState'
 import type { WikiIndexItem } from './wikiIndex'
-import { findSyllabiForConcept, type WikiExamSyllabus } from './wikiParser'
+import type { WikiExamSyllabus } from './wikiParser'
 
 // ─── Tabs and the address ────────────────────────────────────────────────────
 
@@ -114,7 +114,13 @@ export interface QuestionResult {
   otherExam: string | null
 }
 
+/** An exam's study guide, found by the exam's name. */
+export interface ExamResult {
+  item: WikiIndexItem
+}
+
 export interface SearchResults {
+  exams: ExamResult[]
   concepts: ConceptResult[]
   resources: ResourceResult[]
   questions: QuestionResult[]
@@ -122,13 +128,18 @@ export interface SearchResults {
 
 export interface SearchInput {
   query: string
-  /** The wiki index: concepts and `document` items. Exam pages are not searched. */
+  /** The wiki index: exam pages, concepts and `document` items. */
   index: readonly WikiIndexItem[]
   questions: readonly Question[]
   syllabi: readonly WikiExamSyllabus[]
   focus: SearchFocus | null
   /** The question filters. They narrow the questions alone. */
   facets?: FacetSelection
+  /**
+   * `matchQuestions(questions, query)`, when the caller already has it (the
+   * filters count their options over the same list), so it is not found twice.
+   */
+  matched?: readonly Question[]
 }
 
 /** `items` with those `inFocus` first, each group in the order it came. */
@@ -138,43 +149,142 @@ export function focusFirst<T>(items: readonly T[], inFocus: (item: T) => boolean
 
 const NO_LIMIT = Number.MAX_SAFE_INTEGER
 
+// ─── Where a concept sits ────────────────────────────────────────────────────
+
+interface Placement { syllabus: WikiExamSyllabus; topic: string }
+
+/**
+ * Every syllabus a concept name is on, with the first learning objective that
+ * names it there, built once per set of syllabi. Asking each syllabus about
+ * each matched concept (`findSyllabiForConcept`) cost a second for a
+ * one-letter query; this is the same answer, looked up.
+ */
+const placementsBySyllabi = new WeakMap<readonly WikiExamSyllabus[], Map<string, Placement[]>>()
+
+function placements(syllabi: readonly WikiExamSyllabus[]): Map<string, Placement[]> {
+  const known = placementsBySyllabi.get(syllabi)
+  if (known) return known
+  const map = new Map<string, Placement[]>()
+  for (const syllabus of syllabi) {
+    for (const topic of syllabus.topics) {
+      for (const c of topic.concepts) {
+        const keys = new Set([
+          c.name.toLowerCase(),
+          c.target.split('/').pop()?.replace(/\.md$/i, '').toLowerCase() ?? '',
+        ])
+        for (const key of keys) {
+          if (!key) continue
+          const list = map.get(key) ?? []
+          if (list.length === 0) map.set(key, list)
+          if (list[list.length - 1]?.syllabus !== syllabus) list.push({ syllabus, topic: topic.name })
+        }
+      }
+    }
+  }
+  placementsBySyllabi.set(syllabi, map)
+  return map
+}
+
 function conceptPlace(
   name: string,
   syllabi: readonly WikiExamSyllabus[],
   focus: SearchFocus | null,
 ): { place: ConceptResult['place']; inFocus: boolean } {
-  const on = findSyllabiForConcept(syllabi as WikiExamSyllabus[], name)
+  const on = placements(syllabi).get(name.toLowerCase()) ?? []
   if (on.length === 0) return { place: null, inFocus: false }
-  const mine = focus ? on.find(s => s.examId === focus.examId) : undefined
-  const syllabus = mine ?? on[0]!
-  const needle = name.toLowerCase()
-  const topic = syllabus.topics.find(t => t.concepts.some(c =>
-    c.name.toLowerCase() === needle ||
-    c.target.split('/').pop()?.replace(/\.md$/i, '').toLowerCase() === needle,
-  ))
-  return { place: { exam: syllabus.examLabel, topic: topic?.name ?? '' }, inFocus: !!mine }
+  const mine = focus ? on.find(p => p.syllabus.examId === focus.examId) : undefined
+  const at = mine ?? on[0]!
+  return { place: { exam: at.syllabus.examLabel, topic: at.topic }, inFocus: !!mine }
 }
 
-/** The names of the concepts a question is tagged with. */
-function questionConcepts(q: Question): string[] {
-  return q.wiki_link.map(conceptLabel)
+// ─── Questions ───────────────────────────────────────────────────────────────
+
+interface QuestionText {
+  /** The id, the stem and every part's prompt, folded for matching. */
+  text: string
+  /** `text` with a space at each end, so a word's start can be looked for. */
+  padded: string
+  id: string
+  /** The names of the concepts it is tagged with, the first being its main one. */
+  concepts: string[]
+}
+
+/** What a question is matched on, read once: a search runs on every keystroke. */
+const questionTexts = new WeakMap<Question, QuestionText>()
+
+function questionText(q: Question): QuestionText {
+  const known = questionTexts.get(q)
+  if (known) return known
+  const parts = (q.parts ?? []).map(p => p.stem).join(' ')
+  const text = foldText(`${q.id} ${q.stem} ${parts}`)
+  const made: QuestionText = {
+    text,
+    padded: ` ${text} `,
+    id: foldText(q.id),
+    concepts: q.wiki_link.map(conceptLabel),
+  }
+  questionTexts.set(q, made)
+  return made
 }
 
 /**
- * The questions a query finds: those whose stem or id holds it
- * (`filterQuestions`' own search, questions kept for the record included),
- * then those tagged with a concept whose name answers it. No query finds every
- * question.
+ * Whether the text holds `word` as a word or the start of one. A single
+ * letter must be a whole word: "exam p" is not every question with a p in it.
+ */
+function holdsWord(padded: string, word: string): boolean {
+  return padded.includes(word.length === 1 ? ` ${word} ` : ` ${word}`)
+}
+
+/**
+ * The questions a query finds, the most likely first:
+ *
+ *   0. the question whose id it is;
+ *   1. tagged with a concept the query names, and using the words itself;
+ *   2. tagged with such a concept;
+ *   3. holding the query as written, in its stem, a part or its id;
+ *   4. holding every word of the query, each as a word or the start of one;
+ *   5. when no concept's name answered the query, tagged with a concept a
+ *      typing slip away ("poison").
+ *
+ * Within a group the bank's order is kept. Questions kept for the record are
+ * found too. A query that is a question's id finds that question and whatever
+ * else holds it as written, not every question with its pieces. No query
+ * finds every question.
  */
 export function matchQuestions(questions: readonly Question[], query: string): Question[] {
-  const q = query.trim()
+  const q = foldText(query)
   if (!q) return [...questions]
-  const direct = filterQuestions(questions as Question[], { search: q, includeOffSyllabus: true })
-  const seen = new Set(direct.map(d => d.id))
-  const tagged = questions.filter(
-    item => !seen.has(item.id) && questionConcepts(item).some(name => rankMatch(name, q) !== null),
-  )
-  return [...direct, ...tagged]
+  const words = q.split(' ')
+
+  // A concept's name answers the query or it doesn't, whichever question carries it.
+  const named = new Map<string, boolean>()
+  const names = (name: string, near: boolean): boolean => {
+    let hit = named.get(name)
+    if (hit === undefined) {
+      hit = near ? nearMatch(name, q) : rankMatch(name, q) !== null
+      named.set(name, hit)
+    }
+    return hit
+  }
+
+  const groups: Question[][] = [[], [], [], [], []]
+  for (const item of questions) {
+    const t = questionText(item)
+    if (t.id === q) { groups[0]!.push(item); continue }
+    const tagged = t.concepts.some(name => names(name, false))
+    const phrase = t.text.includes(q)
+    const every = phrase || (words.length > 1 && words.every(w => holdsWord(t.padded, w)))
+    if (tagged) groups[every ? 1 : 2]!.push(item)
+    else if (phrase) groups[3]!.push(item)
+    else if (every) groups[4]!.push(item)
+  }
+  if (groups[0]!.length > 0) return [...groups[0]!, ...groups[3]!]
+  if (groups[1]!.length + groups[2]!.length > 0) return groups.flat()
+
+  named.clear()
+  const near = new Set<Question>([...groups[3]!, ...groups[4]!])
+  const slips = questions.filter(item => !near.has(item) && questionText(item).concepts.some(name => names(name, true)))
+  return [...groups[3]!, ...groups[4]!, ...slips]
 }
 
 /** Everything the query finds, each kind ranked with the exam in focus first. */
@@ -183,11 +293,19 @@ export function runSearch(input: SearchInput): SearchResults {
   const facets = input.facets ?? emptyFacets()
   const q = query.trim()
 
+  const exams: ExamResult[] = searchBy(
+    index.filter(it => it.category === 'exam'),
+    q,
+    it => [it.title ?? it.name, it.name],
+    NO_LIMIT,
+  ).map(item => ({ item }))
+
   const concepts: ConceptResult[] = searchBy(
     index.filter(it => it.category === 'concept'),
     q,
     it => [it.title ?? it.name, it.name],
     NO_LIMIT,
+    { near: true },
   ).map(item => {
     const { place, inFocus } = conceptPlace(item.name, syllabi, focus)
     return { item, place, otherExam: focus && place && !inFocus ? place.exam : null }
@@ -204,29 +322,30 @@ export function runSearch(input: SearchInput): SearchResults {
     return { item, otherExam: focus && !inFocus && exams.length > 0 ? exams[0]! : null }
   })
 
-  const matched = matchQuestions(questions, q).filter(question => matchesFacets(question, facets))
+  const matched = (input.matched ?? matchQuestions(questions, q)).filter(question => matchesFacets(question, facets))
   const questionResults: QuestionResult[] = matched.map(question => ({
     question,
     otherExam: focus?.bank && question.exam !== focus.bank ? question.exam : null,
   }))
 
   return {
+    exams,
     concepts: focusFirst(concepts, c => !!focus && c.place !== null && c.otherExam === null),
     resources: focusFirst(resources, r => !!focus && r.otherExam === null && (r.item.exams?.length ?? 0) > 0),
     questions: focusFirst(questionResults, r => !!focus?.bank && r.otherExam === null),
   }
 }
 
-/** The count on each tab. All is the sum of the three. */
+/** The count on each tab. All is the three and the study guides found. */
 export function tabCounts(results: SearchResults): Record<SearchTab, number> {
   const concepts = results.concepts.length
   const resources = results.resources.length
   const questions = results.questions.length
-  return { all: concepts + resources + questions, concepts, resources, questions }
+  return { all: results.exams.length + concepts + resources + questions, concepts, resources, questions }
 }
 
 /** How many of each kind the All tab shows before its "N more" row. */
-export const ALL_TAB_PREVIEW = { concepts: 3, resources: 2, questions: 2 } as const
+export const ALL_TAB_PREVIEW = { exams: 2, concepts: 3, resources: 2, questions: 2 } as const
 
 /** A kind's rows under All, and how many its "N more" row stands for. */
 export function previewOf<T>(items: readonly T[], size: number): { shown: T[]; more: number } {

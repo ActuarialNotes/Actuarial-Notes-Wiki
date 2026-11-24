@@ -144,3 +144,32 @@ describe('questionPreview', () => {
     expect(questionPreview({ stem: '', parts: [] })).toBe('')
   })
 })
+
+describe('a short preview', () => {
+  const stem = `Given the following selections for an insurer with several lines: ${'filler words here. '.repeat(6)}Incremental losses follow an over-dispersed Poisson distribution with a known scale.`
+
+  it('always holds the match it was cut for', () => {
+    const snippet = stemSnippet(stem, 'poisson', 72)
+    expect(snippet.toLowerCase()).toContain('poisson')
+    expect(snippet.length).toBeLessThan(80)
+  })
+
+  it('shows one of the words when the query\'s words are apart', () => {
+    expect(stemSnippet(stem, 'poisson selections', 72).toLowerCase()).toMatch(/poisson|selections/)
+  })
+
+  it('never ends inside a formula', () => {
+    const math = 'Claims are made according to a Poisson process $\\{N(t), t \\ge 0\\}$ with rate 3 per hour and more words after it.'
+    for (let n = 40; n < math.length; n++) {
+      const cut = stemPreview(math, n)
+      expect((cut.match(/(?<!\\)\$/g) ?? []).length % 2).toBe(0)
+    }
+  })
+
+  it('never starts inside a formula', () => {
+    const math = `${'filler words here. '.repeat(8)}Let $\\sum_{i=1}^{10} X_i^2 = 500$ and calculate the minimum variance estimate.`
+    const cut = stemSnippet(math, 'variance', 72)
+    expect((cut.match(/(?<!\\)\$/g) ?? []).length % 2).toBe(0)
+    expect(cut).toContain('variance')
+  })
+})

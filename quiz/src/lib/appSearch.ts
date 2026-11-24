@@ -24,11 +24,36 @@ export function normalizeQuery(text: string): string {
   return text.toLowerCase().replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim()
 }
 
+/**
+ * `normalizeQuery`, and then everything a reader types differently from the
+ * vault without meaning anything by it: accents dropped ("Bühlmann"),
+ * apostrophes dropped ("Bayes' Theorem" is the page *Bayes Theorem*), and
+ * hyphens, dashes, slashes and underscores read as spaces ("chain-ladder").
+ * Both sides of every match go through it.
+ */
+export function foldText(text: string): string {
+  return normalizeQuery(text)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/'/g, '')
+    .replace(/[-\u2010-\u2015/_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 // Ranks, best first. The gaps are meaningless; only the order is.
 const RANK_PREFIX = 0
 const RANK_WORD_START = 1
 const RANK_CONTAINS = 2
-const RANK_ALL_WORDS = 3
+const RANK_INITIALS = 3
+const RANK_ALL_WORDS = 4
+/** A name found only by allowing for a typing slip — below every true match. */
+const RANK_NEAR = 5
+
+/** The first letter of each word: "bornhuetter ferguson method" → "bfm". */
+function initials(folded: string): string {
+  return folded.split(' ').map(w => w[0] ?? '').join('')
+}
 
 /** How far down the field list a hit was found — see `searchBy`. */
 const FIELD_PENALTY = 10
@@ -43,17 +68,68 @@ const FIELD_PENALTY = 10
  * never pushed down the list by one.
  */
 export function rankMatch(text: string, query: string): number | null {
-  const hay = normalizeQuery(text)
-  const q = normalizeQuery(query)
+  const hay = foldText(text)
+  const q = foldText(query)
   if (!hay || !q) return null
 
   if (hay.startsWith(q)) return RANK_PREFIX
   const idx = hay.indexOf(q)
   if (idx >= 0) return isWordStart(hay, idx) ? RANK_WORD_START : RANK_CONTAINS
 
+  // A name's initials: "bf" finds Bornhuetter-Ferguson Method, "glm" the
+  // Generalized Linear Model. Letters only, and short, so a word is never one.
+  if (/^[a-z]{2,6}$/.test(q) && hay.includes(' ') && initials(hay).startsWith(q)) return RANK_INITIALS
+
   const words = q.split(' ')
   if (words.length > 1 && words.every(w => hay.includes(w))) return RANK_ALL_WORDS
   return null
+}
+
+/** How many slips a word of this length may hold and still be the word meant. */
+function slipsAllowed(word: string): number {
+  if (word.length < 4) return 0
+  return word.length < 8 ? 1 : 2
+}
+
+/**
+ * The edit distance between two words (a letter added, dropped, changed, or
+ * two neighbours swapped), or `max + 1` as soon as it is known to be past `max`.
+ */
+export function editDistance(a: string, b: string, max: number): number {
+  if (Math.abs(a.length - b.length) > max) return max + 1
+  let prev2: number[] = []
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j)
+  for (let i = 1; i <= a.length; i++) {
+    const row = [i]
+    let best = i
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1
+      let d = Math.min(prev[j]! + 1, row[j - 1]! + 1, prev[j - 1]! + cost)
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d = Math.min(d, prev2[j - 2]! + 1)
+      row.push(d)
+      if (d < best) best = d
+    }
+    if (best > max) return max + 1
+    prev2 = prev
+    prev = row
+  }
+  return prev[b.length]!
+}
+
+/**
+ * Whether `text` is what a mistyped `query` meant: every word of the query is
+ * within a slip or two of some word of the text ("poison" for *Poisson*,
+ * "varience" for *Variance*). Short words must be exact. Only asked when
+ * nothing matched properly, so a typo never outranks a true match.
+ */
+export function nearMatch(text: string, query: string): boolean {
+  const hay = foldText(text).split(' ').filter(Boolean)
+  const words = foldText(query).split(' ').filter(Boolean)
+  if (hay.length === 0 || words.length === 0) return false
+  return words.every(w => {
+    const max = slipsAllowed(w)
+    return hay.some(h => (max === 0 ? h.startsWith(w) : editDistance(w, h, max) <= max))
+  })
 }
 
 function isWordStart(text: string, idx: number): boolean {
@@ -75,8 +151,10 @@ export function searchBy<T>(
   query: string,
   fields: (item: T) => (string | undefined | null)[],
   limit = 20,
+  /** `near`: when nothing matches, the items whose name is a typing slip away. */
+  options: { near?: boolean } = {},
 ): T[] {
-  const q = normalizeQuery(query)
+  const q = foldText(query)
   if (!q) return []
 
   const scored: { item: T; score: number; label: string }[] = []
@@ -92,6 +170,14 @@ export function searchBy<T>(
       if (best === null || score < best) best = score
     }
     if (best !== null) scored.push({ item, score: best, label: parts[0] ?? '' })
+  }
+
+  if (scored.length === 0 && options.near) {
+    for (const item of items) {
+      const name = fields(item)[0]
+      // The shortest name first: "varience" is Variance before Bias-Variance Tradeoff.
+      if (name && nearMatch(name, q)) scored.push({ item, score: RANK_NEAR + name.length / 1000, label: name })
+    }
   }
 
   scored.sort((a, b) => a.score - b.score || a.label.localeCompare(b.label))

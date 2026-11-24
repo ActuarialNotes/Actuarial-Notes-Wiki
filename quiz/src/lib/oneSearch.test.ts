@@ -110,8 +110,26 @@ describe('runSearch', () => {
     expect(questionMetaLine(results.questions[2]!)).toBe('Poisson Process · Hard · Exam MAS-I')
   })
 
-  it('counts each tab, All being the sum', () => {
-    expect(tabCounts(results)).toEqual({ all: 6, concepts: 3, resources: 0, questions: 3 })
+  it('finds an exam\'s study guide by the exam\'s name, apart from the concepts', () => {
+    expect(results.exams.map(e => e.item.name)).toEqual(['Exam Poisson (SOA)'])
+  })
+
+  it('counts each tab, All being the three and the study guides', () => {
+    expect(tabCounts(results)).toEqual({ all: 7, concepts: 3, resources: 0, questions: 3 })
+  })
+
+  it('takes the questions already matched, and narrows those', () => {
+    const matched = [QUESTIONS[3]!]
+    const given = runSearch({ query: 'poisson', index: [], questions: QUESTIONS, syllabi: [], focus: null, matched })
+    expect(given.questions.map(r => r.question.id)).toEqual(['p-3'])
+  })
+
+  it('finds a concept a typing slip away when nothing matches as typed', () => {
+    const slip = runSearch({ query: 'poison', index: INDEX, questions: QUESTIONS, syllabi: SYLLABI, focus: null })
+    expect(slip.concepts.map(c => c.item.name).sort()).toEqual([
+      'Compound Poisson Process', 'Poisson Distribution', 'Poisson Process',
+    ])
+    expect(slip.questions.map(r => r.question.id)).toEqual(['masi-1', 'p-1', 'p-2'])
   })
 
   it('keeps the match order and labels nothing when no exam is in focus', () => {
@@ -141,6 +159,55 @@ describe('runSearch', () => {
 describe('matchQuestions', () => {
   it('finds a question by its id', () => {
     expect(matchQuestions(QUESTIONS, 'p-3').map(q => q.id)).toEqual(['p-3'])
+  })
+
+  it('puts the questions about the concept ahead of those that only mention it', () => {
+    const bank = [
+      question({ id: 'a', stem: 'Reserves use a Poisson assumption in passing.', wiki_link: ['Concepts/Chain+Ladder'] }),
+      question({ id: 'b', stem: 'Counts have mean 2.', wiki_link: ['Concepts/Poisson+Distribution'] }),
+      question({ id: 'c', stem: 'Claims are Poisson.', wiki_link: ['Concepts/Poisson+Distribution'] }),
+    ]
+    expect(matchQuestions(bank, 'poisson').map(q => q.id)).toEqual(['c', 'b', 'a'])
+  })
+
+  it('finds words that are apart in the stem, and ignores punctuation the reader added', () => {
+    const bank = [
+      question({ id: 'a', stem: 'Estimate the Bühlmann credibility factor.', wiki_link: [] }),
+      question({ id: 'b', stem: "Use Bayes' theorem.", wiki_link: ['Concepts/Bayes+Theorem'] }),
+      question({ id: 'c', stem: 'Apply the chain ladder method.', wiki_link: [] }),
+    ]
+    expect(matchQuestions(bank, 'credibility buhlmann').map(q => q.id)).toEqual(['a'])
+    expect(matchQuestions(bank, "bayes' theorem").map(q => q.id)).toEqual(['b'])
+    expect(matchQuestions(bank, 'chain-ladder').map(q => q.id)).toEqual(['c'])
+  })
+
+  it('finds a question by its id alone, not every question with the id\'s pieces', () => {
+    const bank = [
+      question({ id: 'p-004', stem: 'A fair die.', wiki_link: [] }),
+      question({ id: 'p-104', stem: 'Let p be 004 of something.', wiki_link: [] }),
+    ]
+    expect(matchQuestions(bank, 'p-004').map(q => q.id)).toEqual(['p-004'])
+  })
+
+  it('reads a one-letter word as a whole word', () => {
+    const bank = [
+      question({ id: 'a', stem: 'The exam covers probability.', wiki_link: [] }),
+      question({ id: 'b', stem: 'Exam P is the first.', wiki_link: [] }),
+    ]
+    expect(matchQuestions(bank, 'p exam').map(q => q.id)).toEqual(['b'])
+  })
+
+  it('adds the questions on a concept a slip away after any that hold the word as typed', () => {
+    const bank = [
+      question({ id: 'a', stem: 'Counts have mean 2.', wiki_link: ['Concepts/Poisson+Distribution'] }),
+      question({ id: 'b', stem: 'A poison is ingested.', wiki_link: ['Concepts/Mortality'] }),
+    ]
+    expect(matchQuestions(bank, 'poison').map(q => q.id)).toEqual(['b', 'a'])
+  })
+
+  it('reads the parts of a question whose stem is empty', () => {
+    const bank = [question({ id: 'a', stem: '', parts: [{ label: 'a', stem: 'Describe adverse selection.' }] as never })]
+    expect(matchQuestions(bank, 'adverse selection').map(q => q.id)).toEqual(['a'])
   })
 })
 

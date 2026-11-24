@@ -1,9 +1,11 @@
 import { PlaceHeader } from '@/components/nav/Places'
 import { useIsMobile } from '@/hooks/useIsMobile'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
-import { ConceptPageIcon } from '@/components/ConceptPageIcon'
+import { BookMarked, GraduationCap, Play } from 'lucide-react'
+import { LevelSquare } from '@/components/LevelSquare'
+import { ROW_FOCUS, ROW_RULE } from '@/components/search/QuestionRow'
+import { handleResultKeys } from '@/components/search/resultKeys'
 import {
   ExamStatusBanner,
   FloatingSearchBar,
@@ -12,7 +14,7 @@ import {
   SearchBackdrop,
   SearchScopePill,
 } from '@/components/FloatingSearchBar'
-import { highlightMatch } from '@/components/SearchHighlight'
+import { INK_MARK, highlightMatch } from '@/components/SearchHighlight'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -20,9 +22,13 @@ import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions } from '@/lib/parser'
+import { searchBy } from '@/lib/appSearch'
+import type { MasteryState } from '@/lib/mastery'
+import { loadParsedQuestions } from '@/lib/parsedQuestions'
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock'
+import { useConceptLevels } from '@/hooks/useConceptLevels'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { cn } from '@/lib/utils'
 
 type Scope = 'page' | 'all'
 
@@ -45,7 +51,8 @@ interface WikiFloatingSearchProps {
 export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
-  const [scope, setScope] = useState<Scope>('page')
+  // The reader's own choice of scope; until they make one it is this page, where the page has concepts.
+  const [scopeChoice, setScope] = useState<Scope | null>(null)
   const [active, setActive] = useState(false)
   const [chooser, setChooser] = useState<{ conceptName: string; syllabi: WikiExamSyllabus[] } | null>(null)
   const [questionCounts, setQuestionCounts] = useState<Map<string, number> | null>(null)
@@ -61,6 +68,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   // exam and way back move into those two lines. On a wide screen the rail
   // carries the exam and the reader, and the bar keeps its field and strip.
   const phone = useIsMobile(1023)
+  const { levelOf } = useConceptLevels()
 
   useEffect(() => {
     let cancelled = false
@@ -70,17 +78,20 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
     return () => { cancelled = true }
   }, [])
 
-  // Per-concept question counts, so each concept row can label its "Start Quiz"
-  // action with how many questions are available. Keyed by the concept name
-  // normalised the same way filterQuestions/linkMatchesConcept resolve a
-  // wiki_link's trailing segment (slug hyphens → spaces).
+  // Per-concept question counts, so each concept row can say how many
+  // questions there are to practise. Counted when the field is first entered,
+  // from the bank every search shares: the page itself never waits on it.
+  // Keyed by the concept name normalised the same way
+  // filterQuestions/linkMatchesConcept resolve a wiki_link's trailing segment
+  // (slug hyphens → spaces).
   useEffect(() => {
+    if (!active || questionCounts) return
     let cancelled = false
-    fetchAllQuestions()
-      .then(raw => {
+    loadParsedQuestions()
+      .then(parsed => {
         if (cancelled) return
         const map = new Map<string, number>()
-        for (const q of parseAllQuestions(raw)) {
+        for (const q of parsed) {
           const seen = new Set<string>()
           for (const link of q.wiki_link) {
             const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
@@ -95,17 +106,16 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
       })
       .catch(() => {})
     return () => { cancelled = true }
-  }, [])
+  }, [active, questionCounts])
 
   useEffect(() => {
     setQuery('')
-    setScope('page')
+    setScope(null)
     setActive(false)
   }, [location.pathname])
 
-  useEffect(() => {
-    if (pageRefs.length === 0 && scope === 'page') setScope('all')
-  }, [pageRefs.length, scope])
+  const pageDisabled = pageRefs.length === 0
+  const scope: Scope = pageDisabled ? 'all' : scopeChoice ?? 'page'
 
   const examSourcePath = useMemo(() => {
     const m = location.pathname.match(/^\/wiki\/exam\/(.+)$/)
@@ -119,8 +129,15 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
         dismiss()
       }
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') dismiss()
+    }
     document.addEventListener('mousedown', handleMouseDown)
-    return () => document.removeEventListener('mousedown', handleMouseDown)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('keydown', handleKey)
+    }
   }, [active])
 
   function dismiss() {
@@ -141,33 +158,30 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   }
 
   const hasQuery = query.trim().length > 0
-  const pageDisabled = pageRefs.length === 0
+  // The field is drawn at once; the results follow when the browser has a moment.
+  const deferredQuery = useDeferredValue(query)
 
-  const conceptResults = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return []
-
-    let pool: WikiIndexItem[]
-    if (scope === 'page') {
-      const keys = new Set(pageRefs.map(r => `${r.kind}:${r.name.toLowerCase()}`))
-      pool = index.filter(it => {
-        const kind = it.category === 'document' ? 'resource' : it.category
-        return keys.has(`${kind}:${it.name.toLowerCase()}`)
-      })
-    } else {
-      pool = index
-    }
-
-    return pool
-      .filter(it => {
-        const haystack = [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase()
-        return haystack.includes(q)
-      })
-      .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
-      .slice(0, 30)
-  }, [index, query, scope, pageRefs])
+  // The ranking every search shares (lib/appSearch.ts): a name that starts
+  // with the query, then one that holds it, never the alphabet. A query this
+  // page has nothing for is answered from everywhere, and says so.
+  const { conceptResults, widened } = useMemo(() => {
+    const find = (pool: WikiIndexItem[]) =>
+      searchBy(pool, deferredQuery, it => [it.title ?? it.name, it.name, it.author], 30, { near: true })
+    if (!deferredQuery.trim()) return { conceptResults: [], widened: false }
+    if (scope === 'all') return { conceptResults: find(index), widened: false }
+    const keys = new Set(pageRefs.map(r => `${r.kind}:${r.name.toLowerCase()}`))
+    const here = find(index.filter(it => {
+      const kind = it.category === 'document' ? 'resource' : it.category
+      return keys.has(`${kind}:${it.name.toLowerCase()}`)
+    }))
+    if (here.length > 0) return { conceptResults: here, widened: false }
+    const everywhere = find(index)
+    return { conceptResults: everywhere, widened: everywhere.length > 0 }
+  }, [index, deferredQuery, scope, pageRefs])
 
   const isExpanded = active && hasQuery
+  // One thing scrolls while the results are up: the results.
+  useBodyScrollLock(isExpanded)
   function handleConceptSelect(ref: WikiEntryRef) {
     dismiss()
     const conceptList = pageRefs
@@ -219,7 +233,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             : null
         }
       >
-        <>
+        <div onKeyDown={e => handleResultKeys(e, inputRef.current, { enterOpens: true })}>
           <FloatingSearchInput
             inputRef={inputRef}
             value={query}
@@ -251,16 +265,21 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
                 </SearchScopePill>
               </div>
 
+              {widened && (
+                <p className="pb-1.5 text-[14px]">Nothing on this page matches. From everywhere:</p>
+              )}
+
               {/* Results */}
-              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
+              <ul className="flex max-h-[min(60dvh,32rem)] flex-col overflow-y-auto overscroll-contain">
                 {conceptResults.length === 0 ? (
-                  <li className="text-xs text-muted-foreground px-2 py-2">No matches.</li>
+                  <li className="py-3 text-[16px]">Nothing matches “{deferredQuery.trim()}”.</li>
                 ) : (
                   conceptResults.map(item => (
-                    <li key={`${item.category}:${item.path}`}>
+                    <li key={`${item.category}:${item.path}`} className={ROW_RULE}>
                       <ConceptResultRow
                         item={item}
-                        query={query}
+                        query={deferredQuery}
+                        level={item.category === 'concept' ? levelOf(item.name) : null}
                         onSelect={dismiss}
                         onConceptSelect={handleConceptSelect}
                         questionCount={item.category === 'concept' ? questionCountFor(item.name) : null}
@@ -272,7 +291,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
               </ul>
             </div>
           )}
-        </>
+        </div>
       </FloatingSearchBar>
 
       {chooser && (
@@ -298,6 +317,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
 function ConceptResultRow({
   item,
   query,
+  level,
   onSelect,
   onConceptSelect,
   questionCount,
@@ -305,6 +325,8 @@ function ConceptResultRow({
 }: {
   item: WikiIndexItem
   query: string
+  /** The reader's level on a concept; null for a study guide or a resource. */
+  level: MasteryState | null
   onSelect: () => void
   onConceptSelect: (ref: WikiEntryRef) => void
   questionCount: number | null
@@ -313,20 +335,18 @@ function ConceptResultRow({
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
   const route = wikiRoute(ref)
   const isConcept = item.category === 'concept'
-  const Icon =
-    item.category === 'exam' ? GraduationCap :
-    isConcept ? FileText :
-    BookMarked
-  const iconColor =
-    item.category === 'exam' ? 'text-teal-500' :
-    'text-muted-foreground'
+  const Icon = item.category === 'exam' ? GraduationCap : BookMarked
   const display = item.title ?? item.name
+  const meta = [item.author, item.year].filter(Boolean).join(' · ')
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
       <Link
         to={route}
+        data-result
         onClick={e => {
+          // A modified click keeps the link: the page in a new tab.
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
           if (isConcept) {
             e.preventDefault()
             onConceptSelect(ref)
@@ -334,64 +354,30 @@ function ConceptResultRow({
             onSelect()
           }
         }}
-        className={`flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors min-w-0 ${isConcept ? '' : 'flex-1'}`}
+        className={cn('flex min-h-12 min-w-0 flex-1 scroll-my-2 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS)}
       >
-        {isConcept
-          ? <ConceptPageIcon concept={item.name} className="mt-0.5" />
-          : <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />}
-        <div className="min-w-0 flex-1">
-          <div className="text-sm truncate">{highlightMatch(display, query)}</div>
-          {(item.author || item.year) && (
-            <div className="text-[11px] text-muted-foreground truncate">
-              {[item.author, item.year].filter(Boolean).join(' · ')}
-            </div>
-          )}
-        </div>
+        {level !== null
+          ? <LevelSquare state={level} size="sm" />
+          : <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden />}
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="text-[16px] font-semibold leading-snug">{highlightMatch(display, query, INK_MARK)}</span>
+          {meta && <span className="truncate text-[14px] leading-snug">{meta}</span>}
+        </span>
       </Link>
-      {isConcept && (
-        <ConceptActions
-          name={item.name}
-          questionCount={questionCount}
-          onStartQuiz={onStartQuiz}
-        />
-      )}
-    </div>
-  )
-}
-
-// Inline "Start Quiz" action shown beside a concept name in the search
-// results. It opens the per-concept question picker,
-// labelled with how many questions exist.
-function ConceptActions({
-  name,
-  questionCount,
-  onStartQuiz,
-}: {
-  name: string
-  questionCount: number | null
-  onStartQuiz: (name: string) => void
-}) {
-  return (
-    <div className="flex items-center gap-1 shrink-0">
-      {questionCount !== 0 && (
+      {isConcept && questionCount !== 0 && (
         <button
           type="button"
           data-sound="begin"
-          onClick={e => {
-            e.preventDefault()
-            e.stopPropagation()
-            onStartQuiz(name)
-          }}
-          className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-          title={`Start a quiz on ${name}`}
-          aria-label={questionCount != null ? `Start quiz on ${name}, ${questionCount} questions` : `Start quiz on ${name}`}
-        >
-          <Play className="h-3 w-3 shrink-0" />
-          {questionCount != null && questionCount > 0 && (
-            <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums leading-none">
-              {questionCount}
-            </span>
+          onClick={() => onStartQuiz(item.name)}
+          className={cn(
+            'inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border-[1.5px] border-foreground px-3 text-[13px] font-bold transition-colors hover:bg-foreground/10',
+            ROW_FOCUS,
           )}
+          title={`Practice ${item.name}`}
+          aria-label={questionCount != null ? `Practice ${item.name}, ${questionCount} questions` : `Practice ${item.name}`}
+        >
+          <Play className="h-3 w-3 shrink-0 fill-current" aria-hidden />
+          {questionCount != null && questionCount > 0 && <span className="tabular-nums">{questionCount}</span>}
         </button>
       )}
     </div>

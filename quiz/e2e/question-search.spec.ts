@@ -72,7 +72,7 @@ test.describe('search', () => {
     // The row for the rest opens that kind's tab.
     await questions.getByRole('button', { name: /^\d+ more$/ }).click()
     await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
-    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+)$/ })).toBeVisible()
   })
 
   test('"Practice these N" starts a quiz on the results', async ({ page }) => {
@@ -86,13 +86,39 @@ test.describe('search', () => {
     await expect(page).toHaveURL(/from=search/)
   })
 
+  test('reads past a typing slip and punctuation, ranks by the keyboard, and remembers the search', async ({ page }) => {
+    await page.goto('/search')
+    const field = page.getByRole('searchbox', { name: 'Search' })
+
+    // An apostrophe the page's name doesn't have, and a slip, still find the concept.
+    await field.fill("bayes' theorem")
+    await expect(page.locator('main a[href^="/wiki/concept/Bayes"]').first()).toBeVisible({ timeout: 30_000 })
+    await field.fill('varience')
+    await expect(page.locator('main a[href^="/wiki/concept/Variance"]').first()).toBeVisible()
+
+    // Down goes into the results, Up comes back to the field.
+    await field.press('ArrowDown')
+    await expect(page.locator('[data-result]').first()).toBeFocused()
+    await page.keyboard.press('ArrowUp')
+    await expect(field).toBeFocused()
+
+    // A search that led somewhere is offered again when the field is empty.
+    await field.fill('poisson')
+    await expect(page).toHaveURL(/q=poisson/)
+    await field.press('Enter')
+    await page.goto('/search')
+    await page.getByRole('region', { name: 'Recent searches' }).getByRole('button', { name: 'poisson' }).click()
+    await expect(field).toHaveValue('poisson')
+    await expect(page.getByRole('tab', { name: /^Concepts \d/ })).toBeVisible()
+  })
+
   test('an old link to the question search still lands', async ({ page }) => {
     await page.goto('/search?type=questions&q=poisson')
     await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
-    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+)$/ })).toBeVisible()
   })
 
-  test("a concept's questions: picked ones, or so many at random", async ({ page }) => {
+  test("a concept's questions: picked ones, or so many drawn at random", async ({ page }) => {
     await page.goto('/search?tab=questions&concept=Bayes+Theorem')
     await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
     const rows = page.getByTestId('search-question')
@@ -100,7 +126,7 @@ test.describe('search', () => {
 
     // A count, stepped, draws that many at random.
     const bar = page.getByTestId('search-practice')
-    await expect(bar.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
+    await expect(bar.getByRole('button', { name: /^Practice (all \d+|\d+)$/ })).toBeVisible()
     await bar.getByRole('button', { name: 'One question fewer' }).click()
 
     // Ticking questions practises those instead.

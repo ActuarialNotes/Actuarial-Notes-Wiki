@@ -29,4 +29,4 @@ The answer is **6.0**. The actual ratio is 1.20/0.95 = 1.26, so the chart makes 
 **Common wrong entries**
 
 - **1.3**: the actual ratio of the relativities, which is what the chart should show but not what it shows.
-- **0.3**: subtracting the axis start from the taller bar only, $0.30/0.95$, which mixes a drawn length with a true value.
+- **0.3**: subtracting the axis start from the taller bar only, 0.30/0.95, which mixes a drawn length with a true value.

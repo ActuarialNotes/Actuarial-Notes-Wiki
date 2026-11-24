@@ -44,7 +44,7 @@ The answer is **0.2933**, down from the parent's $G = 2(0.20)(0.80) = 0.32$.
 ## Part b (1 point)
 Both child nodes predict "renew", as the parent does, so the split leaves the classification error rate at 0.20. Which statement best explains why the tree is still grown with this split?
 
-- A) The Gini index rewards a split that makes the nodes purer, and a purer node gives more confident class probabilities, even when the predicted class does not change.
+- A) The split makes the nodes purer, which sharpens their class probabilities even though the predicted class does not change.
 - B) The classification error rate is the measure used to grow trees, and it is only reported as 0.20 because of rounding.
 - C) A split is kept only if it changes the predicted class of at least one node, so this split must change one later.
 - D) Cost-complexity pruning will remove the split anyway, so it makes no difference whether it is grown.

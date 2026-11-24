@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Bias-Variance+Tradeoff
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c966404a4e0af3f7d5516375574bf5ca53a68f274a08769f1bc7999660932313
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-029.md
 ---
 
 An actuary fits a ridge-penalized Poisson GLM for claim frequency with predictors on very different scales: driver age in years, vehicle value in dollars, and annual distance in kilometres.

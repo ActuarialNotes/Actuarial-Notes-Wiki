@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Actuarial+Standards+of+Practice
   - Concepts/Data+Quality
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:74c2e561a4469fdf5acc4816859afe1a467afa2e2c7b15c034174295fbdeb42d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-004.md
 ---
 
 An actuary in the United States is building a predictive pricing model for a personal auto book. Match each task in the project to the Actuarial Standard of Practice (ASOP) whose subject it is. An option may be used more than once or not at all.

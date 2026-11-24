@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5469e642903dd19a0cbe7665e9c0d5bba910b0f967aabd6919adcd7e54125204
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-017.md
 ---
 
 In an application file for a personal lines frequency model, a financial-responsibility score is missing for 12% of applicants. Underwriting notes say that applicants with poor scores often decline to provide one. Which classification of the missing values, and which treatment, is most appropriate?

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Partial+Dependence+Plot
   - Concepts/Shapley+Value
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:db04577f85adcfec42c1fac04531b41c18db835e7b870a96108365d643259a5c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-041.md
 ---
 
 A homeowners insurer documents the interpretability of its models. Match each item in the documentation to the kind of interpretability in Lipton's taxonomy that it provides. An option may be used more than once or not at all.

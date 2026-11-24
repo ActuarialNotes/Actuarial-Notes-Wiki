@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Predictive+Accuracy
 answer: "0.281"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:470dbb13d4f529709d7fb6c6fe725159530ef4329861b599d7fd1587cb26da9e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-033.md
 ---
 
 In a block of homeowners claims, 4% are fraudulent. A fraud model flags 75% of fraudulent claims and 8% of legitimate claims.

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Link+Function
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5c998b01bb703b330c25d08096c2136786d8240e6f203aef824454a504353b1d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-026.md
 ---
 
 A claim frequency model has an intercept, an indicator $x_1$ for a young driver, an indicator $x_2$ for an urban territory, and their interaction. Its fitted mean frequencies for the four combinations are:

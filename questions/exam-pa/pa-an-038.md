@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Poisson+Regression
   - Concepts/Link+Function
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d31ce08b9d5ccf4166eaa7b660c2f175e76b871e325e3c72a0d5e26f299b138f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-038.md
 ---
 
 A personal auto insurer asks you to build a claim frequency model to update its territory and driver relativities. Each row of the data is one policy term, with the number of claims (0, 1, 2 or more), the earned car-years (from 0.1 to 1.0, since many terms were cancelled or written mid-year), the territory and the driver's age group. The insurer's deductible relativities were set in a separate study last year, and management wants them kept as they are while the other relativities are re-estimated around them. The rating plan is multiplicative.

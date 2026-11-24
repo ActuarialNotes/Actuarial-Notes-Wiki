@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Node+Impurity
   - Concepts/Tree+Pruning
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c9ee078fad87d7e1472df9493bfdad965e51b0f042ea3e791c578b615926096e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-030.md
 ---
 
 A life insurer grows a classification tree to predict which of 2,000 term policies will lapse at renewal. In the training data, 400 policies lapsed. A candidate first split on premium mode sends 500 policies to the left node, of which 200 lapsed, and 1,500 to the right node, of which 200 lapsed.

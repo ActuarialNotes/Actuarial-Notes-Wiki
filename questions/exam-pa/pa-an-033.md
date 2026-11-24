@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Hyperparameter
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b68c9af99f24bdc3bd8723d6695126704be819bee080bbd42557b983457e63eb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-033.md
 ---
 
 An analyst is building a bagged tree model for workers' compensation claim severity on 10,000 claims.

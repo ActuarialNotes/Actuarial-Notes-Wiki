@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Link+Function
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9f847a776e580cfe3cdda3759d87a49df36d44446df1b0df0281e704de2893ce
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-020.md
 ---
 
 A homeowners insurer asks you to model the annual pure premium of each policy, its total losses for the year, so that the fitted values can be used directly as a multiplicative rating plan. Of the 40,000 policies in the data, about 93% had no loss, and the losses of the rest are positive and strongly right-skewed.

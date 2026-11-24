@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Interaction
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:831d120fa9caa931f8fe71eed8b2660ccb980d1b4a6268518af53a517c24d259
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-044.md
 ---
 
 A GBM predicts claim frequency for a personal auto book. Its partial dependence plot for annual distance driven rises steadily across the range of the data. The individual conditional expectation (ICE) curves for the same variable rise gently for drivers in rural territories and steeply for drivers in urban territories, so the curves fan out as distance increases.

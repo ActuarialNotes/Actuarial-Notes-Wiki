@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Random+Forest
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c2a4870150aefad8fac913bdf471fce9a13f6a0b2dd6b3338b4a0fa7038a0b21
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-032.md
 ---
 
 An actuary bags 50 deep regression trees to predict claim severity. For a given policy, each tree's prediction has variance $\sigma^2 = 4$, and any two trees' predictions have correlation $\rho = 0.5$. Calculate the variance of the bagged prediction for that policy.

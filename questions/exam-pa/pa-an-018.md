@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Dendrogram
   - Concepts/K-Means+Clustering
 points: 3
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8c6d9df2628a23a917212d4b24968dcfa6f9279111b692309d56edd1cb500199
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-018.md
 ---
 
 An actuary groups four territories by their loss experience using agglomerative hierarchical clustering. The dissimilarities between them are:

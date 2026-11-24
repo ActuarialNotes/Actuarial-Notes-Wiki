@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Shapley+Value
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5ea55af6ca640c729c329d1802cd5d2b39e4df519d05024aa62c4f3b80be20ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-055.md
 ---
 
 A personal auto insurer prices with a GBM. A policyholder calls to ask why her quote is well above what her neighbour pays, and the customer service team asks the pricing actuary for something it can use to answer her.

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Categorical+Predictor
 answer: "20"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:915d10d31d0c3a0d1e6dea9a11bd494427fc372f6183b9cea859c27df073480a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-016.md
 ---
 
 A claim frequency GLM has an intercept and these predictors:

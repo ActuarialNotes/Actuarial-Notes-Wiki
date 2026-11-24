@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Predictive+Analytics
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6a282d72e6d18c54808f4053f0efa8723e5f9dc978c0861c8bbfbe82f5962b84
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-001.md
 ---
 
 An auto insurer's analytics team has built a model that gives every new claim a probability of being fraudulent. The special investigations unit can open about 60 files a month. The claims director now asks for a tool that says which claims the unit should open each month.

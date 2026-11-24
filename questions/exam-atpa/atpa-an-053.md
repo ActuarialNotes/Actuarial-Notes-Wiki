@@ -8,9 +8,18 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Actuarial+Communication
-  - Concepts/Actuarial+Report
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e7dad5a49dec652d64b18e148116fcfc3000d25b25365fe4841a2a7d76ea643d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-053.md
 ---
 
 An actuary is writing the report on a new commercial property loss-cost model for the head of underwriting, who will rely on its findings. The model was fit to policy and claim data extracted by the claims department.

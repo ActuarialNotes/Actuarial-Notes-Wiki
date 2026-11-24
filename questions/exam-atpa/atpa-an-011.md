@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Warehouse
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5133ff37b09151c30388b2031ed507fbdfd80dc406149947f79745b80be587f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-011.md
 ---
 
 A policyholder lived in territory 1 from 2021 to 2023, had two claims there, and moved to territory 3 at the start of 2024. The policy system overwrote the address with the new one. An analyst builds 2021–2025 territory experience directly from the policy system. What is the effect on the territory experience?

@@ -9,6 +9,16 @@ bloom: apply
 wiki_link:
   - Concepts/Data+Warehouse
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3857e7645a2ff081ed70330b9a5822a3abd384741b1a59e3d26e6462f43876e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-010.md
 ---
 
 An insurer keeps an operational database for its policy system, a data lake, and a data warehouse. Match each request to the store that should serve it. An option may be used more than once or not at all.

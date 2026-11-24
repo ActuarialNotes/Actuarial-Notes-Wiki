@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cbcf9c89fa113e54795d8400c1800d74a599d118dd7d36e4247556cf4d534486
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-028.md
 ---
 
 Determine which of the following statements about table importability are true.

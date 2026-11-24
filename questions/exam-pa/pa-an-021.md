@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Poisson+Regression
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:302eb64d590cf869f0a344fcd58865ce9a778260411470437932e05935bb2037
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-021.md
 ---
 
 A Poisson GLM with a log link models auto claim frequency. The output for the rating variable annual distance driven, with four ordered levels, is below. Level 1 is the base level.

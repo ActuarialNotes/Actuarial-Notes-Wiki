@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Bias-Variance+Tradeoff
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ee5f1989faae3079b4b2ed6a017395d9f5f8635385cc3f29dc0170ba71687f53
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-005.md
 ---
 
 An actuary maintains a claim frequency model and refits it each year. Determine which of the following statements are true.

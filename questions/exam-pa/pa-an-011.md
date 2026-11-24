@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Visualization
 answer: "6.0"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7df97c5e0d38a73190a9af245528ba3a90f86e6cb2732aedee5ace775cc5ae36
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-011.md
 ---
 
 A draft exhibit for a rate filing shows each territory's relativity as a bar. To make the differences easier to see, the analyst started the vertical axis at 0.90. Territory 4's relativity is 1.20 and territory 7's is 0.95.

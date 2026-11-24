@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a95a59a6509ee87c8b9252f71bdf6985cf0ba1750353a4e44fcd81636d6b285a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-009.md
 ---
 
 Reviewing a personal auto file before modelling, an actuary plots driver age. The distribution is smooth from 16 to 95, except for a spike of 3,800 policies, about 4% of the file, at an age of exactly 0. Which response is most appropriate?

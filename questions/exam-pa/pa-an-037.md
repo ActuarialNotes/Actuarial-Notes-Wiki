@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Boosting
 answer: "1042.5"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b5083f62f344c0d9622ca0c740851f4a8a2b106cbe195f27a6c26dfae309050d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-037.md
 ---
 
 A boosted regression tree model for claim severity uses shrinkage $\lambda = 0.05$ and starts from a model that predicts 0. One claim in the training data has a severity of 1,200. The first three trees, each fitted to the current residuals, predict 1,000, 1,100 and 1,050 for this claim.

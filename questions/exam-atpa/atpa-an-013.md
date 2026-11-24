@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Relational+Database
   - Concepts/Data+Preparation
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8f54d984c6c468ddc73859cdfa9c0a73b1a0df785e756e13b8a874421226a2d1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-013.md
 ---
 
 A policy table has 500 policies, each with 1.0 car-year of exposure, and `policy_id` as its primary key. A claim table has one row per claim, with `policy_id` as a foreign key:

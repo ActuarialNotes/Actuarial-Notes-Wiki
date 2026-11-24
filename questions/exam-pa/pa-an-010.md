@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Design
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e339b3930d0f36ae38a739dff274e2bad1afd09e2f9c8c3f263847f886a0bece
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-010.md
 ---
 
 An actuary is building a homeowners claim frequency and severity model to price policies written in 2027. The data were extracted on 31 March 2026: every policy in force on 1 January 2026, with its claims from accident years 2021 to 2025.

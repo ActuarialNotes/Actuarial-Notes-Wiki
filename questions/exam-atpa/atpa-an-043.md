@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Out-of-Bag+Error
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:796309e6ba729e8419247f7c4502dbab650b2bb5bc36840657497e0ded38ab61
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-043.md
 ---
 
 A bagged tree model predicts auto physical damage severity. Two of its predictors, vehicle value and vehicle symbol, are strongly correlated. In the impurity-based importance ranking, vehicle value scores 100 and vehicle symbol scores 9. A junior analyst proposes dropping vehicle symbol to simplify the model, on the grounds that its importance shows it adds almost nothing.

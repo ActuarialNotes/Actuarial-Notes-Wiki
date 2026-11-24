@@ -9,6 +9,16 @@ bloom: apply
 wiki_link:
   - Concepts/Data+Validation
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:56609c40ec47eecce9c8216de60a65af95c4f98b542e37f59b83a9aaf852ceea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-015.md
 ---
 
 Before building a modelling data set, an analyst runs the validation checks on an auto policy file and its claim file. Match each finding to the kind of check that flags it. An option may be used more than once or not at all.

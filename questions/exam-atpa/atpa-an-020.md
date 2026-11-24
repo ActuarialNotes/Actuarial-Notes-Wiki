@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Gini+Index
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d0ed4441adc6f12582f2f19f7712d19cb37c48f62c9fc63de21ce7ba9a4f39b7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-020.md
 ---
 
 An insurer will use a new pure premium model to set its overall rate level. Two candidates are scored on the same holdout data. Model B's prediction for every record is exactly 1.15 times Model A's. In four equal-exposure buckets sorted by Model A's prediction, Model A's actual-to-predicted ratios are 1.03, 0.97, 1.02 and 0.99.
@@ -39,6 +49,6 @@ so Model B over-predicts by about 15% in every bucket. Only a calibration measur
 **Why not the others**
 
 - **A** — the AUROC depends only on the order of the predictions, so it is identical for the two models.
-- **B** — the normalized Gini equals $\text{Gini} = 2 \times \text{AUROC} - 1$, so it is identical too, and it is not a separate check.
+- **B** — $\text{normalized Gini} = 2 \times \text{AUROC} - 1$, so it is identical too, and it is not a separate check.
 - **C** — lift also depends only on the order, so both models show the same lift.
 - **E** — confuses discrimination with predictive accuracy as a whole. The models rank alike but predict different levels, and calibration is a separate question.

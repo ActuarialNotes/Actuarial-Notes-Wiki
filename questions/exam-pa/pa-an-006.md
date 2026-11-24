@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Variance
 answer: "54"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:72bc7a522b2974e82b621ef8ddb8aee23eb60c406cfea39eba9c1e4b5991b927
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-006.md
 ---
 
 An actuary compares two pure premium models at the profile of a typical policy, $x_0$. Simulation over many possible training sets gives:

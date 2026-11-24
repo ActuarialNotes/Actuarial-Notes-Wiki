@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Statistics
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7108a01b0958b821b5157b3fab48b0f758c8d0ea77a63c1796fc1a06dd92bad4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-003.md
 ---
 
 An insurer changed how new claims are assigned to adjusters. Before the change, claims took 46 days on average to settle. A manager asks, "Is the new process faster?" An analyst takes a random sample of 80 claims reported after the change; their average settlement time is 41 days.

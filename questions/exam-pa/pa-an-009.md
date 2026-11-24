@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Design
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:812f5de5d84965c58e95ab754629687c996ac60d6219a660042dc67708a1f8fc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-009.md
 ---
 
 Fraud is confirmed on a small share of an insurer's claims. To train a fraud model, an analyst keeps every fraudulent claim and a random 20% of the legitimate ones. The model, fitted to this sample, gives a new claim a fraud probability of 0.40.

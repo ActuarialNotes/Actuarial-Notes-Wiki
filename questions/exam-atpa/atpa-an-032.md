@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/AIC
   - Concepts/BIC
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5aeed0b5cc441c2f040394bc5117ee6ae2999d04bd8bca636165eace5867c05f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-032.md
 ---
 
 An analyst starts a claim-frequency model with 150 candidate predictors on 50,000 policy records.

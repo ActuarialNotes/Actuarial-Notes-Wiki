@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Train-Test+Split
   - Concepts/Holdout+Sample
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1d37d41022dfb024ecba5e40ff7b910ad3ea56ca9deb688d75ec2380c79b54c9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-023.md
 ---
 
 A modeling team tries 20 candidate severity models and keeps the one with the smallest mean squared error on a single holdout sample. Unknown to the team, all 20 candidates have the same true test MSE of 250. Each holdout MSE equals the true value plus an independent error with standard deviation 10. The expected maximum of 20 independent standard normal variables is 1.867.
@@ -40,7 +50,7 @@ Which procedure gives an unbiased estimate of the kept model's test error?
 - A) Report the kept model's MSE on the holdout sample, since each candidate's estimate is unbiased
 - B) Score the kept model once on a test set that played no part in choosing it
 - C) Repeat the comparison on a new random holdout sample and report the new winner's MSE
-- D) Choose the model by training MSE instead, and report its holdout MSE after a refit with tuned settings
+- D) Choose the model by training MSE instead, then tune its settings until its holdout MSE is smallest and report that MSE
 
 ### Answer
 B
@@ -50,4 +60,4 @@ Once the holdout sample has chosen anything, a different set must report the res
 
 - **A** — is the optimistic estimate from part a.
 - **C** — keeps the smallest of 20 noisy estimates again, so the new figure is biased downward in the same way.
-- **D** — retuning after looking at the holdout error fits the model to that sample, so the reported error is still optimistic. Training MSE also favours the most flexible model.
+- **D** — tuning until the holdout error is smallest uses the holdout sample to choose the settings, so the reported error is still optimistic. Training MSE also favours the most flexible model.

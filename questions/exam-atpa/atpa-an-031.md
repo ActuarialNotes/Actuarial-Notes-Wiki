@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Overfitting
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a50f66fd500c01feb02f016bc966d268f19a53c61e8bfcc51e159c7ad4e85449
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-031.md
 ---
 
 A team wants to combine several models of claim frequency to improve accuracy, and to report an honest comparison of the combination with its base models. Which plan does both?

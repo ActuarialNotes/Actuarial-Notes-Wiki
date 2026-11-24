@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Explainability
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dacdbe78fe1993bce6c0f751291aaec4a37df2f1ab12b412baa7688fd4d29718
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-054.md
 ---
 
 An insurer's analytics team has built five gradient boosting machines that are hard to explain. Each would be used as described below, with no explanation of individual outputs beyond what the team already has.

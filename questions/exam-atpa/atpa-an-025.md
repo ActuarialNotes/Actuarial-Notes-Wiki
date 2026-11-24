@@ -9,9 +9,20 @@ bloom: evaluate
 wiki_link:
   - Concepts/Linear+Mixed+Model
   - Concepts/Random+Effects
+  - Concepts/Best+Linear+Unbiased+Predictor
   - Concepts/Overfitting
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c69850db5ca82c4f5abd931bf5b26c54622b84f35b22d50656ea6d231a29a0d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-025.md
 ---
 
 A commercial auto loss-cost model includes the vehicle make and model, which has 900 levels in the data. A third of the levels have fewer than 10 vehicle-years, and new levels appear every year. The pricing team believes the vehicle model matters but does not want thin levels to drive the rates.

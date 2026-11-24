@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Hyperparameter
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3dab1d2348035a8fd2165735065377745bb1df2c0417446b278522a5431c4ba5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-035.md
 ---
 
 An actuary tunes a random forest of 1,000 trees that classifies auto claims as likely or unlikely to involve litigation, using $p = 25$ predictors. The out-of-bag error rate for several values of $m$, the number of predictors tried at each split, is:

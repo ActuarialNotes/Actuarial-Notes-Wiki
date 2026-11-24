@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Partial+Dependence+Plot
 answer: "9.8"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0175a595d5eff9fb86eeec7c640eb61a05b0ec3adfa72d581c4abd9a7e8df63a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-045.md
 ---
 
 A frequency model, written in closed form so it can be checked by hand, predicts

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Correlation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:93bed81b452befd51c222d115ba9e88101b090fa6d3bc2f91a73fe0784f4ac94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-014.md
 ---
 
 An analyst explores an auto insurer's data two variables at a time before fitting lapse and frequency models. Determine which of the following statements are true.

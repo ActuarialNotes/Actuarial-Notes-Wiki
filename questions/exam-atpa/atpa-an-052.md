@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Link+Function
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dedf3afa4fe0a1e1f1c58568db7ca7211141b97b1b8ecaa72992d499cfd080ef
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-052.md
 ---
 
 A log-link frequency GLM for personal auto gives a coefficient of 0.405 for an at-fault claim in the prior three years. The finding is going into a two-page summary for the vice-president of personal lines.

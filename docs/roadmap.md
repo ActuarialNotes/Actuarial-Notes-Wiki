@@ -361,7 +361,9 @@ order below stands.
 **Content:**
 - C2–C6 (Exam 9, Exam 5, MAS-II, 6C, PCPA) and the four beta prelims' campaigns moved to **Now**
   (Lane 3, item 0) on 2026-10-25.
-- **C9's rest:** PA and ATPA to beta, after Phase 2.
+- ~~**C9's rest:** PA and ATPA to beta.~~ ✅ 2026-11-24, ahead of Phase 2 by the maintainer's
+  choice: each bank is the vault's own questions (PA 37, ATPA 51), every syllabus concept covered
+  (G6), each question re-read by a second agent. Their G7 and G8 are owed (content plan Phase 3).
 - ~~**C9: write the SOA ASA-prelim publication plan.**~~ ✅ 2026-10-18, content plan §3.1a.
 - **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
   link fixes).
@@ -1207,6 +1209,9 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-24, PA and ATPA to beta (C9).** Taken ahead of Phase 2 at the maintainer's choice,
+  with the banks' fact check and answerability check left for later: G7 and G8 now fail on both.
 
 - **2026-11-08, the Quiz Battle redesign (X10).** A card-game redesign of Quiz Battle, agreed on
   a canvas with the maintainer: `docs/quiz-battle-redesign.md`. It is proposed in §3.4, with

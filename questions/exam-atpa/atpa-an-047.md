@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Explainability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ea82c14ef7a4f6a61a4d280b4e2ed8587c33c1d23e0e600e4fcfe48e266a1daf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-047.md
 ---
 
 A homeowners GBM predicts an annual loss cost of 950 for one applicant, against an average prediction of 600 over the portfolio. The Shapley values for this applicant are $+280$ for the age of the roof, $+120$ for the fire protection class and $-50$ for a claim-free record over the past five years.
@@ -35,5 +45,5 @@ So the prediction is 350 above the average of 600. Roof age moves it up by 280, 
 
 - **B** reads a Shapley value as the effect of changing the feature. Each value measures how far the feature moved this prediction away from the **average** prediction, not from a new roof, and where features interact the Shapley values share the interaction between them, so changing one feature need not move the prediction by its value.
 - **C** turns one record's local explanation into a global ranking. A global importance from Shapley values averages $|\phi_j|$ over every record.
-- **D** forgets $\phi_0$. By efficiency the values add up to the prediction **less** the average prediction, 950 − 600 = 350, so nothing is missing.
+- **D** forgets $\phi_0$. By efficiency the values add up to the prediction **less** the average prediction, 950 - 600 = 350, so nothing is missing.
 - **E** reads a cause into the value. It describes what the model does with the claim-free record for this applicant, not that the record causes lower losses.

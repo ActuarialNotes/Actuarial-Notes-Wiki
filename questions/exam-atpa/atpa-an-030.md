@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Cross-Validation
 answer: "0.70"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f04bae3ace33a9ac0091bc4f8d8aef0e9a78f2a90c72446b66fe0ea55a1db514
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-030.md
 ---
 
 A GLM and a GBM give these out-of-fold predictions of claim severity (in thousands) for five claims:

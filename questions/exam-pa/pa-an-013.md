@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Histogram
   - Concepts/QQ+Plot
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecc9a3d73635ea2a11b4be23216dcb8e818f2c4f8c1d96ccb857e513e37adf78
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-013.md
 ---
 
 Before fitting frequency and severity models, an actuary plots each variable on its own. Match each check to the univariate plot best suited to it. An option may be used more than once or not at all.

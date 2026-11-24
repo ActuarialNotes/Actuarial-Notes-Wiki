@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Preparation
   - Concepts/Data+Pipeline
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fb8a7f8ed69c4c70acedc2e7f6ba7b31a9b7ebb3c0ad05a7aaff9fb748461111
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-018.md
 ---
 
 An analyst prepares a frequency data set with one row per policy term. Data are evaluated at 2025-12-31, so earning stops at 2026-01-01. Days are counted with the end date excluded and a 365-day year.

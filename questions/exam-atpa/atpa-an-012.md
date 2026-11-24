@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Tidy+Data
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4900b7a256913e3e604049718e09ccb82646390506860e7d7f012cb00a860d32
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-012.md
 ---
 
 A territory summary has one row per territory and the columns `territory`, `exposure_2023`, `exposure_2024`, `claims_2023` and `claims_2024`. An analyst wants to fit a claim frequency model with territory and year as predictors and exposure as an offset. Which layout should the summary be reshaped into?

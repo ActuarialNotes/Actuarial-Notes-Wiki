@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Overfitting
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d9a07b5a0622c29dca193bead665017d35383fdfd9ce639fed268fc67d6bea3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-004.md
 ---
 
 An actuary fits four claim frequency models of increasing flexibility to the same training data and evaluates each on the same holdout data.

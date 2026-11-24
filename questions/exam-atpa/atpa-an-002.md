@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Ethics
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d70510311b093219ca968bb7eb1136d268d750c70bcf690c1f444be394ae5230
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-002.md
 ---
 
 A year after launching a telematics discount, an insurer finds that 42% of participants in a protected group earn a discount, against 60% of participants in the reference group. The rating model does not use group membership as an input.
@@ -45,4 +55,4 @@ Only I is true, so the answer is **A**.
 - **B** accepts II, reading an outcome screen as a cost comparison.
 - **C** accepts III, treating a model without the protected input as fair by construction.
 - **D** rejects the one true statement and accepts both false ones.
-- **E** would need all three statements true, or none.
+- **E** would be right only for a combination (A) to (D) do not list, such as II only, III only, all three or none. Exactly I is true.

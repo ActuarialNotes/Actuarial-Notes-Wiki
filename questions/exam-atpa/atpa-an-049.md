@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Holdout+Sample
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:28ed2ae2f2793e86604a7121540af9773fb4454d1682cd67c88cc356a332f5c1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-049.md
 ---
 
 A modeler recommends replacing a pricing GLM with a GBM. The recommendation rests on decile plots built on the data both models were fit to: the GBM's actual loss costs run from 0.45 to 1.65 of the average, a lift of 3.7, while the GLM's run from 0.60 to 1.40, a lift of 2.3. Both models are monotonic and track their predictions closely.

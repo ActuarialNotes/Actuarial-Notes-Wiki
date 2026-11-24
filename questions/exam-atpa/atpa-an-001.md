@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Ethics
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9851325e68f596707a49d76ef1bedfc6eae866637bd19e94f061bd5da80699c5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-001.md
 ---
 
 An insurer reviews a new auto rating model for fairness before filing it. The model does not use any protected characteristic. For policyholders in a protected group, the review finds:

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Cross-Validation
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:261bc8f66ab363592c8ce1eea6933ae05096d10c4c07d3c547eed79fc4f8bfbc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-027.md
 ---
 
 An actuary fits a Poisson lasso for claim frequency over a grid of values of the penalty $\lambda$. Ten-fold cross-validation on the training data gives:

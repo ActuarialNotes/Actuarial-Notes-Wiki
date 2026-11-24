@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Outlier
   - Concepts/Data+Quality
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3c4e6eef39186c827e669e0c1aa0341f3a289169a45243a72f1a8a425354abb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-016.md
 ---
 
 An analyst is preparing 3,000 auto physical damage claims for a severity model. The first quartile of the claim amounts is \$800 and the third quartile is \$4,800. Three claims draw attention: \$9,500, \$52,000 and $-\$1{,}500$.

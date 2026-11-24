@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Principal+Components+Analysis
   - Concepts/Scree+Plot
 points: 3
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:846a145c2071f88c288c0d9f5634e27884099e7747832724e0c86344112d6152
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-017.md
 ---
 
 An insurer wants a few features summarizing its territories for a frequency model. An actuary runs principal components analysis on five territory-level variables, each standardized: population density, traffic accidents per 1,000 residents, share of drivers under 25, average vehicle value and average commute distance. The eigenvalues of the correlation matrix are 2.6, 1.3, 0.6, 0.3 and 0.2.

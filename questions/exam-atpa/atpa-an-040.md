@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Shapley+Value
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4e5c1fb917f0311ddad2767b4ba91f51b2b538ff158ecc443150247d8b6ddf3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-040.md
 ---
 
 A pricing team is replacing its personal auto GLM with a gradient boosting machine (GBM). In the project's documentation, the team writes three statements about explainability and interpretability.

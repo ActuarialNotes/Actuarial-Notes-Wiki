@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
 answer: "203"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e6433791f41edf1d28b37dc76808d115459359614e389f92f58c41162a90b98d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-023.md
 ---
 
 A pure premium GLM with a log link is fitted to homeowners data. The deductible factors and the increased limit factors were set in separate studies, so both are carried into the model as offsets. The fitted model has an intercept of 5.20 and a coefficient of 0.18 for the policy's territory.

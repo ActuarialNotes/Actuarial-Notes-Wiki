@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Predictive+Analytics
   - Concepts/Data+Analytics
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d9144822eb48d9ff5674bf8706aef5b67f07fd51230e887eb9a99adfc06f66d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-002.md
 ---
 
 The vice-president of a commercial auto insurer asks the actuarial team for "a model of our worst accounts".

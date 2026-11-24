@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Unstructured+Data
   - Concepts/Structured+Data
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7abe7ddbb3b3d115cb174a881146dcbbbc414ea902021e6eef4f3a60d8edc25a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-007.md
 ---
 
 An insurer is building a model to predict which new auto claims will exceed \$50,000. Classify each data source the team has found. An option may be used more than once or not at all.

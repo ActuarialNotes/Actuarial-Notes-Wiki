@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Cross-Validation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8b22272e87df3daa6ab4a272c747a0d21f97161798a6b224ae87378cd5d47dbd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-036.md
 ---
 
 An actuary fits a boosted tree model for claim severity with shrinkage $\lambda = 0.01$ and interaction depth $d = 2$. As the number of trees $B$ grows to 4,000, the training error keeps falling. The five-fold cross-validation error falls to its lowest point at $B = 900$ and rises steadily after that.

@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Pipeline
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c33125fad2cc764874ba438459cbd086f878af50aba31a53c9dfda831454376
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-006.md
 ---
 
 A legacy policy file has no delimiters. Its record layout gives positions 1–6 for the policy number, 7–14 for the effective date as YYYYMMDD, 15–16 for the territory code, and 17–24 for the written premium in cents. One record is

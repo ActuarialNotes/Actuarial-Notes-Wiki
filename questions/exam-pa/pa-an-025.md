@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
 answer: "2.226"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b09f4640152277a63563fe954c897281120c3f56324327de5e0b525e728fe097
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-025.md
 ---
 
 A Poisson GLM with a log link models claim frequency for small commercial vehicles. Its predictors are vehicle age $x_1$ in years, an indicator $x_2$ that is 1 for an urban garaging location, and their interaction $x_1 x_2$. The fitted coefficients are:

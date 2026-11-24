@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Ethics
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:31e4976f11ce7f62ad02010437700b2513750158fa916c6dadf331f8f155444d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-003.md
 ---
 
 An insurer's claims app records the phone's location and photos of the damage when a policyholder reports a claim. Policyholders agreed to this collection in order to have their claims handled. The pricing team now proposes to use the full location history from the app as a rating variable at renewal, and legal counsel confirms that the use is permitted by law.

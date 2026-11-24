@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Activation+Function
 answer: "1.4"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:176f236d6f5606a598ffd7dc9ffb32ddd7f6be6c3f82474c06c3aa8be6d3a3f2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-026.md
 ---
 
 A neural network for claim severity has one hidden layer of two units with the ReLU activation, $g(z) = \max(0, z)$. The weights are:

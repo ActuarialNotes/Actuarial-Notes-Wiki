@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Unstructured+Data
 answer: "0.1565"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e97ed7724faf2509c7df2b264b35079a3026d1f48e722c1be95a53d5ee39ca36
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-008.md
 ---
 
 An insurer turns 2,000 auto claim notes into a document-term matrix to add features to a severity model. The term "rollover" appears in 40 of the notes. Note #231 is 50 terms long and contains "rollover" twice.

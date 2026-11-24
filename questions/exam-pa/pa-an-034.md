@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Hyperparameter
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:55cd09b83aedefcc29bae022eea8a96b963270e238ccd4e22d58733920d25719
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-034.md
 ---
 
 An actuary fits a random forest to predict the cost of commercial property claims from $p = 30$ predictors. One predictor, the building's insured value, is far stronger than the others. The actuary reports the forest's settings to a reviewer.

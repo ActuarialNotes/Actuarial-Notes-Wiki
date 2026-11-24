@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Data+Validation
 answer: "300000"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37182eac18ecf3fc54b664c6a123b156bd182e9a0337d4d69419a4c536a2ddb6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-008.md
 ---
 
 A commercial auto modelling extract totals \$27,400,000 of written premium for the year, and the annual statement shows \$28,900,000 for the line. The data owner explains that \$1,200,000 of premium written through a managing general agent is booked outside the policy system and is not in the extract.

@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Shapley+Value
 answer: "171.67"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e10c4b12d510b4a6ee9831877768fbf12d5df7e4f7779928317fb91c187e1381
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-046.md
 ---
 
 A boosted pure premium model predicts 800 for one personal auto policy. The model uses three features: the driver's prior claims ($A$), the territory ($T$) and the vehicle ($V$). Averaging the model over the portfolio while the features in a coalition $S$ are held at this policy's values gives these payouts:

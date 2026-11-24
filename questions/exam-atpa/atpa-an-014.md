@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Data+Validation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6377bccbc35c1022d99c2a82f5a998a3582488c795909efbb62858a141b89cba
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-014.md
 ---
 
 An analyst left joins a claim table onto a policy table on `policy_id`, with the policies on the left. In the policy table the key is stored as a number (`123`), and in the claim table as text with leading zeros (`000123`). The query runs without an error. After the null claim fields are set to zero, every one of the 40,000 policies shows zero claims, although the claim table holds 3,100 claims. What should the analyst conclude and do?

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Quantile+Plot
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2fbb38929d07ee33284687ea9501c0f776287d849c0d88813fdc88ec337ef9e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-048.md
 ---
 
 Two candidate pricing models are compared on the same holdout data. For each model, the holdout records are sorted by that model's predictions and grouped into five quintiles of equal exposure. Loss costs are shown divided by the overall average prediction.
@@ -44,4 +54,4 @@ Model B separates the best and worst risks further, so it has the greater lift, 
 - **A** uses Model A's predictions, 1.70 / 0.50 = 3.40. Predictions rise across a model's own quantiles by construction, so a wide spread of predictions shows nothing; Model A's actuals spread far less than its predictions.
 - **B** is Model A's actual lift computed correctly, but it is smaller than Model B's.
 - **C** uses Model B's predictions, 1.40 / 0.70 = 2.00, instead of its actuals.
-- **E** takes the difference of Model A's predictions, 1.70 − 0.50 = 1.20, which mixes the wrong measure with the wrong values.
+- **E** takes the difference of Model A's predictions, 1.70 - 0.50 = 1.20, which mixes the wrong measure with the wrong values.

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Test+Error
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c861c61a7c2d0398ac7bb599a1ad6f3a94dfd24bb50dad9d3365c83a9bd01d9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-022.md
 ---
 
 An analyst builds a claim-frequency model on five years of policy records, in which each renewal of a policy is a separate record. Determine which of the following statements about the analyst's procedure are true.
@@ -39,4 +49,4 @@ I and III are true, so the answer is **C**.
 
 - **A** — leaves out III, treating the test error as unbiased even after the set chose the model.
 - **B** and **D** — both include II, which accepts a step fitted on data that includes the test set.
-- **E** — would need all three true, or another combination, but II is false.
+- **E** — would be right only for a combination (A) to (D) do not list. Exactly I and III are true.

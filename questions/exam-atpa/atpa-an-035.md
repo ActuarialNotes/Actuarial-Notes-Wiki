@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Bias
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af1c9493a250ccd785147bfe51203aa305494a06434bfe302103fe84424215b0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-035.md
 ---
 
 In a book of policies the true pure premium is

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Gini+Index
 answer: "0.60"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ab4bd802409fe8b64222dff36e2cd3f7b003ceeaf5743e5b59191fb3c2749f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-021.md
 ---
 
 A claims-fraud model is scored on a holdout sample of eight claims. The three fraudulent claims score 0.90, 0.60 and 0.35. The five legitimate claims score 0.70, 0.50, 0.30, 0.20 and 0.10.

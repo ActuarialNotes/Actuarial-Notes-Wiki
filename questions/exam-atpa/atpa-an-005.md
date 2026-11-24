@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Data+Quality
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5cc885b58f0c66020b2b68ec2ef37599bd23f96d6b48a92d2dc701e61e46728a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-005.md
 ---
 
 An actuary in the United States receives a claims file from a third-party administrator to build a severity model. Determine which of the following statements about the actuary's obligations under the Actuarial Standards of Practice are true.
@@ -36,4 +46,4 @@ II and III are true, so the answer is **D**.
 **Why not the others**
 
 - **A**, **B** and **C** each accept I, which turns the review ASOP No. 23 asks for into an audit.
-- **E** would need all three statements true, or none.
+- **E** would be right only for a combination (A) to (D) do not list, such as II only, III only, all three or none. Exactly II and III are true.

@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Explainability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f41d2b9cc6444f726f4085233b9642ee2bd5fa56243666ceb71d55e4ddba27ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-027.md
 ---
 
 A personal auto insurer files its rating relativities with the regulator, who reviews the effect of every rating variable. Its rating engine can load a base rate with one-way and two-way tables of relativities and nothing else. The team compares five candidates by holdout deviance against the current log-link GLM:

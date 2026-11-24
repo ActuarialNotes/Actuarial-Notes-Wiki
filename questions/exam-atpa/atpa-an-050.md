@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Model+Risk
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3f794a9452f8e4fda9ec5243a44b500ef023939ba24687fb81df98876e89f368
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-050.md
 ---
 
 A Canadian property and casualty insurer reviews how three of its models are governed under a lifecycle-wide, risk-based approach such as OSFI's Guideline E-23.

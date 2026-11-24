@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Explainability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a05e29541ad26179ac61608e1bace1690221f666c5537cdf6ddd6853e1209b4c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-042.md
 ---
 
 A random forest predicts the claim frequency of small commercial property risks. Its variable importance plot, rescaled so the largest is 100, shows building age 100, construction class 62, sprinkler status 35 and territory 12. The underwriting manager reads the plot and asks what it tells her.

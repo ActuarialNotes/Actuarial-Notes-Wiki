@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Linear+Mixed+Model
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa764f28e09030d97d0b6a342fd1d632b726ec8b2fe57e5d29d583f412e349d9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-034.md
 ---
 
 An actuary fits a Bayesian hierarchical model of loss ratio by territory. Each territory's effect has a normal prior with mean zero and variance $\tau^2$, and the global intercept and the slope on vehicle age have their own normal priors. The fitted effects of territories with little data are pulled almost all the way to zero, and the actuary believes territories differ more than that.

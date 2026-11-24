@@ -9,6 +9,16 @@ bloom: analyze
 wiki_link:
   - Concepts/Decision+Tree
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c65bf60f9c8775426e02fc222b4076baff6405bf80ecadafb08af5b22c739390
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-029.md
 ---
 
 A modeler compares a regression tree with a linear regression on six observations of a predictor $x$ and a response $y$:

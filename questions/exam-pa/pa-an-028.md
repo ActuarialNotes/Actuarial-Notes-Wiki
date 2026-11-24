@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Hyperparameter
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38b7fc1841e8c22608aefdb8f57a8e7fa09592cc1fb23dfe8fdf1b95ccdc8bd1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-028.md
 ---
 
 A marketing team asks for a renewal model built from 60 candidate predictors, many of them highly correlated with each other (several credit-based scores and several measures of tenure). The team wants a model that drops the predictors that add little, and wants the coefficients of correlated predictors to be stable rather than swinging wildly between refits. The actuary will fit a penalized logistic GLM with R's `glmnet`.

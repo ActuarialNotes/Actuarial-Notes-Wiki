@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Holdout+Sample
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6100930e6d267a949819de9d26349c7059f1c3a62330f4b41e0791ea3e113f6f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-012.md
 ---
 
 Underwriting management must decide whether to replace the current auto rating plan with a new pricing model. The actuary's report to them can lead with one exhibit. Which exhibit best supports their decision?

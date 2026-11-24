@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Actuarial+Communication
   - Concepts/Explainability
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:428f4225c4145e9009a7b8cc98e7dce918410be8df5edf1355b264921d89d9c4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-051.md
 ---
 
 A U.S. personal auto insurer has approved a GBM to replace the GLM behind its filed rates. You are the actuary responsible for the model's documentation.

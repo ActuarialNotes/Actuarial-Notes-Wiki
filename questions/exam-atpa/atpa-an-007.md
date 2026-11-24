@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Data+Preparation
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:07f1709a608293f71842dbfc6fc912723223fe89873ea63c6adad95906bf109e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-007.md
 ---
 
 To build a homeowners frequency model on 2021–2025 experience, an analyst extracts every policy in force on 31 December 2025 and attaches each policy's claims since 1 January 2021. The insurer non-renews policies after repeated water claims. Which bias does this extract introduce?

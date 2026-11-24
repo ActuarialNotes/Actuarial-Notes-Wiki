@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ba0039700213c3d76144b97c49a9a03e2907c815a611bc0bde42e61cf0fe6fbe
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-024.md
 ---
 
 To keep the file small, a claims department summarizes its data before sending it for a severity model. Each row is one combination of rating variables, with the number of claims in the cell and their average severity. Some rows hold 1 claim and others hold more than 200. The actuary will fit a gamma GLM with a log link, with average severity as the response.

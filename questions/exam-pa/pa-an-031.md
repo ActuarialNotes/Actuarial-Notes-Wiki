@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Cross-Validation
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:14034e58952bce96e111447613b5f02c959821ffc57beca9d981e9fc36713b16
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-031.md
 ---
 
 An actuary grows a large classification tree to flag auto claims for review, then prunes it by cost-complexity pruning, with the number of misclassified training claims as the error term. The candidate subtrees are:

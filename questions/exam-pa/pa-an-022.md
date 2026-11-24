@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Dispersion+Parameter
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bc70738bcdc9fe7c0fb89e9731343a4d19fd2955a0bb7e06c18902fbb2b7d652
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-022.md
 ---
 
 A commercial auto data set has one row per fleet: the fleet's claim count, its exposure in vehicle-years, and its rating variables. Exposure ranges from 2 to 400 vehicle-years. An actuary wants a Poisson GLM with a log link whose coefficients describe claim frequency per vehicle-year, with expected claims proportional to exposure.

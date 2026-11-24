@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Train-Test+Split
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4bdc04fabc30888c07cdf8f705fcde228d37235bd062723afb778e56da426917
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-pa/pa-an-015.md
 ---
 
 An insurer wants a model that predicts, at first notice of loss, the eventual severity of each new auto claim, so that adjusters can set initial reserves. The team proposes features for it. Determine which of the following statements are true.

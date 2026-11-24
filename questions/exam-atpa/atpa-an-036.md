@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Bias
   - Concepts/Explainability
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6326f313adc26d006164d3a8da69ba5cb44dfaaae304f356d5c9991d3c732f61
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-atpa/atpa-an-036.md
 ---
 
 An insurer's new auto pricing model is a GBM with about 40 rating variables. Race and ethnicity are not among them, and the insurer does not collect them. A consumer group says the model charges one ethnic group more than its losses justify. The chief actuary replies that the model cannot discriminate by ethnicity because ethnicity is not an input.

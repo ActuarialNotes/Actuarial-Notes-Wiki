@@ -374,11 +374,31 @@ export default function WikiExam() {
       saveOpenObjective(examFileName, at)
       return at
     })
-    const frame = requestAnimationFrame(() => {
-      document.querySelector(`[data-pill="${CSS.escape(reading)}"]`)?.scrollIntoView({ block: 'start', behavior: 'smooth' })
-    })
-    return () => cancelAnimationFrame(frame)
   }, [reading, page, examFileName])
+
+  // …and the page scrolls to that pill, once for each concept the reader
+  // shows. The pill is drawn only when its objective has opened, which is a
+  // render after the one that asked for it (and, on arriving by a link, after
+  // the page itself has loaded), so the pill is waited for rather than looked
+  // for once: looked for once, it was usually not there yet and nothing moved.
+  const scrolledTo = useRef<string | null>(null)
+  useEffect(() => {
+    if (!reading) { scrolledTo.current = null; return }
+    if (!page || scrolledTo.current === reading) return
+    let frame = 0
+    let tries = 0
+    const look = () => {
+      const pill = document.querySelector(`[data-pill="${CSS.escape(reading)}"]`)
+      if (pill) {
+        scrolledTo.current = reading
+        pill.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      } else if (++tries < 60) {
+        frame = requestAnimationFrame(look)
+      }
+    }
+    frame = requestAnimationFrame(look)
+    return () => cancelAnimationFrame(frame)
+  }, [reading, page, openIndex])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {

@@ -1653,12 +1653,21 @@ Other important `lib/` modules:
   entered**, on the exam's questions and their filters, before a word is typed; the page under it
   is held still (`hooks/useBodyScrollLock.ts`) and the panel is as tall as the room under the
   field, so one thing scrolls; and what was typed and filtered is kept for the history entry
-  (sessionStorage), so Back from a question finds the panel as it was left. Learn's search is laid out the same
+  (sessionStorage), so Back from a question finds the panel as it was left. Below `md` the open
+  search is the **whole screen** (fixed to the visual viewport: the field at the top, the
+  Practice button resting on the keyboard), since a panel hung in the page was moved about by
+  the phone's browser whenever the keyboard came or went. **Pressing a question's row ticks it
+  for practice** on every surface; the chevron opens the whole question under the row (stem,
+  options, parts, never an answer), which is where its own page is linked from. Question lists
+  load their next page as the reader nears the foot (`ShowMore`'s `auto`). Learn's search is laid out the same
   way on a phone: the app's top row, then the field as a pill under it (`WikiFloatingSearch`). It
   replaced the old Search page, the Quiz tab's floating search and the Flashcards bar. The field,
   then four tabs with counts — All, Concepts, Resources, Questions — over every exam, the exam in
   focus's results first within each kind and a result from another exam labelled with it
-  (`runSearch`, `focusFirst`). Under All each kind shows its first few and a row for the rest; the
+  (`runSearch`, `focusFirst`). **A concept result opens on its exam's study guide**
+  (`?concept=`), where the page opens its objective, scrolls to its pill, fills it and opens the
+  reader (`WikiExam.tsx` waits for the pill to be drawn before scrolling); a concept on no
+  syllabus opens on its own page. Under All each kind shows its first few and a row for the rest; the
   Questions tab adds `QuestionFilterBar`, a dot a row (green last answered right, red last
   missed, an empty ring not tried — `attemptDot`; none for a signed-out reader) and the filled
   **Practice these N**, which starts a quiz on the results (the first 100). Query, tab and filters

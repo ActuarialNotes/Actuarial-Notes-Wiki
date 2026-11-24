@@ -26,7 +26,6 @@ import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePagedList } from '@/hooks/usePagedList'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
@@ -64,7 +63,7 @@ import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
 import { cn } from '@/lib/utils'
 import { installWikiBundle } from '@/lib/wikiBundle'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { FROM_SEARCH, examDisplayName, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { FROM_SEARCH, examDisplayName, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 
 /** The filters the Questions tab offers. Results span exams, so Exam is one of them. */
 const QUESTION_FACETS_SHOWN: readonly QuestionFacet[] = ['difficulty', 'type', 'source', 'exam', 'sitting']
@@ -218,14 +217,6 @@ export default function Search() {
   }, [text])
   const forget = useCallback(() => { setRecent([]); saveRecentSearches([]) }, [])
 
-  // A concept opens in the reader, which walks the concepts found.
-  const openAt = useConceptPopup(s => s.openAt)
-  const conceptRefs = useMemo<WikiEntryRef[]>(
-    () => results.concepts.map(c => pathToEntryRef(c.item.path) ?? { kind: 'concept', name: c.item.name }),
-    [results.concepts],
-  )
-  const openConcept = useCallback((i: number) => openAt(conceptRefs, i), [openAt, conceptRefs])
-
   const paged = usePagedList(results.questions, `one-search:${query}:${facetKey}`)
   const pagedConcepts = usePagedList(results.concepts, `one-search-concepts:${query}`)
   const pagedResources = usePagedList(results.resources, `one-search-resources:${query}`)
@@ -245,7 +236,8 @@ export default function Search() {
     })
   }, [])
 
-  const showPractice = tab === 'questions' && !questionsLoading && (count > 0 || pickedList.length > 0)
+  // The questions' own tab always ends in it; elsewhere it comes up once a question is ticked.
+  const showPractice = !questionsLoading && (tab === 'questions' ? count > 0 || pickedList.length > 0 : tab === 'all' && pickedList.length > 0)
   const practiceBarRef = useRef<HTMLDivElement>(null)
   useActionBarHeight(practiceBarRef, showPractice)
 
@@ -270,15 +262,8 @@ export default function Search() {
     navigate(`${url.pathname}${url.search}`)
   }
 
-  const conceptRow = (c: ConceptResult, i: number) => (
-    <ConceptRow
-      key={c.item.path}
-      result={c}
-      query={query}
-      level={levelOf(c.item.name)}
-      href={wikiRoute(conceptRefs[i]!)}
-      onOpen={() => openConcept(i)}
-    />
+  const conceptRow = (c: ConceptResult) => (
+    <ConceptRow key={c.item.path} result={c} query={query} level={levelOf(c.item.name)} />
   )
   const resourceRow = (r: ResourceResult) => <ResourceRow key={r.item.path} result={r} query={query} />
   const questionRow = (r: QuestionResult) => (
@@ -287,7 +272,7 @@ export default function Search() {
       result={r}
       query={query}
       dot={tracked ? attemptDot(attempts.get(r.question.id)) : null}
-      picked={tab === 'questions' ? picked.has(r.question.id) : undefined}
+      picked={picked.has(r.question.id)}
       onTogglePick={togglePick}
     />
   )
@@ -502,7 +487,7 @@ export default function Search() {
               ) : (
                 <>
                   <ul className="flex flex-col">{paged.shown.map(questionRow)}</ul>
-                  <ShowMore nextSize={paged.nextSize} remaining={paged.remaining} noun="questions" onShowMore={paged.showMore} />
+                  <ShowMore auto nextSize={paged.nextSize} remaining={paged.remaining} noun="questions" onShowMore={paged.showMore} />
                 </>
               )}
             </>
@@ -588,30 +573,23 @@ function Section({
   )
 }
 
-function ConceptRow({
-  result,
-  query,
-  level,
-  href,
-  onOpen,
-}: {
-  result: ConceptResult
-  query: string
-  level: MasteryState
-  href: string
-  onOpen: () => void
-}) {
+/**
+ * A concept among the results. It opens on its exam's study guide, where the
+ * page scrolls to it, lights its pill and opens it in the reader
+ * (pages/wiki/WikiExam.tsx, `?concept=`); a concept on no syllabus opens on
+ * its own page.
+ */
+function ConceptRow({ result, query, level }: { result: ConceptResult; query: string; level: MasteryState }) {
   const place = conceptPlaceLine(result)
+  const ref = pathToEntryRef(result.item.path) ?? { kind: 'concept' as const, name: result.item.name }
+  const href = result.place
+    ? `${wikiRoute({ kind: 'exam', name: result.place.examFile })}?concept=${encodeURIComponent(result.item.name)}`
+    : wikiRoute(ref)
   return (
     <li className={ROW_RULE}>
       <Link
         to={href}
-        // A plain click opens the concept in the reader; a modified one keeps the link.
-        onClick={e => {
-          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
-          e.preventDefault()
-          onOpen()
-        }}
+        state={FROM_SEARCH}
         data-result
         className={cn('flex min-h-14 items-center gap-3 rounded-lg py-1.5', ROW_FOCUS, ROW_SCROLL)}
       >

@@ -82,6 +82,8 @@ interface ConceptPopupState {
   occurrenceIndex: number
   // What triggered the popup — used by "This Page" search to compute scope.
   sourcePath: string | null
+  /** The address the popup was opened on. */
+  openedOn: string | null
   // What the walk is — see WalkKind. Decides whether the footer offers the
   // syllabus-filter picker at all.
   walkKind: WalkKind
@@ -117,6 +119,11 @@ interface ConceptPopupState {
   // Closes the popup if the user navigated away from the page that opened it —
   // called by WikiLayout on every route change to keep the split pane in sync.
   closeOnNavigation: (pathname: string) => void
+  // Closes a popup opened outside the wiki (the search, Today, Flashcards, a
+  // tool) once the reader is on another page. Such a popup names no source
+  // page, so `closeOnNavigation` leaves it alone, and it would come up again
+  // over whichever page mounts the popup next. Called on every change of page.
+  closeIfLeft: (pathname: string) => void
 }
 
 // The stack the walk resets to whenever it moves: just the entry it landed on.
@@ -127,6 +134,13 @@ function stackState(list: WikiEntryRef[], index: number): { pages: StackPageRef[
   return { pages: stack.pages, pageIndex: stack.index }
 }
 
+/** The address the reader is on, for `openedOn`. */
+function currentPathname(): string | null {
+  return typeof window === 'undefined' ? null : window.location.pathname
+}
+
+const CLOSED = { open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, openedOn: null, walkKind: 'syllabus' as WalkKind, objectives: null, dashboardContext: null }
+
 export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   open: false,
   list: [],
@@ -136,6 +150,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   occurrences: null,
   occurrenceIndex: 0,
   sourcePath: null,
+  openedOn: null,
   walkKind: 'syllabus',
   objectives: null,
   dashboardContext: null,
@@ -152,6 +167,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: filter === 'entire-syllabus' ? occurrences : null,
       occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
       sourcePath,
+      openedOn: currentPathname(),
       walkKind: options?.walk ?? 'syllabus',
       // Kept whatever the filter is: a study-plan or source-material walk is
       // still a walk through the same syllabus, so its concepts still belong to
@@ -171,6 +187,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: null,
       occurrenceIndex: 0,
       sourcePath: null,
+      openedOn: currentPathname(),
       walkKind: 'syllabus',
       // The dashboard's walk is cross-exam, so it has no one syllabus to cut by.
       objectives: null,
@@ -286,11 +303,15 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     }
     set({ pages: next.pages, pageIndex: next.index })
   },
-  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, walkKind: 'syllabus', objectives: null, dashboardContext: null }),
+  close: () => set(CLOSED),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, walkKind: 'syllabus', objectives: null, dashboardContext: null })
+      set(CLOSED)
     }
+  },
+  closeIfLeft: pathname => {
+    const { open, sourcePath, openedOn } = get()
+    if (open && !sourcePath && openedOn && openedOn !== pathname) set(CLOSED)
   },
 }))

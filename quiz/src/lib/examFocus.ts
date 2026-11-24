@@ -132,6 +132,35 @@ export function addressFocus(pageId: string, exams: readonly ExamPage[]): string
   return exams.some(e => e.examId === pageId) ? pageId : null
 }
 
+/**
+ * Where choosing an exam in the switcher takes a page whose address names an
+ * exam, or null when the page follows the focus by itself.
+ *
+ * An address that names an exam wins over the focus, so on such a page the
+ * choice has to move the address too, or the page would put its own exam
+ * straight back in focus: an exam's study guide goes to the chosen exam's
+ * guide (`examPath`), and Practice opened on `?topic=` drops the topic and
+ * shows the exam in focus.
+ */
+export function switchDestination(
+  location: { pathname: string; search: string },
+  examPath: string | null,
+): { to: string; replace: boolean } | null {
+  const { pathname, search } = location
+  if (pathname.startsWith('/wiki/exam/')) {
+    if (!examPath || examPath === pathname) return null
+    return { to: examPath, replace: false }
+  }
+  if (pathname === '/' || pathname === '/papers') {
+    const params = new URLSearchParams(search)
+    if (!params.has('topic')) return null
+    params.delete('topic')
+    const rest = params.toString()
+    return { to: rest ? `${pathname}?${rest}` : pathname, replace: true }
+  }
+  return null
+}
+
 /** The regional variant a page stands for: `CAS-6`, `6C` → `CA`. Null for an exam with none. */
 export function variantForPage(key: string, pageId: string): string | null {
   const map = LOCALIZED_EXAM_VARIANT_IDS[key]

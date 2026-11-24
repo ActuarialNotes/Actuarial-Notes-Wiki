@@ -1,6 +1,7 @@
 import { Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
 import { Routes, Route, Link, Navigate, useNavigate, useLocation, useParams } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
 import { NOT_FOUND_HEAD } from '@/lib/seo'
 import { PageLoading } from '@/components/LoadingMark'
@@ -256,6 +257,9 @@ function NotFound() {
 
 function PageTracker() {
   usePageTracking()
+  // A concept opened over one page doesn't follow the reader to the next.
+  const { pathname } = useLocation()
+  useEffect(() => { useConceptPopup.getState().closeIfLeft(pathname) }, [pathname])
   return null
 }
 

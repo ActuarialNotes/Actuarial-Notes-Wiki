@@ -350,12 +350,14 @@ export function AddExamList({
 /**
  * The whole flow: pick an exam, say when it is, and land on Today with it in
  * focus. `initial` starts on the date for an exam already chosen (the page the
- * reader is visiting).
+ * reader is visiting). `to` is where the reader lands instead of Today:
+ * Practice passes its own address, so an exam added there opens its quiz setup.
  */
 export function AddExamFlow({
-  initial = null, onBack, onDone, onLeave, titleId,
+  initial = null, onBack, onDone, onLeave, titleId, to = '/dashboard',
 }: {
   initial?: ExamChoice | null
+  to?: string
   onBack?: () => void
   onDone?: () => void
   onLeave?: () => void
@@ -381,7 +383,7 @@ export function AddExamFlow({
           return
         }
         onDone?.()
-        navigate('/dashboard')
+        navigate(to, { replace: to === '/' })
       }}
     />
   )

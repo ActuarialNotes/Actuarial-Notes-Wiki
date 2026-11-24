@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examDisplayName, headingSlug, hrefToEntryRef, isNonExamRequirement, requirementDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
+import { examDisplayName, headingSlug, hrefToEntryRef, isNonExamRequirement, requirementDisplayName, studyGuidesSection, RESOURCES_ROUTE, FROM_SEARCH, remembersWikiPlace, studyGuidesRowTarget } from './wikiRoutes'
 
 describe('requirementDisplayName', () => {
   it('titles a non-exam requirement without "Exam"', () => {
@@ -102,5 +102,29 @@ describe('heading links', () => {
 
   it('reads #repeat as no heading', () => {
     expect(hrefToEntryRef('/wiki/concept/Event#repeat')).toEqual({ kind: 'concept', name: 'Event' })
+  })
+})
+
+describe('the Study Guides row', () => {
+  it('returns to the page last read from another tab', () => {
+    expect(studyGuidesRowTarget('/', '/wiki/exam/Exam+P-1+(SOA)')).toBe('/wiki/exam/Exam+P-1+(SOA)')
+    expect(studyGuidesRowTarget('/dashboard', '/wiki/resources?exam=all')).toBe('/wiki/resources?exam=all')
+  })
+
+  it('opens the tab\'s home with nothing read, or a stored value that is no wiki page', () => {
+    expect(studyGuidesRowTarget('/', null)).toBe('/wiki')
+    expect(studyGuidesRowTarget('/', '/settings')).toBe('/wiki')
+  })
+
+  it('leads home from inside the tab, so it is a way out of the page showing', () => {
+    expect(studyGuidesRowTarget('/wiki/question/p-006', '/wiki/exam/Exam+P-1+(SOA)')).toBe('/wiki')
+    expect(studyGuidesRowTarget('/wiki/concept/Bayes+Theorem', '/wiki/concept/Bayes+Theorem')).toBe('/wiki')
+  })
+
+  it('does not remember a question\'s page or a page opened as a search result', () => {
+    expect(remembersWikiPlace('/wiki/question/p-006', null)).toBe(false)
+    expect(remembersWikiPlace('/wiki/resource/Basic+Ratemaking', FROM_SEARCH)).toBe(false)
+    expect(remembersWikiPlace('/wiki/resource/Basic+Ratemaking', null)).toBe(true)
+    expect(remembersWikiPlace('/wiki/exam/Exam+P-1+(SOA)', { restoreScroll: true })).toBe(true)
   })
 })

@@ -172,9 +172,39 @@ test('the Quiz tab opens on the exam in focus, and the switcher changes it', asy
   await expect.poll(() => page.evaluate(() => localStorage.getItem('quiz.dashboard.activeExamId'))).toBe('P-1')
 })
 
+test('the switcher moves a page whose address names an exam', async ({ page }) => {
+  await studying(page, [{ exam_id: 'P', target_date: '2027-01-14' }, { exam_id: 'FM', target_date: '2027-04-14' }])
+  // Practice opened on `?topic=`: the choice drops the topic and shows the exam chosen.
+  await page.goto('/?topic=Probability')
+  const practice = page.getByTestId('practice-exam')
+  await expect(practice).toHaveAccessibleName('Switch exam, Exam P-1', { timeout: 30_000 })
+  await practice.click()
+  await page.getByRole('dialog', { name: 'Your exams' }).getByRole('radio', { name: /^Exam FM/ }).click()
+  await expect(practice).toHaveAccessibleName('Switch exam, Exam FM-2')
+  await expect(page).toHaveURL(/\/$/)
+
+  // An exam's study guide: the choice opens the chosen exam's guide, and Back returns.
+  await page.goto('/wiki/exam/Exam+FM-2+(SOA)')
+  const guide = page.getByTestId('exam-switcher')
+  await expect(guide).toHaveAccessibleName('Switch exam, Exam FM-2', { timeout: 30_000 })
+  await guide.click()
+  await page.getByRole('dialog', { name: 'Your exams' }).getByRole('radio', { name: /^Exam P/ }).click()
+  await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+P-1/)
+  await expect(guide).toHaveAccessibleName('Switch exam, Exam P-1')
+  await page.goBack()
+  await expect(page).toHaveURL(/\/wiki\/exam\/Exam\+FM-2/)
+})
+
 test('the Quiz tab with no exams is Add an exam, and an exam with no questions says so', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible({ timeout: 30_000 })
+
+  // An exam added here opens its quiz setup, on the Quiz tab.
+  await page.getByTestId('add-exam').getByRole('button', { name: /^Exam P\b/ }).click()
+  await page.getByTestId('exam-date').getByRole('button', { name: 'Add Exam P' }).click()
+  await expect(page.getByTestId('practice-exam')).toHaveAccessibleName('Switch exam, Exam P-1')
+  await expect(page).toHaveURL(/\/$/)
+  await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
 
   await page.evaluate(() => localStorage.setItem('quiz.browserExams', JSON.stringify([
     { exam_id: 'CAS-PCPA', status: 'in_progress', target_date: null },

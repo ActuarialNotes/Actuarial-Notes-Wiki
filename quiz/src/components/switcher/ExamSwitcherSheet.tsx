@@ -5,6 +5,7 @@
 // and the date question are screens of their own (AddExamFlow.tsx).
 
 import { useId, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
@@ -14,11 +15,12 @@ import { Popup, PopupTitle } from '@/components/ui/Popup'
 import { useExamProgress } from '@/contexts/examProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useExamInFocus } from '@/hooks/useExamInFocus'
-import { daysLeftLabel, switcherRows, type SwitcherRow } from '@/lib/examFocus'
+import { daysLeftLabel, switchDestination, switcherRows, type SwitcherRow } from '@/lib/examFocus'
 import { isExamInDevelopment } from '@/lib/examStatus'
 import { computeExamReadiness } from '@/lib/readiness'
 import { cn } from '@/lib/utils'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import { useExamSwitcher } from '@/stores/examSwitcher'
 
 const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
@@ -57,6 +59,18 @@ export default function ExamSwitcherSheet() {
   const { exams, active, select, syllabi } = useExamInFocus()
   const { targetDates, saveExamRows, updateTargetDate } = useExamProgress()
   const { records } = useConceptMastery()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // A page whose address names an exam moves with the choice (lib/examFocus.ts).
+  function choose(examId: string) {
+    select(examId)
+    close()
+    const page = exams.find(e => e.examId === examId)
+    const examPath = page?.fileName ? wikiRoute({ kind: 'exam', name: page.fileName }) : null
+    const dest = switchDestination(location, examPath)
+    if (dest) navigate(dest.to, { replace: dest.replace })
+  }
 
   /** What the sheet shows: the list, Add an exam, or a date being set. */
   const [view, setView] = useState<
@@ -109,6 +123,8 @@ export default function ExamSwitcherSheet() {
           initial={view.initial}
           onBack={adding ? close : exams.length > 0 ? () => setView({ kind: 'list' }) : undefined}
           onDone={close}
+          // Added from Practice, the reader stays on Practice, on the new exam.
+          to={location.pathname === '/' ? '/' : '/dashboard'}
           onLeave={close}
         />
       </Popup>
@@ -183,7 +199,7 @@ export default function ExamSwitcherSheet() {
               role="radio"
               aria-checked={row.current}
               aria-label={rowLabel(row)}
-              onClick={() => { select(row.examId); close() }}
+              onClick={() => choose(row.examId)}
               className={cn(
                 'grid min-h-[84px] grid-cols-[44px_minmax(0,1fr)_28px] items-center gap-x-3.5 rounded-[18px] px-4 py-3 text-left',
                 FOCUS_RING,

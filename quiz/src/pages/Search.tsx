@@ -61,7 +61,7 @@ import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
 import { cn } from '@/lib/utils'
 import { installWikiBundle } from '@/lib/wikiBundle'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { examDisplayName, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { FROM_SEARCH, examDisplayName, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 
 /** The filters the Questions tab offers. Results span exams, so Exam is one of them. */
 const QUESTION_FACETS_SHOWN: readonly QuestionFacet[] = ['difficulty', 'type', 'source', 'exam', 'sitting']
@@ -444,7 +444,7 @@ function ResourceRow({ result, query }: { result: ResourceResult; query: string 
   const meta = resourceMetaLine(result)
   return (
     <li className={ROW_RULE}>
-      <Link to={wikiRoute(ref)} className={cn('flex min-h-16 items-center gap-3 rounded-lg py-2', ROW_FOCUS)}>
+      <Link to={wikiRoute(ref)} state={FROM_SEARCH} className={cn('flex min-h-16 items-center gap-3 rounded-lg py-2', ROW_FOCUS)}>
         {item.coverImage ? (
           <img
             src={item.coverImage}

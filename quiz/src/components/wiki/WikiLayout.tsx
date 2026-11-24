@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { remembersWikiPlace, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { WikiFloatingSearch } from '@/components/wiki/WikiFloatingSearch'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -47,9 +47,13 @@ export function WikiLayout({ children }: { children: ReactNode }) {
       isReturn = stored.split('?')[0] === location.pathname
     } catch { /* ignore */ }
 
-    try {
-      sessionStorage.setItem('wiki:last-path', location.pathname + location.search)
-    } catch { /* ignore */ }
+    // Where the sidebar's Study Guides row returns to. A page opened as a
+    // search result is not that place (lib/wikiRoutes.ts).
+    if (remembersWikiPlace(location.pathname, location.state)) {
+      try {
+        sessionStorage.setItem('wiki:last-path', location.pathname + location.search)
+      } catch { /* ignore */ }
+    }
 
     setPageRefsState([])
     setExamIdState(null)
@@ -67,7 +71,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     if (!isReturn) {
       closeOnNavigation(location.pathname)
     }
-  }, [location.pathname, location.search, closeOnNavigation])
+  }, [location.pathname, location.search, location.state, closeOnNavigation])
 
   return (
     <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta, setGround }}>

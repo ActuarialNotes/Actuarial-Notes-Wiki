@@ -4,7 +4,7 @@ import { TRACKS } from '../data/tracks'
 import {
   addExamBody, addExamSections, addressFocus, browserExamsToMerge, daysAwayLabel, daysLeftLabel, daysUntil,
   focusOnLoad, isUsableExamDate, nearestSittingExam, offeredSittings, parseBrowserExams, parseStoredFocus,
-  readerExams, resolveFocus, switcherRows, variantForPage, type ExamPage,
+  readerExams, resolveFocus, switchDestination, switcherRows, variantForPage, type ExamPage,
 } from './examFocus'
 
 const page = (examId: string, examLabel = `Exam ${examId}`, examTopic = 'Topic'): ExamPage =>
@@ -248,5 +248,32 @@ describe('a visitor\'s exams', () => {
       { exam_id: 'SRM', status: 'not_started', target_date: null },
     ]))
     expect(browserExamsToMerge(browser, new Set(['P'])).map(r => r.exam_id)).toEqual(['FM'])
+  })
+})
+
+describe('switchDestination', () => {
+  const at = (pathname: string, search = '') => ({ pathname, search })
+
+  it('moves an exam page to the chosen exam\'s page', () => {
+    expect(switchDestination(at('/wiki/exam/Exam+P-1+(SOA)'), '/wiki/exam/Exam+FM-2+(SOA)'))
+      .toEqual({ to: '/wiki/exam/Exam+FM-2+(SOA)', replace: false })
+  })
+
+  it('leaves an exam page alone when it is the chosen exam\'s, or the exam has no page', () => {
+    expect(switchDestination(at('/wiki/exam/Exam+P-1+(SOA)'), '/wiki/exam/Exam+P-1+(SOA)')).toBeNull()
+    expect(switchDestination(at('/wiki/exam/Exam+P-1+(SOA)'), null)).toBeNull()
+  })
+
+  it('drops the topic from Practice\'s address, keeping the rest', () => {
+    expect(switchDestination(at('/', '?topic=Probability'), null)).toEqual({ to: '/', replace: true })
+    expect(switchDestination(at('/', '?topic=Exam+5&mode=quiz'), null)).toEqual({ to: '/?mode=quiz', replace: true })
+    expect(switchDestination(at('/papers', '?topic=Exam+5'), null)).toEqual({ to: '/papers', replace: true })
+  })
+
+  it('is null wherever the page follows the focus by itself', () => {
+    expect(switchDestination(at('/'), '/wiki/exam/Exam+FM-2+(SOA)')).toBeNull()
+    expect(switchDestination(at('/dashboard'), '/wiki/exam/Exam+FM-2+(SOA)')).toBeNull()
+    expect(switchDestination(at('/wiki'), '/wiki/exam/Exam+FM-2+(SOA)')).toBeNull()
+    expect(switchDestination(at('/wiki/concept/Bayes+Theorem', '?from=x'), '/wiki/exam/Exam+FM-2+(SOA)')).toBeNull()
   })
 })

@@ -31,6 +31,31 @@ test.describe('search', () => {
     await expect(page).toHaveURL(/\/search\?/)
   })
 
+  test('a result is not where Study Guides opens, and a concept opened here stays here', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/search?q=p-004&tab=questions')
+    const studyGuides = page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Study Guides' })
+
+    // A question's page, then Study Guides: the tab's home, from the page and from another tab.
+    await page.getByTestId('search-question').first().getByRole('link').first().click()
+    await expect(page).toHaveURL(/\/wiki\/question\/p-004/)
+    await studyGuides.click()
+    await expect(page).toHaveURL(/\/wiki$/)
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Quiz/ }).click()
+    await expect(page).toHaveURL(/\/$/)
+    await studyGuides.click()
+    await expect(page).toHaveURL(/\/wiki$/)
+
+    // A concept opened over the results closes when the reader goes to another page.
+    await page.goto('/search?q=bayes+theorem&tab=concepts')
+    await page.locator('main a[href^="/wiki/concept/"]').first().click()
+    const practiceThis = page.getByRole('link', { name: 'Practice this' })
+    await expect(practiceThis).toBeVisible()
+    await studyGuides.click()
+    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
+    await expect(practiceThis).toHaveCount(0)
+  })
+
   test('the tabs count what the query found, and All shows each kind', async ({ page }) => {
     await page.goto('/search?q=poisson')
 

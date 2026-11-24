@@ -507,7 +507,7 @@ export default function Landing() {
           ) : !hasExams ? (
             <div className="mt-2">
               <Suspense fallback={null}>
-                <AddExamFlow />
+                <AddExamFlow to="/" />
               </Suspense>
             </div>
           ) : null}

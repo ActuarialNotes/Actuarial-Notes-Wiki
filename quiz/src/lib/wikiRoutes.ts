@@ -72,6 +72,33 @@ export function studyGuidesSection(pathname: string): StudyGuidesSection | null 
   return null
 }
 
+/**
+ * Navigation state for a link into a study guide page from the one search: the
+ * page is a result being looked at, not the reader's place in Study Guides, so
+ * the sidebar's Study Guides row doesn't come back to it.
+ */
+export const FROM_SEARCH = { fromSearch: true } as const
+
+/**
+ * Whether a visit to a wiki page is the place the Study Guides row returns to.
+ * A practice question's page never is (it is reached from a search, and is not
+ * a page of the guides), and neither is a page opened as a search result.
+ */
+export function remembersWikiPlace(pathname: string, state: unknown): boolean {
+  if (pathname.startsWith('/wiki/question/')) return false
+  return !(typeof state === 'object' && state !== null && (state as { fromSearch?: unknown }).fromSearch === true)
+}
+
+/**
+ * Where the sidebar's Study Guides row leads: from another tab, back to the
+ * page last read there; from inside the tab, to its home, so the row is always
+ * a way out of the page showing.
+ */
+export function studyGuidesRowTarget(pathname: string, lastPath: string | null): string {
+  if (studyGuidesSection(pathname)) return '/wiki'
+  return lastPath && studyGuidesSection(lastPath.split(/[?#]/)[0]) ? lastPath : '/wiki'
+}
+
 // Convert a repo-relative file path ("Concepts/Expected Value.md",
 // "Resources/Books/Probability for Risk Management.md",
 // "Exam P-1 (SOA).md") to its wiki route and vice versa.

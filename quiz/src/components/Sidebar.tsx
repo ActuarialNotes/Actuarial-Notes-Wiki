@@ -37,15 +37,15 @@ import { RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOOLS_STORE_NAV_ENABLED } from '@/
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
-import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
+import { RESOURCES_ROUTE, studyGuidesRowTarget, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
-function getLastWikiPath(): string {
-  try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
+function getLastWikiPath(): string | null {
+  try { return sessionStorage.getItem('wiki:last-path') } catch { return null }
 }
 
 function getInitialCollapsed(): boolean {
@@ -305,7 +305,7 @@ function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavig
   return (
     <>
       <SidebarItem
-        to={getLastWikiPath()}
+        to={studyGuidesRowTarget(pathname, getLastWikiPath())}
         label="Study Guides"
         icon={<BookOpen className={iconClass} />}
         collapsed={collapsed}
@@ -665,8 +665,9 @@ export default function Sidebar() {
             }
             collapsed={collapsed}
             end
-            // Games — Quiz Battle and Concept Craft — are ways of quizzing, opened from this tab.
-            forceActive={location.pathname === '/games' || location.pathname === '/battle' || location.pathname === '/craft' || location.pathname.startsWith('/craft/')}
+            // Games (Quiz Battle and Concept Craft), the past papers and the
+            // search are opened from this tab, so it stays lit on them.
+            forceActive={['/games', '/battle', '/craft', '/papers', '/search'].includes(location.pathname) || location.pathname.startsWith('/craft/')}
             onNavigate={closeMobile}
             badge={quizBadge}
             dataTour="nav-quiz"

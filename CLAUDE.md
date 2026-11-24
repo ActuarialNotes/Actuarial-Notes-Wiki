@@ -1175,7 +1175,10 @@ Other important `lib/` modules:
   (`?exam=…&year=…`, so Back and the sidebar's return keep it). Drawn with the question
   lists' `MultiSelectDropdown`. The sidebar lists the tab's two pages — **Exams** and
   **Resources** — under Study Guides while the tab is open, the way Projects lists an open
-  attempt's views; which one a path is under is `studyGuidesSection` in `wikiRoutes.ts`
+  attempt's views. The Study Guides row itself returns to the page last read there from another
+  tab and leads to the tab's home from inside it (`studyGuidesRowTarget`); a question's page and
+  a page opened as a search result are never that remembered page (`remembersWikiPlace`,
+  `FROM_SEARCH`); which one a path is under is `studyGuidesSection` in `wikiRoutes.ts`
   (a resource page is under Resources, an exam or concept page under Exams). Pure and tested.
 - `resourceVintages.ts` — the Resources page's **Vintage** filter: with exactly one exam
   chosen, which *edition* of its syllabus the shelf shows (the newest by default, so a
@@ -1320,7 +1323,10 @@ Other important `lib/` modules:
   `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
   folded page come back where it was left). A page's **Read PDF** stacks its document the
   same way (`PdfPageRef` → `components/wiki/PdfPagePanel.tsx`), whose own page bar and
-  footer stand in for the walk's while it is open. See `docs/stacked-pages.md`.
+  footer stand in for the walk's while it is open. See `docs/stacked-pages.md`. The popup is one store
+  for the whole app, so a concept opened outside the wiki (the search, Today, Flashcards, a
+  tool) is closed when the reader goes to another page (`closeIfLeft`, called from `App.tsx` on
+  every change of path); without it the popup came up again over the next page that mounts it.
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
   it on a given route: a page with a floating search bar carries the hamburger
   (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
@@ -1463,7 +1469,11 @@ Other important `lib/` modules:
   `contexts/ExamProgressContext.tsx`, where the account's value wins on load and on return to
   the tab. `hooks/useExamInFocus.ts` is the hook. **An address that names an exam still opens
   that exam**: if it is one of the reader's it comes into focus, and any other is a **visit**
-  that leaves the focus alone (`addressFocus`); reading an exam never requires adding it. The
+  that leaves the focus alone (`addressFocus`); reading an exam never requires adding it. Because
+  the address wins, **choosing an exam in the sheet moves a page whose address names one**
+  (`switchDestination`): an exam's study guide goes to the chosen exam's guide, and Practice
+  opened on `?topic=` drops the topic. An exam added from Practice lands on Practice, on its
+  quiz setup (`AddExamFlow`'s `to`); added anywhere else it lands on Today. The
   module is also what the sheet lists (`switcherRows`), what Add an exam lists
   (`addExamSections`: ready and beta exams by credential, in-development ones folded; it is the
   full ladder) and which sittings "When is your exam?" offers (`offeredSittings`: rows of

@@ -118,11 +118,22 @@ test.describe('practice home', () => {
     await expect(page.getByTestId('practice').getByRole('link', { name: /Flashcards/ })).toHaveAttribute('href', '/flashcards')
     // The search stays on Practice: its results are laid over the page,
     // questions only, the Exam filter on the exam showing.
-    await page.getByRole('searchbox', { name: 'Search questions' }).fill('loss')
+    // Entering the field is enough: the exam's questions and their filters open under it.
+    const search = page.getByRole('searchbox', { name: 'Search questions' })
+    await search.focus()
     const results = page.getByTestId('practice-search-results')
+    await expect(results.getByTestId('search-question').first()).toBeVisible({ timeout: 30_000 })
+    await expect(results.getByRole('button', { name: /Exam 5/ })).toBeVisible()
+    await search.fill('loss')
     await expect(results.getByTestId('search-question').first()).toBeVisible({ timeout: 30_000 })
     await expect(page).not.toHaveURL(/\/search/)
     await expect(results.getByRole('button', { name: /Exam 5/ })).toBeVisible()
+    // A question opened from the results and left again finds them as they were.
+    await results.getByTestId('search-question').first().getByRole('link').first().click()
+    await expect(page).toHaveURL(/\/wiki\/question\//)
+    await page.goBack()
+    await expect(search).toHaveValue('loss')
+    await expect(results.getByTestId('search-question').first()).toBeVisible({ timeout: 30_000 })
     await page.keyboard.press('Escape')
     await expect(results).toHaveCount(0)
   })

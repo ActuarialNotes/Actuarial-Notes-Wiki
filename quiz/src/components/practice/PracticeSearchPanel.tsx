@@ -3,7 +3,7 @@
 // with a box to pick it, ending in the button that starts a quiz on them.
 // The matching, filters and draw are the one search's (lib/oneSearch.ts).
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Play } from 'lucide-react'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
@@ -23,23 +23,47 @@ import {
   runSearch,
 } from '@/lib/oneSearch'
 import type { Question } from '@/lib/parser'
-import { emptyFacets, toggleFacet, type FacetSelection, type QuestionFacet } from '@/lib/questionFilters'
+import { QUESTION_FACETS, emptyFacets, toggleFacet, type FacetSelection, type QuestionFacet } from '@/lib/questionFilters'
 import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
 import { cn } from '@/lib/utils'
 
 const FACETS_SHOWN: readonly QuestionFacet[] = ['exam', 'difficulty', 'type', 'source', 'sitting']
 
-export default function PracticeSearchPanel({ query, exam, questions }: {
+/** The filters as they were left (components/practice/PracticeSearch.tsx), or the exam the page shows. */
+function startingFacets(exam: string, stored: Record<string, string[]> | undefined): FacetSelection {
+  if (stored) {
+    let facets = emptyFacets()
+    for (const facet of QUESTION_FACETS) {
+      for (const value of stored[facet] ?? []) facets = toggleFacet(facets, facet, value)
+    }
+    return facets
+  }
+  return exam ? toggleFacet(emptyFacets(), 'exam', exam) : emptyFacets()
+}
+
+export default function PracticeSearchPanel({ query: typed, exam, questions, initialFacets, onFacets }: {
   query: string
   exam: string
   questions: Question[]
+  /** The filters this history entry was left with, when it is come back to. */
+  initialFacets?: Record<string, string[]>
+  /** Told each change of the filters, so they can be kept for the way back. */
+  onFacets?: (facets: Record<string, string[]>) => void
 }) {
   const navigate = useNavigate()
   const quizSettings = useQuizBuilderSettings('quiz')
   const { byQuestionId: attempts, tracked } = useQuestionAttempts()
+  // The field is drawn at once; the results follow when the browser has a moment.
+  const query = useDeferredValue(typed)
 
   // The Exam filter opens on the exam the page shows; the reader can widen it.
-  const [facets, setFacets] = useState<FacetSelection>(() => (exam ? toggleFacet(emptyFacets(), 'exam', exam) : emptyFacets()))
+  const [facets, setFacets] = useState<FacetSelection>(() => startingFacets(exam, initialFacets))
+  const facetKey = FACETS_SHOWN.map(f => [...facets[f]].sort().join(',')).join('|')
+  useEffect(() => {
+    onFacets?.(Object.fromEntries(QUESTION_FACETS.map(f => [f, [...facets[f]]])))
+    // `facetKey` is the filters' content.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facetKey, onFacets])
 
   const pool = useMemo(() => matchQuestions(questions, query), [questions, query])
   const results = useMemo(
@@ -50,11 +74,15 @@ export default function PracticeSearchPanel({ query, exam, questions }: {
       syllabi: [],
       focus: exam ? { examId: '', bank: exam, resourceLabel: '' } : null,
       facets,
+      matched: pool,
     }).questions,
-    [query, questions, exam, facets],
+    [query, questions, exam, facets, pool],
   )
-  const facetKey = FACETS_SHOWN.map(f => [...facets[f]].sort().join(',')).join('|')
   const paged = usePagedList(results, `practice-search:${query}:${facetKey}`)
+
+  // New results start at their top.
+  const listRef = useRef<HTMLDivElement>(null)
+  useEffect(() => { listRef.current?.scrollTo(0, 0) }, [query, facetKey])
 
   const [picked, setPicked] = useState<ReadonlySet<string>>(() => new Set())
   const [chosenCount, setChosenCount] = useState<number | null>(null)
@@ -94,9 +122,13 @@ export default function PracticeSearchPanel({ query, exam, questions }: {
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4">
-        {found === 0 ? (
-          <p className="py-6 text-[16px]">No questions match “{query.trim()}” with these filters.</p>
+      <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4">
+        {questions.length === 0 ? (
+          <p className="py-6 text-[16px]" aria-live="polite">Loading the questions…</p>
+        ) : found === 0 ? (
+          <p className="py-6 text-[16px]">
+            {query.trim() ? `No questions match “${query.trim()}” with these filters.` : 'No questions match these filters.'}
+          </p>
         ) : (
           <>
             <ul className="flex flex-col">

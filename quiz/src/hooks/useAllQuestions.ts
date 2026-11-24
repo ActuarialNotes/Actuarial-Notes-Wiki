@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions } from '@/lib/parser'
+import { loadParsedQuestions } from '@/lib/parsedQuestions'
 import type { Question } from '@/lib/parser'
 
 interface UseAllQuestionsResult {
@@ -17,10 +16,9 @@ export function useAllQuestions(): UseAllQuestionsResult {
   useEffect(() => {
     let cancelled = false
 
-    fetchAllQuestions()
-      .then(raw => {
-        if (cancelled) return
-        setQuestions(parseAllQuestions(raw))
+    loadParsedQuestions()
+      .then(parsed => {
+        if (!cancelled) setQuestions(parsed)
       })
       .catch(() => {
         if (!cancelled) setError("The questions didn't load. Check your connection and try again.")

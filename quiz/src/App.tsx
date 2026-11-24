@@ -269,7 +269,10 @@ function GlobalKeyHandler() {
     function onKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         const target = e.target as HTMLElement | null
-        if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+        // An answer being written, or a grid with keys of its own, keeps the key.
+        if (target && (target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('[data-own-keys]'))) return
+        // The search answers it itself, by going to its field (pages/Search.tsx).
+        if (window.location.pathname === '/search') return
         e.preventDefault()
         navigate('/search')
       }

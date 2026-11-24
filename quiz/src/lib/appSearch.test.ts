@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildStudyIndex, inWikiScope, normalizeQuery, rankMatch, searchBy } from './appSearch'
+import { buildStudyIndex, editDistance, foldText, inWikiScope, nearMatch, normalizeQuery, rankMatch, searchBy } from './appSearch'
 
 describe('normalizeQuery', () => {
   it('folds case, curly apostrophes and runs of whitespace', () => {
@@ -7,7 +7,33 @@ describe('normalizeQuery', () => {
   })
 })
 
+describe('foldText', () => {
+  it('drops accents and apostrophes and reads hyphens as spaces', () => {
+    expect(foldText('Bühlmann–Straub')).toBe('buhlmann straub')
+    expect(foldText('Bayes’ Theorem')).toBe('bayes theorem')
+    expect(foldText('chain-ladder')).toBe('chain ladder')
+  })
+})
+
+describe('nearMatch', () => {
+  it('allows a slip in a long enough word, and none in a short one', () => {
+    expect(nearMatch('Poisson Distribution', 'poison')).toBe(true)
+    expect(nearMatch('Variance', 'varience')).toBe(true)
+    expect(nearMatch('Variance', 'valuation')).toBe(false)
+    expect(nearMatch('Mean', 'man')).toBe(false)
+    expect(editDistance('recieve', 'receive', 1)).toBe(1)
+  })
+})
+
 describe('rankMatch', () => {
+  it('reads past punctuation and finds a name by its initials', () => {
+    expect(rankMatch('Bayes Theorem', "bayes' theorem")).not.toBeNull()
+    expect(rankMatch('Chain Ladder Method', 'chain-ladder')).not.toBeNull()
+    expect(rankMatch('Bornhuetter-Ferguson Method', 'BF')).not.toBeNull()
+    expect(rankMatch('Generalized Linear Model', 'glm')!).toBeGreaterThan(rankMatch('GLM Offset', 'glm')!)
+    expect(rankMatch('Variance', 'bf')).toBeNull()
+  })
+
   it('ranks a prefix above a word start above a mid-word hit', () => {
     const prefix = rankMatch('Expected Value', 'exp')!
     const wordStart = rankMatch('Conditional Expectation', 'exp')!
@@ -114,5 +140,15 @@ describe('buildStudyIndex', () => {
       { examLabel: 'Exam P-1', topics: [{ concepts: [{ name: '  ', target: '' }] }], resources: [] },
     ])
     expect(empty.filter(e => e.kind === 'concept')).toHaveLength(0)
+  })
+})
+
+describe('searchBy, near', () => {
+  const names = ['Variance', 'Poisson Distribution', 'Mean']
+  it('offers a name a slip away only when nothing matches, and only when asked', () => {
+    expect(searchBy(names, 'varience', n => [n])).toEqual([])
+    expect(searchBy(names, 'varience', n => [n], 20, { near: true })).toEqual(['Variance'])
+    expect(searchBy(names, 'poisson', n => [n], 20, { near: true })).toEqual(['Poisson Distribution'])
+    expect(searchBy(['Bias-Variance Tradeoff', 'Variance'], 'varience', n => [n], 20, { near: true })[0]).toBe('Variance')
   })
 })

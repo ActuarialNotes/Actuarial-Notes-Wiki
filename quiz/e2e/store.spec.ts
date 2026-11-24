@@ -1,4 +1,5 @@
 import { test, expect } from './test'
+import { account } from './fixtures/account'
 
 // The Store (docs/store.md): real products, each bought on its seller's own
 // page. Nothing here is bought in the app, so the smoke checks the shelf
@@ -187,6 +188,20 @@ test.describe('gem shop', () => {
     await expect(page.getByText(/skin/i).first()).toBeVisible()
 
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+
+  // The profile is the way to both until Phase F (docs/redesign-spec.md §7b):
+  // its Store row, and its gems tile for an account.
+  test('You leads to the Store, and its gems to the Gem Shop', async ({ page }) => {
+    await page.goto('/you')
+    await page.getByTestId('you-store').click()
+    await expect(page).toHaveURL(/\/store$/)
+
+    await account(page)
+    await page.goto('/you')
+    await page.getByTestId('you-gems').click({ timeout: 30_000 })
+    await expect(page).toHaveURL(/\/store\/gems$/)
+    await expect(page.getByRole('heading', { name: 'Gem Shop', exact: true })).toBeVisible()
   })
 
   test('the old store links land in the gem shop', async ({ page }) => {

@@ -58,8 +58,9 @@ add the connector when the connector is missing.
 - OpenAI Responses API: the tool is
   `{"type": "mcp", "server_label": "actuarial-notes", "server_url": "https://quiz.actuarialnotes.com/api/mcp", "require_approval": "never"}`.
 
-The app's **Settings → AI assistants** section shows the URL with a copy button and links the
-skill download (`components/AiConnectorCard.tsx`, addresses from `lib/aiConnector.ts`).
+The app's **Settings → AI assistants** row opens a popup with the URL, a copy button and the
+skill download (`AiAssistantsSheet` in `components/you/SettingsSheets.tsx`, addresses from
+`lib/aiConnector.ts`); `/settings#ai` opens it directly.
 `/llms.txt` points any browsing assistant at both.
 
 ---

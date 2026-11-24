@@ -1,1257 +1,308 @@
-import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react'
-import { useBack } from '@/hooks/useBack'
-import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
-import { Link, useNavigate } from 'react-router-dom'
+// Settings (docs/redesign-spec.md §7b.3): one screen, grouped, every value
+// shown on its row. A row is edited in place (a switch, the theme) or in a
+// popup (components/you/SettingsSheets.tsx); nothing opens a second screen.
+//
+// It holds no quiz settings (R3): when answers show, Timed and tap-to-read
+// concepts are in the quiz setup sheet, where they are used.
+//
+// A visitor gets the rows the browser keeps (session length, daily goal,
+// theme, sound, AI assistants, usage analytics) and Sign in for the rest.
+
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Loader2, Plus } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import { useProgress } from '@/hooks/useProgress'
 import { useSettings } from '@/hooks/useSettings'
+import { useSubscription } from '@/hooks/useSubscription'
+import { useTheme } from '@/hooks/useTheme'
+import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { useXp } from '@/hooks/useXp'
+import { useEmailPrefs } from '@/hooks/useEmailPrefs'
+import { useExamsPopout } from '@/hooks/useExamsPopout'
+import { useTodayExam } from '@/hooks/useTodayExam'
+import { readLength, saveSessionLength } from '@/hooks/useTodaySession'
 import { useExamProgress } from '@/contexts/examProgress'
 import { TRACKS } from '@/data/tracks'
-import type { ItemStatus, TrackItem } from '@/data/tracks'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Separator } from '@/components/ui/separator'
-import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail, Plus, Bell, HelpCircle } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useSubscription } from '@/hooks/useSubscription'
-import { useOnboardingTour } from '@/hooks/useOnboardingTour'
-import { useExamsPopout } from '@/hooks/useExamsPopout'
-import { SoundSettingsCard } from '@/components/SoundSettingsCard'
-import { PrivacySettingsCard } from '@/components/PrivacySettingsCard'
-import { AiConnectorCard } from '@/components/AiConnectorCard'
-import { DAILY_PLAN_EMAIL_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { matchesSelectedVariant } from '@/data/examSittings'
-import { AvatarDisplay } from '@/components/AvatarDisplay'
-import { ProBadge } from '@/components/ProBadge'
-import { CharacterSkinSelector } from '@/components/MascotWidget'
-import { authErrorMessage } from '@/lib/authMessages'
+import { isAnalyticsOptedOut, setAnalyticsOptOut } from '@/lib/analytics'
+import { DAILY_PLAN_EMAIL_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { supabase } from '@/lib/supabase'
-import { useTheme } from '@/hooks/useTheme'
-import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
-import { ContactDialog } from '@/components/ContactDialog'
-import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv, exportScopeSlug } from '@/lib/exportData'
-import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from '@/lib/exportPdf'
+import { withLength, type SessionLength } from '@/lib/todaySession'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { YOU_PATH, dailyEmailValue, examDateValue, proRowValue, readerName, signInProvider, soundValue } from '@/lib/you'
+import { todayISO } from '@/lib/studyPlan'
+import { ExamLogo } from '@/components/ExamLogo'
+import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/buttonVariants'
+import { SessionLengthSheet } from '@/components/today/SessionLengthSheet'
+import { DailyEmailSheet } from '@/components/you/DailyEmailSheet'
+import { GoalSheet } from '@/components/you/YouSheets'
+import {
+  AiAssistantsSheet,
+  DeleteAccountSheet,
+  ExamSettingsSheet,
+  ExportSheet,
+  PasswordSheet,
+  ProSheet,
+  ResetSheet,
+  SoundSheet,
+  TextFieldSheet,
+  ThemeRow,
+  TrackSheet,
+} from '@/components/you/SettingsSheets'
+import { Row, RowGroup, SwitchRow, YouScreen } from '@/components/you/rows'
+import { cn } from '@/lib/utils'
 
-// The daily email's settings and the dashboard guide were opened from the
-// Dashboard's header until Today replaced it (docs/redesign-spec.md §8, Phase B).
-// They are opened from here until the You page exists. Each is fetched when
-// its row is pressed.
-const DashboardRemindersModal = lazy(() =>
-  import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
-const DashboardGuideModal = lazy(() =>
-  import('@/components/DashboardGuideModal').then(m => ({ default: m.DashboardGuideModal })))
-
-/** The exam the Dashboard was last showing (it writes this key). */
-const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
-
-/**
- * The dashboard guide, for the exam the Dashboard last showed. Its last slide
- * reads that exam's syllabus, levels and plan, so they are derived here the way
- * the Dashboard derives them, and only while the guide is open: this mounts
- * with the guide and is gone when it closes.
- */
-function DashboardGuide({ isPro, onClose }: { isPro: boolean; onClose: () => void }) {
-  const { syllabi } = useWikiSyllabus()
-  const { progress, targetDates, examVariants } = useExamProgress()
-  const { records, loading: masteryLoading } = useConceptMastery()
-
-  const syllabus = useMemo(() => {
-    const inProgress = syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return progress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    })
-    let saved: string | null = null
-    try { saved = localStorage.getItem(ACTIVE_EXAM_KEY) } catch { /* ignore */ }
-    return inProgress.find(s => s.examId === saved) ?? inProgress[0] ?? null
-  }, [syllabi, progress, examVariants])
-
-  const progressKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
-  const examDate = progressKey ? (targetDates[progressKey] ?? null) : null
-  const { plan } = useStudyPlan(syllabus, records, examDate, masteryLoading)
-  const examRecords = useMemo(
-    () => (progressKey ? records.filter(r => r.exam_id === progressKey) : []),
-    [records, progressKey],
-  )
-
-  return (
-    <Suspense fallback={null}>
-      <DashboardGuideModal
-        open
-        onClose={onClose}
-        syllabus={syllabus}
-        masteryRecords={examRecords}
-        examDate={examDate}
-        // Only a Pro account has a plan (as on the Dashboard).
-        plan={isPro ? plan : null}
-      />
-    </Suspense>
-  )
-}
-
-// ---- Exam status icons ----
-
-const STATUS_LABEL: Record<ItemStatus, string> = {
-  not_started: 'Not started',
-  in_progress: 'In progress',
-  completed: 'Passed',
-}
-
-function StatusIcon({ status }: { status: ItemStatus }) {
-  if (status === 'completed') {
-    return (
-      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2" />
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-        <polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
-  }
-  if (status === 'in_progress') {
-    return (
-      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
-      </svg>
-    )
-  }
-  return (
-    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-/** Format an exam target date (ISO `YYYY-MM-DD`) without tripping over UTC parsing. */
-function formatTargetDate(iso: string): string {
-  const d = new Date(iso + 'T00:00:00')
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-// ---- Simple inline modal ----
-
-function ConfirmModal({
-  open,
-  title,
-  children,
-  confirmLabel,
-  confirmDisabled,
-  onConfirm,
-  onCancel,
-  destructive,
-}: {
-  open: boolean
-  title: string
-  children: React.ReactNode
-  confirmLabel: string
-  confirmDisabled?: boolean
-  onConfirm: () => void
-  onCancel: () => void
-  destructive?: boolean
-}) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 paper-scrim">
-      <div className="bg-background rounded-lg p-6 w-full max-w-md shadow-lg space-y-4">
-        <h3 className="font-semibold text-lg">{title}</h3>
-        <div className="text-sm text-muted-foreground space-y-2">{children}</div>
-        <div className="flex justify-end gap-3">
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button
-            variant={destructive ? 'destructive' : 'default'}
-            onClick={onConfirm}
-            disabled={confirmDisabled}
-          >
-            {confirmLabel}
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ---- Section feedback ----
-
-function Feedback({ error, success }: { error: string | null; success: string | null }) {
-  if (!error && !success) return null
-  return (
-    <Alert className={cn('mt-3 text-sm', error ? 'bg-destructive/10 text-destructive' : 'bg-green-500/10 text-green-700 dark:text-green-400')}>
-      {error ?? success}
-    </Alert>
-  )
-}
-
-// ---- Inline auth form (shown on You tab when logged out) ----
-
-function InlineAuthForm() {
-  const navigate = useNavigate()
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [signupSuccess, setSignupSuccess] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    if (mode === 'signup' && password !== confirmPassword) {
-      setError('The two passwords don’t match. Type the same one in both boxes.')
-      return
-    }
-    setSubmitting(true)
-    try {
-      if (mode === 'signin') {
-        const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
-        if (authError) throw authError
-        navigate('/dashboard', { replace: true })
-      } else {
-        const { error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-        })
-        if (authError) throw authError
-        setSignupSuccess(true)
-      }
-    } catch (err) {
-      setError(authErrorMessage(err instanceof Error ? err.message : '', mode))
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  if (signupSuccess) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Check your email</CardTitle>
-          <CardDescription>
-            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button variant="outline" className="w-full" onClick={() => { setSignupSuccess(false); setMode('signin') }}>
-            Back to sign in
-          </Button>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{mode === 'signin' ? 'Sign in' : 'Create account'}</CardTitle>
-        <CardDescription>
-          {mode === 'signin' ? 'Sign in to keep your progress on every device.' : 'Create an account to keep your results on every device.'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="inline-email">Email</Label>
-            <Input id="inline-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="inline-password">Password</Label>
-            <Input
-              id="inline-password"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-              minLength={8}
-            />
-          </div>
-          {mode === 'signup' && (
-            <div className="space-y-2">
-              <Label htmlFor="inline-confirm-password">Confirm password</Label>
-              <Input
-                id="inline-confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-                minLength={8}
-              />
-            </div>
-          )}
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'}
-          </Button>
-        </form>
-        <div className="mt-4 text-center text-sm text-muted-foreground">
-          {mode === 'signin' ? (
-            <>
-              Don&apos;t have an account?{' '}
-              <button type="button" className="text-primary hover:underline" onClick={() => { setMode('signup'); setError(null) }}>
-                Create account
-              </button>
-            </>
-          ) : (
-            <>
-              Already have an account?{' '}
-              <button type="button" className="text-primary hover:underline" onClick={() => { setMode('signin'); setError(null) }}>
-                Sign in
-              </button>
-            </>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-// ---- Nav items ----
-
-// Account sections, rendered first for signed-in users
-const ACCOUNT_NAV_ITEMS = [
-  { id: 'profile',    label: 'Profile' },
-  { id: 'pro',        label: 'Pro' },
-  { id: 'exams',      label: 'Credential Track & Exams' },
-]
-
-// ---- Main page ----
+type Sheet =
+  | 'length' | 'goal' | 'email-daily' | 'track'
+  | 'sound' | 'ai'
+  | 'name' | 'email' | 'password' | 'pro'
+  | 'export' | 'reset' | 'delete'
 
 export default function Settings() {
   const navigate = useNavigate()
-  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const sound = useSoundEffects()
+  const xp = useXp()
   const { isPro, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
-  const { sessions } = useProgress()
-  const {
-    profile, setProfile,
-    examRows,
-    loadingProfile, loadingExams,
-    changePassword, updateProfile,
-    resetHistory, deleteAccount,
-    accountState, profileState, dataState,
-  } = useSettings()
+  const emailPrefs = useEmailPrefs()
+  const { changePassword, updateProfile, resetHistory, deleteAccount, accountState } = useSettings()
+  const { examRows, targetDates, selectedTrack, setSelectedTrack, updateTargetDate, saveExamRows } = useExamProgress()
+  const { exams } = useTodayExam()
+  const openExams = useExamsPopout(s => s.openExams)
 
-  // Detect OAuth/SSO users (Google, Apple, etc.) — they cannot change their password
-  // or email through our settings since identity is managed externally.
-  const isSSOUser = !!(
-    user?.app_metadata?.provider && user.app_metadata.provider !== 'email'
-  )
+  // `/settings#ai` opens AI assistants: Workflows' Run in Claude links to it.
+  const { hash } = useLocation()
+  const [sheet, setSheet] = useState<Sheet | null>(hash === '#ai' ? 'ai' : null)
+  const [examKey, setExamKey] = useState<string | null>(null)
+  const [length, setLength] = useState(() => readLength(user?.user_metadata?.session_minutes))
+  const [analyticsOff, setAnalyticsOff] = useState(isAnalyticsOptedOut)
+  const close = () => setSheet(null)
 
-  const navItems = [
-    ...(user ? [] : [{ id: 'signin', label: 'Sign in' }]),
-    ...(user ? ACCOUNT_NAV_ITEMS : []),
-    ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'reminders', label: 'Reminders' }] : []),
-    { id: 'appearance', label: 'Appearance' },
-    { id: 'sound', label: 'Sound' },
-    { id: 'ai', label: 'AI assistants' },
-    { id: 'privacy', label: 'Privacy' },
-    { id: 'support', label: 'Support' },
-    ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
-  ]
-
-  // ---- Onboarding tour (replayable from Support) ----
-  const restartTour = useOnboardingTour(s => s.restart)
-  const [showContact, setShowContact] = useState(false)
-  const [showReminders, setShowReminders] = useState(false)
-  const [showGuide, setShowGuide] = useState(false)
-
-  // ---- Section refs for scroll-nav ----
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
-  const scrollTo = (id: string) => {
-    sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (authLoading) {
+    return (
+      <YouScreen way="back" to={YOU_PATH} label="You" title="Settings" testId="settings">
+        <div className="flex flex-1 items-center justify-center py-16" aria-busy="true">
+          <Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" />
+        </div>
+      </YouScreen>
+    )
   }
 
-  // ---- Dirty tracking (per section) ----
-  const [profileDirty, setProfileDirty] = useState(false)
-  const isAnyDirty = profileDirty
+  const now = new Date()
+  const name = readerName(user)
+  const provider = signInProvider(user)
+  const track = TRACKS.find(t => t.key === selectedTrack) ?? TRACKS[0]
+  const proValue = proRowValue({ isPro, isBetaTester })
+  const openExam = exams.find(s => wikiExamIdToProgressKey(s.examId) === examKey) ?? null
 
-  // beforeunload warning
-  useEffect(() => {
-    const handler = (e: BeforeUnloadEvent) => {
-      if (isAnyDirty) { e.preventDefault(); e.returnValue = '' }
-    }
-    window.addEventListener('beforeunload', handler)
-    return () => window.removeEventListener('beforeunload', handler)
-  }, [isAnyDirty])
+  const setExamStatus = (key: string, status: 'completed' | 'not_started') =>
+    saveExamRows([{
+      exam_id: key,
+      status,
+      target_date: examRows.find(r => r.exam_id === key)?.target_date ?? null,
+    }])
 
-  // ---- Pro: manage subscription via Stripe portal ----
-  const [portalLoading, setPortalLoading] = useState(false)
-  const [portalError, setPortalError] = useState<string | null>(null)
-  const [restoreLoading, setRestoreLoading] = useState(false)
-  const [restoreMessage, setRestoreMessage] = useState<string | null>(null)
-
-  const handleRestorePurchase = async () => {
-    setRestoreLoading(true)
-    setRestoreMessage(null)
-    try {
-      const { data, error } = await supabase.functions.invoke('stripe-sync-session', { body: {} })
-      if (error) throw new Error(error.message)
-      if (data?.synced && data?.tier === 'premium') {
-        setRestoreMessage('Pro restored. Reload the page if the Pro features don’t show yet.')
-      } else {
-        setRestoreMessage('There’s no active Pro subscription on this account. If you paid with another email, sign in with that one, or contact us below.')
-      }
-    } catch (err) {
-      console.error('settings: restore purchase failed:', err)
-      setRestoreMessage('Your purchase couldn’t be checked just now. Try again in a minute.')
-    } finally {
-      setRestoreLoading(false)
-    }
+  const pickLength = (minutes: SessionLength) => {
+    const next = withLength(length, minutes, todayISO(), true)
+    setLength(next)
+    saveSessionLength(user?.id ?? null, next, true)
   }
 
-  const handleManageSubscription = async () => {
-    setPortalLoading(true)
-    setPortalError(null)
+  const openBilling = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('stripe-create-portal', {
         body: { return_url: window.location.href },
       })
       if (error || !data?.url) throw new Error('portal')
       window.location.href = data.url
+      return true
     } catch (err) {
       console.error('settings: billing portal failed:', err)
-      setPortalError('The billing page didn’t open. Try again in a minute, or contact us below.')
-      setPortalLoading(false)
+      return false
     }
-  }
-
-  // ---- Password change state (hidden behind toggle in Profile section) ----
-  const [showPasswordFields, setShowPasswordFields] = useState(false)
-  const [currentPw, setCurrentPw] = useState('')
-  const [newPw, setNewPw] = useState('')
-  const [confirmPw, setConfirmPw] = useState('')
-  const [pwValidErr, setPwValidErr] = useState<string | null>(null)
-
-  const handlePasswordSave = async () => {
-    setPwValidErr(null)
-    if (!newPw) { setPwValidErr('Type a new password.'); return }
-    if (newPw.length < 8) { setPwValidErr('Your new password needs at least 8 characters.'); return }
-    if (newPw !== confirmPw) { setPwValidErr('The two new passwords don’t match.'); return }
-    const ok = await changePassword(currentPw, newPw)
-    if (ok) {
-      setCurrentPw(''); setNewPw(''); setConfirmPw('')
-      setShowPasswordFields(false)
-    }
-  }
-
-  // ---- Profile section state ----
-  const [localDisplayName, setLocalDisplayName] = useState('')
-  const [localEmail, setLocalEmail] = useState('')
-  const [localAvatarUrl, setLocalAvatarUrl] = useState('')
-
-  useEffect(() => {
-    setLocalDisplayName(profile.displayName)
-    setLocalEmail(profile.email)
-    setLocalAvatarUrl(profile.avatarUrl)
-  }, [profile])
-
-  const handleProfileSave = async () => {
-    const ok = await updateProfile({
-      displayName: localDisplayName,
-      email: isSSOUser ? undefined : localEmail,
-      avatarUrl: localAvatarUrl,
-    })
-    if (ok) {
-      setProfile(p => ({ ...p, displayName: localDisplayName, email: localEmail, avatarUrl: localAvatarUrl }))
-      setProfileDirty(false)
-    }
-  }
-
-  // The character/skin grid lives in the shared picker popup (same one the
-  // Dashboard level badge opens); here the choice is staged until Save Profile.
-  const [showCharacterPicker, setShowCharacterPicker] = useState(false)
-
-  const handleCharacterSelect = (avatarUrl: string) => {
-    setLocalAvatarUrl(avatarUrl)
-    setProfileDirty(true)
-  }
-
-  // ---- Exams section state ----
-  // Settings only *shows* the track and the exams already on it; adding an exam or
-  // changing its status/date happens in the shared Exams popout (mounted by Sidebar).
-  const { selectedTrack, setSelectedTrack } = useExamProgress()
-  const openExams = useExamsPopout(s => s.openExams)
-
-  // ---- Progress & Data modals ----
-  const [showResetModal, setShowResetModal] = useState(false)
-  const [resetScope, setResetScope] = useState<'all' | string>('all')
-  const [exportScope, setExportScope] = useState<'all' | string>('all')
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [deleteConfirmText, setDeleteConfirmText] = useState('')
-  const [dataActionState, setDataActionState] = useState<{ saving: boolean; error: string | null; success: string | null }>({ saving: false, error: null, success: null })
-
-  const handleResetHistory = async () => {
-    setShowResetModal(false)
-    setDataActionState({ saving: true, error: null, success: null })
-    const examId = resetScope === 'all' ? null : resetScope
-    const ok = await resetHistory(examId)
-    const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
-    setDataActionState({
-      saving: false,
-      error: ok ? null : 'Your study history couldn’t be reset. Try again in a minute.',
-      success: ok ? `Study history and learning progress cleared for ${scopeLabel}.` : null,
-    })
-  }
-
-  const [exportFormat, setExportFormat] = useState<'csv' | 'pdf'>('csv')
-  const [exporting, setExporting] = useState(false)
-
-  const handleExport = async () => {
-    if (!user) return
-    const examId = exportScope === 'all' ? null : exportScope
-    const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
-    setExporting(true)
-    setDataActionState({ saving: false, error: null, success: null })
-    try {
-      const rows = await fetchExportResponses(user.id, examId)
-      if (rows.length === 0) {
-        setDataActionState({ saving: false, error: `No answered questions to export for ${scopeLabel}.`, success: null })
-        return
-      }
-      if (exportFormat === 'pdf') {
-        const report = buildProgressReport(rows)
-        const owner = profile.displayName?.trim() || profile.email || 'You'
-        const scopeTitle = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'All exams'
-        await generateProgressReportPdf(report, { scopeLabel: scopeTitle, owner }, buildPdfFilename(exportScopeSlug(examId)))
-      } else {
-        downloadCsv(buildExportFilename(examId), responsesToCsv(rows))
-      }
-      const format = exportFormat.toUpperCase()
-      setDataActionState({
-        saving: false,
-        error: null,
-        success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel} as ${format}.`,
-      })
-    } catch (err) {
-      console.error('settings: export failed:', err)
-      setDataActionState({ saving: false, error: 'Your data couldn’t be exported. Try again in a minute.', success: null })
-    } finally {
-      setExporting(false)
-    }
-  }
-
-  const handleDeleteAccount = async () => {
-    setShowDeleteModal(false)
-    setDataActionState({ saving: true, error: null, success: null })
-    const ok = await deleteAccount()
-    if (ok) navigate('/')
-    else setDataActionState({ saving: false, error: 'Your account couldn’t be deleted. Try again, or contact us under Support.', success: null })
-  }
-
-  const totalSessions = sessions.length
-  const avgScore = totalSessions > 0
-    ? Math.round(sessions.reduce((sum, s) => sum + (s.correct_count / s.total_questions) * 100, 0) / totalSessions)
-    : null
-
-  const initials = (profile.displayName || profile.email || '?').slice(0, 2).toUpperCase()
-
-  if (authLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    )
-  }
-
-  const currentTrack = TRACKS.find(t => t.key === selectedTrack) ?? TRACKS[0]
-
-  // The exams on this track the learner has actually started or passed — everything
-  // else is noise here and lives in the Exams popout.
-  const seenExamIds = new Set<string>()
-  const trackedExams: { item: TrackItem; status: ItemStatus; targetDate: string | null }[] = []
-  for (const item of currentTrack.sections.flatMap(s => s.items)) {
-    if (seenExamIds.has(item.id)) continue
-    const row = examRows.find(r => r.exam_id === item.id)
-    if (!row || row.status === 'not_started') continue
-    seenExamIds.add(item.id)
-    trackedExams.push({ item, status: row.status, targetDate: row.target_date ?? null })
   }
 
   return (
-    <>
-      {showContact && <ContactDialog onClose={() => setShowContact(false)} />}
-      {user && DAILY_PLAN_EMAIL_ENABLED && showReminders && (
-        <Suspense fallback={null}>
-          <DashboardRemindersModal
-            open
-            onClose={() => setShowReminders(false)}
-            email={user.email ?? ''}
-            isPro={isPro}
-            subscriptionLoading={subLoading}
-          />
-        </Suspense>
-      )}
-      {user && showGuide && <DashboardGuide isPro={isPro} onClose={() => setShowGuide(false)} />}
-
-      <ConfirmModal
-        open={showResetModal}
-        title="Reset study history?"
-        confirmLabel="Reset history"
-        onConfirm={handleResetHistory}
-        onCancel={() => setShowResetModal(false)}
-        destructive
-      >
-        <p>
-          This deletes your quiz history, your answers and your concept levels
-          {resetScope === 'all' ? ' for every exam' : ` for ${EXAM_ID_TO_LABEL[resetScope] ?? resetScope}`}.
-          It can’t be undone.
-        </p>
-      </ConfirmModal>
-
-      <ConfirmModal
-        open={showDeleteModal}
-        title="Delete account"
-        confirmLabel="Delete account"
-        confirmDisabled={deleteConfirmText !== 'DELETE'}
-        onConfirm={handleDeleteAccount}
-        onCancel={() => { setShowDeleteModal(false); setDeleteConfirmText('') }}
-        destructive
-      >
-        <p>
-          This deletes your account, your quiz history and your exam progress. It can’t be undone.
-        </p>
-        <div className="mt-3">
-          <Label htmlFor="delete-confirm">Type <span className="font-mono font-bold">DELETE</span> to confirm</Label>
-          <Input
-            id="delete-confirm"
-            className="mt-1"
-            value={deleteConfirmText}
-            onChange={e => setDeleteConfirmText(e.target.value)}
-            placeholder="DELETE"
-          />
-        </div>
-      </ConfirmModal>
-
-      <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <User className="h-6 w-6" />
-            Settings
-          </h1>
-          {user && <p className="text-sm text-muted-foreground mt-1">{user.email}</p>}
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar nav */}
-          <nav className="md:w-44 shrink-0">
-            <ul className="flex md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 sticky top-20">
-              {navItems.map(item => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => scrollTo(item.id)}
-                    className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors whitespace-nowrap text-muted-foreground hover:text-foreground flex items-center justify-between group"
-                  >
-                    {item.label}
-                    <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity hidden md:block" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Sections */}
-          <div className="flex-1 space-y-8 min-w-0">
-
-            {/* ---- Inline login (logged out, first) ---- */}
-            {!user && (
-              <section ref={el => { sectionRefs.current.signin = el }} id="signin">
-                <InlineAuthForm />
-              </section>
-            )}
-
-            {user && <>
-
-            {/* ---- Profile ---- */}
-            <section ref={el => { sectionRefs.current.profile = el }} id="profile">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Profile</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {loadingProfile ? (
-                    <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-                  ) : (
-                    <>
-                      {/* Avatar — the picker itself lives in a popup */}
-                      <div className="flex items-center gap-4">
-                        <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
-                        <Button variant="outline" onClick={() => setShowCharacterPicker(true)}>
-                          Change character
-                        </Button>
-                      </div>
-                      {showCharacterPicker && (
-                        <CharacterSkinSelector
-                          currentAvatarUrl={localAvatarUrl}
-                          onSelect={handleCharacterSelect}
-                          onClose={() => setShowCharacterPicker(false)}
-                        />
-                      )}
-
-                      <Separator />
-
-                      <div className="space-y-2">
-                        <Label htmlFor="display-name">Display name</Label>
-                        <Input
-                          id="display-name"
-                          value={localDisplayName}
-                          onChange={e => { setLocalDisplayName(e.target.value); setProfileDirty(true) }}
-                          placeholder="Your name"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email address</Label>
-                        {isSSOUser ? (
-                          <>
-                            <Input id="email" type="email" value={localEmail} readOnly className="opacity-60 cursor-not-allowed" />
-                            <p className="text-xs text-muted-foreground">
-                              Email is managed by your {user?.app_metadata?.provider === 'google' ? 'Google' : 'linked'} account.
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={localEmail}
-                              onChange={e => { setLocalEmail(e.target.value); setProfileDirty(true) }}
-                            />
-                            <p className="text-xs text-muted-foreground">
-                              A confirmation email will be sent to the new address before the change applies.
-                            </p>
-                          </>
-                        )}
-                      </div>
-
-                      <Feedback error={profileState.error} success={profileState.success} />
-                      <Button
-                        onClick={handleProfileSave}
-                        disabled={!profileDirty || profileState.saving}
-                        className="w-full sm:w-auto"
-                      >
-                        {profileState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save profile'}
-                      </Button>
-
-                      {/* Password change — hidden by default, not shown for SSO users */}
-                      {!isSSOUser && (
-                        <>
-                          <Separator />
-                          {!showPasswordFields ? (
-                            <button
-                              type="button"
-                              onClick={() => setShowPasswordFields(true)}
-                              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
-                            >
-                              Change my password
-                            </button>
-                          ) : (
-                            <div className="space-y-4">
-                              <p className="text-sm font-medium">Change password</p>
-                              <div className="space-y-2">
-                                <Label htmlFor="current-pw">Current password</Label>
-                                <Input
-                                  id="current-pw"
-                                  type="password"
-                                  autoComplete="current-password"
-                                  value={currentPw}
-                                  onChange={e => setCurrentPw(e.target.value)}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="new-pw">New password</Label>
-                                <Input
-                                  id="new-pw"
-                                  type="password"
-                                  autoComplete="new-password"
-                                  value={newPw}
-                                  onChange={e => setNewPw(e.target.value)}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="confirm-pw">Confirm new password</Label>
-                                <Input
-                                  id="confirm-pw"
-                                  type="password"
-                                  autoComplete="new-password"
-                                  value={confirmPw}
-                                  onChange={e => setConfirmPw(e.target.value)}
-                                />
-                              </div>
-                              {pwValidErr && (
-                                <Alert className="text-sm bg-destructive/10 text-destructive">{pwValidErr}</Alert>
-                              )}
-                              <Feedback error={accountState.error} success={accountState.success} />
-                              <div className="flex gap-2">
-                                <Button
-                                  onClick={handlePasswordSave}
-                                  disabled={accountState.saving}
-                                  className="w-full sm:w-auto"
-                                >
-                                  {accountState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save password'}
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => { setShowPasswordFields(false); setCurrentPw(''); setNewPw(''); setConfirmPw(''); setPwValidErr(null) }}
-                                >
-                                  Cancel
-                                </Button>
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Pro ---- */}
-            <section ref={el => { sectionRefs.current.pro = el }} id="pro">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Pro</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {subLoading ? (
-                    <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-                  ) : isPro && isBetaTester ? (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <ProBadge size="md" />
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-400">
-                          <Star className="h-3 w-3 fill-current" />
-                          Beta tester
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        You have Pro through a beta tester code. Thanks for testing.
-                      </p>
-                    </>
-                  ) : isPro ? (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <ProBadge size="md" />
-                      </div>
-                      {currentPeriodEnd && (
-                        <p className="text-sm text-muted-foreground">
-                          Renews {new Date(currentPeriodEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
-                        </p>
-                      )}
-                      <div>
-                        <Button
-                          variant="outline"
-                          onClick={handleManageSubscription}
-                          disabled={portalLoading}
-                        >
-                          {portalLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Opening…</> : 'Manage subscription'}
-                        </Button>
-                        {portalError && (
-                          <p className="text-sm text-destructive mt-2">{portalError}</p>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center text-xs font-semibold px-2 py-1 rounded-full bg-muted text-muted-foreground">
-                          Free
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Pro paces your daily session to your exam date.
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        <Link to="/upgrade">
-                          <Button variant="default">Get Pro</Button>
-                        </Link>
-                        <Button
-                          variant="outline"
-                          onClick={handleRestorePurchase}
-                          disabled={restoreLoading}
-                        >
-                          {restoreLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Checking…</> : 'Restore purchase'}
-                        </Button>
-                      </div>
-                      {restoreMessage && (
-                        <p className="text-sm text-muted-foreground">{restoreMessage}</p>
-                      )}
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Credential Path & Exams ---- */}
-            <section ref={el => { sectionRefs.current.exams = el }} id="exams">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Credential Track &amp; Exams</CardTitle>
-                  <CardDescription>
-                    The exams you&rsquo;ve started or passed on your track. Add an exam or change its status with Add exams.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="track-select">Credential track</Label>
-                    <select
-                      id="track-select"
-                      value={selectedTrack}
-                      onChange={e => setSelectedTrack(e.target.value)}
-                      className="w-full sm:w-auto text-base border border-input rounded-md px-3 py-2 bg-background text-foreground cursor-pointer"
-                    >
-                      {TRACKS.map(t => (
-                        <option key={t.key} value={t.key}>{t.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {loadingExams ? (
-                    <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-                  ) : trackedExams.length > 0 ? (
-                    <div className="space-y-1">
-                      {trackedExams.map(({ item, status, targetDate }) => (
-                        <div key={item.id} className="flex items-center gap-3 py-1">
-                          <span
-                            title={STATUS_LABEL[status]}
-                            className={cn(
-                              'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 [&>svg]:w-[18px] [&>svg]:h-[18px]',
-                              status === 'completed'
-                                ? 'text-green-600 dark:text-green-500'
-                                : 'text-amber-600 dark:text-amber-500',
-                            )}
-                          >
-                            <StatusIcon status={status} />
-                          </span>
-                          <span
-                            className={cn(
-                              'text-sm font-medium min-w-0 truncate',
-                              status === 'completed' && 'line-through text-muted-foreground',
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                          <span className="ml-auto shrink-0 text-xs text-muted-foreground">
-                            {status === 'completed'
-                              ? STATUS_LABEL.completed
-                              : targetDate
-                              ? formatTargetDate(targetDate)
-                              : STATUS_LABEL.in_progress}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      No exams on this track yet.
-                    </p>
-                  )}
-
-                  <Button variant="outline" onClick={openExams} className="w-full sm:w-auto">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add exams
-                  </Button>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Reminders (docs/daily-plan-email.md) ---- */}
-            {DAILY_PLAN_EMAIL_ENABLED && (
-              <section ref={el => { sectionRefs.current.reminders = el }} id="reminders">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Reminders</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium flex items-center gap-1.5">
-                          Daily study plan email
-                          {!isPro && !subLoading && <ProBadge />}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          The concepts your study plan has scheduled for the day, emailed at the hour you choose.
-                        </p>
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowReminders(true)}
-                        className="shrink-0"
-                      >
-                        <Bell className="h-4 w-4 mr-2" />
-                        Email settings
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-            )}
-
-            </> /* end user && */}
-
-            {/* ---- Appearance ---- */}
-            <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Appearance</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => theme !== 'light' && toggleTheme()}
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                        theme === 'light'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                      )}
-                    >
-                      <Sun className="h-4 w-4" />
-                      Light
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => theme !== 'dark' && toggleTheme()}
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                        theme === 'dark'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                      )}
-                    >
-                      <Moon className="h-4 w-4" />
-                      Dark
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Sound ---- */}
-            <section ref={el => { sectionRefs.current.sound = el }} id="sound">
-              <SoundSettingsCard />
-            </section>
-
-            {/* ---- AI assistants (docs/ai-connector.md) ---- */}
-            <section ref={el => { sectionRefs.current.ai = el }} id="ai">
-              <AiConnectorCard />
-            </section>
-
-            {/* ---- Privacy (lib/analytics.ts) ---- */}
-            <section ref={el => { sectionRefs.current.privacy = el }} id="privacy">
-              <PrivacySettingsCard />
-            </section>
-
-            {/* ---- Support ---- */}
-            <section ref={el => { sectionRefs.current.support = el }} id="support">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Support</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {TOUR_ENABLED && (
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium">Take the tour</p>
-                        <p className="text-xs text-muted-foreground">
-                          Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes
-                          and more. Minimize it any time — it parks as a button in the bottom-right corner
-                          and picks up where you left off.
-                        </p>
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => restartTour()}
-                        className="shrink-0"
-                      >
-                        <GraduationCap className="h-4 w-4 mr-2" />
-                        Start tour
-                      </Button>
-                    </div>
-                  )}
-                  {user && (
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium">How the dashboard works</p>
-                        <p className="text-xs text-muted-foreground">
-                          Concept levels, today&rsquo;s study plan and how your readiness score is counted.
-                        </p>
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowGuide(true)}
-                        className="shrink-0"
-                      >
-                        <HelpCircle className="h-4 w-4 mr-2" />
-                        Open guide
-                      </Button>
-                    </div>
-                  )}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Contact us</p>
-                      <p className="text-xs text-muted-foreground">
-                        Send a question or report a bug.
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowContact(true)}
-                      className="shrink-0"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact us
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {user && <>
-
-            {/* ---- Progress & Data ---- */}
-            <section ref={el => { sectionRefs.current.data = el }} id="data">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Progress &amp; Data</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Study history summary */}
-                  <div>
-                    <p className="text-sm font-medium mb-2">Study history</p>
-                    <div className="flex gap-6 text-sm text-muted-foreground">
-                      <span><span className="text-foreground font-medium">{totalSessions}</span> sessions</span>
-                      {avgScore !== null && (
-                        <span>average score <span className="text-foreground font-medium">{avgScore}%</span></span>
-                      )}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Reset history */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Reset study history</p>
-                      <p className="text-xs text-muted-foreground">
-                        Delete your quiz history, answers and concept levels.
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <select
-                        value={resetScope}
-                        onChange={e => setResetScope(e.target.value)}
-                        aria-label="Reset scope"
-                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
-                      >
-                        <option value="all">All exams</option>
-                        {RESETTABLE_EXAMS.map(({ id, label }) => (
-                          <option key={id} value={id}>{label}</option>
-                        ))}
-                      </select>
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowResetModal(true)}
-                        disabled={dataState.saving || dataActionState.saving}
-                      >
-                        Reset history
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Export */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Export performance data</p>
-                      <p className="text-xs text-muted-foreground">
-                        Download your answered questions as a <span className="font-medium">CSV</span> spreadsheet
-                        (date, exam, topic, your answer, correct answer, result and time), or a{' '}
-                        <span className="font-medium">PDF</span> report of your accuracy by exam and topic.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
-                      <select
-                        value={exportScope}
-                        onChange={e => setExportScope(e.target.value)}
-                        aria-label="Export scope"
-                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
-                      >
-                        <option value="all">All exams</option>
-                        {RESETTABLE_EXAMS.map(({ id, label }) => (
-                          <option key={id} value={id}>{label}</option>
-                        ))}
-                      </select>
-                      <select
-                        value={exportFormat}
-                        onChange={e => setExportFormat(e.target.value as 'csv' | 'pdf')}
-                        aria-label="Export format"
-                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
-                      >
-                        <option value="csv">CSV spreadsheet</option>
-                        <option value="pdf">PDF report</option>
-                      </select>
-                      <Button variant="outline" onClick={handleExport} disabled={exporting}>
-                        {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Exporting…</> : 'Export'}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Feedback error={dataActionState.error} success={dataActionState.success} />
-
-                  <Separator />
-
-                  {/* Delete account */}
-                  <div className="rounded-md bg-destructive/5 p-4 space-y-3">
-                    <p className="text-sm font-semibold text-destructive">Danger zone</p>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium">Delete account</p>
-                        <p className="text-xs text-muted-foreground">
-                          Delete your account and everything saved with it.
-                        </p>
-                      </div>
-                      <Button
-                        variant="destructive"
-                        onClick={() => setShowDeleteModal(true)}
-                        disabled={dataState.saving || dataActionState.saving}
-                        className="shrink-0"
-                      >
-                        Delete account
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            </> /* end user && */}
-
-            <div className="text-center pt-2">
-              <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                ← Back to {back.label}
-              </Link>
-            </div>
+    <YouScreen way="back" to={YOU_PATH} label="You" title="Settings" testId="settings">
+      <div className="flex flex-col gap-[22px] px-5 pb-7 pt-3.5">
+        {!user && (
+          <div className="flex flex-col gap-3">
+            <p className="text-[17px] leading-normal">
+              Sign in to add exams and keep your progress on every device. These settings are kept in this browser.
+            </p>
+            <Link to="/auth" state={{ from: '/settings' }} className={cn(buttonVariants({ size: 'main' }), 'w-full')}>
+              Sign in
+            </Link>
           </div>
-        </div>
+        )}
+
+        <RowGroup title="Studying">
+          {user && exams.map(exam => {
+            const key = wikiExamIdToProgressKey(exam.examId)
+            return (
+              <Row
+                key={exam.examId}
+                leading={<ExamLogo examKey={key} size="sm" />}
+                label={exam.examLabel}
+                value={examDateValue(targetDates[key], now)}
+                onClick={() => setExamKey(key)}
+                testId={`settings-exam-${key}`}
+              />
+            )
+          })}
+          {user && (
+            <Row
+              leading={<span className="flex h-[26px] w-[26px] items-center justify-center"><Plus className="h-5 w-5" aria-hidden="true" /></span>}
+              label="Add or change exams"
+              onClick={openExams}
+              testId="settings-add-exam"
+            />
+          )}
+          <Row label="Session length" value={`${length.everyDay} min`} onClick={() => setSheet('length')} testId="settings-length" />
+          {XP_ENABLED && <Row label="Daily goal" value={`${xp.goal.xp} XP`} onClick={() => setSheet('goal')} testId="settings-goal" />}
+          {user && DAILY_PLAN_EMAIL_ENABLED && (
+            <Row
+              label="Daily email"
+              value={emailPrefs.loading || subLoading ? null : dailyEmailValue(emailPrefs.prefs, isPro)}
+              onClick={() => setSheet('email-daily')}
+              testId="settings-daily-email"
+            />
+          )}
+          {user && <Row label="Credential track" value={track.name} onClick={() => setSheet('track')} testId="settings-track" />}
+        </RowGroup>
+
+        <RowGroup title="App">
+          <ThemeRow theme={theme} onToggle={toggleTheme} />
+          <Row label="Sound" value={soundValue(sound)} onClick={() => setSheet('sound')} testId="settings-sound" />
+          <Row label="AI assistants" onClick={() => setSheet('ai')} testId="settings-ai" />
+        </RowGroup>
+
+        {user && (
+          <RowGroup title="Account">
+            <Row label="Name" value={name} onClick={() => setSheet('name')} testId="settings-name" />
+            {provider ? (
+              <Row label="Email" value={user.email} />
+            ) : (
+              <Row label="Email" value={user.email} onClick={() => setSheet('email')} testId="settings-email" />
+            )}
+            {provider ? (
+              <Row label="Password" value={provider} />
+            ) : (
+              <Row label="Password" onClick={() => setSheet('password')} testId="settings-password" />
+            )}
+            {subLoading ? (
+              <Row label="Pro" />
+            ) : proValue === 'Get Pro' ? (
+              <Row label="Pro" value={proValue} to="/upgrade" testId="settings-pro" />
+            ) : proValue === 'Manage' ? (
+              <Row label="Pro" value={proValue} onClick={() => setSheet('pro')} testId="settings-pro" />
+            ) : (
+              <Row label="Pro" value={proValue} testId="settings-pro" />
+            )}
+          </RowGroup>
+        )}
+
+        <RowGroup title="Your data">
+          <SwitchRow
+            label="Usage analytics"
+            on={!analyticsOff}
+            onChange={on => { setAnalyticsOptOut(!on); setAnalyticsOff(!on) }}
+            testId="settings-analytics"
+          />
+          {user && <Row label="Export" onClick={() => setSheet('export')} testId="settings-export" />}
+          {user && <Row label="Reset study history" onClick={() => setSheet('reset')} testId="settings-reset" />}
+        </RowGroup>
+
+        {user && (
+          <div className="flex flex-col gap-1">
+            <Button
+              variant="edge"
+              className="h-[52px] w-full text-base"
+              onClick={() => { void signOut(); navigate('/') }}
+            >
+              Sign out
+            </Button>
+            <button
+              type="button"
+              onClick={() => setSheet('delete')}
+              aria-haspopup="dialog"
+              className="h-12 rounded-full text-[15px] font-semibold text-answer-incorrect focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Delete account
+            </button>
+          </div>
+        )}
       </div>
-    </>
+
+      {sheet === 'length' && (
+        <SessionLengthSheet standing minutes={length.everyDay} onPick={pickLength} onClose={close} />
+      )}
+      {sheet === 'goal' && <GoalSheet onClose={close} />}
+      {sheet === 'email-daily' && user && (
+        <DailyEmailSheet email={user.email ?? ''} isPro={isPro} subscriptionLoading={subLoading} onClose={close} />
+      )}
+      {sheet === 'track' && <TrackSheet selected={track.key} onPick={setSelectedTrack} onClose={close} />}
+      {sheet === 'sound' && <SoundSheet onClose={close} />}
+      {sheet === 'ai' && <AiAssistantsSheet onClose={close} />}
+      {sheet === 'name' && user && (
+        <TextFieldSheet
+          title="Name"
+          label="Your name"
+          initial={(user.user_metadata?.display_name as string | undefined) ?? ''}
+          autoComplete="nickname"
+          note="A league you’ve joined shows the name you had when you joined it."
+          onSave={value => updateProfile({ displayName: value })}
+          onClose={close}
+        />
+      )}
+      {sheet === 'email' && user && (
+        <TextFieldSheet
+          title="Email"
+          label="Email address"
+          type="email"
+          initial={user.email ?? ''}
+          autoComplete="email"
+          note="We send a confirmation link to the new address. Your email changes once you open it."
+          saved={value => `Confirmation link sent to ${value}. Open it to finish the change.`}
+          onSave={value => updateProfile({ email: value })}
+          onClose={close}
+        />
+      )}
+      {sheet === 'password' && user && (
+        <PasswordSheet error={accountState.error} onSave={changePassword} onClose={close} />
+      )}
+      {sheet === 'pro' && (
+        <ProSheet
+          renews={currentPeriodEnd
+            ? new Date(currentPeriodEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+            : null}
+          onManage={openBilling}
+          onClose={close}
+        />
+      )}
+      {sheet === 'export' && user && <ExportSheet userId={user.id} owner={name} onClose={close} />}
+      {sheet === 'reset' && <ResetSheet onReset={resetHistory} onClose={close} />}
+      {sheet === 'delete' && (
+        <DeleteAccountSheet
+          onDelete={async () => {
+            const ok = await deleteAccount()
+            if (ok) navigate('/')
+            return ok
+          }}
+          onClose={close}
+        />
+      )}
+      {openExam && examKey && (
+        <ExamSettingsSheet
+          label={openExam.examLabel}
+          date={targetDates[examKey] ?? null}
+          onSaveDate={date => updateTargetDate(examKey, date)}
+          onPassed={() => setExamStatus(examKey, 'completed')}
+          onRemove={() => setExamStatus(examKey, 'not_started')}
+          onClose={() => setExamKey(null)}
+        />
+      )}
+    </YouScreen>
   )
 }

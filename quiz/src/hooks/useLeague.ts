@@ -66,6 +66,8 @@ export function useLeague(exam: string | null): LeagueView {
   const [board, setBoard] = useState<LeagueBoardRow[]>([])
   const [loading, setLoading] = useState(true)
   const [version, setVersion] = useState(0)
+  /** The account and exam the state on hand was read for. */
+  const readKey = useRef<string | null>(null)
 
   const refresh = useCallback(() => setVersion(v => v + 1), [])
 
@@ -74,10 +76,14 @@ export function useLeague(exam: string | null): LeagueView {
     if (!userId || !exam) {
       setSelf(EMPTY_SELF)
       setBoard([])
+      readKey.current = null
       setLoading(false)
       return
     }
-    setLoading(true)
+    // A spinner for a league not read yet; a re-read (a join, a quiz's XP,
+    // the tab coming back) keeps what is on screen until the answer lands.
+    const key = `${userId}:${exam}`
+    if (readKey.current !== key) setLoading(true)
     void (async () => {
       // Board first: its RPC performs the lazy weekly rollover server-side, so
       // reading self *after* it sees the post-rollover tier/result on Mondays.
@@ -86,6 +92,7 @@ export function useLeague(exam: string | null): LeagueView {
       if (cancelled) return
       setBoard(nextBoard ?? [])
       setSelf(nextSelf ?? EMPTY_SELF)
+      readKey.current = key
       setLoading(false)
     })()
     return () => { cancelled = true }

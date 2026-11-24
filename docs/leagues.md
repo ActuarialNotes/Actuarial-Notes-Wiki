@@ -20,22 +20,24 @@ Where the pieces live:
 | Shared constants + rendering math (pure, tested) | `quiz/src/lib/leagues.ts` (+ `leagues.test.ts`) |
 | Client sync glue (RPC calls, `LEAGUE_EVENT`) | `quiz/src/lib/leagueStore.ts` |
 | Hook (load + realtime + event + focus refresh) | `quiz/src/hooks/useLeague.ts` — `useLeague(exam)` |
-| Leaderboard UI (Level popup tab) + its exam selector | `quiz/src/components/LeaderboardPanel.tsx` |
-| Level badge popup that hosts the tab (Level / Quests / League) | `quiz/src/components/LevelBadge.tsx` |
+| The league's screen (`/you/league`): the table, the exam picker, joining and leaving | `quiz/src/pages/League.tsx` |
+| The table cut by its two lines, the row on the profile, the days left | `quiz/src/lib/you.ts` (`leagueTable`, `leagueRowValue`, `weekLeftLabel`) |
 | Tables + RLS + all server logic | `supabase/migrations/20260710_leagues.sql` |
 | Feature flag | `LEAGUES_ENABLED` in `quiz/src/lib/featureFlags.ts` |
 
 ## Where it surfaces
 
-There is no standalone Dashboard card. The leaderboard lives as the **League
-tab** inside the Level-badge popup (top-left of the Dashboard), alongside the
-**Quests** tab (`LevelBadge.tsx` → `LeaderboardPanel.tsx` / `QuestsPanel.tsx`).
-The popup's header carries the current level and level-progress bar, and the
-daily goal is shown as the first row of the Quests tab (there is no separate
-Level tab). Because leagues are per-exam, the League tab carries a
-compact exam selector (styled like the Dashboard exam pills, smaller) when more
-than one exam is active, defaulting to the Dashboard's active exam. Joining and leaving both happen
-there — Settings has no league section.
+The league is a screen of its own, `/you/league`, opened from the **League** row on
+the profile (`/you`), which shows the reader's tier and rank, or **Join** for a reader
+in no league (`docs/redesign-spec.md` §7b.2). The table is rank, name and the week's
+XP, the reader's row filled; a line labelled **Promoted** closes the rows that move up
+and one labelled **Relegated** opens the rows that move down (`leagueTable` in
+`lib/you.ts`, over `zoneForRank`); the days left are in the header. Because leagues are
+per exam, the exam is switched in place and rides the address (`?exam=<key>`). A
+reader who hasn't joined that exam's league is shown, on the same screen, how they
+will appear and what joining shares, with **Join the league**; **Leave the league** is
+at the foot of the table and asks first. Until 2026-11-23 the league was a tab of the
+level badge's popup on the Dashboard.
 
 ## Privacy model
 

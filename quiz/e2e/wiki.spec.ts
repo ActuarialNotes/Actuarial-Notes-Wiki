@@ -270,7 +270,7 @@ test.describe('learn', () => {
     await expect(general.locator('[data-pill][aria-current="true"]')).toHaveCount(1)
   })
 
-  test('the concept page ends in Practice this and leads back to its exam', async ({ page }) => {
+  test('the concept page ends in Practice and leads back to its exam', async ({ page }) => {
     await page.goto('/wiki/concept/Conditional+Probability?from=p-1')
 
     const concept = page.getByTestId('concept-page')
@@ -295,8 +295,8 @@ test.describe('learn', () => {
     // The end of the page: the next concept of the objective, and the foot.
     await expect(page.getByTestId('concept-next')).toContainText(/Next in General Probability/)
     const practice = page.getByTestId('practice-button')
-    await expect(practice).toContainText(/Practice this\s*\d+ questions/, { timeout: 30_000 })
-    await expect(practice).toHaveAttribute('href', /^\/quiz\?concept=Conditional\+Probability&/)
+    await expect(practice).toContainText(/Practice\s*\d+ questions/, { timeout: 30_000 })
+    await expect(practice).toHaveAttribute('href', '/search?tab=questions&concept=Conditional+Probability')
     await expect(practice).toBeInViewport()
 
     // Back, for a reader who landed here, is up to the exam.
@@ -304,7 +304,7 @@ test.describe('learn', () => {
     await expect(page).toHaveURL(/\/wiki\/exam\//)
   })
 
-  test('the reader ends a concept the same way: Previous, Practice this, Next', async ({ page }) => {
+  test('the reader ends a concept the same way: Previous, Practice, Next', async ({ page }) => {
     await page.goto(`${EXAM}?concept=Conditional+Probability`)
     const reader = page.getByRole('complementary', { name: 'Concept: Conditional Probability' })
     await expect(reader).toBeVisible()
@@ -314,8 +314,8 @@ test.describe('learn', () => {
     await expect(reader.getByRole('heading', { level: 2, name: 'Conditional Probability' })).toBeVisible()
     await expect(reader.getByRole('button', { name: 'New. Open Learning Progress' })).toBeVisible()
     await expect(reader.getByRole('button', { name: 'Previous' })).toBeVisible()
-    await expect(reader.getByRole('link', { name: 'Practice this' }))
-      .toHaveAttribute('href', /^\/quiz\?concept=Conditional\+Probability&/, { timeout: 30_000 })
+    await expect(reader.getByRole('link', { name: 'Practice', exact: true }))
+      .toHaveAttribute('href', '/search?tab=questions&concept=Conditional+Probability', { timeout: 30_000 })
     await reader.getByRole('button', { name: 'Next' }).click()
     await expect(page.getByRole('complementary', { name: /^Concept: (?!Conditional Probability)/ })).toBeVisible()
   })

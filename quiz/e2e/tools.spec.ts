@@ -535,7 +535,7 @@ test.describe('tools, in Apply', () => {
     await expect(page).toHaveURL(/\/apply$/)
   })
 
-  test('outlines the answer, leads to the method with the reader\'s level, and ends in Practice this', async ({ page }) => {
+  test('outlines the answer, leads to the method with the reader\'s level, and ends in Practice', async ({ page }) => {
     await page.goto('/tools/loss-ratio-method')
     const card = page.getByTestId('tool-card')
     // An outline in the text colour, with nothing filled behind the answer.
@@ -552,7 +552,7 @@ test.describe('tools, in Apply', () => {
 
     // The one filled button: a quiz on the tool's concept.
     const practice = page.getByTestId('practice-button')
-    await expect(practice).toContainText(/Practice this\s*\d+ questions/, { timeout: 30_000 })
+    await expect(practice).toContainText(/Practice\s*\d+ questions/, { timeout: 30_000 })
     await expect(practice).toHaveAttribute('href', /concept=Loss(\+|%20)Ratio(\+|%20)Method/)
 
     await learn.click()

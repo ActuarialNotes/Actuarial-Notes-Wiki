@@ -449,10 +449,10 @@ before touching that area**:
   Readings (the Source Material shelf), the page's notes and Fact Check. **A pill opens the
   concept in the concept popup**, over the exam page, never by navigating; the open concept's
   pill is filled and the walk opens the objective that holds it. The popup's foot is Previous,
-  Practice this, Next. The concept's own page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`: a
+  Practice, Next. The concept's own page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`: a
   new tab, a search result, a shared link) no longer redirects into the exam page and ends the
   same way: back to where the reader came from, the level button, more, the article, **Next in
-  <objective>** and the fixed **Practice this**. **Phase I, Apply, is built** (§7c and §8): **Apply's home** is
+  <objective>** and the fixed **Practice**. **Phase I, Apply, is built** (§7c and §8): **Apply's home** is
   `pages/Apply.tsx` at `/apply` (lazy), three outlined cards in this order, each heading tapped
   into: **Projects** (the attempts in progress, or how many briefs there are, and the attempt
   worked on last with its four-step bar), **Tools** (how many the exam in focus covers, or the
@@ -467,7 +467,7 @@ before touching that area**:
   every exam whose syllabus names one of its concepts (`toolsForExam`, which takes the exam's
   own page), while its sheets' colour is still the earliest exam's (`examForConcepts`). On a
   tool's page three things changed and nothing else: the answer card is an outline, **Learn the
-  method** is a row with the reader's level, and **Practice this** is fixed to the foot (the
+  method** is a row with the reader's level, and **Practice** is fixed to the foot (the
   concept page's button, not drawn for a concept with no questions). An **attempt opens on its
   overview** (`components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`): title
   and company, Rehearsal or Practice as a tag, the four-step bar (`StepBar` in
@@ -494,7 +494,7 @@ before touching that area**:
   (`isYouRoute`). The flows are `e2e/you.spec.ts`. **Phase G, Practice, is built** (§8 again): Practice's home,
   the setup popup, Past papers, Flashcards as a row and the one search; see `quizBuilder.ts`,
   `pastExams.ts` and `oneSearch.ts` below. Flashcards (`pages/Flashcards.tsx`) is one card at a
-  time with Previous, **Practice this** and Next at the foot; the deck (the grid, reorder, remove)
+  time with Previous, **Practice** and Next at the foot; the deck (the grid, reorder, remove)
   is the **Deck** popup, adding is **+**, and shuffle, the back's content and focus mode are in
   **More**. `/papers`, `/flashcards` and `/search` are sheets over Practice (`deskPlace`), each
   with a back arrow to it (`components/practice/PracticeHeader.tsx`) and no phone navigation

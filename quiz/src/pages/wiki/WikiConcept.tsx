@@ -28,7 +28,7 @@ import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useStandalonePage } from '@/hooks/useStandalonePage'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { backLabel, useBack, usePageLabel } from '@/hooks/useBack'
-import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { useConceptQuestionCount } from '@/hooks/usePractice'
 import { nextInObjective, parseExamPage, type ObjectivePill } from '@/lib/examPage'
 import { conceptPracticeUrl, questionCountLabel } from '@/lib/practiceLaunch'
 import { compareExamLabels } from '@/lib/resourceExams'
@@ -234,10 +234,10 @@ export default function WikiConcept() {
           className="sticky bottom-0 z-30 -mx-4 -mb-8 mt-6 border-t border-border bg-ground px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:mx-0 sm:px-0"
         >
           <PracticeButton
-            to={conceptPracticeUrl(conceptName, questionCount, practiceSettings())}
+            to={conceptPracticeUrl(conceptName)}
             aside={questionCountLabel(questionCount)}
           >
-            Practice this
+            Practice
           </PracticeButton>
         </div>
       )}

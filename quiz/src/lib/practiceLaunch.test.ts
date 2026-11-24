@@ -4,11 +4,10 @@ import { conceptPracticeUrl, objectivePracticeUrl, questionCountLabel } from './
 const settings = { mode: 'quiz', reveal: 'during', links: '1', timed: false } as const
 
 describe('practiceLaunch', () => {
-  it('starts ten questions on a concept with more, and all of a smaller pool', () => {
-    expect(conceptPracticeUrl('Bayes Theorem', 152, settings))
-      .toBe('/quiz?concept=Bayes+Theorem&mode=quiz&reveal=during&from=home&links=1&count=10')
-    expect(conceptPracticeUrl('Bayes Theorem', 4, settings))
-      .toBe('/quiz?concept=Bayes+Theorem&mode=quiz&reveal=during&from=home&links=1')
+  it("opens the search on a concept's questions, named the way the Concepts filter names it", () => {
+    expect(conceptPracticeUrl('Bayes Theorem')).toBe('/search?tab=questions&concept=Bayes+Theorem')
+    expect(conceptPracticeUrl('Law of Total Probability'))
+      .toBe('/search?tab=questions&concept=Law+Of+Total+Probability')
   })
 
   it('starts an objective from the exam bank, on its concepts', () => {

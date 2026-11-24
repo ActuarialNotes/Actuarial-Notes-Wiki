@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   ALL_TAB_PREVIEW,
+  PRACTICE_DEFAULT,
   PRACTICE_LIMIT,
   attemptDot,
+  drawIds,
+  pickedIds,
+  practiceCount,
   conceptPlaceLine,
   focusFirst,
   matchQuestions,
@@ -172,6 +176,45 @@ describe('practiceIds', () => {
     const ids = practiceIds(many)
     expect(ids).toHaveLength(PRACTICE_LIMIT)
     expect(ids[0]).toBe('q-0')
+  })
+})
+
+describe('practiceCount', () => {
+  it('starts at the default, or all of a smaller pool', () => {
+    expect(practiceCount(null, 152)).toBe(PRACTICE_DEFAULT)
+    expect(practiceCount(null, 4)).toBe(4)
+    expect(practiceCount(null, 0)).toBe(0)
+  })
+  it("holds the reader's choice between 1 and what was found, never past the limit", () => {
+    expect(practiceCount(25, 30)).toBe(25)
+    expect(practiceCount(25, 12)).toBe(12)
+    expect(practiceCount(0, 12)).toBe(1)
+    expect(practiceCount(500, 500)).toBe(PRACTICE_LIMIT)
+  })
+})
+
+describe('drawIds', () => {
+  const results = Array.from({ length: 20 }, (_, i) => ({ question: question({ id: `q-${i}` }), otherExam: null }))
+  it('draws so many of the results, none twice', () => {
+    const ids = drawIds(results, 7)
+    expect(ids).toHaveLength(7)
+    expect(new Set(ids).size).toBe(7)
+    for (const id of ids) expect(id).toMatch(/^q-\d+$/)
+  })
+  it('draws at random', () => {
+    // Each pick swaps the last place left into the draw.
+    expect(drawIds(results, 3, () => 0.999)).toEqual(['q-19', 'q-0', 'q-1'])
+    expect(drawIds(results, 3, () => 0)).toEqual(['q-0', 'q-1', 'q-2'])
+  })
+  it('takes no more than there are', () => {
+    expect(drawIds(results.slice(0, 2), 10)).toHaveLength(2)
+  })
+})
+
+describe('pickedIds', () => {
+  it('keeps the ticked questions still among the results, in their order', () => {
+    const results = ['a', 'b', 'c'].map(id => ({ question: question({ id }), otherExam: null }))
+    expect(pickedIds(results, new Set(['c', 'a', 'gone']))).toEqual(['a', 'c'])
   })
 })
 

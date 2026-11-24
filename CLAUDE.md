@@ -894,8 +894,9 @@ Other important `lib/` modules:
   bank passed it),
   `beta` (Exams 6C and 8,
   FAM and SRM — their banks the SOA's sample sets — ASTAM and ALTAM, from their sample sets and
-  released papers, and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM —
-  PA, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
+  released papers, PA and ATPA — their banks the vault's own questions, since both are sat as
+  projects — and PCPA) or `development` (Exams 6U, 6I and 6T, the FSA pathway's exams, keyed
+  `FSA-GH101` etc. — and the **non-exam
   requirements**: the three VEEs (`VEE-MS`, `VEE-ECON`, `VEE-AF`), the SOA's e-learning modules
   PAF, ASF, FAP and DMAC (`FSA-DMAC`), its APC and FAC (`FSA-FAC`), and the CAS's Course on
   Professionalism, page id `COP`, still keyed `CAS-APC` because readers' progress is stored
@@ -1927,7 +1928,9 @@ compile — don't "clean up" the flagged code as dead.
   sittings, Spring 2023–Spring 2026, as `astam-<year><s|f>-q<n>` — the Excel-workbook question of
   each left out — and two of the vault's own, `astam-an-001` …), `exam-altam` (the same shape: the
   SOA's ALTAM sample set as `altam-<n>`, most of its questions old MLC and LTAM papers', and its
-  seven released sittings as `altam-<year><s|f>-q<n>`),
+  seven released sittings as `altam-<year><s|f>-q<n>`), `exam-pa` and `exam-atpa` (the vault's own
+  questions on the syllabus concepts, `pa-an-001` …, `atpa-an-001` …: both exams are sat as
+  projects, so the SOA publishes nothing to convert into a bank),
   `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
   (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the
   thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /

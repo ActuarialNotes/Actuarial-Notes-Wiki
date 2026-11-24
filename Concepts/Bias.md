@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-31
   last_checked_by: agent:validate-v1
-  content_hash: sha256:37a22a24c395da2f1dcc9d425afc27861190bf1b8bbaa67bfe710f5f9136a4da
+  content_hash: sha256:e426ef8aeaa44225a9b85ae2d648ae9636595e7af309817dfe6e33947a0eb64e
   sources:
     - "Penn State STAT 501 Regression Methods, Lesson 10 §10.1 'What if the Regression Equation Contains \"Wrong\" Predictors?', Outcome 2 (underspecified model): biased coefficients and predictions; 'the mean square error MSE tends to overestimate σ², thereby yielding wider confidence intervals than it should'; Martian example MSE 0.653 vs 0.017, sha256:c5c4744b68f627609bd40ed82d3a571ed3aa6c2231469ddbac18d5b8cc94313c — https://online.stat.psu.edu/stat501/Lesson10"
     - "Penn State STAT 462 Applied Regression Analysis, §11.1 'What if the Regression Equation Contains \"Wrong\" Predictors?', underspecified model (outcome 2): same MSE-overestimates-σ² / wider confidence intervals sentence, sha256:4e75fc0fd87859ad788661398e41d98f592654b42642c523c849339b7fd56e4f — https://online.stat.psu.edu/stat462/node/195/"
@@ -97,6 +97,40 @@ Omitting a variable that belongs in the model biases the coefficients of the var
 > [!example]- The true model has $\beta_1 = 2$ and $\beta_2 = 3$. The variable $x_2$ is omitted, and the slope of $x_2$ on $x_1$ is 0.5. What is the bias of $\hat{\beta}_1$? {Example}
 > - The expected value of $\hat{\beta}_1$ is $2 + 3 \times 0.5 = 3.5$.
 > - The bias of $\hat{\beta}_1$ is $3.5 - 2 = 1.5$.
+
+## Bias of a model's predictions for a group
+
+A predictive model is biased against a group when its predictions for that group are systematically wrong. Applying the definition to the records of a group $g$, the bias of the model for that group is
+
+> $$\text{Bias}_g = \bar{\hat{y}}_g - \bar{y}_g$$
+
+- $\bar{\hat{y}}_g$ is the average prediction for the records in group $g$.
+- $\bar{y}_g$ is the average actual outcome for the same records.
+
+A positive bias overpredicts the group and a negative bias underpredicts it. Bias of this kind can come from data that under-represents the group, from past decisions recorded in the target, or from a variable that stands in for a protected characteristic as [[Proxy Discrimination|proxy discrimination]]. It is one of the ways a model produces [[Unfair Discrimination|unfair discrimination]], and checking for it is part of [[Data Ethics|data ethics]].
+
+Three common fairness criteria compare groups:
+
+| Criterion | Holds when, in every group |
+| :--- | :--- |
+| Calibration | The average prediction equals the average actual outcome, so $\text{Bias}_g = 0$ |
+| Demographic parity | The average prediction, or the share flagged positive, is the same |
+| Equal error rates | The [[Confusion Matrix#Sensitivity and specificity|true positive and false positive rates]] are the same |
+
+When the groups' actual outcome rates differ, a calibrated model gives them different average predictions, so it cannot also meet demographic parity. A calibrated model also cannot have equal error rates across such groups unless it predicts every record correctly. Choosing a criterion is a judgment the business context has to support.
+
+> [!example]- Is this claim model biased for either group? {Example}
+> A claim model's predicted and actual claim rates on holdout data are:
+>
+> | Group | Average prediction | Actual claim rate |
+> | :--- | ---: | ---: |
+> | A | 0.10 | 0.10 |
+> | B | 0.12 | 0.08 |
+>
+> > [!answer]-
+> > - Group A's bias is $0.10 - 0.10 = 0$, so the model is calibrated for group A.
+> > - Group B's bias is $0.12 - 0.08 = 0.04$, so the model overpredicts group B by 4 claims per 100 records.
+> > - The model is not calibrated across the groups, and a variable correlated with membership of group B is the first place to look.
 
 > [!trap] Treating the error of one estimate as bias
 > The bias is an expected value over repeated samples. One estimate of 1.3 for a coefficient whose true value is 1.5 does not show a bias of $-0.2$. The difference is a sampling error, and the bias can only be found from the expected value of the estimator.

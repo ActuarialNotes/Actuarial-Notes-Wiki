@@ -187,10 +187,10 @@ describe('Add an exam', () => {
   it('lists a body\'s studiable exams by credential and folds the ones in development', () => {
     const sections = addExamSections('SOA', TRACKS, pages, { P: 'in_progress', FM: 'completed' }, {}, name)
     const asa = sections.find(s => s.track === 'ASA')!
-    expect(asa.rows.map(r => r.examId)).toEqual(['P-1', 'FM-2', 'FAM', 'SRM'])
-    expect(asa.rows.map(r => r.added)).toEqual([true, false, false, false])
+    expect(asa.rows.map(r => r.examId)).toEqual(['P-1', 'FM-2', 'FAM', 'SRM', 'PA'])
+    expect(asa.rows.map(r => r.added)).toEqual([true, false, false, false, false])
     expect(asa.rows[1].passed).toBe(true)
-    expect(asa.development.map(r => r.examId)).toEqual(['PA'])
+    expect(asa.development).toEqual([])
     const fsa = sections.find(s => s.track === 'FSA')!
     expect(fsa.rows).toEqual([])
     expect(fsa.development.map(r => r.examId)).toEqual(['GH-101'])

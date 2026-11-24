@@ -120,6 +120,8 @@ const EMAIL_BANK_LABELS: Record<string, string> = {
   'P': 'Probability',
   'FM': 'Financial Mathematics',
   'SRM': 'Exam SRM',
+  'PA': 'Exam PA',
+  'ATPA': 'Exam ATPA',
   'FAM': 'Exam FAM',
   'ASTAM': 'Exam ASTAM',
   'ALTAM': 'Exam ALTAM',

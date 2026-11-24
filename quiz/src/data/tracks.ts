@@ -97,8 +97,10 @@ export const TRACKS: Track[] = [
           { id: 'FM', name: 'Exam FM-2', color: 'indigo' },
           { id: 'FAM', name: 'Exam FAM', color: 'purple' },
           { id: 'SRM', name: 'Exam SRM', color: 'fuchsia' },
+          { id: 'PA', name: 'Exam PA', color: 'rose' },
           { id: 'ALTAM', name: 'Exam ALTAM', color: 'red' },
           { id: 'ASTAM', name: 'Exam ASTAM', color: 'red' },
+          { id: 'ATPA', name: 'ATPA', color: 'orange' },
         ],
       },
       {

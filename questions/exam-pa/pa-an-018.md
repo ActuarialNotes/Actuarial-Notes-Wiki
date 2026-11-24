@@ -36,7 +36,7 @@ Complete linkage measures the dissimilarity between two clusters as the largest 
 2. The cluster $\{1, 2\}$ is $\max(7, 4) = 7$ from territory 3 and $\max(11, 8) = 11$ from territory 4. The smallest remaining dissimilarity is $d_{34} = 6$, so territories 3 and 4 fuse at height 6.
 3. The clusters $\{1, 2\}$ and $\{3, 4\}$ are $\max(7, 11, 4, 8) = 11$ apart, so they fuse at height **11**.
 
-Entering **6** uses single linkage, which takes the smallest dissimilarity between the clusters; entering **7.5** uses average linkage, $(7 + 11 + 4 + 8)/4$.
+Entering **6** uses single linkage, which takes the smallest dissimilarity between the clusters and ends with a fusion at 6 (part b). Entering **7.5**, the mean $(7 + 11 + 4 + 8)/4$, applies average linkage to the clusters complete linkage formed. Average linkage forms different ones: territory 3 joins $\{1, 2\}$ at $(7 + 4)/2 = 5.5$, below $d_{34} = 6$, and territory 4 joins last at $(11 + 8 + 6)/3 = 8.33$.
 
 ## Part b (1 point)
 The actuary repeats the clustering with single linkage and cuts the dendrogram at height 5. Which clusters result?

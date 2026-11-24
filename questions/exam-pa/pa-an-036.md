@@ -31,6 +31,6 @@ Each boosted tree is fitted to the residuals of the model so far. Past 900 trees
 **Why not the others**
 
 - **B** chooses $B$ by training error, which always favours the most flexible model.
-- **C** borrows the property of bagging. Boosting fits each tree to the full data with the updated residuals, and resampling would not stop the added trees from chasing the residuals.
-- **D** gives up what the small shrinkage is for. Shrinking each tree makes the model learn slowly, through many small corrections; with $\lambda = 0.5$ each tree corrects the residuals by much more, and keeping 4,000 trees leaves the model still fitting noise.
+- **C** borrows the property of bagging. Boosting fits each tree to the full data with the updated residuals as the response, and it overfits when $B$ is too large because each added tree keeps fitting the residuals. Fitting each tree to a bootstrap sample would not change that.
+- **D** moves the wrong way. A smaller shrinkage needs a larger $B$, and a larger shrinkage learns faster and needs fewer trees. At $\lambda = 0.5$ the cross-validation error would reach its minimum well before 900 trees, so keeping 4,000 leaves the model even further into fitting noise.
 - **E** makes each tree more flexible, allowing interactions of up to 6 predictors, which moves further toward overfitting, not away from it.

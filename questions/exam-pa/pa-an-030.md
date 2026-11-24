@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Classification+Tree
   - Concepts/Gini+Index
   - Concepts/Node+Impurity
+  - Concepts/Tree+Pruning
 points: 2
 ---
 

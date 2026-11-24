@@ -73,4 +73,4 @@ The logarithm of claim severity. Check whether it is close to normal before a lo
 E
 
 ### Explanation
-A QQ plot shows whether a continuous variable follows an assumed distribution: the points lie near a straight line when it does. A histogram (**A**) shows the shape but makes it hard to judge departures from a particular distribution, especially in the tails.
+A QQ plot shows whether a continuous variable follows an assumed distribution: the points lie near a straight line when it does. A histogram (**A**) shows the shape of the distribution, but checking it against an assumed distribution is the QQ plot's job.

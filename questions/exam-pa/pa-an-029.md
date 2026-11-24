@@ -32,7 +32,7 @@ Determine which of the following statements are true.
 
 **I is true.** At $\lambda = 0$ the fit is the unpenalized one, which has the smallest training deviance. A larger $\lambda$ shrinks the coefficients away from that fit, adding bias, so the training deviance rises. Test deviance, by contrast, is U-shaped in $\lambda$.
 
-**II is false.** The intercept is not penalized. As $\lambda$ grows the slope coefficients shrink toward 0, and the intercept is still fitted to the data, so the predictions approach the overall average frequency, not 1.
+**II is false.** The intercept is not penalized, so the overall level of the predictions is still fitted to the data. As $\lambda$ grows the slope coefficients approach 0 and every policy gets nearly the same fitted frequency, but that frequency is set by the intercept fitted to the claims, not fixed at $e^0 = 1$.
 
 **III is true.** Unpenalized estimates are scale equivariant: multiplying a predictor by $c$ multiplies its coefficient by $\frac{1}{c}$. Penalized estimates are not, so vehicle value measured in dollars would be penalized very differently from the same predictor measured in thousands of dollars. Standardizing puts the predictors on one scale first.
 
@@ -41,5 +41,5 @@ I and III are true, so the answer is **C**.
 **Why not the others**
 
 - **A** rejects III, missing that the penalty treats a coefficient's size the same whatever its predictor's units.
-- **B** and **D** accept II, assuming the penalty applies to the intercept.
+- **B** and **D** accept II, assuming the penalty shrinks the intercept along with the slopes.
 - **E** would need another combination, but I and III are true and II is false.

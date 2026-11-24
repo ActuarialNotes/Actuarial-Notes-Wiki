@@ -24,8 +24,9 @@ function read(rel: string): string {
 
 /** Every surface that puts a published PDF in front of the reader. */
 const PDF_SURFACES = [
-  // The past-paper shelf: a sitting's examiner's report and its solutions.
-  'components/PastExamBrowser.tsx',
+  // A past paper's popup: the sitting's examiner's report, a sample set's
+  // questions and solutions.
+  'components/practice/PaperPopup.tsx',
   // The study guide's sticky header: the exam's published syllabus.
   'components/wiki/ExamSyllabusButton.tsx',
   // A resource page's metadata card: "Read PDF".

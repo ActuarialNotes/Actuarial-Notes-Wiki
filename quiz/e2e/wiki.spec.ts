@@ -59,10 +59,10 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki$/)
   })
 
-  test('walks back the way the reader came, into the quiz builder as it was left', async ({ page }) => {
-    // From the Quiz tab's Exam P builder, through Study Guides to the exam:
+  test('walks back the way the reader came, into Practice as it was left', async ({ page }) => {
+    // From Practice on Exam P, through Study Guides to the exam:
     // the arrow names Study Guides and returns there, and the browser's Back
-    // walks on the same way — into the builder as it was left, not the list.
+    // walks on the same way, into Practice on that exam and not the list.
     await page.goto('/')
     await page.locator('button[data-tour="quiz-exam-p"]').click()
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
@@ -72,7 +72,7 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki$/)
     await page.goBack()
     await expect(page).toHaveURL(/\?topic=/)
-    await expect(page.getByRole('button', { name: 'Change exam' })).toBeVisible()
+    await expect(page.getByTestId('practice-exam')).toContainText('Exam P')
     await page.goBack()
     await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
   })

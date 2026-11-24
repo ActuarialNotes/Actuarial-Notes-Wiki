@@ -83,11 +83,11 @@ test.describe('quiz in progress', () => {
     await expect(page.getByRole('button', { name: 'Next', exact: true })).toHaveCount(0)
   })
 
-  // Quit leads back to where the quiz was started — here, Exam P's builder,
-  // still open — rather than the exam list (lib/navTrail.ts).
+  // Quit leads back to where the quiz was started: here Practice on Exam P,
+  // not the exam list (lib/navTrail.ts).
   test('quitting returns to the builder the quiz was started from', async ({ page }) => {
     const examP = page.locator('button[data-tour="quiz-exam-p"]')
-    const changeExam = page.getByRole('button', { name: 'Change exam' })
+    const practiceExam = page.getByTestId('practice-exam')
     const start = page.locator('[data-tour="start-quiz"]')
 
     await page.goto('/')
@@ -102,7 +102,7 @@ test.describe('quiz in progress', () => {
     await page.getByRole('button', { name: 'Leave the quiz' }).click()
     await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
     await page.waitForURL(url => url.pathname === '/' && url.searchParams.has('topic'))
-    await expect(changeExam).toBeVisible()
+    await expect(practiceExam).toContainText('Exam P')
     await expect(pill(page)).toHaveCount(0)
   })
 

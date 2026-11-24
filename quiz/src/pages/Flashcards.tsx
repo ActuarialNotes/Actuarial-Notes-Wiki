@@ -1,47 +1,21 @@
-import { createContext, forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, forwardRef, useCallback, useContext, useEffect, useId, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useSubscription } from '@/hooks/useSubscription'
 import {
-  CalendarCheck,
-  CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
-  Eye,
-  Images,
-  Keyboard,
-  LayoutGrid,
-  Layers,
   Loader2,
-  Maximize2,
-  Minus,
-  Play,
+  MoreHorizontal,
   Plus,
+  Repeat,
   RotateCcw,
   Search,
-  Sigma,
-  Trash2,
   X,
 } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { CONCEPT_TILE_GRID, ConceptTile } from '@/components/ConceptTile'
-import {
-  DndContext,
-  closestCenter,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from '@dnd-kit/core'
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  rectSortingStrategy,
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
 import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { showAddedToDeck } from '@/hooks/useToast'
@@ -49,16 +23,13 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { useTodayPlanCardNames } from '@/hooks/useTodayPlanCardNames'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useExamProgress } from '@/contexts/examProgress'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, examDisplayName } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { latestMasteryStates, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
-import { ACTION_MENU_ROW_CLASS, ConceptActionMenu } from '@/components/ConceptActionMenu'
 import {
-  needsReviewOrder,
   nextIncompleteIndex,
   resolveActiveIndex,
   shouldLockPageScroll,
@@ -66,6 +37,7 @@ import {
   summarizeSession,
   type StudyRating,
 } from '@/lib/flashcardStudy'
+import { deckCountLabel, opensDeck, toggleBackPart, type CardBackPart } from '@/lib/flashcardDeck'
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
 import { completedTodayConcepts, deckExamLabels, flashcardShelfExams } from '@/lib/flashcardShelf'
@@ -74,23 +46,31 @@ import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter
 import { ExamStrip } from '@/components/ExamStrip'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { Button } from '@/components/ui/button'
+import { GROUND } from '@/components/ui/OutlineCard'
+import { Popup, PopupTitle } from '@/components/ui/Popup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { extractMathBlockquotes, extractImages, splitDefinition } from '@/lib/wikiMarkdown'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
-import { FlashcardsSearchBar } from '@/components/FlashcardsSearchBar'
+import { DeckPopup } from '@/components/flashcards/DeckPopup'
+import { FlashcardsMoreMenu } from '@/components/flashcards/FlashcardsMoreMenu'
+import { PracticeButton } from '@/components/learn/PracticeButton'
+import { PRACTICE_HEADER_BUTTON, PracticeHeader } from '@/components/practice/PracticeHeader'
+import { LevelSquare } from '@/components/LevelSquare'
+import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { conceptPracticeUrl } from '@/lib/practiceLaunch'
 import { trackFlashcardReviewed } from '@/lib/analytics'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
-import { FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { useTheme } from '@/hooks/useTheme'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { cn } from '@/lib/utils'
 
-type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
-type ReverseCardSection = 'definition' | 'math' | 'images'
+// How the deck is ordered: by exam and syllabus, as the reader dragged it, or shuffled.
+type GroupBy = 'exam' | 'custom' | 'shuffle'
 
 // How long one card's "clear" animation (border ring → green flood + checkmark
 // → the card collapsing into its own centre and puffing out a ring of little
@@ -116,50 +96,8 @@ function clearStaggerFor(count: number): number {
   return Math.max(90, Math.min(CLEAR_STAGGER_MS, Math.round(CLEAR_SWEEP_BUDGET_MS / count)))
 }
 
-// The layers of a card's clear animation — the line racing round the border,
-// the disc of green flooding out from the middle, the halo the filled card
-// glows with, and the checkmark stroked over the top. Identical on both faces
-// of the card; the shared timeline lives in index.css. Each is its own element
-// so that every one of them can animate a transform or an opacity and nothing
-// has to repaint mid-sweep.
-//
-// The four are gathered under one `.flashcard-clear-body` because that wrapper
-// is what implodes at the end — a single transform collapses the finished card
-// to a point. The burst of little "gone" lines is deliberately *outside* it, so
-// it is still full size when the thing it came from has shrunk away to nothing.
-const CLEAR_OVERLAY = (
-  <>
-    <span className="flashcard-clear-body" aria-hidden="true">
-      <svg className="flashcard-clear-ring" width="100%" height="100%" aria-hidden="true">
-        <rect width="100%" height="100%" rx="11" pathLength="100" />
-      </svg>
-      <span className="flashcard-clear-glow" />
-      <span className="flashcard-clear-wash"><span /></span>
-      <svg className="flashcard-clear-check" viewBox="0 0 24 24">
-        <path d="M4 12.5 L9.5 18 L20 6.5" />
-      </svg>
-    </span>
-    {/* Eight strokes flicking outward from where the card was. One element, one
-        transform: the whole puff is a single scale+fade of this SVG. */}
-    <svg className="flashcard-clear-burst" viewBox="0 0 48 48" aria-hidden="true">
-      {/* Four long spokes on the axes, four shorter and thinner on the
-          diagonals — an even ring reads as a wheel, an uneven one as a puff. */}
-      <path d="M34 24 H44 M14 24 H4 M24 14 V4 M24 34 V44" />
-      <path
-        className="flashcard-clear-burst-short"
-        d="M30.4 17.6 L34.6 13.4 M17.6 17.6 L13.4 13.4 M30.4 30.4 L34.6 34.6 M17.6 30.4 L13.4 34.6"
-      />
-    </svg>
-  </>
-)
-
-
 function extractFirstParagraph(markdown: string): string {
   return splitDefinition(markdown).paragraph
-}
-
-function withoutFirstParagraph(markdown: string): string {
-  return splitDefinition(markdown).rest
 }
 
 // ─── The add-flashcards shelves ──────────────────────────────────────────────
@@ -705,12 +643,12 @@ const SHEET_EXIT_MS = 200
 
 // How the "+" reaches the sheet. The sheet is owned by the page
 // (`AddFlashcardsSheetHost`, mounted by `Flashcards` at the bottom of this
-// file), not by the button that opens it: the button lives in the controls
-// footer, and that footer is torn down and rebuilt the moment the deck stops
-// being empty. Holding the open state down there meant adding your *first*
-// card slammed the sheet shut mid-browse; hoisting it above that switch keeps
-// the sheet — and its search text, exam pill and scroll position — exactly
-// where it was.
+// file), not by the button that opens it: the button is in the deck's top row
+// (or the empty deck's middle), and that tree is torn down and rebuilt the
+// moment the deck stops being empty. Holding the open state down there meant
+// adding your *first* card slammed the sheet shut mid-browse; hoisting it
+// above that switch keeps the sheet — and its search text, exam pill and
+// scroll position — exactly where it was.
 const AddFlashcardsSheetContext = createContext<{
   openSheet: () => void
   onCardsAdded: () => void
@@ -840,189 +778,6 @@ function AddFlashcardsSheet({
   )
 }
 
-// One row of the "+" menu. Same shape as the rows of ConceptActionMenu, the
-// app's other action menu — icon, label, and a `trailing` slot where a row
-// states its own count.
-function AddFlashcardsMenuRow({
-  icon,
-  label,
-  trailing,
-  disabled = false,
-  sound,
-  onClick,
-}: {
-  icon: ReactNode
-  label: string
-  trailing?: ReactNode
-  disabled?: boolean
-  /** Overrides the delegated press cue — "none" for a row that plays its own. */
-  sound?: string
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      role="menuitem"
-      data-sound={sound}
-      disabled={disabled}
-      onClick={onClick}
-      className={`w-full inline-flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-left transition-colors ${
-        disabled
-          ? 'text-muted-foreground/60 cursor-default'
-          : 'text-foreground hover:bg-accent'
-      }`}
-    >
-      <span className="shrink-0">{icon}</span>
-      <span className="whitespace-nowrap">{label}</span>
-      {trailing && <span className="ml-auto pl-3 shrink-0 inline-flex items-center">{trailing}</span>}
-    </button>
-  )
-}
-
-// The menu itself, mounted only while it is open. That is deliberate rather
-// than incidental: reading today's plan means generating one per in-progress
-// exam (`useTodayPlanCardNames`), and the "+" sits in a footer that is on
-// screen the whole time the deck is. Keeping the hook inside the open menu
-// means the plans are built when someone asks what today holds, not on every
-// flashcards render.
-function AddFlashcardsMenu({
-  onAdded,
-  onBrowseAll,
-}: {
-  onAdded: () => void
-  onBrowseAll: () => void
-}) {
-  const { addCard, hasCard } = useFlashcards()
-  const { names: planNames, loading: planLoading, hasPlan } = useTodayPlanCardNames()
-  const { isPro } = useSubscription()
-
-  // What today's plan would actually add — the plan's concepts minus whatever
-  // is already in the deck, so the row's count is the number of *new* cards and
-  // tapping it twice is a no-op rather than a pile of duplicates.
-  const missing = planNames.filter(n => !hasCard(n))
-  const allInDeck = planNames.length > 0 && missing.length === 0
-
-  function addToday() {
-    if (missing.length === 0) return
-    for (const name of missing) addCard({ kind: 'concept', name })
-    playSound('addToDeck')
-    showAddedToDeck(missing.length)
-    onAdded()
-  }
-
-  return (
-    <div
-      role="menu"
-      aria-label="Add flashcards"
-      // Surface and layer match ConceptActionMenu's inline form: `bg-popover`
-      // is a step off `--background`, which pure black is not, and the menu
-      // floats over whatever card is behind the footer. z-50 is the same step
-      // its neighbour in this footer (ViewModeDropdown) opens on.
-      className="absolute bottom-full mb-2 right-0 z-50 flex w-max min-w-[248px] flex-col gap-0.5 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-lg"
-    >
-      <AddFlashcardsMenuRow
-        icon={<CalendarCheck className="h-4 w-4" />}
-        label="Today's Study Plan"
-        disabled={planLoading || missing.length === 0}
-        sound="none"
-        onClick={addToday}
-        trailing={
-          planLoading ? (
-            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
-          ) : allInDeck ? (
-            <CheckMark className="h-4 w-4" />
-          ) : missing.length > 0 ? (
-            <span
-              className="shrink-0 inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
-              aria-label={`${missing.length} card${missing.length === 1 ? '' : 's'} to add`}
-            >
-              {missing.length}
-            </span>
-          ) : (
-            <span className="shrink-0 text-xs">{!isPro ? 'Pro' : hasPlan ? 'None today' : 'Not set up'}</span>
-          )
-        }
-      />
-      <AddFlashcardsMenuRow
-        icon={<Search className="h-4 w-4" />}
-        label="Browse all"
-        onClick={onBrowseAll}
-      />
-    </div>
-  )
-}
-
-// The deck with nothing in it. The way to fill it is in the card, not a
-// sentence pointing at the "+" in the far corner (design review F18): the
-// button opens the same sheet, whose first section is today's study plan.
-function EmptyDeck() {
-  const { openSheet } = useContext(AddFlashcardsSheetContext)
-  return (
-    <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-4">
-      <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" aria-hidden="true" />
-      <p className="text-sm text-muted-foreground">Your deck is empty.</p>
-      <Button onClick={openSheet}>
-        <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-        Add flashcards
-      </Button>
-    </div>
-  )
-}
-
-// The round primary "+" in the controls footer, and the little menu it opens
-// above itself. The two ways into the deck are not equals: the plan already
-// knows what today is for, so building that deck should be one tap, while
-// everything else is a browse. So the "+" no longer opens the sheet directly —
-// it offers today's plan first, and "Browse all" is what reaches the sheet.
-//
-// Only the button and its menu are here — the sheet itself is mounted by the
-// page, above the empty-deck/deck switch this footer sits below.
-function AddFlashcardsButton() {
-  const { openSheet, onCardsAdded } = useContext(AddFlashcardsSheetContext)
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    function handleOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('mousedown', handleOutside)
-    document.addEventListener('keydown', handleKey)
-    return () => {
-      document.removeEventListener('mousedown', handleOutside)
-      document.removeEventListener('keydown', handleKey)
-    }
-  }, [open])
-
-  return (
-    <div className="relative shrink-0" ref={ref}>
-      <button
-        type="button"
-        data-tour="add-flashcards-btn"
-        onClick={() => setOpen(v => !v)}
-        title="Add flashcards"
-        aria-label="Add flashcards"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
-      >
-        <Plus className={`h-5 w-5 transition-transform ${open ? 'rotate-45' : ''}`} />
-      </button>
-
-      {open && (
-        <AddFlashcardsMenu
-          onAdded={() => { setOpen(false); onCardsAdded() }}
-          onBrowseAll={() => { setOpen(false); openSheet() }}
-        />
-      )}
-    </div>
-  )
-}
-
 // Holds the add-flashcards sheet for the whole page: the "+" opens it through
 // the context, and it stays mounted — with its search, exam pill and scroll
 // intact — until it is closed, however the deck below it changes shape.
@@ -1061,9 +816,6 @@ function AddFlashcardsSheetHost({
     setOpen(true)
   }, [])
 
-  // `onCardsAdded` reaches the "+" menu through the same context as `openSheet`:
-  // the menu's quick add happens in the footer, below this host, and has to
-  // announce itself exactly as an add made inside the sheet does.
   const notifyCardsAdded = useCallback(() => { onCardsAdded?.() }, [onCardsAdded])
   const ctx = useMemo(
     () => ({ openSheet, onCardsAdded: notifyCardsAdded }),
@@ -1084,646 +836,12 @@ function AddFlashcardsSheetHost({
   )
 }
 
-// Study ⇄ Gallery toggle. Lives in the bottom controls footer (shared between
-// both views), alongside Flip / Back content / focus. `galleryOpen` picks the
-// direction: true → "Study" (return to the single-card view), false →
-// "Gallery" (open the overlay). `count` is the deck size, shown as the orange
-// badge the rest of the app uses for "how much is waiting for you" (see
-// TodayQuizBadge / StreakBadge).
-function StudyGalleryToggle({
-  galleryOpen,
-  onToggle,
-  count,
-  className = '',
-}: {
-  galleryOpen: boolean
-  onToggle: () => void
-  count?: number
-  className?: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      title={galleryOpen ? 'Back to study' : 'Open gallery'}
-      aria-pressed={galleryOpen}
-      // Two different actions behind one button: going back to the cards is a
-      // study session opening (`study`), spreading them out is a panel (`open`).
-      data-sound={galleryOpen ? 'study' : 'open'}
-      className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base sm:text-lg font-medium transition-colors ${
-        galleryOpen
-          ? 'bg-primary text-primary-foreground'
-          : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-      } ${className}`}
-    >
-      {galleryOpen
-        ? <span className="inline-flex gap-0.5"><Eye className="h-5 w-5" /><Eye className="h-5 w-5" /></span>
-        : <LayoutGrid className="h-5 w-5" />
-      }
-      <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
-      {count !== undefined && count > 0 && (
-        <span
-          className="inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
-          aria-label={`${count} card${count === 1 ? '' : 's'} in your deck`}
-        >
-          {count}
-        </span>
-      )}
-    </button>
-  )
-}
-
-// Focus-mode toggle, sized/shaped to match StudyGalleryToggle so the two read
-// as a pair. Sits above the Prev/Next nav alongside the Gallery button.
-function FocusModeToggle({
-  focusMode,
-  onToggle,
-  className = '',
-}: {
-  focusMode: boolean
-  onToggle: () => void
-  className?: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      title={focusMode ? 'Exit focus mode' : 'Focus mode'}
-      aria-pressed={focusMode}
-      className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base sm:text-lg font-medium transition-colors ${
-        focusMode
-          ? 'bg-primary text-primary-foreground'
-          : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-      } ${className}`}
-    >
-      <Maximize2 className="h-5 w-5" />
-      <span>Focus</span>
-    </button>
-  )
-}
-
-// ─── Controls Footer (shared between study and gallery views) ─────────────────
-
-function ViewModeDropdown({
-  reverseCardModes,
-  onToggleMode,
-}: {
-  reverseCardModes: Set<ReverseCardSection>
-  onToggleMode: (mode: ReverseCardSection) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    function handleOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handleOutside)
-    return () => document.removeEventListener('mousedown', handleOutside)
-  }, [open])
-
-  const hasActive = reverseCardModes.size > 0
-
-  return (
-    <div className="relative shrink-0" ref={ref}>
-      <button
-        type="button"
-        data-tour="card-content"
-        onClick={() => setOpen(v => !v)}
-        title="Back content"
-        className={`inline-flex items-center gap-1 px-3 h-11 rounded-md transition-colors ${
-          hasActive
-            ? 'bg-primary text-primary-foreground'
-            : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-        }`}
-      >
-        {hasActive ? (
-          <span className="inline-flex items-center gap-0.5">
-            {reverseCardModes.has('definition') && (
-              <span className="font-serif italic font-bold text-sm leading-none">D</span>
-            )}
-            {reverseCardModes.has('math') && <Sigma className="h-3.5 w-3.5" />}
-            {reverseCardModes.has('images') && <Images className="h-3.5 w-3.5" />}
-          </span>
-        ) : (
-          <span className="text-xs font-medium">Back</span>
-        )}
-        <ChevronDown className={`h-3 w-3 opacity-60 transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-
-      {open && (
-        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background rounded-xl shadow-lg p-1.5 flex flex-col gap-0.5 min-w-[148px] z-50">
-          {(
-            [
-              { mode: 'definition', label: 'Definition', icon: <span className="font-serif italic font-bold text-sm w-4 text-center leading-none">D</span> },
-              { mode: 'math', label: 'Math', icon: <Sigma className="h-4 w-4" /> },
-              { mode: 'images', label: 'Images', icon: <Images className="h-4 w-4" /> },
-            ] as const
-          ).map(({ mode, label, icon }) => {
-            const active = reverseCardModes.has(mode)
-            return (
-              <button
-                key={mode}
-                type="button"
-                data-tour={mode === 'math' ? 'card-math' : undefined}
-                onClick={() => onToggleMode(mode)}
-                aria-pressed={active}
-                className={`inline-flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  active
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                }`}
-              >
-                {icon}
-                <span>{label}</span>
-                {active && <CheckMark className="ml-auto h-3.5 w-3.5 text-current" />}
-              </button>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// The controls footer. Besides the card-display controls (Flip / Back content)
-// it carries the manage-deck bin and the round + that opens the add-flashcards
-// sheet, pinned to the right-hand end. Every control in the bar is one 44px
-// (h-11) tap target, so the row reads as a single row of equally weighted
-// controls rather than small ones orbiting the +.
-function FlashcardControlsBar({
-  reverseCardModes,
-  onToggleMode,
-  flip,
-  onFlipToggle,
-  onShortcutsHelp,
-  cardCount = 0,
-  onManage,
-}: {
-  reverseCardModes: Set<ReverseCardSection>
-  onToggleMode: (mode: ReverseCardSection) => void
-  flip: boolean
-  onFlipToggle: () => void
-  onShortcutsHelp: () => void
-  // Deck controls — only rendered once there's a deck to manage.
-  cardCount?: number
-  onManage?: () => void
-}) {
-  const hasDeck = cardCount > 0
-  return (
-    <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
-      <div className="flex h-11 items-center gap-2 shrink-0 rounded-md bg-muted px-2.5">
-        <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={flip}
-          onClick={onFlipToggle}
-          title={flip ? 'Show fronts by default' : 'Show backs by default'}
-          className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
-            flip ? 'bg-primary' : 'bg-muted-foreground/30'
-          }`}
-        >
-          <span className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-            flip ? 'translate-x-6' : 'translate-x-0'
-          }`} />
-        </button>
-      </div>
-
-      <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
-
-      <button
-        type="button"
-        onClick={onShortcutsHelp}
-        title="Keyboard shortcuts (?)"
-        aria-label="Keyboard shortcuts"
-        className="hidden sm:inline-flex items-center justify-center h-11 w-11 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-      ><Keyboard className="h-5 w-5" /></button>
-
-      <div className="flex-1 min-w-0" />
-
-      {hasDeck && onManage && (
-        <button
-          type="button"
-          onClick={onManage}
-          title="Manage cards"
-          aria-label="Manage cards"
-          className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-        ><Trash2 className="h-5 w-5" /></button>
-      )}
-
-      <AddFlashcardsButton />
-    </div>
-  )
-}
-
-// ─── Sortable Card (used in expanded gallery) ─────────────────────────────────
-
-function SortableCard({
-  card,
-  masteryState,
-  onSelect,
-  onRemove,
-  isFlashing,
-  isActive,
-  reverseCardModes,
-  globalFlip,
-  collected = false,
-  animateCollected,
-  disableSort = false,
-  onCardsAdded,
-  focusMode = false,
-  isCompleted = false,
-  showDeckToggle = true,
-  isClearing = false,
-}: {
-  card: FlashCard
-  masteryState: MasteryState
-  onSelect: () => void
-  onRemove: (name: string) => void
-  isFlashing: boolean
-  isActive: boolean
-  reverseCardModes: Set<ReverseCardSection>
-  globalFlip: boolean
-  collected?: boolean
-  // Whether collected cards get the holographic sheen animation. Defaults to
-  // `collected`; the deck passes false so the ongoing animation doesn't
-  // distract while reading.
-  animateCollected?: boolean
-  disableSort?: boolean
-  onCardsAdded?: () => void
-  focusMode?: boolean
-  // Completed cards keep their green edge in the gallery, but completion is
-  // only ever *toggled* from the study view — a gallery tile has no control
-  // for it, so a stray tap can't silently finish a card.
-  isCompleted?: boolean
-  // Whether the quiet add/remove-from-deck control shows in the corner. The
-  // deck gallery hides it — every tile there is already in the deck, and the
-  // actions menu takes one out — so it's left for any other surface that
-  // reuses this tile to pull a card in.
-  showDeckToggle?: boolean
-  // True while the card is animating out during a "Clear Completed Flashcards"
-  // sweep — shrinks and fades the card away just before it leaves the deck.
-  isClearing?: boolean
-}) {
-  const [flipped, setFlipped] = useState(globalFlip)
-  const { theme } = useTheme()
-  const [markdown, setMarkdown] = useState<string | null>(null)
-  const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const [showPlayMenu, setShowPlayMenu] = useState(false)
-  const { addCard, hasCard } = useFlashcards()
-  const playBtnRef = useRef<HTMLButtonElement>(null)
-
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name, disabled: disableSort })
-
-  const inDeck = hasCard(card.name)
-  function toggleDeck(e: React.MouseEvent) {
-    e.stopPropagation()
-    if (inDeck) {
-      onRemove(card.name)
-    } else {
-      playSound('addToDeck')
-      addCard(card)
-      showAddedToDeck(1)
-      onCardsAdded?.()
-    }
-  }
-
-  // Quiet, always-available add/remove-from-deck control. Transparent so it
-  // doesn't compete with the card content — only the front face shows it.
-  const deckToggleButton = (
-    <button
-      type="button"
-      data-sound="none"
-      onPointerDown={e => e.stopPropagation()}
-      onClick={toggleDeck}
-      aria-label={inDeck ? `Remove ${card.name} from deck` : `Add ${card.name} to deck`}
-      title={inDeck ? 'Remove from deck' : 'Add to deck'}
-      className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-transparent text-muted-foreground hover:text-foreground transition-colors"
-    >
-      {inDeck ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-    </button>
-  )
-
-  // The two rows that belong to a *card* rather than to the concept on it, and
-  // so aren't part of the shared action menu: studying this card, and taking it
-  // out of the deck. Everything else on the menu is ConceptActionMenu's.
-  const studyMenuItem = (
-    <button
-      type="button"
-      onPointerDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); onSelect(); setShowPlayMenu(false) }}
-      data-sound="study"
-      className={ACTION_MENU_ROW_CLASS}
-    >
-      <span className="inline-flex shrink-0 gap-0.5"><Eye className="h-3.5 w-3.5" /><Eye className="h-3.5 w-3.5" /></span>
-      Study
-    </button>
-  )
-
-  const removeMenuItem = (
-    <button
-      type="button"
-      onPointerDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); onRemove(card.name); setShowPlayMenu(false) }}
-      className={`${ACTION_MENU_ROW_CLASS} mt-1 text-destructive`}
-    >
-      <Trash2 className="h-3.5 w-3.5 shrink-0" />
-      Remove
-    </button>
-  )
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,
-    zIndex: isDragging ? 50 : undefined,
-  }
-
-  // Sync to global flip/unflip action
-  useEffect(() => {
-    setFlipped(globalFlip)
-    if (globalFlip && markdown === null && loadStatus === 'idle') {
-      setLoadStatus('loading')
-      fetchWikiFile(entryRefToRepoPath(card))
-        .then(raw => { setMarkdown(raw); setLoadStatus('idle') })
-        .catch(() => setLoadStatus('error'))
-    }
-  }, [globalFlip]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  function handleFlipOpen() {
-    setFlipped(true)
-    if (markdown === null && loadStatus === 'idle') {
-      setLoadStatus('loading')
-      fetchWikiFile(entryRefToRepoPath(card))
-        .then(raw => { setMarkdown(raw); setLoadStatus('idle') })
-        .catch(() => setLoadStatus('error'))
-    }
-  }
-
-  const definition = markdown ? extractFirstParagraph(markdown) : null
-  const allEquations = markdown ? extractMathBlockquotes(markdown) : []
-  const cardImages = markdown ? extractImages(markdown) : []
-
-  // Focus mode drops the "shiny"/holographic treatment for collected cards so
-  // every card reads the same and the title is the only thing that stands out.
-  // Everywhere else the foil edge is the card's level readout — the card prints
-  // no mastery label — so it steps once per state: a bare glint at New, a faint
-  // hairline at L1, a static holographic edge at L2, the travelling border at
-  // L3, and amber once a card has decayed (`lib/flashcardFoil.ts`).
-  const sheenLevelClass = FOIL_LEVEL_CLASS[masteryState] ? ` ${FOIL_LEVEL_CLASS[masteryState]}` : ''
-  const showSheen = (animateCollected ?? collected) && collected
-  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}${isClearing ? ' flashcard-clearing' : ''}`
-  const colorClass = isActive
-    ? 'bg-primary/10 shadow-sm'
-    : 'bg-card text-card-foreground'
-
-  if (flipped) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        data-card-name={card.name}
-        {...listeners}
-        {...attributes}
-        onClick={(e) => {
-          // NB: the card itself carries role="button" from dnd-kit's drag
-          // attributes, so we must not include [role="button"] here or the
-          // guard would always match the card and never flip back.
-          const target = e.target as HTMLElement
-          if (!target.closest('a, button, input, select, textarea')) {
-            setFlipped(false)
-          }
-        }}
-        className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
-      >
-        {isClearing && CLEAR_OVERLAY}
-        {/* Header: name + actions menu. The menu survives focus mode — a card
-            filling the screen is when its actions are most wanted — and only
-            the name beside it drops away with the rest of the chrome. */}
-        <div className="flex items-center justify-between gap-1 px-3 py-2">
-          {!focusMode && <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>}
-          <div className="relative shrink-0">
-            <button
-              ref={playBtnRef}
-              type="button"
-              data-play-menu-trigger
-              data-sound="actions"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); setShowPlayMenu(v => !v) }}
-              aria-haspopup="menu"
-              aria-expanded={showPlayMenu}
-              aria-label={`Actions for ${card.name}`}
-              className="text-muted-foreground hover:text-primary h-7 w-7 flex items-center justify-center transition-colors"
-            >
-              <Play className="h-4 w-4" />
-            </button>
-            <ConceptActionMenu
-              entry={card}
-              open={showPlayMenu}
-              onClose={() => setShowPlayMenu(false)}
-              anchorRef={playBtnRef}
-              content={markdown}
-              stopPropagation
-              leading={studyMenuItem}
-              trailing={removeMenuItem}
-            />
-          </div>
-        </div>
-
-        {/* Back content — grows to fit, no scrollbar. data-math-scope: the whole
-            face is one math-focus set, so Previous/Next steps through every
-            equation on it. */}
-        <div className="px-3 py-2" data-math-scope="">
-          {loadStatus === 'loading' && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
-              <Loader2 className="h-3 w-3 animate-spin" /> Loading…
-            </div>
-          )}
-          {loadStatus === 'error' && (
-            <p className="text-xs text-destructive py-1">Couldn't load content.</p>
-          )}
-          {reverseCardModes.has('definition') && definition && (
-            <WikiArticle
-              markdown={definition}
-              onWikiLink={ref => {
-                const { open, jumpTo, openAt } = useConceptPopup.getState()
-                if (open) jumpTo(ref); else openAt([ref], 0)
-                return true
-              }}
-            />
-          )}
-          {reverseCardModes.has('math') && allEquations.length > 0 && (
-            <div className="space-y-2">
-              {allEquations.map((eq, i) => (
-                <WikiArticle key={i} markdown={eq} onWikiLink={ref => {
-                  const { open, jumpTo, openAt } = useConceptPopup.getState()
-                  if (open) jumpTo(ref); else openAt([ref], 0)
-                  return true
-                }} />
-              ))}
-            </div>
-          )}
-          {reverseCardModes.has('images') && cardImages.length > 0 && (
-            <div className="space-y-2">
-              {cardImages.map((img, i) => (
-                <figure key={i} className="flex flex-col items-center gap-1">
-                  {/* Match the study card: fill the tile's width rather than
-                      rendering at the SVG's (small) intrinsic size. */}
-                  <img src={themedFigureSrc(img.src, theme)} alt={img.alt} className="w-full max-h-[50vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
-                  {img.caption && (
-                    <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
-                  )}
-                </figure>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      data-card-name={card.name}
-      {...listeners}
-      {...attributes}
-      onClick={(e) => {
-        // See note on the back face: exclude [role="button"] so dnd-kit's own
-        // role on the card doesn't swallow the flip.
-        const target = e.target as HTMLElement
-        if (!target.closest('a, button, input, select, textarea')) {
-          handleFlipOpen()
-        }
-      }}
-      className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
-    >
-      {isClearing && CLEAR_OVERLAY}
-      {/* Corner controls: deck toggle + actions menu. They float over the tile
-          rather than sitting in a row above it, so the name below reads
-          dead-centre in the card. Focus mode drops the deck toggle with the
-          rest of the chrome but keeps the menu — the only way to a card's
-          actions while it fills the screen. */}
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1.5">
-        {!focusMode && showDeckToggle && deckToggleButton}
-        <div className="relative">
-          <button
-            ref={playBtnRef}
-            type="button"
-            data-play-menu-trigger
-            data-sound="actions"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); setShowPlayMenu(v => !v) }}
-            aria-haspopup="menu"
-            aria-expanded={showPlayMenu}
-            aria-label={`Actions for ${card.name}`}
-            className="text-muted-foreground hover:text-primary h-7 w-7 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-          >
-            <Play className="h-4 w-4" />
-          </button>
-          <ConceptActionMenu
-            entry={card}
-            open={showPlayMenu}
-            onClose={() => setShowPlayMenu(false)}
-            anchorRef={playBtnRef}
-            content={markdown}
-            stopPropagation
-            leading={studyMenuItem}
-            trailing={removeMenuItem}
-          />
-        </div>
-      </div>
-
-      {/* Name — click to flip. The card's controls live in the top-right
-          corner, so the name sits alone on the card's centre. */}
-      <div className={`flex-1 flex items-center justify-center gap-1.5 px-3 min-w-0 ${focusMode ? 'py-4' : 'py-9'}`}>
-        <button
-          type="button"
-          onPointerDown={e => e.stopPropagation()}
-          onClick={e => { e.stopPropagation(); handleFlipOpen() }}
-          // The level used to be printed under the name; now that the foil edge
-          // carries it, hovering the name is how you put a word to the border.
-          title={!focusMode && collected ? `${card.name} · ${MASTERY_LABEL[masteryState]}` : undefined}
-          className={`min-w-0 text-center transition-colors ${
-            isActive ? 'text-primary' : 'hover:text-primary'
-          }`}
-        >
-          <span className="font-semibold text-base leading-snug">
-            {card.name}
-          </span>
-        </button>
-      </div>
-
-      {/* Mastery is the foil border and nothing else — no pill, so the name sits
-          alone on the card's centre. The border can't be read out, so the level
-          is named here for screen readers (and as the card's tooltip above).
-          Absent on an uncollected card: there is no level yet to name. */}
-      {!focusMode && collected && (
-        <span className="sr-only">{MASTERY_LABEL[masteryState]}</span>
-      )}
-    </div>
-  )
-}
-
-// ─── Remove All Dialog ───────────────────────────────────────────────────────
-
-function FlashcardsManageDialog({
-  cardCount,
-  onCancel,
-  onRemoveAll,
-}: {
-  cardCount: number
-  onCancel: () => void
-  onRemoveAll: () => void
-}) {
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onCancel() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onCancel])
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
-      onClick={onCancel}
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        className="w-full max-w-sm rounded-lg bg-card text-card-foreground shadow-lg p-5 space-y-4"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="space-y-1">
-          <h2 className="text-base font-semibold">{cardCount} card{cardCount === 1 ? '' : 's'}</h2>
-          <p className="text-sm text-muted-foreground">
-            {cardCount === 0 ? 'Your flashcard deck is empty.' : 'Manage your current flashcard deck.'}
-          </p>
-        </div>
-
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={onCancel}>
-            Cancel
-          </Button>
-          {cardCount > 0 && (
-            <Button variant="destructive" size="sm" onClick={onRemoveAll}>
-              Remove all
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Study Session Summary ───────────────────────────────────────────────────
 
 // Shown when every card in the deck has been marked complete via the
 // Again / Got it loop. Recaps the session (with the cards that needed extra
-// passes) and offers the two natural next steps: sweep the finished cards into
-// a dated pack, or reset the deck and run it again.
+// passes) and offers the two natural next steps: clear the finished cards out
+// of the deck, or reset the deck and run it again.
 function StudySessionSummaryDialog({
   cardNames,
   againCounts,
@@ -1738,300 +856,51 @@ function StudySessionSummaryDialog({
   onClose: () => void
 }) {
   const summary = useMemo(() => summarizeSession(cardNames, againCounts), [cardNames, againCounts])
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  const titleId = useId()
 
   return (
-    <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Deck complete"
-    >
-      <div
-        className="w-full max-w-sm rounded-xl bg-card text-card-foreground shadow-2xl p-6 space-y-4"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="text-center space-y-2">
-          <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-500/15 text-green-500">
-            <CheckCircle2 className="h-7 w-7" />
-          </span>
-          <h2 className="text-lg font-bold">Deck complete</h2>
-          <p className="text-sm text-muted-foreground">
-            {summary.total} card{summary.total === 1 ? '' : 's'} studied
-            {summary.struggled.length > 0
-              ? `, ${summary.firstTry} on the first try.`
-              : ', all on the first try.'}
-          </p>
-        </div>
+    <Popup onClose={onClose} labelledBy={titleId}>
+      <PopupTitle id={titleId}>Deck complete</PopupTitle>
+      <p className="text-[17px] leading-normal">
+        {deckCountLabel(summary.total)} studied
+        {summary.struggled.length > 0
+          ? `, ${summary.firstTry} on the first try.`
+          : ', all on the first try.'}
+      </p>
 
-        {summary.struggled.length > 0 && (
-          <div className="rounded-lg bg-muted/40 p-3 space-y-1.5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Marked Again
-            </p>
-            <ul className="space-y-1">
-              {summary.struggled.slice(0, 5).map(({ name, againCount }) => (
-                <li key={name} className="flex items-center gap-2 text-sm">
-                  <span className="flex-1 min-w-0 truncate">{name}</span>
-                  <span className="shrink-0 text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 tabular-nums">
-                    {againCount}× again
-                  </span>
-                </li>
-              ))}
-              {summary.struggled.length > 5 && (
-                <li className="text-xs text-muted-foreground">
-                  +{summary.struggled.length - 5} more
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={onClearCompleted}
-            title="Remove completed cards from your deck"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-[0.98] transition-all"
-          >
-            <CheckCircle2 className="h-4 w-4" /> Clear Completed Flashcards
-          </button>
-          <button
-            type="button"
-            onClick={onStudyAgain}
-            data-sound="study"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-muted text-foreground text-sm font-semibold hover:bg-accent active:scale-[0.98] transition-all"
-          >
-            <RotateCcw className="h-4 w-4" /> Study again
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Keep browsing
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Gallery Panel (expanded overlay) ────────────────────────────────────────
-
-function GalleryPanel({
-  cards,
-  orderedCards,
-  groupBy,
-  examGroups,
-  flashingCard,
-  activeIndex,
-  onSelect,
-  onRemove,
-  onDragEnd,
-  sensors,
-  onClose,
-  conceptMasteryMap,
-  reverseCardModes,
-  globalFlip,
-  inline = false,
-  onCardsAdded,
-  focusMode = false,
-  clearingNames,
-  onClearCompleted,
-}: {
-  cards: FlashCard[]
-  orderedCards: FlashCard[]
-  groupBy: GroupBy
-  examGroups: { label: string; cards: FlashCard[] }[]
-  flashingCard: string | null
-  activeIndex: number
-  onSelect: (index: number) => void
-  onRemove: (name: string) => void
-  onDragEnd: (e: DragEndEvent) => void
-  sensors: ReturnType<typeof useSensors>
-  onClose?: () => void
-  conceptMasteryMap: Map<string, MasteryState>
-  reverseCardModes: Set<ReverseCardSection>
-  globalFlip: boolean
-  inline?: boolean
-  onCardsAdded?: () => void
-  focusMode?: boolean
-  // Lowercased names of completed cards currently animating out (during a
-  // "Clear Completed Flashcards" sweep). Optional — undefined when nothing is
-  // being cleared.
-  clearingNames?: Set<string>
-  // Runs the animated "Clear Completed Flashcards" sweep. Falls back to the
-  // store's plain clearCompleted when not provided (e.g. inline empty deck).
-  onClearCompleted?: () => void
-}) {
-  const { clearCompleted } = useFlashcards()
-  const collectedCards = useCollectedCards(s => s.cards)
-  const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
-  const collectedSet = useMemo(
-    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
-    [collectedCards],
-  )
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-
-  // Center the active deck card when the gallery opens.
-  useEffect(() => {
-    const activeCard = orderedCards[activeIndex]
-    if (!activeCard || !scrollContainerRef.current) return
-    const all = scrollContainerRef.current.querySelectorAll<HTMLElement>('[data-card-name]')
-    for (const el of all) {
-      if (el.dataset.cardName === activeCard.name) {
-        el.scrollIntoView({ block: 'center', behavior: 'instant' })
-        break
-      }
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Follow the "Clear Completed Flashcards" sweep down the deck (the most
-  // recently started card — Sets preserve insertion order). The cards clear in
-  // an overlapping cascade, so chasing every one in turn would mean a new
-  // smooth scroll every couple of hundred milliseconds, each one interrupting
-  // the last; only cards that have actually drifted out of view are chased.
-  const currentClearingName = clearingNames && clearingNames.size > 0
-    ? [...clearingNames].at(-1)
-    : undefined
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!currentClearingName || !container) return
-    const all = container.querySelectorAll<HTMLElement>('[data-card-name]')
-    for (const el of all) {
-      if (el.dataset.cardName?.toLowerCase() !== currentClearingName) continue
-      const card = el.getBoundingClientRect()
-      const view = container.getBoundingClientRect()
-      if (card.top < view.top || card.bottom > view.bottom) {
-        el.scrollIntoView({ block: 'center', behavior: 'smooth' })
-      }
-      break
-    }
-  }, [currentClearingName])
-
-  function handleCardSelect(card: FlashCard) {
-    const idx = orderedCards.findIndex(c => c.name === card.name)
-    onSelect(idx >= 0 ? idx : 0)
-    onClose?.()
-  }
-
-  function renderCard(card: FlashCard) {
-    const overallIdx = orderedCards.findIndex(c => c.name === card.name)
-    return (
-      <SortableCard
-        key={card.name}
-        card={card}
-        masteryState={conceptMasteryMap.get(card.name.toLowerCase()) ?? 'new'}
-        onSelect={() => handleCardSelect(card)}
-        onRemove={onRemove}
-        isFlashing={flashingCard?.toLowerCase() === card.name.toLowerCase()}
-        isActive={overallIdx === activeIndex}
-        reverseCardModes={reverseCardModes}
-        globalFlip={globalFlip}
-        collected={collectedSet.has(card.name.toLowerCase())}
-        animateCollected={false}
-        onCardsAdded={onCardsAdded}
-        focusMode={focusMode}
-        isCompleted={!!card.completedAt}
-        showDeckToggle={false}
-        isClearing={clearingNames?.has(card.name.toLowerCase()) ?? false}
-      />
-    )
-  }
-
-  // In focus mode the panel covers the full viewport (including the sidebar) and
-  // sits above the focus backdrop, so the cards are the only thing on screen.
-  const containerClass = inline
-    ? 'flex flex-col'
-    : focusMode
-      ? 'fixed inset-0 z-[56] flex flex-col bg-background'
-      : 'gallery-panel fixed inset-0 z-40 flex flex-col bg-background'
-
-  return (
-    <div className={containerClass}>
-      {/* Scrollable content */}
-      <div
-        ref={scrollContainerRef}
-        className={inline
-          ? 'space-y-4'
-          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-28'}
-      >
-        <div className="space-y-4">
-          {/* Clear-completed — the only thing left in this row now that the
-              deck's count, sort and add controls live in the footer bar. In
-              the overlay panel it sticks to the top of the scroll area so it
-              stays reachable while scrolling a long deck. Sticky offsets are
-              measured from the scroll container's content box, so
-              -top-4/-mt-4 cancel its py-4 padding (the row
-              pins flush to the panel edge with no sliver of card showing
-              above it) while pt-4 keeps the row sitting where it did;
-              -mx-4/px-4 stretch the opaque background across the px-4 gutters
-              so cards scroll cleanly underneath. */}
-          {!focusMode && completedCount > 0 && (
-          <div
-            className={`flex items-center justify-end ${
-              inline ? '' : 'sticky -top-4 z-20 -mx-4 -mt-4 px-4 pt-4 pb-2 bg-background'
-            }`}
-          >
-            <button
-              type="button"
-              onClick={onClearCompleted ?? clearCompleted}
-              title="Clear the completed cards out of your deck"
-              className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
-            >
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>Clear Completed Flashcards</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/25 tabular-nums">
-                {completedCount}
-              </span>
-            </button>
-          </div>
-          )}
-
-          {/* Today's study plan is no longer pinned here — it's the first
-              section of the exam's shelf in the add-flashcards sheet, where
-              cards are added (see TodayStudyPlanSection). */}
-
-          {cards.length === 0 ? (
-            <EmptyDeck />
-          ) : (
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-              <SortableContext items={orderedCards.map(c => c.name)} strategy={rectSortingStrategy}>
-                {groupBy === 'exam' ? (
-                  <div className="space-y-6">
-                    {examGroups.length === 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        {orderedCards.map(renderCard)}
-                      </div>
-                    ) : (
-                      examGroups.map(({ label, cards: groupCards }) => (
-                        <div key={label} className="space-y-2">
-                          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{label}</h2>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                            {groupCards.map(renderCard)}
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {orderedCards.map(renderCard)}
-                  </div>
-                )}
-              </SortableContext>
-            </DndContext>
+      {summary.struggled.length > 0 && (
+        <div>
+          <h3 className="text-[15px] font-bold">Marked Again</h3>
+          <ul>
+            {summary.struggled.slice(0, 5).map(({ name, againCount }) => (
+              <li key={name} className="flex min-h-11 items-center gap-3 border-b border-border text-base last:border-b-0">
+                <span className="min-w-0 flex-1 truncate">{name}</span>
+                <span className="shrink-0 font-semibold tabular-nums">{againCount}×</span>
+              </li>
+            ))}
+          </ul>
+          {summary.struggled.length > 5 && (
+            <p className="pt-2 text-[15px]">and {summary.struggled.length - 5} more</p>
           )}
         </div>
+      )}
+
+      <div className="flex flex-col gap-2.5">
+        <Button size="main" data-sound="study" onClick={onStudyAgain}>
+          Study again
+        </Button>
+        <Button variant="edge" className="h-12 text-base" onClick={onClearCompleted}>
+          Clear completed cards
+        </Button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="min-h-11 rounded-md text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Keep browsing
+        </button>
       </div>
-    </div>
+    </Popup>
   )
 }
 
@@ -2045,17 +914,40 @@ interface FlashcardStudyAreaHandle {
 const SWIPE_THRESHOLD = 80
 const SWIPE_FLY_DISTANCE = 500
 
+// A link on the back of a card opens in the concept reader.
+function openInReader(ref: WikiEntryRef): boolean {
+  const { open, jumpTo, openAt } = useConceptPopup.getState()
+  if (open) jumpTo(ref); else openAt([ref], 0)
+  return true
+}
+
+// The back of a card is the concept page's own words, set as the redesign sets
+// reading text: 17px in the one text colour, each formula in a box outlined in
+// the line colour that scrolls sideways.
+const BACK_ARTICLE =
+  'text-[17px] text-foreground prose-p:leading-normal prose-p:text-foreground prose-strong:text-foreground ' +
+  '[&_blockquote[data-math-block]]:my-0 [&_blockquote[data-math-block]]:overflow-x-auto ' +
+  '[&_blockquote[data-math-block]]:rounded-[14px] [&_blockquote[data-math-block]]:border ' +
+  '[&_blockquote[data-math-block]]:border-border [&_blockquote[data-math-block]]:bg-ground ' +
+  '[&_blockquote[data-math-block]]:px-4'
+
+/**
+ * One card (docs/redesign-spec.md §7a.3): an outline on the ground holding the
+ * concept's name and its level square, and, once flipped, the definition, the
+ * formulas and the figures the More menu has switched on. A tap anywhere on it
+ * flips it; under a flipped card sit Again and Got it.
+ */
 const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
-  cards: WikiEntryRef[]
+  cards: FlashCard[]
   index: number
+  level: MasteryState
   isFlashing?: boolean
-  reverseCardModes: Set<ReverseCardSection>
+  reverseCardModes: ReadonlySet<CardBackPart>
   defaultFlipped: boolean
   onNext: () => void
   onPrev: () => void
   hasNext: boolean
   hasPrev: boolean
-  focusMode?: boolean
   // Again / Got it self-assessment loop. `onRate` advances to the next
   // unfinished card (Got it also marks the current one complete).
   onRate: (rating: StudyRating) => void
@@ -2063,6 +955,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
 }>(function FlashcardStudyArea({
   cards,
   index,
+  level,
   isFlashing,
   reverseCardModes,
   defaultFlipped,
@@ -2070,17 +963,13 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   onPrev,
   hasNext,
   hasPrev,
-  focusMode = false,
   onRate,
   isCompleted,
 }, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
   const { theme } = useTheme()
-  const [expanded, setExpanded] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const [showPlayMenu, setShowPlayMenu] = useState(false)
-  const playBtnRef = useRef<HTMLButtonElement>(null)
 
   // Swipe-to-navigate (mobile touch only — desktop keeps click-to-flip + Prev/Next buttons)
   const [dragX, setDragX] = useState(0)
@@ -2093,14 +982,8 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const current = cards[index]
 
   useEffect(() => {
-    if (focusMode) setExpanded(false)
-  }, [focusMode])
-
-  useEffect(() => {
     setFlipped(defaultFlipped)
-    setExpanded(false)
     setMarkdown(null)
-    setShowPlayMenu(false)
     if (defaultFlipped) {
       setLoadStatus('loading')
       fetchWikiFile(entryRefToRepoPath(cards[index]))
@@ -2138,7 +1021,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
       }
     } else {
       setFlipped(false)
-      setExpanded(false)
     }
   }
 
@@ -2214,17 +1096,23 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   }
 
   const definition = markdown ? extractFirstParagraph(markdown) : null
-  const remainder = markdown ? withoutFirstParagraph(markdown) : null
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
 
   return (
-    <div className="flex flex-col items-center gap-5 px-4 py-6">
+    <div className="flex flex-col gap-4">
       {/* Flip card */}
       <div
         data-tour="flip-card"
+        data-testid="flashcard"
+        data-face={flipped ? 'back' : 'front'}
         data-sound="none"
-        className={`relative w-full max-w-xl min-h-56 rounded-2xl bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
+        className={cn(
+          'relative flex min-h-[min(50dvh,28rem)] w-full cursor-pointer flex-col gap-[18px] rounded-[26px] border-[1.5px] border-foreground bg-ground p-6 text-foreground',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground',
+          !flipped && 'select-none',
+          isFlashing && 'flashcard-highlight',
+        )}
         style={{
           transform: `translateX(${dragX}px) rotate(${dragX / 20}deg)`,
           opacity: 1 - Math.min(Math.abs(dragX) / SWIPE_FLY_DISTANCE, 1),
@@ -2245,197 +1133,126 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
         onTouchCancel={handleTouchEnd}
         role={flipped ? undefined : 'button'}
         tabIndex={flipped ? undefined : 0}
-        aria-label={flipped ? undefined : 'Click to reveal'}
+        aria-label={flipped ? undefined : `${current.name}, ${MASTERY_LABEL[level]}. Showing the front. Flip`}
         onKeyDown={e => { if (!flipped && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleFlip() } }}
       >
         {swiping && Math.abs(dragX) > 20 && (
           <div
-            className={`pointer-events-none absolute inset-y-0 flex items-center z-10 ${dragX < 0 ? 'right-3' : 'left-3'}`}
+            className={`pointer-events-none absolute inset-y-0 z-10 flex items-center ${dragX < 0 ? 'right-3' : 'left-3'}`}
             style={{ opacity: Math.min(Math.abs(dragX) / SWIPE_THRESHOLD, 1) }}
           >
-            <div className="rounded-full bg-foreground/10 p-2">
+            <div className="rounded-full border-[1.5px] border-foreground bg-ground p-2">
               {dragX < 0
                 ? (hasNext ? <ChevronRight className="h-6 w-6" /> : null)
                 : (hasPrev ? <ChevronLeft className="h-6 w-6" /> : null)}
             </div>
           </div>
         )}
-        {isCompleted && (
-          <span
-            className="absolute top-3 right-3 z-10 text-green-500 pointer-events-none"
-            title="Completed"
-            aria-label="Completed"
-          >
-            <CheckCircle2 className="h-5 w-5" />
-          </span>
-        )}
-        {!flipped ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
-            <span className="text-3xl font-bold text-center leading-tight">{current.name}</span>
-          </div>
-        ) : (
+
+        {/* The same row on both faces, so the card doesn't jump as it turns. */}
+        <div className="flex items-center gap-2.5">
+          <span className="min-w-0 flex-1 break-words text-2xl font-bold leading-tight">{current.name}</span>
+          {isCompleted && <CheckMark className="h-6 w-6 shrink-0 text-foreground" label="Completed" />}
+          <LevelSquare state={level} size="md" />
+        </div>
+
+        {flipped && (
           // data-math-scope: the revealed face is one math-focus set (see
-          // lib/mathFocus.ts) — Math View renders each equation as its own
-          // article, and Previous/Next should run through all of them.
-          <div className="flex-1 flex flex-col p-6 gap-4" data-math-scope="">
-            {/* Name + actions. The menu stays through focus mode — a card
-                filling the screen is when its actions are most wanted — and
-                only the name beside it drops away with the rest of the
-                chrome. */}
-            <div className="flex items-center gap-2">
-              {!focusMode && <p className="text-sm font-medium text-muted-foreground">{current.name}</p>}
-              <div className="relative shrink-0" onClick={e => e.stopPropagation()}>
-                <button
-                  ref={playBtnRef}
-                  type="button"
-                  data-play-menu-trigger
-                  data-sound="actions"
-                  onPointerDown={e => e.stopPropagation()}
-                  onClick={e => { e.stopPropagation(); setShowPlayMenu(v => !v) }}
-                  aria-haspopup="menu"
-                  aria-expanded={showPlayMenu}
-                  className="inline-flex items-center justify-center h-7 w-7 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
-                  title={`Actions for ${current.name}`}
-                  aria-label={`Actions for ${current.name}`}
-                >
-                  <Play className="h-3.5 w-3.5" />
-                </button>
-                <ConceptActionMenu
-                  entry={current}
-                  open={showPlayMenu}
-                  onClose={() => setShowPlayMenu(false)}
-                  anchorRef={playBtnRef}
-                  content={markdown}
-                  stopPropagation
-                />
-              </div>
-            </div>
+          // lib/mathFocus.ts) — each equation is its own article, and
+          // Previous/Next should run through all of them.
+          <div className="flex flex-col gap-[18px]" data-math-scope="">
             {loadStatus === 'loading' && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
-                <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+              <div className="flex items-center gap-2 text-base">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Loading…
               </div>
             )}
             {loadStatus === 'error' && (
-              <p className="text-sm text-destructive">Couldn't load content.</p>
+              <p className="text-base">This card's page didn't load. Check your connection and flip it again.</p>
             )}
             {reverseCardModes.has('definition') && definition && (
-              <div>
-                <WikiArticle
-                  markdown={definition}
-                  onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }}
-                />
-              </div>
+              <WikiArticle markdown={definition} onWikiLink={openInReader} className={BACK_ARTICLE} />
             )}
-            {reverseCardModes.has('math') && allEquations.length > 0 && (
-              <div className="space-y-3">
-                {allEquations.map((eq, i) => (
-                  <WikiArticle key={i} markdown={eq} onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }} />
-                ))}
-              </div>
-            )}
-            {reverseCardModes.has('images') && cardImages.length > 0 && (
-              <div className="space-y-3">
-                {cardImages.map((img, i) => (
-                  <figure key={i} className="flex flex-col items-center gap-1">
-                    {/* Figures are the point of the card, not a thumbnail: fill the
-                        card's width and only clamp on height so a tall one still fits
-                        above the Again / Got it buttons. */}
-                    <img src={themedFigureSrc(img.src, theme)} alt={img.alt} className="w-full max-h-[60vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
-                    {img.caption && (
-                      <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
-                    )}
-                  </figure>
-                ))}
-              </div>
-            )}
-            {expanded && remainder && (
-              <div className="pt-4 overflow-y-auto max-h-96">
-                <WikiArticle
-                  markdown={remainder}
-                  sourcePath={entryRefToRepoPath(current)}
-                  onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }}
-                />
-              </div>
-            )}
-            {markdown && !focusMode && (
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
-                className="flex items-center justify-center w-full mt-auto pt-2 pb-1 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={expanded ? 'Collapse' : 'Expand'}
-              >
-                {expanded
-                  ? <ChevronUp className="h-8 w-8" />
-                  : <ChevronDown className="h-8 w-8" />
-                }
-              </button>
-            )}
+            {reverseCardModes.has('math') && allEquations.map((eq, i) => (
+              <WikiArticle key={i} markdown={eq} onWikiLink={openInReader} className={BACK_ARTICLE} />
+            ))}
+            {reverseCardModes.has('images') && cardImages.map((img, i) => (
+              <figure key={i} className="flex flex-col items-center gap-1.5">
+                {/* Figures are the point of the card, not a thumbnail: fill the
+                    card's width and only clamp on height so a tall one still fits
+                    above the Again / Got it buttons. */}
+                <img src={themedFigureSrc(img.src, theme)} alt={img.alt} className="max-h-[60vh] w-full rounded object-contain" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                {img.caption && <figcaption className="text-center text-[13px]">{img.caption}</figcaption>}
+              </figure>
+            ))}
           </div>
         )}
+
+        <Repeat className="mt-auto h-[26px] w-[26px] shrink-0 self-center" aria-hidden="true" />
       </div>
 
       {/* Again / Got it — the self-assessment loop, revealed once the card is
           flipped. "Got it" marks the card complete and jumps to the next
-          unfinished card; "Again" keeps it cycling until it sticks. */}
+          unfinished card; "Again" keeps it cycling until it sticks. Both are
+          outlined: the screen's filled button is Practice this. */}
       {flipped && (
-        <div className="flex items-stretch gap-3 w-full max-w-xl">
-          <button
-            type="button"
+        <div className="flex items-stretch gap-2.5">
+          <Button
+            variant="edge"
+            className="h-[52px] flex-1 gap-2 text-base"
             onClick={() => onRate('again')}
             title="Keep this card in rotation (1)"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-sm font-semibold hover:bg-rose-500/20 active:scale-[0.98] transition-all"
           >
-            <RotateCcw className="h-4 w-4" /> Again
-          </button>
-          <button
-            type="button"
+            <RotateCcw className="h-[18px] w-[18px]" aria-hidden="true" /> Again
+          </Button>
+          <Button
+            variant="edge"
+            className="h-[52px] flex-1 gap-2 text-base"
             data-sound="none"
             onClick={() => onRate('got')}
             title="Mark complete and continue (2)"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold hover:bg-green-500/25 active:scale-[0.98] transition-all"
           >
-            <CheckCircle2 className="h-4 w-4" /> Got it
-          </button>
+            <CheckMark className="h-[18px] w-[18px] text-foreground" /> Got it
+          </Button>
         </div>
       )}
-
     </div>
   )
 })
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+// Flashcards, a screen under Practice (docs/redesign-spec.md §7a.3, R17): one
+// card at a time between a top row (back, Deck, +, More) and a foot of
+// Previous, Practice this and Next.
+//
 // The page proper is `FlashcardsDeck` below; this shell exists only so the
-// add-flashcards sheet outlives it. `FlashcardsDeck` returns two completely
-// different trees either side of "is the deck empty?", so everything it renders
-// — the controls footer, the "+", and until now the sheet hanging off it — is
-// torn down the instant the first card lands. Owning the sheet (and the
-// gallery-expanded flag it flips) up here keeps it open across that switch, so
-// adding your first card leaves you where you were, free to add a second.
+// add-cards sheet outlives it. `FlashcardsDeck` returns two different trees
+// either side of "is the deck empty?", so everything it renders is torn down
+// the instant the first card lands. Owning the sheet up here keeps it open
+// across that switch, so adding your first card leaves you where you were,
+// free to add a second.
 export default function Flashcards() {
-  const [galleryExpanded, setGalleryExpanded] = useState(false)
-
   return (
-    <AddFlashcardsSheetHost onCardsAdded={() => setGalleryExpanded(true)}>
-      <FlashcardsDeck
-        galleryExpanded={galleryExpanded}
-        setGalleryExpanded={setGalleryExpanded}
-      />
+    <AddFlashcardsSheetHost>
+      <FlashcardsDeck />
     </AddFlashcardsSheetHost>
   )
 }
 
-function FlashcardsDeck({
-  galleryExpanded,
-  setGalleryExpanded,
-}: {
-  galleryExpanded: boolean
-  setGalleryExpanded: (open: boolean) => void
-}) {
+// The most cards the bar draws as a segment each; past it, one plain bar.
+const MAX_CARD_SEGMENTS = 24
+
+const FOOT_ARROW =
+  'flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-foreground text-foreground ' +
+  'transition-colors hover:bg-foreground/10 disabled:opacity-40 disabled:hover:bg-transparent ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
+
+function FlashcardsDeck() {
   const {
     cards, removeCard, clearCards, customOrder, setCustomOrder,
     toggleCompleted, clearCompleted, resetCompleted,
   } = useFlashcards()
+  const { openSheet } = useContext(AddFlashcardsSheetContext)
   const { syllabi } = useWikiSyllabus()
   const { progress: examProgress, examVariants } = useExamProgress()
   const { records: masteryRecords } = useConceptMastery()
@@ -2448,7 +1265,7 @@ function FlashcardsDeck({
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Names (lowercased) of completed cards currently animating out of the deck
-  // before "Clear Completed Flashcards" sweeps them out of the deck.
+  // before "Clear completed" sweeps them out of the deck.
   const [clearingNames, setClearingNames] = useState<Set<string>>(() => new Set())
   const clearTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const orderedCardsRef = useRef<FlashCard[]>([])
@@ -2486,18 +1303,14 @@ function FlashcardsDeck({
     setActiveName(null)
   }, [])
 
-  // `galleryExpanded` is owned by the page shell above, so the add-flashcards
-  // sheet can expand the gallery behind itself without this component holding
-  // the flag it would drop on the empty-deck switch.
-  // Manage-deck dialog (rename/save/clear) — opened from the bin in the
-  // controls footer, which is where the gallery's old header row moved to.
-  const [showManageDialog, setShowManageDialog] = useState(false)
+  // The Deck popup and the More menu, both opened from the top row.
+  const [deckOpen, setDeckOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
-  // The study-view controls toolbar (Gallery / Flip / Back content / shuffle /
-  // focus) starts collapsed; a chevron under the card count expands it.
-  const [controlsExpanded, setControlsExpanded] = useState(false)
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
+  // The order to go back to when Shuffle is switched off.
+  const beforeShuffleRef = useRef<GroupBy>('exam')
   // The shuffled deck order (card names) while groupBy === 'shuffle'. Freshly
   // drawn each time shuffle is chosen; newly added cards append at the end.
   const [shuffleOrder, setShuffleOrder] = useState<string[]>([])
@@ -2506,40 +1319,38 @@ function FlashcardsDeck({
   const [showSessionSummary, setShowSessionSummary] = useState(false)
   // The back of a card shows the definition *and* its formulas out of the box —
   // a concept's equations are half of what a card is for, and a learner who
-  // never opens this menu should still see them. Images stay opt-in: many
+  // never opens the More menu should still see them. Figures stay opt-in: many
   // concepts carry none, and a figure is the one section that can push the
   // definition off a phone screen.
-  const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
-    new Set<ReverseCardSection>(['definition', 'math']),
+  const [reverseCardModes, setReverseCardModes] = useState<Set<CardBackPart>>(
+    new Set<CardBackPart>(['definition', 'math']),
   )
   const [globalFlip, setGlobalFlip] = useState(false)
 
-  // Lock the page behind the viewport-covering views — but only while one of
-  // them is actually on screen. Both unmount when the deck empties (the
-  // empty-deck branch below renders its own scrolling layout instead), so a
-  // clear/remove that takes the last card has to release the lock too.
+  // Lock the page behind focus mode — but only while it is on screen. It
+  // unmounts when the deck empties, so a clear/remove that takes the last card
+  // has to release the lock too. (The popups lock the page themselves.)
   const lockPageScroll = shouldLockPageScroll({
     deckSize: cards.length,
-    galleryExpanded,
+    galleryExpanded: false,
     focusMode,
   })
   useEffect(() => {
-    if (lockPageScroll) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
+    if (!lockPageScroll) return
+    const before = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = before }
   }, [lockPageScroll])
 
   // …and drop the overlay state itself, so re-adding a card doesn't drop the
-  // user straight back into a gallery or focus mode they never reopened.
+  // reader straight back into a popup or focus mode they never reopened.
   useEffect(() => {
     if (cards.length === 0) {
-      setGalleryExpanded(false)
+      setDeckOpen(false)
+      setMoreOpen(false)
       setFocusMode(false)
     }
-  }, [cards.length, setGalleryExpanded])
+  }, [cards.length])
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -2549,7 +1360,7 @@ function FlashcardsDeck({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [focusMode])
 
-  // Keyboard navigation for study mode (disabled when gallery overlay or popups are open)
+  // Keyboard navigation for the card (off while a popup is open)
   usePageKeyboard({
     ' ': () => { studyAreaRef.current?.flip() },
     'ArrowRight': () => {
@@ -2563,30 +1374,18 @@ function FlashcardsDeck({
     's': () => { handleShuffle() },
     'f': () => { setFocusMode(v => !v) },
     '?': () => setShowShortcutsHelp(v => !v),
-  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
-
-  function toggleReverseMode(mode: ReverseCardSection) {
-    setReverseCardModes(prev => {
-      const next = new Set(prev)
-      if (next.has(mode)) next.delete(mode); else next.add(mode)
-      return next
-    })
-  }
-
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-  )
+  }, !deckOpen && !moreOpen && !popupOpen && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
 
   // Reset tracked popup name when popup closes
   useEffect(() => {
     if (!popupOpen) prevPopupNameRef.current = null
   }, [popupOpen])
 
-  // Cancel any in-flight "Clear Completed" animation timer on unmount.
+  // Cancel any in-flight "Clear completed" animation timer on unmount.
   useEffect(() => () => { clearTimersRef.current.forEach(clearTimeout) }, [])
 
-  // Flash and navigate the gallery strip when popup navigates to a new concept
+  // Follow the concept reader: when it moves to a concept in the deck, the
+  // card behind it moves too.
   useEffect(() => {
     if (!popupCurrentName || popupCurrentName === prevPopupNameRef.current) return
     prevPopupNameRef.current = popupCurrentName
@@ -2637,27 +1436,11 @@ function FlashcardsDeck({
 
   // Ordered flat list
   const orderedCards = useMemo((): FlashCard[] => {
-    if (groupBy === 'date') return [...cards].sort((a, b) => b.addedAt - a.addedAt)
-    if (groupBy === 'alpha') return [...cards].sort((a, b) => a.name.localeCompare(b.name))
-    if (groupBy === 'mastery') {
-      return needsReviewOrder(cards, c => conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new')
-    }
-    if (groupBy === 'shuffle') {
+    if (groupBy === 'shuffle' || groupBy === 'custom') {
+      const order = groupBy === 'shuffle' ? shuffleOrder : customOrder
       const nameToCard = new Map(cards.map(c => [c.name.toLowerCase(), c]))
       const ordered: FlashCard[] = []
-      for (const name of shuffleOrder) {
-        const card = nameToCard.get(name.toLowerCase())
-        if (card) ordered.push(card)
-      }
-      for (const card of cards) {
-        if (!ordered.some(c => c.name.toLowerCase() === card.name.toLowerCase())) ordered.push(card)
-      }
-      return ordered
-    }
-    if (groupBy === 'custom') {
-      const nameToCard = new Map(cards.map(c => [c.name.toLowerCase(), c]))
-      const ordered: FlashCard[] = []
-      for (const name of customOrder) {
+      for (const name of order) {
         const card = nameToCard.get(name.toLowerCase())
         if (card) ordered.push(card)
       }
@@ -2682,7 +1465,7 @@ function FlashcardsDeck({
       }
       return a.name.localeCompare(b.name)
     })
-  }, [cards, customOrder, groupBy, conceptToExam, conceptSyllabusPosition, conceptMasteryMap, shuffleOrder])
+  }, [cards, customOrder, groupBy, conceptToExam, conceptSyllabusPosition, shuffleOrder])
 
   orderedCardsRef.current = orderedCards
 
@@ -2694,18 +1477,32 @@ function FlashcardsDeck({
     lastIndexRef.current,
   )
   lastIndexRef.current = activeIndex
+  const activeCard: FlashCard | undefined = orderedCards[activeIndex]
 
   // Focus mode's scroller outlives the card on it, so a new card would open
   // wherever the last one was left — start each one at its top.
   const focusScrollRef = useRef<HTMLDivElement>(null)
-  const activeCardName = orderedCards[activeIndex]?.name
+  const activeCardName = activeCard?.name
   useEffect(() => {
     focusScrollRef.current?.scrollTo({ top: 0 })
   }, [activeCardName])
 
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
 
+  // "Practice this": a quiz on the card's concept, when the bank has questions
+  // on it — the concept reader's own button and count.
+  const practiceConcept = activeCard?.kind === 'concept' ? activeCard.name : null
+  const practiceCount = useConceptQuestionCount(practiceConcept)
+
+  // Shuffle is a switch: on draws a fresh order, off goes back to the order
+  // the deck was in.
   function handleShuffle() {
+    if (groupBy === 'shuffle') {
+      setGroupBy(beforeShuffleRef.current)
+      resetActiveIndex()
+      return
+    }
+    beforeShuffleRef.current = groupBy
     playSound('shuffle')
     setShuffleOrder(shuffled(cards.map(c => c.name)))
     setGroupBy('shuffle')
@@ -2774,32 +1571,17 @@ function FlashcardsDeck({
   }, [highlightName, orderedCards, setSearchParams, setActiveIndex])
 
   // Arriving with ?view=deck — from tapping the "Added to Deck" confirmation —
-  // opens the gallery so the cards just added are what you land on.
-  // The param is consumed immediately so a later Back/refresh doesn't reopen it.
+  // opens the Deck popup so the cards just added are what you land on. The
+  // param is consumed immediately so a later Back/refresh doesn't reopen it.
   useEffect(() => {
-    if (viewParam !== 'deck') return
-    // With an empty deck the gallery is already inline on the page; expanding
-    // the overlay on top of it would just cover it with the same panel.
-    if (cards.length > 0) setGalleryExpanded(true)
+    if (!opensDeck(viewParam)) return
+    if (cards.length > 0) setDeckOpen(true)
     setSearchParams(prev => {
       const next = new URLSearchParams(prev)
       next.delete('view')
       return next
     }, { replace: true })
-  }, [viewParam, cards.length, setSearchParams, setGalleryExpanded])
-
-  // Exam groups derived from orderedCards
-  const examGroups = useMemo(() => {
-    if (groupBy !== 'exam') return []
-    const groups: { label: string; cards: FlashCard[] }[] = []
-    const seen = new Map<string, number>()
-    for (const card of orderedCards) {
-      const label = conceptToExam.get(card.name.toLowerCase()) ?? 'Other'
-      if (!seen.has(label)) { seen.set(label, groups.length); groups.push({ label, cards: [] }) }
-      groups[seen.get(label)!].cards.push(card)
-    }
-    return groups
-  }, [groupBy, orderedCards, conceptToExam])
+  }, [viewParam, cards.length, setSearchParams])
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -2814,7 +1596,7 @@ function FlashcardsDeck({
     // itself into its new slot.
   }
 
-  // Go to a card by name — how the top search bar reaches one. The deck is
+  // Go to a card by name — how the Deck popup reaches one. The deck is
   // addressed by name everywhere else too (the `?highlight=` param, the active
   // card), because a position follows the slot and not the card.
   function goToCardByName(name: string) {
@@ -2826,108 +1608,43 @@ function FlashcardsDeck({
     flashTimerRef.current = setTimeout(() => setFlashingCard(null), 1700)
   }
 
-  // The controls footer, measured for whatever else is parked on the bottom
-  // edge — the "Return to quiz" pill rides above it (style guide §5.1). One
-  // footer per branch below, so one measurement each.
-  const emptyFooterRef = useRef<HTMLDivElement>(null)
+  // The foot, measured for whatever else is parked on the bottom edge — the
+  // "Return to quiz" pill rides above it (style guide §5.1).
   const footerRef = useRef<HTMLDivElement>(null)
-  useActionBarHeight(emptyFooterRef, cards.length === 0)
   useActionBarHeight(footerRef, cards.length > 0)
 
-  // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
-  // the user can browse Packs / Collected and add cards to start studying. The
-  // layout fills the viewport (rather than contracting to its content) and
-  // keeps the controls toolbar pinned to the bottom, matching the study view.
-  if (cards.length === 0) {
+  // No cards yet: the same top row, one sentence and the way to add some.
+  if (cards.length === 0 || !activeCard) {
     return (
       <>
-        <FlashcardsSearchBar
-          cards={orderedCards}
-          onSelectCard={goToCardByName}
-          onCardsAdded={() => setGalleryExpanded(true)}
-        />
-        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
-          <GalleryPanel
-            inline
-            onCardsAdded={() => setGalleryExpanded(true)}
-            cards={cards}
-            orderedCards={orderedCards}
-            groupBy={groupBy}
-            examGroups={examGroups}
-            flashingCard={flashingCard}
-            activeIndex={activeIndex}
-            onSelect={setActiveIndex}
-            onRemove={removeCard}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
-            conceptMasteryMap={conceptMasteryMap}
-            reverseCardModes={reverseCardModes}
-            globalFlip={globalFlip}
-          />
+        <div className={cn(GROUND, 'min-h-dvh')}>
+          <div className="mx-auto w-full max-w-xl px-5 pb-16 pt-3">
+            <PracticeHeader title="Flashcards" />
+            <div className="flex flex-col items-center gap-6 pt-24 text-center">
+              <p className="text-[17px]">Your deck is empty.</p>
+              <Button size="main" data-tour="add-flashcards-btn" onClick={openSheet}>
+                <Plus className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+                Add cards
+              </Button>
+            </div>
+          </div>
         </div>
         <ConceptPopup />
-
-        {showShortcutsHelp && (
-          <KeyboardShortcutsHelp
-            context="flashcards"
-            onClose={() => setShowShortcutsHelp(false)}
-          />
-        )}
-
-        {/* Controls toolbar — kept visible so the empty deck doesn't lose it,
-            and so the + (the only way in with an empty deck) stays reachable.
-            Flip / Back content act on the gallery cards; the deck controls
-            (sort, manage) stay hidden until there's a deck. */}
-        <div ref={emptyFooterRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
-          <FlashcardControlsBar
-            reverseCardModes={reverseCardModes}
-            onToggleMode={toggleReverseMode}
-            flip={globalFlip}
-            onFlipToggle={() => setGlobalFlip(v => !v)}
-            onShortcutsHelp={() => setShowShortcutsHelp(true)}
-            cardCount={0}
-          />
-        </div>
       </>
     )
   }
 
-  // Focus mode works in both study and gallery views — toggling it must not
-  // kick the user out of the gallery. In gallery view it strips the chrome
-  // (sidebar, panel header, per-card actions) so the cards themselves are the
-  // only thing on screen.
-  function handleFocusToggle() {
-    setFocusMode(v => !v)
-  }
-
-  // Opening the gallery flashes the card being studied so you can see where
-  // the active card sits among the rest; the
-  // GalleryPanel scrolls it into view on mount. Closing just dismisses.
-  function handleGalleryToggle() {
-    if (galleryExpanded) {
-      setGalleryExpanded(false)
-      return
-    }
-    const activeCard = orderedCards[activeIndex]
-    setGalleryExpanded(true)
-    if (activeCard) {
-      setFlashingCard(activeCard.name)
-      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
-      flashTimerRef.current = setTimeout(() => setFlashingCard(null), 1700)
-    }
-  }
-
-  // "Clear Completed Flashcards" — take the user to the deck and play a brief
-  // disappear animation on the finished cards, then sweep them into a dated
-  // pack. Shared by the end-of-session summary dialog and the in-deck toolbar
-  // button so the clear always reads as a deliberate, visible action.
+  // "Clear completed" — open the deck and play a brief disappear animation on
+  // the finished cards, then take them out. Shared by the end-of-session
+  // summary, the More menu and the Deck popup's own button so the clear always
+  // reads as a deliberate, visible action.
   function handleClearCompleted() {
     // Visual order (not insertion order) so the sweep reads top-to-bottom the
     // same way the deck is laid out on screen.
     const names = orderedCards.filter(c => c.completedAt).map(c => c.name.toLowerCase())
     if (names.length === 0) return
     setShowSessionSummary(false)
-    setGalleryExpanded(true)
+    setDeckOpen(true)
     clearTimersRef.current.forEach(clearTimeout)
     clearTimersRef.current = []
     // Each sweep starts its own climb, so the first card off a deck of two
@@ -2954,108 +1671,129 @@ function FlashcardsDeck({
     clearTimersRef.current.push(finalTimer)
   }
 
-  const studyFocus = focusMode && !galleryExpanded
+  function handleStudyAgain() {
+    resetCompleted()
+    if (groupBy === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
+    setAgainCounts({})
+    setShowSessionSummary(false)
+    resetActiveIndex()
+  }
 
   function closeFocusFromBackdrop(e: React.MouseEvent) {
     if (e.target === e.currentTarget) setFocusMode(false)
   }
 
+  const position = `${activeIndex + 1} of ${orderedCards.length}`
+  const cardSegments = orderedCards.length <= MAX_CARD_SEGMENTS
+    ? orderedCards.map((c, i) => ({ start: i + 1, label: c.name }))
+    : undefined
+
   return (
-    <>
-      {/* The deck's top chrome. Below `lg` it stands in for the app header (see
-          lib/mobileNavHost.ts): a search bar rather than the wordmark, because a
-          deck of a hundred cards is a thing you look *into*. It stays up over
-          the gallery, which is why `.gallery-panel` starts 3.5rem down the
-          viewport — that row was the app header's and is now this bar's. Focus
-          mode is the one view that takes it, and takes it by covering
-          everything (the panel goes `inset-0` at z-[56], above this bar). */}
+    <div className={cn(GROUND, 'min-h-dvh')}>
+      {/* The top row and the bar under it. Focus mode covers both. */}
       {!focusMode && (
-        <FlashcardsSearchBar
-          cards={orderedCards}
-          onSelectCard={goToCardByName}
-          onCardsAdded={() => setGalleryExpanded(true)}
-        />
+        <div className="mx-auto w-full max-w-xl px-5 pt-3">
+          <PracticeHeader title="Flashcards">
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                data-testid="flashcards-deck"
+                data-sound="open"
+                aria-haspopup="dialog"
+                aria-label={`Deck, ${deckCountLabel(orderedCards.length)}`}
+                onClick={() => setDeckOpen(true)}
+                className={cn(PRACTICE_HEADER_BUTTON, 'w-auto px-4 text-[15px] font-semibold')}
+              >
+                Deck
+              </button>
+              <button
+                type="button"
+                data-tour="add-flashcards-btn"
+                aria-label="Add cards"
+                title="Add cards"
+                onClick={openSheet}
+                className={PRACTICE_HEADER_BUTTON}
+              >
+                <Plus className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                aria-label="More"
+                title="More"
+                aria-haspopup="dialog"
+                onClick={() => setMoreOpen(true)}
+                className={PRACTICE_HEADER_BUTTON}
+              >
+                <MoreHorizontal className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+              </button>
+            </div>
+          </PracticeHeader>
+          <NavProgressBar
+            className="mt-[18px]"
+            current={activeIndex + 1}
+            total={orderedCards.length}
+            label={`Card ${position}`}
+            onScrub={next => setActiveIndex(next - 1)}
+            formatValue={n => orderedCards[n - 1]?.name ?? `${n} of ${orderedCards.length}`}
+            segments={cardSegments}
+            trackClassName="rounded-full bg-border"
+            fillClassName="rounded-full bg-foreground dark:bg-foreground"
+            segmentClassName="rounded-full bg-border"
+          />
+        </div>
       )}
 
-      {/* Focus mode backdrop — clicking it closes focus mode */}
+      {/* Focus mode: the card alone on the ground. Clicking the ground leaves it. */}
       {focusMode && (
         <div
-          className="fixed inset-0 z-[55] bg-black"
+          className="fixed inset-0 z-[55] bg-ground"
           onClick={() => setFocusMode(false)}
         />
       )}
-
-      {/* Focus mode close button */}
       {focusMode && (
         <button
           type="button"
           onClick={() => setFocusMode(false)}
-          className="fixed top-3 right-4 z-[60] flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
+          className={cn(PRACTICE_HEADER_BUTTON, 'fixed right-4 top-3 z-[60] bg-ground')}
           title="Exit focus mode (Esc)"
+          aria-label="Exit focus mode"
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5" aria-hidden="true" />
         </button>
       )}
 
-      {/* Expanded gallery overlay */}
-      {galleryExpanded && (
-        <GalleryPanel
-          cards={cards}
-          orderedCards={orderedCards}
-          groupBy={groupBy}
-          examGroups={examGroups}
-          flashingCard={flashingCard}
-          activeIndex={activeIndex}
-          onSelect={idx => { setActiveIndex(idx) }}
-          onRemove={removeCard}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-          onClose={() => setGalleryExpanded(false)}
-          conceptMasteryMap={conceptMasteryMap}
-          reverseCardModes={reverseCardModes}
-          globalFlip={globalFlip}
-          focusMode={focusMode}
-          clearingNames={clearingNames}
-          onClearCompleted={handleClearCompleted}
-        />
-      )}
-
-      {/* Focus mode locks the page (the backdrop covers it), so the study area
-          brings its own scroller: a revealed card is often taller than a phone
+      {/* Focus mode locks the page (the backdrop covers it), so the card brings
+          its own scroller: a revealed card is often taller than a phone
           screen, and in normal flow under a locked body it could never be
           scrolled to its end. A tap on the scroller's empty space — not on
           the card, and not on anything the card portals out — still closes
-          focus mode, as the backdrop beneath it used to. */}
+          focus mode, as the backdrop beneath it does. */}
       <div
         ref={focusScrollRef}
-        className={studyFocus ? 'fixed inset-0 z-[56] overflow-y-auto overscroll-contain' : undefined}
-        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
+        className={focusMode ? 'fixed inset-0 z-[56] overflow-y-auto overscroll-contain' : undefined}
+        onClick={focusMode ? closeFocusFromBackdrop : undefined}
       >
-      <div
-        className="container max-w-4xl mx-auto pb-36"
-        style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
-        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
-      >
-        {/* Study area — no page title here; the nav already says "Flashcards"
-            and the deck should get the full height. */}
-        <div>
+        <div
+          className={cn('mx-auto w-full max-w-xl px-5 pb-40', focusMode ? 'pt-[68px]' : 'pt-[18px]')}
+          style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+          onClick={focusMode ? closeFocusFromBackdrop : undefined}
+        >
           <FlashcardStudyArea
             ref={studyAreaRef}
             cards={orderedCards}
             index={activeIndex}
-            isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
+            level={conceptMasteryMap.get(activeCard.name.toLowerCase()) ?? 'new'}
+            isFlashing={flashingCard?.toLowerCase() === activeCard.name.toLowerCase()}
             reverseCardModes={reverseCardModes}
             defaultFlipped={globalFlip}
             onNext={() => setActiveIndex(i => Math.min(i + 1, orderedCards.length - 1))}
             onPrev={() => setActiveIndex(i => Math.max(i - 1, 0))}
             hasNext={activeIndex < orderedCards.length - 1}
             hasPrev={activeIndex > 0}
-            focusMode={focusMode}
             onRate={handleRate}
-            isCompleted={!!orderedCards[activeIndex]?.completedAt}
+            isCompleted={!!activeCard.completedAt}
           />
         </div>
-      </div>
       </div>
 
       <ConceptPopup />
@@ -3072,114 +1810,94 @@ function FlashcardsDeck({
           cardNames={orderedCards.map(c => c.name)}
           againCounts={againCounts}
           onClearCompleted={handleClearCompleted}
-          onStudyAgain={() => {
-            resetCompleted()
-            if (groupBy === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
-            setAgainCounts({})
-            setShowSessionSummary(false)
-            resetActiveIndex()
-          }}
+          onStudyAgain={handleStudyAgain}
           onClose={() => setShowSessionSummary(false)}
         />
       )}
 
-      {/* Fixed controls footer — always on the bottom edge */}
+      {/* The foot is the concept reader's: Previous, Practice this, Next. A
+          card whose concept has no questions shows its place in the deck where
+          the button would be. Focus mode dims it until it is reached for. */}
       <div
         ref={footerRef}
-        className={`fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
-          focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
-        }`}
+        data-testid="flashcards-foot"
+        className={cn(
+          'fixed bottom-0 left-0 right-0 bg-ground lg:left-[var(--sidebar-width)]',
+          focusMode ? 'z-[57] opacity-30 transition-opacity duration-300 focus-within:opacity-100 hover:opacity-100' : 'z-[46]',
+        )}
       >
-        {/* Gallery + Focus buttons — standalone pills above the nav. Shown in
-            both study and gallery views so the Gallery toggle can return to
-            study when the gallery overlay is open. Hidden in focus mode, which
-            pares the footer down to just the Prev/Next nav. */}
-        {!focusMode && (
-          <div className="flex items-center justify-between gap-3 bg-background px-4 py-2">
-            <StudyGalleryToggle
-              galleryOpen={galleryExpanded}
-              onToggle={handleGalleryToggle}
-              count={cards.length}
+        <div className="mx-auto flex w-full max-w-xl items-center gap-2.5 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
+          <button
+            type="button"
+            disabled={activeIndex === 0}
+            data-sound="ruffle"
+            aria-label="Previous card"
+            title="Previous card"
+            onClick={() => setActiveIndex(activeIndex - 1)}
+            className={FOOT_ARROW}
+          >
+            <ChevronLeft className="h-[22px] w-[22px]" strokeWidth={2.5} aria-hidden="true" />
+          </button>
+          {practiceConcept && practiceCount ? (
+            <PracticeButton
+              to={conceptPracticeUrl(practiceConcept, practiceCount, practiceSettings())}
               className="flex-1"
-            />
-            <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} className="flex-1" />
-          </div>
-        )}
-        {/* Prev / Next nav footer — only in study mode */}
-        {!galleryExpanded && (
-          <>
-          <NavProgressBar
-            current={activeIndex + 1}
-            total={orderedCards.length}
-            label={`Card ${activeIndex + 1} of ${orderedCards.length}`}
-            onScrub={next => setActiveIndex(next - 1)}
-            formatValue={n => orderedCards[n - 1]?.name ?? `${n} of ${orderedCards.length}`}
-          />
-          <div className="flex items-stretch h-16 shrink-0 bg-background">
-            <button
-              type="button"
-              disabled={activeIndex === 0}
-              data-sound="ruffle"
-              onClick={() => setActiveIndex(activeIndex - 1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
-              <span>Previous</span>
-            </button>
-            {/* The position is already read off the bar above (and off the card
-                itself while scrubbing), so the middle column is the controls
-                handle — sized as the target it is, not as a footnote. */}
-            <div className="self-center px-2 shrink-0 flex flex-col items-center">
-              {completedCount > 0 && (
-                <span className="flex items-center gap-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400 tabular-nums">
-                  <CheckCircle2 className="h-3 w-3" /> {completedCount} done
-                </span>
-              )}
-              <button
-                type="button"
-                data-tour="flashcard-controls-toggle"
-                onClick={() => setControlsExpanded(v => !v)}
-                aria-expanded={controlsExpanded}
-                aria-label={controlsExpanded ? 'Hide controls' : 'Show controls'}
-                title={controlsExpanded ? 'Hide controls' : 'Show controls'}
-                className="inline-flex items-center justify-center h-12 w-16 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              >
-                <ChevronUp className={`h-8 w-8 transition-transform ${controlsExpanded ? '' : 'rotate-180'}`} />
-              </button>
-            </div>
-            <button
-              type="button"
-              disabled={activeIndex === orderedCards.length - 1}
-              data-sound="ruffle"
-              onClick={() => setActiveIndex(activeIndex + 1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
-            </button>
-          </div>
-          </>
-        )}
-        {(galleryExpanded || controlsExpanded) && (
-          <FlashcardControlsBar
-            reverseCardModes={reverseCardModes}
-            onToggleMode={toggleReverseMode}
-            flip={globalFlip}
-            onFlipToggle={() => setGlobalFlip(v => !v)}
-            onShortcutsHelp={() => setShowShortcutsHelp(true)}
-            cardCount={cards.length}
-            onManage={() => setShowManageDialog(true)}
-          />
-        )}
+              Practice this
+            </PracticeButton>
+          ) : (
+            <span className="flex-1 text-center text-base font-semibold tabular-nums" data-testid="flashcards-position">
+              {position}
+            </span>
+          )}
+          <button
+            type="button"
+            disabled={activeIndex === orderedCards.length - 1}
+            data-sound="ruffle"
+            aria-label="Next card"
+            title="Next card"
+            onClick={() => setActiveIndex(activeIndex + 1)}
+            className={FOOT_ARROW}
+          >
+            <ChevronRight className="h-[22px] w-[22px]" strokeWidth={2.5} aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
-      {showManageDialog && (
-        <FlashcardsManageDialog
-          cardCount={cards.length}
-          onCancel={() => setShowManageDialog(false)}
-          onRemoveAll={() => { clearCards(); setGalleryExpanded(false); setShowManageDialog(false) }}
+      {deckOpen && (
+        <DeckPopup
+          cards={orderedCards}
+          activeName={activeCard.name}
+          levels={conceptMasteryMap}
+          clearingNames={clearingNames}
+          onSelect={goToCardByName}
+          onRemove={removeCard}
+          onDragEnd={handleDragEnd}
+          onClearCompleted={handleClearCompleted}
+          onRemoveAll={() => { clearCards(); setDeckOpen(false) }}
+          onClose={() => setDeckOpen(false)}
         />
       )}
-    </>
+
+      {moreOpen && (
+        <FlashcardsMoreMenu
+          onClose={() => setMoreOpen(false)}
+          conceptName={activeCard.name}
+          onRead={() => useConceptPopup.getState().openAt(orderedCards, activeIndex)}
+          shuffled={groupBy === 'shuffle'}
+          onShuffle={handleShuffle}
+          backFirst={globalFlip}
+          onBackFirst={() => setGlobalFlip(v => !v)}
+          backParts={reverseCardModes}
+          onBackPart={part => setReverseCardModes(prev => toggleBackPart(prev, part))}
+          onFocus={() => setFocusMode(true)}
+          completedCount={completedCount}
+          onClearCompleted={handleClearCompleted}
+          onStudyAgain={handleStudyAgain}
+          onRemove={() => removeCard(activeCard.name)}
+          onShortcuts={() => setShowShortcutsHelp(true)}
+        />
+      )}
+    </div>
   )
 }

@@ -215,9 +215,17 @@ describe('canTransition', () => {
 
 describe('deskPlace', () => {
   it('lays the tabs out left to right in the sidebar\'s order', () => {
-    const order = ['/dashboard', '/wiki', '/flashcards', '/', '/project'].map(p => deskPlace(p).tab)
+    const order = ['/dashboard', '/wiki', '/', '/project'].map(p => deskPlace(p).tab)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
     expect(new Set(order).size).toBe(order.length)
+  })
+
+  it("lays Practice's own screens over it: past papers, flashcards and the search", () => {
+    for (const path of ['/papers', '/flashcards', '/search']) {
+      expect(deskPlace(path)).toEqual({ tab: deskPlace('/').tab, depth: 1 })
+      expect(paperMove('/', path, 'PUSH')).toBe('push')
+      expect(paperMove(path, '/', 'POP')).toBe('pop')
+    }
   })
 
   it('puts a tab\'s deeper pages on the same tab, further down', () => {

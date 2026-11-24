@@ -284,13 +284,13 @@ describe('examSourceLabel', () => {
   })
 
   it('names the source after real papers when the exam has them', () => {
-    expect(examSourceLabel([row(2019), row(2018)])).toBe('Past Papers')
+    expect(examSourceLabel([row(2019), row(2018)])).toBe('Past papers')
   })
 
   it('names the sample set when the shelf is the generated Mix alone', () => {
     // Exam P and FM release no dated sittings, so their shelf has no rows. It
     // is never "Practice Exam": that is a way of sitting questions, chosen
     // apart from where they come from.
-    expect(examSourceLabel([])).toBe('By Source')
+    expect(examSourceLabel([])).toBe('Sample questions')
   })
 })

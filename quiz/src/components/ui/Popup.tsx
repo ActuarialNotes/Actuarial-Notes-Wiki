@@ -19,6 +19,7 @@ export function Popup({
   labelledBy,
   children,
   layer = 'z-[80]',
+  suspended = false,
   aboveReader = false,
   className,
 }: {
@@ -28,6 +29,11 @@ export function Popup({
   children: ReactNode
   /** The overlay's stacking layer (style guide §8.2). */
   layer?: string
+  /**
+   * Something opened from the popup has the keyboard (the PDF reader over a
+   * past paper): Escape and Tab are left to it until it closes.
+   */
+  suspended?: boolean
   /**
    * The popup stays up while the concept reader is open and sits in the room
    * above the reader's pane. Esc and Tab are then the reader's: Esc closes
@@ -39,6 +45,8 @@ export function Popup({
   const panelRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
   onCloseRef.current = onClose
+  const suspendedRef = useRef(suspended)
+  suspendedRef.current = suspended
 
   // Focus moves into the popup, stays there, and goes back where it was.
   useEffect(() => {
@@ -47,6 +55,7 @@ export function Popup({
     panel?.focus()
 
     function onKeyDown(e: KeyboardEvent) {
+      if (suspendedRef.current) return
       if (aboveReader && document.documentElement.dataset.conceptSplitOpen) return
       if (e.key === 'Escape') {
         e.stopPropagation()

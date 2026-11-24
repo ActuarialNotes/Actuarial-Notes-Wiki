@@ -19,8 +19,14 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/store')).toBe(true)
   })
 
+  it("counts Practice's own screens, which draw their top row themselves", () => {
+    for (const path of ['/flashcards', '/papers', '/search']) {
+      expect(pageHostsNavButton(path)).toBe(true)
+    }
+  })
+
   it('leaves every other route to the app header', () => {
-    for (const path of ['/search', '/store/gems', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
+    for (const path of ['/store/gems', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
       expect(pageHostsNavButton(path)).toBe(false)
     }
   })

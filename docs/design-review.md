@@ -521,6 +521,11 @@ settings) and F10 (the results were a transcript).
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
+**Phase G (Practice) was built the same day**: the Quiz tab opens on the exam in focus with the
+quiz as an outlined card and rows for a Practice Exam, Past papers and Flashcards (F3: Flashcards
+is a row of Practice, though its sidebar row stays until the navigation is built); the setup is a
+black popup; a past paper shows the reader's last result; and one search covers concepts,
+resources and questions (F6).
 **Phase I (Apply) was built the same day**: the home's three cards (Projects, Tools,
 Workflows), the Tools screen with a tab for the exam in focus, the tool page's outlined
 answer, "Learn the method" and "Practice this" (the tool link F13 asked for, from the tool's
@@ -529,7 +534,7 @@ side), an attempt's overview, and briefs anyone can read.
 daily goal and the day's quests), the league as its own screen, and Settings as one grouped
 screen with every value on its row. Theme and sound left the sidebar's foot for Settings, and
 the level badge's popup is gone (F1's two menus for one account, and F15's settings scattered
-over three places). Phases E, G and F are not built.
+over three places). Phases E and F are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

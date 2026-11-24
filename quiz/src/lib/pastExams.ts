@@ -236,23 +236,15 @@ export function practiceExamQuestions(exam: string): number {
 export const PRACTICE_EXAM_LABEL = 'Practice Exam'
 
 /**
- * What the source itself is called: the tab on the quiz builder, above the shelf.
- *
- * The label follows the content, the same rule the report button follows
- * (`Examiner's Report` vs `Exam & Answer Key`): an exam whose body released its
- * papers offers **Past Papers**, and one with none — Exam P and FM draw on the
- * SOA's rolling sample set, so their shelf is the generated Mix row and the
- * sample set's PDFs — offers **By Source**, the shelf's sources (the Mix and the
- * sample set) without claiming a paper. Naming the Mix "past papers" would
- * overstate it.
- *
- * It names a *source* of questions and nothing else. It used to fall back to
- * "Practice Exam", when the tab also decided how the questions were sat; that
- * is the builder's format choice now (Quiz or Practice Exam, beside Start), and
- * any source can be sat as either.
+ * What the exam's own papers are called on Practice (docs/redesign-spec.md
+ * §7a.1): **Past papers** for an exam whose body released its sittings, and
+ * **Sample questions** for one with none — Exam P and FM draw on the SOA's
+ * rolling sample set, so calling it "past papers" would overstate it. The
+ * label follows the content, the rule the report button follows too
+ * (`Examiner's Report` vs `Exam & Answer Key`).
  */
 export function examSourceLabel(rows: PastExamRow[]): string {
-  return rows.length > 0 ? 'Past Papers' : 'By Source'
+  return rows.length > 0 ? 'Past papers' : 'Sample questions'
 }
 
 /** A percentage for display: `40` → `"40%"`, `40.6` → `"40.6%"`, nothing → `null`. */

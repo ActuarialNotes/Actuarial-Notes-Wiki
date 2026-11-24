@@ -13,7 +13,6 @@ import {
   drawSignature,
   formatTargetDate,
   groupConceptsBySyllabus,
-  isExamList,
   newQuestionCount,
   orderConceptsBySyllabus,
   papersFilter,
@@ -22,7 +21,6 @@ import {
   quizLaunchUrl,
   quizQuestionCount,
   quizQuestionCounts,
-  quizSearchFilter,
   quizTrackGroups,
   quizWikiExamId,
   savedConceptsKey,
@@ -131,14 +129,6 @@ describe('the exams', () => {
   it('dates an exam row by month and year', () => {
     expect(formatTargetDate('2026-09-15T12:00:00')).toBe('Sep 26')
   })
-
-  it("knows the exam list's address", () => {
-    expect(isExamList('/')).toBe(true)
-    expect(isExamList('/?autostart=1')).toBe(true)
-    expect(isExamList('/?topic=Exam%205')).toBe(false)
-    expect(isExamList('/?topic=Exam%205#x')).toBe(false)
-    expect(isExamList('/quiz')).toBe(false)
-  })
 })
 
 describe('the draw', () => {
@@ -199,19 +189,6 @@ describe('the draw', () => {
     expect(drawSignature({ ...input, concepts: ['A', 'B'] })).toBe(drawSignature(input))
     expect(drawSignature({ ...input, sitting: { year: 2019 } })).toContain('2019|')
     expect(drawSignature({ ...input, levelsParam: 'easy' })).not.toBe(drawSignature(input))
-  })
-
-  it('opens the search on the pool the builder shows', () => {
-    const base = { topic: 'Exam 5', source: 'custom' as const, sitting: null, concept: '', concepts: ['Trend'], todaysPlan: null }
-    expect(quizSearchFilter(base)).toEqual({ exam: 'Exam 5', concepts: ['Trend'] })
-    expect(quizSearchFilter({ ...base, concept: 'Trend' })).toEqual({ concept: 'Trend' })
-    expect(quizSearchFilter({ ...base, topic: '' })).toEqual({})
-    expect(quizSearchFilter({ ...base, source: 'papers', sitting: { year: 2019, session: 'Fall' } }))
-      .toEqual({ exam: 'Exam 5', year: 2019, session: 'Fall' })
-    expect(quizSearchFilter({ ...base, source: 'today', todaysPlan: plan({ todaysConcepts: ['Chain Ladder'] }) }))
-      .toEqual({ exam: 'Exam 5', concepts: ['Chain Ladder'] })
-    expect(quizSearchFilter({ ...base, source: 'today', todaysPlan: plan({ status: 'review_mode', reviewConcepts: [] }) }))
-      .toEqual({ exam: 'Exam 5' })
   })
 
   it("names the past-paper shelf's documents", () => {

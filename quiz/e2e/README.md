@@ -10,7 +10,9 @@ and the god-component refactors (P3.1) can't silently break them.
 | `quiz.spec.ts`   | Run a quiz, answer a question, reach the results screen; an open answer and its self-grade don't carry into the next question |
 | `quiz-resume.spec.ts` | Leave a timed quiz mid-way: the Return to quiz pill follows the reader, Return resumes the same answered question, Leave discards it, and Quit leaves no pill behind |
 | `code-block.spec.ts` | Console output in a question stem scrolls inside its panel on a phone |
-| `flashcard-focus.spec.ts` | A revealed flashcard taller than a phone scrolls in focus mode, and the backdrop still exits |
+| `flashcard-focus.spec.ts` | A revealed flashcard taller than a phone scrolls in focus mode (entered from More), and the backdrop still exits; the Deck popup lists the cards and goes to one; the foot is Previous, Practice this, Next |
+| `quiz-format.spec.ts` | Practice's home: a pill opens the setup popup (topics, difficulty, switches), the count steps and is typed, Start launches, a past paper opens its popup and is sat whole, a paper already sat shows its bar, a Practice Exam, Sample questions, and the page opening on the exam last practised |
+| `question-search.spec.ts` | The one search: tabs with counts, a question's Info from its row, and Practice these N launching a quiz |
 | `collect.spec.ts`| Read a New concept from the pre-quiz list, answer it right, and collect its card |
 | `tour.spec.ts`   | Onboarding tour: corner launcher, guided steps, minimize/resume, dismiss |
 | `store.spec.ts`  | The Store's aisles render, the exam strip and aisle pills narrow them, a product sheet's button goes out to the seller in a new tab, and the Gem Shop's catalog renders at `/store/gems` (the old `/store?tab=` links sent on to it) |

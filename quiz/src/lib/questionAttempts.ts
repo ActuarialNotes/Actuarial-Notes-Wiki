@@ -7,6 +7,8 @@
 // Structural input type: `QuestionAttemptSummary` from `hooks/useQuestionAttempts`
 // satisfies it, without lib having to depend on the hook.
 export interface AttemptCounts {
+  /** Whether the latest attempt was right, where the answers' order is known. */
+  last_correct?: boolean
   attempt_count: number
   correct_count: number
 }

@@ -23,7 +23,8 @@ import type { RetentionAnswer } from '@/lib/learningSignals'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
 import { scoredQuestions } from '@/lib/quizScore'
-import type { StepKind } from '@/lib/sessionProgress'
+import { finalSegments, type StepKind } from '@/lib/sessionProgress'
+import { paperKey, savePaperResult, sittingOf, tallyStates } from '@/lib/paperResults'
 
 // A concept's flashcard is collected the moment it first reaches Level 1 —
 // there is no separate comprehension check (docs/flashcard-collection.md).
@@ -448,6 +449,22 @@ function computeMasteryTransitions(
 
 export const LAST_SESSION_KEY = 'actuarial_last_session'
 
+/**
+ * A whole past paper finished as a Practice Exam leaves its result for the
+ * Past papers screen's bar (lib/paperResults.ts). Only a quiz launched as a
+ * sitting counts (`year=` in its address): "Fix these N" on a paper's misses
+ * is the same paper's questions, and must not stand in for the paper.
+ */
+function keepPaperResult(session: Pick<CompletedSession, 'questions' | 'responses' | 'mode' | 'manualGrades' | 'completedAt'>): void {
+  try {
+    if (!new URLSearchParams(window.location.search).has('year')) return
+    const sitting = sittingOf(session.mode, session.questions)
+    if (!sitting) return
+    const states = finalSegments(session.questions, session.responses, session.manualGrades ?? {})
+    savePaperResult(paperKey(sitting.exam, sitting.year, sitting.session), tallyStates(states, session.completedAt))
+  } catch { /* the bar is simply absent */ }
+}
+
 interface PersistableSession {
   questions: Question[]
   responses: Record<string, Response>
@@ -759,6 +776,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       } catch {
         // quota exceeded — continue
       }
+      keepPaperResult(completedSession)
       appendTodayLevelUps(upward.map(t => ({
         conceptSlug: t.conceptSlug,
         from: t.from,
@@ -816,6 +834,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     } catch {
       // quota exceeded — continue
     }
+    keepPaperResult(completedSession)
 
     addDailyQuizStats(correctCount, scoredCount)
     // Remember what today's quizzes have already served so the next Today's

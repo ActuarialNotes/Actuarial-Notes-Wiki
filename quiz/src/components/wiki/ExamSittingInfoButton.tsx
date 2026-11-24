@@ -3,7 +3,8 @@ import { CalendarDays, ChevronDown, ExternalLink, Info, X } from 'lucide-react'
 import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
 import { LABELLED_HEADER_BUTTON } from '@/components/wiki/ExamSyllabusButton'
 import { ExamLogo } from '@/components/ExamLogo'
-import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { INFO_CLOSE, InfoSheet } from '@/components/ui/InfoSheet'
+import { GROUP_ACTION_ROW, PublisherChip } from '@/components/ui/infoRows'
 import { useExamVersion } from '@/hooks/useExamVersion'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { examAbout, sittingDetailsFor } from '@/data/examSittingDetails'
@@ -11,7 +12,6 @@ import { sittingVersionLabel, type ExamSitting } from '@/data/examSittings'
 import { sittingTimeline } from '@/lib/sittingTimeline'
 import { SittingDates, SittingStatus } from '@/components/SittingTimeline'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
-import { examAccentStyle } from '@/lib/examColors'
 import { aboutRows, sourceRows } from '@/lib/sittingInfo'
 import { todayISO } from '@/lib/studyPlan'
 import { inkToolTile } from '@/components/ui/ink'
@@ -144,28 +144,14 @@ function ExamSittingInfoDialog({
   const facts = about ? aboutRows(about.facts) : []
 
   return (
-    <OverlayPortal>
-      <div
-        className="fixed inset-0 z-[80] flex justify-center overflow-y-auto p-4 paper-scrim"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="exam-sitting-info-title"
-      >
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-        {/* `m-auto`, not `items-center`: a panel taller than the screen
-            (PCPA's) then scrolls from its top instead of losing it. The sheet
-            is `bg-background` so its groups (`bg-card`) read as cards on it. */}
-        <div
-          className="relative z-10 m-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl bg-background p-4 shadow-2xl"
-          style={examAccentStyle(progressKey)}
-        >
-          <header className="flex items-center gap-3 px-1 pt-1">
+    <InfoSheet onClose={onClose} labelledBy="exam-sitting-info-title">
+          <header className="flex items-center gap-3">
             <ExamLogo examKey={progressKey} size="md" />
             <div className="min-w-0 flex-1">
-              <h2 id="exam-sitting-info-title" className="text-base font-semibold leading-tight">
+              <h2 id="exam-sitting-info-title" className="text-[20px] font-bold leading-tight">
                 {examLabel}
               </h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">
+              <p className="mt-0.5 text-[13px]">
                 {sitting ? `${sittingMonthYear(sitting)} sitting · ${FORMAT_LABEL[sitting.format]}` : 'No sitting on file'}
               </p>
             </div>
@@ -178,15 +164,15 @@ function ExamSittingInfoDialog({
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className={INFO_CLOSE}
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </button>
           </header>
 
           {sitting ? (
             <>
-              <SittingStatus steps={steps} today={today} examKey={progressKey} />
+              <SittingStatus steps={steps} today={today} />
               <SittingDates
                 steps={steps}
                 today={today}
@@ -195,7 +181,7 @@ function ExamSittingInfoDialog({
               />
             </>
           ) : (
-            <p className="rounded-xl bg-card px-3.5 py-3 text-sm">
+            <p className="rounded-[18px] border border-border px-3.5 py-3 text-[15px]">
               {about?.noSittings ?? `No upcoming sitting of ${examLabel} has been published yet.`}
             </p>
           )}
@@ -221,32 +207,26 @@ function ExamSittingInfoDialog({
                   href={s.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
+                  className={GROUP_ACTION_ROW}
                 >
-                  {s.publisher && (
-                    <span className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md bg-muted px-1 text-[9px] font-extrabold tracking-wide text-muted-foreground">
-                      {s.publisher}
-                    </span>
-                  )}
+                  {s.publisher && <PublisherChip>{s.publisher}</PublisherChip>}
                   <span className="min-w-0 flex-1">{s.title}</span>
-                  <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
                 </a>
               ))}
               {hiddenSources > 0 && (
                 <button
                   type="button"
                   onClick={() => setAllSources(true)}
-                  className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
+                  className={GROUP_ACTION_ROW}
                 >
                   <span className="min-w-0 flex-1">{hiddenSources} more</span>
-                  <ChevronDown className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                  <ChevronDown className="h-4 w-4 shrink-0" aria-hidden />
                 </button>
               )}
             </Group>
           )}
-        </div>
-      </div>
-    </OverlayPortal>
+    </InfoSheet>
   )
 }
 

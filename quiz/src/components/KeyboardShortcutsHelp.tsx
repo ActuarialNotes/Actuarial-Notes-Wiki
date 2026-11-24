@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Keyboard } from 'lucide-react'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
-import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
+import { BannerTile, InfoBanner, InfoSheet } from '@/components/ui/InfoSheet'
 
 interface ShortcutRow {
   keys: string[]
@@ -65,7 +65,7 @@ const HELP_SHORTCUT: ShortcutRow = { keys: ['?'], description: 'Show this help' 
 
 function Kbd({ label }: { label: string }) {
   return (
-    <kbd className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-muted px-1.5 font-mono text-[11px] font-semibold text-foreground/90 shadow-[inset_0_-1px_0_hsl(var(--foreground)/0.08)]">
+    <kbd className="inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-foreground px-1.5 font-mono text-[13px] font-semibold">
       {label}
     </kbd>
   )
@@ -115,7 +115,6 @@ export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHel
         title="Keyboard shortcuts"
         titleId="shortcuts-title"
         onClose={onClose}
-        tint={NEUTRAL_BANNER}
       />
       {groups.map(g => <ShortcutGroupList key={g.title} {...g} />)}
       <ShortcutGroupList title="Anywhere" rows={anywhere} />

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
-import { factCheckBadge, factCheckOverview, formatCheckedDate, type FactCheckTone, type Verification } from '@/lib/verification'
+import { factCheckBadge, factCheckOverview, formatCheckedDate, type Verification } from '@/lib/verification'
 import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_ICONS } from '@/lib/factCheckTone'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
-import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
+import { BannerTile, InfoBanner, InfoSheet, Stat } from '@/components/ui/InfoSheet'
 import { FactCheckPanel } from '@/components/FactCheckPanel'
 
 /**
@@ -101,7 +101,7 @@ export function FactCheckDialog(props: FactCheckDialogProps) {
  * viewing rather than to the surface that owns the button.
  *
  * An info popup (`components/ui/InfoSheet.tsx`): the verdict leads as the
- * banner, tinted in its tone — the page's name over the verdict, and the
+ * header, its tile in the verdict's tone, the page's name over the verdict, and the
  * strip's figures (when last checked, against how many sources, how many
  * issues are open) — and the record follows as one grouped surface. A verdict
  * the figures can't say (stale, under review, unchecked) keeps its sentence.
@@ -152,14 +152,13 @@ function FactCheckSheet({
         eyebrow={contentName ?? contentPath}
         title={badge.label.split(' · ')[0]}
         onClose={onClose}
-        tint={BANNER_TINT[badge.tone]}
         stats={checked ? [
-          date ? <Stat key="date" value={date.endsWith(String(new Date().getFullYear())) ? date.replace(/ \d{4}$/, '') : date} label="last checked" tone={STAT_TONE[badge.tone]} /> : null,
+          date ? <Stat key="date" value={date.endsWith(String(new Date().getFullYear())) ? date.replace(/ \d{4}$/, '') : date} label="last checked" /> : null,
           sources > 0 ? <Stat key="sources" value={sources} label={sources === 1 ? 'source' : 'sources'} /> : null,
           <Stat key="open" value={verification?.openFindings ?? 0} label={(verification?.openFindings ?? 0) === 1 ? 'open issue' : 'open issues'} />,
         ] : undefined}
       >
-        {!checked && <p className="px-3.5 pb-3.5 text-sm text-muted-foreground">{overview.sentence}</p>}
+        {!checked && <p className="text-[15px] leading-relaxed">{overview.sentence}</p>}
       </InfoBanner>
 
       <FactCheckPanel
@@ -169,22 +168,6 @@ function FactCheckSheet({
       />
     </InfoSheet>
   )
-}
-
-/** The banner's wash, in the verdict's tone. */
-const BANNER_TINT: Record<FactCheckTone, string> = {
-  green: 'bg-green-500/10',
-  amber: 'bg-amber-500/10',
-  red: 'bg-red-500/10',
-  grey: NEUTRAL_BANNER,
-}
-
-/** The date figure, in the verdict's colour. */
-const STAT_TONE: Record<FactCheckTone, string> = {
-  green: 'text-green-700 dark:text-green-400',
-  amber: 'text-amber-700 dark:text-amber-400',
-  red: 'text-red-700 dark:text-red-400',
-  grey: '',
 }
 
 /** A verdict's label without its date: "Fact checked · 9 Oct 2026" → "Fact checked". */

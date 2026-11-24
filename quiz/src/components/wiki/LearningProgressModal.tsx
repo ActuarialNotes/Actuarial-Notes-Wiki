@@ -6,12 +6,11 @@ import { summarizeAttemptedQuestions } from '@/lib/learningHistory'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
-import { MasteryBadge } from '@/components/MasteryBadge'
-import { BannerTile, EXAM_BANNER, InfoBanner, InfoSheet, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
+import { LevelSquare } from '@/components/LevelSquare'
+import { BannerTile, InfoBanner, InfoSheet, Stat } from '@/components/ui/InfoSheet'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { findSyllabiForConcept, wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { examAccentStyle } from '@/lib/examColors'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { dialogOpenOver } from '@/lib/layeredDialog'
 
@@ -23,7 +22,12 @@ import { dialogOpenOver } from '@/lib/layeredDialog'
 // `sm` sits inline with a small modal title;
 // `md` is the standalone-modal header / level-row pill.
 export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 'sm' | 'md' }) {
-  return <MasteryBadge state={level} size={size} className="font-bold tracking-wide" />
+  return (
+    <span className={`inline-flex items-center gap-2 font-semibold ${size === 'sm' ? 'text-[13px]' : 'text-[15px]'}`}>
+      <LevelSquare state={level} size="sm" decorative />
+      {MASTERY_LABEL[level]}
+    </span>
+  )
 }
 
 // ─── Reusable panel ─────────────────────────────────────────────────────────
@@ -89,7 +93,7 @@ export function LearningProgressPanelView({
   return (
     <div className="space-y-5">
       {isLoading && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground py-8 justify-center">
+        <div className="flex items-center gap-2 text-[15px] py-8 justify-center">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading progress…
         </div>
       )}
@@ -101,7 +105,7 @@ export function LearningProgressPanelView({
       )}
 
       {!isLoading && isEmpty && (
-        <div className="text-center py-10 text-muted-foreground text-sm">
+        <div className="py-8 text-center text-[15px] leading-relaxed">
           No quiz attempts yet for this concept.
           <br />
           Complete a quiz to see your progress here.
@@ -113,7 +117,7 @@ export function LearningProgressPanelView({
           {/* Level pill */}
           {showLevelRow && (
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">
+              <span className="text-[13px]">
                 {hoveredLevel ? 'Level at selected time' : 'Current level'}
               </span>
               <LevelPill level={displayLevel} />
@@ -132,7 +136,7 @@ export function LearningProgressPanelView({
                   setGraphOpen(open => !open)
                 }}
                 aria-expanded={graphOpen}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-transparent text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border-[1.5px] border-foreground px-4 text-[15px] font-semibold transition-colors hover:bg-foreground/10"
               >
                 {graphOpen ? 'Hide history' : 'Show history'}
                 <ChevronDown
@@ -145,14 +149,14 @@ export function LearningProgressPanelView({
           {graphVisible && (
             <>
               {/* Graph, with its legend */}
-              <div className="rounded-xl bg-card px-2 pb-2 pt-3">
-                <div className="flex items-center gap-4 px-2 text-[11px] text-muted-foreground">
+              <div className="rounded-[18px] border border-border px-2 pb-2 pt-3">
+                <div className="flex items-center gap-4 px-2 text-[13px]">
                   <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-green-500" />
+                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-answer-correct" />
                     Right
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-red-500" />
+                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-answer-incorrect" />
                     Wrong
                   </span>
                 </div>
@@ -203,8 +207,8 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // The exam whose syllabus names the concept: its logo, colour and name lead
-  // the banner. A concept on no syllabus gets the neutral banner.
+  // The exam whose syllabus names the concept: its logo and name lead the
+  // header. A concept on no syllabus gets a plain tile.
   const { syllabi } = useWikiSyllabus()
   const syllabus = useMemo(() => findSyllabiForConcept(syllabi, conceptName)[0] ?? null, [syllabi, conceptName])
   const examKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
@@ -220,7 +224,6 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
       // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
       layer="z-[130]"
       dialogRef={dialogRef}
-      style={examKey ? examAccentStyle(examKey) : undefined}
     >
       <InfoBanner
         tile={examKey
@@ -229,9 +232,8 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
         eyebrow={syllabus?.examLabel}
         title={conceptName}
         onClose={onClose}
-        tint={examKey ? EXAM_BANNER : NEUTRAL_BANNER}
         stats={level && attempts > 0 ? [
-          <Stat key="level" value={level.value} label={level.label} accent />,
+          <Stat key="level" value={level.value} label={level.label} />,
           <Stat key="attempts" value={attempts} label={attempts === 1 ? 'attempt' : 'attempts'} />,
           <Stat key="right" value={`${Math.round((100 * right) / attempts)}%`} label="right" />,
         ] : undefined}

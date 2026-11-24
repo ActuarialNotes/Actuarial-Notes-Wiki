@@ -502,6 +502,13 @@ before touching that area**:
   exam in focus, the sheet, Add an exam and the date question, read by Today, the exam page,
   Study Guides, Practice, Resources, the Store, Apply, Tools, You and the league
   (`examFocus.ts` below).
+- `docs/redesign-consistency-review.md` — **the redesign's consistency backlog** (2026-11-24):
+  where the app still disagrees with the spec's visual rules now that every phase but F is built.
+  Old pieces a redesigned screen opens, screens still in the old system, and patterns that differ
+  between screens, each with the rule it breaks. Its §1 is done: every info popup (`InfoSheet`:
+  Question info, the bank's info, Quiz settings, shortcuts, Learning Progress, Fact Check, Dates
+  and fees) draws the redesign's popup, with outlined grouped lists and no exam colour. Read before
+  restyling a screen, and strike an item there when it is fixed.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new

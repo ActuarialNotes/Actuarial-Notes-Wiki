@@ -206,7 +206,7 @@ export function ProgressGraph({
               cx={cx}
               cy={cy}
               r={DOT_R}
-              fill={dot.isCorrect ? '#22c55e' : '#ef4444'}
+              fill={dot.isCorrect ? 'hsl(var(--answer-correct))' : 'hsl(var(--answer-incorrect))'}
               stroke="white"
               strokeWidth={2}
               opacity={isDimmed ? 0.25 : 0.9}

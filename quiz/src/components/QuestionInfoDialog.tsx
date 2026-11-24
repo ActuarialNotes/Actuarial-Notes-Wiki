@@ -7,11 +7,10 @@ import { conceptLabel } from '@/lib/questionFilters'
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { questionFigures, questionSource, questionTitle } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
-import { BannerTile, EXAM_BANNER, InfoBanner, InfoFinePrint, InfoSheet, NEUTRAL_BANNER, Stat } from '@/components/ui/InfoSheet'
+import { BannerTile, InfoBanner, InfoFinePrint, InfoSheet, Stat } from '@/components/ui/InfoSheet'
 import { GROUP_ACTION_ROW, RowChevron, RowTile } from '@/components/ui/infoRows'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
 import { ExamLogo } from '@/components/ExamLogo'
-import { examAccentStyle } from '@/lib/examColors'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
 import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_ICONS } from '@/lib/factCheckTone'
 import { factCheckBadge, formatCheckedDate } from '@/lib/verification'
@@ -94,7 +93,6 @@ export function QuestionInfoDialog({
       // learning-progress modal), and a later sibling at the same layer
       // paints on top.
       layer="z-[130]"
-      style={examKey ? examAccentStyle(examKey) : undefined}
     >
       <InfoBanner
         tile={examKey
@@ -104,9 +102,8 @@ export function QuestionInfoDialog({
         title={questionTitle(question)}
         titleId="question-info-title"
         onClose={onClose}
-        tint={examKey ? EXAM_BANNER : NEUTRAL_BANNER}
         stats={figures.map(f => (
-          <Stat key={f.key} value={f.value} label={f.label} accent={f.key === 'points'} />
+          <Stat key={f.key} value={f.value} label={f.label} />
         ))}
       />
 
@@ -139,7 +136,7 @@ export function QuestionInfoDialog({
             </RowTile>
             <span className="min-w-0 flex-1">{factCheckRowLabel(factCheck.label)}</span>
             {factCheckDate(question) && (
-              <span className="shrink-0 tabular-nums text-muted-foreground">{factCheckDate(question)}</span>
+              <span className="shrink-0 tabular-nums">{factCheckDate(question)}</span>
             )}
             <RowChevron />
           </button>
@@ -171,7 +168,7 @@ export function QuestionInfoDialog({
             href={githubBlobUrl(source.path)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex shrink-0 items-center gap-1 transition-colors hover:text-foreground"
+            className="inline-flex shrink-0 items-center gap-1 underline-offset-2 hover:underline"
           >
             <ExternalLink className="h-3 w-3" aria-hidden />
             GitHub
@@ -235,9 +232,9 @@ function QuestionConcepts({
       >
         <RowTile><BookOpen className="h-3.5 w-3.5" /></RowTile>
         <span className="min-w-0 flex-1">Concepts</span>
-        <span className="shrink-0 tabular-nums text-muted-foreground">{links.length}</span>
+        <span className="shrink-0 tabular-nums">{links.length}</span>
         <ChevronDown
-          className={cn('h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')}
           aria-hidden
         />
       </button>

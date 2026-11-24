@@ -4,7 +4,7 @@
 // screen with a grab handle; from `sm` it is a panel in the middle.
 //
 // The session length sheet and the exam switcher are built from it. An info
-// popup on a screen not yet redesigned stays `InfoSheet`.
+// popup (`InfoSheet`) draws the same shape and keeps its own keys.
 
 import { useEffect, useRef, type ReactNode } from 'react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'

@@ -3,9 +3,8 @@ import { BookOpen, BookX, Eye, EyeOff, SlidersHorizontal, Timer, TimerOff } from
 import type { Difficulty } from '@/lib/parser'
 import { DIFFICULTY_LEVELS } from '@/lib/quizDifficulty'
 import { difficultySummary } from '@/lib/quizSetup'
-import { examAccentStyle } from '@/lib/examColors'
 import { ExamLogo } from '@/components/ExamLogo'
-import { BannerTile, InfoBanner, InfoSheet, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
+import { BannerTile, InfoBanner, InfoSheet } from '@/components/ui/InfoSheet'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { cn } from '@/lib/utils'
@@ -72,7 +71,7 @@ export function QuizSettingsDialog({
   onClose,
 }: {
   settings: QuizSettings
-  /** The exam's progress key — the banner's logo and accent. */
+  /** The exam's progress key: the header's logo. */
   examKey?: string
   /** A practice exam rather than a quiz, for the banner's small line. */
   practiceExam?: boolean
@@ -92,12 +91,11 @@ export function QuizSettingsDialog({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const marker = 'h-4 w-4 text-muted-foreground'
+  const marker = 'h-4 w-4'
   return (
     <InfoSheet
       onClose={onClose}
       labelledBy="quiz-settings-title"
-      style={examKey ? examAccentStyle(examKey) : undefined}
     >
       <InfoBanner
         tile={examKey
@@ -108,11 +106,10 @@ export function QuizSettingsDialog({
         titleId="quiz-settings-title"
         onClose={onClose}
         closeRef={closeRef}
-        tint={examKey ? undefined : NEUTRAL_BANNER}
       />
       <Group footer="Settings are chosen on the quiz setup screen, before a quiz starts.">
         <GroupRow
-          marker={<DifficultyBars levels={levels} size={16} className="text-muted-foreground" />}
+          marker={<DifficultyBars levels={levels} size={16} />}
           label="Difficulty"
           detail="The levels the questions are drawn from."
           value={difficultySummary(levels)}

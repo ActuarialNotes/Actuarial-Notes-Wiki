@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ExternalLink, Info, ListChecks, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { examAccentStyle } from '@/lib/examColors'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
-import { InfoSheet } from '@/components/ui/InfoSheet'
+import { INFO_CLOSE, InfoSheet } from '@/components/ui/InfoSheet'
 import { GROUP_ACTION_ROW, PublisherChip, RowChevron, RowTile } from '@/components/ui/infoRows'
 import { useNavigate } from 'react-router-dom'
 import { ExamLogo } from '@/components/ExamLogo'
@@ -146,10 +145,10 @@ function QuizExamInfoDialog({
   const page = about ? splitSourceLabel(about.source.label) : null
 
   return (
-    <InfoSheet onClose={onClose} labelledBy="quiz-exam-info-title" style={examAccentStyle(progressKey)} className="p-4">
-      <header className="flex items-center gap-3 px-1 pt-1">
+    <InfoSheet onClose={onClose} labelledBy="quiz-exam-info-title">
+      <header className="flex items-center gap-3">
         <ExamLogo examKey={progressKey} size="md" />
-        <h2 id="quiz-exam-info-title" className="min-w-0 flex-1 text-base font-semibold leading-tight">
+        <h2 id="quiz-exam-info-title" className="min-w-0 flex-1 text-[20px] font-bold leading-tight">
           {examLabel} question bank
         </h2>
         <button
@@ -157,14 +156,14 @@ function QuizExamInfoDialog({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={INFO_CLOSE}
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
       </header>
 
-      <section className="rounded-xl bg-[var(--exam-accent-soft,hsl(var(--muted)))] px-4 py-3.5" aria-label="Where the questions come from">
-        <p className="text-xl font-bold leading-tight tabular-nums">{plural(info.total, 'question')}</p>
+      <section className="rounded-[18px] border border-border px-4 py-3.5" aria-label="Where the questions come from">
+        <p className="text-[22px] font-bold leading-tight tabular-nums">{plural(info.total, 'question')}</p>
         {mix.length > 0 && (
           <>
             <div className="mt-3 flex h-2.5 gap-0.5" aria-hidden>
@@ -176,11 +175,11 @@ function QuizExamInfoDialog({
                 />
               ))}
             </div>
-            <ul className="mt-2 flex flex-wrap gap-x-3.5 gap-y-1 text-[11px] text-muted-foreground">
+            <ul className="mt-2 flex flex-wrap gap-x-3.5 gap-y-1 text-[13px]">
               {mix.map(part => (
                 <li key={part.key} className="flex items-center gap-1.5">
                   <span className={cn('h-2 w-2 shrink-0 rounded-full', MIX_FILL[part.key])} aria-hidden />
-                  {part.label} <span className="tabular-nums text-foreground">{part.count.toLocaleString()}</span>
+                  {part.label} <span className="font-semibold tabular-nums">{part.count.toLocaleString()}</span>
                 </li>
               ))}
             </ul>
@@ -210,14 +209,14 @@ function QuizExamInfoDialog({
             <a href={about.source.url} target="_blank" rel="noreferrer" className={GROUP_ACTION_ROW}>
               {page.publisher && <PublisherChip>{page.publisher}</PublisherChip>}
               <span className="min-w-0 flex-1">{page.title}</span>
-              <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
             </a>
           )}
           {passRates && (
             <a href={passRates.url} target="_blank" rel="noreferrer" title={passRates.label} className={GROUP_ACTION_ROW}>
               {page?.publisher && <PublisherChip>{page.publisher}</PublisherChip>}
               <span className="min-w-0 flex-1">Pass rates</span>
-              <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
             </a>
           )}
         </Group>
@@ -226,11 +225,11 @@ function QuizExamInfoDialog({
   )
 }
 
-/** Each piece of the mix, in the exam's colour: its own papers boldest, the record greyest. */
+/** Each piece of the mix, in neutral shades: its own papers solid, the record an empty outline. */
 const MIX_FILL: Record<BankMixPart['key'], string> = {
-  pastPapers: 'bg-[var(--exam-accent-vivid,hsl(var(--foreground)))]',
-  samples: 'bg-[var(--exam-accent,hsl(var(--foreground)/0.7))]',
-  carried: 'bg-[var(--exam-accent-muted,hsl(var(--foreground)/0.4))]',
-  vault: 'bg-background ring-[1.5px] ring-inset ring-[var(--exam-accent,hsl(var(--foreground)))]',
-  offSyllabus: 'bg-muted-foreground/40',
+  pastPapers: 'bg-foreground',
+  samples: 'bg-level-2',
+  carried: 'bg-level-1',
+  vault: 'bg-ground ring-[1.5px] ring-inset ring-foreground',
+  offSyllabus: 'bg-ground ring-[1.5px] ring-inset ring-border',
 }

@@ -153,7 +153,13 @@ One thing, one name. Use these exactly.
 | The readiness forecast | **Projected readiness** | Predicted |
 | The pop-up behind the readiness ring | **Exam Readiness** | Study Guide |
 | A credential's requirements | **track** | path |
-| The settings page | **Settings** | You |
+| The profile screen | **You** (its rows: **League**, **Settings**, **Store**, **Help**) | Profile, Account, Me |
+| The settings screen | **Settings**, in four groups: **Studying**, **App**, **Account**, **Your data** | Preferences, Options, Privacy (the group is Your data) |
+| The XP to earn in a day | **Daily goal** ("60 / 100 XP") | Daily target, XP goal |
+| The day's small tasks | **quests**; a finished one shows **Collect** | challenges, missions, tasks |
+| The weekly table | the **league** ("Silver league", "Join the league", "Leave the league"); its lines read **Promoted** and **Relegated** | Leaderboard, Promotion zone, Demotion zone, demoted |
+| The opt-in study email | **Daily email** | Reminders, Daily reminder email |
+| The reader's avatar | **character** ("Change character") | avatar, mascot |
 | Taking a reward | **Collect** | Claim, Unlock, bank |
 | The date a plan aims at | **ready date** | target date |
 | Accounts | **Create account**, **Sign in** | Sign up, Make an account, Sign In |
@@ -207,6 +213,14 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
+
+- 2026-11-23 · Redesign, You (`docs/redesign-spec.md` §7b, R3, R20) · Settings is one grouped
+  screen with every value on its row and no quiz settings; Delete account is plain red text.
+  Volume stays in Settings, so Sound opens a popup with the switch and the slider. A visitor
+  keeps what the browser keeps (theme, sound, session length, the daily goal) and is asked to
+  sign in for what an account holds. → A row shows its value, never a caption about it. Nothing
+  about how a quiz is sat is written in Settings. A screen a visitor can use says "Sign in"
+  once, beside what it would add.
 
 - 2026-11-23 · Redesign, Apply (`docs/redesign-spec.md` §7c) · Four things settled before it was
   built. A card on Apply never disappears and never counts nothing: an exam with no tools reads

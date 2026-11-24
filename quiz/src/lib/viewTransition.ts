@@ -102,7 +102,9 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   // Community, listed after the Shop; a topic's page is a sheet laid over it.
   { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
-  { prefix: '/settings', tab: 8, depth: 0 },
+  // You: the profile, with the league and Settings each a sheet laid over it.
+  { prefix: '/you', tab: 8, depth: 0, below: 1 },
+  { prefix: '/settings', tab: 8, depth: 1 },
   { prefix: '/auth', tab: 11, depth: 0 },
 ]
 

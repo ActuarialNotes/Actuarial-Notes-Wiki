@@ -459,7 +459,7 @@ search should default to the exam in focus is open (§10).
 
 ## 7b. You
 
-Canvas: `You`, `League`, `Settings`. Opened by the profile button at the top right of every
+Canvas: `You`, `League`, `Settings`. Built (§8, Phase H). Opened by the profile button at the top right of every
 place (the foot of the rail on desktop). Replaces `components/LevelBadge.tsx`'s popup, the
 Dashboard header's export, reminders and help icons, and `pages/Settings.tsx`.
 
@@ -555,7 +555,7 @@ once and needs You to exist.
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** (built 2026-11-23) | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
-| **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
+| **H. You** (built 2026-11-23) | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** (built 2026-11-23) | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
 
@@ -773,6 +773,61 @@ decided while building it, the first four with the maintainer (2026-11-23):
   (already gone), the Flashcards page's gallery, toolbar and search bar.
 - **Desktop** is not on the canvas: every Practice screen is one column, 36rem wide.
 - **Not built here:** §5.2's written part was built with Phase C.
+**Phase H is built.** You is three pages under the existing sidebar: the profile at `/you`
+(`pages/You.tsx`), the league at `/you/league` (`pages/League.tsx`) and Settings at `/settings`
+(`pages/Settings.tsx`), over `components/you/` (`rows.tsx`: the top row, a group of rows, a row
+with its value, a switch; `YouSheets.tsx`, `SettingsSheets.tsx` and `DailyEmailSheet.tsx`: the
+popups) and `lib/you.ts` (what each row says, the league's table and its two lines). What was
+decided while building it, the first three with the maintainer:
+
+- **A visitor** keeps what the browser keeps. You works without an account (the level, the
+  streak, the daily goal and the day's quests are kept in the browser), drawn with the fox, with
+  **Sign in** where the name would be and no Pro tag, gems tile or League row. Settings shows
+  Session length, Daily goal, Theme, Sound, AI assistants and Usage analytics under a filled
+  **Sign in**; it has no Account group, Sign out or Delete account, and the sign-in form it used
+  to carry is gone. The league asks a visitor to sign in. A visitor's quest pays its XP alone,
+  because gems are kept on an account.
+- **Every Settings row is edited in place or in a popup**; nothing opens a second screen. In
+  place: Theme and Usage analytics. A popup each: an exam (its date, Mark as passed, Remove from
+  my exams), Session length (Today's sheet, kept for every day, without the dots), Daily goal,
+  Daily email, Credential track, Sound, AI assistants, Name, Email, Password, Pro, Export, Reset
+  study history and Delete account (which still asks for DELETE to be typed). Sign out signs out
+  at once.
+- **Volume stays in Settings**: the Sound row shows the volume, or Off, and opens a popup with
+  the switch and the slider. The canvas draws a switch in place.
+- **Not on the canvas:** *Add or change exams* (the existing exams panel, until Phase E) and
+  *Credential track* are rows of Studying. A subscriber's Pro row opens a popup with the renewal
+  date and **Manage subscription**, so a billing page that fails to open has somewhere to say so;
+  a free account's row reads **Get Pro** and goes to Upgrade; a beta tester's reads "Beta tester"
+  and doesn't press. An account that signs in with Google shows "Google" on its Password row,
+  and neither it nor Email presses.
+- **The profile:** tapping the character opens the existing character picker. The gems tile goes
+  to the Gem Shop and the Store row to the Store. A quest's row opens the quest (what it counts,
+  what it pays). One filled button a screen: with several quests finished, the first one's
+  Collect is filled and the others' outlined. **Help** is a popup: How Today works (the guide),
+  Contact us, Restore purchase for an account without Pro, and Take the tour when its flag is on.
+  A reader who opens You before Today still gets the day's quests, drawn from the concepts at
+  Forgotten and the paced plan Today last kept.
+- **The league:** the table shows rank, name and the week's XP, as drawn (no characters). The
+  header reads "4 days left", then hours on the last day. The lines are where `zoneForRank` puts
+  them: **Promoted** under the last row that moves up, **Relegated** above the first that moves
+  down; Bronze has no Relegated line and Diamond no Promoted. The exam is switched in a popup and
+  rides the address (`?exam=`). A reader who hasn't joined this exam's league gets the way in on
+  the same screen: what a league is, how they will appear, what joining shares, and a filled
+  **Join the league**. Leaving asks first. Last week's result is one line above the table until
+  dismissed. A re-read of the league (a join, a quiz's XP) keeps the table on screen.
+- **The ways in, until Phase F:** Today's level badge is a link to You that still counts the
+  quests to collect, and the sidebar's account row is a link to You for an account and a visitor
+  alike. On a phone the three screens have no app header: the profile's cross and the others'
+  back arrow are the way out (`isYouRoute`, read by `lib/mobileNavHost.ts`).
+- **Moved or removed:** the level badge's popup with its Quests and League tabs
+  (`QuestsPanel`, `QuestsCard`, `LeaderboardPanel`, `DailyGoalPicker`); the sidebar's theme and
+  sound buttons and its account menu (Gem Shop, Exams, Settings, Upgrade to Pro, Sign out); and
+  from Settings the section list down its side, the study-history summary (sessions and average
+  score), the "Danger zone" box and the Support card. The daily email's footer link
+  (`/dashboard?reminders=1`) opens the same popup over Today.
+- **Desktop** is not on the canvas: each screen is one column at reading width beside the sidebar.
+
 **Phase I is built.** Apply's home is `pages/Apply.tsx` at `/apply`, over `lib/apply.ts` (what
 each card says); the Tools screen and a tool's page are `pages/Tools.tsx`; the attempt's
 overview is `components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`; the
@@ -846,7 +901,7 @@ For every phase:
   skill's glossary.
 - Logic goes in `lib/` as pure, tested functions; update the e2e specs the change touches
   (`e2e/dashboard-session.spec.ts`, `e2e/quiz.spec.ts`, `e2e/reveal.spec.ts`,
-  `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`).
+  `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`, `e2e/you.spec.ts`).
 - Check each screen at 390 × 844 and 1440 × 900, in both themes.
 - Update the lines in `CLAUDE.md`, `docs/roadmap.md` (X11), `docs/design-review.md` §6 and
   the design doc of whatever was changed (`docs/exam-readiness.md`,

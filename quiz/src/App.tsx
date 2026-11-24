@@ -83,6 +83,9 @@ const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages
 // never the first screen, so they wait for the click (first-paint budget, E3).
 const { Component: GemShop, preload: loadGemShop } = lazyRoute(() => import('@/pages/GemShop'))
 const { Component: Settings, preload: loadSettings } = lazyRoute(() => import('@/pages/Settings'))
+// You (docs/redesign-spec.md §7b): the profile and the league. Settings is its third screen.
+const { Component: You, preload: loadYou } = lazyRoute(() => import('@/pages/You'))
+const { Component: League, preload: loadLeague } = lazyRoute(() => import('@/pages/League'))
 const { Component: Search, preload: loadSearch } = lazyRoute(() => import('@/pages/Search'))
 const { Component: PastPapers, preload: loadPastPapers } = lazyRoute(() => import('@/pages/PastPapers'))
 const { Component: Upgrade, preload: loadUpgrade } = lazyRoute(() => import('@/pages/Upgrade'))
@@ -118,6 +121,8 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/store/gems') return loadGemShop()
   if (route === '/upgrade') return loadUpgrade()
   if (route === '/settings') return loadSettings()
+  if (route === '/you') return loadYou()
+  if (route === '/you/league') return loadLeague()
   if (route === '/search') return loadSearch()
   if (route === '/papers') return loadPastPapers()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
@@ -448,6 +453,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Suspense fallback={<WikiFallback />}><Settings /></Suspense>} />
+                <Route path="/you" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><You /></Suspense></ErrorBoundary>} />
+                <Route path="/you/league" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><League /></Suspense></ErrorBoundary>} />
                 <Route path="/upgrade" element={<Suspense fallback={<WikiFallback />}><Upgrade /></Suspense>} />
                 {/* The Store: real products, each bought on its seller's own
                     page. The gem shop is a corner of it. */}

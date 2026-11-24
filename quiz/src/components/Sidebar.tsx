@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   BookOpen,
   Calculator,
@@ -8,19 +8,13 @@ import {
   ChevronsRight,
   Database,
   FlaskConical,
-  Gem,
   GraduationCap,
   Layers,
   LayoutDashboard,
   LibraryBig,
-  LogOut,
   Microscope,
-  Moon,
   Play,
-  Settings2,
   ShoppingBag,
-  Sparkles,
-  Sun,
   Users,
   Workflow,
   X,
@@ -32,10 +26,8 @@ import { useCollectGlow } from '@/hooks/useCollectGlow'
 import { useMobileNav } from '@/hooks/useMobileNav'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { isSessionRoute, pageHostsNavButton } from '@/lib/mobileNavHost'
-import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useTheme } from '@/hooks/useTheme'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge, NAME_PILL } from '@/components/ProBadge'
@@ -48,7 +40,6 @@ import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attem
 import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
-import { SoundPopover } from '@/components/SoundPopover'
 import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
@@ -390,13 +381,10 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
 }
 
 export default function Sidebar() {
-  const { user, signOut } = useAuth()
-  const { balance: gemBalance } = useGems()
+  const { user } = useAuth()
   const { isPro, isBetaTester } = useSubscription()
   const showCommunity = useCommunityAccess()
   const showWorkflows = useWorkflowsAccess()
-  const { theme, toggleTheme } = useTheme()
-  const navigate = useNavigate()
   const location = useLocation()
   const { cards } = useFlashcards()
   const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
@@ -451,41 +439,7 @@ export default function Sidebar() {
   const navHostedByPage = pageHostsNavButton(location.pathname)
   // A quiz and its results have no app chrome at all (docs/redesign-spec.md §5).
   const inSession = isSessionRoute(location.pathname)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const { open: examsOpen, openExams, closeExams } = useExamsPopout()
-  const [signOutConfirm, setSignOutConfirm] = useState(false)
-  const profileRef = useRef<HTMLDivElement>(null)
-
-  // Gem animation: tracks unseen increases and fires when the badge is visible.
-  const prevGemBalance = useRef<number | null>(null)
-  const pendingGemAnim = useRef(false)
-  const [gemAnimKey, setGemAnimKey] = useState(0)
-
-  const fireGemAnim = () => {
-    if (!pendingGemAnim.current) return
-    pendingGemAnim.current = false
-    setGemAnimKey(k => k + 1)
-  }
-
-  // Mark pending when balance grows (runs before the visibility effects below).
-  useEffect(() => {
-    if (prevGemBalance.current !== null && gemBalance > prevGemBalance.current) {
-      pendingGemAnim.current = true
-    }
-    prevGemBalance.current = gemBalance
-  }, [gemBalance])
-
-  // Fire immediately if the desktop gem badge is already visible.
-  useEffect(() => {
-    if (!collapsed) fireGemAnim()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gemBalance, collapsed])
-
-  // Fire when the mobile drawer opens and a balance increase was missed.
-  useEffect(() => {
-    if (mobileOpen) fireGemAnim()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobileOpen])
+  const { open: examsOpen, closeExams } = useExamsPopout()
 
   useEffect(() => {
     try {
@@ -502,20 +456,6 @@ export default function Sidebar() {
     )
   }, [collapsed])
 
-  useEffect(() => {
-    if (!profileOpen) {
-      setSignOutConfirm(false)
-      return
-    }
-    function handleClickOutside(e: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
-        setProfileOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [profileOpen])
-
   const closeMobile = closeNav
 
   const touchStartX = useRef<number | null>(null)
@@ -524,7 +464,7 @@ export default function Sidebar() {
     (user?.user_metadata?.full_name as string | undefined) ||
     (user?.user_metadata?.display_name as string | undefined) ||
     user?.email?.split('@')[0] ||
-    'Profile'
+    'You'
 
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const profileInitials = profileName.slice(0, 2).toUpperCase()
@@ -768,152 +708,49 @@ export default function Sidebar() {
           )}
         </nav>
 
-        <div className="border-t px-3 py-3 space-y-1 lg:px-2">
-          <div className={cn('flex items-stretch gap-1', collapsed && 'lg:flex-col')}>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
-              className="flex-1 flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
-            >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
-                {theme === 'dark' ? <Sun className="h-5 w-5 lg:h-4 lg:w-4" /> : <Moon className="h-5 w-5 lg:h-4 lg:w-4" />}
-              </span>
-              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
-                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              </span>
-            </button>
-
-            {/* Inline sound popout: mute / volume without leaving for Settings */}
-            <SoundPopover collapsed={collapsed} />
-          </div>
-
-          {user ? (
-            <div ref={profileRef} className="relative">
-              {profileOpen && (
-                <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
-                  <button
-                    type="button"
-                    onClick={() => { navigate('/store/gems'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                  >
-                    <ShoppingBag className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Gem Shop</span>
-                    <span
-                      key={gemAnimKey}
-                      className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${gemAnimKey > 0 ? 'gem-celebrate' : ''}`}
-                      aria-label={`${gemBalance} gems`}
-                    >
-                      <Gem className="h-3 w-3" />
-                      {gemBalance}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { openExams(); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                  >
-                    <GraduationCap className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Exams</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                  >
-                    <Settings2 className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Settings</span>
-                  </button>
-                  {!isPro && (
-                    <button
-                      type="button"
-                      onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                    >
-                      <Sparkles className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                      <span>Upgrade to Pro</span>
-                    </button>
-                  )}
-                  {signOutConfirm ? (
-                    <div className="px-3 py-2 space-y-2">
-                      <p className="text-xs text-muted-foreground">Sign out?</p>
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
-                          className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
-                        >
-                          Sign out
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSignOutConfirm(false)}
-                          className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSignOutConfirm(true)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-                  >
-                    <LogOut className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Sign out</span>
-                  </button>
-                  )}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => setProfileOpen(v => !v)}
-                title={collapsed ? profileName : undefined}
-                className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
-              >
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
-                  <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
-                </span>
-                <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
-                  <span className="truncate">{profileName}</span>
-                  {bannerLabel && (
-                    <span
-                      title={designationBanner?.fullName}
-                      className={cn(
-                        NAME_PILL,
-                        designationBanner
-                          ? 'designation-foil text-foreground'
-                          : equippedBanner?.id === 'beta_tester'
-                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-                          : 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
-                      )}
-                    >
-                      {bannerLabel}
-                    </span>
-                  )}
-                  {isPro && (
-                    <ProBadge title={isBetaTester ? 'Beta Tester' : undefined} />
-                  )}
-                </span>
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => { navigate('/settings'); closeMobile() }}
-              title={collapsed ? 'You' : undefined}
-              className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
-            >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
-                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 lg:h-4 lg:w-4">
+        {/* You (docs/redesign-spec.md §7b): the profile, and from it the
+            league, Settings (theme and sound among them), the Store and Help.
+            Phase F replaces this row with the profile button. */}
+        <div className="border-t px-3 py-3 lg:px-2">
+          <Link
+            to="/you"
+            onClick={closeMobile}
+            title={collapsed ? profileName : undefined}
+            aria-label={user ? `You, ${profileName}` : 'You'}
+            data-testid="sidebar-you"
+            className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
+          >
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
+              {user ? (
+                <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
+              ) : (
+                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 lg:h-4 lg:w-4" aria-hidden="true">
                   <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
                 </svg>
-              </span>
-              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>You</span>
-            </button>
-          )}
+              )}
+            </span>
+            <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
+              <span className="truncate">{profileName}</span>
+              {user && bannerLabel && (
+                <span
+                  title={designationBanner?.fullName}
+                  className={cn(
+                    NAME_PILL,
+                    designationBanner
+                      ? 'designation-foil text-foreground'
+                      : equippedBanner?.id === 'beta_tester'
+                      ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
+                  )}
+                >
+                  {bannerLabel}
+                </span>
+              )}
+              {user && isPro && (
+                <ProBadge title={isBetaTester ? 'Beta Tester' : undefined} />
+              )}
+            </span>
+          </Link>
         </div>
       </aside>
 

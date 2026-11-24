@@ -1180,7 +1180,30 @@ Apply's home, the Tools screen and an attempt's overview (`pages/Apply.tsx`, `pa
 - **A tool's answer card** is a 1.5px outline in the text colour with nothing filled behind
   the answer; the exam's colour is not on it.
 
-### 13.9 Practice's pieces
+### 13.9 You's pieces
+
+The profile, the league and Settings (`docs/redesign-spec.md` §7b) share `components/you/rows.tsx`:
+
+- **The top row** (`YouScreen`): a 44px way out, a cross on the profile and a back arrow on the
+  league and Settings, then the title at 22px bold and one fact at the right (the league's days
+  left). Below `lg` it is the page's only chrome.
+- **A group of rows** (`RowGroup`): a 15px bold title over one outlined tile, hairlines between
+  its rows.
+- **A row** (`Row`): 56px, its label at 17px medium, its value at 15px beside a chevron. The
+  value is the setting itself ("25 min", "Jan 14", "Off"); a row never carries a caption. A row
+  that opens nothing has no chevron.
+- **A switch** (`SwitchRow`, `SwitchMark`): 52 by 32, filled in the text colour when on and an
+  outline when off. Used where a setting is edited in place.
+- **A two-way choice** (`ChoiceRow`): an outlined pill holding the options, the chosen one filled.
+- **A meter** (`Meter`): an 8px track in the line colour, filled in the text colour. A level, the
+  daily goal and a quest are all drawn with it; green stays an answer's.
+- **Delete account** is plain text in the incorrect red (`text-answer-incorrect`), the one use of
+  an answer colour outside an answer (R20).
+- **The league's table**: a row is rank, name and XP; the reader's row is filled in the text
+  colour with 14px corners; the Promoted and Relegated lines are a 13px bold label with an arrow
+  and a hairline running to the edge.
+
+### 13.10 Practice's pieces
 
 Built with Phase G (`docs/redesign-spec.md` §7a), in `components/practice/` unless said:
 

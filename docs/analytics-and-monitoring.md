@@ -52,7 +52,7 @@ visit `gtag` stays undefined and every `track*` call is a no-op. Kept out:
 | `localhost`, `vite preview` (the e2e suite), `*.vercel.app` previews | only `quiz.actuarialnotes.com` is measured (`MEASURED_HOSTS`) |
 | Playwright, Puppeteer, Selenium | `navigator.webdriver === true` |
 | Crawlers, Lighthouse, headless Chrome, uptime checks, link previewers | user agent (`isAutomatedUserAgent`) — GA4 drops the IAB's known bots server-side too; this catches what runs our JavaScript anyway |
-| A reader who switched it off | Settings → Privacy → Usage analytics (`setAnalyticsOptOut`) |
+| A reader who switched it off | Settings → Your data → Usage analytics (`setAnalyticsOptOut`) |
 
 What is left is **labelled**, not dropped:
 
@@ -161,7 +161,7 @@ day** than their first-ever visit — the D1 return signal.
   `analytics_storage` granted until the reader switches analytics off.
 - **Google signals and ad personalisation are off** in the tag config. Signals turns
   on data *thresholding*, which hides rows from reports in a property this size.
-- **The opt-out** (Settings → Privacy) is per device: it sets `ga-disable-<ID>`,
+- **The opt-out** (Settings → Your data) is per device: it sets `ga-disable-<ID>`,
   updates consent to denied, stops `track()`, removes the interaction listener and
   deletes the `_ga` cookies. Switching it back on resumes the tag, or starts it.
 - **No personal data**: no emails (redacted from URLs and search terms), no names;

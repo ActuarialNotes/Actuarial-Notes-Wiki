@@ -1,3 +1,5 @@
+import { isYouRoute } from './you'
+
 /**
  * Which routes carry the nav button in their own top bar.
  *
@@ -37,6 +39,10 @@ export function pageHostsNavButton(pathname: string): boolean {
   if (isUnder(pathname, '/workflows')) return true
   // Data Sources (CoworkTopBar, or a table's ToolsSearchBar) — every page under it.
   if (isUnder(pathname, '/data-sources')) return true
+  // You's three screens (the profile, the league, Settings) each open on a top
+  // row of their own whose control is the way out, a cross or a back arrow, in
+  // place of the hamburger (docs/redesign-spec.md §7b).
+  if (isYouRoute(pathname)) return true
   // The wiki (WikiFloatingSearch) and the flag-gated research tab
   // (ResearchTopSearch) — each of which bars every page under them.
   return isUnder(pathname, '/wiki') || isUnder(pathname, '/research')

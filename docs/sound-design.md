@@ -101,8 +101,7 @@ sound synthesized" below.
 | `quiz/src/lib/soundInteractions.ts` | Pure decision table: given a description of the pressed element, which cue plays. |
 | `quiz/src/components/SoundEffects.tsx` | Mounted once in `App`. One delegated listener gives every control its press cue (see "When a press counts as a press"); also unlocks the AudioContext on the first gesture. |
 | `quiz/src/hooks/useSoundEffects.ts` | `useSoundEffects()` (settings + `play`), plus `useSoundOnMount` / `useSoundOnToggle` for surfaces whose sound belongs to the surface. |
-| `quiz/src/components/SoundSettingsCard.tsx` | Settings → Sound: on/off and volume. |
-| `quiz/src/components/SoundPopover.tsx` | The sidebar popout beside the theme picker: mute + volume, reachable from any page. |
+| `SoundSheet` in `quiz/src/components/you/SettingsSheets.tsx` | Settings → Sound: the popup with the on/off switch and the volume. The row shows the volume, or Off. The sidebar's own sound button went with the redesign's You (`docs/redesign-spec.md` §7b); a quiz's More menu still mutes. |
 
 ## Why it doesn't sound synthesized
 

@@ -8,7 +8,7 @@ import type { RevealMode } from '@/lib/revealMode'
 import { cn } from '@/lib/utils'
 import { SittingSwitches, StartPopup } from './SetupSheet'
 
-/** A paper's last result as a bar in the answer colours (style guide §13.9). */
+/** A paper's last result as a bar in the answer colours (style guide §13.10). */
 export function PaperResultBar({ result, className }: { result: PaperResult; className?: string }) {
   return (
     <span role="img" aria-label={paperResultLabel(result)} className={cn('flex h-2 gap-0.5', className)}>

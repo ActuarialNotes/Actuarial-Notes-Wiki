@@ -4,7 +4,7 @@ import { ChevronLeft } from 'lucide-react'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { cn } from '@/lib/utils'
 
-/** A round, outlined 44px button in a Practice screen's top row (style guide §13.9). */
+/** A round, outlined 44px button in a Practice screen's top row (style guide §13.10). */
 export const PRACTICE_HEADER_BUTTON =
   'flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-[1.5px] border-foreground text-foreground ' +
   'transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ' +

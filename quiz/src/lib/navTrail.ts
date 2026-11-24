@@ -191,6 +191,8 @@ const STATIC_LABELS: Record<string, string> = {
   '/store': 'Store',
   '/store/gems': 'Gem Shop',
   '/settings': 'Settings',
+  '/you': 'You',
+  '/you/league': 'League',
   '/upgrade': 'Upgrade',
   '/research': 'Research',
   '/workflows': 'Workflows',

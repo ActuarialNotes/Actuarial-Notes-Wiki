@@ -43,7 +43,7 @@ has no Start.
 (`year=` in its address) is finished in the practice-exam format: how many of its questions were
 correct, incorrect, partial and unanswered, kept in the browser under the sitting's key. A retry
 of the paper's misses is not the paper and leaves it alone. The bar is in the answer colours
-(`docs/style-guide.md` §13.9).
+(`docs/style-guide.md` §13.10).
 
 **A practice exam of no one sitting is shaped like the paper** (`lib/practiceExam.ts`,
 `drawPracticeExam`, used by `useQuestions` and the builder's shuffle alike):

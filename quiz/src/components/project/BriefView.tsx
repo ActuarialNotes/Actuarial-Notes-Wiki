@@ -14,7 +14,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import { GROUND, OUTLINE_TILE } from '@/components/ui/OutlineCard'
 import { MarkdownText } from '@/components/MarkdownText'
 import {
   APPENDIX_LIMIT,
@@ -24,9 +24,7 @@ import {
   WORD_LIMIT,
   type ProjectCase,
 } from '@/data/pcpaProjects'
-import { programmeOf } from '@/data/projects'
 import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
-import { examAccentStyle } from '@/lib/examColors'
 import type { ProjectAttempt } from '@/lib/pcpaAttempt'
 import { activeSectionIndex } from '@/lib/scrollSpy'
 import { downloadWorkspaceFile } from './projectFiles'
@@ -113,48 +111,49 @@ function BriefSection({
   const bodyId = `brief-${spec.id}-body`
   return (
     <section ref={sectionRef} id={`brief-${spec.id}`} className="scroll-mt-16 lg:scroll-mt-6">
-      <Card className="overflow-hidden">
+      <div className={cn(OUTLINE_TILE, 'overflow-hidden')}>
         <h2>
           <button
             type="button"
             onClick={onToggle}
             aria-expanded={open}
             aria-controls={bodyId}
-            className="group flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+            className="group flex min-h-14 w-full items-center gap-3.5 px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--exam-accent-soft,hsl(var(--muted)))] text-[var(--exam-accent,hsl(var(--foreground)))]">
-              <Icon className="h-4 w-4" aria-hidden />
-            </span>
+            <Icon className="h-[22px] w-[22px] shrink-0" strokeWidth={2} aria-hidden />
             <span className="min-w-0 flex-1">
-              <span className="block text-base font-semibold tracking-tight">{spec.title}</span>
-              {!open && <span className="mt-0.5 block truncate text-xs font-normal text-muted-foreground">{spec.summary}</span>}
+              <span className="block text-[17px] font-semibold">{spec.title}</span>
+              {!open && <span className="mt-0.5 block truncate text-sm font-normal">{spec.summary}</span>}
             </span>
-            <ChevronDown className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200', open && 'rotate-180')} aria-hidden />
+            <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform duration-200', open && 'rotate-180')} strokeWidth={2.5} aria-hidden />
           </button>
         </h2>
         {open && (
-          <div id={bodyId} className="space-y-3 border-t border-border p-4 sm:p-5">
+          <div id={bodyId} className="space-y-3 border-t border-border p-4 text-base leading-normal sm:p-5">
             {children}
           </div>
         )}
-      </Card>
+      </div>
     </section>
   )
 }
 
 export function BriefView({
-  attempt,
+  attempt = null,
   projectCase,
   onOpenFile,
 }: {
-  attempt: ProjectAttempt
+  /** The attempt whose brief this is. Absent, the brief is only being read: no deadline, and no files to open. */
+  attempt?: ProjectAttempt | null
   projectCase: ProjectCase
-  onOpenFile: (path: string) => void
+  onOpenFile?: (path: string) => void
 }) {
+  // What the open sections are remembered under: the attempt, or the brief itself.
+  const memoryKey = attempt?.id ?? `brief:${projectCase.id}`
   const files = usePcpaWorkspace(s => s.files)
   const [openDict, setOpenDict] = useState<string | null>(null)
   const sections = sectionsFor(projectCase)
-  const [open, setOpen] = useState<Set<SectionId>>(() => new Set(openByAttempt.get(attempt.id) ?? []))
+  const [open, setOpen] = useState<Set<SectionId>>(() => new Set(openByAttempt.get(memoryKey) ?? []))
   const [active, setActive] = useState<SectionId>(sections[0].id)
   const { memo } = projectCase
 
@@ -166,7 +165,7 @@ export function BriefView({
   /** Until when a chosen section holds the outline while the scroll to it plays. */
   const holdUntil = useRef(0)
 
-  useEffect(() => { openByAttempt.set(attempt.id, open) }, [attempt.id, open])
+  useEffect(() => { openByAttempt.set(memoryKey, open) }, [memoryKey, open])
 
   // Follow the scroll: the outline marks the section being read.
   useEffect(() => {
@@ -240,13 +239,11 @@ export function BriefView({
   }
   const spec = (id: SectionId) => sections.find(s => s.id === id)!
 
-  const accent = examAccentStyle(programmeOf(projectCase.id)?.examKey ?? '')
-
   return (
-    <div ref={rootRef} style={accent} className="mx-auto max-w-5xl px-4 py-6 pb-24 lg:grid lg:grid-cols-[12.5rem_minmax(0,1fr)] lg:gap-10">
+    <div ref={rootRef} className={cn(GROUND, 'mx-auto max-w-5xl px-5 py-6 pb-24 lg:grid lg:grid-cols-[12.5rem_minmax(0,1fr)] lg:gap-10')}>
       <aside className="hidden lg:block">
         <nav aria-label="Brief outline" className="sticky top-6 space-y-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">In this brief</p>
+          <p className="text-[13px] font-bold">In this brief</p>
           <ol className="border-l border-border">
             {sections.map(s => {
               const current = s.id === active
@@ -258,13 +255,11 @@ export function BriefView({
                     aria-current={current ? 'location' : undefined}
                     className={cn(
                       '-ml-px flex w-full items-center gap-2 border-l-2 py-1.5 pl-3 pr-1 text-left text-sm transition-colors',
-                      current
-                        ? 'border-[var(--exam-accent,hsl(var(--primary)))] font-medium text-foreground'
-                        : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
+                      current ? 'border-foreground font-bold' : 'border-transparent hover:border-foreground/50',
                     )}
                   >
                     <span className="min-w-0 flex-1 truncate">{s.short}</span>
-                    {s.count !== undefined && <span className="text-xs tabular-nums text-muted-foreground">{s.count}</span>}
+                    {s.count !== undefined && <span className="text-[13px] tabular-nums">{s.count}</span>}
                   </button>
                 </li>
               )
@@ -273,7 +268,7 @@ export function BriefView({
           <button
             type="button"
             onClick={toggleAll}
-            className="inline-flex items-center gap-1.5 rounded-md px-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-md px-1 text-[13px] font-medium underline-offset-4 hover:underline"
           >
             {allOpen ? <ChevronsDownUp className="h-3.5 w-3.5" aria-hidden /> : <ChevronsUpDown className="h-3.5 w-3.5" aria-hidden />}
             {allOpen ? 'Collapse all' : 'Expand all'}
@@ -283,18 +278,17 @@ export function BriefView({
 
       <div className="min-w-0 space-y-4">
         <header className="space-y-2 pb-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">PCPA Project · {projectCase.line}</p>
-          <h1 className="text-2xl font-semibold tracking-tight">{projectCase.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            {projectCase.company}
-            {attempt.deadline !== null ? <> · Submissions close {formatDeadline(attempt.deadline)}</> : ' · Practice, no deadline'}
+          <h1 className="text-[28px] font-bold leading-[1.15] tracking-tight">{projectCase.title}</h1>
+          <p className="text-base">
+            {[projectCase.line, projectCase.company].join(' · ')}
+            {attempt && (attempt.deadline !== null ? ` · Submissions close ${formatDeadline(attempt.deadline)}` : ' · Practice, no deadline')}
           </p>
         </header>
 
         <nav
           ref={chipsRef}
           aria-label="Brief outline"
-          className="sticky top-0 z-10 -mx-4 flex gap-1.5 overflow-x-auto bg-background/90 px-4 py-2 backdrop-blur [scrollbar-width:none] lg:hidden"
+          className="sticky top-0 z-10 -mx-5 flex gap-2 overflow-x-auto bg-ground px-5 py-2 [scrollbar-width:none] lg:hidden"
         >
           {sections.map(s => {
             const current = s.id === active
@@ -306,10 +300,8 @@ export function BriefView({
                 onClick={() => goTo(s.id)}
                 aria-current={current ? 'location' : undefined}
                 className={cn(
-                  'shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors',
-                  current
-                    ? 'bg-[var(--exam-accent-soft,hsl(var(--muted)))] text-[var(--exam-accent,hsl(var(--foreground)))] ring-1 ring-inset ring-[var(--exam-accent-muted,hsl(var(--border)))]'
-                    : 'bg-muted text-muted-foreground hover:text-foreground',
+                  'inline-flex h-9 shrink-0 items-center rounded-full border-[1.5px] border-foreground px-3.5 text-sm font-bold transition-colors',
+                  current ? 'bg-foreground text-ground' : 'hover:bg-foreground/10',
                 )}
               >
                 {s.short}
@@ -320,43 +312,43 @@ export function BriefView({
             type="button"
             onClick={toggleAll}
             aria-label={allOpen ? 'Collapse all sections' : 'Expand all sections'}
-            className="ml-auto flex shrink-0 items-center rounded-full px-2 text-muted-foreground hover:text-foreground"
+            className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
           >
             {allOpen ? <ChevronsDownUp className="h-4 w-4" aria-hidden /> : <ChevronsUpDown className="h-4 w-4" aria-hidden />}
           </button>
         </nav>
 
         <BriefSection spec={spec('problem')} open={open.has('problem')} onToggle={() => toggle('problem')} sectionRef={setRef('problem')}>
-          <dl className="grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1 text-sm">
-            <dt className="text-muted-foreground">From</dt><dd>{memo.from}</dd>
-            <dt className="text-muted-foreground">To</dt><dd>{memo.to}</dd>
-            <dt className="text-muted-foreground">Subject</dt><dd className="font-medium">{memo.subject}</dd>
+          <dl className="grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1 text-[15px] [&_dt]:font-bold">
+            <dt>From</dt><dd>{memo.from}</dd>
+            <dt>To</dt><dd>{memo.to}</dd>
+            <dt>Subject</dt><dd className="font-medium">{memo.subject}</dd>
           </dl>
           <div className="border-t border-border pt-4">
-            <MarkdownText className="prose prose-sm max-w-none dark:prose-invert">{memo.body}</MarkdownText>
+            <MarkdownText className="prose max-w-none text-foreground dark:prose-invert">{memo.body}</MarkdownText>
           </div>
         </BriefSection>
 
         <BriefSection spec={spec('stakeholders')} open={open.has('stakeholders')} onToggle={() => toggle('stakeholders')} sectionRef={setRef('stakeholders')}>
-          <p className="text-sm text-muted-foreground">Weigh each note for its relevance to the problem. Not everything a stakeholder expects is true.</p>
+          <p>Weigh each note for its relevance to the problem. Not everything a stakeholder expects is true.</p>
           <div className="space-y-2">
             {projectCase.stakeholders.map((s, i) => (
-              <div key={i} className="rounded-lg bg-muted/50 p-4">
-                <p className="text-sm">{s.note}</p>
-                <p className="mt-2 text-xs text-muted-foreground">— {s.from}, {s.role}</p>
+              <div key={i} className="border-l-2 border-foreground py-1 pl-4">
+                <p>{s.note}</p>
+                <p className="mt-1.5 text-sm font-semibold">{s.from}, {s.role}</p>
               </div>
             ))}
           </div>
         </BriefSection>
 
         <BriefSection spec={spec('scope')} open={open.has('scope')} onToggle={() => toggle('scope')} sectionRef={setRef('scope')}>
-          <ul className="list-disc space-y-1.5 pl-5 text-sm">
+          <ul className="list-disc space-y-1.5 pl-5">
             {projectCase.scope.map(s => <li key={s}>{s}</li>)}
           </ul>
         </BriefSection>
 
         <BriefSection spec={spec('data')} open={open.has('data')} onToggle={() => toggle('data')} sectionRef={setRef('data')}>
-          <p className="text-sm text-muted-foreground">
+          <p>
             In the workspace's <span className="font-mono">data/</span> folder, read-only. Missing values are blank fields.
             The data are the property of the CAS: they are not submitted, and may not be shared.
           </p>
@@ -366,18 +358,20 @@ export function BriefView({
               const file = files[path]
               const expanded = openDict === d.file
               return (
-                <div key={d.file} className="overflow-hidden rounded-lg border border-border">
+                <div key={d.file} className="overflow-hidden rounded-xl border border-border">
                   <div className="flex flex-wrap items-center gap-2 p-3">
                     {/* Wide enough to read; on a phone the buttons wrap below it instead. */}
                     <div className="min-w-[min(100%,14rem)] flex-1">
                       <p className="font-mono text-sm font-medium">{d.file}</p>
-                      <p className="text-xs text-muted-foreground">{d.description} {d.rows} rows, {d.entries.length} columns.</p>
+                      <p className="text-sm">{d.description} {d.rows} rows, {d.entries.length} columns.</p>
                     </div>
-                    <button type="button" onClick={() => onOpenFile(path)} className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium hover:bg-accent">
-                      <FolderOpen className="h-3.5 w-3.5" /> Open
-                    </button>
+                    {onOpenFile && (
+                      <button type="button" onClick={() => onOpenFile(path)} className="flex h-9 items-center gap-1.5 rounded-full border-[1.5px] border-foreground px-3 text-[13px] font-semibold hover:bg-foreground/10">
+                        <FolderOpen className="h-3.5 w-3.5" /> Open
+                      </button>
+                    )}
                     {file && (
-                      <button type="button" onClick={() => downloadWorkspaceFile(file)} className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium hover:bg-accent">
+                      <button type="button" onClick={() => downloadWorkspaceFile(file)} className="flex h-9 items-center gap-1.5 rounded-full border-[1.5px] border-foreground px-3 text-[13px] font-semibold hover:bg-foreground/10">
                         <Download className="h-3.5 w-3.5" /> CSV
                       </button>
                     )}
@@ -385,7 +379,7 @@ export function BriefView({
                       type="button"
                       onClick={() => setOpenDict(expanded ? null : d.file)}
                       aria-expanded={expanded}
-                      className="flex h-8 items-center gap-1 rounded-md px-2.5 text-xs font-medium hover:bg-accent"
+                      className="flex h-9 items-center gap-1 rounded-full border-[1.5px] border-foreground px-3 text-[13px] font-semibold hover:bg-foreground/10"
                     >
                       Dictionary <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', expanded && 'rotate-180')} />
                     </button>
@@ -393,7 +387,7 @@ export function BriefView({
                   {expanded && (
                     <div className="overflow-x-auto border-t border-border">
                       <table className="w-full text-sm">
-                        <thead className="bg-muted/60 text-left text-xs">
+                        <thead className="border-b border-border text-left text-[13px]">
                           <tr>
                             <th className="px-4 py-2 font-semibold">Column</th>
                             <th className="px-4 py-2 font-semibold">Type</th>
@@ -402,9 +396,9 @@ export function BriefView({
                         </thead>
                         <tbody>
                           {d.entries.map(e => (
-                            <tr key={e.column} className="border-t border-border/60 align-top">
-                              <td className="whitespace-nowrap px-4 py-1.5 font-mono text-xs">{e.column}</td>
-                              <td className="whitespace-nowrap px-4 py-1.5 text-xs text-muted-foreground">{e.type}</td>
+                            <tr key={e.column} className="border-t border-border align-top">
+                              <td className="whitespace-nowrap px-4 py-1.5 font-mono text-[13px]">{e.column}</td>
+                              <td className="whitespace-nowrap px-4 py-1.5 text-[13px]">{e.type}</td>
                               <td className="px-4 py-1.5">{e.description}</td>
                             </tr>
                           ))}
@@ -419,29 +413,29 @@ export function BriefView({
         </BriefSection>
 
         <BriefSection spec={spec('submit')} open={open.has('submit')} onToggle={() => toggle('submit')} sectionRef={setRef('submit')}>
-          <p className="text-sm">
+          <p>
             A brief technical report that describes how you explored the data and managed its problems, how you built,
             evaluated and improved a GLM to address the business problem, and what the model means, both technically and
             for the business decision to be made.
           </p>
-          <div className="rounded-lg bg-muted/50 p-4">
-            <p className="mb-2 text-sm font-semibold">Final checklist</p>
-            <ul className="list-disc space-y-1.5 pl-5 text-sm">
+          <div className="border-l-2 border-foreground py-1 pl-4">
+            <p className="mb-2 font-bold">Final checklist</p>
+            <ul className="list-disc space-y-1.5 pl-5">
               {FINAL_CHECKLIST.map(item => <li key={item}>{item}</li>)}
             </ul>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm">
             A report over {WORD_LIMIT.toLocaleString('en-US')} words, more than {APPENDIX_LIMIT} appendices, or files not in the required
             format is an automatic fail on the real project.
           </p>
         </BriefSection>
 
         <BriefSection spec={spec('attestation')} open={open.has('attestation')} onToggle={() => toggle('attestation')} sectionRef={setRef('attestation')}>
-          <p className="text-sm">At submission you will affirm that:</p>
-          <ul className="list-disc space-y-1.5 pl-5 text-sm">
+          <p>At submission you will affirm that:</p>
+          <ul className="list-disc space-y-1.5 pl-5">
             {ATTESTATION.map(a => <li key={a}>{a}</li>)}
           </ul>
-          <a href={CONTENT_OUTLINE_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-medium underline-offset-4 hover:underline">
+          <a href={CONTENT_OUTLINE_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold underline underline-offset-4">
             The full policy, in the CAS PCPA Content Outline <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </BriefSection>

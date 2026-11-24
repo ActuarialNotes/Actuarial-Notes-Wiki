@@ -21,6 +21,13 @@ test.describe('data sources', () => {
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 
+  test('is a row at the foot of the Tools screen', async ({ page }) => {
+    await page.goto('/tools')
+    await page.getByTestId('data-sources-row').click()
+    await expect(page).toHaveURL(/\/data-sources$/)
+    await expect(page.getByRole('heading', { name: 'Data Sources', exact: true })).toBeVisible()
+  })
+
   test('is one catalogue: a need, a type or a filter changes the rows and nothing else', async ({ page }) => {
     await page.goto('/data-sources')
     await expect(page.getByRole('heading', { name: 'Data Sources', exact: true })).toBeVisible()

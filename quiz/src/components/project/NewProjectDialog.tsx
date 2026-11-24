@@ -10,6 +10,7 @@ import { PROJECT_PROGRAMMES, type ProjectProgramme } from '@/data/projects'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { examAccentStyle } from '@/lib/examColors'
 import { attemptRoute, type AttemptMode, type Language, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import { briefRoute } from '@/lib/attemptViews'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { BriefTile } from './BriefTile'
 import { ChoiceCards, Pill, ProjectDialog } from './shared'
@@ -136,8 +137,11 @@ function StartFields({
   setLanguage,
   data,
   setData,
+  readTo,
 }: {
   projectCase: ProjectCase
+  /** The brief's own page, for a candidate who wants to read it before starting. */
+  readTo?: string
   previous?: ProjectAttempt
   mode: AttemptMode
   setMode: (m: AttemptMode) => void
@@ -150,7 +154,12 @@ function StartFields({
     <>
       <div className="-mt-2 flex items-center gap-3">
         <BriefTile caseId={projectCase.id} size="md" />
-        <p className="min-w-0 text-sm text-muted-foreground">{projectCase.company} · {projectCase.line}</p>
+        <p className="min-w-0 flex-1 text-sm text-muted-foreground">{projectCase.company} · {projectCase.line}</p>
+        {readTo && (
+          <Link to={readTo} className="shrink-0 text-sm font-semibold underline underline-offset-4" data-testid="read-brief">
+            Read the brief
+          </Link>
+        )}
       </div>
 
       <ChoiceCards<AttemptMode>
@@ -199,8 +208,11 @@ function StartFields({
 export function NewProjectDialog({
   attempts,
   owner,
+  initialBrief = null,
   onClose,
 }: {
+  /** Open on this brief's second step: the brief's own page starts a project from here. */
+  initialBrief?: ProjectCase | null
   /** The reader's attempts, newest first — which briefs are under way, and whose data can be drawn again. */
   attempts: ProjectAttempt[]
   /** The signed-in account the attempt is saved to; undefined keeps it in this browser. */
@@ -209,7 +221,7 @@ export function NewProjectDialog({
 }) {
   const create = usePcpaAttempts(s => s.create)
   const navigate = useNavigate()
-  const [brief, setBrief] = useState<ProjectCase | null>(null)
+  const [brief, setBrief] = useState<ProjectCase | null>(initialBrief)
   const [mode, setMode] = useState<AttemptMode>('rehearsal')
   const [language, setLanguage] = useState<Language>(attempts[0]?.language ?? 'r')
   const [data, setData] = useState<DataChoice>('fresh')
@@ -259,6 +271,7 @@ export function NewProjectDialog({
     >
       <StartFields
         projectCase={brief}
+        readTo={initialBrief ? undefined : briefRoute(brief.id)}
         previous={previous}
         mode={mode}
         setMode={setMode}

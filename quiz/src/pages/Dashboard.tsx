@@ -346,13 +346,13 @@ export default function Dashboard() {
   )
   const syllabusRoute = activeSyllabus?.fileName ? wikiRoute({ kind: 'exam', name: activeSyllabus.fileName }) : '/wiki'
 
-  // A square opens its concept in the reader, walking the whole syllabus; the
+  // A square opens its concept in the reader, walking the whole syllabus (the
+  // syllabus overlay, when that is where the square was, stays up above it); the
   // reader's own filter still narrows the walk to today's session.
   const openSyllabusConcept = useCallback((name: string) => {
     const refs = session.conceptRefs
     const idx = refs.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
     if (idx === -1) return
-    setOverlay(null)
     const walk: WikiEntryRef[] | null = session.view
       ? sessionWalk(session.view).map(n => ({ kind: 'concept' as const, name: n }))
       : null

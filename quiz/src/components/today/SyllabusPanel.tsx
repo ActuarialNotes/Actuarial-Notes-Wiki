@@ -6,7 +6,7 @@
 // Syllabus tile opens (`SyllabusOverlay`), which is also what its heading
 // opens on desktop.
 
-import { useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, X } from 'lucide-react'
 import { LevelSquareKey } from '@/components/LevelSquare'
@@ -98,9 +98,25 @@ export function SyllabusOverlay({
   onClose: () => void
 }) {
   const titleId = useId()
+  const bodyRef = useRef<HTMLDivElement>(null)
+
+  // Keep the square of the concept being read in view. The reader's pane
+  // mounts and slides up after the store opens, and the overlay shrinks to the
+  // room above it, so look again once it has settled.
+  useEffect(() => {
+    if (!current) return
+    const place = () => {
+      bodyRef.current
+        ?.querySelector<HTMLElement>('[data-concept-square][aria-current="true"]')
+        ?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    }
+    const ids = [120, 600].map(ms => window.setTimeout(place, ms))
+    return () => ids.forEach(id => window.clearTimeout(id))
+  }, [current])
+
   return (
-    <Popup onClose={onClose} labelledBy={titleId} className="sm:max-w-[560px]">
-      <div data-testid="syllabus-overlay" className="flex flex-col gap-[22px]">
+    <Popup onClose={onClose} labelledBy={titleId} aboveReader className="sm:max-w-[560px]">
+      <div ref={bodyRef} data-testid="syllabus-overlay" className="flex flex-col gap-[22px]">
         <div className="flex items-center gap-3">
           <h2 id={titleId} className="min-w-0 flex-1 text-[22px] font-bold leading-tight">Syllabus</h2>
           <span className="flex items-baseline gap-2 text-[22px] font-bold tabular-nums">

@@ -25,7 +25,13 @@ export function ProjectTopBar({
   subtitle,
   children,
   right,
+  overviewTo,
 }: {
+  /**
+   * The attempt's overview. Given, the arrow leads there, in place: the views
+   * of an attempt are one history entry, and the overview is the way out of them.
+   */
+  overviewTo?: string
   /** The page's parent, for a reader who came in from outside the app. */
   backTo: string
   /** The parent's name. */
@@ -40,9 +46,15 @@ export function ProjectTopBar({
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/95 px-2 backdrop-blur-sm sm:px-3">
       <MobileNavButton />
-      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backLabelOf(back)} title={backLabelOf(back)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
-        <ChevronLeft className="h-5 w-5" />
-      </Link>
+      {overviewTo ? (
+        <Link to={overviewTo} replace aria-label="Back to the overview" title="Back to the overview" data-testid="attempt-overview-link" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
+          <ChevronLeft className="h-5 w-5" />
+        </Link>
+      ) : (
+        <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backLabelOf(back)} title={backLabelOf(back)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
+          <ChevronLeft className="h-5 w-5" />
+        </Link>
+      )}
       <div className={cn('min-w-0', children ? 'hidden flex-1 md:block' : 'flex-1')}>
         <p className="truncate text-sm font-semibold leading-tight">{title}</p>
         {subtitle && <p className="truncate text-xs leading-tight text-muted-foreground">{subtitle}</p>}

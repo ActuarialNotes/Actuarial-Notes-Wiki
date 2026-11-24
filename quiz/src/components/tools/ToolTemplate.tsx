@@ -30,7 +30,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronRight, Landmark, RotateCcw, Undo2 } from 'lucide-react'
+import { ChevronDown, ChevronRight, Landmark, RotateCcw, Undo2 } from 'lucide-react'
 import {
   AREAS,
   checksFor,
@@ -70,10 +70,12 @@ import { fieldQuantities, quantityStep, stepBackground, type QuantityStep } from
 import { pendingFiguresFor } from '@/lib/toolBank'
 import { lastRun } from '@/lib/toolRuns'
 import { recordRecent } from '@/lib/toolRecent'
-import { EXAM_BANNER, NEUTRAL_BANNER } from '@/components/ui/InfoSheet'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { cn } from '@/lib/utils'
 import { CheckMark } from '@/components/CheckMark'
+import { LevelSquare } from '@/components/LevelSquare'
+import { ApplyRow } from '@/components/apply/ApplyParts'
+import type { MasteryState } from '@/lib/mastery'
 import { FactorSelection } from './FactorSelection'
 import { FigureDetails, FigureLine, LinkDetails } from './FigureNote'
 import { ToolFigure } from './ToolFigure'
@@ -120,6 +122,7 @@ export function ToolTemplate({
   onOpenMethod,
   persist = false,
   examKey,
+  methodLevel,
   onPinAnswer,
 }: {
   spec: ToolSpec
@@ -128,8 +131,10 @@ export function ToolTemplate({
   sender?: string | null
   onOpenMethod?: () => void
   persist?: boolean
-  /** The exam that first teaches the method (`lib/toolExam.ts`), whose colour the card takes; null draws it neutral. */
+  /** The exam that first teaches the method (`lib/toolExam.ts`), whose colour the sheets and marks take; null draws them neutral. */
   examKey: string | null
+  /** The reader's level on the tool's concept, drawn on the "Learn the method" row. */
+  methodLevel?: MasteryState
   /** Told the answer while its card is scrolled out of view, and null once it is back. */
   onPinAnswer?: (answer: PinnedAnswer | null) => void
 }) {
@@ -247,29 +252,14 @@ export function ToolTemplate({
       {queryFirst && <DataSourceLine toolId={spec.id} />}
       {queryFirst && group([...choices, ...inputs])}
 
-      <section className={cn('overflow-hidden rounded-2xl', examKey ? EXAM_BANNER : NEUTRAL_BANNER)} data-testid="tool-answer">
+      {/* An outline, never a fill: the exam's colour is on its logo alone (docs/redesign-spec.md §7c.3). */}
+      <section className="overflow-hidden rounded-[22px] border-[1.5px] border-foreground" data-testid="tool-answer">
         <header className="flex items-start gap-3 px-3.5 pt-3.5">
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs text-foreground/75" data-testid="tool-eyebrow">
               {[area, reading].filter(Boolean).join(' · ')}
             </p>
-            {onOpenMethod ? (
-              <button
-                type="button"
-                onClick={onOpenMethod}
-                className="group block text-left text-[17px] font-bold leading-tight underline-offset-4 hover:underline"
-                title="Read about the method"
-              >
-                {/* The book keeps to the last word, never to a line of its own. */}
-                {spec.name.split(' ').slice(0, -1).join(' ')}{spec.name.includes(' ') ? ' ' : ''}
-                <span className="whitespace-nowrap">
-                  {spec.name.split(' ').pop()}
-                  <BookOpen className="ml-1.5 inline h-3.5 w-3.5 align-[-1px] text-foreground/60 group-hover:text-foreground" aria-hidden />
-                </span>
-              </button>
-            ) : (
-              <h2 className="text-[17px] font-bold leading-tight">{spec.name}</h2>
-            )}
+            <h2 className="text-[17px] font-bold leading-tight">{spec.name}</h2>
           </div>
           <div className="-mr-1 flex shrink-0 items-center gap-1">
             {m.undo ? (
@@ -423,6 +413,17 @@ export function ToolTemplate({
       {!queryFirst && (grids ? group(inputs, 'Inputs') : group([...choices, ...inputs], 'Inputs'))}
 
       <GivesTo neighbours={m.neighbours.after} build={n => m.buildFor(n.handoff)} onSend={m.sendTo} />
+
+      {/* The way to the concept the tool computes, with the reader's level on it. */}
+      {onOpenMethod && (
+        <ApplyRow
+          onClick={onOpenMethod}
+          leading={<LevelSquare state={methodLevel ?? 'new'} size="sm" className="h-4 w-4 rounded-[4px]" />}
+          label="Learn the method"
+          className="border-y border-border px-1"
+          testId="tool-learn-method"
+        />
+      )}
 
       <div className="divide-y divide-border/60 overflow-hidden rounded-xl bg-card">
         {m.result && m.result.trace.length > 0 && <Working result={m.result} notation={notation} />}

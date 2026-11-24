@@ -49,6 +49,8 @@ type Props =
       area: PracticeArea | null
       onQuery: (q: string) => void
       onArea: (area: PracticeArea | null) => void
+      /** What the empty input says: "Search 37 tools". */
+      placeholder?: string
     }
   | {
       kind: 'tool'
@@ -79,7 +81,7 @@ function AreaPills({ query, area, onArea }: { query: string; area: PracticeArea 
   )
 }
 
-function CatalogueBar({ query, area, onQuery, onArea }: Extract<Props, { kind: 'catalogue' }>) {
+function CatalogueBar({ query, area, onQuery, onArea, placeholder = 'Search tools' }: Extract<Props, { kind: 'catalogue' }>) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [focused, setFocused] = useState(false)
   return (
@@ -95,7 +97,7 @@ function CatalogueBar({ query, area, onQuery, onArea }: Extract<Props, { kind: '
           inputRef.current?.blur()
           setFocused(false)
         }}
-        placeholder="Search tools"
+        placeholder={placeholder}
         ariaLabel="Search tools"
         navCollapsed={focused && query.length > 0}
       />

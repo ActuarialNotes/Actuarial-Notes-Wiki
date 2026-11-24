@@ -93,7 +93,8 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, `You.tsx`, `League.tsx` and Settings — the profile, the league and Settings, `/you`, `/you/league`, `/settings`, lazy —
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
-  Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
+  Upgrade, `Apply.tsx` — Apply's home, `/apply`, lazy: Projects, Tools and Workflows as three
+  cards — wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
   `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: the catalogue of values, tables and documents, a publisher's page (the catalogue narrowed to it) and a table's page —
   and `Research/`, which is
   flag-gated)
@@ -441,11 +442,37 @@ before touching that area**:
   counts (`examPage.test.ts` holds every exam page to it) — with `components/learn/ObjectiveCard.tsx`
   (one open at a time, ending in **Practice <objective>**), the labelled **Official syllabus**
   and **Dates and fees** buttons (the sitting picker is in that panel), and foot rows for
-  Readings (the Source Material shelf), the page's notes and Fact Check. A pill goes to the
-  concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
-  the exam page: back to where the reader came from, the level button, more, the article,
-  **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next. **Phase H, You, is built** (§7b and §8; style guide §13.8): three
+  Readings (the Source Material shelf), the page's notes and Fact Check. **A pill opens the
+  concept in the concept popup**, over the exam page, never by navigating; the open concept's
+  pill is filled and the walk opens the objective that holds it. The popup's foot is Previous,
+  Practice this, Next. The concept's own page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`: a
+  new tab, a search result, a shared link) no longer redirects into the exam page and ends the
+  same way: back to where the reader came from, the level button, more, the article, **Next in
+  <objective>** and the fixed **Practice this**. **Phase I, Apply, is built** (§7c and §8): **Apply's home** is
+  `pages/Apply.tsx` at `/apply` (lazy), three outlined cards in this order, each heading tapped
+  into: **Projects** (the attempts in progress, or how many briefs there are, and the attempt
+  worked on last with its four-step bar), **Tools** (how many the exam in focus covers, or the
+  whole catalogue's count when it covers none, and the reader's recent tools as pills with the
+  level square of each tool's concept) and **Workflows** (how many are saved and the latest;
+  only for accounts that can use Workflows). What each card says is `lib/apply.ts`; a card never
+  disappears and never counts nothing. Until Phase F the sidebar's Projects row leads there.
+  The **Tools screen** (`/tools`, `pages/Tools.tsx`) is a search row, a tab for the exam in
+  focus and one for All (no tabs when the exam covers no tool), the tools grouped by practice
+  area with the level square of each tool's concept, and a row for Data Sources. **A tool has
+  one concept**, the first its method names (`toolConcept` in `lib/toolExam.ts`), and belongs to
+  every exam whose syllabus names one of its concepts (`toolsForExam`, which takes the exam's
+  own page), while its sheets' colour is still the earliest exam's (`examForConcepts`). On a
+  tool's page three things changed and nothing else: the answer card is an outline, **Learn the
+  method** is a row with the reader's level, and **Practice this** is fixed to the foot (the
+  concept page's button, not drawn for a concept with no questions). An **attempt opens on its
+  overview** (`components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`): title
+  and company, Rehearsal or Practice as a tag, the four-step bar (`StepBar` in
+  `components/apply/ApplyParts.tsx`), the submission checklist with its figures, each row a
+  button to the view where it is done, **Continue in <step>** and a row to read the brief. The
+  overview is a view of the attempt's page (`?view=overview`), so going into a view replaces the
+  history entry; `briefReadAt` and `cleanRun` on the attempt's record feed it. **Anyone can read
+  a brief** (`/project/brief/<case id>`, `pages/Project/BriefPage.tsx`); starting one is Pro's
+  (**Upgrade to start**). **Phase H, You, is built** (§7b and §8; style guide §13.9): three
   pages under the existing sidebar. The profile, `/you` (`pages/You.tsx`): the reader's character,
   name, Pro tag and level, the streak and gems, a Today card with the daily goal and the day's
   quests (a finished one shows Collect), and rows to League, Settings, Store and Help. The league,
@@ -678,7 +705,9 @@ before touching that area**:
   (`docs/tools-ux-review.md`): every number row one line at any count, choices first, a chip only for
   a value that isn't the default, a Data Source's inputs above its answer, grids that count their
   off-screen columns, a **Solve for** strip for a spec naming `solveFor` (Bond Price), the chain strip
-  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`).
+  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`, drawn on
+  Apply's Tools card since the redesign's Phase I, which also made the answer card an outline
+  and the catalogue the Tools screen).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
@@ -692,9 +721,10 @@ before touching that area**:
   its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz — a
-  **Pro** feature, its row marked with the Pro chip and the page locked to anyone else, with an
-  open attempt's Brief / Workspace / Report / Submit views as rows under it — `lib/attemptViews.ts`;
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, reached from Apply's home, which the
+  sidebar's Projects row opens — working a project is a **Pro** feature, its row marked with the
+  Pro chip, while anyone can read a brief on its own page; an attempt opens on its overview, with
+  its Brief / Workspace / Report / Submit views as rows under Projects — `lib/attemptViews.ts`;
   the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
   — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
@@ -1162,6 +1192,17 @@ Other important `lib/` modules:
   spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
   comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
   `components/store/ExamKit.tsx`; pure and tested.
+- `apply.ts` / `attemptOverview.ts` / `toolCatalogue.ts` — **Apply** (`docs/redesign-spec.md`
+  §7c). `apply.ts` is what the home's three cards say: the attempts still open
+  (`openAttempts`), each card's count (`projectsCount`, `toolsCount`, `workflowsCount`), the
+  recent tools still in the catalogue (`recentTools`) and which of the Tools screen's tabs a
+  `?tab=` opens (`resolveToolsTab`). `attemptOverview.ts` is an attempt's overview: the four
+  steps and which is current, and the checklist's rows with their figures, held to the Submit
+  view's rules (`MIN_BODY_WORDS`, the word and appendix limits, the Tweedie power question
+  never counted); `recordTally` counts the report off the record alone, for a surface with no
+  workspace open. `toolCatalogue.ts` is the tools the Tools screen lists: every calculator,
+  the published tables left to Data Sources. Pure and tested; the flows are
+  `e2e/apply.spec.ts`, `e2e/tools.spec.ts` and `e2e/pcpa-project.spec.ts`.
 - `store.ts` / `storeBooks.ts` — the **Store** (`docs/store.md`). `store.ts` is its logic,
   pure and tested: the four aisles, the exams the shelf narrows to (`STORE_EXAMS`, in
   ladder order), price printing (`Free` for nothing, "From" over choices), registration

@@ -173,8 +173,9 @@ The parent breadcrumb is the study guide whose bank holds the question
 
 `WikiConcept` used to redirect every concept that belongs to one syllabus into its
 study guide. Since 2026-11-23 it never does: a concept's address shows the concept,
-to a reader following a pill from an exam page and to a visitor who lands on it (a
-search result, a shared link, a bookmark, a crawler) alike. Which exam the page is
+to a reader who opens it in a new tab from an exam page and to a visitor who lands on it (a
+search result, a shared link, a bookmark, a crawler) alike. (A plain click on an exam page's
+pill opens the concept in the reader, over the page.) Which exam the page is
 read for is `?from=<exam id>`, else the first exam, in ladder order, whose syllabus
 names it; a concept on more than one syllabus lists them under its title. That is
 what lets a concept URL be a search result at all. **Don't reintroduce a redirect**:

@@ -1034,7 +1034,7 @@ Other important `lib/` modules:
   joins it to what it draws: `components/practice/` (and the Games row, `components/landing/`).
   **Practice's home** (`docs/redesign-spec.md` §7a, built as Phase G) opens on the exam in focus
   (`useQuizExamScreen`, `practiceTopic` in `lib/practiceHome.ts`: `?topic=`, else the exam in
-  focus; the exam at the top is the exam switcher, and the old exam list is gone): a search row to `/search`; `QuizCard`, the reader's quiz as an
+  focus; the exam at the top is the exam switcher, and the old exam list is gone): a search row that finds questions over the page (`PracticeSearch`); `QuizCard`, the reader's quiz as an
   outline (the count between a minus and a plus, typed when pressed, the time it should take, four
   pills that each say a setting's current value — `settingPills` — and Start, the page's one filled
   button); then rows for **Practice Exam**, **Past papers** (`/papers`, `pages/PastPapers.tsx`; or
@@ -1645,7 +1645,12 @@ Other important `lib/` modules:
   marked — the one implementation the wiki search, the one search and Cowork all call (`INK_MARK`
   is the redesign's mark, the text colour filled).
 - `oneSearch.ts` / `appSearch.ts` — **the one search** (`/search`, `pages/Search.tsx`, lazy;
-  `docs/redesign-spec.md` §7a.4, R18), opened from Practice's search row and by Ctrl/⌘ K. It
+  `docs/redesign-spec.md` §7a.4, R18), opened by Ctrl/⌘ K and by a concept's Practice button.
+  **Practice's own search row no longer opens it**: `components/practice/PracticeSearch.tsx` is a
+  field under the top row that searches questions only, its Exam filter starting on the exam
+  the page shows, with the results laid over the page (`PracticeSearchPanel`, lazy; the rows are
+  `components/search/QuestionRow.tsx`, shared with the page). Learn's search is laid out the same
+  way on a phone: the app's top row, then the field as a pill under it (`WikiFloatingSearch`). It
   replaced the old Search page, the Quiz tab's floating search and the Flashcards bar. The field,
   then four tabs with counts — All, Concepts, Resources, Questions — over every exam, the exam in
   focus's results first within each kind and a result from another exam labelled with it

@@ -15,7 +15,7 @@ import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveE
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MobileNavButton } from '@/components/MobileNavButton'
-import type { LeagueExamOption } from '@/components/LeaderboardPanel'
+import { YOU_PATH } from '@/lib/you'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { DayNoteCard, SessionCard } from '@/components/today/SessionCard'
@@ -75,7 +75,7 @@ const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek
 const AnalyticsOverlay = lazy(() => import('@/components/today/AnalyticsScreen').then(m => ({ default: m.AnalyticsOverlay })))
 const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
 const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
-const DashboardRemindersModal = lazy(() => import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
+const DailyEmailSheet = lazy(() => import('@/components/you/DailyEmailSheet').then(m => ({ default: m.DailyEmailSheet })))
 
 /** The span the Analytics tile's figure covers, in days. */
 const TILE_SPAN = 30
@@ -265,13 +265,13 @@ export default function Dashboard() {
   )
   const syllabusRoute = activeSyllabus?.fileName ? wikiRoute({ kind: 'exam', name: activeSyllabus.fileName }) : '/wiki'
 
-  // A square opens its concept in the reader, walking the whole syllabus; the
+  // A square opens its concept in the reader, walking the whole syllabus (the
+  // syllabus overlay, when that is where the square was, stays up above it); the
   // reader's own filter still narrows the walk to today's session.
   const openSyllabusConcept = useCallback((name: string) => {
     const refs = session.conceptRefs
     const idx = refs.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
     if (idx === -1) return
-    setOverlay(null)
     const walk: WikiEntryRef[] | null = session.view
       ? sessionWalk(session.view).map(n => ({ kind: 'concept' as const, name: n }))
       : null
@@ -329,18 +329,6 @@ export default function Dashboard() {
     planDone: planConcepts.length > 0 && planConcepts.every(c => planDone.has(c.toLowerCase())),
     gemsToday,
   })
-
-  const leagueExams = useMemo<LeagueExamOption[]>(() => {
-    const seen = new Set<string>()
-    const out: LeagueExamOption[] = []
-    for (const s of exam.exams) {
-      const id = wikiExamIdToProgressKey(s.examId)
-      if (seen.has(id)) continue
-      seen.add(id)
-      out.push({ id, label: s.examLabel })
-    }
-    return out
-  }, [exam.exams])
 
   const questContext = useMemo<QuestContext | undefined>(() => {
     if (masteryLoading || planLoading) return undefined
@@ -471,9 +459,11 @@ export default function Dashboard() {
                   </Link>
                 ) : (
                   XP_ENABLED ? (
-                    <LevelBadge avatarUrl={avatarUrl} size={44} questContext={questContext} leagueExams={leagueExams} activeExamId={activeKey} />
+                    <LevelBadge size={44} questContext={questContext} />
                   ) : (
-                    <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
+                    <Link to={YOU_PATH} aria-label="You" data-testid="today-you" className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                      <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
+                    </Link>
                   )
                 )}
               </span>
@@ -622,12 +612,11 @@ export default function Dashboard() {
     )}
     {!isGuest && DAILY_PLAN_EMAIL_ENABLED && remindersOpen && (
       <Suspense fallback={null}>
-        <DashboardRemindersModal
-          open
-          onClose={() => setRemindersOpen(false)}
+        <DailyEmailSheet
           email={user?.email ?? ''}
           isPro={isPro}
           subscriptionLoading={subscriptionLoading}
+          onClose={() => setRemindersOpen(false)}
         />
       </Suspense>
     )}

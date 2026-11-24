@@ -20,8 +20,14 @@ describe('pageHostsNavButton', () => {
   })
 
   it('leaves every other route to the app header', () => {
-    for (const path of ['/search', '/settings', '/store/gems', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
+    for (const path of ['/search', '/store/gems', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
       expect(pageHostsNavButton(path)).toBe(false)
+    }
+  })
+
+  it('gives the app header up on You, whose top row is the way out', () => {
+    for (const path of ['/you', '/you/league', '/settings']) {
+      expect(pageHostsNavButton(path)).toBe(true)
     }
   })
 

@@ -2,8 +2,8 @@
 // that each do one thing, for people here and for AI agents through the MCP
 // connector — the same engine either way (`lib/tools`).
 //
-//   /tools          the catalogue: practice areas, a row per tool, each row
-//                   naming the one question its tool answers
+//   /tools          the Tools screen: a tab for the exam in focus and one for
+//                   every tool, grouped by practice area, a row per tool
 //   /tools/:slug    one tool's card, alone; `#input=…` opens a given run (a
 //                   share link, a Send to…, an agent's app_url)
 //
@@ -13,26 +13,31 @@
 // file's `ToolPage`. An old `/tools/<table>` or `/tools/assumptions` link is
 // sent there with its run kept.
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
-import type { Back } from '@/hooks/useBack'
-import { Link } from 'react-router-dom'
-import { Database } from 'lucide-react'
-import { AREAS, TOOLS, decodeRunInput, toolBySlug, toolPath, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Link, Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
+import { AREAS, decodeRunInput, toolBySlug, toolPath, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
+import { CATALOGUE_AREAS, CATALOGUE_TOOLS } from '@/lib/toolCatalogue'
+import { resolveToolsTab } from '@/lib/apply'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { ToolsSearchBar, type Crumb } from '@/components/tools/ToolsSearchBar'
-import { useBack, usePageLabel } from '@/hooks/useBack'
-import { ListPanel, ListRow } from '@/components/ui/ListPanel'
-import { LogoTile } from '@/components/LogoTile'
+import { ApplyRow, Chevron } from '@/components/apply/ApplyParts'
+import { LevelSquare } from '@/components/LevelSquare'
+import { PracticeButton } from '@/components/learn/PracticeButton'
+import { GROUND, OUTLINE_ROW_RULE, OUTLINE_TILE } from '@/components/ui/OutlineCard'
+import { backLabel, useBack, usePageLabel, type Back } from '@/hooks/useBack'
+import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { useConceptLevels } from '@/hooks/useConceptLevels'
+import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
 import { FROM_PARAM } from '@/lib/toolTemplate'
-import { examForConcepts } from '@/lib/toolExam'
-import { examAccentStyle } from '@/lib/examColors'
+import { examForConcepts, toolConcept, toolsForExam } from '@/lib/toolExam'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { readRecent, type RecentTool } from '@/lib/toolRecent'
-import { inkChip } from '@/components/ui/ink'
+import type { MasteryState } from '@/lib/mastery'
+import { conceptPracticeUrl, questionCountLabel } from '@/lib/practiceLaunch'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -51,9 +56,6 @@ async function openMethod(concepts: string[]) {
   const refs = concepts.filter(name => bundle.files[`Concepts/${name}.md`] !== undefined).map(name => ({ kind: 'concept' as const, name }))
   if (refs.length) useConceptPopup.getState().openAt(refs, 0, null, null, null, { walk: 'corpus' })
 }
-
-/** The catalogue's areas: every one but the published tables, which are on the Data Sources page. */
-const CATALOGUE_AREAS = AREAS.filter(a => a.id !== 'data')
 
 export default function Tools() {
   const { slug } = useParams()
@@ -74,10 +76,15 @@ export default function Tools() {
   )
 }
 
+/**
+ * The Tools screen (docs/redesign-spec.md §7c.2): a search row, a tab for the
+ * exam in focus and one for every tool, and the tools grouped by practice
+ * area, each row led by the reader's level on the tool's concept.
+ */
 function Catalogue() {
   usePageHead(TOOLS_HEAD)
-  // The query and the area ride the URL, so Back from a tool returns to the
-  // same results (docs/actuarial-tools.md §6.2). A change of either is the
+  // The query, the area and the tab ride the URL, so Back from a tool returns
+  // to the same list (docs/actuarial-tools.md §6.2). A change of any is the
   // same page, so it replaces rather than pushes.
   const [params, setParams] = useSearchParams()
   const query = params.get('q') ?? ''
@@ -91,136 +98,121 @@ function Catalogue() {
     setParams(next, { replace: true })
   }
   const results = useMemo(() => searchTools(query, area), [query, area])
-  const { syllabi } = useWikiSyllabus()
   const searching = query.trim().length > 0
-  // An area with no query (a breadcrumb's "Ratemaking") shows that area alone.
-  const shownAreas = !searching && area ? CATALOGUE_AREAS.filter(a => a.id === area) : CATALOGUE_AREAS
+  const back = useBack({ to: '/apply', label: 'Apply' })
+
+  // The exam in focus, and the tools its syllabus covers (`lib/toolExam.ts`).
+  const { active } = useExamInFocus()
+  const examTools = useMemo(() => (active ? toolsForExam(CATALOGUE_TOOLS, active) : []), [active])
+  const tab = resolveToolsTab(params.get('tab'), examTools.length)
+  // An area on its own (a breadcrumb's "Ratemaking") is that area of every tool.
+  const listed = area ? CATALOGUE_TOOLS.filter(t => t.area === area) : tab === 'exam' ? examTools : CATALOGUE_TOOLS
+  const { levelOf } = useConceptLevels()
+  const row = (t: ToolSpec, q = '') => <ToolRow key={t.id} spec={t} query={q} level={levelOf(toolConcept(t) ?? '')} />
 
   return (
-    <>
-      <ToolsSearchBar kind="catalogue" query={query} area={area} onQuery={q => setParam('q', q)} onArea={a => setParam('area', a)} />
-      <div className="container mx-auto max-w-3xl space-y-6 px-4 py-6">
-        <header className="space-y-3">
-          <h1 className="text-2xl font-bold tracking-tight">Tools</h1>
-          {/* The areas, always on screen: a reader jumps to Credibility without scrolling (v3 §5). */}
-          {!searching && (
-            <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(90deg,#000_85%,transparent)]" role="group" aria-label="Area" data-testid="tool-areas">
-              <button type="button" onClick={() => setParam('area', null)} className={cn(inkChip(area === null), 'shrink-0')} aria-pressed={area === null}>All</button>
-              {CATALOGUE_AREAS.map(a => (
-                <button key={a.id} type="button" onClick={() => setParam('area', a.id)} className={cn(inkChip(area === a.id), 'shrink-0')} aria-pressed={area === a.id}>
-                  {a.label}
-                </button>
-              ))}
-            </div>
-          )}
+    <div className={cn(GROUND, 'min-h-dvh')}>
+      <ToolsSearchBar
+        kind="catalogue"
+        query={query}
+        area={area}
+        onQuery={q => setParam('q', q)}
+        onArea={a => setParam('area', a)}
+        placeholder={`Search ${CATALOGUE_TOOLS.length} tools`}
+      />
+      <div className="mx-auto max-w-xl px-5 pb-24 pt-2 sm:px-6">
+        <header className="-ml-3 flex items-center gap-1">
+          <Link
+            to={back.to}
+            state={RESTORE_SCROLL}
+            onClick={back.onLinkClick}
+            aria-label={backLabel(back)}
+            title={backLabel(back)}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            data-testid="tools-back"
+          >
+            <ChevronLeft className="h-[22px] w-[22px]" strokeWidth={2.5} aria-hidden />
+          </Link>
+          <h1 className="text-[22px] font-bold">Tools</h1>
         </header>
-        {!searching && !area && <RecentTools syllabi={syllabi} />}
+
         {searching ? (
-          results.length ? (
-            <ListPanel>
-              {results.map(t => <ToolRow key={t.id} spec={t} query={query} syllabi={syllabi} />)}
-            </ListPanel>
-          ) : (
-            <p className="px-1 text-sm text-muted-foreground" data-testid="tool-no-results">No tools match “{query.trim()}”.</p>
-          )
+          <div className="pt-5">
+            {results.length ? (
+              <ToolList>{results.map(t => row(t, query))}</ToolList>
+            ) : (
+              <p className="text-base" data-testid="tool-no-results">No tools match “{query.trim()}”.</p>
+            )}
+          </div>
         ) : (
-          <>
-            {shownAreas.map(a => {
-              const tools = TOOLS.filter(t => t.area === a.id)
+          <div className="flex flex-col gap-[22px] pt-5">
+            {active && examTools.length > 0 && !area && (
+              <div role="tablist" aria-label="Show" className="flex gap-2" data-testid="tool-tabs">
+                <TabChip selected={tab === 'exam'} onSelect={() => setParam('tab', null)} label={active.examLabel} count={examTools.length} />
+                <TabChip selected={tab === 'all'} onSelect={() => setParam('tab', 'all')} label="All" count={CATALOGUE_TOOLS.length} />
+              </div>
+            )}
+            {CATALOGUE_AREAS.map(a => {
+              const tools = listed.filter(t => t.area === a.id)
               if (!tools.length) return null
               return (
-                <section key={a.id} className="space-y-2" aria-labelledby={`area-${a.id}`}>
-                  <h2 id={`area-${a.id}`} className="px-1 text-sm font-semibold text-muted-foreground">{a.label}</h2>
-                  <ListPanel>
-                    {tools.map(t => <ToolRow key={t.id} spec={t} syllabi={syllabi} />)}
-                  </ListPanel>
+                <section key={a.id} aria-labelledby={`area-${a.id}`} data-testid="tool-area">
+                  <h2 id={`area-${a.id}`} className="pb-1.5 text-[15px] font-bold">{a.label}</h2>
+                  <ToolList>{tools.map(t => row(t))}</ToolList>
                 </section>
               )
             })}
             {/* The published tables and figures a calculator reads from are a page of their own. */}
-            {!area && <ListPanel><DataSourcesRow /></ListPanel>}
-          </>
+            {!area && <ApplyRow to="/data-sources" label="Data Sources" testId="data-sources-row" />}
+          </div>
         )}
       </div>
-    </>
+    </div>
   )
+}
+
+/** One of the screen's two tabs: its name and how many tools it lists, solid when chosen. */
+function TabChip({ selected, onSelect, label, count }: { selected: boolean; onSelect: () => void; label: string; count: number }) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={selected}
+      onClick={onSelect}
+      className={cn(
+        'inline-flex h-[38px] shrink-0 items-center gap-2 rounded-full border-[1.5px] border-foreground px-3.5 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground',
+        selected ? 'bg-foreground text-ground' : 'text-foreground hover:bg-foreground/10',
+      )}
+    >
+      {label}
+      <span className="font-medium tabular-nums">{count}</span>
+    </button>
+  )
+}
+
+/** A practice area's tools as one outlined tile, a hairline between rows. */
+function ToolList({ children }: { children: ReactNode }) {
+  return <div className={cn(OUTLINE_TILE, 'flex flex-col px-4')}>{children}</div>
 }
 
 /**
- * The tool's colour: the exam that first teaches its method (`lib/toolExam.ts`),
- * as a dot. The question it answers says what it is; the colour says where on
- * the ladder it is taught.
+ * One tool: the reader's level on its concept, its name and a chevron. A
+ * search result also says the question the tool answers, where the match may be.
  */
-function ExamDot({ spec, syllabi }: { spec: ToolSpec; syllabi: readonly WikiExamSyllabus[] }) {
-  const exam = examForConcepts(spec.method.concepts, syllabi)
+function ToolRow({ spec, query = '', level }: { spec: ToolSpec; query?: string; level: MasteryState }) {
   return (
-    <span
-      style={exam ? examAccentStyle(exam) : undefined}
-      className="ml-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--exam-accent-vivid,hsl(var(--muted-foreground)/0.5))]"
-      aria-hidden
-      data-testid="tool-exam-dot"
-    />
-  )
-}
-
-/** One tool in the catalogue: its exam's dot, its name and the question it answers. */
-function ToolRow({ spec, query = '', syllabi }: { spec: ToolSpec; query?: string; syllabi: readonly WikiExamSyllabus[] }) {
-  return (
-    <ListRow
+    <Link
       to={toolPath(spec)}
-      leading={<ExamDot spec={spec} syllabi={syllabi} />}
-      title={highlightMatch(spec.name, query)}
-      subtitle={highlightMatch(spec.answers, query)}
-      subtitleLines={2}
+      className={cn(OUTLINE_ROW_RULE, 'flex min-h-[54px] items-center gap-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring')}
       data-testid="tool-row"
-    />
-  )
-}
-
-/** "Pick up where you left off": the tools used last on this device, each with the answer it showed. */
-function RecentTools({ syllabi }: { syllabi: readonly WikiExamSyllabus[] }) {
-  const [recent] = useState<RecentTool[]>(() => readRecent())
-  const shown = recent.map(r => ({ r, spec: toolBySlug(r.slug) })).filter((x): x is { r: RecentTool; spec: ToolSpec } => !!x.spec).slice(0, 3)
-  if (!shown.length) return null
-  return (
-    <section className="space-y-2" aria-labelledby="tools-recent">
-      <h2 id="tools-recent" className="px-1 text-sm font-semibold text-muted-foreground">Pick up where you left off</h2>
-      <div className="-mx-4 flex gap-2.5 overflow-x-auto px-4 pb-1">
-        {shown.map(({ r, spec }) => {
-          const exam = examForConcepts(spec.method.concepts, syllabi)
-          return (
-            <Link
-              key={r.slug}
-              to={toolPath(spec)}
-              style={exam ? examAccentStyle(exam) : undefined}
-              className="w-40 shrink-0 rounded-2xl bg-[var(--exam-accent-soft,hsl(var(--card)))] px-3.5 py-3 transition-colors hover:brightness-110"
-              data-testid="tool-recent"
-            >
-              <span className="block truncate text-xs text-muted-foreground">{spec.name}</span>
-              <span className="mt-1 block truncate text-xl font-bold tabular-nums">{r.value}</span>
-            </Link>
-          )
-        })}
-      </div>
-    </section>
-  )
-}
-
-/** The way to the Data Sources page, at the foot of the catalogue. */
-function DataSourcesRow() {
-  return (
-    <ListRow
-      to="/data-sources"
-      leading={
-        <LogoTile size="lg" className="bg-muted text-foreground">
-          <Database className="h-6 w-6" aria-hidden />
-        </LogoTile>
-      }
-      title="Data Sources"
-      subtitle="Published figures, their sources and documents: life tables, price indexes, yield curves, insurer filings"
-      subtitleLines={2}
-      data-testid="data-sources-row"
-    />
+    >
+      <LevelSquare state={level} size="sm" className="h-4 w-4 rounded-[4px]" />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[17px] font-medium">{highlightMatch(spec.name, query)}</span>
+        {query && <span className="line-clamp-2 text-sm">{highlightMatch(spec.answers, query)}</span>}
+      </span>
+      <Chevron />
+    </Link>
   )
 }
 
@@ -248,12 +240,19 @@ export function ToolPage({ slug }: { slug: string }) {
   const table = spec?.area === 'data'
   usePageHead(spec ? toolHead(spec.name, spec.answers, toolPath(spec)) : TOOLS_HEAD)
   usePageLabel(spec?.name)
-  const back = useBack(table ? { to: '/data-sources', label: 'Data Sources' } : { to: '/tools', label: 'All tools' })
+  const back = useBack(table ? { to: '/data-sources', label: 'Data Sources' } : { to: '/tools', label: 'Tools' })
   const open = useCallback(() => { if (spec) void openMethod(spec.method.concepts) }, [spec])
   const { syllabi } = useWikiSyllabus()
-  // The exam that first teaches the method: the colour the template takes (§19).
+  // The exam that first teaches the method: the colour its sheets and marks take (§19).
   const examKey = useMemo(() => (spec ? examForConcepts(spec.method.concepts, syllabi) : null), [spec, syllabi])
   const [pinned, setPinned] = useState<PinnedAnswer | null>(null)
+  // The tool's concept: the reader's level on it, and the questions "Practice this" starts.
+  const concept = spec ? toolConcept(spec) : null
+  const { levelOf } = useConceptLevels()
+  const questionCount = useConceptQuestionCount(concept)
+  const footRef = useRef<HTMLDivElement>(null)
+  const hasFoot = !!concept && !!questionCount
+  useActionBarHeight(footRef, hasFoot)
   if (!spec) return <Navigate to={table === false ? '/tools' : '/data-sources'} replace />
   const areaLabel = AREAS.find(a => a.id === spec.area)?.label ?? spec.area
   const senderPath = sender ? toolPath(sender) : null
@@ -273,7 +272,7 @@ export function ToolPage({ slug }: { slug: string }) {
         title={spec.name}
         back={back}
         crumbs={crumbs}
-        pinned={pinned ? <PinnedPill answer={pinned} examKey={examKey} /> : null}
+        pinned={pinned ? <PinnedPill answer={pinned} /> : null}
       />
       <div className="container mx-auto max-w-2xl space-y-3 px-4 py-4">
         {/* Keyed by the run, so a Send to… or a pasted link starts the card afresh. */}
@@ -285,22 +284,36 @@ export function ToolPage({ slug }: { slug: string }) {
             onOpenMethod={open}
             persist
             examKey={examKey}
+            methodLevel={concept ? levelOf(concept) : undefined}
             onPinAnswer={setPinned}
           />
       </div>
+      {/* The page's one filled button (docs/redesign-spec.md §7c.3): a quiz on the
+          tool's concept. Not drawn for a concept no question is tagged with. */}
+      {hasFoot && (
+        <div
+          ref={footRef}
+          className="sticky bottom-0 z-30 border-t border-border bg-background px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3"
+        >
+          <div className="mx-auto max-w-2xl">
+            <PracticeButton to={conceptPracticeUrl(concept, questionCount, practiceSettings())} aside={questionCountLabel(questionCount)}>
+              Practice this
+            </PracticeButton>
+          </div>
+        </div>
+      )}
     </>
   )
 }
 
-/** The answer in the title strip, in the exam's wash, while the answer card is scrolled away. */
-function PinnedPill({ answer, examKey }: { answer: PinnedAnswer; examKey: string | null }) {
+/** The answer in the title strip, outlined as its card is, while the card is scrolled away. */
+function PinnedPill({ answer }: { answer: PinnedAnswer }) {
   return (
     <span
-      style={examKey ? examAccentStyle(examKey) : undefined}
-      className="inline-flex shrink-0 items-baseline gap-1.5 rounded-full bg-[var(--exam-accent-soft,hsl(var(--foreground)/0.07))] px-3 py-1 text-sm"
+      className="inline-flex shrink-0 items-baseline gap-1.5 rounded-full border-[1.5px] border-foreground px-3 py-1 text-sm"
       data-testid="tool-pinned-answer"
     >
-      <span className="text-xs text-muted-foreground">{answer.symbol}</span>
+      <span className="text-xs">{answer.symbol}</span>
       <span className="font-bold tabular-nums">{answer.value}</span>
     </span>
   )

@@ -90,10 +90,11 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 
 
 ### Inside `quiz/src/`
-- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
+- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, `You.tsx`, `League.tsx` and Settings — the profile, the league and Settings, `/you`, `/you/league`, `/settings`, lazy —
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
-  Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
+  Upgrade, `Apply.tsx` — Apply's home, `/apply`, lazy: Projects, Tools and Workflows as three
+  cards — wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
   `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `DataSources/` — Data Sources, `/data-sources`: the catalogue of values, tables and documents, a publisher's page (the catalogue narrowed to it) and a table's page —
   and `Research/`, which is
   flag-gated)
@@ -378,7 +379,7 @@ before touching that area**:
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user
-  agents), not opted out (Settings → Privacy) — the rules being `lib/analyticsPolicy.ts`,
+  agents), not opted out (Settings → Your data) — the rules being `lib/analyticsPolicy.ts`,
   pure and tested. The app sends its own page views (`usePageTracking`: one per settled
   address, never for a page rewriting its query in place, URL cleaned, `content_group`
   set), `user_id` + user properties (`components/AnalyticsTracker.tsx`), `content_view`
@@ -443,13 +444,55 @@ before touching that area**:
   counts (`examPage.test.ts` holds every exam page to it) — with `components/learn/ObjectiveCard.tsx`
   (one open at a time, ending in **Practice <objective>**), the labelled **Official syllabus**
   and **Dates and fees** buttons (the sitting picker is in that panel), and foot rows for
-  Readings (the Source Material shelf), the page's notes and Fact Check. A pill goes to the
-  concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
-  the exam page: back to where the reader came from, the level button, more, the article,
-  **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next. **Phase E, the exam switcher, is built** (§8): one
+  Readings (the Source Material shelf), the page's notes and Fact Check. **A pill opens the
+  concept in the concept popup**, over the exam page, never by navigating; the open concept's
+  pill is filled and the walk opens the objective that holds it. The popup's foot is Previous,
+  Practice this, Next. The concept's own page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`: a
+  new tab, a search result, a shared link) no longer redirects into the exam page and ends the
+  same way: back to where the reader came from, the level button, more, the article, **Next in
+  <objective>** and the fixed **Practice this**. **Phase I, Apply, is built** (§7c and §8): **Apply's home** is
+  `pages/Apply.tsx` at `/apply` (lazy), three outlined cards in this order, each heading tapped
+  into: **Projects** (the attempts in progress, or how many briefs there are, and the attempt
+  worked on last with its four-step bar), **Tools** (how many the exam in focus covers, or the
+  whole catalogue's count when it covers none, and the reader's recent tools as pills with the
+  level square of each tool's concept) and **Workflows** (how many are saved and the latest;
+  only for accounts that can use Workflows). What each card says is `lib/apply.ts`; a card never
+  disappears and never counts nothing. Until Phase F the sidebar's Projects row leads there.
+  The **Tools screen** (`/tools`, `pages/Tools.tsx`) is a search row, a tab for the exam in
+  focus and one for All (no tabs when the exam covers no tool), the tools grouped by practice
+  area with the level square of each tool's concept, and a row for Data Sources. **A tool has
+  one concept**, the first its method names (`toolConcept` in `lib/toolExam.ts`), and belongs to
+  every exam whose syllabus names one of its concepts (`toolsForExam`, which takes the exam's
+  own page), while its sheets' colour is still the earliest exam's (`examForConcepts`). On a
+  tool's page three things changed and nothing else: the answer card is an outline, **Learn the
+  method** is a row with the reader's level, and **Practice this** is fixed to the foot (the
+  concept page's button, not drawn for a concept with no questions). An **attempt opens on its
+  overview** (`components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`): title
+  and company, Rehearsal or Practice as a tag, the four-step bar (`StepBar` in
+  `components/apply/ApplyParts.tsx`), the submission checklist with its figures, each row a
+  button to the view where it is done, **Continue in <step>** and a row to read the brief. The
+  overview is a view of the attempt's page (`?view=overview`), so going into a view replaces the
+  history entry; `briefReadAt` and `cleanRun` on the attempt's record feed it. **Anyone can read
+  a brief** (`/project/brief/<case id>`, `pages/Project/BriefPage.tsx`); starting one is Pro's
+  (**Upgrade to start**). **Phase H, You, is built** (§7b and §8; style guide §13.9): three
+  pages under the existing sidebar. The profile, `/you` (`pages/You.tsx`): the reader's character,
+  name, Pro tag and level, the streak and gems, a Today card with the daily goal and the day's
+  quests (a finished one shows Collect), and rows to League, Settings, Store and Help. The league,
+  `/you/league` (`pages/League.tsx`): one exam's table for the week, the reader's row filled,
+  lines labelled Promoted and Relegated, the days left, Leave at the foot, and for a reader not
+  in it the way to join. Settings, `/settings` (`pages/Settings.tsx`): one screen in four groups
+  (Studying, App, Account, Your data) with every value on its row, each row edited in place or in
+  a popup (`components/you/SettingsSheets.tsx`), then Sign out and Delete account as plain red
+  text; it holds no quiz settings (R3). `lib/you.ts` is what each row says and the league's table
+  (`leagueTable`); `components/you/rows.tsx` the shared row, group, switch and top row. A visitor
+  keeps what the browser keeps (level, streak, goal, quests; theme, sound, session length) and is
+  asked to sign in for the rest. It replaced the level badge's popup, the sidebar's theme and
+  sound buttons and its account menu: Today's level badge and the sidebar's account row are links
+  to `/you` until Phase F's profile button. Below `lg` the three screens have no app header
+  (`isYouRoute`). The flows are `e2e/you.spec.ts`. **Phase E, the exam switcher, is built** (§6 and §8): one
   exam in focus, the sheet, Add an exam and the date question, read by Today, the exam page,
-  Study Guides, the Quiz tab, Resources and the Store (`examFocus.ts` below).
+  Study Guides, the Quiz tab, Resources, the Store, Apply, Tools, You and the league
+  (`examFocus.ts` below).
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -667,7 +710,9 @@ before touching that area**:
   (`docs/tools-ux-review.md`): every number row one line at any count, choices first, a chip only for
   a value that isn't the default, a Data Source's inputs above its answer, grids that count their
   off-screen columns, a **Solve for** strip for a spec naming `solveFor` (Bond Price), the chain strip
-  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`).
+  (`lib/toolChains.ts`) and the catalogue's recent tools (`lib/toolRecent.ts`, drawn on
+  Apply's Tools card since the redesign's Phase I, which also made the answer card an outline
+  and the catalogue the Tools screen).
   Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
@@ -681,9 +726,10 @@ before touching that area**:
   its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz — a
-  **Pro** feature, its row marked with the Pro chip and the page locked to anyone else, with an
-  open attempt's Brief / Workspace / Report / Submit views as rows under it — `lib/attemptViews.ts`;
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, reached from Apply's home, which the
+  sidebar's Projects row opens — working a project is a **Pro** feature, its row marked with the
+  Pro chip, while anyone can read a brief on its own page; an attempt opens on its overview, with
+  its Brief / Workspace / Report / Submit views as rows under Projects — `lib/attemptViews.ts`;
   the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
   — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
@@ -1151,6 +1197,17 @@ Other important `lib/` modules:
   spotlight, prices on one scale (`priceScale` / `priceBar`, shared with the question-by-question
   comparison), and the reader's ticks (`hooks/useStoreKit.ts`, localStorage). Drawn by
   `components/store/ExamKit.tsx`; pure and tested.
+- `apply.ts` / `attemptOverview.ts` / `toolCatalogue.ts` — **Apply** (`docs/redesign-spec.md`
+  §7c). `apply.ts` is what the home's three cards say: the attempts still open
+  (`openAttempts`), each card's count (`projectsCount`, `toolsCount`, `workflowsCount`), the
+  recent tools still in the catalogue (`recentTools`) and which of the Tools screen's tabs a
+  `?tab=` opens (`resolveToolsTab`). `attemptOverview.ts` is an attempt's overview: the four
+  steps and which is current, and the checklist's rows with their figures, held to the Submit
+  view's rules (`MIN_BODY_WORDS`, the word and appendix limits, the Tweedie power question
+  never counted); `recordTally` counts the report off the record alone, for a surface with no
+  workspace open. `toolCatalogue.ts` is the tools the Tools screen lists: every calculator,
+  the published tables left to Data Sources. Pure and tested; the flows are
+  `e2e/apply.spec.ts`, `e2e/tools.spec.ts` and `e2e/pcpa-project.spec.ts`.
 - `store.ts` / `storeBooks.ts` — the **Store** (`docs/store.md`). `store.ts` is its logic,
   pure and tested: the four aisles, the exams the shelf narrows to (`STORE_EXAMS`, in
   ladder order), price printing (`Free` for nothing, "From" over choices), registration
@@ -1255,7 +1312,7 @@ Other important `lib/` modules:
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
-  none. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
+  none. You's three screens (`isYouRoute` in `lib/you.ts`) are listed there too: their top row's control is the way out, a cross or a back arrow, with no hamburger. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
   sidebar, at any width. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
@@ -1433,9 +1490,9 @@ Other important `lib/` modules:
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`
   persists `XpState` to the `user_xp` table (signed-in) or localStorage (guests) and is
   called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
-  + `components/LevelBadge.tsx` (the Dashboard header level badge — a level ring that
-  replaces the mascot icon and opens an XP/daily-goal popup) and
-  `components/DailyGoalPicker.tsx` (the goal presets, behind the popup's *Change goal*). Gated by `XP_ENABLED`.
+  + the profile, `/you` (the level with its bar, and the daily goal on its Today card, which
+  opens `GoalSheet`, the goal presets), and `components/LevelBadge.tsx`, the ring on Today that
+  links there. Gated by `XP_ENABLED`.
 - `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
   loop. `quests.ts` is the pure, tested core: it generates a *personalized* daily
   board from the catalogue authored in `data/quests.ts` (one always-achievable "core"
@@ -1447,8 +1504,9 @@ Other important `lib/` modules:
   context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
   `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
   `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
-  `hooks/useQuests.ts`, the Level badge's Quests tab (`components/QuestsPanel.tsx`, whose
-  Collect button is `QuestsCard.tsx`'s `CollectButton`) and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  `hooks/useQuests.ts`, the profile's Today card (`pages/You.tsx`: a row per quest with its
+  progress, Collect on a finished one, and `QuestSheet` for what it counts and pays) and
+  `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
   layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
@@ -1461,19 +1519,17 @@ Other important `lib/` modules:
   `supabase/migrations/20260710_leagues.sql`) because a leaderboard is cross-user — the
   client can never write its own weekly XP or read the raw member table. `recordLeagueXp`
   is fired alongside `recordXp` from `quizStore` on quiz completion, credited to the
-  quiz's exam (quest XP is not — quests are cross-exam). Surfaced not as its own card but
-  as the **League tab** in the Level-badge popup (`components/LevelBadge.tsx` hosts
-  Quests/League tabs — the popup header shows the level + level-progress bar and the
-  daily goal is the first row of the Quests tab → `components/LeaderboardPanel.tsx` with
-  a per-exam selector and the join/leave, `components/QuestsPanel.tsx`; its footer's *Change goal*
-  swaps in `components/DailyGoalPicker.tsx`). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
+  quiz's exam (quest XP is not — quests are cross-exam). Surfaced as the profile's **League**
+  row (the tier and rank, or Join) and the league's own screen, `/you/league`
+  (`pages/League.tsx`: the week's table with its Promoted and Relegated lines, the exam switched
+  in place, joining and leaving). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
 - `dailyEmail.ts` — pure core of the opt-in daily study-plan email: derives "today's
   concepts" from a cached (possibly stale) study plan and the local send-time math. The
   actual sending happens server-side in the `daily-plan-email` edge function, which
   mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
   contract as the league SQL; `duplicationContracts.test.ts` runs both copies against
   golden vectors, and holds the SQL rollover to `leagues.ts` the same way). Prefs live in `user_email_prefs`
-  (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
+  (`hooks/useEmailPrefs.ts` + `components/you/DailyEmailSheet.tsx`, opened from Settings' Daily email row). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
   reader's review: the accuracy figures behind Today's **Analytics** tile and screen (via
@@ -1610,7 +1666,7 @@ Other important `lib/` modules:
   `buildKnowledgeBase` turns it into the export through the app's own parsers (`parseQuestion`,
   `parseExamSyllabus`, `extractSourceMaterial`, `factCheckBadge`), withholding any question with an
   open critical finding. `aiConnector.ts` holds the public addresses (connector URL, skill zip) the
-  Settings card (`components/AiConnectorCard.tsx`) and `llms.txt` hand out. The run-time half is
+  Settings popup (`AiAssistantsSheet` in `components/you/SettingsSheets.tsx`) and `llms.txt` hand out. The run-time half is
   plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
   `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
@@ -1657,7 +1713,7 @@ Other important `lib/` modules:
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`; `TOOLS_STORE_NAV_ENABLED` — off: the sidebar's Tools, Data Sources and Store rows are hidden, their pages still open by address and Workflows keeps its row; the e2e build sets `VITE_SIDEBAR_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
-  mount it and Settings → Support hides the "Take the tour" row. The component, store and
+  mount it and Help, on You, hides the "Take the tour" row. The component, store and
   the `data-tour` markers across the app are left intact — re-enabling is a one-line change.
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `flashcardSync.ts` — cross-device persistence for the flashcard state: the collected

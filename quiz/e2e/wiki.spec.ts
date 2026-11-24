@@ -253,13 +253,25 @@ test.describe('learn', () => {
     await expect(page.getByRole('dialog')).toBeVisible()
   })
 
-  test('a pill opens the concept page, which ends in Practice this and leads back', async ({ page }) => {
+  test('a pill opens the concept in the reader, over the exam page', async ({ page }) => {
     await page.goto(EXAM)
     const general = page.locator('[data-objective="General Probability"]')
     await general.getByRole('button', { name: /General Probability/ }).click()
     await general.getByRole('button', { name: /^\d+ more$/ }).click()
-    await general.getByRole('link', { name: 'Conditional Probability, New' }).click()
-    await expect(page).toHaveURL(/\/wiki\/concept\/Conditional\+Probability\?from=P-1$/i)
+    const pill = general.getByRole('link', { name: 'Conditional Probability, New' })
+    await pill.click()
+    // The page stays; the reader opens on the concept and its pill is lit.
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await expect(page.getByRole('complementary', { name: 'Concept: Conditional Probability' })).toBeVisible()
+    await expect(pill).toHaveAttribute('aria-current', 'true')
+    // Next walks the syllabus, and the lit pill follows.
+    await page.getByRole('complementary', { name: /^Concept:/ }).getByRole('button', { name: 'Next' }).click()
+    await expect(pill).not.toHaveAttribute('aria-current', 'true')
+    await expect(general.locator('[data-pill][aria-current="true"]')).toHaveCount(1)
+  })
+
+  test('the concept page ends in Practice this and leads back to its exam', async ({ page }) => {
+    await page.goto('/wiki/concept/Conditional+Probability?from=p-1')
 
     const concept = page.getByTestId('concept-page')
     // The title is text; the level is a button that opens Learning Progress.
@@ -287,10 +299,9 @@ test.describe('learn', () => {
     await expect(practice).toHaveAttribute('href', /^\/quiz\?concept=Conditional\+Probability&/)
     await expect(practice).toBeInViewport()
 
-    // Back is the page the reader came from, named for the objective left open.
-    await concept.getByRole('link', { name: 'Back to General Probability' }).click()
+    // Back, for a reader who landed here, is up to the exam.
+    await concept.getByRole('link', { name: 'Exam P-1' }).first().click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
-    await expect(general.getByRole('button', { name: /General Probability/ })).toHaveAttribute('aria-expanded', 'true')
   })
 
   test('the reader ends a concept the same way: Previous, Practice this, Next', async ({ page }) => {

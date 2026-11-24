@@ -57,12 +57,20 @@ const SESSION_KEY = 'actuarial_today_session_v1'
 /** Outstanding misses read for Fix: everything waiting, bounded. */
 const MISTAKE_LIMIT = 500
 
-function readLength(accountMinutes: unknown): StoredLength {
+export function readLength(accountMinutes: unknown): StoredLength {
   try {
     const raw = localStorage.getItem(SESSION_LENGTH_KEY)
     if (raw) return lengthFromStored(JSON.parse(raw))
   } catch { /* private window */ }
   return lengthFromStored(isSessionLength(accountMinutes) ? { everyDay: accountMinutes } : null)
+}
+
+/** Keep the reader's session length: in the browser, and on the account when asked. */
+export function saveSessionLength(userId: string | null, next: StoredLength, toAccount: boolean): void {
+  try { localStorage.setItem(SESSION_LENGTH_KEY, JSON.stringify(next)) } catch { /* private window */ }
+  if (toAccount && userId) {
+    void supabase.auth.updateUser({ data: { session_minutes: next.everyDay } })
+  }
 }
 
 function sessionKey(userId: string | null, examKey: string): string {
@@ -143,10 +151,7 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
   const minutes = lengthFor(length, today)
   const saveLength = useCallback((next: StoredLength, toAccount: boolean) => {
     setLength(next)
-    try { localStorage.setItem(SESSION_LENGTH_KEY, JSON.stringify(next)) } catch { /* private window */ }
-    if (toAccount && userId) {
-      void supabase.auth.updateUser({ data: { session_minutes: next.everyDay } })
-    }
+    saveSessionLength(userId, next, toAccount)
   }, [userId])
 
   // ── What the session draws from ───────────────────────────────────────────

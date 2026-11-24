@@ -460,7 +460,7 @@ search should default to the exam in focus is open (§10).
 
 ## 7b. You
 
-Canvas: `You`, `League`, `Settings`. Opened by the profile button at the top right of every
+Canvas: `You`, `League`, `Settings`. Built (§8, Phase H). Opened by the profile button at the top right of every
 place (the foot of the rail on desktop). Replaces `components/LevelBadge.tsx`'s popup, the
 Dashboard header's export, reminders and help icons, and `pages/Settings.tsx`.
 
@@ -556,8 +556,8 @@ once and needs You to exist.
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** (built 2026-11-24) | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
-| **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
-| **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
+| **H. You** (built 2026-11-23) | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
+| **I. Apply** (built 2026-11-23) | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
 
 **Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
@@ -680,12 +680,14 @@ What was decided while building it:
   line is never drawn; its concepts are pills under the sentence above it. A concept with no
   page yet is a pill that doesn't press.
 - **One objective is open at a time**, so the page has one filled button. It shows three lines,
-  then "N more". Which one is open is kept for the browser session, so Back from a concept
-  returns to it, and that history entry is named for it ("Back to General Probability").
-- **A pill goes to the concept's page**, with `?from=<exam>`. `/wiki/concept/…` no longer
-  redirects into the exam page for a link followed inside the app. The reader still opens for
-  Today's session, a link followed inside an article, search, flashcards, a reading, and an old
-  `?concept=` link.
+  then "N more". Which one is open is kept for the browser session, and that history entry is
+  named for it.
+- **A pill opens the concept in the reader**, over the exam page, on the walk of the syllabus
+  (the maintainer's call, 2026-11-23; the first build sent a pill to the concept's page). The
+  open concept's pill is filled, and as Previous and Next move the walk the objective holding
+  the concept opens and its pill scrolls into view. A pill is still a link to the concept's
+  page (`?from=<exam>`), which a new tab, a search result or a shared link opens; that page no
+  longer redirects into the exam page.
 - **Practice** starts a quiz, never the setup: ten questions, or the pool when it holds fewer
   (`lib/practiceLaunch.ts`), with the reader's own quiz settings. The foot says how many
   questions the concept has. The count needs the question bank, which is fetched when a concept
@@ -711,6 +713,127 @@ What was decided while building it:
   (`ReadinessBar`, the countdown and plan-row helpers in `lib/examMenu.ts`), the strip's quiz and
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
+
+**Phase H is built.** You is three pages under the existing sidebar: the profile at `/you`
+(`pages/You.tsx`), the league at `/you/league` (`pages/League.tsx`) and Settings at `/settings`
+(`pages/Settings.tsx`), over `components/you/` (`rows.tsx`: the top row, a group of rows, a row
+with its value, a switch; `YouSheets.tsx`, `SettingsSheets.tsx` and `DailyEmailSheet.tsx`: the
+popups) and `lib/you.ts` (what each row says, the league's table and its two lines). What was
+decided while building it, the first three with the maintainer:
+
+- **A visitor** keeps what the browser keeps. You works without an account (the level, the
+  streak, the daily goal and the day's quests are kept in the browser), drawn with the fox, with
+  **Sign in** where the name would be and no Pro tag, gems tile or League row. Settings shows
+  Session length, Daily goal, Theme, Sound, AI assistants and Usage analytics under a filled
+  **Sign in**; it has no Account group, Sign out or Delete account, and the sign-in form it used
+  to carry is gone. The league asks a visitor to sign in. A visitor's quest pays its XP alone,
+  because gems are kept on an account.
+- **Every Settings row is edited in place or in a popup**; nothing opens a second screen. In
+  place: Theme and Usage analytics. A popup each: an exam (its date, Mark as passed, Remove from
+  my exams), Session length (Today's sheet, kept for every day, without the dots), Daily goal,
+  Daily email, Credential track, Sound, AI assistants, Name, Email, Password, Pro, Export, Reset
+  study history and Delete account (which still asks for DELETE to be typed). Sign out signs out
+  at once.
+- **Volume stays in Settings**: the Sound row shows the volume, or Off, and opens a popup with
+  the switch and the slider. The canvas draws a switch in place.
+- **Not on the canvas:** *Add an exam* (the exam switcher's screen, since Phase E) and
+  *Credential track* are rows of Studying. A subscriber's Pro row opens a popup with the renewal
+  date and **Manage subscription**, so a billing page that fails to open has somewhere to say so;
+  a free account's row reads **Get Pro** and goes to Upgrade; a beta tester's reads "Beta tester"
+  and doesn't press. An account that signs in with Google shows "Google" on its Password row,
+  and neither it nor Email presses.
+- **The profile:** tapping the character opens the existing character picker. The gems tile goes
+  to the Gem Shop and the Store row to the Store. A quest's row opens the quest (what it counts,
+  what it pays). One filled button a screen: with several quests finished, the first one's
+  Collect is filled and the others' outlined. **Help** is a popup: How Today works (the guide),
+  Contact us, Restore purchase for an account without Pro, and Take the tour when its flag is on.
+  A reader who opens You before Today still gets the day's quests, drawn from the concepts at
+  Forgotten and the paced plan Today last kept.
+- **The league:** the table shows rank, name and the week's XP, as drawn (no characters). The
+  header reads "4 days left", then hours on the last day. The lines are where `zoneForRank` puts
+  them: **Promoted** under the last row that moves up, **Relegated** above the first that moves
+  down; Bronze has no Relegated line and Diamond no Promoted. The exam is switched in a popup and
+  rides the address (`?exam=`). A reader who hasn't joined this exam's league gets the way in on
+  the same screen: what a league is, how they will appear, what joining shares, and a filled
+  **Join the league**. Leaving asks first. Last week's result is one line above the table until
+  dismissed. A re-read of the league (a join, a quiz's XP) keeps the table on screen.
+- **The ways in, until Phase F:** Today's level badge is a link to You that still counts the
+  quests to collect, and the sidebar's account row is a link to You for an account and a visitor
+  alike. On a phone the three screens have no app header: the profile's cross and the others'
+  back arrow are the way out (`isYouRoute`, read by `lib/mobileNavHost.ts`).
+- **Moved or removed:** the level badge's popup with its Quests and League tabs
+  (`QuestsPanel`, `QuestsCard`, `LeaderboardPanel`, `DailyGoalPicker`); the sidebar's theme and
+  sound buttons and its account menu (Gem Shop, Exams, Settings, Upgrade to Pro, Sign out); and
+  from Settings the section list down its side, the study-history summary (sessions and average
+  score), the "Danger zone" box and the Support card. The daily email's footer link
+  (`/dashboard?reminders=1`) opens the same popup over Today.
+- **Desktop** is not on the canvas: each screen is one column at reading width beside the sidebar.
+
+**Phase I is built.** Apply's home is `pages/Apply.tsx` at `/apply`, over `lib/apply.ts` (what
+each card says); the Tools screen and a tool's page are `pages/Tools.tsx`; the attempt's
+overview is `components/project/AttemptOverviewView.tsx` over `lib/attemptOverview.ts`; the
+four-step bar and the labelled row are `components/apply/ApplyParts.tsx`. What was decided
+while building it (the first four with the maintainer, 2026-11-23):
+
+- **A card never disappears and never counts nothing** (§10, question 7). Projects reads the
+  attempts in progress, or how many briefs there are ("3 briefs"). Tools reads the tools the
+  exam in focus covers ("20 for Exam 5"), or the whole catalogue's count when the exam covers
+  none or no exam is in focus ("35 tools"); the Tools screen then draws no tabs and is every
+  tool. Workflows says nothing beside its name until one is saved.
+- **Anyone can read a brief; starting one is Pro's** (§10, question 7). `/project` is the
+  list of briefs for a reader without Pro, each opening on its own page
+  (`/project/brief/<case id>`, `pages/Project/BriefPage.tsx`), whose one button is **Upgrade
+  to start**, or **Start this project** with Pro. The locked page is gone. Attempts stay Pro's:
+  nothing of one mounts without it.
+- **A tool has one concept**: the first page its method names (`toolConcept` in
+  `lib/toolExam.ts`). The level square on its row, **Learn the method** and **Practice this**
+  are all about that page. Practice is the concept page's own button (ten questions or the
+  pool, from every bank, the count beside it) and is not drawn for a concept with no
+  questions. Every tool has some today.
+- **A tool belongs to every exam whose syllabus names one of its concepts** (`toolsForExam`),
+  not only the earliest one, which stays the rule for the colour of a tool's sheets and marks.
+  It takes the exam's own page, since Exam 6's papers share a progress key. Nothing under
+  `lib/tools/` changed, so the connector's bundle is as it was.
+- **The exam in focus** is the one Today shows (`hooks/useTodayExam.ts`) until the switcher
+  (Phase E).
+- **The Tools screen** keeps the floating search bar as its search row ("Search 35 tools");
+  the area chips and "Pick up where you left off" are gone (the areas are the headings, the
+  recent tools are on Apply's card). A row is the tool's name; a search result also says the
+  question the tool answers, where the match may be. The published tables are not counted or
+  listed: they are on Data Sources, the row at the foot.
+- **A tool's page**: the answer card is a 1.5 px outline, and so is the answer pinned in the
+  title strip. The title is text (the book icon is gone). Learn the method is a row under the
+  inputs and opens the concept in the reader, as the icon did. Practice this is fixed to the
+  foot. The exam's colour is still on the template's sheets, chain strip and figure marks: the
+  three changes were the scope.
+- **An attempt opens on its overview**, a view of the attempt's page like the four it leads
+  to (`?view=overview`, the default while the attempt is open). Going into a view replaces the
+  history entry, as switching views always has, so the browser's Back leaves the attempt; a
+  view's arrow leads back to the overview. A submitted attempt has no overview and opens on
+  its results. The switcher in a view's top bar and the sidebar's rows stay.
+- **The steps**: Brief is done once the brief has been opened (`briefReadAt`, new on the
+  attempt's record; an older attempt counts once it holds any work), Workspace once a clean
+  run has passed (`cleanRun`, recorded by the Submit view's check, where the row leads),
+  Report once the body has 150 words and the total is within 1,250 (the Submit view's rule).
+  The current step is the first not done, drawn dashed. A later step can be done before an
+  earlier one, and is drawn solid.
+- **The checklist's rows are buttons** to the view where each is done. Appendices is ticked
+  with one to five attached; none is not an error, and the row doesn't say it is. A rehearsal
+  shows its time left beside the company; one whose window has closed is tagged Window closed
+  and its button opens the report.
+- **On Apply's card** the attempt's steps are read off the record alone (`recordTally`), which
+  can't count the words inside an attached table's file, so within a few words of the limit
+  it can differ from the overview.
+- **Until Phase F** the sidebar's Projects row leads to `/apply`, and the arrows at the top of
+  Projects and Tools lead up to it. The Tools and Workflows rows are as they were.
+- **The Projects page and the brief** are drawn to the same rules (the maintainer's review of
+  the first screenshots, 2026-11-23): one ground, outlined tiles, one text colour, the exam's
+  colour on its logo alone. The Projects page is the attempts in progress, each with its
+  four-step bar, then the submitted ones, and **New project** as its filled button; without
+  Pro it is the briefs as rows of one tile. The brief's sections are outlined tiles with a
+  plain icon, its outline chips are Ink's (the current one solid), and a stakeholder's note
+  is set off by a rule at its left. The start sheet and the workspace are as they were.
+- **Desktop** is not on the canvas: every screen is one column at reading width.
 
 **Phase E is built.** The rules are `lib/examFocus.ts`; the stored half is
 `contexts/ExamProgressContext.tsx`, the hook `hooks/useExamInFocus.ts`, the screens
@@ -771,8 +894,9 @@ What was decided while building it:
     The same switch replaces its picker, strip and region picker; an exam sat by region opens
     on the region of the page in focus, and `?region=` still names another.
 - **Not changed:** Flashcards keeps its own SOA / CAS picker (it is a row of Practice in
-  Phase G). Settings' "Add exams" still opens the old exams panel (`ExamsPopout`), which also
-  holds the credential track; it goes with You (Phase H). The parked onboarding tour pointed
+  Phase G). Settings (Phase H) lists the reader's exams and its "Add an exam" row opens the
+  switcher's Add an exam; the old exams panel (`ExamsPopout`) is no longer opened from anywhere.
+  You, the league, Apply and Tools read the exam in focus through the same hook. The parked onboarding tour pointed
   at the Quiz tab's Exam P row, which is gone. Exam names still differ by place ("Exam P" on
   Today, the sheet and the Store; "Exam P-1" on Study Guides, the Quiz tab and Resources), as
   they did before this phase.
@@ -784,7 +908,7 @@ For every phase:
   skill's glossary.
 - Logic goes in `lib/` as pure, tested functions; update the e2e specs the change touches
   (`e2e/dashboard-session.spec.ts`, `e2e/exam-switcher.spec.ts`, `e2e/quiz.spec.ts`, `e2e/reveal.spec.ts`,
-  `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`).
+  `e2e/analytics-locked.spec.ts`, `e2e/wiki.spec.ts`, `e2e/you.spec.ts`).
 - Check each screen at 390 × 844 and 1440 × 900, in both themes.
 - Update the lines in `CLAUDE.md`, `docs/roadmap.md` (X11), `docs/design-review.md` §6 and
   the design doc of whatever was changed (`docs/exam-readiness.md`,
@@ -818,6 +942,6 @@ For every phase:
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).
 6. Whether search defaults to the exam in focus or to every exam (§7a.4 draws every exam).
-7. What Apply shows for an exam with no project and no tools, and what a reader without Pro
-   sees of Projects (§7c). The review's suggestion: let anyone read a brief.
+7. ~~What Apply shows for an exam with no project and no tools, and what a reader without Pro
+   sees of Projects (§7c).~~ Decided 2026-11-23; see §8, Phase I.
 8. Whether the search row also belongs on Learn.

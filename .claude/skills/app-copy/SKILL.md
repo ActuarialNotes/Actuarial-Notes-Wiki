@@ -126,6 +126,15 @@ One thing, one name. Use these exactly.
 | A concept's level, as a control | the level itself ("Level 2", "New"), which opens **Learning Progress** | Mastery, Progress |
 | The menu beside a concept's level | **More** (Add to Flashcards, Listen, Fact Check) | Actions, Options |
 | The concept after this one | **Next in General Probability** (the objective, by its name) | Up next, Continue |
+| The place for projects, tools and workflows | **Apply** (the page at `/apply`; its three cards **Projects**, **Tools**, **Workflows**, in that order). The sidebar row stays "Projects" until the navigation phase | Practice (that is quizzes), Lab, Workbench |
+| The Apply cards' counts | "1 in progress", "3 briefs"; "20 for Exam 5", "35 tools"; "2 saved" | active, ongoing, "20 tools for Exam 5", "0 for Exam 9" |
+| A project's four steps | **Brief**, **Workspace**, **Report**, **Submit**; the page that leads into them is the attempt's **overview** (never a fifth step) | Stages, Phases, Dashboard, Summary |
+| The overview's checklist | **Brief read**, **Code runs clean**, **Report**, **Appendices**, **Submission questions**; a row not done reads "Not yet", a failed run "Stopped with an error" | Pending, Incomplete, Failed, TODO |
+| The overview's button | **Continue in Workspace** (the step, by its name); **Read the brief** on a new attempt | Resume, Next step, Go to Workspace |
+| How an attempt is worked, as a tag | **Rehearsal**, **Practice**; **Window closed** once a rehearsal's deadline has passed | Timed, Untimed, Expired |
+| Starting a project without Pro | **Upgrade to start** (on a brief's page); with Pro, **Start this project** | Unlock, Go Pro, Subscribe |
+| The way from a tool to its concept | **Learn the method** (a row, with the reader's level square) | Read about the method as a link under a title, Docs, Theory |
+| The Tools screen's tabs | the exam's own label ("Exam 5") and **All**, each with its count | My exam, Everything, Other |
 | The exam page's two documents | **Official syllabus**; **Dates and fees** | Syllabus PDF, Info, About |
 | The exam page's foot rows | **Readings**; the page's own titles (**Exam format**); **What you should know first**; **Fact Check** | Source Material, Prerequisite knowledge, Prerequisites |
 | An objective's weight | "23–30% of the exam", as the syllabus prints it | weight, weighting |
@@ -138,7 +147,13 @@ One thing, one name. Use these exactly.
 | The readiness forecast | **Projected readiness** | Predicted |
 | The pop-up behind the readiness ring | **Exam Readiness** | Study Guide |
 | A credential's requirements | **track** | path |
-| The settings page | **Settings** | You |
+| The profile screen | **You** (its rows: **League**, **Settings**, **Store**, **Help**) | Profile, Account, Me |
+| The settings screen | **Settings**, in four groups: **Studying**, **App**, **Account**, **Your data** | Preferences, Options, Privacy (the group is Your data) |
+| The XP to earn in a day | **Daily goal** ("60 / 100 XP") | Daily target, XP goal |
+| The day's small tasks | **quests**; a finished one shows **Collect** | challenges, missions, tasks |
+| The weekly table | the **league** ("Silver league", "Join the league", "Leave the league"); its lines read **Promoted** and **Relegated** | Leaderboard, Promotion zone, Demotion zone, demoted |
+| The opt-in study email | **Daily email** | Reminders, Daily reminder email |
+| The reader's avatar | **character** ("Change character") | avatar, mascot |
 | Taking a reward | **Collect** | Claim, Unlock, bank |
 | The date a plan aims at | **ready date** | target date |
 | Accounts | **Create account**, **Sign in** | Sign up, Make an account, Sign In |
@@ -193,10 +208,27 @@ in-world word's plain meaning beside it the first time it appears on a screen.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-11-23 · Redesign, You (`docs/redesign-spec.md` §7b, R3, R20) · Settings is one grouped
+  screen with every value on its row and no quiz settings; Delete account is plain red text.
+  Volume stays in Settings, so Sound opens a popup with the switch and the slider. A visitor
+  keeps what the browser keeps (theme, sound, session length, the daily goal) and is asked to
+  sign in for what an account holds. → A row shows its value, never a caption about it. Nothing
+  about how a quiz is sat is written in Settings. A screen a visitor can use says "Sign in"
+  once, beside what it would add.
+
+- 2026-11-23 · Redesign, Apply (`docs/redesign-spec.md` §7c) · Four things settled before it was
+  built. A card on Apply never disappears and never counts nothing: an exam with no tools reads
+  the whole catalogue's count ("35 tools"), never "0 for Exam 9". Anyone can read a brief;
+  starting one is the Pro action, and its button says what it does ("Upgrade to start"). A tool
+  has one concept, the first its method names, and the level square, "Learn the method" and
+  "Practice this" are all about it; with no questions "Practice this" is not drawn. A tool
+  belongs to every exam whose syllabus names its concept, so "20 for Exam 5" counts what the
+  exam covers, not what it introduces.
 - 2026-11-23 · Redesign, Learn (`docs/redesign-spec.md` §7, §2.4) · A title is text, never a
   hidden menu. A concept ends in one filled button, "Practice this", on its page and in the
   reader; an opened objective ends in "Practice <objective>". The syllabus's sentences are
-  shown as transcribed, with their concepts as pills under them. → No new control hangs off
+  shown as transcribed, with their concepts as pills under them. A pill opens the concept in
+  the reader over the exam page; it does not leave the page. → No new control hangs off
   a title. A Practice button names what it practices and starts a quiz; it never says
   "Start Quiz". Never reword a syllabus sentence to fit a layout.
 

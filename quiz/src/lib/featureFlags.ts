@@ -66,8 +66,8 @@ export const STREAK_ENABLED: boolean = true
  * Daily goal + XP system (roadmap P1.2) — the second piece of the retention loop.
  *
  * When ON, completing a quiz awards XP (weighted toward hard and decaying
- * concepts — see lib/xp.ts), and a configurable daily-goal ring appears on the
- * Dashboard, with the goal picker behind the Level popup's "Change goal". The pure XP/goal engine and
+ * concepts — see lib/xp.ts), and the level and the daily goal are drawn on You
+ * (`/you`) and as the ring on Today's level badge; the goal is changed from You's Today card or Settings. The pure XP/goal engine and
  * its tests stay compiled either way; the `: boolean` annotation keeps both
  * branches of every gate type-checked (see the flags above). Gate it off to
  * dark-launch or roll back independently of the streak.
@@ -90,8 +90,8 @@ export const QUESTS_ENABLED: boolean = true
 
 /**
  * Weekly XP leagues (roadmap P4.1) — opt-in, privacy-first light social. When
- * ON, a collapsible "League" card appears on the Dashboard (signed-in only)
- * (the Level popup's League tab, which also holds the join/leave). Joining places the
+ * ON, You has a League row (signed-in only) that opens the league's screen,
+ * `/you/league`, where a reader joins and leaves. Joining places the
  * student in a cohort of up to 30 at their tier for the current UTC week,
  * ranked by weekly XP; at week end the top of the cohort promotes a tier and
  * the bottom relegates (Duolingo-style — pure math in lib/leagues.ts, the
@@ -166,7 +166,7 @@ export const MISTAKES_REVIEW_ENABLED: boolean = true
  * When OFF, two things disappear: the `<OnboardingTour />` mount in App.tsx
  * (so nothing auto-launches for a first-time visitor and the collapsed
  * bottom-right launcher never appears) and the "Take the tour" replay row in
- * the Settings → Support card.
+ * Help, on You.
  *
  * Everything behind the flag is intentionally left intact — the component, the
  * store, its localStorage keys, and the `data-tour` target attributes sprinkled

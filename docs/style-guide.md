@@ -1146,7 +1146,8 @@ Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 
 - **The concept pill** (`ObjectiveCard.tsx`): a 40px outlined pill holding a level square
   (`sm`) and the concept's name. The outline is the line colour, and 2px in the text colour for
-  a concept in today's session.
+  a concept in today's session. The pill of the concept open in the reader is filled with the
+  text colour.
 - **The level button** (`ConceptLevelButton.tsx`): the square and the level's name in an
   outlined control; it opens Learning Progress.
 - **The Practice button** (`PracticeButton.tsx`): the screen's filled action, 58px on a page
@@ -1156,3 +1157,48 @@ Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 - **Example and trap cards** (`MarkdownCallout.tsx`) are outlines on every surface: the
   example in the line colour with an outlined "Example" pill, the trap in the text colour with
   its warning icon. Neither carries a hue.
+
+### 13.8 Apply
+
+Apply's home, the Tools screen and an attempt's overview (`pages/Apply.tsx`, `pages/Tools.tsx`,
+`components/project/AttemptOverviewView.tsx`; `docs/redesign-spec.md` §7c).
+
+- **An entry card** (`ApplyCard` in `pages/Apply.tsx`): an outlined card whose heading row is
+  the link (a 26px icon, the name at 22px, one count, a chevron). What the reader last touched
+  sits under a hairline as links of its own, never nested in the heading's.
+- **The step bar** (`StepBar` in `components/apply/ApplyParts.tsx`): a project's four steps as
+  one image. A step done is solid in the text colour, the current one dashed with its name in
+  bold, one not reached the line colour.
+- **A labelled row** (`ApplyRow`): 56px, a label at 17px, an optional leading square and
+  trailing value, a chevron. "Learn the method", "Read the brief" and "Data Sources" are all it.
+- **The tabs** on the Tools screen: 38px pills outlined in the text colour, the chosen one
+  solid, each with its count set lighter.
+- **A tool row**: a level square at 16px, the tool's name, a chevron, rows separated by
+  hairlines inside one outlined tile per practice area.
+- **A checklist row**: a 24px disc (solid with a tick when done, an outline when not), the
+  label, its figure in bold, and a 6px bar under a row that counts toward a limit.
+- **A tool's answer card** is a 1.5px outline in the text colour with nothing filled behind
+  the answer; the exam's colour is not on it.
+
+### 13.9 You's pieces
+
+The profile, the league and Settings (`docs/redesign-spec.md` §7b) share `components/you/rows.tsx`:
+
+- **The top row** (`YouScreen`): a 44px way out, a cross on the profile and a back arrow on the
+  league and Settings, then the title at 22px bold and one fact at the right (the league's days
+  left). Below `lg` it is the page's only chrome.
+- **A group of rows** (`RowGroup`): a 15px bold title over one outlined tile, hairlines between
+  its rows.
+- **A row** (`Row`): 56px, its label at 17px medium, its value at 15px beside a chevron. The
+  value is the setting itself ("25 min", "Jan 14", "Off"); a row never carries a caption. A row
+  that opens nothing has no chevron.
+- **A switch** (`SwitchRow`, `SwitchMark`): 52 by 32, filled in the text colour when on and an
+  outline when off. Used where a setting is edited in place.
+- **A two-way choice** (`ChoiceRow`): an outlined pill holding the options, the chosen one filled.
+- **A meter** (`Meter`): an 8px track in the line colour, filled in the text colour. A level, the
+  daily goal and a quest are all drawn with it; green stays an answer's.
+- **Delete account** is plain text in the incorrect red (`text-answer-incorrect`), the one use of
+  an answer colour outside an answer (R20).
+- **The league's table**: a row is rank, name and XP; the reader's row is filled in the text
+  colour with 14px corners; the Promoted and Relegated lines are a 13px bold label with an arrow
+  and a hairline running to the edge.

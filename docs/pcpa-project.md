@@ -13,11 +13,18 @@ The simulator reproduces that whole loop in the browser. It lives on the **Proje
 a brief and a data set and a deadline rather than a bank of questions. The PCPA study guide's
 **Project** button (`components/wiki/ExamProjectButton.tsx`) leads there too.
 
-**Projects are a Pro feature.** The sidebar row carries the Pro chip for every reader, and
-`pages/Project/index.tsx` checks `useSubscription().isPro` before anything else mounts: a
-reader without Pro gets a locked page at `/project` (*Sign in*, or *Upgrade to Pro* once
-signed in), and a link to an attempt is sent back there. Nothing behind the gate runs for
-them — no sync, no attempt store.
+**Working a project is a Pro feature; reading a brief is not** (decided 2026-11-23,
+`docs/redesign-spec.md` §8, Phase I). The sidebar row carries the Pro chip for every reader.
+`pages/Project/index.tsx` checks `useSubscription().isPro`: a reader without Pro finds the
+briefs at `/project` (`BriefsCatalogue` in `ProjectsHome.tsx`, each brief a row of one outlined tile) and reads any of them on its
+own page, `/project/brief/<case id>` (`BriefPage.tsx`: the brief view with no attempt behind
+it, so no deadline and no files), whose one button is **Upgrade to start**. A link to an
+attempt is sent back to `/project`, and nothing of an attempt runs for them: no sync, no
+attempt store. With Pro the same page's button is **Start this project**, and the start
+sheet's second step links to it (**Read the brief**).
+
+The Projects row leads to **Apply's home** (`/apply`, `pages/Apply.tsx`), whose first card is
+Projects: how many attempts are in progress, and the one worked on last with its four steps.
 
 ```
 Projects tab ──► + ──► Start sheet ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
@@ -63,7 +70,19 @@ The candidate attestation is made once, at submission, as on the real project.
 
 ## An attempt's views
 
-An attempt is one page, `pages/Project/ProjectAttempt.tsx`, with four views chosen by its
+An attempt is one page, `pages/Project/ProjectAttempt.tsx`. While it is open it is entered
+through its **overview** (`components/project/AttemptOverviewView.tsx`, the default view):
+the brief's title and company, Rehearsal or Practice as a tag, the four steps as one bar with
+the current one dashed, the submission checklist with its figures (Brief read, Code runs
+clean, Report words against 1,250, Appendices against 5, Submission questions), each row a
+button to the view where it is done, a row to read the brief, and one filled button,
+**Continue in <step>**. What each row and step says is `lib/attemptOverview.ts`, held to the
+Submit view's own rules; two fields on the attempt's record feed it, `briefReadAt` (set the
+first time the brief is on screen) and `cleanRun` (the last clean run's result, set by the
+Submit view's check). A view's top-bar arrow leads back to the overview; a submitted attempt
+has none and opens on its results.
+
+Under the overview are four views chosen by the
 `view` search parameter: **Brief**, **Workspace**, **Report** and **Submit** — **Results** in
 Submit's place once the attempt is submitted. Two surfaces list them: the switcher in the
 attempt's top bar, and rows under **Projects** in the sidebar while the attempt is open (in

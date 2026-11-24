@@ -51,6 +51,9 @@ const { Component: DataSources, preload: loadDataSources } = lazyRoute(() => imp
 // its editor, its spreadsheet and its data generator are for the candidates
 // who open it.
 const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/pages/Project'))
+// Apply's home (docs/redesign-spec.md §7c): the way into Projects, Tools and
+// Workflows. Lazy: it reads the tools' registry and the briefs.
+const { Component: Apply, preload: loadApply } = lazyRoute(() => import('@/pages/Apply'))
 // Quiz Battle (docs/quiz-battle.md) — a game two players open on purpose, so
 // its engine, its sessions and its screens wait for the click.
 const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pages/Battle'))
@@ -81,6 +84,9 @@ const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages
 // never the first screen, so they wait for the click (first-paint budget, E3).
 const { Component: GemShop, preload: loadGemShop } = lazyRoute(() => import('@/pages/GemShop'))
 const { Component: Settings, preload: loadSettings } = lazyRoute(() => import('@/pages/Settings'))
+// You (docs/redesign-spec.md §7b): the profile and the league. Settings is its third screen.
+const { Component: You, preload: loadYou } = lazyRoute(() => import('@/pages/You'))
+const { Component: League, preload: loadLeague } = lazyRoute(() => import('@/pages/League'))
 const { Component: Search, preload: loadSearch } = lazyRoute(() => import('@/pages/Search'))
 const { Component: Upgrade, preload: loadUpgrade } = lazyRoute(() => import('@/pages/Upgrade'))
 // The onboarding tour is parked (TOUR_ENABLED is off): lazy, so a parked
@@ -107,6 +113,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
   if (TOOLS_ENABLED && (route === '/workflows' || route.startsWith('/workflows/'))) return loadWorkflowBuilder()
   if (TOOLS_ENABLED && (route === '/data-sources' || route.startsWith('/data-sources/'))) return loadDataSources()
+  if (route === '/apply') return loadApply()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
@@ -114,6 +121,8 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/store/gems') return loadGemShop()
   if (route === '/upgrade') return loadUpgrade()
   if (route === '/settings') return loadSettings()
+  if (route === '/you') return loadYou()
+  if (route === '/you/league') return loadLeague()
   if (route === '/search') return loadSearch()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
@@ -442,6 +451,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Suspense fallback={<WikiFallback />}><Settings /></Suspense>} />
+                <Route path="/you" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><You /></Suspense></ErrorBoundary>} />
+                <Route path="/you/league" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><League /></Suspense></ErrorBoundary>} />
                 <Route path="/upgrade" element={<Suspense fallback={<WikiFallback />}><Upgrade /></Suspense>} />
                 {/* The Store: real products, each bought on its seller's own
                     page. The gem shop is a corner of it. */}
@@ -479,7 +490,9 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/cowork/:tab/:id" element={<CoworkRedirect />} />
                 {/* The Projects tab: the briefs, and one attempt. `/project/pcpa`
                     was the PCPA portal before projects were a tab of their own. */}
+                <Route path="/apply" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><Apply /></Suspense></ErrorBoundary>} />
                 <Route path="/project" element={<ProjectRoute />} />
+                <Route path="/project/brief/:caseId" element={<ProjectRoute />} />
                 <Route path="/project/pcpa" element={<Navigate to="/project" replace />} />
                 <Route path="/project/pcpa/:attemptId" element={<ProjectRoute />} />
                 <Route path="/wiki" element={

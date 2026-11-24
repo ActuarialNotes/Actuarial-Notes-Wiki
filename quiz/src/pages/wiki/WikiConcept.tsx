@@ -3,8 +3,8 @@
 // the article as it is, "Next in <objective>" at its end and a fixed foot,
 // "Practice this".
 //
-// A concept's address shows the concept, to a reader following a pill from an
-// exam page and to a visitor landing on it alike (docs/seo.md). Which exam it
+// A concept's address shows the concept and never redirects (docs/seo.md): a
+// pill opened in a new tab, a search result, a shared link. Which exam it
 // is being read for is `?from=`, else the first exam, in ladder order, whose
 // syllabus names it.
 

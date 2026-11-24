@@ -126,7 +126,7 @@ export function FactCheckPanel({
     <div className="space-y-4 text-sm">
       {/* The verdict leads the sheet (`FactCheckBadge`'s banner); the record
           is one grouped surface of folding rows under it. */}
-      <div className="overflow-hidden rounded-xl bg-card divide-y divide-border/60 empty:hidden">
+      <div className="overflow-hidden rounded-[18px] border border-border divide-y divide-border empty:hidden">
         {summary && summary.open.length > 0 && (
           <FactCheckSection
             title="Open issues"
@@ -152,13 +152,13 @@ export function FactCheckPanel({
       </div>
 
       {state.kind === 'loading' && everChecked && (
-        <p className="flex items-center gap-2 px-1.5 text-sm text-muted-foreground">
+        <p className="flex items-center gap-2 px-1.5 text-sm">
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
           Loading the record
         </p>
       )}
       {state.kind === 'failed' && (
-        <p className="px-1.5 text-sm text-muted-foreground">
+        <p className="px-1.5 text-sm">
           Couldn’t load the details of this check. The full record has them.
         </p>
       )}
@@ -169,7 +169,7 @@ export function FactCheckPanel({
             href={githubBlobUrl(logPath)}
             target="_blank"
             rel="noreferrer"
-            className={cn('inline-flex items-center gap-1 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
+            className={cn('inline-flex items-center gap-1 rounded-md text-[13px] underline-offset-2 hover:underline', ROW_FOCUS)}
           >
             <ExternalLink className="h-3 w-3" aria-hidden />
             Full record
@@ -287,17 +287,17 @@ function CheckRow({ entry }: { entry: LogEntry }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-sound="tap"
-        className={cn('flex w-full items-center gap-2.5 px-3 py-3 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
+        className={cn('flex w-full items-center gap-2.5 px-3 py-3 text-left transition-colors hover:bg-foreground/10', ROW_FOCUS)}
       >
         <span className={cn('min-w-0 flex-1 text-sm tabular-nums', open && 'font-medium')}>{date}</span>
         {status && (
-          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
+          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[13px] font-semibold',
             FACT_CHECK_TONE_CLASSES[status.tone])}>
             {status.label}
           </span>
         )}
         <ChevronDown
-          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')}
           aria-hidden
         />
       </button>
@@ -312,17 +312,17 @@ function CheckRow({ entry }: { entry: LogEntry }) {
                 onClick={() => setShowChecks((v) => !v)}
                 aria-expanded={showChecks}
                 data-sound="tap"
-                className={cn('inline-flex items-center gap-1 rounded-md text-xs font-medium text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
+                className={cn('inline-flex items-center gap-1 rounded-md text-[13px] font-medium underline-offset-2 hover:underline', ROW_FOCUS)}
               >
                 What was compared
                 <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', showChecks && 'rotate-180')} aria-hidden />
               </button>
               {showChecks && (
-                <p className="mt-1.5 break-words text-xs leading-relaxed text-muted-foreground">{checks}</p>
+                <p className="mt-1.5 break-words text-[13px] leading-relaxed">{checks}</p>
               )}
             </div>
           )}
-          {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
+          {meta && <p className="text-[13px]">{meta}</p>}
         </div>
       )}
     </li>
@@ -356,7 +356,7 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-sound="tap"
-        className={cn('flex w-full items-start gap-2.5 px-3 py-3 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
+        className={cn('flex w-full items-start gap-2.5 px-3 py-3 text-left transition-colors hover:bg-foreground/10', ROW_FOCUS)}
       >
         {applied && <CheckMark className="mt-0.5 h-4 w-4" />}
         <span className={cn('min-w-0 flex-1 break-words text-sm', open && 'font-medium')}>
@@ -364,13 +364,13 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
           {applied && <span className="sr-only">, already corrected on the page</span>}
         </span>
         {isOpenFinding && entry.severity && (
-          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
+          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[13px] font-semibold',
             FACT_CHECK_TONE_CLASSES[SEVERITY_TONE[entry.severity] ?? 'grey'])}>
             {entry.severity}
           </span>
         )}
         <ChevronDown
-          className={cn('mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform',
+          className={cn('mt-0.5 h-4 w-4 shrink-0 transition-transform',
             open && 'rotate-180')}
           aria-hidden
         />
@@ -417,7 +417,7 @@ export function EntryDetail({ group }: { group: LogEntryGroup }) {
       {outcome && <Outcome outcome={outcome} />}
       {note && <EntryNote label={hasDiff || outcome ? 'Note' : null} text={note} />}
       {closingNote && <EntryNote label="Closed" text={closingNote} />}
-      {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
+      {meta && <p className="text-[13px]">{meta}</p>}
     </div>
   )
 }
@@ -448,7 +448,7 @@ function DiffSide({
         {side === 'removed' ? '−' : '+'}
       </span>
       <div className="min-w-0 flex-1">
-        <p className={cn('text-xs font-semibold leading-5', tone.mark)}>{label}</p>
+        <p className={cn('text-[13px] font-semibold leading-5', tone.mark)}>{label}</p>
         <p className="mt-0.5 break-words text-sm leading-relaxed">{text}</p>
         {links.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-2">
@@ -485,7 +485,7 @@ function SourceLink({ url }: { url: string }) {
       target="_blank"
       rel="noreferrer"
       aria-label={`Open the source on ${host}`}
-      className={cn('inline-flex min-h-[32px] items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground', ROW_FOCUS)}
+      className={cn('inline-flex min-h-[32px] items-center gap-2 rounded-md border border-foreground px-2.5 py-1 text-sm font-medium transition-colors hover:bg-foreground/10', ROW_FOCUS)}
     >
       <ExternalLink className="h-4 w-4 shrink-0 text-primary" aria-hidden />
       {host}
@@ -514,11 +514,11 @@ function Outcome({ outcome }: { outcome: FindingOutcome }) {
     <div className="flex gap-2.5">
       {done
         ? <CheckMark className="mt-0.5 h-4 w-4" />
-        : <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />}
+        : <Icon className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />}
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium leading-5">
           {OUTCOME_LABEL[outcome.kind]}
-          {aside && <span className="font-normal text-muted-foreground"> · {aside}</span>}
+          {aside && <span className="font-normal"> · {aside}</span>}
         </p>
         {outcome.note && (
           <p className="mt-1 break-words text-sm leading-relaxed">{outcome.note}</p>
@@ -531,7 +531,7 @@ function Outcome({ outcome }: { outcome: FindingOutcome }) {
 function EntryNote({ label, text }: { label: string | null; text: string }) {
   return (
     <div>
-      {label && <p className="text-xs font-semibold text-muted-foreground">{label}</p>}
+      {label && <p className="text-[13px] font-semibold">{label}</p>}
       <p className={cn('break-words text-sm leading-relaxed', label && 'mt-0.5')}>{text}</p>
     </div>
   )

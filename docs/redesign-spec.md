@@ -977,6 +977,13 @@ For every phase:
 
 ---
 
+**After the phases:** `docs/redesign-consistency-review.md` (2026-11-24) lists what still
+disagrees with §2 once A to E and G to I were built: the old pieces a redesigned screen opens,
+the screens not yet rebuilt, and the patterns that differ between screens. Its §1, the info
+popups (`InfoSheet`, Dates and fees), is done.
+
+---
+
 ## 9. Where this differs from `docs/design-review.md`
 
 | There | Here |

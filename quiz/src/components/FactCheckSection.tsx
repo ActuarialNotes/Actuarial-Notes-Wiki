@@ -53,7 +53,7 @@ export function FactCheckSection({
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           data-sound="tap"
-          className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left text-sm font-normal transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
+          className="flex w-full items-center gap-3 px-3.5 py-3 text-left text-[15px] font-normal transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10 focus-visible:outline-none"
         >
           <span
             className={cn('flex h-6 w-6 shrink-0 items-center justify-center rounded-md [&>svg]:h-3.5 [&>svg]:w-3.5',
@@ -63,11 +63,11 @@ export function FactCheckSection({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block leading-tight">{title}</span>
-            {detail && <span className="mt-0.5 block text-xs text-muted-foreground">{detail}</span>}
+            {detail && <span className="mt-0.5 block text-[13px]">{detail}</span>}
           </span>
-          <span className="shrink-0 tabular-nums text-muted-foreground">{count}</span>
+          <span className="shrink-0 tabular-nums">{count}</span>
           <ChevronDown
-            className={cn('h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+            className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')}
             aria-hidden
           />
         </button>

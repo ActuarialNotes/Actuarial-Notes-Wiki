@@ -136,7 +136,7 @@ export function AnswerabilityHistory({ entry, reach }: { entry: AnswerabilityEnt
 
 function Pill({ label }: { label: Label }) {
   return (
-    <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
+    <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[13px] font-semibold',
       FACT_CHECK_TONE_CLASSES[label.tone])}>
       {label.label}
     </span>
@@ -158,15 +158,15 @@ function EventRow({ event }: { event: AnswerabilityEvent }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-sound="tap"
-        className={cn('flex w-full items-center gap-2.5 px-3 py-3 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
+        className={cn('flex w-full items-center gap-2.5 px-3 py-3 text-left transition-colors hover:bg-foreground/10', ROW_FOCUS)}
       >
         <span className={cn('min-w-0 flex-1 text-sm tabular-nums', open && 'font-medium')}>
           {date}
-          {event.kind === 'resolution' && <span className="text-muted-foreground"> · {event.requirement.concept || 'Requirement'}</span>}
+          {event.kind === 'resolution' && <span> · {event.requirement.concept || 'Requirement'}</span>}
         </span>
         <Pill label={pill} />
         <ChevronDown
-          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')}
           aria-hidden
         />
       </button>
@@ -186,7 +186,7 @@ function EventRow({ event }: { event: AnswerabilityEvent }) {
             <>
               <p className="break-words text-sm leading-relaxed">{event.requirement.statement}</p>
               {event.resolution.note && (
-                <p className="break-words text-sm leading-relaxed text-muted-foreground">{event.resolution.note}</p>
+                <p className="break-words text-sm leading-relaxed">{event.resolution.note}</p>
               )}
               {event.resolution.page && event.resolution.quote && (
                 <Passage page={event.resolution.page} quote={event.resolution.quote} />
@@ -233,15 +233,15 @@ function RequirementRow({ req, reach, asChecked = false }: {
         aria-expanded={canOpen ? open : undefined}
         disabled={!canOpen}
         data-sound={canOpen ? 'tap' : 'none'}
-        className={cn('block w-full px-3 py-2.5 text-left transition-colors enabled:hover:bg-accent/50', ROW_FOCUS)}
+        className={cn('block w-full px-3 py-2.5 text-left transition-colors enabled:hover:bg-foreground/10', ROW_FOCUS)}
       >
         {/* The pill rides the concept's line, so the statement gets the full width. */}
         <span className="flex items-center gap-2.5">
-          <span className="min-w-0 flex-1 truncate text-xs font-medium text-muted-foreground">{req.concept}</span>
+          <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{req.concept}</span>
           <Pill label={label} />
           {canOpen && (
             <ChevronDown
-              className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+              className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')}
               aria-hidden
             />
           )}
@@ -250,7 +250,7 @@ function RequirementRow({ req, reach, asChecked = false }: {
       </button>
       {open && (
         <div className="space-y-2 border-t border-border px-3 py-2.5">
-          {note && <p className="break-words text-sm leading-relaxed text-muted-foreground">{note}</p>}
+          {note && <p className="break-words text-sm leading-relaxed">{note}</p>}
           {places.map((p, i) => <Passage key={`${p.page}:${i}`} page={p.page} quote={p.quote} />)}
         </div>
       )}
@@ -262,7 +262,7 @@ function RequirementRow({ req, reach, asChecked = false }: {
 function Passage({ page, quote }: { page: string; quote: string }) {
   return (
     <figure>
-      <figcaption className="text-xs font-semibold text-muted-foreground">{page}</figcaption>
+      <figcaption className="text-[13px] font-semibold">{page}</figcaption>
       <blockquote className="mt-1 border-l-2 border-border pl-3">
         <MarkdownText className="break-words text-sm leading-relaxed [&_p]:my-0">{quoteText(quote)}</MarkdownText>
       </blockquote>

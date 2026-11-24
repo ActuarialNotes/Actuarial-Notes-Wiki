@@ -1,7 +1,6 @@
 import { CheckMark } from '@/components/CheckMark'
 import type { ReactNode } from 'react'
 import { Group, GroupRow, GroupSurface } from '@/components/ui/GroupedList'
-import { examAccentStyle } from '@/lib/examColors'
 import {
   formatStepDateShort,
   sittingHeadline,
@@ -12,11 +11,12 @@ import {
 import { cn } from '@/lib/utils'
 
 /**
- * A sitting, drawn: a **status banner** in the exam's colour — the one thing
- * that matters now and its countdown ("Exam window open · 7 days"), over a
+ * A sitting, drawn: a **status banner**, outlined, with the one thing that
+ * matters now and its countdown ("Exam window open · 7 days"), over a
  * **ruler** that lays every date out to scale with today ticked on it — and
- * under it the **dates** as a grouped list, a check on what has passed and a
- * ring on what is open or next.
+ * under it the **dates** as a grouped list, a check on what has passed, a
+ * filled dot on what is open and a ring on what is next. All of it is in the
+ * text and line colours: the exam's colour is on its logo alone.
  *
  * Two surfaces draw a sitting with it — the study guide's info panel
  * (`components/wiki/ExamSittingInfoButton.tsx`) and the Store's registration
@@ -27,19 +27,17 @@ import { cn } from '@/lib/utils'
 export function SittingTimeline({
   steps,
   today,
-  examKey,
   windowNote,
   listClassName,
 }: {
   steps: SittingStep[]
   today: string
-  examKey: string
   windowNote?: string
   listClassName?: string
 }) {
   return (
-    <div className="space-y-3" style={examAccentStyle(examKey)}>
-      <SittingStatus steps={steps} today={today} examKey={examKey} />
+    <div className="space-y-3">
+      <SittingStatus steps={steps} today={today} />
       <GroupSurface className={listClassName}>
         <SittingDateRows steps={steps} today={today} windowNote={windowNote} />
       </GroupSurface>
@@ -48,23 +46,22 @@ export function SittingTimeline({
 }
 
 /** The banner: headline and countdown over the ruler. Nothing for a sitting with neither. */
-export function SittingStatus({ steps, today, examKey }: { steps: SittingStep[]; today: string; examKey: string }) {
+export function SittingStatus({ steps, today }: { steps: SittingStep[]; today: string }) {
   const headline = sittingHeadline(steps, today)
   const ruler = sittingRuler(steps, today)
   if (!headline && !ruler) return null
   return (
     <div
-      className="rounded-xl bg-[var(--exam-accent-soft,hsl(var(--muted)))] px-4 py-3.5"
-      style={examAccentStyle(examKey)}
+      className="rounded-[18px] border border-border px-4 py-3.5"
       data-testid="sitting-status"
     >
       {headline && (
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">{headline.title}</p>
-            <p className="text-xs text-muted-foreground tabular-nums">{headline.detail}</p>
+            <p className="text-[15px] font-semibold">{headline.title}</p>
+            <p className="text-[13px] tabular-nums">{headline.detail}</p>
           </div>
-          <p className="shrink-0 text-[22px] font-bold leading-none tabular-nums text-[var(--exam-accent,hsl(var(--foreground)))]">
+          <p className="shrink-0 text-[22px] font-bold leading-none tabular-nums">
             {headline.count}
           </p>
         </div>
@@ -78,10 +75,10 @@ export function SittingStatus({ steps, today, examKey }: { steps: SittingStep[];
 function Ruler({ ruler }: { ruler: SittingRuler }) {
   const { today } = ruler
   return (
-    <div className="relative mx-1 mt-2 h-11" aria-hidden>
-      <span className="absolute inset-x-0 top-[21px] h-0.5 rounded-full bg-[var(--exam-accent-muted,hsl(var(--border)))]" />
+    <div className="relative mx-1 mt-2 h-[50px]" aria-hidden>
+      <span className="absolute inset-x-0 top-[21px] h-0.5 rounded-full bg-border" />
       {today !== null && (
-        <span className="absolute left-0 top-[21px] h-0.5 rounded-full bg-muted-foreground/70" style={{ width: `${today}%` }} />
+        <span className="absolute left-0 top-[21px] h-0.5 rounded-full bg-foreground" style={{ width: `${today}%` }} />
       )}
       {ruler.marks.map(m =>
         m.to !== undefined ? (
@@ -90,8 +87,8 @@ function Ruler({ ruler }: { ruler: SittingRuler }) {
             className={cn(
               'absolute top-4 h-3 rounded-full',
               m.state === 'now' || m.state === 'done'
-                ? 'bg-[var(--exam-accent-vivid,hsl(var(--foreground)))]'
-                : 'bg-card ring-[1.5px] ring-inset ring-[var(--exam-accent,hsl(var(--foreground)))]',
+                ? 'bg-foreground'
+                : 'bg-ground ring-[1.5px] ring-inset ring-foreground',
             )}
             style={{ left: `${m.at}%`, width: `${Math.max(m.to - m.at, 1.5)}%` }}
           />
@@ -99,8 +96,8 @@ function Ruler({ ruler }: { ruler: SittingRuler }) {
           <span
             key={m.key}
             className={cn(
-              'absolute top-[17px] -ml-[5px] h-2.5 w-2.5 rounded-full border-2 border-muted-foreground',
-              m.state === 'done' ? 'bg-muted-foreground' : 'bg-card',
+              'absolute top-[17px] -ml-[5px] h-2.5 w-2.5 rounded-full border-2 border-foreground',
+              m.state === 'done' ? 'bg-foreground' : 'bg-ground',
             )}
             style={{ left: `${m.at}%` }}
           />
@@ -108,10 +105,10 @@ function Ruler({ ruler }: { ruler: SittingRuler }) {
       )}
       {today !== null && (
         <>
-          <span className="absolute top-3 -ml-px h-[22px] w-0.5 rounded-full bg-foreground" style={{ left: `${today}%` }} />
+          <span className="absolute top-[15px] -ml-px h-[14px] w-0.5 rounded-full bg-foreground" style={{ left: `${today}%` }} />
           <span
             className={cn(
-              'absolute top-0 text-[10px] font-bold leading-none',
+              'absolute top-0 text-[13px] font-bold leading-none',
               today < 8 ? '-translate-x-0.5' : today > 92 ? '-translate-x-full' : '-translate-x-1/2',
             )}
             style={{ left: `${today}%` }}
@@ -121,7 +118,7 @@ function Ruler({ ruler }: { ruler: SittingRuler }) {
         </>
       )}
       {ruler.months.map(mo => (
-        <span key={`${mo.label}${mo.at}`} className="absolute top-[30px] -translate-x-1/2 text-[10.5px] text-muted-foreground" style={{ left: `${mo.at}%` }}>
+        <span key={`${mo.label}${mo.at}`} className="absolute top-[33px] -translate-x-1/2 text-[13px] leading-none" style={{ left: `${mo.at}%` }}>
           {mo.label}
         </span>
       ))}
@@ -142,7 +139,6 @@ export function SittingDateRows({ steps, today, windowNote }: { steps: SittingSt
             label={<>{step.label}<span className="sr-only">{STATE_SR[step.state]}</span></>}
             detail={lines.length > 0 ? lines.map(l => <span key={l} className="block">{l}</span>) : undefined}
             value={formatStepDateShort(step, today)}
-            dimmed={step.state === 'done'}
             strong={step.state === 'now' || step.state === 'next'}
           />
         )
@@ -162,10 +158,10 @@ export function SittingDates({ footer, ...rows }: { steps: SittingStep[]; today:
 
 /** Drawn only — the state is read out in the step's label (`STATE_SR`). */
 function StepMarker({ state }: { state: SittingStep['state'] }) {
-  if (state === 'done') return <CheckMark className="h-4 w-4" />
-  if (state === 'now') return <span className="h-3 w-3 rounded-full bg-[var(--exam-accent,hsl(var(--primary)))] ring-4 ring-[var(--exam-accent-soft,hsl(var(--primary)/0.2))]" aria-hidden />
-  if (state === 'next') return <span className="h-3 w-3 rounded-full border-2 border-[var(--exam-accent,hsl(var(--primary)))]" aria-hidden />
-  return <span className="h-3 w-3 rounded-full border-2 border-muted-foreground/50" aria-hidden />
+  if (state === 'done') return <CheckMark className="h-4 w-4 text-foreground" />
+  if (state === 'now') return <span className="h-3 w-3 rounded-full bg-foreground" aria-hidden />
+  if (state === 'next') return <span className="h-3 w-3 rounded-full border-2 border-foreground" aria-hidden />
+  return <span className="h-3 w-3 rounded-full border-[1.5px] border-border" aria-hidden />
 }
 
 const STATE_SR: Record<SittingStep['state'], string> = {

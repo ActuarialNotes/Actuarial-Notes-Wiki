@@ -594,15 +594,16 @@ info, Fact Check, *Where you're losing marks*, the level popup, Learning Progres
 keyboard shortcuts — is an **info popup**, built from `InfoSheet` and modelled on the study
 guide's sitting panel (`ExamSittingInfoButton`):
 
-- **A black sheet** (`bg-background`, `rounded-2xl`, `max-w-sm`) so its grouped lists
-  (`GroupedList`, `bg-card`) read as cards on it.
-- **A banner** leads (`InfoBanner`): a tinted card holding the popup's own header — a tile
-  (the exam logo, a verdict mark, the level), a small line naming what the title belongs to,
-  the title, a round close — and, along its foot, a **stat strip** (`Stat`) of the two to
-  four figures that matter. Tinted in the exam's accent when an exam scopes the popup
-  (`examAccentStyle` on the sheet, `EXAM_BANNER`), in a verdict's tone for Fact Check, and
-  the neutral wash otherwise (`NEUTRAL_BANNER`). A figure that isn't known is left out, never
-  estimated — the strip simply has fewer columns.
+- **The redesign's popup** (§13.5): the ground colour, a 1.5px edge in the text colour, 22px
+  corners, the page behind dimmed with no blur; a sheet from the foot of the screen below
+  `sm`. `InfoSheet` draws that shape itself and leaves Escape to its caller, because several
+  of these hand the key to a dialog opened over them. Its grouped lists (`GroupedList`) are
+  outlines in the line colour with hairlines between rows.
+- **A header** leads (`InfoBanner`): a tile (the exam logo, a verdict mark), a small line
+  naming what the title belongs to, the title, and close (`INFO_CLOSE`, a 44px target). Under
+  it, a **stat strip** (`Stat`) of the two to four figures that matter, outlined. Nothing is
+  tinted and no figure takes the exam's colour; the one hue is Fact Check's verdict tile. A
+  figure that isn't known is left out, never estimated: the strip has fewer columns.
 - **Rows** below, in grouped lists: a link or button row is `GROUP_ACTION_ROW` with a small
   `RowTile` or `PublisherChip` and a `RowChevron`; a fact is a `GroupRow`. A group gets a
   label only when it has a neighbour to be told apart from.
@@ -1086,8 +1087,8 @@ the `--answer-*` tokens.
 corners, over a page dimmed to about a third (`bg-ground/70`, no blur). Below `sm` it is a
 sheet from the foot of the screen with a grab handle; from `sm` a panel in the middle. It
 closes on Escape and a press outside, keeps Tab inside itself and gives focus back when it
-closes. `PopupTitle` is its heading. `InfoSheet` (§7.2c) stays for the screens not yet
-redesigned.
+closes. `PopupTitle` is its heading. An info popup (`InfoSheet`, §7.2c) is drawn in the same
+shape since 2026-11-24 and keeps its own shell for its keys.
 
 ### 13.6 The session
 

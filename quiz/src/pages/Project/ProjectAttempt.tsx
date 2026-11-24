@@ -7,6 +7,7 @@ import { WorkspaceView } from '@/components/project/WorkspaceView'
 import { ReportView } from '@/components/project/ReportView'
 import { SubmitView } from '@/components/project/SubmitView'
 import { ResultsView } from '@/components/project/ResultsView'
+import { AttemptOverviewView } from '@/components/project/AttemptOverviewView'
 import { ProjectTopBar, WindowPill } from '@/components/project/ProjectTopBar'
 import { queueOpenFile } from '@/components/project/workspaceTabs'
 import { projectCase as findCase } from '@/data/pcpaProjects'
@@ -15,15 +16,16 @@ import { useAttemptNav } from '@/hooks/useAttemptNav'
 import { useAttempt, usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { usePcpaWorkspace, type SeedFile } from '@/hooks/usePcpaWorkspace'
 import { useProjectRuntime } from '@/hooks/useProjectRuntime'
-import { attemptPhase, starterScript, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import { attemptPhase, attemptRoute, starterScript, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptViewTab, attemptViews, resolveAttemptView, type AttemptView } from '@/lib/attemptViews'
 import { generateCase } from '@/lib/pcpaData'
 import { toCsv } from '@/lib/csv'
 
 /**
- * One project attempt: the materials, the workspace, the report, submission
- * and — once submitted — the results. The five are views of one page (the
- * `view` search parameter), not five pages: switching between them is the
+ * One project attempt: its overview (the way in, while it is open —
+ * `AttemptOverviewView`), the materials, the workspace, the report, submission
+ * and — once submitted — the results. They are views of one page (the
+ * `view` search parameter), not pages of their own: switching between them is the
  * candidate moving between windows of one project, and a query-only change
  * doesn't slide the sheet (`lib/viewTransition.ts`). The sidebar lists the
  * same views under Projects (`lib/attemptViews.ts`), from what this page
@@ -90,6 +92,13 @@ export default function ProjectAttemptPage() {
     shutdown()
   }, [closeWorkspace, shutdown])
 
+  // The first time the brief is on screen: what the overview's "Brief read" reads.
+  const briefShown = view === 'brief' && status === 'ready' && !!attempt && attempt.briefReadAt === undefined && phase !== 'submitted'
+  const attemptKey = attempt?.id
+  useEffect(() => {
+    if (briefShown && attemptKey) update(attemptKey, { briefReadAt: Date.now() })
+  }, [briefShown, attemptKey, update])
+
   // What the sidebar mirrors under Projects: this attempt's views and the one showing.
   const showNav = useAttemptNav(s => s.show)
   const clearNav = useAttemptNav(s => s.clear)
@@ -138,9 +147,18 @@ export default function ProjectAttemptPage() {
     return { value, label: <><Icon className="h-4 w-4" /><span className="hidden sm:inline">{name}</span></>, ariaLabel: name }
   })
 
+  if (view === 'overview') {
+    return (
+      <div className="h-[100dvh] overflow-y-auto">
+        <AttemptOverviewView attempt={attempt} projectCase={projectCase} phase={phase} now={now} onOpen={setView} />
+      </div>
+    )
+  }
+
   return (
     <div className="flex h-[100dvh] flex-col">
       <ProjectTopBar
+        overviewTo={phase === 'submitted' ? undefined : attemptRoute(attempt.id)}
         backTo="/project"
         backLabel="Projects"
         title={projectCase.title}

@@ -20,6 +20,7 @@ export function Popup({
   children,
   layer = 'z-[80]',
   suspended = false,
+  aboveReader = false,
   className,
 }: {
   onClose: () => void
@@ -33,6 +34,12 @@ export function Popup({
    * past paper): Escape and Tab are left to it until it closes.
    */
   suspended?: boolean
+  /**
+   * The popup stays up while the concept reader is open and sits in the room
+   * above the reader's pane. Esc and Tab are then the reader's: Esc closes
+   * the reader first, and the popup on the next press.
+   */
+  aboveReader?: boolean
   className?: string
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
@@ -49,6 +56,7 @@ export function Popup({
 
     function onKeyDown(e: KeyboardEvent) {
       if (suspendedRef.current) return
+      if (aboveReader && document.documentElement.dataset.conceptSplitOpen) return
       if (e.key === 'Escape') {
         e.stopPropagation()
         onCloseRef.current()
@@ -80,13 +88,17 @@ export function Popup({
       document.body.style.overflow = overflow
       before?.focus?.()
     }
-  }, [])
+  }, [aboveReader])
 
   return (
     <OverlayPortal>
-      <div className={cn('fixed inset-0 flex items-end justify-center sm:items-center sm:p-4 paper-scrim', layer)}>
+      <div
+        className={cn('fixed inset-0 flex items-end justify-center sm:items-center sm:p-4 paper-scrim', layer)}
+        data-above-reader={aboveReader || undefined}
+        style={aboveReader ? { bottom: 'var(--concept-split-height, 0px)' } : undefined}
+      >
         {/* The page behind, dimmed to about 30%. No blur: it stays readable as a page. */}
-        <div className="fixed inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
+        <div className="absolute inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
         <div
           ref={panelRef}
           role="dialog"
@@ -94,6 +106,7 @@ export function Popup({
           aria-label={label}
           aria-labelledby={labelledBy}
           tabIndex={-1}
+          style={aboveReader ? { maxHeight: 'calc(92dvh - var(--concept-split-height, 0px))' } : undefined}
           className={cn(
             'relative z-10 flex max-h-[92dvh] w-full flex-col gap-[18px] overflow-y-auto bg-ground text-foreground outline-none',
             'rounded-t-[22px] border-[1.5px] border-b-0 border-foreground px-5 pb-7 pt-2.5',

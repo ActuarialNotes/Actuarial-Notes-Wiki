@@ -145,6 +145,14 @@ CDF never replaces the latest values a reader typed.
 
 ## 5. The catalogue
 
+_Changed 2026-11-23 by the redesign's Apply phase (`docs/redesign-spec.md` §7c.2, §8): the
+catalogue is the **Tools screen**. Its two tabs are the exam in focus and All, the areas are
+headings, each row leads with the level square of the tool's concept in place of the exam's
+dot, and the recent tools are on Apply's Tools card. `?area=` still shows one area (a
+breadcrumb's link). On a tool's page the answer card is an outline, "Learn the method" is a
+row and "Practice this" is at the foot; the rest of this document stands. The list below is
+what was built on 2026-11-09._
+
 - **Area chips** under the title, always on screen (they set `?area=`), replacing "All tools".
 - **Pick up where you left off**: the three tools used last on this device, each with the answer its
   page last showed (`lib/toolRecent.ts`, localStorage, R7), tinted in its exam.

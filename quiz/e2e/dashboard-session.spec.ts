@@ -129,8 +129,22 @@ test('the Syllabus tile opens the squares by learning objective, and a square op
   const square = objective.locator('[data-concept-square]').first()
   const name = await square.getAttribute('data-concept-square')
   await square.click()
+  // The overlay stays up, in the room above the reader, on the square being read.
+  const reader = page.locator('.concept-popup-aside')
+  await expect(reader).toContainText(name!, { timeout: 30_000 })
+  await expect(overlay).toBeVisible()
+  await expect(square).toHaveAttribute('aria-current', 'true')
+  await expect(square).toBeInViewport()
+  const overlayBox = (await overlay.boundingBox())!
+  const readerBox = (await reader.boundingBox())!
+  expect(overlayBox.y + overlayBox.height).toBeLessThanOrEqual(readerBox.y + 1)
+  await page.screenshot({ path: 'test-results/today-syllabus-overlay-reading.png' })
+  // Esc closes the reader first, then the overlay.
+  await page.keyboard.press('Escape')
+  await expect(reader).toBeHidden()
+  await expect(overlay).toBeVisible()
+  await page.keyboard.press('Escape')
   await expect(overlay).toBeHidden()
-  await expect(page.locator('.concept-popup-aside')).toContainText(name!, { timeout: 30_000 })
 })
 
 test('on desktop a square names its concept when pointed at, and opens it', async ({ page }) => {

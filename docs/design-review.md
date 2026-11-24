@@ -525,7 +525,11 @@ concepts as pills, "Practice <objective>", the concept page's level button, "mor
 quiz as an outlined card and rows for a Practice Exam, Past papers and Flashcards (F3: Flashcards
 is a row of Practice, though its sidebar row stays until the navigation is built); the setup is a
 black popup; a past paper shows the reader's last result; and one search covers concepts,
-resources and questions (F6). Phases E, F, H and I are not built.
+resources and questions (F6).
+**Phase I (Apply) was built the same day**: the home's three cards (Projects, Tools,
+Workflows), the Tools screen with a tab for the exam in focus, the tool page's outlined
+answer, "Learn the method" and "Practice this" (the tool link F13 asked for, from the tool's
+side), an attempt's overview, and briefs anyone can read. Phases E, F and H are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

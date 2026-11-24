@@ -4,7 +4,6 @@ import { BriefView } from '@/components/project/BriefView'
 import { NewProjectDialog } from '@/components/project/NewProjectDialog'
 import { ChevronLeft } from 'lucide-react'
 import { ExamLogo } from '@/components/ExamLogo'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { GROUND } from '@/components/ui/OutlineCard'
 import { programmeOf } from '@/data/projects'
 import { backLabel, useBack, usePageLabel } from '@/hooks/useBack'
@@ -42,7 +41,6 @@ export default function BriefPage() {
   return (
     <div className={cn(GROUND, 'flex h-[100dvh] flex-col')} data-testid="brief-page">
       <header className="flex h-14 shrink-0 items-center gap-2 px-2 sm:px-3">
-        <MobileNavButton />
         <Link
           to={back.to}
           state={RESTORE_SCROLL}

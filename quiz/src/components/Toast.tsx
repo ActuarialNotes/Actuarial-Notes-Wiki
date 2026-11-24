@@ -31,7 +31,7 @@ export default function Toast() {
     // the concept popup's action menu must be visible above it — while staying
     // below the ceremony band.
     <div
-      className="fixed bottom-6 left-0 lg:left-[var(--sidebar-width)] right-0 z-[80] flex justify-center px-4 pointer-events-none"
+      className="fixed bottom-[calc(1.5rem+var(--place-bar-height,0px))] left-0 lg:left-[var(--sidebar-width)] right-0 z-[80] flex justify-center px-4 pointer-events-none"
       role="status"
       aria-live="polite"
     >

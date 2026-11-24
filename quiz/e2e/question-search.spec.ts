@@ -31,17 +31,17 @@ test.describe('search', () => {
     await expect(page).toHaveURL(/\/search\?/)
   })
 
-  test('a result is not where Study Guides opens, and a concept opened here stays here', async ({ page }) => {
+  test('a result is not where Learn opens, and a concept opened here stays here', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/search?q=p-004&tab=questions')
-    const studyGuides = page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Study Guides' })
+    const studyGuides = page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' })
 
-    // A question's page, then Study Guides: the tab's home, from the page and from another tab.
+    // A question's page, then Learn: its home, from the page and from another place.
     await page.getByTestId('search-question').first().getByRole('link').first().click()
     await expect(page).toHaveURL(/\/wiki\/question\/p-004/)
     await studyGuides.click()
     await expect(page).toHaveURL(/\/wiki$/)
-    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Quiz/ }).click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Practice' }).click()
     await expect(page).toHaveURL(/\/$/)
     await studyGuides.click()
     await expect(page).toHaveURL(/\/wiki$/)

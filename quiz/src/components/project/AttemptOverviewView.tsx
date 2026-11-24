@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { ApplyRow, StepBar } from '@/components/apply/ApplyParts'
 import { ExamLogo } from '@/components/ExamLogo'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { GROUND } from '@/components/ui/OutlineCard'
 import type { ProjectCase } from '@/data/pcpaProjects'
 import { programmeOf } from '@/data/projects'
@@ -87,7 +86,6 @@ export function AttemptOverviewView({
   return (
     <div className={cn(GROUND, 'flex min-h-full flex-col')} data-testid="attempt-overview">
       <header className="flex h-14 shrink-0 items-center gap-2 px-2 sm:px-3">
-        <MobileNavButton />
         <Link
           to={back.to}
           state={RESTORE_SCROLL}

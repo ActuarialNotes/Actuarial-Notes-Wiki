@@ -1,23 +1,23 @@
 import { test, expect } from './test'
 
 /**
- * Workflows, Tools and Data Sources in the one sidebar, from a signed-out
+ * Workflows, Tools and Data Sources, all in Apply, from a signed-out
  * browser. Workflows and the publishers are open only to approved accounts
  * while in Preview; the suite's build opens them to every viewer
  * (`VITE_COWORK_PREVIEW=on` in playwright.config.ts, `COWORK_OPEN_TO_ALL`).
  * The approval rule itself is pinned by `src/lib/workflowsAccess.test.ts`.
  */
 test.describe('data sources', () => {
-  test('has no mode switch, and lists Tools and Data Sources under Workflows', async ({ page }) => {
+  test('has no mode switch and no row of its own: it is in Apply, behind Tools', async ({ page }) => {
     await page.goto('/dashboard')
     await expect(page.getByRole('button', { name: /Mode:/ })).toHaveCount(0)
-    const nav = page.getByRole('navigation', { name: 'Main' })
-    await expect(nav.getByRole('link', { name: 'Workflows' })).toBeVisible()
-    await expect(nav.getByRole('link', { name: 'Tools' })).toBeVisible()
-    await nav.getByRole('link', { name: 'Data Sources' }).click()
+    const nav = page.getByRole('navigation', { name: 'Places' })
+    await expect(nav.getByRole('link', { name: 'Data Sources' })).toHaveCount(0)
+    await nav.getByRole('link', { name: 'Apply' }).click()
+    await page.getByTestId('apply-tools-open').click()
+    await page.getByTestId('data-sources-row').click()
     await expect(page).toHaveURL(/\/data-sources$/)
-    // The Study rows stay: the app is one place.
-    await expect(nav.getByRole('link', { name: 'Quiz' })).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'Apply' })).toHaveAttribute('aria-current', 'page')
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 

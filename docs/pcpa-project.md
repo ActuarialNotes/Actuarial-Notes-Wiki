@@ -9,12 +9,12 @@ their code, answers to questions about their analysis, and an attestation. It is
 pass/fail against a published rubric, six to eight weeks later.
 
 The simulator reproduces that whole loop in the browser. It lives on the **Projects** tab
-(`/project`), a tab of its own in the sidebar after Quiz — a project is its own kind of study,
+(`/project`), the first card of Apply — a project is its own kind of study,
 a brief and a data set and a deadline rather than a bank of questions. The PCPA study guide's
 **Project** button (`components/wiki/ExamProjectButton.tsx`) leads there too.
 
 **Working a project is a Pro feature; reading a brief is not** (decided 2026-11-23,
-`docs/redesign-spec.md` §8, Phase I). The sidebar row carries the Pro chip for every reader.
+`docs/redesign-spec.md` §8, Phase I).
 `pages/Project/index.tsx` checks `useSubscription().isPro`: a reader without Pro finds the
 briefs at `/project` (`BriefsCatalogue` in `ProjectsHome.tsx`, each brief a row of one outlined tile) and reads any of them on its
 own page, `/project/brief/<case id>` (`BriefPage.tsx`: the brief view with no attempt behind
@@ -84,18 +84,15 @@ has none and opens on its results.
 
 Under the overview are four views chosen by the
 `view` search parameter: **Brief**, **Workspace**, **Report** and **Submit** — **Results** in
-Submit's place once the attempt is submitted. Two surfaces list them: the switcher in the
-attempt's top bar, and rows under **Projects** in the sidebar while the attempt is open (in
-line under the flask on the collapsed rail). Both read `lib/attemptViews.ts` — which views an
-attempt offers, which one a `?view=` opens, their names and icons — so they can't disagree.
-Switching views replaces the history entry either way: the views are windows of one project,
+Submit's place once the attempt is submitted. The switcher in the attempt's top bar lists
+them, from `lib/attemptViews.ts` — which views an attempt offers, which one a `?view=`
+opens, their names and icons.
+Switching views replaces the history entry: the views are windows of one project,
 not pages of it.
 
-The sidebar is in the main bundle and the attempt isn't, so the sidebar doesn't read the
-attempts store (that would bring the authored briefs into every page's first load). The page
-publishes its views and the one showing to `hooks/useAttemptNav.ts` and clears them when it
-closes; `lib/attemptViews.ts` imports nothing from `lib/pcpaAttempt.ts` but a type, and holds
-`attemptRoute` for the same reason.
+The navigation lists the four places and nothing under them, so an attempt's views are
+reached from its overview and the switcher in its top bar alone. `lib/attemptViews.ts`
+imports nothing from `lib/pcpaAttempt.ts` but a type.
 
 ## The brief
 
@@ -275,7 +272,7 @@ rehearsal whose window closes unsubmitted can't be submitted, as on the real pro
 | Authored material & published rules | `quiz/src/data/pcpaProjects.ts` |
 | Data generator | `quiz/src/lib/pcpaData.ts` |
 | Attempts, modes, windows, paths, who sees what | `quiz/src/lib/pcpaAttempt.ts` |
-| An attempt's views (top-bar switcher, sidebar rows) | `quiz/src/lib/attemptViews.ts`, `quiz/src/hooks/useAttemptNav.ts` |
+| An attempt's views (the top-bar switcher) | `quiz/src/lib/attemptViews.ts` |
 | Keeping attempts with the account | `quiz/src/lib/project/projectSync.ts`, `quiz/src/hooks/useProjectSync.ts`, `supabase/migrations/20260927_project_sync.sql` |
 | The brief's outline | `quiz/src/lib/scrollSpy.ts` |
 | Words, form rules, report checks | `quiz/src/lib/pcpaReport.ts` |

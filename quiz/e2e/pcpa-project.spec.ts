@@ -60,11 +60,11 @@ test.describe('pcpa project, without Pro', () => {
     await expect(page.getByTestId('brief-upgrade')).toHaveAttribute('href', '/upgrade')
   })
 
-  test('marks the row Pro in the sidebar, and sends an attempt link back to the briefs', async ({ page }) => {
+  test('sends an attempt link back to the briefs, in Apply', async ({ page }) => {
     await page.goto('/project/pcpa/p-unknown')
     await expect(page).toHaveURL(/\/project$/)
-    const sidebar = page.getByRole('navigation', { name: 'Main' })
-    await expect(sidebar.getByRole('link', { name: /^Projects/ })).toContainText('Pro')
+    const places = page.getByRole('navigation', { name: 'Places' })
+    await expect(places.getByRole('link', { name: 'Apply' })).toHaveAttribute('aria-current', 'page')
   })
 
   test('is the same for a signed-in reader without Pro', async ({ page }) => {
@@ -157,29 +157,6 @@ test.describe('pcpa project', () => {
 
     await checks.click()
     await expect(page.getByRole('dialog', { name: 'Report checks' })).toBeVisible()
-  })
-
-  test('lists the attempt\'s views under Projects in the sidebar, in step with the top bar', async ({ page }) => {
-    await startBrief(page)
-    const sidebar = page.getByRole('navigation', { name: 'Main' })
-    for (const view of ['Brief', 'Workspace', 'Report', 'Submit']) {
-      await expect(sidebar.getByRole('link', { name: view, exact: true })).toBeVisible()
-    }
-    await expect(sidebar.getByRole('link', { name: 'Brief', exact: true })).toHaveAttribute('aria-current', 'page')
-
-    await sidebar.getByRole('link', { name: 'Workspace', exact: true }).click()
-    await expect(page).toHaveURL(/view=workspace/)
-    await expect(page.getByRole('radio', { name: 'Workspace' })).toBeChecked()
-    await expect(sidebar.getByRole('link', { name: 'Workspace', exact: true })).toHaveAttribute('aria-current', 'page')
-    await expect(sidebar.getByRole('link', { name: 'Brief', exact: true })).not.toHaveAttribute('aria-current', 'page')
-
-    await page.getByRole('radio', { name: 'Report' }).click()
-    await expect(sidebar.getByRole('link', { name: 'Report', exact: true })).toHaveAttribute('aria-current', 'page')
-
-    // Off the attempt, the views go with it. The Projects row leads to Apply's home.
-    await sidebar.getByRole('link', { name: /^Projects/ }).click()
-    await expect(page).toHaveURL(/\/apply$/)
-    await expect(sidebar.getByRole('link', { name: 'Workspace', exact: true })).toHaveCount(0)
   })
 
   test('opens an attempt on its overview: the steps, the checklist, and where to continue', async ({ page }) => {

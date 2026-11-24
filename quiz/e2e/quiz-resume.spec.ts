@@ -34,7 +34,7 @@ test.describe('quiz in progress', () => {
     await page.getByRole('dialog').getByRole('button', { name: 'Come back later' }).click()
     await page.waitForURL(url => url.pathname === '/')
     await expect(pill(page)).toBeVisible()
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
     await page.waitForURL('**/wiki')
 
     // Where they had got to, and — timed — the clock, still running.
@@ -43,8 +43,8 @@ test.describe('quiz in progress', () => {
     await expect(pill(page).getByRole('timer')).toBeVisible()
 
     // It stays with them from page to page.
-    await page.getByRole('link', { name: 'Flashcards' }).first().click()
-    await page.waitForURL('**/flashcards')
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Apply' }).first().click()
+    await page.waitForURL('**/apply')
     await expect(pill(page)).toBeVisible()
 
     await pill(page).click()
@@ -72,7 +72,7 @@ test.describe('quiz in progress', () => {
     await page.getByRole('button', { name: 'Leave the quiz' }).click()
     await page.getByRole('dialog').getByRole('button', { name: 'Come back later' }).click()
     await page.waitForURL(url => url.pathname === '/')
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
     await page.waitForURL('**/wiki')
     await pill(page).click()
     await page.getByRole('dialog', { name: 'Quiz in progress' }).getByRole('button', { name: 'Leave' }).click()

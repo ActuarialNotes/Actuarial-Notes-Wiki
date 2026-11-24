@@ -12,7 +12,6 @@ import { ProjectTopBar, WindowPill } from '@/components/project/ProjectTopBar'
 import { queueOpenFile } from '@/components/project/workspaceTabs'
 import { projectCase as findCase } from '@/data/pcpaProjects'
 import { useAuth } from '@/hooks/useAuth'
-import { useAttemptNav } from '@/hooks/useAttemptNav'
 import { useAttempt, usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { usePcpaWorkspace, type SeedFile } from '@/hooks/usePcpaWorkspace'
 import { useProjectRuntime } from '@/hooks/useProjectRuntime'
@@ -27,9 +26,7 @@ import { toCsv } from '@/lib/csv'
  * and — once submitted — the results. They are views of one page (the
  * `view` search parameter), not pages of their own: switching between them is the
  * candidate moving between windows of one project, and a query-only change
- * doesn't slide the sheet (`lib/viewTransition.ts`). The sidebar lists the
- * same views under Projects (`lib/attemptViews.ts`), from what this page
- * publishes to `useAttemptNav`.
+ * doesn't slide the sheet (`lib/viewTransition.ts`).
  *
  * The page owns the attempt's session: it opens the workspace's files — drawing
  * the data sets the first time — and stops the R and Python sessions when the
@@ -99,18 +96,6 @@ export default function ProjectAttemptPage() {
     if (briefShown && attemptKey) update(attemptKey, { briefReadAt: Date.now() })
   }, [briefShown, attemptKey, update])
 
-  // What the sidebar mirrors under Projects: this attempt's views and the one showing.
-  const showNav = useAttemptNav(s => s.show)
-  const clearNav = useAttemptNav(s => s.clear)
-  const shownId = attempt?.id
-  useEffect(() => {
-    if (!shownId) return
-    showNav({ attemptId: shownId, views: attemptViews(phase), view: tab })
-  }, [shownId, phase, tab, showNav])
-  useEffect(() => {
-    if (!shownId) return
-    return () => clearNav(shownId)
-  }, [shownId, clearNav])
 
   // The clock the countdown reads, and the time spent working.
   useEffect(() => {

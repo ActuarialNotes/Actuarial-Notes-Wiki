@@ -216,7 +216,7 @@ function AttemptsHome() {
         )}
       </div>
 
-      <div className="sticky bottom-0 shrink-0 border-t border-border bg-ground px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3">
+      <div className="sticky bottom-[var(--place-bar-height,0px)] shrink-0 border-t border-border bg-ground px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3">
         <button
           type="button"
           onClick={() => setCreating(true)}

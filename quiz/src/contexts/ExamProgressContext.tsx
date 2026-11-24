@@ -8,7 +8,7 @@ import {
   BROWSER_EXAMS_KEY, EXAM_FOCUS_KEY, EXAM_FOCUS_METADATA,
   browserExamsToMerge, focusOnLoad, parseBrowserExams, parseStoredFocus,
 } from '@/lib/examFocus'
-import { isSessionRoute } from '@/lib/mobileNavHost'
+import { isSessionRoute } from '@/lib/places'
 import { loadStudyPlanConfig } from '@/lib/studyPlan'
 
 // A visitor's exams live in the browser alone (docs/redesign-spec.md R11):

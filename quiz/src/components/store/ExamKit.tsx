@@ -198,7 +198,7 @@ export function ExamKit({
       {undo && (
         <div
           role="status"
-          className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[46] mx-auto flex max-w-md items-center gap-3 rounded-2xl bg-foreground py-1.5 pl-4 pr-1.5 text-background shadow-xl lg:left-[calc(var(--sidebar-width)+1rem)]"
+          className="fixed inset-x-4 bottom-[calc(1rem+max(env(safe-area-inset-bottom),var(--place-bar-height,0px)))] z-[46] mx-auto flex max-w-md items-center gap-3 rounded-2xl bg-foreground py-1.5 pl-4 pr-1.5 text-background shadow-xl lg:left-[calc(var(--sidebar-width)+1rem)]"
           data-testid="store-kit-undo"
         >
           <span className="min-w-0 flex-1 truncate text-sm font-semibold">Marked done: {KIT_STEP_TITLE[undo.step]}</span>

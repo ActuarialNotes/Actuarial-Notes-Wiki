@@ -104,7 +104,7 @@ One thing, one name. Use these exactly.
 |---|---|---|
 | The products tab | **Store** ("Search the Store") | Shop |
 | The cosmetics page | **Gem Shop** | Store, shop |
-| The screen that was the Dashboard | **Today** (the redesigned screen and its session card's title). The sidebar row stays "Dashboard" until the navigation phase | Home, Dashboard for the redesigned screen |
+| The screen that was the Dashboard | **Today** (the first of the four places, and its session card's title) | Home, Dashboard for the redesigned screen |
 | The day's work on Today | the **session** ("today's session", "your daily session"); free for every account | Today's Study Plan (that is Pro's plan, which paces the session to the exam date) |
 | The one exam every place opens on | the **exam in focus** in docs and code; on screen it is never named: the control shows the exam ("Exam P") and the sheet is **Your exams** | active exam, current exam, selected exam |
 | Taking an exam on | **Add an exam** (the screen and the row), **Add Exam P** (the button for one exam); an exam on the list is **Added** | Track, Follow, Enrol, Start studying |
@@ -126,7 +126,7 @@ One thing, one name. Use these exactly.
 | A concept's level, as a control | the level itself ("Level 2", "New"), which opens **Learning Progress** | Mastery, Progress |
 | The menu beside a concept's level | **More** (Add to Flashcards, Listen, Fact Check) | Actions, Options |
 | The concept after this one | **Next in General Probability** (the objective, by its name) | Up next, Continue |
-| The place for projects, tools and workflows | **Apply** (the page at `/apply`; its three cards **Projects**, **Tools**, **Workflows**, in that order). The sidebar row stays "Projects" until the navigation phase | Practice (that is quizzes), Lab, Workbench |
+| The place for projects, tools and workflows | **Apply** (the page at `/apply`; its three cards **Projects**, **Tools**, **Workflows**, in that order). The fourth of the four places | Practice (that is quizzes), Lab, Workbench |
 | The Apply cards' counts | "1 in progress", "3 briefs"; "20 for Exam 5", "35 tools"; "2 saved" | active, ongoing, "20 tools for Exam 5", "0 for Exam 9" |
 | A project's four steps | **Brief**, **Workspace**, **Report**, **Submit**; the page that leads into them is the attempt's **overview** (never a fifth step) | Stages, Phases, Dashboard, Summary |
 | The overview's checklist | **Brief read**, **Code runs clean**, **Report**, **Appendices**, **Submission questions**; a row not done reads "Not yet", a failed run "Stopped with an error" | Pending, Incomplete, Failed, TODO |
@@ -142,7 +142,9 @@ One thing, one name. Use these exactly.
 | The daily plan | **Today's Study Plan** as a title, tile or button; "today's study plan" mid-sentence | Today's plan, Custom Study Plan, Study Plan |
 | The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`); its button is **Start Practice Exam** | Practice exam, Exam, mock exam |
 | An exam's released sittings | **Past papers** (`examSourceLabel`); **Sample questions** for an exam with none released | Past Papers, By Source, Mix |
-| The quiz tab's page | **Practice** (the sidebar row reads Quiz until the navigation is rebuilt) | Quiz builder, Quiz setup |
+| The quiz tab's page | **Practice** (the third of the four places) | Quiz, Quiz builder, Quiz setup |
+| The place for the study guides | **Learn** (the second of the four places; it opens on the study guide of the exam in focus). **Study Guides** is the page above it that lists the reader's exams, Resources and the credentials | Wiki, Library, Study |
+| The navigation | the **places**: Today, Learn, Practice, Apply, in that order, and **You** behind the profile button | Tabs, Menu, Sidebar, Dashboard |
 | The quiz card's settings, as pills | the current value: **All topics** / "3 topics"; **All levels** / "Easy + Medium"; **Timed** / **Untimed**; **As you go** / **At the end** | Topics:, Difficulty:, Answers: |
 | The setup popup | **Your quiz**, with **Topics**, **Difficulty** and its button "Start 12 questions" | Quiz settings, Configure |
 | A paper's last result | **Last sat**, with "14 correct, 7 incorrect, 3 unanswered" | Score, Best, Result |

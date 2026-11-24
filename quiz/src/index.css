@@ -323,7 +323,7 @@
 }
 
 /* Gem balance: pops and sparkles when the balance increases. Applied by
-   re-keying the element in Sidebar.tsx so the animation always replays fresh. */
+   re-keying the element so the animation always replays fresh. */
 @keyframes gem-celebrate {
   0%   { transform: scale(1); }
   20%  { transform: scale(1.55) rotate(-8deg); filter: drop-shadow(0 0 5px rgb(16 185 129 / 0.85)) brightness(1.35); }
@@ -464,12 +464,25 @@ html:has(.concept-popup-aside[data-focus="true"]) [data-above-reader] {
   --sticky-heading-bg: hsl(0 0% 0%);
 }
 
-/* Concept popup: left edge tracks the sidebar width exactly.
-   --sidebar-width is set by Sidebar.tsx (16rem expanded, 3.5rem collapsed).
+/* The navigation's two measures (components/nav/Places.tsx). `--sidebar-width`
+   is the rail down the left of a wide screen. `--place-bar-height` is the bar
+   at the bottom of a phone: 0 where it isn't drawn, so anything parked on the
+   bottom edge can ride above it unconditionally. */
+:root {
+  --sidebar-width: 13.75rem;
+  --place-bar-height: 0px;
+}
+@media (max-width: 1023.98px) {
+  :root[data-place-bar] {
+    --place-bar-height: calc(4.0625rem + max(0.875rem, env(safe-area-inset-bottom)));
+  }
+}
+
+/* Concept popup: left edge tracks the rail's width exactly.
    On mobile the popup spans full width so we skip this rule. */
 @media (min-width: 1024px) {
   .concept-popup-aside {
-    left: var(--sidebar-width, 16rem) !important;
+    left: var(--sidebar-width) !important;
     transition-property: left;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 200ms;
@@ -1285,44 +1298,6 @@ summary .katex-display,
   to   { opacity: 0; }
 }
 
-/* Flashcards nav item lights up when a collected drop lands */
-.flashcard-nav-glow {
-  animation: flashcard-nav-glow 1.5s ease-out;
-}
-@keyframes flashcard-nav-glow {
-  0%   { color: hsl(var(--primary)); filter: drop-shadow(0 0 0 hsl(var(--primary))); transform: scale(1); }
-  25%  { color: hsl(var(--primary)); filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.9)); transform: scale(1.22); }
-  60%  { transform: scale(1); }
-  100% { filter: drop-shadow(0 0 0 transparent); }
-}
-
-/* Ring that briefly pulses outward from the Flashcards icon when the drop
-   lands — the "highlight" companion to the glow above. */
-.flashcard-nav-ring {
-  position: absolute;
-  inset: -8px;
-  border-radius: 9999px;
-  pointer-events: none;
-  border: 2px solid hsl(var(--primary) / 0.7);
-  animation: flashcard-nav-ring 800ms ease-out both;
-}
-@keyframes flashcard-nav-ring {
-  0%   { opacity: 0.9; transform: scale(0.4); }
-  100% { opacity: 0;   transform: scale(1.7); }
-}
-
-/* Flashcard counter badge: pops and glows each time a card is collected. */
-.flashcard-badge-pop {
-  animation: flashcard-badge-pop 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-@keyframes flashcard-badge-pop {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.5); background-color: hsl(var(--primary) / 0.25); color: hsl(var(--primary));
-         box-shadow: 0 0 0 4px hsl(var(--primary) / 0.25), 0 0 14px 2px hsl(var(--primary) / 0.6); }
-  65%  { transform: scale(1.1); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
-}
-
 /* Brief pop-in for the "Collected!" confirmation that replaces the card once
    it has flown off to the Flashcards tab — a quick confirm, not the card
    itself reappearing. */
@@ -1552,7 +1527,7 @@ summary .katex-display,
 @media (prefers-reduced-motion: reduce) {
   .collect-card-snake-ring::before, .collect-card-absorb,
   .collect-bloom, .collect-shake, .collect-grid-in, .collect-card-land,
-  .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
+  .collect-done-pop { animation: none; }
   /* Keep a plain green-flash fade so cards still visibly leave, without motion.
      The card stays visible here (no visibility step) and simply fades, which
      takes the fill and the checkmark with it — so the implode and its puff of
@@ -2104,23 +2079,22 @@ summary .katex-display,
 }
 
 /* ── The chrome stays put ──
-   The desktop rail and the phone's header are the frame the sheets move
-   under, not sheets themselves: each is lifted out of the page's picture and
-   held still, above everything that moves. Only what changes inside them —
-   the rail's active row — cross-fades, and quickly. On a phone the rail is
-   the drawer: lifted out the same way, it finishes closing over the sheets
-   rather than being carried off inside the old one. The resume dock
-   (components/ResumeDock.tsx) — "Return to quiz", "Return to lobby" — is
-   chrome too: it belongs to no page, so it stays where it is while they move. */
+   The rail of places on a wide screen and the bar of them at the bottom of a
+   phone are the frame the sheets move under, not sheets themselves: each is
+   lifted out of the page's picture and held still, above everything that
+   moves. Only what changes inside them — the place the reader is in —
+   cross-fades, and quickly. The resume dock (components/ResumeDock.tsx) —
+   "Return to quiz", "Return to lobby" — is chrome too: it belongs to no page,
+   so it stays where it is while they move. */
 .paper-chrome-rail { view-transition-name: paper-rail; }
-.paper-chrome-header { view-transition-name: paper-header; }
+.paper-chrome-bar { view-transition-name: paper-bar; }
 .paper-chrome-resume { view-transition-name: paper-resume; }
 /* The Tutor (docs/tutor.md §9) is chrome the same way: it sits in the corner
    of every page and belongs to none of them. */
 .paper-chrome-tutor { view-transition-name: paper-tutor; }
 
 ::view-transition-group(paper-rail),
-::view-transition-group(paper-header),
+::view-transition-group(paper-bar),
 ::view-transition-group(paper-resume),
 ::view-transition-group(paper-tutor) {
   z-index: 10;
@@ -2128,8 +2102,8 @@ summary .katex-display,
 }
 ::view-transition-old(paper-rail),
 ::view-transition-new(paper-rail),
-::view-transition-old(paper-header),
-::view-transition-new(paper-header),
+::view-transition-old(paper-bar),
+::view-transition-new(paper-bar),
 ::view-transition-old(paper-resume),
 ::view-transition-new(paper-resume),
 ::view-transition-old(paper-tutor),
@@ -2411,7 +2385,7 @@ summary .katex-display,
    panel opens above it on a wide screen, and drops to the bottom of the screen
    when the split pane leaves too little room above; on a phone it is a sheet. */
 .tutor-dock {
-  bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 1rem);
+  bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px), var(--place-bar-height, 0px)) + 1rem);
 }
 .tutor-panel-frame {
   bottom: 0;
@@ -2419,7 +2393,7 @@ summary .katex-display,
 }
 @media (min-width: 640px) {
   .tutor-panel-frame {
-    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 4.75rem), calc(100vh - 34rem)));
+    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px), var(--place-bar-height, 0px)) + 4.75rem), calc(100vh - 34rem)));
     bottom: var(--tutor-panel-bottom);
     max-height: calc(100vh - var(--tutor-panel-bottom) - 1rem);
   }

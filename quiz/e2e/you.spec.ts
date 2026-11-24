@@ -2,8 +2,8 @@ import { expect, test } from './test'
 import { account } from './fixtures/account'
 
 // You (docs/redesign-spec.md §7b): the profile, the league and Settings, for
-// an account and for a visitor, and the two ways in until Phase F adds the
-// profile button: Today's level badge and the sidebar's account row.
+// an account and for a visitor, and the two ways in: the profile button on a
+// phone and the foot of the rail on a wide screen.
 
 test.describe('You, on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
@@ -28,7 +28,7 @@ test.describe('You, on a phone', () => {
 
     // No app header above it: the cross is the way out.
     await expect(page.getByRole('link', { name: 'Close' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Open navigation' })).toHaveCount(0)
+    await expect(page.getByTestId('place-bar')).toHaveCount(0)
 
     // Collecting marks the quest collected.
     await warmUp.getByRole('button', { name: 'Collect' }).click()
@@ -241,13 +241,13 @@ test.describe('You, on a phone', () => {
 })
 
 test.describe('the ways in to You', () => {
-  test('Today’s level badge opens the profile', async ({ page }) => {
+  test('the profile button on a phone opens the profile', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await account(page)
     await page.goto('/dashboard')
-    const badge = page.getByTestId('today-you')
+    const badge = page.getByTestId('profile-button')
     await expect(badge).toBeVisible({ timeout: 30_000 })
-    await expect(badge).toHaveAccessibleName(/^You\. Level \d+, 60 of 100 XP today\. 1 quest to collect\.$/)
+    await expect(badge).toHaveAccessibleName('You. 1 quest to collect')
     await badge.click()
     await expect(page).toHaveURL(/\/you$/)
     await expect(page.getByTestId('you-name')).toHaveText('Ada')
@@ -256,11 +256,11 @@ test.describe('the ways in to You', () => {
     await expect(page).toHaveURL(/\/dashboard$/)
   })
 
-  test('the sidebar’s account row opens the profile, and holds no theme or sound button', async ({ page }) => {
+  test('the foot of the rail opens the profile, and holds no theme or sound button', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await account(page)
     await page.goto('/dashboard')
-    const row = page.getByTestId('sidebar-you')
+    const row = page.getByTestId('rail-you')
     await expect(row).toBeVisible({ timeout: 30_000 })
     await expect(page.getByRole('button', { name: /Switch to (light|dark) mode/ })).toHaveCount(0)
     await row.click()

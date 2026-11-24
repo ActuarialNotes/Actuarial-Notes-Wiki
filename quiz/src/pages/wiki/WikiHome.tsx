@@ -5,7 +5,8 @@
 // in-development exams folded, is Add an exam.
 
 import { useEffect, useMemo, useState } from 'react'
-import { Award, Compass, Plus } from 'lucide-react'
+import { Award, Compass, Microscope, Plus } from 'lucide-react'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { requirementDisplayName, wikiRoute } from '@/lib/wikiRoutes'
@@ -152,6 +153,16 @@ export default function WikiHome() {
             </ListPanel>
           ))}
           <StudyGuidesPageRow page="resources" count={resourceCount} />
+          {/* The flag-gated Research tab (docs/research-ai-disabled.md): its way in, when it is on. */}
+          {RESEARCH_TAB_ENABLED && (
+            <ListPanel>
+              <ListRow
+                to="/research"
+                leading={<LogoTile size="lg" className="bg-foreground text-background shadow-sm"><Microscope className="h-6 w-6" /></LogoTile>}
+                title="Research"
+              />
+            </ListPanel>
+          )}
         </div>
       </section>
 

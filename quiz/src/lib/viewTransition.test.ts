@@ -214,8 +214,8 @@ describe('canTransition', () => {
 })
 
 describe('deskPlace', () => {
-  it('lays the tabs out left to right in the sidebar\'s order', () => {
-    const order = ['/dashboard', '/wiki', '/', '/project'].map(p => deskPlace(p).tab)
+  it('lays the four places out left to right in the navigation\'s order, then You', () => {
+    const order = ['/dashboard', '/wiki', '/', '/apply', '/you'].map(p => deskPlace(p).tab)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
     expect(new Set(order).size).toBe(order.length)
   })
@@ -244,23 +244,22 @@ describe('deskPlace', () => {
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 
-  it('lays Resources beside the exams, with a resource page a sheet over the shelf', () => {
+  it('lays Resources over Study Guides, with a resource page a sheet over the shelf', () => {
     const shelf = deskPlace('/wiki/resources')
-    expect(shelf.depth).toBe(0)
-    expect(shelf.tab).toBeGreaterThan(deskPlace('/wiki').tab)
-    expect(shelf.tab).toBeLessThan(deskPlace('/flashcards').tab)
-    expect(deskPlace('/wiki/resource/Werner')).toEqual({ tab: shelf.tab, depth: 1 })
-    expect(paperMove('/wiki', '/wiki/resources', 'PUSH')).toBe('next')
-    expect(paperMove('/wiki/resources', '/wiki', 'PUSH')).toBe('prev')
+    expect(shelf).toEqual({ tab: deskPlace('/wiki').tab, depth: 1 })
+    expect(deskPlace('/wiki/resource/Werner')).toEqual({ tab: shelf.tab, depth: 2 })
+    expect(paperMove('/wiki', '/wiki/resources', 'PUSH')).toBe('push')
+    expect(paperMove('/wiki/resources', '/wiki', 'PUSH')).toBe('pop')
     expect(paperMove('/wiki/resources', '/wiki/resource/Werner', 'PUSH')).toBe('push')
     expect(paperMove('/wiki/resource/Werner', '/wiki/resources', 'PUSH')).toBe('pop')
     expect(paperMove('/wiki/resources', '/wiki/resources?exam=Exam+7', 'PUSH')).toBeNull()
   })
 
-  it('reads Projects as a tab, with an attempt a sheet over its briefs', () => {
-    expect(deskPlace('/project')).toEqual({ tab: deskPlace('/project').tab, depth: 0 })
-    expect(deskPlace('/project').tab).not.toBe(deskPlace('/wiki').tab)
-    expect(deskPlace('/project/pcpa/p-123')).toEqual({ tab: deskPlace('/project').tab, depth: 1 })
+  it('lays Projects over Apply, with an attempt a sheet over the list', () => {
+    expect(deskPlace('/project')).toEqual({ tab: deskPlace('/apply').tab, depth: 1 })
+    expect(deskPlace('/project/pcpa/p-123')).toEqual({ tab: deskPlace('/apply').tab, depth: 2 })
+    expect(paperMove('/apply', '/project', 'PUSH')).toBe('push')
+    expect(paperMove('/project', '/apply', 'PUSH')).toBe('pop')
     expect(paperMove('/project', '/project/pcpa/p-123', 'PUSH')).toBe('push')
     expect(paperMove('/project/pcpa/p-123', '/project/pcpa/p-123?view=report', 'PUSH')).toBeNull()
   })
@@ -275,12 +274,26 @@ describe('deskPlace', () => {
     expect(deskPlace('/nowhere').tab).not.toBe(deskPlace('/').tab)
   })
 
-  it('lays Workflows, Tools and Data Sources side by side, in sidebar order, each page a sheet over its list', () => {
-    expect(deskPlace('/workflows').tab).toBeLessThan(deskPlace('/tools').tab)
-    expect(deskPlace('/tools').tab).toBeLessThan(deskPlace('/data-sources').tab)
-    expect(deskPlace('/data-sources').tab).toBeLessThan(deskPlace('/store').tab)
-    expect(deskPlace('/workflows/wf-1')).toEqual({ tab: deskPlace('/workflows').tab, depth: 1 })
-    expect(deskPlace('/data-sources/osfi')).toEqual({ tab: deskPlace('/data-sources').tab, depth: 1 })
+  it('lays Tools and Workflows over Apply, Data Sources over Tools, and each page a sheet over its list', () => {
+    const apply = deskPlace('/apply').tab
+    expect(deskPlace('/tools')).toEqual({ tab: apply, depth: 1 })
+    expect(deskPlace('/workflows')).toEqual({ tab: apply, depth: 1 })
+    expect(deskPlace('/data-sources')).toEqual({ tab: apply, depth: 2 })
+    expect(deskPlace('/tools/chain-ladder')).toEqual({ tab: apply, depth: 2 })
+    expect(deskPlace('/workflows/wf-1')).toEqual({ tab: apply, depth: 2 })
+    expect(deskPlace('/data-sources/osfi')).toEqual({ tab: apply, depth: 3 })
+    expect(paperMove('/tools', '/data-sources', 'PUSH')).toBe('push')
+    expect(paperMove('/tools', '/apply', 'PUSH')).toBe('pop')
+  })
+
+  it('lays the league, Settings, the Store, Community and Upgrade over You', () => {
+    const you = deskPlace('/you').tab
+    for (const path of ['/you/league', '/settings', '/store', '/community', '/upgrade']) {
+      expect(deskPlace(path)).toEqual({ tab: you, depth: 1 })
+      expect(paperMove('/you', path, 'PUSH')).toBe('push')
+    }
+    expect(deskPlace('/store/gems')).toEqual({ tab: you, depth: 2 })
+    expect(paperMove('/dashboard', '/you', 'PUSH')).toBe('next')
   })
 })
 

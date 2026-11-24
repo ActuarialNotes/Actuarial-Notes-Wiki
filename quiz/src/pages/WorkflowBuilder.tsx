@@ -21,7 +21,6 @@ import { WorkflowLogo } from '@/components/workflow/WorkflowLogo'
 import { EdgePanel, StepPanel, type PanelLayout } from '@/components/workflow/WorkflowPanels'
 import { readCsvFile } from '@/lib/workflowCsv'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useIsMobile } from '@/hooks/useIsMobile'
@@ -571,7 +570,6 @@ function Header({
   const back = useBack({ to: '/workflows', label: 'Workflows' })
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-1.5 border-b border-border px-3">
-      <MobileNavButton className="lg:hidden" />
       <button
         type="button"
         onClick={back.go}

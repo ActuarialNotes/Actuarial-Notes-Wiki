@@ -138,11 +138,10 @@ function ResourceShelfCard({
  * (`lib/resourceFilters.ts`), and by **Vintage** — which edition of one exam's
  * syllabus — with what that edition added marked, and what it dropped on request
  * (`lib/resourceVintages.ts`). It used to be a section at the foot of the exam
- * ladder; it is a page of its own, listed under Study Guides in the sidebar
- * the way an open project's views are listed under Projects.
+ * ladder; it is a page of its own in Learn, a row of Study Guides' home.
  *
  * The filters ride the URL, so a filtered shelf survives the browser's Back,
- * the sidebar's return to the tab and a reload. A card opens its resource in
+ * Learn's return to it from another place and a reload. A card opens its resource in
  * the concept popup, and the popup's Previous / Next walk the shelf as it is
  * filtered.
  */

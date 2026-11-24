@@ -2,7 +2,7 @@ import { test, expect } from './test'
 import { signIn } from './fixtures/signedIn'
 
 // Actuarial Tools (docs/actuarial-tools.md): calculators that each do one
-// thing, one live card each. The smoke checks the tab is in the sidebar, the
+// thing, one live card each. The smoke checks the way in from Apply, the
 // catalogue lists the tools, a card recomputes as an input changes (no Run
 // button), a result can be sent on to the next tool, a run link opens the run
 // it names, and a scalar card fits a phone without scrolling (R10).
@@ -10,9 +10,10 @@ import { signIn } from './fixtures/signedIn'
 const factor = (n: number) => n.toFixed(4)
 
 test.describe('tools', () => {
-  test('opens from the sidebar and lists the tools by area', async ({ page }) => {
+  test('opens from Apply and lists the tools by area', async ({ page }) => {
     await page.goto('/store')
-    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Tools' }).click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Apply' }).click()
+    await page.getByTestId('apply-tools-open').click()
     await expect(page).toHaveURL(/\/tools$/)
     await expect(page.getByRole('heading', { name: 'Tools', exact: true })).toBeVisible()
     for (const area of ['Reserving', 'Ratemaking', 'Loss distributions', 'Credibility', 'Financial mathematics']) {

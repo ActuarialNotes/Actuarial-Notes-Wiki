@@ -86,31 +86,37 @@ test.describe('wiki', () => {
     await studying(page)
     await page.goto('/')
     await expect(page.getByTestId('practice-exam')).toHaveAccessibleName('Switch exam, Exam P-1')
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    const learn = page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' })
+    // Learn opens on the exam in focus's study guide; from there it leads up to Study Guides.
+    await learn.click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await learn.click()
+    await expect(page).toHaveURL(/\/wiki$/)
     await page.locator('a[data-tour="exam-p"]').click()
     const back = page.getByRole('link', { name: 'Back to Study Guides' })
     await back.click()
     await expect(page).toHaveURL(/\/wiki$/)
+    await page.goBack()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
     await page.goBack()
     await expect(page).toHaveURL(url => url.pathname === '/')
     await expect(page.getByTestId('practice-exam')).toBeVisible()
     await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
   })
 
-  // Resources is the tab's second page: listed under Study Guides in the
-  // sidebar while the tab is open, filtered by exam, publisher and year, with
-  // the choice kept in the URL.
-  test('opens Resources from the sidebar and filters the shelf by exam', async ({ page }) => {
+  // Resources is a row of Study Guides: the shelf, filtered by exam, publisher
+  // and year, with the choice kept in the URL. It is part of Learn.
+  test('opens Resources from Study Guides and filters the shelf by exam', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/wiki')
 
-    const nav = page.getByRole('navigation', { name: 'Main' })
-    await expect(nav.getByRole('link', { name: 'Exams' })).toHaveAttribute('aria-current', 'page')
-    await nav.getByRole('link', { name: 'Resources' }).click()
+    const learn = page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' })
+    await expect(learn).toHaveAttribute('aria-current', 'page')
+    await page.getByTestId('study-guides-link-resources').click()
 
     await expect(page).toHaveURL(/\/wiki\/resources$/)
     await expect(page.getByRole('heading', { name: 'Resources' })).toBeVisible()
-    await expect(nav.getByRole('link', { name: 'Resources' })).toHaveAttribute('aria-current', 'page')
+    await expect(learn).toHaveAttribute('aria-current', 'page')
     // A visitor with no exams sees every exam's readings.
     const cards = page.locator('main').getByRole('button').filter({ has: page.locator('p.font-semibold') })
     await expect.poll(() => cards.count()).toBeGreaterThan(10)

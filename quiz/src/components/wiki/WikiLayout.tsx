@@ -47,7 +47,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
       isReturn = stored.split('?')[0] === location.pathname
     } catch { /* ignore */ }
 
-    // Where the sidebar's Study Guides row returns to. A page opened as a
+    // Where Learn returns to from another place (lib/places.ts). A page opened as a
     // search result is not that place (lib/wikiRoutes.ts).
     if (remembersWikiPlace(location.pathname, location.state)) {
       try {

@@ -32,7 +32,7 @@ export interface Crumb {
  * The **Tools top bar** (docs/actuarial-tools.md §6.2) — the floating search
  * bar every tab carries, built from the shared parts so a search here feels
  * the same as anywhere else. It is the route's only row of top chrome below
- * `lg` (`lib/mobileNavHost.ts`), so it carries the hamburger.
+ * `lg` (`drawsOwnTopRow` in `lib/places.ts`).
  *
  * Two shapes. On the **catalogue** the page *is* the result list: the query
  * and the practice-area pill are lifted to the page (they ride the URL), and
@@ -83,23 +83,19 @@ function AreaPills({ query, area, onArea }: { query: string; area: PracticeArea 
 
 function CatalogueBar({ query, area, onQuery, onArea, placeholder = 'Search tools' }: Extract<Props, { kind: 'catalogue' }>) {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [focused, setFocused] = useState(false)
   return (
     <FloatingSearchBar>
       <FloatingSearchInput
         inputRef={inputRef}
         value={query}
         onChange={onQuery}
-        onFocus={() => setFocused(true)}
         onClear={() => {
           onQuery('')
           onArea(null)
           inputRef.current?.blur()
-          setFocused(false)
         }}
         placeholder={placeholder}
         ariaLabel="Search tools"
-        navCollapsed={focused && query.length > 0}
       />
       {query.trim() && <AreaPills query={query} area={area} onArea={onArea} />}
     </FloatingSearchBar>
@@ -154,7 +150,6 @@ function ToolPageBar({ title, back, pinned, crumbs }: { title: string; back: Bac
           onClear={dismiss}
           placeholder="Search tools"
           ariaLabel="Search tools"
-          navCollapsed={active}
         />
         {active && hasQuery ? (
           <div className="pb-3">

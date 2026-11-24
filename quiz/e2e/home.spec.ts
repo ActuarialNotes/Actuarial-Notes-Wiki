@@ -13,8 +13,11 @@ test.describe('app shell', () => {
     await page.goto('/')
 
     await expect(page).toHaveTitle(/Actuarial Notes/)
-    // Primary navigation is present (sidebar on desktop) for signed-out users.
-    await expect(page.getByRole('link', { name: 'Study Guides' }).first()).toBeVisible()
+    // The four places are present (the rail on desktop) for signed-out users.
+    const places = page.getByRole('navigation', { name: 'Places' })
+    await expect(places.getByRole('link')).toHaveText(['Today', 'Learn', 'Practice', 'Apply', 'You', 'Sign in'])
+    await expect(places.getByRole('link', { name: 'Practice' })).toHaveAttribute('aria-current', 'page')
+    // Flashcards is a row of Practice.
     await expect(page.getByRole('link', { name: 'Flashcards' }).first()).toBeVisible()
     // The landing rendered content, not the error boundary.
     await expect(page.getByText('Something went wrong')).toHaveCount(0)

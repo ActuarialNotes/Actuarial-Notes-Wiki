@@ -2,8 +2,8 @@
 // today's session with its one Start, and the Syllabus and Analytics, each of
 // which opens as an overlay on this page. A day picked in the week row takes
 // the session card's place with that day's plan.
-// The route is still /dashboard and the sidebar row still says Dashboard until
-// the navigation is rebuilt (the spec's Phase F).
+// Today is the first of the four places (lib/places.ts); its route is still
+// /dashboard.
 //
 // Everything on the screen is for the exam showing (`useExamInFocus`), except
 // the week, which is the account's.
@@ -12,12 +12,9 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronRight, Loader2 } from 'lucide-react'
 import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveExamCard'
-import { AvatarDisplay } from '@/components/AvatarDisplay'
-import { LevelBadge } from '@/components/LevelBadge'
-import { MobileNavButton } from '@/components/MobileNavButton'
-import { YOU_PATH } from '@/lib/you'
+import { PlaceTopRow } from '@/components/nav/Places'
+import { useQuests } from '@/hooks/useQuests'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { DayNoteCard, SessionCard } from '@/components/today/SessionCard'
 import { SessionLengthSheet } from '@/components/today/SessionLengthSheet'
 import { SyllabusOverlay, SyllabusPanel, type SyllabusObjective } from '@/components/today/SyllabusPanel'
@@ -52,7 +49,7 @@ import { useTodaySession } from '@/hooks/useTodaySession'
 import { accuracyPercent } from '@/lib/accuracyTrend'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { questionExamLabel } from '@/lib/examIds'
-import { DAILY_PLAN_EMAIL_ENABLED, PODCAST_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, PODCAST_ENABLED, QUESTS_ENABLED } from '@/lib/featureFlags'
 import { decayIfStale } from '@/lib/mastery'
 import { planConceptsToday, planDoneConceptSlugs } from '@/lib/planCompletion'
 import { requestProCelebration } from '@/lib/proCelebration'
@@ -335,6 +332,9 @@ export default function Dashboard() {
     const forgottenDue = masteryRecords.filter(r => decayIfStale(r, new Date()).state === 'forgotten').length
     return { forgottenDue, planConcepts }
   }, [masteryLoading, planLoading, masteryRecords, planConcepts])
+  // Today seeds the day's quests, and counts the finished ones on the profile button.
+  const quests = useQuests(QUESTS_ENABLED ? questContext : undefined)
+  const claimable = QUESTS_ENABLED && user ? quests.claimable.length : 0
 
   const unsupportedActiveExams = useMemo(() => {
     if (exam.syllabi.length === 0) return []
@@ -353,10 +353,6 @@ export default function Dashboard() {
   }
 
   const isGuest = !user
-  const displayName = isGuest
-    ? 'Guest'
-    : (user.user_metadata?.display_name as string | undefined) ?? user.email?.split('@')[0] ?? 'You'
-  const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const hasExams = exam.exams.length > 0
   // The reader is open on one of the session's concepts: the rest of Today steps back.
   const reading = popupConcept !== null
@@ -439,37 +435,26 @@ export default function Dashboard() {
           style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
           data-testid="today"
         >
-          {/* The exam showing, and the reader. */}
-          {/* Below `lg` this row is the page's top chrome, so it carries the
-              way into the navigation (lib/mobileNavHost.ts). */}
-          <div className={cn('flex items-center gap-1 px-1 lg:mb-8 lg:px-0', dim, !(hasExams && activeSyllabus && activeKey) && 'lg:hidden')}>
-            <MobileNavButton className="h-11 w-11" />
-            {hasExams && activeSyllabus && activeKey && (
-              <>
-              <ExamSwitcherButton examKey={activeKey} label={activeSyllabus.examLabel} testId="today-exam" />
-              <span className="ml-auto flex shrink-0 items-center">
-                {isGuest ? (
-                  // A visitor's exams and progress are this browser's; signing in keeps them.
-                  <Link
-                    to="/auth"
-                    state={{ from: '/dashboard' }}
-                    className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-4 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    Sign in
-                  </Link>
-                ) : (
-                  XP_ENABLED ? (
-                    <LevelBadge size={44} questContext={questContext} />
-                  ) : (
-                    <Link to={YOU_PATH} aria-label="You" data-testid="today-you" className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                      <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
-                    </Link>
-                  )
-                )}
-              </span>
-              </>
+          {/* The exam showing, and the reader. On a wide screen the rail
+              carries both, so this row is the phone's alone. */}
+          <PlaceTopRow
+            examKey={hasExams && activeSyllabus ? activeKey : null}
+            label={activeSyllabus?.examLabel}
+            testId="today-exam"
+            claimable={claimable}
+            className={cn('px-1 lg:hidden', dim)}
+          >
+            {isGuest && (
+              // A visitor's exams and progress are this browser's; signing in keeps them.
+              <Link
+                to="/auth"
+                state={{ from: '/dashboard' }}
+                className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-4 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Sign in
+              </Link>
             )}
-          </div>
+          </PlaceTopRow>
 
           {exam.loading ? (
             <ActiveExamCardLoading />

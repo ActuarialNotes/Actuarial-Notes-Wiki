@@ -1,6 +1,7 @@
 // You, the profile (docs/redesign-spec.md §7b.1): the reader's character, name
 // and level; the streak and gems; a Today card with the daily goal and the
-// day's quests; and the rows that lead on to League, Settings, Store and Help.
+// day's quests; and the rows that lead on to League, Settings, Store, Community
+// (for the accounts that have it) and Help.
 //
 // A visitor's level, streak, goal and quests are kept in the browser, so the
 // screen works without an account; what an account holds (a name, the Pro
@@ -15,6 +16,7 @@ import { useStreak } from '@/hooks/useStreak'
 import { useGems } from '@/hooks/useGems'
 import { useQuests } from '@/hooks/useQuests'
 import { useLeague } from '@/hooks/useLeague'
+import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -69,6 +71,7 @@ export default function You() {
   const gems = useGems()
   const exam = useExamInFocus()
   const league = useLeague(user && LEAGUES_ENABLED ? exam.activeKey : null)
+  const showCommunity = useCommunityAccess()
   const questContext = useQuestContext(isPro, !authLoading && !subLoading)
   const quests = useQuests(QUESTS_ENABLED ? questContext : undefined)
 
@@ -235,6 +238,8 @@ export default function You() {
           )}
           <Row label="Settings" to={SETTINGS_PATH} testId="you-settings" />
           <Row label="Store" to="/store" testId="you-store" />
+          {/* Preview, approved accounts (docs/community.md). */}
+          {showCommunity && <Row label="Community" to="/community" testId="you-community" />}
           <Row label="Help" onClick={() => setSheet('help')} testId="you-help" />
         </div>
       </div>

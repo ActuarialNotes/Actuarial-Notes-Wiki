@@ -22,7 +22,6 @@ import { CraftScoreboard, MedalDisc } from '@/components/craft/CraftScoreboard'
 import { ConceptTileStatic } from '@/components/ConceptTile'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { CheckMark } from '@/components/CheckMark'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { progressOf, useConceptCraft, type StrengthFilter } from '@/hooks/useConceptCraft'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
@@ -753,7 +752,6 @@ function BoardHeader({ tally, scoreboard = null }: { tally: TopicTally | null; s
   const back = useBack({ to: '/games', label: 'Games' })
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
-      <MobileNavButton className="lg:hidden" />
       <button
         type="button"
         onClick={back.go}

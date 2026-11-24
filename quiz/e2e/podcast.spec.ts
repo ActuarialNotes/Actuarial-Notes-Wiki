@@ -102,7 +102,7 @@ test('the pill follows the reader around the app', async ({ page }) => {
   await expect(player.getByRole('dialog')).toBeVisible()
   await page.keyboard.press('Escape')
   // …but moving within the app keeps it.
-  await page.getByRole('link', { name: 'Study Guides' }).first().click()
+  await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
   await expect(page).toHaveURL(/\/wiki/)
   await expect(player).toBeVisible()
   await expect(player.getByRole('button', { name: /^(Play|Pause)$/ })).toBeEnabled()

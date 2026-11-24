@@ -6,10 +6,14 @@ Read this first, every session. It should save you a re-discovery pass through t
 
 A two-part product for people studying for actuarial exams (CAS/SOA):
 
-The app is **one place** with one sidebar. What was **Cowork** — a second mode behind a
-Study / Cowork pill until 2026-11-14 — is now two rows of it: **Workflows** (`/workflows`, with
-**Tools** and **Data Sources** under it) and **Data Sources** (`/data-sources`: one catalogue of
-values, tables and documents, open to everyone). Workflows is open only to approved accounts
+The app is **four places**, in the order of the path a learner walks: **Today**
+(`/dashboard`), **Learn** (`/wiki`), **Practice** (`/`) and **Apply** (`/apply`), a bar at the
+bottom of a phone and a rail down the left of a wide screen, with **You** behind the profile
+button (`components/nav/Places.tsx`, `lib/places.ts` below; `docs/redesign-spec.md` §8, Phase
+F). There is no sidebar and no hamburger. What was **Cowork** — a second mode behind a
+Study / Cowork pill until 2026-11-14 — is part of Apply: **Workflows** (`/workflows`, one of
+its three cards) and **Data Sources** (`/data-sources`: one catalogue of
+values, tables and documents, open to everyone, the row at the foot of Tools). Workflows is open only to approved accounts
 (`PREVIEW_APPROVED_EMAILS` in `lib/workflowsAccess.ts`) — see "Workflows and Data Sources" at the end of this file and
 `docs/cowork.md`. "Study Mode" below means the study product (guides, quizzes, flashcards).
 
@@ -426,7 +430,7 @@ before touching that area**:
   `pages/DesignBase.tsx` shows them at `/design/base` on the dev server only. **Phase B, Today, is
   built** (its §8 lists what was decided while building it): the daily session is free and sized by
   time, Pro is the pacing, Analytics and the podcast. See `todaySession.ts` below. **Phase C, the
-  session, is built** (spec §5 and §8; style guide §13.6): `/quiz` and `/review` have no sidebar
+  session, is built** (spec §5 and §8; style guide §13.6): `/quiz` and `/review` have no rail, no place bar
   and no app header (`isSessionRoute`). The question screen (`pages/Quiz.tsx`) has one row above
   the question: leave, the progress bar, the timer, and **More** (`components/session/`:
   `SessionProgress`, `SessionMoreMenu`, `AnswerFeedback`), with **Check** and then **Next** at the
@@ -459,7 +463,7 @@ before touching that area**:
   whole catalogue's count when it covers none, and the reader's recent tools as pills with the
   level square of each tool's concept) and **Workflows** (how many are saved and the latest;
   only for accounts that can use Workflows). What each card says is `lib/apply.ts`; a card never
-  disappears and never counts nothing. Until Phase F the sidebar's Projects row leads there.
+  disappears and never counts nothing.
   The **Tools screen** (`/tools`, `pages/Tools.tsx`) is a search row, a tab for the exam in
   focus and one for All (no tabs when the exam covers no tool), the tools grouped by practice
   area with the level square of each tool's concept, and a row for Data Sources. **A tool has
@@ -477,7 +481,7 @@ before touching that area**:
   history entry; `briefReadAt` and `cleanRun` on the attempt's record feed it. **Anyone can read
   a brief** (`/project/brief/<case id>`, `pages/Project/BriefPage.tsx`); starting one is Pro's
   (**Upgrade to start**). **Phase H, You, is built** (§7b and §8; style guide §13.9): three
-  pages under the existing sidebar. The profile, `/you` (`pages/You.tsx`): the reader's character,
+  pages. The profile, `/you` (`pages/You.tsx`): the reader's character,
   name, Pro tag and level, the streak and gems, a Today card with the daily goal and the day's
   quests (a finished one shows Collect), and rows to League, Settings, Store and Help. The league,
   `/you/league` (`pages/League.tsx`): one exam's table for the week, the reader's row filled,
@@ -488,10 +492,10 @@ before touching that area**:
   text; it holds no quiz settings (R3). `lib/you.ts` is what each row says and the league's table
   (`leagueTable`); `components/you/rows.tsx` the shared row, group, switch and top row. A visitor
   keeps what the browser keeps (level, streak, goal, quests; theme, sound, session length) and is
-  asked to sign in for the rest. It replaced the level badge's popup, the sidebar's theme and
-  sound buttons and its account menu: Today's level badge and the sidebar's account row are links
-  to `/you` until Phase F's profile button. Below `lg` the three screens have no app header
-  (`isYouRoute`). The flows are `e2e/you.spec.ts`. **Phase G, Practice, is built** (§8 again): Practice's home,
+  asked to sign in for the rest. It replaced the level badge's popup, the old sidebar's theme and
+  sound buttons and its account menu; the ways in are the profile button on a phone and the foot
+  of the rail on a wide screen. Below `lg` the three screens have no place bar and no top row but
+  their own (`isYouRoute`). The flows are `e2e/you.spec.ts`. **Phase G, Practice, is built** (§8 again): Practice's home,
   the setup popup, Past papers, Flashcards as a row and the one search; see `quizBuilder.ts`,
   `pastExams.ts` and `oneSearch.ts` below. Flashcards (`pages/Flashcards.tsx`) is one card at a
   time with Previous, **Practice this** and Next at the foot; the deck (the grid, reorder, remove)
@@ -501,9 +505,15 @@ before touching that area**:
   button of its own. **Phase E, the exam switcher, is built** (§6 and §8): one
   exam in focus, the sheet, Add an exam and the date question, read by Today, the exam page,
   Study Guides, Practice, Resources, the Store, Apply, Tools, You and the league
-  (`examFocus.ts` below).
+  (`examFocus.ts` below). **Phase F, the navigation, is built** (§8 again): the four places as
+  `PlaceRail` and `PlaceBar`, the phone's top row (`PlaceTopRow`, `PlaceHeader`) and the profile
+  button (`components/nav/`), over `lib/places.ts`; `Sidebar.tsx`, the hamburger and
+  `lib/mobileNavHost.ts` are gone, and Flashcards, Projects, Tools, Workflows, Data Sources, the
+  Store and Community have no row of the navigation (each is a row or a card inside a place, or
+  of You). Learn opens on the study guide of the exam in focus. The flows are in
+  `e2e/home.spec.ts`, `e2e/wiki.spec.ts`, `e2e/you.spec.ts` and `e2e/view-transitions.spec.ts`.
 - `docs/redesign-consistency-review.md` — **the redesign's consistency backlog** (2026-11-24):
-  where the app still disagrees with the spec's visual rules now that every phase but F is built.
+  where the app still disagrees with the spec's visual rules now that every phase is built.
   Old pieces a redesigned screen opens, screens still in the old system, and patterns that differ
   between screens, each with the rule it breaks. Its §1 is done: every info popup (`InfoSheet`:
   Question info, the bank's info, Quiz settings, shortcuts, Learning Progress, Fact Check, Dates
@@ -513,7 +523,7 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
-- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects; its header is the
+- `docs/store.md` — the **Store** (`/store`, a row of You; its header is the
   Resources page's — a search bar and one switch, the exam in focus or All exams; an exam with
   regional syllabi like Exam 6 opens on the region of the page in focus — `lib/storeExams.ts`,
   `lib/examVariants.ts`): real products
@@ -571,8 +581,7 @@ before touching that area**:
   concept is made of. localStorage only, and only the connections found — the hand is
   re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
   named `craft*`, `conceptCraft` or `conceptGraph`.
-- `docs/workflows.md` — **Workflows** (`/workflows`, a sidebar row with Tools and Data Sources
-  under it, Preview — `lib/workflowsAccess.ts`; it was the Tools tab's *Workflow Builder*, then
+- `docs/workflows.md` — **Workflows** (`/workflows`, the third card of Apply, Preview — `lib/workflowsAccess.ts`; it was the Tools tab's *Workflow Builder*, then
   Cowork's, and `/tools/workflow`, `/cowork/workflows` and `/cowork/deliverables` redirect to it).
   It opens on a **library** (`components/workflow/WorkflowLibrary.tsx`, `lib/workflowLibrary.ts`):
   New and the templates, then every workflow built as a card drawn from its board
@@ -651,7 +660,7 @@ before touching that area**:
   document) and *there is no second reader* (a Cowork resource opens in `ConceptPopup`; its own
   documents are registered as virtual vault files to keep that true). Read before touching
   anything named `cowork*`, `DataSources`, `dataSources` or `workflowsAccess`.
-- `docs/community.md` — **Community** (`/community`, a sidebar row after the Shop, Preview: one
+- `docs/community.md` — **Community** (`/community`, a row of You, Preview: one
   approved account — `COMMUNITY_APPROVED_EMAILS` in `lib/community/access.ts`, behind
   `COMMUNITY_ENABLED`): where actuaries gather — r/actuary's newest posts, read live through the
   Arctic Shift archive by `quiz/api/community-feed.js` and shown as posted; upcoming meetings and
@@ -680,7 +689,7 @@ before touching that area**:
   Supabase Storage bucket `listen` — recordings are never committed — and a recording whose script
   hash no longer matches the page is ignored. Read before touching `useListenSpeech`, `mathSpeech.ts` or that script.
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
-  page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
+  page (`/tools`, the second card of Apply, `TOOLS_ENABLED`) of actuarial
   calculators — thirty-four so far across reserving, ratemaking, loss distributions, credibility
   and financial maths, plus three Data Sources —
   that people use as a card (`components/tools/ToolCard.tsx`) and AI agents use through the
@@ -742,10 +751,8 @@ before touching that area**:
   its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, reached from Apply's home, which the
-  sidebar's Projects row opens — working a project is a **Pro** feature, its row marked with the
-  Pro chip, while anyone can read a brief on its own page; an attempt opens on its overview, with
-  its Brief / Workspace / Report / Submit views as rows under Projects — `lib/attemptViews.ts`;
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, the first card of Apply's home — working a project is a **Pro** feature, while anyone can read a brief on its own page; an attempt opens on its overview, with
+  its Brief / Workspace / Report / Submit views in its top bar's switcher — `lib/attemptViews.ts`;
   the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
   — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
@@ -916,7 +923,7 @@ Other important `lib/` modules:
   section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
   each topic equally. The one definition; the exam rows on both tabs dim
   those exams under a dashed *In Development* tag instead of a Beta one (`components/ExamRow.tsx`),
-  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and `ExamsPopout` uses it (together with "does
+  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and Add an exam uses it (together with "does
   the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
   Move an exam out of development here (and in `scripts/exam_catalog.json`, which
   `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
@@ -1179,11 +1186,10 @@ Other important `lib/` modules:
   item's `exams`, `publisher`, `year` — a page that names none is under none), the options
   each offers with the count choosing it would leave (the other filters applied, OR within a
   filter, AND across them — `questionFilters.ts`'s rule), and the URL the choice rides
-  (`?exam=…&year=…`, so Back and the sidebar's return keep it). Drawn with the question
-  lists' `MultiSelectDropdown`. The sidebar lists the tab's two pages — **Exams** and
-  **Resources** — under Study Guides while the tab is open, the way Projects lists an open
-  attempt's views. The Study Guides row itself returns to the page last read there from another
-  tab and leads to the tab's home from inside it (`studyGuidesRowTarget`); a question's page and
+  (`?exam=…&year=…`, so Back and Learn's return keep it). Drawn with the question
+  lists' `MultiSelectDropdown`. Both pages are in Learn, and Resources is a row of Study Guides'
+  home. Learn itself returns to the page last read there from another
+  place and leads to its home from inside it (`learnTarget` in `lib/places.ts`); a question's page and
   a page opened as a search result are never that remembered page (`remembersWikiPlace`,
   `FROM_SEARCH`); which one a path is under is `studyGuidesSection` in `wikiRoutes.ts`
   (a resource page is under Resources, an exam or concept page under Exams). Pure and tested.
@@ -1334,17 +1340,25 @@ Other important `lib/` modules:
   for the whole app, so a concept opened outside the wiki (the search, Today, Flashcards, a
   tool) is closed when the reader goes to another page (`closeIfLeft`, called from `App.tsx` on
   every change of path); without it the popup came up again over the next page that mounts it.
-- `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
-  it on a given route: a page with a floating search bar carries the hamburger
-  (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
-  header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
-  to decide whether to render the header — so a route added here must gain a
-  `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
-  none. You's three screens (`isYouRoute` in `lib/you.ts`) are listed there too: their top row's control is the way out, a cross or a back arrow, with no hamburger. Practice's own screens (`/papers`, `/flashcards`, `/search`) are listed too and draw a back arrow to Practice in place of the button. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
-  sidebar, at any width. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
-  it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
+- `places.ts` — **the four places** (`docs/redesign-spec.md` R2, §8 Phase F): Today, Learn,
+  Practice and Apply (`PLACES`), which place a path is in (`placeOf`; You, the Store, Community
+  and Upgrade are in none), and where Learn leads (`learnTarget`: its home is the study guide of
+  the exam in focus, Study Guides one step up; from another place it returns to the page last
+  read there). `showsPlaceBar` says where the phone's bar is drawn: on every page a reader moves
+  between places from, and off a screen that owns the bottom edge or the whole screen, each with
+  its own way back (the session, a game's board, You's three screens, a concept, a question or a
+  tool with its Practice this foot, Flashcards and Search, an attempt or a brief, a workflow's
+  board). `drawsOwnTopRow` says which pages open on a top row of their own below `lg`; `App.tsx`
+  gives every other page the app's (`PlaceHeader`: the exam in focus and the profile button), so
+  a route added there must draw its own row or it ends up with none. `isSessionRoute` is `/quiz`
+  and `/review`, which have no rail, no bar and no top row but their own, at any width. The
+  drawing is `components/nav/Places.tsx` (`PlaceRail`, `PlaceBar`, `PlaceTopRow`, `PlaceHeader`)
+  and `components/nav/ProfileButton.tsx`. The rail's width is `--sidebar-width` and the bar's
+  height `--place-bar-height` (0 where it isn't drawn; `index.css`), which the resume dock, the
+  toast, the Tutor and a page's own fixed foot read to stay clear of them. Pure and tested. See
+  `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
-  sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
+  sheet and the app is the desk. The four places lie side by side in the navigation's order, with You after them, so a move between places
   slides the desk (`next`/`prev`); a link deeper into a tab lays a sheet over the current
   one (`push`); Back — or a link *up* the tab — swipes the top sheet off (`pop`); and within a
   page a quiz's Next/Back flicks the question off the pile or slides it back
@@ -1360,7 +1374,7 @@ Other important `lib/` modules:
   and one pace for every move (`--paper-ease`, which decelerates *evenly* — a steeper curve
   crawls its second half and reads as freezing, then snapping in), every move ends with the
   arriving sheet exactly where the page lies, and **everything on a page travels with its
-  page**: nothing but the chrome (`paper-rail`, `paper-header`) is given a
+  page**: nothing but the chrome (`paper-rail`, `paper-bar`) is given a
   `view-transition-name`, because an object lifted out flies against its sliding sheet —
   `e2e/view-transitions.spec.ts` sweeps for strays. Nothing may hold the click up either,
   since the old picture stays frozen on screen until the new page renders: lazy routes are
@@ -1524,8 +1538,7 @@ Other important `lib/` modules:
   persists `XpState` to the `user_xp` table (signed-in) or localStorage (guests) and is
   called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
   + the profile, `/you` (the level with its bar, and the daily goal on its Today card, which
-  opens `GoalSheet`, the goal presets), and `components/LevelBadge.tsx`, the ring on Today that
-  links there. Gated by `XP_ENABLED`.
+  opens `GoalSheet`, the goal presets). Gated by `XP_ENABLED`.
 - `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
   loop. `quests.ts` is the pure, tested core: it generates a *personalized* daily
   board from the catalogue authored in `data/quests.ts` (one always-achievable "core"
@@ -1621,8 +1634,8 @@ Other important `lib/` modules:
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
 - `components/FloatingSearchBar.tsx` — the **floating search bar**, as parts: the sticky
-  blurred container, the input line (the hamburger on the search's own row, folding away as
-  you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
+  blurred container, the input line (with a `trailing` slot: Learn's bar carries the profile
+  button there on a phone — see `places.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
   wiki's `WikiFloatingSearch` and Data Sources' `CoworkTopBar` are built from these and a
   search feels the same wherever a reader is. `components/SearchHighlight.tsx` is the matched run,
@@ -1680,7 +1693,7 @@ Other important `lib/` modules:
   (what was Cowork; Preview, approved accounts only via `PREVIEW_APPROVED_EMAILS`,
   `COWORK_ENABLED`; the e2e build opens it to everyone with `VITE_COWORK_PREVIEW=on` →
   `COWORK_OPEN_TO_ALL`). `workflowsAccess.ts` is who may use Workflows and the publishers
-  (`canUseWorkflows`, read through `hooks/useWorkflowsAccess.ts` by the sidebar, the Data Sources
+  (`canUseWorkflows`, read through `hooks/useWorkflowsAccess.ts` by Apply's home, the Data Sources
   page and `WorkflowRoute`); `dataSources.ts` is the Data Sources page's addresses, and
   `dataCatalogue.ts` the page itself as data: every value, table and document as one item
   (`buildCatalogue`, from the bank and the source catalogue), the need each is filed under
@@ -1748,7 +1761,7 @@ Other important `lib/` modules:
   modules are tested.
 - `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`; `TOOLS_STORE_NAV_ENABLED` — off: the sidebar's Tools, Data Sources and Store rows are hidden, their pages still open by address and Workflows keeps its row; the e2e build sets `VITE_SIDEBAR_PREVIEW=on`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Help, on You, hides the "Take the tour" row. The component, store and
@@ -1795,7 +1808,8 @@ annotated `: boolean` so both branches stay type-checked). Two of them gate a la
 with search, a resource timeline, source-collection "projects", and an AI "Ask" assistant:
 
 - `RESEARCH_TAB_ENABLED = false` — hides the whole tab. The nav drops the Research entry and
-  `/research` redirects to `/wiki` (see `App.tsx`, `Sidebar.tsx`).
+  `/research` redirects to `/wiki` (see `App.tsx`; its row on Study Guides' home,
+  `pages/wiki/WikiHome.tsx`, is drawn only while the flag is on).
 - `RESEARCH_AI_ENABLED = false` — hides only the AI surfaces (the "Ask AI" search button +
   answer panel, and the project "Ask"/FAQ views) while leaving keyword search + source
   collection working.
@@ -2048,7 +2062,7 @@ modules that read directly from the repo root:
 - `virtual:exam-pages` — just the root `Exam*.md` syllabus pages (~80 KB), read by
   `hooks/useWikiSyllabus.ts`. Separate from `virtual:wiki-content` on purpose: that
   module is megabytes and is imported from `WikiLayout`'s lazy chunk, but the Dashboard,
-  Sidebar, quiz builder and Flashcards all need to know *which exams exist* and none of
+  the navigation, the quiz builder and Flashcards all need to know *which exams exist* and none of
   them mount `WikiLayout`. They used to resolve that from GitHub's Contents API at
   runtime, so a rate-limit or outage left the app with no exams at all — an account
   could add one and never see it appear. **Which exams exist is a build-time fact; keep
@@ -2139,11 +2153,11 @@ the knowledge-base export from its own deployment); `quiz/api/_mcp/` and `quiz/a
 ## Workflows and Data Sources (what was Cowork)
 
 Until 2026-11-14 this was **Cowork**, a second mode behind a pill beside the wordmark. It is now
-part of the one sidebar: **Workflows** (`/workflows`) with **Tools** (`/tools`) and **Data
-Sources** (`/data-sources`) under it. Workflows is in **Preview**, gated by `COWORK_ENABLED`
+part of Apply: **Workflows** (`/workflows`) and **Tools** (`/tools`) are two of its cards, and **Data
+Sources** (`/data-sources`) is the row at the foot of Tools. Workflows is in **Preview**, gated by `COWORK_ENABLED`
 and open only to the approved accounts in `PREVIEW_APPROVED_EMAILS` (`lib/workflowsAccess.ts`);
-anyone else sees Tools and Data Sources as rows of their own, and `/workflows` redirects them to
-the dashboard. Data Sources is open to everyone. The word *Cowork* is on no screen;
+anyone else has no Workflows card on Apply, and `/workflows` redirects them to
+Today. Data Sources is open to everyone. The word *Cowork* is on no screen;
 the code keeps its `cowork*` names.
 
 ```
@@ -2203,7 +2217,7 @@ Three things to know before changing any of it — all three are load-bearing, a
 
 The library store (`hooks/useCoworkLibrary.ts`) is localStorage only and holds **ids only** —
 the catalogue is passed in, so it stays in the Data Sources and Workflows chunks (and the
-Workflows row has no count: the workflow store reads the tools engine, and the sidebar is in the
+navigation counts nothing: the workflow store reads the tools engine, and the navigation is in the
 first-paint bundle). Populating the corpus more deeply is the next phase.
 
 ## Working conventions observed in this repo

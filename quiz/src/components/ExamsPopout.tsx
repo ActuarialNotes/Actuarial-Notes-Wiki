@@ -20,7 +20,6 @@ import {
 } from '@/lib/studyPlan'
 import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
-const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
 const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
   not_started: 'in_progress',
@@ -113,7 +112,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
   const navigate = useNavigate()
   const { isPro } = useSubscription()
   const { syllabi } = useWikiSyllabus()
-  const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate } = useExamProgress()
+  const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate, setFocusId } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
   const desktopLeft = useDesktopLeft()
 
@@ -179,7 +178,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
 
   const openOnboardingFor = useCallback((item: TrackItem, targetDate: string | null) => {
     // Promote this exam to be the user's active dashboard exam.
-    try { localStorage.setItem(ACTIVE_EXAM_KEY, item.id) } catch { /* ignore */ }
+    setFocusId(item.id)
     setOnboarding({
       examId: item.id,
       examLabel: item.name,
@@ -187,7 +186,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
       config: loadStudyPlanConfig(item.id),
     })
     onClose()
-  }, [onClose])
+  }, [onClose, setFocusId])
 
   // "Add" — one action that marks the exam in progress, saves it, and goes
   // straight into the study-plan wizard.

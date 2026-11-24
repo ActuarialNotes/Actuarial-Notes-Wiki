@@ -1,64 +1,50 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { useExamProgress } from '@/contexts/examProgress'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { bankLabelFor } from '@/lib/examIds'
-import { PRACTICE_EXAM_KEY, practiceTopic } from '@/lib/practiceHome'
+import { practiceTopic } from '@/lib/practiceHome'
 import { quizExamFor } from '@/lib/quizBuilder'
-import { moveScreen } from '@/lib/viewTransition'
-
-function remembered(): string {
-  try { return localStorage.getItem(PRACTICE_EXAM_KEY) ?? '' } catch { return '' }
-}
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 
 /**
- * Which exam Practice is showing (`topic`, a bank label; '' for the exam
- * list), and the moves between them (docs/redesign-spec.md §7a.1).
+ * Which exam Practice is showing (`topic`, a bank label), from the address or
+ * the exam in focus (docs/redesign-spec.md §6, §7a.1). There is no exam list:
+ * the exam is changed with the switcher at the top of the page.
  *
- * The page opens on the exam in focus: the one Today shows when the reader is
- * studying an exam with a question bank, else the exam last practised in this
- * browser (`practiceTopic`, lib/practiceHome.ts). `?topic=` names an exam
- * outright, which is how a quiz quit or finished comes back to the exam it
- * was started from, and `?exams=1` is the exam list, the way to another exam
- * until the exam switcher (§6, Phase E) replaces it. Each is an entry of its
- * own, so the browser's Back undoes the move.
- *
- * Opening an exam makes it the exam in focus: remembered here, and shown on
- * Today too when it is one the reader is studying.
+ * `?topic=` names an exam outright, which is how a quiz quit or finished comes
+ * back to the exam it was started from. If it is one of the reader's exams it
+ * comes into focus; any other exam opens as a visit and leaves the focus alone
+ * (lib/examFocus.ts). `topic` is '' when there is nothing to open: a reader
+ * with no exams, or an exam in focus with no question bank. `?exams=1`, the
+ * exam list's address until Phase E, reads as the bare page.
  */
 export function useQuizExamScreen() {
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { active, selectByKey, loading } = useTodayExam()
+  const { focusId, setFocusId } = useExamProgress()
+  const { exams, active, loading } = useExamInFocus()
 
   const urlTopic = searchParams.get('topic') ?? ''
-  const showList = searchParams.get('exams') === '1'
   const focus = active ? bankLabelFor(active) ?? '' : ''
   const topic = practiceTopic({
     urlTopic,
-    showList,
+    showList: false,
     focus,
-    remembered: remembered(),
+    remembered: '',
     offered: label => !!quizExamFor(label),
   })
+  const exam = topic ? quizExamFor(topic) : undefined
 
-  // The exam on screen is the one to open on next time.
+  // The reader's exam that the address names, when it names one of theirs.
+  const named = urlTopic && exam
+    ? exams.find(e => wikiExamIdToProgressKey(e.examId) === exam.progressKey && (!exam.examId || e.examId === exam.examId))
+    : undefined
+  const namedId = named?.examId ?? null
   useEffect(() => {
-    if (!topic || !quizExamFor(topic)) return
-    try { localStorage.setItem(PRACTICE_EXAM_KEY, topic) } catch { /* private window */ }
-  }, [topic])
+    if (!loading && namedId && focusId !== namedId) setFocusId(namedId)
+  }, [loading, namedId, focusId, setFocusId])
 
-  const openExam = useCallback((value: string) => {
-    const exam = quizExamFor(value)
-    if (exam) selectByKey(exam.progressKey)
-    // Both screens are `/`, so the router sees no page move; the page names it
-    // (lib/viewTransition.ts): an exam is laid over the list, and the list is
-    // what lies under it.
-    moveScreen('push', () => navigate(`/?topic=${encodeURIComponent(value)}`))
-  }, [navigate, selectByKey])
-
-  const showExams = useCallback(() => moveScreen('pop', () => navigate('/?exams=1')), [navigate])
-
-  // A change of exam, or to the list, opens at the top like a new page.
+  // A change of exam opens at the top, like a new page.
   const shown = useRef(topic)
   useLayoutEffect(() => {
     if (shown.current === topic) return
@@ -66,13 +52,14 @@ export function useQuizExamScreen() {
     window.scrollTo(0, 0)
   }, [topic])
 
-  const focusLoading = loading && !urlTopic && !showList
-  // With no exam to open on, the bare address is the exam list. It moves to the
-  // list's own address, so Back from an exam picked there returns to the list
-  // and not to the exam just remembered.
-  useEffect(() => {
-    if (!topic && !showList && !focusLoading) navigate('/?exams=1', { replace: true })
-  }, [topic, showList, focusLoading, navigate])
-
-  return { topic, openExam, showExams, focusLoading }
+  return {
+    topic,
+    /** The address names an exam that isn't one of the reader's. */
+    visiting: !!urlTopic && !!exam && !named && !loading,
+    /** The exam in focus, when it has no question bank to open. */
+    focusWithoutBank: !topic ? active : null,
+    hasExams: exams.length > 0,
+    /** The reader's exams are still loading and nothing names an exam yet. */
+    focusLoading: loading && !urlTopic,
+  }
 }

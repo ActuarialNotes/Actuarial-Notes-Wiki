@@ -16,7 +16,7 @@ import { useGems } from '@/hooks/useGems'
 import { useQuests } from '@/hooks/useQuests'
 import { useLeague } from '@/hooks/useLeague'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { usePageLabel } from '@/hooks/useBack'
 import { useExamProgress } from '@/contexts/examProgress'
@@ -48,7 +48,7 @@ const TILE = cn(OUTLINE_TILE, 'flex min-w-0 flex-1 basis-0 items-center gap-3 px
 function useQuestContext(isPro: boolean, ready: boolean): QuestContext | undefined {
   const { records, loading } = useConceptMastery()
   const { examRows, loadingExams } = useExamProgress()
-  const { activeKey, loading: examLoading } = useTodayExam()
+  const { activeKey, loading: examLoading } = useExamInFocus()
   return useMemo(() => {
     if (!ready || loading || loadingExams || examLoading) return undefined
     const now = new Date()
@@ -67,7 +67,7 @@ export default function You() {
   const xp = useXp()
   const streak = useStreak()
   const gems = useGems()
-  const exam = useTodayExam()
+  const exam = useExamInFocus()
   const league = useLeague(user && LEAGUES_ENABLED ? exam.activeKey : null)
   const questContext = useQuestContext(isPro, !authLoading && !subLoading)
   const quests = useQuests(QUESTS_ENABLED ? questContext : undefined)

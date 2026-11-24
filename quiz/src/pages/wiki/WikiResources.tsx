@@ -4,28 +4,25 @@ import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
-import { ExamStrip } from '@/components/ExamStrip'
-import { ExamVariantPicker } from '@/components/ExamVariantPicker'
-import { groupExamVariants, variantRegion } from '@/lib/examVariants'
+import { variantExamName } from '@/lib/examVariants'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useExamProgress } from '@/contexts/examProgress'
-import { defaultGuideBody, loadGuideBody, saveBody, type GuideBody } from '@/lib/bodyFilter'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { RESOURCES_ROUTE, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { RESOURCES_ROUTE, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
 import {
   RESOURCE_FACETS,
   RESOURCE_FACET_LABEL,
-  bodyForExam,
+  ALL_EXAMS,
   emptyResourceFacets,
   filterResources,
   resourceFacetOptions,
   resourceFacetsFromParams,
   resourceFacetsToParams,
-  resourceStripExams,
-  resourcesForBody,
+  shelfExams,
   toggleResourceFacet,
   type ResourceFacet,
 } from '@/lib/resourceFilters'
@@ -156,11 +153,10 @@ export default function WikiResources() {
   // first frame rather than one "Loading…" later.
   const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
   const [searchParams, setSearchParams] = useSearchParams()
-  const { selectedTrack } = useExamProgress()
-  // The SOA/CAS picker the Study Guides page carries, the same stored choice
-  // (`lib/bodyFilter.ts`): it picks whose exams the strip offers, and with no
-  // exam chosen, whose readings the shelf holds.
-  const [bodyOverride, setBodyOverride] = useState<GuideBody | null>(loadGuideBody)
+  // The shelf opens on the exam in focus; its address can name another exam,
+  // or every exam (lib/resourceFilters.ts, `shelfExams`).
+  const { focusId, setFocusId } = useExamProgress()
+  const { active, exams: myExams, loading: examsLoading } = useExamInFocus()
 
   useEffect(() => {
     setPageRefs([])
@@ -180,28 +176,24 @@ export default function WikiResources() {
     () => withCurrentExams(index.filter(i => i.category === 'document'), syllabusEditions),
     [index],
   )
-  const examPages = useMemo(() => index.filter(i => i.category === 'exam').map(i => i.name), [index])
-  const examCount = examPages.length
-  const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
-  const strips = useMemo(
-    () => ({
-      SOA: resourceStripExams(examPages, 'SOA'),
-      CAS: resourceStripExams(examPages, 'CAS'),
-      CIA: resourceStripExams(examPages, 'CIA'),
-    }),
-    [examPages],
-  )
-  // The strip picks one exam at a time; an older link naming several shows the first.
-  const chosenExam = selection.exam.size > 0 ? [...selection.exam][0] : null
-  const body = bodyForExam(chosenExam, bodyOverride ?? defaultGuideBody(selectedTrack), strips)
-  const strip = strips[body]
-  // An exam with a syllabus per region (Exam 6's 6C, 6U, 6I, 6T) is one logo on
-  // the strip. Choosing it puts every variant on the shelf, and the region
-  // picker under the strip narrows it to one (`lib/examVariants.ts`).
-  const groups = useMemo(() => groupExamVariants(strip), [strip])
-  const chosenGroup = chosenExam ? groups.find(g => g.members.some(m => m.label === chosenExam)) ?? null : null
-  const chosenVariant = chosenGroup && chosenGroup.members.length > 1 && selection.exam.size === 1 ? chosenExam : null
-  const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
+  // The address, as written: what a filter change is merged into.
+  const urlSelection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
+  const focusLabel = active?.fileName ? examDisplayName(active.fileName) : null
+  const shelf = useMemo(() => shelfExams(urlSelection.exam, focusLabel), [urlSelection.exam, focusLabel])
+  // The shelf, as shown: the address's filters, on the exams the shelf is showing.
+  const selection = useMemo(() => ({ ...urlSelection, exam: shelf.exams }), [urlSelection, shelf.exams])
+  const chosenExam = shelf.exams.size > 0 ? [...shelf.exams][0] : null
+  // With every exam showing, the exam the switch goes back to: the exam in focus.
+  const lastExam = shelf.all ? focusLabel : null
+  // An address naming several pages is an exam's regions together: "Exam 6".
+  const chosenName = chosenExam ? (shelf.exams.size > 1 ? variantExamName(chosenExam) : chosenExam) : null
+  // An address that names one of the reader's exams puts it in focus.
+  const namedId = !shelf.fromFocus && shelf.exams.size === 1
+    ? myExams.find(e => e.fileName && examDisplayName(e.fileName) === chosenExam)?.examId ?? null
+    : null
+  useEffect(() => {
+    if (!examsLoading && namedId && focusId !== namedId) setFocusId(namedId)
+  }, [examsLoading, namedId, focusId, setFocusId])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
   // reading list, and the Exam filter's work is done by that list.
@@ -212,8 +204,8 @@ export default function WikiResources() {
   const entries = useMemo<VintageShelfEntry[]>(
     () => vintage
       ? vintageShelf(books, vintage, showDropped)
-      : (selection.exam.size > 0 ? books : bodyBooks).map(item => ({ item, change: null, stub: false })),
-    [books, bodyBooks, selection.exam, vintage, showDropped],
+      : books.map(item => ({ item, change: null, stub: false })),
+    [books, vintage, showDropped],
   )
   const pool = useMemo(() => entries.map(e => e.item), [entries])
   const facetSelection = useMemo(
@@ -225,7 +217,7 @@ export default function WikiResources() {
     return entries.filter(e => kept.has(e.item))
   }, [entries, pool, facetSelection])
   // A page of the shelf at a time; the body and the filters make it a different shelf.
-  const paged = usePagedList(filtered, `resources:${body}:${searchParams.toString()}`)
+  const paged = usePagedList(filtered, `resources:${[...shelf.exams].join('|')}:${searchParams.toString()}`)
   const options = useMemo(
     () => Object.fromEntries(DROPDOWN_FACETS.map(facet => [
       facet,
@@ -255,22 +247,16 @@ export default function WikiResources() {
   // A filter is the same page showing something else, so it replaces the
   // history entry rather than stacking one per tick.
   function toggle(facet: ResourceFacet, value: string) {
-    setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
+    setSearchParams(resourceFacetsToParams(toggleResourceFacet(urlSelection, facet, value), searchParams), { replace: true })
   }
 
-  // One exam at a time — every region of it, or one — or none. A vintage is
-  // an edition of one exam's syllabus, so another exam starts at its own newest.
-  function chooseExam(label: string | readonly string[] | null) {
-    const exam = new Set(label === null ? [] : typeof label === 'string' ? [label] : label)
-    const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
+  // This exam, or every exam. The exam in focus needs no name in the address;
+  // an exam the address named stays named. A vintage is an edition of one
+  // exam's syllabus, so the change starts at the newest.
+  function showAll(all: boolean) {
+    const exam = new Set(all ? [ALL_EXAMS] : [])
+    const next = resourceFacetsToParams({ ...urlSelection, exam }, searchParams)
     setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
-  }
-
-  // The other body's ladder doesn't hold the chosen exam, so the choice goes.
-  function chooseBody(next: GuideBody) {
-    saveBody(next)
-    setBodyOverride(next)
-    if (next !== body && chosenExam) chooseExam(null)
   }
 
   function chooseVintage(label: string) {
@@ -285,48 +271,32 @@ export default function WikiResources() {
 
   function clearFilters() {
     setSearchParams(
-      vintageToParams(null, false, resourceFacetsToParams(emptyResourceFacets(), searchParams)),
+      vintageToParams(null, false, resourceFacetsToParams({ ...emptyResourceFacets(), exam: urlSelection.exam }, searchParams)),
       { replace: true },
     )
   }
 
   return (
     <div className="space-y-6">
-      {/* The same title row as the Study Guides page, picker and all: the
-          two are one tab's two pages, and the body is one choice across them. */}
       <header className="flex items-center gap-2">
         <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Resources</h1>
-        <SegmentedControl
-          label="Examining body"
-          size="lg"
-          pill
-          value={body}
-          onChange={chooseBody}
-          options={[
-            { value: 'SOA', label: 'SOA' },
-            { value: 'CAS', label: 'CAS' },
-            { value: 'CIA', label: 'CIA' },
-          ]}
-          className="shrink-0"
-        />
+        {/* The exam in focus, or the one the address names, against every exam. */}
+        {(chosenName || lastExam) && (
+          <SegmentedControl
+            label="Exams shown"
+            size="lg"
+            pill
+            fit
+            value={shelf.all ? 'all' : 'exam'}
+            onChange={value => showAll(value === 'all')}
+            options={[
+              { value: 'exam', label: chosenName ?? lastExam ?? '' },
+              { value: 'all', label: 'All exams' },
+            ]}
+            className="shrink-0"
+          />
+        )}
       </header>
-
-      <ExamStrip
-        exams={groups.map(g => ({ value: g.key, name: g.name, logoKey: g.key }))}
-        value={chosenGroup?.key ?? null}
-        onChange={key => chooseExam(key === null ? null : groups.find(g => g.key === key)!.members.map(m => m.label))}
-        className="sm:-mx-6 sm:px-6"
-      />
-
-      {chosenGroup && chosenGroup.members.length > 1 && (
-        <ExamVariantPicker
-          className="-mt-3"
-          examName={chosenGroup.name}
-          options={chosenGroup.members.map(m => ({ value: m.label, label: variantRegion(m.label) ?? m.label }))}
-          value={chosenVariant}
-          onChange={label => chooseExam(label ?? chosenGroup.members.map(m => m.label))}
-        />
-      )}
 
       <div className="-mt-3 flex flex-wrap items-center gap-2">
         {DROPDOWN_FACETS.map(facet => {
@@ -353,9 +323,7 @@ export default function WikiResources() {
           emptyTitle={
             selection.exam.size === 1
               ? 'No earlier edition of this exam’s syllabus is on file'
-              : chosenGroup
-                ? 'Choose one region to see its syllabus by edition'
-                : 'Choose one exam to see its syllabus by edition'
+              : 'Open one exam to see its syllabus by edition'
           }
           single
         />
@@ -381,7 +349,7 @@ export default function WikiResources() {
           exam is chosen: the shelf is then that exam's, not the tab's. */}
       {!chosenExam && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <StudyGuidesPageRow page="exams" count={examCount} />
+          <StudyGuidesPageRow page="exams" />
         </div>
       )}
 

@@ -18,8 +18,8 @@ import { useTheme } from '@/hooks/useTheme'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useXp } from '@/hooks/useXp'
 import { useEmailPrefs } from '@/hooks/useEmailPrefs'
-import { useExamsPopout } from '@/hooks/useExamsPopout'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamSwitcher } from '@/stores/examSwitcher'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { readLength, saveSessionLength } from '@/hooks/useTodaySession'
 import { useExamProgress } from '@/contexts/examProgress'
 import { TRACKS } from '@/data/tracks'
@@ -68,8 +68,8 @@ export default function Settings() {
   const emailPrefs = useEmailPrefs()
   const { changePassword, updateProfile, resetHistory, deleteAccount, accountState } = useSettings()
   const { examRows, targetDates, selectedTrack, setSelectedTrack, updateTargetDate, saveExamRows } = useExamProgress()
-  const { exams } = useTodayExam()
-  const openExams = useExamsPopout(s => s.openExams)
+  const { exams } = useExamInFocus()
+  const openAddExam = useExamSwitcher(s => s.openAdd)
 
   // `/settings#ai` opens AI assistants: Workflows' Run in Claude links to it.
   const { hash } = useLocation()
@@ -154,8 +154,8 @@ export default function Settings() {
           {user && (
             <Row
               leading={<span className="flex h-[26px] w-[26px] items-center justify-center"><Plus className="h-5 w-5" aria-hidden="true" /></span>}
-              label="Add or change exams"
-              onClick={openExams}
+              label="Add an exam"
+              onClick={() => openAddExam()}
               testId="settings-add-exam"
             />
           )}

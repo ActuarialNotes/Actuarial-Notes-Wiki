@@ -62,7 +62,7 @@ export default function PastPapers() {
     [open, questions, topic],
   )
 
-  if (!topic) return <Navigate to="/?exams=1" replace />
+  if (!topic) return <Navigate to="/" replace />
   // An exam with no released sittings has no shelf: its sample set is a row on Practice.
   if (!loading && questions.length > 0 && rows.length === 0) {
     return <Navigate to={`/?topic=${encodeURIComponent(topic)}`} replace />

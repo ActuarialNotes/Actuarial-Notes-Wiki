@@ -444,9 +444,11 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `/you/league` and Settings as one grouped screen, replacing the level badge's popup and the
   sidebar's theme, sound and account menu) was built the same day. Phase G (Practice: the home with the quiz card and its rows, the
   setup popup, Past papers with a paper's last result, Flashcards as one card at a time with a
-  Deck popup, and the one search at `/search`) was built the same day too. E (the exam switcher)
-  and F (the navigation) are not built.
-
+  Deck popup, and the one search at `/search`) was built the same day too.
+  **Phase E (the exam switcher) is built (2026-11-24):** one exam in focus, kept with the
+  account; the sheet, Add an exam and "When is your exam?"; a visitor has Today from the
+  browser's record (R11). Today, the exam page, Study Guides, Practice, Resources and the
+  Store read it, and their exam lists, strips and body pickers are gone. Phase F (the navigation) is open.
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the

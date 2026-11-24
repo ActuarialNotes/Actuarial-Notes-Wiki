@@ -1,40 +1,60 @@
 import { test, expect } from './test'
+import { studying } from './fixtures/visitor'
 
 // Loads the wiki from the build-time bundled markdown (virtual:wiki-content),
 // no network required, then drills into an exam study-guide page.
 test.describe('wiki', () => {
-  test('renders the Study Guides index and opens an exam page', async ({ page }) => {
+  test('Study Guides leads with the exam in focus and opens its page', async ({ page }) => {
+    await studying(page)
     await page.goto('/wiki')
 
     await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
 
-    // Exam study guides are links into /wiki/exam/*. Open the first one.
-    const examLink = page.locator('a[href^="/wiki/exam/"]').first()
-    await expect(examLink).toBeVisible()
-    await examLink.click()
+    // The exam list is the switcher's now: one row for the exam in focus, the
+    // way to the reader's others, then the credentials.
+    const mine = page.getByTestId('study-guides-exam')
+    await expect(mine.locator('a[href^="/wiki/exam/"]')).toHaveCount(1)
+    await expect(page.getByTestId('credential-ASA')).toBeVisible()
+    await mine.getByTestId('study-guides-your-exams').click()
+    await expect(page.getByRole('dialog', { name: 'Your exams' }).getByRole('radio', { name: /^Exam P/ })).toBeChecked()
+    await page.keyboard.press('Escape')
 
+    await mine.locator('a[href^="/wiki/exam/"]').click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
     // The exam page: its title, and its learning objectives as cards.
     await expect(page.getByTestId('exam-page').getByRole('heading', { level: 1 })).toBeVisible()
     await expect(page.locator('[data-objective]').first()).toBeVisible()
   })
 
+  test('with no exams, Study Guides offers Add an exam and keeps the credentials', async ({ page }) => {
+    await page.goto('/wiki')
+    await expect(page.getByTestId('study-guides-exam').locator('a[href^="/wiki/exam/"]')).toHaveCount(0)
+    await expect(page.getByTestId('credential-FCAS')).toBeVisible()
+    await page.getByTestId('study-guides-add-exam').click()
+    await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible()
+    // An in-development exam opens its study guide; reading it needs no adding.
+    await page.getByTestId('add-exam').getByRole('button', { name: /^In development/ }).click()
+    await page.getByTestId('add-exam').getByRole('link', { name: /Exam PA/ }).click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await expect(page.getByTestId('exam-page')).toBeVisible()
+  })
+
   // Leaving a page and coming back returns to where it was left — by Back, or
   // by the exam page's back arrow — while a new page opens at its top.
   // lib/routeScrollMemory.ts; the router records the place as the page is left.
-  test('keeps the Study Guides list where it was left', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 600 })
+  test('keeps Study Guides where it was left', async ({ page }) => {
+    await studying(page)
+    await page.setViewportSize({ width: 1280, height: 420 })
     await page.goto('/wiki')
     const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
 
-    const exam9 = page.locator('a[href^="/wiki/exam/"]').filter({ hasText: 'Exam 9' }).first()
-    if (!(await exam9.isVisible())) await page.getByRole('radio', { name: 'CAS' }).click()
-    await exam9.scrollIntoViewIfNeeded()
-    await page.evaluate(() => window.scrollBy(0, 40))
+    const exam = page.locator('a[data-tour="exam-p"]')
+    await expect(exam).toBeVisible()
+    await page.evaluate(() => window.scrollTo(0, 40))
     const listY = await scrollY()
     expect(listY).toBeGreaterThan(0)
 
-    await exam9.click()
+    await exam.click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
     await expect.poll(scrollY).toBe(0)
 
@@ -42,7 +62,7 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki$/)
     await expect.poll(scrollY).toBe(listY)
 
-    await exam9.click()
+    await exam.click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
     await page.getByRole('link', { name: 'Back to Study Guides' }).click()
     await expect(page).toHaveURL(/\/wiki$/)
@@ -55,26 +75,26 @@ test.describe('wiki', () => {
   test('leads back to the page the reader came from', async ({ page }) => {
     // Straight onto an exam page: nothing of the app's behind it, so up.
     await page.goto('/wiki/exam/Exam+P-1+(SOA)')
-    await page.getByRole('link', { name: 'All exams' }).click()
+    await page.locator('a[title="Study Guides"]').click()
     await expect(page).toHaveURL(/\/wiki$/)
   })
 
-  test('walks back the way the reader came, into Practice as it was left', async ({ page }) => {
-    // From Practice on Exam P, through Study Guides to the exam:
-    // the arrow names Study Guides and returns there, and the browser's Back
-    // walks on the same way, into Practice on that exam and not the list.
+  test('walks back the way the reader came, into the quiz builder as it was left', async ({ page }) => {
+    // From the Quiz tab's builder, through Study Guides to the exam: the arrow
+    // names Study Guides and returns there, and the browser's Back walks on
+    // the same way, into the builder.
+    await studying(page)
     await page.goto('/')
-    await page.locator('button[data-tour="quiz-exam-p"]').click()
+    await expect(page.getByTestId('practice-exam')).toHaveAccessibleName('Switch exam, Exam P-1')
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
     await page.locator('a[data-tour="exam-p"]').click()
     const back = page.getByRole('link', { name: 'Back to Study Guides' })
     await back.click()
     await expect(page).toHaveURL(/\/wiki$/)
     await page.goBack()
-    await expect(page).toHaveURL(/\?topic=/)
-    await expect(page.getByTestId('practice-exam')).toContainText('Exam P')
-    await page.goBack()
-    await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+    await expect(page).toHaveURL(url => url.pathname === '/')
+    await expect(page.getByTestId('practice-exam')).toBeVisible()
+    await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
   })
 
   // Resources is the tab's second page: listed under Study Guides in the
@@ -91,39 +111,42 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki\/resources$/)
     await expect(page.getByRole('heading', { name: 'Resources' })).toBeVisible()
     await expect(nav.getByRole('link', { name: 'Resources' })).toHaveAttribute('aria-current', 'page')
-    // The exam is chosen on the strip of exam logos under the SOA/CAS picker,
-    // and choosing All again clears it.
-    await page.getByRole('radiogroup', { name: 'Examining body' }).getByRole('radio', { name: 'CAS' }).click()
+    // A visitor with no exams sees every exam's readings.
     const cards = page.locator('main').getByRole('button').filter({ has: page.locator('p.font-semibold') })
     await expect.poll(() => cards.count()).toBeGreaterThan(10)
-    const all = await cards.count()
+    await expect(page.getByRole('radiogroup', { name: 'Exams shown' })).toHaveCount(0)
 
-    const strip = page.getByRole('radiogroup', { name: 'Exam' })
-    await strip.getByRole('radio', { name: /^Exam 7\b/ }).click()
-    await expect(page).toHaveURL(/\/wiki\/resources\?exam=Exam\+7$/)
-    await expect.poll(() => cards.count()).toBeLessThan(all)
-    // Every card left on the shelf is an Exam 7 reading.
+    // An address that names an exam shows its readings, with All exams one tap away.
+    await page.goto('/wiki/resources?exam=Exam+7')
+    const shown = page.getByRole('radiogroup', { name: 'Exams shown' })
+    await expect(shown.getByRole('radio', { name: 'Exam 7' })).toBeChecked()
+    await expect.poll(() => cards.count()).toBeGreaterThan(0)
     for (const card of await cards.all()) await expect(card.getByText('Exam 7', { exact: true })).toBeVisible()
-
-    await strip.getByRole('radio', { name: 'All exams' }).click()
-    await expect(page).toHaveURL(/\/wiki\/resources$/)
-    await expect.poll(() => cards.count()).toBe(all)
+    const some = await cards.count()
+    await shown.getByRole('radio', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/\/wiki\/resources\?exam=all$/)
+    await expect.poll(() => cards.count()).toBeGreaterThan(some)
   })
 
-  // Exam 6's regional study guides (6C, 6U, 6I, 6T) are one logo on the strip;
-  // choosing it puts a region picker under the strip.
-  test('shows Exam 6 once and narrows it by region', async ({ page }) => {
+  test('Resources opens on the exam in focus', async ({ page }) => {
+    await studying(page)
     await page.goto('/wiki/resources')
-    await page.getByRole('radiogroup', { name: 'Examining body' }).getByRole('radio', { name: 'CAS' }).click()
-    const strip = page.getByRole('radiogroup', { name: 'Exam' })
-    await expect(strip.getByRole('radio', { name: 'Exam 6', exact: true })).toHaveCount(1)
-    await strip.getByRole('radio', { name: 'Exam 6', exact: true }).click()
-    const regions = page.getByTestId('exam-variants')
-    await expect(regions).toBeVisible()
-    await regions.getByRole('radio', { name: 'Canada' }).click()
-    await expect(page).toHaveURL(/exam=Exam\+6C$/)
-    await regions.getByRole('radio', { name: 'All regions' }).click()
-    await expect(page).toHaveURL(/exam=Exam\+6C&exam=Exam\+6/)
+    const shown = page.getByRole('radiogroup', { name: 'Exams shown' })
+    await expect(shown.getByRole('radio', { name: 'Exam P-1' })).toBeChecked()
+    const cards = page.locator('main').getByRole('button').filter({ has: page.locator('p.font-semibold') })
+    await expect.poll(() => cards.count()).toBeGreaterThan(0)
+    for (const card of await cards.all()) await expect(card.getByText('Exam P-1', { exact: true })).toBeVisible()
+    // Every exam, and back to this one.
+    await shown.getByRole('radio', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/exam=all/)
+    await shown.getByRole('radio', { name: 'Exam P-1' }).click()
+    await expect(page).toHaveURL(/\/wiki\/resources$/)
+  })
+
+  // An address naming an exam's regions together still shows them as one exam.
+  test('shows the regions of Exam 6 an address names', async ({ page }) => {
+    await page.goto('/wiki/resources?exam=Exam+6C&exam=Exam+6U')
+    await expect(page.getByRole('radiogroup', { name: 'Exams shown' }).getByRole('radio', { name: 'Exam 6', exact: true })).toBeChecked()
   })
 })
 

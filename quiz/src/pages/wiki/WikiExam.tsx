@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { ChevronDown, ChevronRight, ChevronUp, Loader2, PlusCircle } from 'lucide-react'
+import { ChevronDown, ChevronRight, ChevronUp, Loader2, Plus } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -25,7 +25,6 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { ExamSyllabusButton, LABELLED_HEADER_BUTTON } from '@/components/wiki/ExamSyllabusButton'
 import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
-import { ExamLogo } from '@/components/ExamLogo'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FloatingSearchBack } from '@/components/FloatingSearchBar'
 import { ObjectiveCard, type PillState } from '@/components/learn/ObjectiveCard'
@@ -50,7 +49,10 @@ import { documentPathsByName, extractSourceMaterial, parseSyllabusObjectives, so
 import { planTickPct } from '@/lib/todaySession'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
 import { buildWikiIndex, isInWikiIndex } from '@/lib/wikiIndex'
-import { useExamsPopout } from '@/hooks/useExamsPopout'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
+import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
+import { addressFocus } from '@/lib/examFocus'
+import { useExamSwitcher } from '@/stores/examSwitcher'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useBack, usePageLabel } from '@/hooks/useBack'
 import type { BackOptions } from '@/lib/navTrail'
@@ -130,8 +132,17 @@ export default function WikiExam() {
   const progressKey = useMemo(() => examProgressKeyFromFile(examFileName), [examFileName])
   const { user } = useAuth()
   const { isPro } = useSubscription()
-  const { examRows, progress, targetDates } = useExamProgress()
-  const openExams = useExamsPopout(s => s.openExams)
+  const { examRows, progress, targetDates, focusId, setFocusId } = useExamProgress()
+  const openAddExam = useExamSwitcher(s => s.openAdd)
+  // The page's own id (`P-1`, `6C`). An address that names one of the reader's
+  // exams puts it in focus; any other exam is a visit, and the focus stays
+  // where it was (lib/examFocus.ts).
+  const pageId = useMemo(() => examPageIdFromFile(examFileName), [examFileName])
+  const { exams: myExams, loading: examsLoading } = useExamInFocus()
+  const isMine = addressFocus(pageId, myExams) !== null
+  useEffect(() => {
+    if (!examsLoading && isMine && focusId !== pageId) setFocusId(pageId)
+  }, [examsLoading, isMine, focusId, pageId, setFocusId])
 
   // The wiki exam id (`p-1`, `5-1`, `mas-i`) — how the syllabus link is keyed.
   const wikiExamId = useMemo(() => examIdFromFile(examFileName), [examFileName])
@@ -397,10 +408,16 @@ export default function WikiExam() {
   }, [resourceParam, pageRefs, openResource])
 
   // ── The strip above the page ──────────────────────────────────────────────
-  const pageIcon = useMemo(() => <ExamLogo examKey={progressKey} size="strip" />, [progressKey])
+  // The strip's icon is the exam switcher: this exam's logo and name, and the
+  // way to the reader's others.
+  const stripLabel = examDisplayName(examFileName)
+  const pageIcon = useMemo(
+    () => <ExamSwitcherButton examKey={progressKey} label={stripLabel} visiting={isMine ? null : pageId} />,
+    [progressKey, stripLabel, isMine, pageId],
+  )
   // Always back to the exam list: the browser's Back when the reader came
   // from it (its filters and scroll intact), and up to it from anywhere else.
-  const back = useBack({ to: '/wiki', label: 'All exams' }, EXAM_LIST_ONLY)
+  const back = useBack({ to: '/wiki', label: 'Study Guides' }, EXAM_LIST_ONLY)
   const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
   // How far along this exam's material is. The page's own id, since 6C and 6U
   // share a progress key and not a status.
@@ -476,9 +493,9 @@ export default function WikiExam() {
             <div className="flex flex-wrap gap-2.5">
               <ExamSyllabusButton examId={wikiExamId} examLabel={title} labelled />
               <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={title} labelled />
-              {user && examState === 'not_started' && (
-                <button type="button" onClick={openExams} className={LABELLED_HEADER_BUTTON}>
-                  <PlusCircle aria-hidden="true" />
+              {!examsLoading && !isMine && contentStatus !== 'development' && (
+                <button type="button" onClick={() => openAddExam(pageId)} className={LABELLED_HEADER_BUTTON}>
+                  <Plus aria-hidden="true" />
                   Add exam
                 </button>
               )}

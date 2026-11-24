@@ -1,11 +1,13 @@
 import { lazy, Suspense, useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { usePageLabel } from '@/hooks/useBack'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronDown, ChevronRight, Loader2, Search } from 'lucide-react'
+import { ChevronRight, Loader2, Search } from 'lucide-react'
 import { ExamStatusBanner } from '@/components/FloatingSearchBar'
-import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/examProgress'
+import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import { useConcepts } from '@/hooks/useConcepts'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -24,9 +26,7 @@ import { examStatus } from '@/lib/examStatus'
 import { difficultyLevelsToParam, inDifficultyLevels } from '@/lib/quizDifficulty'
 import { formatPace, paceForExam } from '@/lib/quizTiming'
 import { estimateSeconds, formatEstimate, topicPills } from '@/lib/quizSetup'
-import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import {
-  activeQuizExamValues,
   conceptLevels,
   groupConceptsBySyllabus,
   loadSavedConcepts,
@@ -42,7 +42,6 @@ import {
   sessionQuizIds,
   storeSelectedIds,
   takeConceptOverride,
-  QUIZ_EXAMS,
   type LaunchSettings,
 } from '@/lib/quizBuilder'
 import {
@@ -59,16 +58,10 @@ import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
 import { useQuizExamScreen } from '@/hooks/useQuizExamScreen'
 import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
-import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
-import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
-import { QuizTitleRow } from '@/components/landing/QuizTitleRow'
-import { ExamLogo } from '@/components/ExamLogo'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
-import { Popup, PopupTitle } from '@/components/ui/Popup'
-import { CheckMark } from '@/components/CheckMark'
 import { GROUND } from '@/components/ui/OutlineCard'
 import { QuizCard } from '@/components/practice/QuizCard'
 import { PaperPopup } from '@/components/practice/PaperPopup'
@@ -91,13 +84,14 @@ import type { Question } from '@/lib/parser'
 //
 // The day's session is on Today, so today's plan has no tile here; the page
 // still launches the session Today's Start hands over (`autostart`). The exam
-// list (`?exams=1`) is the way to another exam until the exam switcher (§6).
+// switcher at the top (§6) is the way to another exam.
 
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
+const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 
 /** Which popup is open. */
-type Sheet = 'quiz' | 'practice' | 'samples' | 'exams'
+type Sheet = 'quiz' | 'practice' | 'samples'
 
 /** Who published an exam's undated questions: "SOA", "SOA, Actuarial Notes". */
 function sourceDetail(questions: readonly Question[]): string {
@@ -123,15 +117,12 @@ export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { progress: examProgress, targetDates, selectedTrack, examVariants } = useExamProgress()
+  const { progress: examProgress, targetDates } = useExamProgress()
   const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
   const { isPro, loading: subLoading } = useSubscription()
-  // Per-exam "questions left in today's plan" — badges the exam cards, so the
-  // count is visible before an exam is even picked.
-  const { byExam: todayQuizByExam } = useTodayQuizCounts()
   // Attempt history, for the pools' counts of questions not yet tried.
   const { byQuestionId: attemptsByQuestionId } = useQuestionAttempts()
 
@@ -140,18 +131,8 @@ export default function Landing() {
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   const initialConcept = searchParams.get('concept') ?? ''
 
-  // Shared with the Study Guides tab — same key, same fallback. See
-  // lib/bodyFilter.ts.
-  const [filterOverride, setFilterOverride] = useState<ExamBody | null>(loadBody)
-  const activeFilter = filterOverride ?? defaultBody(selectedTrack)
-
-  function handleSetFilter(f: ExamBody) {
-    saveBody(f)
-    setFilterOverride(f)
-  }
-
-  // The exam list or one exam's setup screen, and the moves between them.
-  const { topic, openExam, showExams, focusLoading } = useQuizExamScreen()
+  // The exam the page is on: the address's, else the exam in focus.
+  const { topic, visiting, focusWithoutBank, hasExams, focusLoading } = useQuizExamScreen()
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
@@ -459,11 +440,13 @@ export default function Landing() {
     setCount(Math.max(1, Math.min(next, quizPool.length > 0 ? quizPool.length : next)))
   }
 
-  // The reader's exams with a question bank, for the exam popup.
-  const myExams = useMemo(() => {
-    const mine = new Set(activeQuizExamValues(examProgress, examVariants))
-    return QUIZ_EXAMS.filter(e => mine.has(e.value))
-  }, [examProgress, examVariants])
+  // The study guide page of the exam showing, for the switcher's "Add" row on a visit.
+  const visitingPageId = useMemo(() => {
+    const exam = quizExamFor(topic)
+    if (!visiting || !exam) return null
+    return syllabi.find(sy => wikiExamIdToProgressKey(sy.examId) === exam.progressKey
+      && (!exam.examId || sy.examId === exam.examId))?.examId ?? null
+  }, [visiting, topic, syllabi])
 
   const examBank = useMemo(
     () => (topic ? filterQuestions(allQuestions, { exam: topic, includeOffSyllabus: true }) : []),
@@ -493,40 +476,44 @@ export default function Landing() {
     return <div className={cn(GROUND, 'min-h-[60vh]')} aria-busy="true" />
   }
 
-  // ── The exam list: the way to another exam until the exam switcher ──
+  // ── Nothing to open: a reader with no exams adds one here (R11), and an
+  // exam in focus with no question bank says so ──
   if (!hasTopic) {
     return (
-      <>
-        <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-8 sm:px-6">
+      <div className={cn(GROUND, 'min-h-full')} data-testid="practice-empty">
+        <div className="mx-auto flex w-full max-w-xl flex-col px-5 pb-10 pt-3 lg:pt-8">
           <div className="flex items-center gap-1">
-            <MobileNavButton className="h-11 w-11 lg:hidden" />
-            <div className="min-w-0 flex-1">
-              <QuizTitleRow
-                hasTopic={false}
-                signedIn={!!user}
-                body={activeFilter}
-                onBodyChange={handleSetFilter}
-                concept=""
-                conceptCount={0}
-                onClearConcept={() => {}}
+            <MobileNavButton className="-ml-2 h-11 w-11 lg:hidden" />
+            {focusWithoutBank && (
+              <ExamSwitcherButton
+                examKey={wikiExamIdToProgressKey(focusWithoutBank.examId)}
+                label={focusWithoutBank.examLabel}
+                testId="practice-exam"
               />
-            </div>
+            )}
           </div>
-          {GAMES_ENABLED && <QuizGamesPanel />}
-          <QuizExamLadder
-            body={activeFilter}
-            syllabi={syllabi}
-            questions={allQuestions}
-            examProgress={examProgress}
-            examVariants={examVariants}
-            targetDates={targetDates}
-            todayQuizByExam={todayQuizByExam}
-            onOpenExam={openExam}
-          />
+          {focusWithoutBank ? (
+            <div className="mt-6 flex flex-col items-start gap-4" data-testid="quiz-no-bank">
+              <p className="text-[17px] leading-normal">{focusWithoutBank.examLabel} has no practice questions yet.</p>
+              {focusWithoutBank.fileName && (
+                <Link
+                  to={wikiRoute({ kind: 'exam', name: focusWithoutBank.fileName })}
+                  className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-5 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  Open its study guide
+                </Link>
+              )}
+            </div>
+          ) : !hasExams ? (
+            <div className="mt-2">
+              <Suspense fallback={null}>
+                <AddExamFlow />
+              </Suspense>
+            </div>
+          ) : null}
+          {GAMES_ENABLED && <div className="mt-8"><QuizGamesPanel /></div>}
         </div>
-        {/* A track heading opens its credential's page here, as on Study Guides. */}
-        <ConceptPopup />
-      </>
+      </div>
     )
   }
 
@@ -542,18 +529,12 @@ export default function Landing() {
               so it carries the way into the navigation (lib/mobileNavHost.ts). */}
           <div className="flex items-center gap-1">
             <MobileNavButton className="-ml-2 h-11 w-11 lg:hidden" />
-            <button
-              type="button"
-              onClick={() => (myExams.length > 0 ? setSheet('exams') : showExams())}
-              aria-haspopup={myExams.length > 0 ? 'dialog' : undefined}
-              aria-label={`Switch exam, ${examLabel}`}
-              data-testid="practice-exam"
-              className="flex h-11 min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <ExamLogo examKey={currentExam?.progressKey ?? ''} size="md" />
-              <span className="truncate text-[17px] font-semibold">{examLabel}</span>
-              <ChevronDown className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
-            </button>
+            <ExamSwitcherButton
+              examKey={currentExam?.progressKey ?? ''}
+              label={examLabel}
+              visiting={visitingPageId}
+              testId="practice-exam"
+            />
             <span className="flex-1" />
             {currentExam && (
               <QuizExamInfoButton
@@ -615,6 +596,7 @@ export default function Landing() {
               <RowBody title="Flashcards" detail={String(flashcardCount)} />
             </Link>
           </div>
+          {GAMES_ENABLED && <div className="-mx-2 mt-6"><QuizGamesPanel /></div>}
         </div>
       </div>
 
@@ -699,44 +681,7 @@ export default function Landing() {
         />
       )}
 
-      {sheet === 'exams' && (
-        <Popup onClose={closeSheet} labelledBy="practice-exams-title">
-          <PopupTitle id="practice-exams-title">Your exams</PopupTitle>
-          <ul className="flex flex-col gap-2.5">
-            {myExams.map(exam => {
-              const on = exam.value === topic
-              return (
-                <li key={exam.value}>
-                  <button
-                    type="button"
-                    aria-current={on || undefined}
-                    onClick={() => { closeSheet(); openExam(exam.value) }}
-                    className={cn(EXAM_ROW, on ? 'border-2 border-foreground' : 'border-[1.5px] border-border hover:border-foreground')}
-                  >
-                    <ExamLogo examKey={exam.progressKey} size="md" />
-                    <span className="min-w-0 flex-1 truncate">{exam.label}</span>
-                    {on && <CheckMark className="h-7 w-7 text-foreground" label="Showing" />}
-                  </button>
-                </li>
-              )
-            })}
-            <li>
-              <button
-                type="button"
-                onClick={() => { closeSheet(); showExams() }}
-                className={cn(EXAM_ROW, 'border-[1.5px] border-border hover:border-foreground')}
-              >
-                <span className="min-w-0 flex-1">All exams</span>
-                <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
-              </button>
-            </li>
-          </ul>
-        </Popup>
-      )}
     </>
   )
 }
 
-const EXAM_ROW =
-  'flex min-h-[60px] w-full items-center gap-3.5 rounded-[18px] px-4 text-left text-[17px] font-semibold ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'

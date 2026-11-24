@@ -15,6 +15,8 @@ export interface SignedInOptions {
   displayName?: string
   /** exam_progress rows: which exams the account is studying. */
   examProgress?: { exam_id: string; status: string; target_date: string | null }[]
+  /** More of the account's `user_metadata`: `{ exam_in_focus: 'FM-2' }`. */
+  metadata?: Record<string, unknown>
   /** An active Pro subscription (a `user_subscriptions` row), for Pro-only features. */
   pro?: boolean
   /** An RPC's answer by name, given its arguments. Undefined falls through to null. */
@@ -27,7 +29,7 @@ export async function signIn(page: Page, opts: SignedInOptions = {}) {
     aud: 'authenticated',
     role: 'authenticated',
     email: 'ada@example.com',
-    user_metadata: { display_name: opts.displayName ?? 'Ada' },
+    user_metadata: { display_name: opts.displayName ?? 'Ada', ...opts.metadata },
     app_metadata: { provider: 'email' },
     created_at: '2026-01-01T00:00:00Z',
   }

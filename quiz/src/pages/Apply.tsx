@@ -19,7 +19,7 @@ import { useConceptLevels } from '@/hooks/useConceptLevels'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { useProjectSync } from '@/hooks/useProjectSync'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useWorkflows } from '@/hooks/useWorkflows'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { openAttempts, projectsCount, recentTools, stepsLabel, toolsCount, workflowsCount } from '@/lib/apply'
@@ -90,7 +90,7 @@ function ProjectsCard() {
 }
 
 function ToolsCard() {
-  const { active } = useTodayExam()
+  const { active } = useExamInFocus()
   const { levelOf } = useConceptLevels()
   const forExam = useMemo(() => (active ? toolsForExam(CATALOGUE_TOOLS, active).length : 0), [active])
   const [recent] = useState(() => recentTools(readRecent(), slug => {

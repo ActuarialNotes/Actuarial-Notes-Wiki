@@ -6,12 +6,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { useXp } from '@/hooks/useXp'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useExamProgress } from '@/contexts/examProgress'
-import { ACTIVE_EXAM_KEY } from '@/hooks/useTodayExam'
-import { matchesSelectedVariant } from '@/data/examSittings'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { setDailyGoal } from '@/lib/xpStore'
 import { DAILY_GOALS } from '@/lib/xp'
@@ -121,19 +119,10 @@ export function QuestSheet({
  * derives them, and only while the guide is open.
  */
 function TodayGuide({ isPro, onClose }: { isPro: boolean; onClose: () => void }) {
-  const { syllabi } = useWikiSyllabus()
-  const { progress, targetDates, examVariants } = useExamProgress()
+  const { targetDates } = useExamProgress()
   const { records, loading: masteryLoading } = useConceptMastery()
 
-  const syllabus = useMemo(() => {
-    const inProgress = syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return progress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    })
-    let saved: string | null = null
-    try { saved = localStorage.getItem(ACTIVE_EXAM_KEY) } catch { /* ignore */ }
-    return inProgress.find(s => s.examId === saved) ?? inProgress[0] ?? null
-  }, [syllabi, progress, examVariants])
+  const syllabus = useExamInFocus().active
 
   const progressKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
   const examDate = progressKey ? (targetDates[progressKey] ?? null) : null

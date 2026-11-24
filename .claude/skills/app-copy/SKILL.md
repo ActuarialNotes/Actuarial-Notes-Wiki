@@ -106,6 +106,11 @@ One thing, one name. Use these exactly.
 | The cosmetics page | **Gem Shop** | Store, shop |
 | The screen that was the Dashboard | **Today** (the redesigned screen and its session card's title). The sidebar row stays "Dashboard" until the navigation phase | Home, Dashboard for the redesigned screen |
 | The day's work on Today | the **session** ("today's session", "your daily session"); free for every account | Today's Study Plan (that is Pro's plan, which paces the session to the exam date) |
+| The one exam every place opens on | the **exam in focus** in docs and code; on screen it is never named: the control shows the exam ("Exam P") and the sheet is **Your exams** | active exam, current exam, selected exam |
+| Taking an exam on | **Add an exam** (the screen and the row), **Add Exam P** (the button for one exam); an exam on the list is **Added** | Track, Follow, Enrol, Start studying |
+| The date question | **When is your exam?**, with **Another date** and **Not sure yet** | Target date, Sitting, Exam window (as the question) |
+| Every exam, on Resources and the Store | **All exams**, beside the exam's own name on one switch | Everything, Any exam, All |
+| The sheet's Edit actions | **Change date**, **Mark as passed**, **Remove** | Delete, Complete, Archive |
 | How long a session is | **session length** (10, 25, 45 or 120 minutes) | session size, duration, time budget |
 | The session's three steps | **Fix mistakes**, **Learn**, **Review**, in that order; finished, they read **Fixed**, **Learned**, **Reviewed** | Mistakes, New, Refresh, Revise |
 | Locking an answer in | **Check** | Confirm Answer, Submit |
@@ -248,6 +253,12 @@ implies. Newest first.
 - 2026-11-23 · Redesign, the session (`docs/redesign-spec.md` §5.2) · "Choose any answer to
   continue" is removed, with the shortcut it described. → A caption that explains a control
   goes when the control does; Next is the way on.
+- 2026-11-23 · Redesign, the exam switcher (`docs/redesign-spec.md` §6, R7, R10, R11) · One
+  exam is in focus everywhere; the sheet is "Your exams", adding is "Add an exam" and the date
+  question is "When is your exam?". A visitor's exams are kept in the browser, and the only
+  word about it is the "Sign in" button on Today. A date with nothing to come reads "No date".
+  → No screen says "exam in focus", "active exam" or "track an exam"; an exam is added, has a
+  date, is passed or is removed.
 - 2026-11-23 · Redesign, Today (`docs/redesign-spec.md` R1, R5, R15, §4.4) · The daily
   session is free; Pro sells the plan paced to the exam date, Analytics and the daily
   podcast. The free-plan upsell on Today is "Pace my plan to Jan 14" (the reader's own exam

@@ -30,7 +30,7 @@ import { usePagedList } from '@/hooks/usePagedList'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { bankLabelFor } from '@/lib/examIds'
 import {
@@ -75,7 +75,7 @@ const ROW_RULE = 'border-t border-border first:border-t-0'
 
 /** The exam in focus, as each index spells it. Null for a reader studying no exam. */
 function useSearchFocus(): SearchFocus | null {
-  const { active, syllabi } = useTodayExam()
+  const { active, syllabi } = useExamInFocus()
   return useMemo(() => {
     // The exam Today shows; for a reader studying none, the exam last opened
     // on Practice in this browser (hooks/useQuizExamScreen.ts).

@@ -143,7 +143,7 @@ export default function WikiConcept() {
   }, [pageRefs, fromExam, setExamId, setPageRefs, setGround])
 
   // Back to the page the reader came from; from outside the app, up to the exam.
-  const back = useBack({ to: guideRoute, label: guide?.label ?? 'All exams' })
+  const back = useBack({ to: guideRoute, label: guide?.label ?? 'Study Guides' })
 
   // The foot: a quiz on this concept, when the bank has questions on it.
   const questionCount = useConceptQuestionCount(status === 'ready' ? conceptName : null)

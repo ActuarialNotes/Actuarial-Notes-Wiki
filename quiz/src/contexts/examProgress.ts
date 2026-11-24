@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import type { ItemStatus } from '@/data/tracks'
 import type { StudyPlan, StudyPlanConfig } from '@/lib/studyPlan'
 
-// The account's exams — status, dates, variants, study plan config and cache —
+// The reader's exams (the account's, or for a visitor the browser's) — status, dates, variants, study plan config and cache —
 // as the app reads them. Provided by `ExamProgressProvider`
 // (contexts/ExamProgressContext.tsx).
 
@@ -38,6 +38,14 @@ export interface ExamProgressContextValue {
   updateTargetDate: (examId: string, date: string | null) => Promise<boolean>
   /** Persist an updated study plan config for a given exam */
   updateStudyPlanConfig: (examId: string, config: StudyPlanConfig) => Promise<boolean>
+  /**
+   * The exam last used, as stored: an exam page's id (`P-1`, `6C`). What the
+   * exam in focus is read from (`lib/examFocus.ts`, `hooks/useExamInFocus.ts`);
+   * it may name an exam the reader no longer has.
+   */
+  focusId: string | null
+  /** Make this exam page the one last used, here and on the account. */
+  setFocusId: (examId: string) => void
   /** Persist the generated study plan so it syncs across devices */
   updateStudyPlanCache: (examId: string, plan: StudyPlan) => Promise<boolean>
 }

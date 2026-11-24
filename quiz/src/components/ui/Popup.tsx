@@ -19,6 +19,7 @@ export function Popup({
   labelledBy,
   children,
   layer = 'z-[80]',
+  full = false,
   suspended = false,
   aboveReader = false,
   className,
@@ -29,6 +30,8 @@ export function Popup({
   children: ReactNode
   /** The overlay's stacking layer (style guide §8.2). */
   layer?: string
+  /** Below `sm`, fill the screen instead of rising as a sheet: a screen of its own (Add an exam). */
+  full?: boolean
   /**
    * Something opened from the popup has the keyboard (the PDF reader over a
    * past paper): Escape and Tab are left to it until it closes.
@@ -109,12 +112,14 @@ export function Popup({
           style={aboveReader ? { maxHeight: 'calc(92dvh - var(--concept-split-height, 0px))' } : undefined}
           className={cn(
             'relative z-10 flex max-h-[92dvh] w-full flex-col gap-[18px] overflow-y-auto bg-ground text-foreground outline-none',
-            'rounded-t-[22px] border-[1.5px] border-b-0 border-foreground px-5 pb-7 pt-2.5',
-            'sm:max-w-md sm:rounded-[22px] sm:border-b-[1.5px] sm:p-6',
+            full
+              ? 'h-dvh max-h-dvh px-5 pb-6 pt-3 sm:h-auto sm:max-h-[92dvh]'
+              : 'rounded-t-[22px] border-[1.5px] border-b-0 border-foreground px-5 pb-7 pt-2.5',
+            'sm:max-w-md sm:rounded-[22px] sm:border-[1.5px] sm:border-foreground sm:p-6',
             className,
           )}
         >
-          <span aria-hidden="true" className="h-1 w-10 shrink-0 self-center rounded-full bg-foreground sm:hidden" />
+          {!full && <span aria-hidden="true" className="h-1 w-10 shrink-0 self-center rounded-full bg-foreground sm:hidden" />}
           {children}
         </div>
       </div>

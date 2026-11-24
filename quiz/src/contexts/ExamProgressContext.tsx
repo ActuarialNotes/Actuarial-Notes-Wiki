@@ -4,6 +4,45 @@ import { useAuth } from '@/hooks/useAuth'
 import type { ItemStatus } from '@/data/tracks'
 import type { StudyPlan, StudyPlanConfig } from '@/lib/studyPlan'
 import { ExamProgressContext, type ExamProgressRow, type SectionState } from '@/contexts/examProgress'
+import {
+  BROWSER_EXAMS_KEY, EXAM_FOCUS_KEY, EXAM_FOCUS_METADATA,
+  browserExamsToMerge, focusOnLoad, parseBrowserExams, parseStoredFocus,
+} from '@/lib/examFocus'
+import { isSessionRoute } from '@/lib/mobileNavHost'
+import { loadStudyPlanConfig } from '@/lib/studyPlan'
+
+// A visitor's exams live in the browser alone (docs/redesign-spec.md R11):
+// the same rows the account keeps, less the cached plan. Signing in adds the
+// ones the account doesn't have and clears the list.
+function readBrowserExams(): ExamProgressRow[] {
+  let raw: string | null = null
+  try { raw = localStorage.getItem(BROWSER_EXAMS_KEY) } catch { /* private window */ }
+  return parseBrowserExams(raw).map(r => ({
+    exam_id: r.exam_id,
+    status: r.status,
+    target_date: r.target_date,
+    ...(r.variant ? { study_plan_config: { ...loadStudyPlanConfig(r.exam_id), examVariant: r.variant } } : {}),
+  }))
+}
+
+function writeBrowserExams(rows: ExamProgressRow[]) {
+  try {
+    localStorage.setItem(BROWSER_EXAMS_KEY, JSON.stringify(rows.map(r => ({
+      exam_id: r.exam_id,
+      status: r.status,
+      target_date: r.target_date ?? null,
+      variant: r.study_plan_config?.examVariant ?? null,
+    }))))
+  } catch { /* private window */ }
+}
+
+function safeGet(key: string): string | null {
+  try { return localStorage.getItem(key) } catch { return null }
+}
+
+function readBrowserFocus(): string | null {
+  try { return parseStoredFocus(localStorage.getItem(EXAM_FOCUS_KEY)) } catch { return null }
+}
 
 export function ExamProgressProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
@@ -54,6 +93,53 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
 
   const userId = user?.id
 
+  // ── The exam in focus, as stored ──────────────────────────────────────────
+  // Kept with the account (`user_metadata.exam_in_focus`) and mirrored in the
+  // browser. The account's value wins when the app loads and when the tab is
+  // returned to, so a second device opens on the exam last used anywhere; a
+  // quiz or its review is never switched under the reader.
+  const [focusId, setFocusIdState] = useState<string | null>(readBrowserFocus)
+  const applyAccountFocus = useCallback((metadata: unknown) => {
+    const account = (metadata as Record<string, unknown> | null | undefined)?.[EXAM_FOCUS_METADATA]
+    const next = focusOnLoad(account, readBrowserFocus())
+    if (!next) return
+    try { localStorage.setItem(EXAM_FOCUS_KEY, next) } catch { /* private window */ }
+    setFocusIdState(next)
+  }, [])
+  // On sign-in the session's copy of the account is applied at once, then the
+  // account is read fresh (a stored session can be an hour behind another
+  // device), and again each time the tab is returned to.
+  const accountFocusRef = useRef<unknown>(null)
+  accountFocusRef.current = (user?.user_metadata as Record<string, unknown> | undefined)?.[EXAM_FOCUS_METADATA]
+  useEffect(() => {
+    if (!userId) return
+    applyAccountFocus({ [EXAM_FOCUS_METADATA]: accountFocusRef.current })
+    let cancelled = false
+    const refresh = () => {
+      if (isSessionRoute(window.location.pathname)) return
+      supabase.auth.getUser()
+        .then(({ data }) => { if (!cancelled && data.user) applyAccountFocus(data.user.user_metadata) })
+        .catch(() => { /* offline: the browser's copy stands */ })
+    }
+    refresh()
+    const onVisible = () => { if (document.visibilityState === 'visible') refresh() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      cancelled = true
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [userId, applyAccountFocus])
+  const setFocusId = useCallback((examId: string) => {
+    const next = parseStoredFocus(examId)
+    if (!next) return
+    setFocusIdState(next)
+    try { localStorage.setItem(EXAM_FOCUS_KEY, next) } catch { /* private window */ }
+    if (userId && accountFocusRef.current !== next) {
+      accountFocusRef.current = next
+      supabase.auth.updateUser({ data: { [EXAM_FOCUS_METADATA]: next } }).catch(() => { /* best-effort */ })
+    }
+  }, [userId])
+
   // A refetch must never undo a local write. Every write below fires a realtime
   // event, and each event refetches the rows — so a refetch that started before
   // a write committed can resolve after it, with the old value. Applied, it put
@@ -91,19 +177,48 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
 
   // Initial load
   useEffect(() => {
-    if (!userId) { setLoadingExams(false); return }
+    if (!userId) {
+      // Signed out: the browser's own list (empty once it was merged into an account).
+      setExamRows(readBrowserExams())
+      setLoadingExams(false)
+      return
+    }
     let cancelled = false
     setLoadingExams(true)
     supabase
       .from('exam_progress')
       .select('*')
       .eq('user_id', userId)
-      .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
+      .then(async ({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
         if (cancelled) return
         if (error) {
           console.warn('ExamProgressContext: failed to load exam_progress:', error.message)
         } else if (data) {
-          setExamRows(data)
+          // The exams added before signing in join the account, once: the
+          // account's own rows win, and the browser's list is then cleared.
+          const extra = browserExamsToMerge(parseBrowserExams(safeGet(BROWSER_EXAMS_KEY)), new Set(data.map(r => r.exam_id)))
+          let rows = data
+          if (extra.length > 0) {
+            const { error: mergeError } = await supabase.from('exam_progress').upsert(
+              extra.map(r => ({
+                user_id: userId, exam_id: r.exam_id, status: r.status, target_date: r.target_date,
+                ...(r.variant ? { study_plan_config: { ...loadStudyPlanConfig(r.exam_id), examVariant: r.variant } } : {}),
+                updated_at: new Date().toISOString(),
+              })),
+              { onConflict: 'user_id,exam_id' },
+            )
+            if (cancelled) return
+            if (!mergeError) {
+              rows = [...data, ...extra.map(r => ({
+                exam_id: r.exam_id, status: r.status, target_date: r.target_date,
+                ...(r.variant ? { study_plan_config: { ...loadStudyPlanConfig(r.exam_id), examVariant: r.variant } } : {}),
+              }))]
+            }
+          }
+          if (extra.length === 0 || rows !== data) {
+            try { localStorage.removeItem(BROWSER_EXAMS_KEY) } catch { /* private window */ }
+          }
+          setExamRows(rows)
         }
         setLoadingExams(false)
       })
@@ -149,7 +264,19 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const saveExamRows = useCallback(async (rows: ExamProgressRow[]) => {
-    if (!user) return false
+    if (!user) {
+      // A visitor's exams are the browser's.
+      setExamRows(prev => {
+        const merged = prev.map(p => {
+          const update = rows.find(r => r.exam_id === p.exam_id)
+          return update ? { ...p, ...update } : p
+        })
+        const next = [...merged, ...rows.filter(r => !prev.some(p => p.exam_id === r.exam_id))]
+        writeBrowserExams(next)
+        return next
+      })
+      return true
+    }
     setExamsState({ saving: true, error: null, success: null })
 
     const payloads = rows.map(r => {
@@ -208,7 +335,16 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     column: Partial<ExamProgressRow>,
     label: string,
   ): Promise<boolean> => {
-    if (!userId) return false
+    if (!userId) {
+      setExamRows(prev => {
+        const next = prev.some(r => r.exam_id === examId)
+          ? prev.map(r => r.exam_id === examId ? { ...r, ...column } : r)
+          : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, ...column }]
+        writeBrowserExams(next)
+        return next
+      })
+      return true
+    }
     writeSeq.current++
     pendingWrites.current++
     setExamRows(prev => prev.some(r => r.exam_id === examId)
@@ -271,6 +407,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       selectedTrack, setSelectedTrack,
       saveExamRows, examsState,
       progress, targetDates, examVariants, updateTargetDate, updateStudyPlanConfig, updateStudyPlanCache,
+      focusId, setFocusId,
     }}>
       {children}
     </ExamProgressContext.Provider>

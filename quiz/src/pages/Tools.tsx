@@ -30,7 +30,7 @@ import { backLabel, useBack, usePageLabel, type Back } from '@/hooks/useBack'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
 import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
 import { FROM_PARAM } from '@/lib/toolTemplate'
 import { examForConcepts, toolConcept, toolsForExam } from '@/lib/toolExam'
@@ -102,7 +102,7 @@ function Catalogue() {
   const back = useBack({ to: '/apply', label: 'Apply' })
 
   // The exam in focus, and the tools its syllabus covers (`lib/toolExam.ts`).
-  const { active } = useTodayExam()
+  const { active } = useExamInFocus()
   const examTools = useMemo(() => (active ? toolsForExam(CATALOGUE_TOOLS, active) : []), [active])
   const tab = resolveToolsTab(params.get('tab'), examTools.length)
   // An area on its own (a breadcrumb's "Ratemaking") is that area of every tool.

@@ -5,21 +5,19 @@
 // The route is still /dashboard and the sidebar row still says Dashboard until
 // the navigation is rebuilt (the spec's Phase F).
 //
-// Everything on the screen is for the exam showing (`useTodayExam`), except
+// Everything on the screen is for the exam showing (`useExamInFocus`), except
 // the week, which is the account's.
 
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronRight, GraduationCap, Loader2, LogIn, PlusCircle, X } from 'lucide-react'
+import { ChevronRight, Loader2 } from 'lucide-react'
 import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveExamCard'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
-import { ExamLogo } from '@/components/ExamLogo'
-import ExamsPopout from '@/components/ExamsPopout'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { YOU_PATH } from '@/lib/you'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { ExamSheet } from '@/components/today/ExamSheet'
+import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { DayNoteCard, SessionCard } from '@/components/today/SessionCard'
 import { SessionLengthSheet } from '@/components/today/SessionLengthSheet'
 import { SyllabusOverlay, SyllabusPanel, type SyllabusObjective } from '@/components/today/SyllabusPanel'
@@ -49,7 +47,7 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { useTodaySession } from '@/hooks/useTodaySession'
 import { accuracyPercent } from '@/lib/accuracyTrend'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
@@ -68,87 +66,19 @@ import { dayNote, dayPractice, dayTitle, planDayView, planTickPct, sessionConcep
 import { cn } from '@/lib/utils'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { useExamSwitcher } from '@/stores/examSwitcher'
 import { usePodcast } from '@/stores/podcastStore'
-
-const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 
 // Lazy: none of these is on Today's first paint.
 const AnalyticsTilePeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsTilePeek })))
 const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsSummaryPeek })))
 const AnalyticsOverlay = lazy(() => import('@/components/today/AnalyticsScreen').then(m => ({ default: m.AnalyticsOverlay })))
 const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
+const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
 const DailyEmailSheet = lazy(() => import('@/components/you/DailyEmailSheet').then(m => ({ default: m.DailyEmailSheet })))
 
 /** The span the Analytics tile's figure covers, in days. */
 const TILE_SPAN = 30
-
-function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm paper-scrim">
-      <div className="relative bg-card rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Dismiss"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="flex items-center justify-center h-14 w-14 rounded-2xl bg-primary/10 mx-auto">
-          <GraduationCap className="h-7 w-7 text-primary" />
-        </div>
-
-        <div className="text-center space-y-1.5">
-          <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Start by adding the exam you&apos;re studying for. Your concepts, quizzes and progress
-            all follow from it.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={onAddExam}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-semibold hover:bg-primary/90 transition-colors"
-        >
-          <PlusCircle className="h-4 w-4" />
-          Add an exam
-        </button>
-
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          I&apos;ll do this later
-        </button>
-      </div>
-    </div>
-  )
-}
-
-function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
-  return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-      <div className="pointer-events-auto bg-card rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
-          <LogIn className="h-6 w-6 text-primary" />
-        </div>
-        <p className="text-base font-semibold text-foreground text-center">Sign in to see Today</p>
-        <p className="text-sm text-muted-foreground text-center">Your daily session, your syllabus and the days left to your exam.</p>
-        <button
-          type="button"
-          onClick={onSignIn}
-          className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
-        >
-          <LogIn className="h-4 w-4" />
-          Sign in
-        </button>
-      </div>
-    </div>
-  )
-}
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -159,8 +89,9 @@ export default function Dashboard() {
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPro, loading: subscriptionLoading, refresh: refreshSubscription } = useSubscription()
   const { questions: allQuestions, loading: questionsLoading } = useAllQuestions()
-  const exam = useTodayExam()
+  const exam = useExamInFocus()
   const wide = !useIsMobile(1023)
+  const openAddExam = useExamSwitcher(st => st.openAdd)
 
   const popupOpen = useConceptPopup(s => s.open)
   const closePopup = useConceptPopup(s => s.close)
@@ -170,8 +101,6 @@ export default function Dashboard() {
   /** The concept the reader is open on, however it was opened: its square is marked. */
   const readingConcept = useConceptPopup(s => (s.open ? (s.list[s.index]?.name.toLowerCase() ?? null) : null))
 
-  const [examSheetOpen, setExamSheetOpen] = useState(false)
-  const [examsOpen, setExamsOpen] = useState(false)
   const [lengthOpen, setLengthOpen] = useState(false)
   const [overlay, setOverlay] = useState<'syllabus' | 'analytics' | null>(null)
   /** The day the session card shows: today, until a day in the week row is picked. */
@@ -182,10 +111,6 @@ export default function Dashboard() {
     () => new URLSearchParams(location.search).get('show') === 'analytics',
   )
   const [planConfigStep, setPlanConfigStep] = useState<1 | 2 | 3 | null>(null)
-  const [showWelcomeModal, setShowWelcomeModal] = useState(() => sessionStorage.getItem('show_welcome') === '1')
-  const [welcomeDismissed, setWelcomeDismissed] = useState(
-    () => { try { return localStorage.getItem(WELCOME_DISMISSED_KEY) === '1' } catch { return false } },
-  )
   // The daily email's footer links to /dashboard?reminders=1. The email's
   // settings live in Settings now; the link still opens them here.
   const [remindersOpen, setRemindersOpen] = useState(
@@ -193,7 +118,7 @@ export default function Dashboard() {
   )
 
   useEffect(() => {
-    if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
+    sessionStorage.removeItem('show_welcome')
     const params = new URLSearchParams(location.search)
     if (params.get('reminders') === '1' || params.get('show')) navigate('/dashboard', { replace: true })
     if (params.get('upgraded') === '1') {
@@ -213,12 +138,6 @@ export default function Dashboard() {
     return () => closePopup()
   // Only run once on mount.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const dismissWelcome = useCallback(() => {
-    setShowWelcomeModal(false)
-    setWelcomeDismissed(true)
-    try { localStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* ignore */ }
   }, [])
 
   useEffect(() => {
@@ -439,7 +358,6 @@ export default function Dashboard() {
     : (user.user_metadata?.display_name as string | undefined) ?? user.email?.split('@')[0] ?? 'You'
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const hasExams = exam.exams.length > 0
-  const showWelcome = !welcomeDismissed && (showWelcomeModal || (!exam.loading && !hasExams))
   // The reader is open on one of the session's concepts: the rest of Today steps back.
   const reading = popupConcept !== null
   const dim = cn('transition-opacity', reading && 'opacity-30')
@@ -515,11 +433,7 @@ export default function Dashboard() {
   return (
     <>
     <div className={cn(GROUND, 'relative min-h-dvh')}>
-      {isGuest && <SignInOverlay onSignIn={() => navigate('/auth', { state: { from: '/dashboard' } })} />}
-      <div
-        className={cn(isGuest && 'pointer-events-none select-none blur-sm opacity-40')}
-        aria-hidden={isGuest || undefined}
-      >
+      <div>
         <div
           className="mx-auto w-full max-w-[460px] px-3 pb-6 pt-3 lg:max-w-[1104px] lg:px-8 lg:pb-14 lg:pt-10"
           style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
@@ -532,20 +446,18 @@ export default function Dashboard() {
             <MobileNavButton className="h-11 w-11" />
             {hasExams && activeSyllabus && activeKey && (
               <>
-              <button
-                type="button"
-                onClick={() => setExamSheetOpen(true)}
-                aria-haspopup="dialog"
-                aria-label={`Switch exam, ${activeSyllabus.examLabel}`}
-                data-testid="today-exam"
-                className="flex h-11 min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <ExamLogo examKey={activeKey} size="md" />
-                <span className="truncate text-[17px] font-semibold">{activeSyllabus.examLabel}</span>
-                <ChevronDown className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
-              </button>
+              <ExamSwitcherButton examKey={activeKey} label={activeSyllabus.examLabel} testId="today-exam" />
               <span className="ml-auto flex shrink-0 items-center">
-                {!isGuest && (
+                {isGuest ? (
+                  // A visitor's exams and progress are this browser's; signing in keeps them.
+                  <Link
+                    to="/auth"
+                    state={{ from: '/dashboard' }}
+                    className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-4 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Sign in
+                  </Link>
+                ) : (
                   XP_ENABLED ? (
                     <LevelBadge size={44} questContext={questContext} />
                   ) : (
@@ -562,11 +474,20 @@ export default function Dashboard() {
           {exam.loading ? (
             <ActiveExamCardLoading />
           ) : !activeSyllabus || !activeKey ? (
-            <ActiveExamCardEmpty
-              onChooseExam={() => setExamsOpen(true)}
-              unsupportedExams={unsupportedActiveExams}
-              loadError={exam.syllabi.length === 0 ? exam.syllabusError : null}
-            />
+            exam.syllabi.length === 0 || unsupportedActiveExams.length > 0 ? (
+              <ActiveExamCardEmpty
+                onChooseExam={openAddExam}
+                unsupportedExams={unsupportedActiveExams}
+                loadError={exam.syllabi.length === 0 ? exam.syllabusError : null}
+              />
+            ) : (
+              // No exams yet: the first screen is Add an exam (R11).
+              <div className="mx-auto w-full max-w-[460px] px-2 pt-2 lg:px-0">
+                <Suspense fallback={<ActiveExamCardLoading />}>
+                  <AddExamFlow />
+                </Suspense>
+              </div>
+            )
           ) : wide ? (
             // Desktop: the session on the left with its concepts listed, where
             // the reader stands on the right.
@@ -642,15 +563,6 @@ export default function Dashboard() {
 
     <ConceptPopup />
 
-    {examSheetOpen && (
-      <ExamSheet
-        exams={exam.exams}
-        activeId={activeSyllabus?.examId ?? null}
-        onPick={exam.select}
-        onManage={() => setExamsOpen(true)}
-        onClose={() => setExamSheetOpen(false)}
-      />
-    )}
     {overlay === 'syllabus' && activeSyllabus && (
       <SyllabusOverlay
         pct={syllabusPct}
@@ -685,8 +597,7 @@ export default function Dashboard() {
         onClose={() => setLengthOpen(false)}
       />
     )}
-    {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
-    {!isGuest && planConfigStep !== null && activeSyllabus && (
+    {planConfigStep !== null && activeSyllabus && (
       <StudyPlanConfigModal
         config={planConfig}
         examDate={targetDate}
@@ -708,9 +619,6 @@ export default function Dashboard() {
           onClose={() => setRemindersOpen(false)}
         />
       </Suspense>
-    )}
-    {!isGuest && showWelcome && (
-      <WelcomeModal onAddExam={() => { dismissWelcome(); setExamsOpen(true) }} onClose={dismissWelcome} />
     )}
     </>
   )

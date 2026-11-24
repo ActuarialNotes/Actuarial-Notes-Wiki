@@ -11,7 +11,7 @@ import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { ArrowDown, ArrowUp, ChevronDown, Loader2, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeague } from '@/hooks/useLeague'
-import { useTodayExam } from '@/hooks/useTodayExam'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { usePageLabel } from '@/hooks/useBack'
 import { LEAGUES_ENABLED } from '@/lib/featureFlags'
 import { COHORT_CAP } from '@/lib/leagues'
@@ -43,7 +43,7 @@ export default function League() {
   usePageLabel('League')
   const { user, loading: authLoading } = useAuth()
   const [params, setParams] = useSearchParams()
-  const today = useTodayExam()
+  const today = useExamInFocus()
   const exams = today.exams.map(s => ({ key: wikiExamIdToProgressKey(s.examId), label: s.examLabel }))
   const asked = params.get('exam')
   const examKey = exams.find(e => e.key === asked)?.key ?? (exams.some(e => e.key === today.activeKey) ? today.activeKey : exams[0]?.key) ?? null

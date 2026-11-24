@@ -121,18 +121,20 @@ test.describe('practice home', () => {
     await expect(page.getByRole('searchbox', { name: 'Search' })).toBeVisible()
   })
 
-  test('the page opens on the exam last practised, and the exam at the top leads to the others', async ({ page }) => {
-    // A first visit has no exam in focus: the exam list.
+  test('the page opens on the exam in focus, and an address that names another exam is a visit', async ({ page }) => {
+    // A first visit has no exams: Add an exam.
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: 'Quiz' })).toBeVisible()
+    await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible()
+    // An address that names an exam opens it without adding it.
     await page.goto('/?topic=Exam%205')
     await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
-    // Now it is the exam in focus.
-    await page.goto('/')
-    await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
+    // The exam at the top is the switcher, which offers to add the exam being visited.
     await page.getByTestId('practice-exam').click()
-    await expect(page).toHaveURL(/exams=1/)
-    await expect(page.getByRole('heading', { name: 'Quiz' })).toBeVisible()
+    await expect(page.getByTestId('add-exam').or(page.getByRole('dialog', { name: 'Your exams' })).first()).toBeVisible()
+    await page.keyboard.press('Escape')
+    // The visit left nothing in focus.
+    await page.goto('/')
+    await expect(page.getByTestId('add-exam')).toBeVisible()
   })
 })
 

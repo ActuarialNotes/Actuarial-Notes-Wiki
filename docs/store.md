@@ -109,16 +109,19 @@ holds what is for one of the body's exams and the calculators its list allows
 (`itemMatchesBody`).
 
 An exam sat under a syllabus per region — CAS Exam 6 (6C, 6U, 6I, 6T), the SOA's GH 201
-and ILA 201 — is **one logo**; choosing it puts a **region picker** under the strip
-(`components/ExamVariantPicker.tsx`, `?region=6C`; the Resources page does the same,
-`lib/examVariants.ts`). A region narrows the textbooks to the ones that region's study
+and ILA 201 — is **one exam** here, narrowed by region (`?region=6C`,
+`lib/examVariants.ts`): the region of the reader's page in focus, or the one the address
+names. The region picker that stood under the strip went with Phase E. A region narrows the textbooks to the ones that region's study
 guide assigns and the study materials to those written for it (`StudyProduct.variant`,
 set only where the seller's title names the region) or for the exam whichever region;
 the registration is one exam, one fee.
 
 Two choices narrow it, and both ride the URL (`?exam=FM&aisle=study`) so Back and a shared
-link keep them: the **exam strip** — the ladder's logos left to right, a radiogroup — and
-the **aisle pills**. With no aisle chosen, an aisle shows six products and "See all": for
+link keep them: the **exam** and the **aisle pills**. The exam is the reader's exam in focus
+(`docs/redesign-spec.md` §6) unless the address names another (`?exam=FM`) or every exam
+(`?exam=all`); the header's one switch, this exam or All exams, moves between the two. The
+strip of exam logos and the SOA / CAS picker that stood here went with Phase E, and an exam
+sat by region opens on the region of the page in focus (`?region=6U` still names another). With no aisle chosen, an aisle shows six products and "See all": for
 the whole Store, one exam at a time up the ladder (`showcase`), and for registration the
 ones open now, soonest deadline first (`registrationUrgency`); the aisle itself stays in
 ladder order. Study materials stand exam by exam, and within an exam like with like —
@@ -235,7 +238,7 @@ online free wears a **Free online** sticker.
 
 | File | What |
 |---|---|
-| `quiz/src/pages/Store.tsx` | The page: header, exam strip, aisle pills, shelves, Pro and Gem Shop rows (lazy route) |
+| `quiz/src/pages/Store.tsx` | The page: header, the exam switch, aisle pills, shelves, Pro and Gem Shop rows (lazy route) |
 | `quiz/src/pages/GemShop.tsx` | The gem cosmetics shop, `/store/gems` |
 | `quiz/src/components/store/StoreCards.tsx` | Ticket, product card, book card, the exam chips and price |
 | `quiz/src/components/store/ProductSheet.tsx` | The product sheet, per aisle — with its reviews and disclaimer |

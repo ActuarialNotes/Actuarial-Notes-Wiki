@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { BookMarked, Calculator, ChevronRight, Columns3, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
-import { ExamStrip } from '@/components/ExamStrip'
-import { ExamVariantPicker } from '@/components/ExamVariantPicker'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { StoreSearchBar } from '@/components/store/StoreSearchBar'
 import { LogoTile } from '@/components/LogoTile'
@@ -13,7 +13,7 @@ import { ProductSheet } from '@/components/store/ProductSheet'
 import { CompareSheet } from '@/components/store/CompareSheet'
 import { ExamKit } from '@/components/store/ExamKit'
 import { useStoreKit } from '@/hooks/useStoreKit'
-import { defaultKitExam, examKit } from '@/lib/storeKit'
+import { examKit } from '@/lib/storeKit'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { STORE_REVIEWS } from '@/data/storeReviews'
 import { CALCULATORS, STUDY_PRODUCTS } from '@/data/storeCatalog'
@@ -22,8 +22,6 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { ProBadge } from '@/components/ProBadge'
 import { usePageHead } from '@/hooks/usePageHead'
 import { STORE_HEAD } from '@/lib/seo'
-import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
-import { variantRegion } from '@/lib/examVariants'
 import {
   AISLE_LABEL,
   PRICE_BANDS,
@@ -43,7 +41,6 @@ import {
   registrationUrgency,
   showcase,
   stockedExams,
-  storeBodyForExam,
   storeExam,
   storeDisclaimer,
   storeShelf,
@@ -103,32 +100,40 @@ export default function Store() {
   const [open, setOpen] = useState<StoreItem | null>(null)
   const shelfTop = useRef<HTMLDivElement>(null)
   const { isPro } = useSubscription()
-  const { progress, selectedTrack } = useExamProgress()
-  // The SOA/CAS picker the Study Guides and Quiz tabs carry, the same stored
-  // choice (`lib/bodyFilter.ts`); an exam in the URL opens on its own ladder.
-  const [bodyOverride, setBodyOverride] = useState<ExamBody | null>(loadBody)
-  const body = storeBodyForExam(urlExam, bodyOverride ?? defaultBody(selectedTrack))
+  const { progress, focusId, setFocusId } = useExamProgress()
+  // The Store opens on the exam in focus (docs/redesign-spec.md §6); its
+  // address can name another exam, or every exam (`?exam=all`).
+  const { active, activeKey, exams: myExams, loading: examsLoading } = useExamInFocus()
 
   const items = useMemo(() => buildStoreItems({ study: STUDY_PRODUCTS, calculators: CALCULATORS }, booksBundle), [])
-  const exams = useMemo(() => stockedExams(items, body), [items, body])
+  const exams = useMemo(() => stockedExams(items), [items])
   const studying = useMemo(
     () => new Set(Object.entries(progress).filter(([, status]) => status === 'in_progress').map(([key]) => key)),
     [progress],
   )
-  const homeExam = useMemo(() => defaultKitExam(studying, exams.map(e => e.key)), [studying, exams])
+  const homeExam = activeKey && exams.some(e => e.key === activeKey) ? activeKey : null
   const exam = urlExam ?? (allExams || params.get('exam') ? null : homeExam)
+  // An address that names one of the reader's exams puts it in focus.
+  const namedId = urlExam ? myExams.find(e => wikiExamIdToProgressKey(e.examId) === urlExam)?.examId ?? null : null
+  const namedIsFocus = !!namedId && urlExam === activeKey
+  useEffect(() => {
+    if (!examsLoading && namedId && !namedIsFocus && focusId !== namedId) setFocusId(namedId)
+  }, [examsLoading, namedId, namedIsFocus, focusId, setFocusId])
   const variants = (exam && storeExam(exam)?.variants) || null
   const regionParam = params.get('region')
-  const variant = variants && regionParam && variants.includes(regionParam) ? regionParam : null
+  // The region: the address's, else the page the reader's exam in focus is (Exam 6C).
+  const focusRegion = exam === activeKey && active ? active.examId : null
+  const variant = variants && regionParam && variants.includes(regionParam)
+    ? regionParam
+    : variants && focusRegion && variants.includes(focusRegion) ? focusRegion : null
   const filter: ShelfFilter = useMemo(
-    () => ({ exam, aisle, free, prices, makers, body, variant, query }),
-    [exam, aisle, free, prices, makers, body, variant, query],
+    () => ({ exam, aisle, free, prices, makers, variant, query }),
+    [exam, aisle, free, prices, makers, variant, query],
   )
   const refined = hasRefinement(filter)
   const shelf = useMemo(() => storeShelf(items, filter), [items, filter])
   const counts = useMemo(() => aisleCounts(items, { ...filter, aisle: null }), [items, filter])
-  // The comparison table's exam strip is the body's ladder, like the shelf's.
-  const comparable = useMemo(() => comparableExams(items).filter(e => e.ladders.includes(body)), [items, body])
+  const comparable = useMemo(() => comparableExams(items), [items])
   const reviewCounts = useMemo(() => {
     const counts = new Map<string, number>()
     for (const item of items) counts.set(item.id, reviewsFor(item.id, STORE_REVIEWS).length)
@@ -182,12 +187,6 @@ export default function Store() {
     setParams(p, { replace: true })
   }
 
-  // The other body's ladder may not hold the chosen exam, so the choice goes.
-  function chooseBody(next: ExamBody) {
-    saveBody(next)
-    setBodyOverride(next)
-    if (exam && !storeExam(exam)?.ladders.includes(next)) choose({ exam: null })
-  }
   const toggle = <T,>(list: readonly T[], value: T) => (list.includes(value) ? list.filter(v => v !== value) : [...list, value])
   const options = makerOptions(items, filter)
   function openCompare() {
@@ -238,40 +237,25 @@ export default function Store() {
     <>
       <StoreSearchBar query={query} onQuery={q => setParam('q', q || null)} />
       <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
-        {/* The Resources page's title row, picker and all. */}
+        {/* The Resources page's title row: this exam, or every exam. */}
         <header className="flex items-center gap-2">
           <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Store</h1>
-          <SegmentedControl
-            label="Examining body"
-            size="lg"
-            pill
-            value={body}
-            onChange={chooseBody}
-            options={[
-              { value: 'SOA', label: 'SOA' },
-              { value: 'CAS', label: 'CAS' },
-            ]}
-            className="shrink-0"
-          />
+          {(exam || homeExam) && (
+            <SegmentedControl
+              label="Exams shown"
+              size="lg"
+              pill
+              fit
+              value={exam ? 'exam' : 'all'}
+              onChange={value => choose({ exam: value === 'all' ? null : homeExam })}
+              options={[
+                { value: 'exam', label: storeExam(exam ?? homeExam ?? '')?.name ?? '' },
+                { value: 'all', label: 'All exams' },
+              ]}
+              className="shrink-0"
+            />
+          )}
         </header>
-
-        <ExamStrip
-          exams={exams.map(e => ({ value: e.key, name: e.name, logoKey: e.key }))}
-          value={exam}
-          studying={studying}
-          onChange={key => choose({ exam: key })}
-          className="sm:-mx-6 sm:px-6"
-        />
-
-        {variants && examName && (
-          <ExamVariantPicker
-            className="-mt-3"
-            examName={examName}
-            options={variants.map(v => ({ value: v, label: variantRegion(v) ?? v }))}
-            value={variant}
-            onChange={v => setParam('region', v)}
-          />
-        )}
 
         {/* The aisles ride above the kit as well as the shelf: with an exam
             chosen, the first pill is that exam's kit. */}

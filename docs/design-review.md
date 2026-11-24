@@ -534,7 +534,12 @@ side), an attempt's overview, and briefs anyone can read.
 daily goal and the day's quests), the league as its own screen, and Settings as one grouped
 screen with every value on its row. Theme and sound left the sidebar's foot for Settings, and
 the level badge's popup is gone (F1's two menus for one account, and F15's settings scattered
-over three places). Phases E and F are not built.
+over three places).
+**Phase E (the exam switcher) was built on 2026-11-24**: the exam in focus, kept with the
+account; the sheet of the reader's exams, Add an exam and the date question; a visitor's first
+screen is Add an exam (D-DR2); and Study Guides, Practice, Resources and the Store open on
+the exam in focus in place of their own exam lists and strips (F2, F5; D-DR3's fold is on Add
+an exam). Phase F is not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

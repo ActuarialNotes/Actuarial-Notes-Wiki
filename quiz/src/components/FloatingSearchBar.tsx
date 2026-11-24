@@ -1,7 +1,6 @@
 import { forwardRef, useCallback, useEffect, useRef, type ReactNode, type Ref } from 'react'
 import { ChevronLeft, Hammer, Search, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { backLabel, type Back } from '@/hooks/useBack'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
@@ -20,18 +19,17 @@ import type { ExamStatus } from '@/lib/examStatus'
  * live here and the places supply the results:
  *
  *   `FloatingSearchBar`      the sticky, blurred, bordered container
- *   `FloatingSearchInput`    the input line — hamburger, glyph, field, clear
+ *   `FloatingSearchInput`    the input line — glyph, field, clear, a trailing control
  *   `FloatingSearchStrip`    the second line, for a page that is *about* something
  *   `SearchScopePill`        one pill of the scope row above the results
  *   `SearchBackdrop`         the dim behind an open dropdown
  *
  * Two things they encode that a place should not re-decide. The bar is the
- * route's **only** row of top chrome below `lg`, so it carries the way into the
- * nav drawer on the input's own line (`lib/mobileNavHost.ts` is what tells
- * `App.tsx` not to reserve a header above it) — and typing folds that button
- * away, because the input wants the width more than the drawer does. And every
- * row is `h-[calc(3.5rem-1px)]`, the header's height less the bar's own border,
- * so one line of chrome measures the same whichever place a reader is in.
+ * route's **only** row of top chrome below `lg` (`drawsOwnTopRow` in
+ * `lib/places.ts` is what tells `App.tsx` not to draw the app's top row above
+ * it), so a place's bar carries the profile button at the end of the input's
+ * line. And every row is `h-[calc(3.5rem-1px)]`, one line of chrome measuring
+ * the same whichever place a reader is in.
  */
 
 /** How wide the bar's content runs — its page's own measure. */
@@ -101,8 +99,8 @@ export interface FloatingSearchInputProps {
   /** What the field is called for a screen reader, which is rarely the placeholder. */
   ariaLabel: string
   inputRef?: Ref<HTMLInputElement>
-  /** The search is in use, so the nav button gives up the line. */
-  navCollapsed?: boolean
+  /** A control at the end of the line: the profile button, on a place's own bar. */
+  trailing?: ReactNode
 }
 
 export function FloatingSearchInput({
@@ -113,12 +111,11 @@ export function FloatingSearchInput({
   placeholder,
   ariaLabel,
   inputRef,
-  navCollapsed = false,
+  trailing,
 }: FloatingSearchInputProps) {
   useSearchTracking(value)
   return (
     <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
-      <MobileNavButton collapsed={navCollapsed} className="-ml-1.5" />
       <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <input
         ref={inputRef}
@@ -145,6 +142,7 @@ export function FloatingSearchInput({
           <X className="h-4 w-4" />
         </button>
       )}
+      {trailing}
     </div>
   )
 }

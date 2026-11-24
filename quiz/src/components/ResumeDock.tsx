@@ -36,7 +36,7 @@ export function ResumeDock() {
   return (
     <div
       style={{
-        bottom: 'calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 1rem)',
+        bottom: 'calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px), var(--place-bar-height, 0px)) + 1rem)',
       }}
       className="paper-chrome-resume fixed left-0 right-0 z-[45] flex flex-wrap items-end justify-center gap-2 px-4 pointer-events-none lg:left-[var(--sidebar-width)]"
     >

@@ -543,8 +543,8 @@ unchanged.
 
 ## 8. Build order
 
-Each phase is one PR that can ship on its own. Phases A to E and G to I work under the
-**existing sidebar**. Phase F, the four-place navigation, goes last: it moves every tab at
+Each phase is one PR that can ship on its own. Phases A to E and G to I were built under the
+old sidebar. Phase F, the four-place navigation, went last: it moves every tab at
 once and needs You to exist.
 
 | Phase | What | Depends on |
@@ -557,7 +557,7 @@ once and needs You to exist.
 | **G. Practice** (built 2026-11-23) | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** (built 2026-11-23) | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** (built 2026-11-23) | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
-| **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
+| **F. Navigation** (built 2026-11-24) | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
 
 **Phase A is built.** The pieces and where each lives are `docs/style-guide.md` §13: the
 `--ground`, `--level-*` and `--answer-*` tokens, `LevelSquare`, `lib/answerState.ts` and
@@ -641,7 +641,7 @@ building it:
   has no navigation of its own, so it is the way to leave without ending the quiz, and the
   Return to quiz pill brings the reader back.
 - **No chrome:** the sidebar and the phone's app header are hidden on `/quiz` and `/review` at
-  every width (`isSessionRoute` in `lib/mobileNavHost.ts`).
+  every width (`isSessionRoute` in `lib/places.ts`).
 - **More** holds Flag question, Question info (with its Fact Check), the spreadsheet for an
   exam sat with one, Sound, Quiz settings (with the timer), Keyboard shortcuts and **Previous
   question**. The Back button at the foot is gone; the ← key still goes back, and the bar can
@@ -817,7 +817,7 @@ decided while building it, the first three with the maintainer:
 - **The ways in, until Phase F:** Today's level badge is a link to You that still counts the
   quests to collect, and the sidebar's account row is a link to You for an account and a visitor
   alike. On a phone the three screens have no app header: the profile's cross and the others'
-  back arrow are the way out (`isYouRoute`, read by `lib/mobileNavHost.ts`).
+  back arrow are the way out (`isYouRoute`, read by `lib/places.ts`).
 - **Moved or removed:** the level badge's popup with its Quests and League tabs
   (`QuestsPanel`, `QuestsCard`, `LeaderboardPanel`, `DailyGoalPicker`); the sidebar's theme and
   sound buttons and its account menu (Gem Shop, Exams, Settings, Upgrade to Pro, Sign out); and
@@ -960,6 +960,63 @@ while building it (the first four with the maintainer, 2026-11-23):
   Today, the sheet and the Store; "Exam P-1" on Study Guides, Practice and Resources), as
   they did before this phase.
 
+**Phase F is built** (2026-11-24). The navigation is `components/nav/Places.tsx` (the rail, the
+bar, the top row) and `components/nav/ProfileButton.tsx`, over `lib/places.ts` (which place a
+path is in, where the bar is drawn, which pages draw their own top row, where Learn leads).
+`components/Sidebar.tsx`, the hamburger (`MobileNavButton`, `useMobileNav`) and
+`lib/mobileNavHost.ts` are gone. What was decided while building it:
+
+- **The addresses stay.** Today is `/dashboard`, Learn `/wiki`, Practice `/`, Apply `/apply`.
+- **The rail** (wide screens) is as drawn on `Desktop`: 220px, the exam in focus at its head
+  (the switcher; the app's name over **Add an exam** for a reader with none), the four places,
+  the one the reader is in filled, and You at its foot with the reader's character, name, Pro
+  tag and designation. A visitor's foot reads You beside an outlined **Sign in**. It doesn't
+  collapse, and it lists nothing under a place: an attempt's views, and Study Guides' Exams and
+  Resources, are no longer rows of the navigation.
+- **The bar** (phones) is as drawn on `Main`. It is on every page a reader moves between
+  places from, and off a screen that owns the bottom edge or the whole screen, each of which
+  has its own way back (`showsPlaceBar`): the session, Quiz Battle and Concept Craft, You's
+  three screens, a concept, a question and a tool (their foot is Practice this), Flashcards
+  and Search, an attempt and a brief, and a workflow's board. The canvas draws it this way
+  (on `Papers`, not on `Concept`, `Tool`, `Project` or `You`); Tools' list keeps it, which the
+  canvas doesn't draw. Where a page's own foot and the bar are both up (the Projects list),
+  the foot sits above the bar.
+- **The top row on a phone** (consistency review §4.1): the exam showing and the profile
+  button. Today and Practice draw it themselves; every page with no top row of its own gets
+  the app's (Apply, Projects, Games, Upgrade, the Gem Shop, Community), with the exam in
+  focus. Learn keeps its search bar and carries the profile button at the end of its line,
+  until the search is in use; §10's question 8 (one search row on Learn) is still open. The
+  wordmark row is gone; the app's name shows only where there is no exam to name, and on the
+  sign-in screen.
+- **The profile button** is the reader's character in a 44px ring (a dashed ring for a
+  visitor), counting the quests ready to collect on Today. It replaced the level badge
+  (`LevelBadge`), whose ring of the day's XP is on the profile. A visitor's Today shows it
+  beside **Sign in**.
+- **On a wide screen** the rail names the exam in focus, so Today's own switcher is the
+  phone's alone. Practice and the exam page keep theirs: it is the page's title, and on a
+  visit it names an exam the rail doesn't.
+- **Learn opens on the study guide of the exam in focus** (the canvas's bar links Learn to
+  `Exam`), and on Study Guides for a reader with no exam. From another place it returns to
+  the page last read in Learn; from inside Learn it goes home; from home it goes up to Study
+  Guides (`learnTarget`). Study Guides keeps its name: it is the page that lists the reader's
+  exams, Resources and the credentials.
+- **What lost its row:** Flashcards (a row of Practice), Projects, Tools, Workflows and Data
+  Sources (Apply's cards, and the row at the foot of Tools), the Store (a row of You) and
+  Community (a row of You for the accounts that have it). The flag that hid the Tools, Data
+  Sources and Store rows (`TOOLS_STORE_NAV_ENABLED`) went with them. The Research tab, off
+  behind its flag, would be a row of Study Guides. The counts the rows carried (today's
+  questions left, the deck's size, the Pro chip on Projects) are on the pages themselves.
+- **The move between pages** follows the places: each is one tab of the desk, and its screens
+  are sheets over it (Resources over Study Guides; Projects, Tools and Workflows over Apply,
+  Data Sources over Tools; the league, Settings, the Store, Community and Upgrade over You).
+  The bar is chrome, held still like the rail (`paper-bar`).
+- **Removed with the sidebar:** the collapse to icons, the drawer, the collect glow on the
+  Flashcards row, the old exams panel (`ExamsPopout`), and the store an open attempt published
+  its views to (`useAttemptNav`).
+- **Not done here:** the back controls still differ between screens (consistency review
+  §4.4), and Learn, Tools, the Store and Data Sources still have search bars of their own
+  (§4.2).
+
 For every phase:
 
 - Reader-facing words follow `docs/writing-style.md` and the `app-copy` skill. *Practice* is
@@ -978,7 +1035,7 @@ For every phase:
 ---
 
 **After the phases:** `docs/redesign-consistency-review.md` (2026-11-24) lists what still
-disagrees with §2 once A to E and G to I were built: the old pieces a redesigned screen opens,
+disagrees with §2 once the phases were built: the old pieces a redesigned screen opens,
 the screens not yet rebuilt, and the patterns that differ between screens. Its §1, the info
 popups (`InfoSheet`, Dates and fees), is done.
 

@@ -1,7 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Copy, MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { useWorkflows } from '@/hooks/useWorkflows'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { TEMPLATES, fromTemplate, type Workflow, type WorkflowTemplate } from '@/lib/workflow'
@@ -50,7 +49,6 @@ export function WorkflowLibrary() {
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-5xl space-y-8 px-4 py-4 sm:px-6 sm:py-6">
         <header className="flex items-center gap-2">
-          <MobileNavButton className="-ml-1.5 lg:hidden" />
           <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Workflows</h1>
           {all.length > SEARCH_FROM && (
             <label className="relative w-44 sm:w-64">

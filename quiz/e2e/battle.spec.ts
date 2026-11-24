@@ -572,7 +572,7 @@ test.describe('quiz battle', () => {
     await queueAsAda(ada)
     await expect(queuePill(ada)).toHaveCount(0)
 
-    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
     await ada.waitForURL('**/wiki')
     await expect(queuePill(ada)).toBeVisible()
     await expect(queuePill(ada).getByRole('timer')).toHaveText(/^\d+:\d\d$/)
@@ -591,7 +591,7 @@ test.describe('quiz battle', () => {
     await expect(queuePill(ada)).toHaveCount(0)
 
     // Away again — and an opponent arriving fetches her back to play.
-    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
     await ada.waitForURL('**/wiki')
     await expect(queuePill(ada)).toBeVisible()
     await rememberSetup(bo, { names: ['Bo', ''], exam: 'Probability', lobbyExam: 'Probability' })
@@ -609,7 +609,7 @@ test.describe('quiz battle', () => {
     const ada = await context.newPage()
     const bo = await context.newPage()
     await queueAsAda(ada)
-    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).first().click()
     await ada.waitForURL('**/wiki')
 
     await queuePill(ada).click()

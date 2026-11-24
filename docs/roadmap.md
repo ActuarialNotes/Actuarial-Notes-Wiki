@@ -450,7 +450,12 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   **Phase E (the exam switcher) is built (2026-11-24):** one exam in focus, kept with the
   account; the sheet, Add an exam and "When is your exam?"; a visitor has Today from the
   browser's record (R11). Today, the exam page, Study Guides, Practice, Resources and the
-  Store read it, and their exam lists, strips and body pickers are gone. Phase F (the navigation) is open.
+  Store read it, and their exam lists, strips and body pickers are gone.
+  **Phase F (the navigation) is built (2026-11-24):** the four places, Today, Learn, Practice
+  and Apply, as a bar at the bottom of a phone and a rail on a wide screen, with the profile
+  button opening You; the sidebar, its hamburger and its rows for Flashcards, Projects, Tools,
+  Workflows, Data Sources, the Store and Community are gone. Every phase of the spec is built;
+  what still disagrees with its rules is `docs/redesign-consistency-review.md`.
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the
@@ -1089,7 +1094,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
 | `docs/design-review.md` | Review: the whole app against the Laws of UX, and a redesign proposal (mock-ups in `design-review-mockups.html`) | X11 (§3.4) | Active. Phase 0 built | 2026-11-15 |
-| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phases A (the visual base), B (Today), C (the session), D (Learn), G (Practice), H (You) and I (Apply) built; see the spec | 2026-11-23 |
+| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; every phase, A to I, built (F, the navigation, last, 2026-11-24); see the spec | 2026-11-23 |
 | `docs/redesign-consistency-review.md` | Backlog: where the app still disagrees with the redesign's rules, screen by screen | X11 (§3.4) | Active. §1 (the info popups) done | 2026-11-24 |
 | `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Active. Phase 1 built | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |

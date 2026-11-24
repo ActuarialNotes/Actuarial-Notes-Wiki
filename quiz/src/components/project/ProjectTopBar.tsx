@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, Clock, PenLine } from 'lucide-react'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { CheckMark } from '@/components/CheckMark'
 import { attemptPhase, timeLeft, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { cn } from '@/lib/utils'
@@ -9,8 +8,8 @@ import { backLabel as backLabelOf, useBack, usePageLabel } from '@/hooks/useBack
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 
 /**
- * The project pages' one row of chrome: the drawer button below `lg` (these
- * routes host it — `lib/mobileNavHost.ts`), the way back, the title, whatever
+ * The project pages' one row of chrome (`drawsOwnTopRow` in `lib/places.ts`):
+ * the way back, the title, whatever
  * the page puts in the middle, and the window's countdown on the right.
  *
  * The way back leads to the page the reader came from (the PCPA study guide,
@@ -45,7 +44,6 @@ export function ProjectTopBar({
   usePageLabel(title)
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/95 px-2 backdrop-blur-sm sm:px-3">
-      <MobileNavButton />
       {overviewTo ? (
         <Link to={overviewTo} replace aria-label="Back to the overview" title="Back to the overview" data-testid="attempt-overview-link" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
           <ChevronLeft className="h-5 w-5" />

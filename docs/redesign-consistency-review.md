@@ -1,7 +1,8 @@
 # Redesign consistency review
 
 _Written 2026-11-24, after Phases A to E and G to I of `docs/redesign-spec.md` were built
-(roadmap X11). The app was run and every main screen and popup looked at on a phone in the
+(roadmap X11; Phase F, the navigation, was built later the same day, and §4.1 and §4.5 are
+struck). The app was run and every main screen and popup looked at on a phone in the
 dark theme, signed out, and held to the spec's §2 and `docs/style-guide.md` §13. This is the
 backlog of what still disagrees with them. The feedback after an answer and the results
 screen were not reached in that pass and are not covered._
@@ -76,9 +77,11 @@ Highest priority: the reader moves from black outline to grey fill in one tap.
 
 ## 4. Patterns that disagree across screens
 
-- **4.1 The top row.** Four versions: the exam switcher (Today, Practice); "Search concepts"
-  over a hairline (Learn); the wordmark over a hairline (Apply, Projects, Games, Upgrade);
-  a cross or back arrow alone (You, Settings). Settle it with Phase F.
+- ~~**4.1 The top row.**~~ Settled with Phase F (2026-11-24): a place's top row on a phone is
+  the exam showing and the profile button (Today, Practice, and the app's own row on Apply,
+  Projects, Games and Upgrade); Learn keeps its search bar and carries the profile button on
+  its line; a screen under a place opens on a back arrow and a title; You's screens on a
+  cross or a back arrow. The wordmark row and the hamburger are gone.
 - **4.2 Search.** R18 says one search. Learn, Tools, the Store and Data Sources each keep a
   bar of their own, styled differently from Practice's outlined row. Spec §10 question 8.
 - **4.3 The chosen state.** Five treatments: a 2px outline with `CheckMark` (the switcher,
@@ -87,8 +90,7 @@ Highest priority: the reader moves from black outline to grey fill in one tap.
   a choice among options and one for a tab.
 - **4.4 Back.** "‹ Exam P-1" as text; a small grey "‹ All resources" and "‹ Store"; a chevron
   beside a title; Battle's filled square button.
-- **4.5 Names.** The sidebar says Dashboard and Quiz where the screens say Today and
-  Practice. Phase F.
+- ~~**4.5 Names.**~~ Done with Phase F: the navigation reads Today, Learn, Practice, Apply.
 - **4.6 Small text.** About 750 uses of text under 13px remain, nearly all in the screens of
   §3 (`ProductSheet`, `StoreCards`, `ConceptDetailModal`, `WorkflowPanels`, the tool template).
 - **4.7 The check mark.** `CheckMark` defaults to the exam's colour, or green
@@ -101,5 +103,5 @@ Highest priority: the reader moves from black outline to grey fill in one tap.
 2. §3.1 and §3.2: Study Guides home and Resources.
 3. The decisions: Fact Check's colours (§1), a tool's chosen value (§3.6), the concept
    figures (§2.4), one chosen state (§4.3).
-4. Phase F, with §4.1, §4.2, §4.4 and §4.5.
+4. ~~Phase F, with §4.1 and §4.5.~~ Built 2026-11-24. §4.2 and §4.4 are still open.
 5. §3.3 to §3.5, then the rest of §3.

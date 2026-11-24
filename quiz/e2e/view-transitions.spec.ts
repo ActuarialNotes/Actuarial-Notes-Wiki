@@ -46,7 +46,7 @@ test.describe('tab-switch view transitions', () => {
           // `root` is the page's own sheet (the html element); the rail, the
           // phone header and the "Return to quiz" pill are the chrome held
           // still over it.
-          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume', 'paper-tutor'])
+          const allowed = new Set(['root', 'paper-rail', 'paper-bar', 'paper-resume', 'paper-tutor'])
           expect(names.every(n => allowed.has(n)), `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(true)
           expect(new Set(names).size, `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(names.length)
         }
@@ -68,15 +68,15 @@ test.describe('tab-switch view transitions', () => {
       }) as typeof document.startViewTransition
     })
 
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
-    await page.waitForURL('**/wiki')
-    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
+    // Learn opens on the study guide of the exam in focus.
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).click()
+    await page.waitForURL('**/wiki/exam/**')
     // The wiki route is lazy: the transition must have waited for its chunk,
-    // so the exam card is on screen rather than a Suspense spinner.
-    await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
+    // so the exam's page is on screen rather than a Suspense spinner.
+    await expect(page.getByRole('heading', { name: 'Exam P-1', level: 1 })).toBeVisible()
     expect(await page.evaluate(() => (window as unknown as { __vtCalls: number }).__vtCalls)).toBeGreaterThan(0)
 
-    await page.getByRole('link', { name: 'Quiz' }).first().click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Practice' }).click()
     await page.waitForURL(url => url.pathname === '/')
     await expect(page.getByTestId('practice-exam')).toBeVisible()
   })
@@ -98,27 +98,28 @@ test.describe('tab-switch view transitions', () => {
 
     await studying(page)
     await page.goto('/')
+    const places = page.getByRole('navigation', { name: 'Places' })
     await expect(page.getByTestId('practice-exam')).toBeVisible()
 
-    // Quiz → Study Guides: the tab to the left.
-    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    // Practice → Learn: the place to the left, open on the exam in focus's study guide.
+    await places.getByRole('link', { name: 'Learn' }).click()
+    await page.waitForURL('**/wiki/exam/**')
+    await expect(page.getByRole('heading', { name: 'Exam P-1', level: 1 })).toBeVisible()
+    // Learn again, from its home: up to Study Guides, that sheet swiped off.
+    await places.getByRole('link', { name: 'Learn' }).click()
+    await page.waitForURL('**/wiki')
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
-    // Study Guides → an exam's page: a sheet laid on top.
+    // Study Guides → the exam's page: a sheet laid on top. The address changes
+    // at the click, but the sheet is laid down only once the page has come
+    // (components/PaperRouter.tsx), so the test waits for it too.
     await page.locator('a[data-tour="exam-p"]').click()
     await page.waitForURL('**/wiki/exam/**')
-    // The address changes at the click, but the sheet is laid down only once
-    // the page's chunk has come (components/PaperRouter.tsx) — and a Back that
-    // lands first rightly wins, leaving no push to record. A reader goes back
-    // from a page they can see, so the test waits for it too.
     await expect(page.getByRole('link', { name: 'Back to Study Guides' })).toBeVisible()
-    // Back: that sheet swiped off again.
-    await page.goBack()
-    await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
-    // Study Guides → Flashcards: the tab to the right.
-    await page.getByRole('link', { name: 'Flashcards' }).first().click()
-    await page.waitForURL('**/flashcards')
+    // Learn → Apply: a place to the right.
+    await places.getByRole('link', { name: 'Apply' }).click()
+    await page.waitForURL('**/apply')
 
-    await expect.poll(moves).toEqual(['prev', 'push', 'pop', 'next'])
+    await expect.poll(moves).toEqual(['prev', 'pop', 'push', 'next'])
     // Every move has landed, and taken its marks off the root with it.
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })
@@ -213,7 +214,7 @@ test.describe('reduced motion', () => {
     }) as typeof document.startViewTransition
   })
 
-  await page.getByRole('link', { name: 'Study Guides' }).first().click()
+  await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).click()
   await page.waitForURL('**/wiki')
   await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
   expect(await page.evaluate(() => (window as unknown as { __vtCalls: number }).__vtCalls)).toBe(0)

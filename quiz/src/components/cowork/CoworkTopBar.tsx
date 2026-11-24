@@ -21,12 +21,11 @@ import {
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 
 /**
- * The **Data Sources** page's top bar — the search, the page strip, and (below
- * `lg`) the way into the sidebar drawer.
+ * The **Data Sources** page's top bar — the search and the page strip.
  *
  * It is the wiki's floating search, built from the same parts
  * (`components/FloatingSearchBar.tsx`): the same sticky blurred bar, the same
- * input line with the hamburger folding away as you type, the same dimmed
+ * input line, the same dimmed
  * backdrop, the same scope pills, the same result rows. Cowork is a second
  * product, not a second design system, and searching should not feel like a
  * different app on another page.
@@ -182,7 +181,6 @@ export function CoworkTopBar({
             onClear={dismiss}
             placeholder={placeholder}
             ariaLabel={placeholder}
-            navCollapsed={active}
           />
 
           {pageTitle && <FloatingSearchStrip title={pageTitle} icon={pageIcon} backLink={backLink} />}

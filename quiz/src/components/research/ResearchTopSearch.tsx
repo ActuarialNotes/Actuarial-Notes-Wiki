@@ -6,7 +6,6 @@ import { useResearchSearch } from '@/hooks/useResearchSearch'
 import { agentMeta } from '@/lib/researchOntology'
 import { toTimelineEntries, searchTimelineEntries, entryToRef, KIND_LABEL, type TimelineEntry } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 import { ResearchFilterPanel } from './ResearchFilterPanel'
@@ -124,9 +123,6 @@ export function ResearchTopSearch({
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}
           <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
-            {/* See WikiFloatingSearch — below lg this bar carries the nav
-                button, and searching folds it away. */}
-            <MobileNavButton collapsed={active} className="-ml-1.5" />
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
             <input
               ref={inputRef}

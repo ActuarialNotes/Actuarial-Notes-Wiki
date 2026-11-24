@@ -1,6 +1,6 @@
 // **Who may use Workflows and the Data Sources' publishers** (docs/cowork.md).
 // Pure, like the Tutor's `canUseTutor` and Community's `canEnterCommunity`:
-// the sidebar, the Data Sources page and the route guard all read this one
+// Apply's home, the Data Sources page and the route guard all read this one
 // rule, so none of them decides it for itself.
 //
 // While in Preview they are open only to the accounts below. To everyone else

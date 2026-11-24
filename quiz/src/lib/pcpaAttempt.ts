@@ -115,8 +115,8 @@ export function visibleTo(attempt: Pick<ProjectAttempt, 'owner'>, userId: string
   return attempt.owner === undefined || (userId !== null && attempt.owner === userId)
 }
 
-// Where an attempt lives. Defined beside the attempt's views, which the
-// sidebar reads without bringing this module (and the briefs) with it.
+// Where an attempt lives. Defined beside the attempt's views, which Apply's
+// home reads without bringing this module (and the briefs) with it.
 export { attemptRoute } from './attemptViews'
 
 export type AttemptPhase = 'open' | 'closed' | 'submitted'

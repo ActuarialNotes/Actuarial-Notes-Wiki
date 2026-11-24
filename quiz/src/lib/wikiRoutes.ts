@@ -57,8 +57,7 @@ export function wikiRoute(ref: WikiEntryRef): string {
 export const RESOURCES_ROUTE = '/wiki/resources'
 
 /**
- * The Study Guides tab's two pages, which the sidebar lists under it the way
- * it lists an open project's views under Projects: **Exams** — the exam ladder
+ * Learn's two shelves: **Exams** — the exam ladder
  * at `/wiki`, with the exam and concept pages read from it — and **Resources**,
  * the shelf, with the resource pages opened from it.
  */
@@ -75,7 +74,7 @@ export function studyGuidesSection(pathname: string): StudyGuidesSection | null 
 /**
  * Navigation state for a link into a study guide page from the one search: the
  * page is a result being looked at, not the reader's place in Study Guides, so
- * the sidebar's Study Guides row doesn't come back to it.
+ * Learn doesn't come back to it (`learnTarget` in lib/places.ts).
  */
 export const FROM_SEARCH = { fromSearch: true } as const
 
@@ -87,16 +86,6 @@ export const FROM_SEARCH = { fromSearch: true } as const
 export function remembersWikiPlace(pathname: string, state: unknown): boolean {
   if (pathname.startsWith('/wiki/question/')) return false
   return !(typeof state === 'object' && state !== null && (state as { fromSearch?: unknown }).fromSearch === true)
-}
-
-/**
- * Where the sidebar's Study Guides row leads: from another tab, back to the
- * page last read there; from inside the tab, to its home, so the row is always
- * a way out of the page showing.
- */
-export function studyGuidesRowTarget(pathname: string, lastPath: string | null): string {
-  if (studyGuidesSection(pathname)) return '/wiki'
-  return lastPath && studyGuidesSection(lastPath.split(/[?#]/)[0]) ? lastPath : '/wiki'
 }
 
 // Convert a repo-relative file path ("Concepts/Expected Value.md",

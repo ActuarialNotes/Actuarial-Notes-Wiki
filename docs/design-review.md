@@ -539,7 +539,10 @@ over three places).
 account; the sheet of the reader's exams, Add an exam and the date question; a visitor's first
 screen is Add an exam (D-DR2); and Study Guides, Practice, Resources and the Store open on
 the exam in focus in place of their own exam lists and strips (F2, F5; D-DR3's fold is on Add
-an exam). Phase F is not built.
+an exam). **Phase F (the navigation) was built the same day**: the four places as a bar at the
+bottom of a phone and a rail on a wide screen, the profile button, and Flashcards, the Store,
+Community and the old tabs off the navigation (F1, F3; D-DR1 and D-DR5). The sidebar and its
+hamburger are gone (`docs/redesign-spec.md` §8).
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

@@ -1,3 +1,4 @@
+import { ProfileButton } from '@/components/nav/ProfileButton'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
@@ -218,7 +219,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             onClear={dismiss}
             placeholder="Search concepts"
             ariaLabel="Search study guides"
-            navCollapsed={active}
+            // Learn's top row on a phone: the profile button, until the search is in use.
+            trailing={!active && <ProfileButton className="-mr-1 scale-[0.82] lg:hidden" />}
           />
 
           {pageTitle && (

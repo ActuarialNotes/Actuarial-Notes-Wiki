@@ -1,7 +1,7 @@
 // **Who may open the Community tab** (docs/community.md). Pure, like the
-// Tutor's `canUseTutor`: the sidebar row and the route guard both read this
+// Tutor's `canUseTutor`: You's Community row and the route guard both read this
 // one rule, so neither decides it for itself. To everyone it leaves out the
-// tab doesn't exist — no sidebar row, `/community` redirects to the dashboard,
+// tab doesn't exist — no row on You, `/community` redirects to the dashboard,
 // and its code is a lazy chunk they never download.
 //
 // This is a UI gate, not a security boundary: the catalogue is bundled seed

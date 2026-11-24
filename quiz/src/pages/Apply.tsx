@@ -3,8 +3,8 @@
 // Each is a card whose heading is tapped into; under it, what the reader last
 // touched there, a tap from being picked up again.
 //
-// What each card says is `lib/apply.ts`. Until the four-place navigation
-// (Phase F) the page is reached from the sidebar's Projects row.
+// What each card says is `lib/apply.ts`. Apply is the fourth of the places
+// (lib/places.ts).
 
 import { useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'

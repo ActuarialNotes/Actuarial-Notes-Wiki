@@ -1,8 +1,8 @@
 // **Paper on a desk** — how the app moves between its states.
 //
 // Every page is a sheet of paper, and the app is the desk they lie on. The
-// tabs lie side by side in the order the sidebar lists them, so switching
-// tabs slides the desk along (`next` / `prev`); following a link deeper into
+// four places lie side by side in the order the navigation lists them, so
+// moving between them slides the desk along (`next` / `prev`); following a link deeper into
 // a tab lays a new sheet on top of the one you were reading (`push`); and
 // coming back up swipes the top sheet away to uncover the one beneath it
 // (`pop`). Inside a page, a run of sheets — a quiz's questions — is turned the
@@ -48,63 +48,58 @@ export type PaperMove = 'next' | 'prev' | 'push' | 'pop' | 'turn' | 'return'
 
 /** Where a path lies on the desk: which tab, and how many sheets deep. */
 export interface DeskPlace {
-  /** Left-to-right position of the tab — the sidebar's order. */
+  /** Left-to-right position of the place — the navigation's order. */
   tab: number
   /** 0 for the tab's own page, one more per sheet laid on top of it. */
   depth: number
 }
 
-// The tabs, left to right, in the order the sidebar lists them — Dashboard,
-// Study Guides, Flashcards, Quiz, Projects — then the pages the rest of the
-// chrome opens. `depth` is how many sheets down the tab a page lies; `below` is
-// the depth of a page *under* the prefix (`/wiki/exam/Exam P` under
+// The four places, left to right, in the order the navigation lists them —
+// Today, Learn, Practice, Apply (lib/places.ts) — then You and what is behind
+// it. `depth` is how many sheets down its place a page lies; `below` is the
+// depth of a page *under* the prefix (`/wiki/exam/Exam P` under
 // `/wiki/exam`), where that differs. The longest matching prefix wins, and a
 // path none of them match is a tab of its own at the far end of the desk.
 const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/dashboard', tab: 0, depth: 0 },
+  // Learn: Study Guides, with an exam's guide over it and a concept over that.
   { prefix: '/wiki', tab: 1, depth: 0, below: 1 },
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },
   { prefix: '/wiki/question', tab: 1, depth: 2 },
-  // Resources is the Study Guides tab's second page, listed under it in the
-  // sidebar beside the exams, so it lies beside them on the desk; a resource
-  // page is a sheet over that shelf.
-  { prefix: '/wiki/resources', tab: 1.2, depth: 0 },
-  { prefix: '/wiki/resource', tab: 1.2, depth: 1 },
-  { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
-  { prefix: '/', tab: 3, depth: 0 },
+  // Resources is a row of Study Guides: the shelf is a sheet over it, and a
+  // resource page a sheet over the shelf.
+  { prefix: '/wiki/resources', tab: 1, depth: 1 },
+  { prefix: '/wiki/resource', tab: 1, depth: 2 },
+  { prefix: '/research', tab: 1, depth: 1, below: 2 },
+  { prefix: '/', tab: 2, depth: 0 },
   // Practice's own screens are sheets laid over it: the past papers, the
   // flashcards and the one search (docs/redesign-spec.md §7a).
-  { prefix: '/papers', tab: 3, depth: 1 },
-  { prefix: '/flashcards', tab: 3, depth: 1 },
-  { prefix: '/search', tab: 3, depth: 1 },
-  { prefix: '/quiz', tab: 3, depth: 1 },
-  // Games is opened from the Quiz tab's exam list, a sheet over it; Quiz
-  // Battle and Concept Craft are opened from Games, a sheet over that.
-  { prefix: '/games', tab: 3, depth: 1 },
-  { prefix: '/battle', tab: 3, depth: 2 },
-  { prefix: '/craft', tab: 3, depth: 2 },
-  { prefix: '/review', tab: 3, depth: 2 },
-  // Apply's home, the way into Projects, Tools and Workflows, lies just
-  // before them until the four-place navigation makes them sheets over it.
-  { prefix: '/apply', tab: 3.9, depth: 0 },
-  // The Projects tab; an attempt is a sheet laid over the list of briefs.
-  { prefix: '/project', tab: 4, depth: 0, below: 1 },
-  // The Store, listed after Projects; the gem shop is a sheet laid over it.
-  { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
-  // Workflows, listed after Projects, with Tools and Data Sources under it
-  // and the Store after them. A workflow's board is a sheet laid over the
-  // library, a tool's card over the catalogue, and a table or a publisher
-  // over Data Sources.
-  { prefix: '/workflows', tab: 4.05, depth: 0, below: 1 },
-  { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
-  { prefix: '/data-sources', tab: 4.15, depth: 0, below: 1 },
-  // Community, listed after the Shop; a topic's page is a sheet laid over it.
-  { prefix: '/community', tab: 4.3, depth: 0, below: 1 },
-  { prefix: '/upgrade', tab: 7, depth: 0 },
-  // You: the profile, with the league and Settings each a sheet laid over it.
-  { prefix: '/you', tab: 8, depth: 0, below: 1 },
-  { prefix: '/settings', tab: 8, depth: 1 },
+  { prefix: '/papers', tab: 2, depth: 1 },
+  { prefix: '/flashcards', tab: 2, depth: 1 },
+  { prefix: '/search', tab: 2, depth: 1 },
+  { prefix: '/quiz', tab: 2, depth: 1 },
+  // Games is a row of Practice, a sheet over it; Quiz Battle and Concept
+  // Craft are opened from Games, a sheet over that.
+  { prefix: '/games', tab: 2, depth: 1 },
+  { prefix: '/battle', tab: 2, depth: 2 },
+  { prefix: '/craft', tab: 2, depth: 2 },
+  { prefix: '/review', tab: 2, depth: 2 },
+  // Apply's home, and its three cards as sheets over it: Projects (an attempt
+  // over the list), Tools (a tool over the catalogue) and Workflows (a board
+  // over the library). Data Sources is a row of Tools, one sheet further down.
+  { prefix: '/apply', tab: 3, depth: 0 },
+  { prefix: '/project', tab: 3, depth: 1, below: 2 },
+  { prefix: '/tools', tab: 3, depth: 1, below: 2 },
+  { prefix: '/workflows', tab: 3, depth: 1, below: 2 },
+  { prefix: '/data-sources', tab: 3, depth: 2, below: 3 },
+  // You: the profile, with the league, Settings, the Store, Community and
+  // Upgrade each a sheet laid over it.
+  { prefix: '/you', tab: 4, depth: 0, below: 1 },
+  { prefix: '/settings', tab: 4, depth: 1 },
+  { prefix: '/store', tab: 4, depth: 1, below: 2 },
+  { prefix: '/community', tab: 4, depth: 1, below: 2 },
+  { prefix: '/upgrade', tab: 4, depth: 1 },
   { prefix: '/auth', tab: 11, depth: 0 },
 ]
 
@@ -163,7 +158,7 @@ export function effectiveAction(action: HistoryAction, state: unknown): HistoryA
  * - A `REPLACE` is the app correcting where it is (a redirect, a sign-in
  *   bounce), not the reader going somewhere, so it lands at once.
  * - Between tabs the desk slides, whichever way the history moved: Back from
- *   the Quiz tab to the Dashboard slides the Dashboard in from the left, the
+ *   Practice to Today slides Today in from the left, the
  *   same way clicking it would.
  * - Within a tab, Back (`delta < 0`) always swipes the top sheet away, and a
  *   link swipes it away too when it leads *up* the tab (the review screen's

@@ -14,7 +14,7 @@ import Games from '@/pages/Games'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Flashcards from '@/pages/Flashcards'
-import Sidebar from '@/components/Sidebar'
+import { PlaceBar, PlaceHeader, PlaceRail } from '@/components/nav/Places'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
 import PaperRouter from '@/components/PaperRouter'
@@ -33,7 +33,7 @@ import { ProCelebration } from '@/components/ProCelebration'
 import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { COMMUNITY_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
-import { isSessionRoute, pageHostsNavButton } from '@/lib/mobileNavHost'
+import { drawsOwnTopRow } from '@/lib/places'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
 import { buttonVariants } from '@/components/ui/buttonVariants'
@@ -280,15 +280,16 @@ function GlobalKeyHandler() {
   return null
 }
 
-// Below lg the app header is fixed, so the content reserves its height — but
-// only on the routes that get one. A route whose own top bar carries the nav
-// button has no header above it and starts at the top of the viewport; the
-// decision is `lib/mobileNavHost.ts`, read here and in `Sidebar.tsx` so the two
-// can't disagree about whether that row exists.
+// Below lg every page opens on one top row. A page that draws its own (Today,
+// Practice, a search bar, a back arrow) is left to it; every other page gets
+// the app's, the exam in focus and the profile button. Which is which is
+// `lib/places.ts`. The padding at the foot keeps the page clear of the phone's
+// place bar (`--place-bar-height`, 0 where the bar isn't drawn).
 function Main({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
-    <main id="main-content" tabIndex={-1} className={`flex-1 min-w-0 lg:pt-0 focus:outline-none ${pageHostsNavButton(pathname) || isSessionRoute(pathname) ? '' : 'pt-14'}`}>
+    <main id="main-content" tabIndex={-1} className="flex-1 min-w-0 pb-[var(--place-bar-height,0px)] focus:outline-none">
+      {!drawsOwnTopRow(pathname) && <PlaceHeader />}
       {children}
     </main>
   )
@@ -424,7 +425,7 @@ export default function App({ initialSession }: { initialSession: Session | null
         <FlashcardSync />
         <ExamProgressProvider>
           <AnalyticsTracker />
-          {/* The first tab stop: past the sidebar's dozen links to the page. */}
+          {/* The first tab stop: past the navigation to the page. */}
           <a
             href="#main-content"
             onClick={e => {
@@ -437,7 +438,7 @@ export default function App({ initialSession }: { initialSession: Session | null
             Skip to content
           </a>
           <div className="min-h-screen bg-background text-foreground flex">
-            <Sidebar />
+            <PlaceRail />
             <Main>
               <Routes>
                 <Route path="/" element={<Landing />} />
@@ -542,6 +543,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Main>
+            <PlaceBar />
             {TOUR_ENABLED && <Suspense fallback={null}><OnboardingTour /></Suspense>}
             <MathFocus />
             <ImageFocus />

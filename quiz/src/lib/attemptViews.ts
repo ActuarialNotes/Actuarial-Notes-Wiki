@@ -5,12 +5,11 @@
  * (`lib/attemptOverview.ts`), which is a view of the page and not one of the
  * four the switcher lists.
  *
- * Two surfaces list them: the switcher in the attempt's top bar and the rows
- * under Projects in the sidebar. Both read this one definition, so they can't
- * disagree about which views an attempt has or which one is showing.
+ * The switcher in the attempt's top bar lists them, and the overview's rows
+ * lead into them, from this one definition.
  *
  * Deliberately free of `lib/pcpaAttempt.ts` (a type aside): that module brings
- * the authored briefs with it, and the sidebar is in the main bundle.
+ * the authored briefs with it.
  *
  * Pure and tested.
  */

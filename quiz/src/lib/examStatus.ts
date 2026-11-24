@@ -132,7 +132,7 @@ export const EXAM_STATUS_LABEL: Record<ExamStatus, string | null> = {
 }
 
 /**
- * What the end of a credential-path row offers (`components/ExamsPopout.tsx`).
+ * What the end of a credential-path row offers.
  *
  *   'add'  — nothing started and there is material to study: the Add button,
  *            which marks the exam in progress and opens the study-plan wizard

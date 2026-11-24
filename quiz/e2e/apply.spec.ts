@@ -4,8 +4,7 @@ import { signIn } from './fixtures/signedIn'
 /**
  * Apply's home (docs/redesign-spec.md §7c.1): Projects, Tools and Workflows as
  * three cards, in that order, each tapped into, each with one count and what
- * the reader last touched. Until the four-place navigation it is reached from
- * the sidebar's Projects row.
+ * the reader last touched. It is the fourth of the places.
  */
 
 const BRIEF = 'Collision Claim Severity'
@@ -21,9 +20,9 @@ async function startAttempt(page: Page) {
 }
 
 test.describe('apply', () => {
-  test('opens from the sidebar on three cards, in order, each tapped into', async ({ page }) => {
+  test('opens from the places on three cards, in order, each tapped into', async ({ page }) => {
     await page.goto('/dashboard')
-    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Projects/ }).click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Apply' }).click()
     await expect(page).toHaveURL(/\/apply$/)
     await expect(page.getByRole('heading', { name: 'Apply', level: 1 })).toBeVisible()
     await expect(page.getByRole('main').getByRole('heading', { level: 2 })).toHaveText(['Projects', 'Tools', 'Workflows'])

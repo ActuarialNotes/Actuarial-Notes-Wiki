@@ -64,7 +64,7 @@ describe('examRowAction', () => {
   })
 
   it('brings Add back when a passed exam is un-ticked', () => {
-    // What the status dot does to a passed exam (STATUS_CYCLE in ExamsPopout).
+    // What the status dot does to a passed exam.
     expect(examRowAction('completed', true)).toBe('none')
     expect(examRowAction('not_started', true)).toBe('add')
   })

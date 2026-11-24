@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { FloatingSearchBar, FloatingSearchInput } from '@/components/FloatingSearchBar'
 
 /**
@@ -7,26 +7,22 @@ import { FloatingSearchBar, FloatingSearchInput } from '@/components/FloatingSea
  * shelf *is* the result list: the query rides the URL (`?q=`) and narrows every
  * aisle at once, the way a refinement does (`itemMatchesQuery` in
  * `lib/store.ts`). It is the route's only row of top chrome below `lg`
- * (`lib/mobileNavHost.ts`), so it carries the hamburger.
+ * (`drawsOwnTopRow` in `lib/places.ts`).
  */
 export function StoreSearchBar({ query, onQuery }: { query: string; onQuery: (q: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [focused, setFocused] = useState(false)
   return (
     <FloatingSearchBar width="lg">
       <FloatingSearchInput
         inputRef={inputRef}
         value={query}
         onChange={onQuery}
-        onFocus={() => setFocused(true)}
         onClear={() => {
           onQuery('')
           inputRef.current?.blur()
-          setFocused(false)
         }}
         placeholder="Search the Store"
         ariaLabel="Search the Store"
-        navCollapsed={focused && query.length > 0}
       />
     </FloatingSearchBar>
   )

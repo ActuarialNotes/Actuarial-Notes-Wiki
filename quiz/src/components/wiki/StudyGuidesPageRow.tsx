@@ -1,10 +1,8 @@
 // The way across between the Study Guides tab's two pages — the exam ladder
-// (`/wiki`) and the Resources shelf (`/wiki/resources`). The sidebar lists both
-// under the tab, but below `lg` the sidebar is a drawer, so each page also
-// carries a one-row panel leading to the other: the same list row and 48px
-// tile as the *How to Study* guide above the ladder (`ui/ListPanel.tsx`), with
-// the icon the sidebar gives that page, so the row and the sidebar entry are
-// recognisably one destination.
+// (`/wiki`) and the Resources shelf (`/wiki/resources`). Both are in Learn, and
+// the navigation lists neither, so each page carries a one-row panel leading
+// to the other: the same list row and 48px tile as the *How to Study* guide
+// above the ladder (`ui/ListPanel.tsx`).
 
 import { GraduationCap, LibraryBig } from 'lucide-react'
 import { LogoTile } from '@/components/LogoTile'

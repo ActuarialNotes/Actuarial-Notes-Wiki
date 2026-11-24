@@ -44,10 +44,10 @@ async function stubFeed(page: Page) {
 }
 
 test.describe('community', () => {
-  test('is a row in the sidebar and opens on the overview', async ({ page }) => {
+  test('is a row of You and opens on the overview', async ({ page }) => {
     await stubFeed(page)
-    await page.goto('/dashboard')
-    await page.getByRole('link', { name: 'Community' }).first().click()
+    await page.goto('/you')
+    await page.getByTestId('you-community').click()
     await expect(page).toHaveURL(/\/community$/)
     await expect(page.getByRole('heading', { name: 'Community', level: 1 })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'What actuaries are saying' })).toBeVisible()

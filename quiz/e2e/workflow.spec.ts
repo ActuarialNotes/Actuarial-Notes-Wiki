@@ -1,6 +1,6 @@
 import { test, expect, type Locator, type Page } from './test'
 
-// Workflows (docs/workflows.md): the way in from the sidebar onto the
+// Workflows (docs/workflows.md): the way in from Apply onto the
 // library, and from New onto an empty board, steps added through the + menu's pages
 // (a document from Sources among them, its table filled in and mapped into a
 // calculation), a
@@ -78,9 +78,10 @@ test.describe('workflows', () => {
     await expect(page).toHaveURL(/\/workflows\/wf-/)
   })
 
-  test('opens on the library from the sidebar, and adds a step of each kind through the + menu', async ({ page }) => {
+  test('opens on the library from Apply, and adds a step of each kind through the + menu', async ({ page }) => {
     await page.goto('/data-sources')
-    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Workflows' }).click()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Apply' }).click()
+    await page.getByTestId('apply-workflows-open').click()
     await expect(page).toHaveURL(/\/workflows$/)
     await expect(page.getByTestId('workflow-library-empty')).toBeVisible()
     await page.getByTestId('workflow-new').click()

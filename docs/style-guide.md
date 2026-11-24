@@ -380,53 +380,47 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 - Page content is centred with a `max-w-*` container: `max-w-4xl` for content pages,
   `max-w-2xl`/`max-w-lg` for focused flows, `max-w-md`/`max-w-sm` for dialogs. Pad the page
   gutter (`px-4`) so content never touches the viewport edge on mobile.
-- Layout is responsive with a **one-sidebar** shell (`Sidebar.tsx`): in flow beside the
-  content at `lg`, and below `lg` a full-width drawer. There is no bottom tab bar — a phone
-  and a tablet get the same navigation, so a destination is added in exactly one place.
-  The sidebar width is published as `--sidebar-width` (16rem expanded / 3.5rem collapsed) —
-  fixed overlays that must clear the sidebar read that variable (see the concept-popup and
-  gallery-panel rules in `index.css`). Reuse it; don't hard-code 16rem.
+- Layout is responsive around **four places** (`components/nav/Places.tsx`,
+  `lib/places.ts`; `docs/redesign-spec.md` §8, Phase F): Today, Learn, Practice and Apply, in
+  the order of the path. At `lg` they are a rail in flow beside the content, 220px wide, with
+  the exam in focus at its head (the exam switcher) and You at its foot. Below `lg` they are
+  a bar fixed to the bottom of the screen. A destination is one of the four or a row inside
+  one; nothing else is added to either. The rail's width is published as `--sidebar-width`
+  and the bar's height as `--place-bar-height` (0 where the bar isn't drawn); a fixed overlay
+  that must clear one of them reads the variable (the concept popup, the resume dock, the
+  toast). Don't hard-code either.
 
-### 5.0 One row of top chrome below `lg`
+### 5.0 The places, and one top row below `lg`
 
-`components/MobileNavButton.tsx` is the hamburger that opens that drawer, and it has two
-homes. A page that already pins a bar to the top of the viewport — a floating search bar —
-carries it **on that bar's line**, left of the search icon; every other page gets the app
-header (`Sidebar.tsx`), the same `h-14` row plus the wordmark. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
-the hamburger is always in the same corner.
+**The rail** (`PlaceRail`): each place is a 46px row with its icon and name at 16px; the
+place the reader is in is filled (`bg-foreground text-background`, bold) and carries
+`aria-current="page"`, the rest are plain. The rail has no sub-rows, no badges and no
+collapse. With no exam to show, the app's name stands at its head over **Add an exam**.
 
-`lib/mobileNavHost.ts` is the one place that says which route does which; `App.tsx` reads it
-to decide whether the content reserves `pt-14`, and `Sidebar.tsx` reads it to decide whether
-to render the header at all. A page whose bar hosts the button starts at the top of the
-viewport (`sticky top-0`); a page with the header offsets by it (`sticky top-14 lg:top-0`).
-Add a route to that module only together with the `<MobileNavButton />` in its bar — the two
-move together, or the page ends up with two hamburgers or none.
+**The bar** (`PlaceBar`): four equal columns, a 24px icon over a 13px label, a hairline
+above. The place the reader is in has its icon filled and its label bold. It is hidden on a
+screen that owns the bottom edge or the whole screen, each of which has its own way back
+(`showsPlaceBar`): the session, a game's board, You's screens, a concept, a question or a
+tool being read (their foot is **Practice this**), the flashcards and the search, a project
+being worked and a workflow's board. A page's own fixed foot sits above the bar where both
+are drawn (`bottom-[var(--place-bar-height,0px)]`).
 
-The session is the exception: `/quiz` and `/review` have neither the header nor the sidebar,
-at any width (`isSessionRoute`, §13.6).
+**One top row** on a phone: the exam showing at the left and the profile button at the right
+(`PlaceTopRow`; the button is `components/nav/ProfileButton.tsx`, the reader's character in a
+44px ring, which opens You). Today and Practice draw it with their own exam; a page with a
+floating search bar carries the profile button at the end of the search's line where it is a
+place's own bar (Learn); a page under a place opens on its back arrow and title. Every other
+page gets the app's row (`PlaceHeader`): the exam in focus and the profile button.
+`drawsOwnTopRow` in `lib/places.ts` is the one place that says which route does which, and
+`App.tsx` reads it; add a route there only when its page draws a top row of its own. The row
+is in the page's flow and scrolls with it. There is no hamburger and no drawer.
 
-When the search on a hosting bar goes **active**, the button folds to zero width and the
-input grows over it: it is the only thing on that line the reader is not using, and typing
-wants the width more than the drawer does. Pass `collapsed` and let the button animate;
-don't unmount it.
+The session is the exception: `/quiz` and `/review` have no rail, no bar and no top row but
+their own, at any width (`isSessionRoute`, §13.6).
 
-**The drawer's rows are sized for a thumb, the rail's for a rail.** Below `lg` the sidebar
-is the whole screen, so a nav row is the one place the app leaves the `text-sm` default
-behind: `px-3 py-3 text-base rounded-lg` with a `h-6` icon slot (a 20px glyph) — a 48px
-full-width target carrying 16px type, well past the 40px floor in §11. At `lg` every one of
-those classes is taken back (`lg:py-2 lg:text-sm lg:rounded-md`, `lg:h-5` slot, 16px glyph)
-so the 16rem rail keeps the app's body size and nav text never outranks page text. The same
-pair rides the group headers, the theme/profile rows in the footer and the popover menus the
-profile row opens — a row is a row wherever it is drawn, so add the `lg:` half
-whenever you add the mobile half. `SidebarItem`'s `base` string is where it lives; the
-hamburger matches it at `h-10 w-10`.
-
-**A tab's pages are rows under it, while it is open.** A tab with more than one page lists
-them beneath its own row — indented behind a `border-l` rule (`SubRows` in `Sidebar.tsx`),
-flush under the icon on the collapsed rail — only while the reader is in that tab: an open
-project's Brief / Workspace / Report / Submit under **Projects**, **Exams** and **Resources**
-under **Study Guides**. The page showing is the filled row; the tab's own row is named
-(`text-foreground font-medium`) but not filled, so exactly one row reads as *here*.
+**Learn's home is the study guide of the exam in focus** (`learnTarget`): from another place
+Learn returns to the page last read there; from inside Learn it goes home; from home it goes
+up to Study Guides.
 
 ### 5.1 Fixed bottom action bars
 
@@ -900,7 +894,7 @@ Rules to keep — the first three are what make it read as *one* motion rather t
   `view-transition-name` of its own: an object lifted out flies on its own path while its
   sheet slides the other way, and two motions at once read as neither. The exam cards on the
   Quiz and Study Guides tabs used to be carried between the tabs this way; they now ride
-  their sheets. Only the chrome is named (`paper-rail`, `paper-header`, and `paper-resume` —
+  their sheets. Only the chrome is named (`paper-rail`, `paper-bar`, and `paper-resume` —
   the resume dock, which belongs to no page; the quiz and battle-queue pills share it so the
   name is carried by one element), and a within-page
   sheet only while its own turn runs (`.paper-sheet` behind `data-paper="turn"`).
@@ -1093,8 +1087,8 @@ shape since 2026-11-24 and keeps its own shell for its keys.
 ### 13.6 The session
 
 The quiz's question screen and its results (`pages/Quiz.tsx`, `pages/Review.tsx`,
-`components/session/`; `docs/redesign-spec.md` §5). The sidebar and the phone's app header are
-hidden on both (`isSessionRoute` in `lib/mobileNavHost.ts`); the question screen's top row is
+`components/session/`; `docs/redesign-spec.md` §5). The rail, the phone's place bar and its top row are
+hidden on both (`isSessionRoute` in `lib/places.ts`); the question screen's top row is
 leave, the progress bar, the timer when timed, and More.
 
 **The progress bar** (`SessionProgress` over `lib/sessionProgress.ts`): one segment per

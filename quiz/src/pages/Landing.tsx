@@ -5,7 +5,6 @@ import { ChevronRight, Loader2, Search } from 'lucide-react'
 import { ExamStatusBanner } from '@/components/FloatingSearchBar'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/examProgress'
-import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { useConcepts } from '@/hooks/useConcepts'
@@ -60,7 +59,7 @@ import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
-import { MobileNavButton } from '@/components/MobileNavButton'
+import { PlaceTopRow } from '@/components/nav/Places'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
 import { GROUND } from '@/components/ui/OutlineCard'
 import { QuizCard } from '@/components/practice/QuizCard'
@@ -482,16 +481,12 @@ export default function Landing() {
     return (
       <div className={cn(GROUND, 'min-h-full')} data-testid="practice-empty">
         <div className="mx-auto flex w-full max-w-xl flex-col px-5 pb-10 pt-3 lg:pt-8">
-          <div className="flex items-center gap-1">
-            <MobileNavButton className="-ml-2 h-11 w-11 lg:hidden" />
-            {focusWithoutBank && (
-              <ExamSwitcherButton
-                examKey={wikiExamIdToProgressKey(focusWithoutBank.examId)}
-                label={focusWithoutBank.examLabel}
-                testId="practice-exam"
-              />
-            )}
-          </div>
+          <PlaceTopRow
+            examKey={focusWithoutBank ? wikiExamIdToProgressKey(focusWithoutBank.examId) : null}
+            label={focusWithoutBank?.examLabel}
+            testId="practice-exam"
+            desk={!!focusWithoutBank}
+          />
           {focusWithoutBank ? (
             <div className="mt-6 flex flex-col items-start gap-4" data-testid="quiz-no-bank">
               <p className="text-[17px] leading-normal">{focusWithoutBank.examLabel} has no practice questions yet.</p>
@@ -525,17 +520,16 @@ export default function Landing() {
     <>
       <div className={cn(GROUND, 'min-h-full')} data-testid="practice">
         <div className="mx-auto flex w-full max-w-xl flex-col px-5 pb-10 pt-3 lg:pt-8">
-          {/* The exam showing. Below `lg` this row is the page's top chrome,
-              so it carries the way into the navigation (lib/mobileNavHost.ts). */}
-          <div className="flex items-center gap-1">
-            <MobileNavButton className="-ml-2 h-11 w-11 lg:hidden" />
-            <ExamSwitcherButton
-              examKey={currentExam?.progressKey ?? ''}
-              label={examLabel}
-              visiting={visitingPageId}
-              testId="practice-exam"
-            />
-            <span className="flex-1" />
+          {/* The exam showing, the bank's info and, on a phone, the profile
+              button. The exam stays on a wide screen too: it is this page's
+              title, and on a visit it isn't the exam the rail names. */}
+          <PlaceTopRow
+            examKey={currentExam?.progressKey ?? ''}
+            label={examLabel}
+            visiting={visitingPageId}
+            testId="practice-exam"
+            desk
+          >
             {currentExam && (
               <QuizExamInfoButton
                 exam={currentExam.value}
@@ -545,7 +539,7 @@ export default function Landing() {
                 questions={examBank}
               />
             )}
-          </div>
+          </PlaceTopRow>
 
           {status !== 'ready' && (
             <div className="mt-3 overflow-hidden rounded-xl"><ExamStatusBanner status={status} /></div>

@@ -41,10 +41,9 @@ export const RESEARCH_AI_ENABLED: boolean = false
  * Research tab (the whole surface, not just the AI assistant) — currently OFF.
  *
  * The nav no longer shows a "Research" entry, and the `/research` route
- * redirects to the wiki. Because "Study Guides" only has one child left when
- * Research is hidden, the sidebar also drops the nested group and renders a
- * single flat "Study Guides" link — see the `RESEARCH_TAB_ENABLED` checks in
- * components/Sidebar.tsx and the `/research` route in App.tsx.
+ * redirects to the wiki. Its way in is a row on Study Guides' home
+ * (pages/wiki/WikiHome.tsx), drawn only while the flag is on — see the
+ * `RESEARCH_TAB_ENABLED` checks there and on the `/research` route in App.tsx.
  *
  * All the underlying code, routes, and Supabase tables are left intact.
  * Re-enabling is a one-line change: set this to `true`.
@@ -205,9 +204,8 @@ export const FACT_CHECK_UI_ENABLED: boolean = true
  * app's second mode, and is now part of the one app. ON, in Preview.
  *
  * When ON, approved accounts (`PREVIEW_APPROVED_EMAILS` in
- * `lib/workflowsAccess.ts`) get the Workflows row in the sidebar, with Tools
- * and Data Sources under it, and the `/workflows` routes. Everyone else sees
- * Tools and Data Sources as plain rows. Data Sources itself (assumptions,
+ * `lib/workflowsAccess.ts`) get the Workflows card on Apply and the
+ * `/workflows` routes. Everyone else has Projects and Tools there. Data Sources itself (assumptions,
  * sources, documents) is open to everyone.
  *
  * Gating the flag off hides all of that for everyone; nothing behind it is
@@ -231,7 +229,7 @@ export const COWORK_OPEN_TO_ALL: boolean = import.meta.env.VITE_COWORK_PREVIEW =
 /**
  * **Actuarial Tools** (docs/actuarial-tools.md) — the Tools tab (`/tools`):
  * calculators that each do one thing, the same engine the MCP connector's
- * `run_tool` runs. Off drops the sidebar row and sends `/tools` to the
+ * `run_tool` runs. Off sends `/tools` to the
  * dashboard; the connector's calculators are unaffected.
  */
 export const TOOLS_ENABLED: boolean = true
@@ -266,7 +264,7 @@ export const TUTOR_OPEN_TO_ALL: boolean = import.meta.env.VITE_TUTOR_PREVIEW ===
  * where the profession gathers, browsed and followed by topic. ON, and open to
  * the approved accounts alone (`COMMUNITY_APPROVED_EMAILS` in
  * `lib/community/access.ts` — Preview: one account); to anyone else there is
- * no sidebar row and `/community` redirects to the dashboard. One lazy chunk.
+ * no Community row on You and `/community` redirects to the dashboard. One lazy chunk.
  */
 export const COMMUNITY_ENABLED: boolean = true
 
@@ -287,12 +285,3 @@ export const COMMUNITY_OPEN_TO_ALL: boolean = import.meta.env.VITE_COMMUNITY_PRE
  */
 export const GAMES_ENABLED: boolean = import.meta.env.VITE_GAMES_PREVIEW === 'on'
 
-/**
- * Tools, Data Sources and the Store are hidden from the sidebar for now. Their
- * pages (`/tools`, `/data-sources`, `/store`, the Gem Shop at `/store/gems`)
- * are left intact and still open by address, and Workflows (Preview) keeps
- * its own row. Only the e2e suite's build sets `VITE_SIDEBAR_PREVIEW=on`
- * (playwright.config.ts), so its flows through those rows keep running.
- * Re-enabling is a one-line change: set this to `true`.
- */
-export const TOOLS_STORE_NAV_ENABLED: boolean = import.meta.env.VITE_SIDEBAR_PREVIEW === 'on'

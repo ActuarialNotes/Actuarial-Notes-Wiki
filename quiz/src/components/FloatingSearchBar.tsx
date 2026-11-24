@@ -27,8 +27,9 @@ import type { ExamStatus } from '@/lib/examStatus'
  * Two things they encode that a place should not re-decide. The bar is the
  * route's **only** row of top chrome below `lg` (`drawsOwnTopRow` in
  * `lib/places.ts` is what tells `App.tsx` not to draw the app's top row above
- * it), so a place's bar carries the profile button at the end of the input's
- * line. And every row is `h-[calc(3.5rem-1px)]`, one line of chrome measuring
+ * it). Learn's bar is the exception on a phone: it draws the app's top row
+ * itself and its field as a pill on the line under it, as Practice's search
+ * is, so the top row is the same on both. And every row is `h-[calc(3.5rem-1px)]`, one line of chrome measuring
  * the same whichever place a reader is in.
  */
 
@@ -102,12 +103,12 @@ export interface FloatingSearchInputProps {
   /** A control at the end of the line: the profile button, on a place's own bar. */
   trailing?: ReactNode
   /**
-   * The line is the page's top row on a phone: below `lg` it is laid out as
-   * `PlaceTopRow` is (12px down, a 44px row, 20px in from each side), so the
-   * profile button sits where it sits on every other page and doesn't move
-   * when the reader changes page.
+   * Draw the field as Practice's search row, an outlined pill, on a line under
+   * the page's top row (Learn on a phone).
    */
-  topRow?: boolean
+  pill?: boolean
+  /** A control before the field: the way back, on a pill's line. */
+  leading?: ReactNode
 }
 
 export function FloatingSearchInput({
@@ -119,11 +120,44 @@ export function FloatingSearchInput({
   ariaLabel,
   inputRef,
   trailing,
-  topRow = false,
+  pill = false,
+  leading,
 }: FloatingSearchInputProps) {
   useSearchTracking(value)
+  if (pill) {
+    return (
+      <div className="flex items-center gap-1 pb-2 pt-3 max-sm:px-1">
+        {leading}
+        <label className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-border pl-4 pr-1.5 transition-colors focus-within:border-foreground hover:border-foreground">
+          <Search className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden />
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            onFocus={onFocus}
+            placeholder={placeholder}
+            aria-label={ariaLabel}
+            autoComplete="off"
+            spellCheck={false}
+            className="h-full w-0 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-foreground placeholder:text-foreground focus:outline-none"
+          />
+          {value && (
+            <button
+              type="button"
+              onClick={() => (onClear ? onClear() : onChange(''))}
+              aria-label="Clear search"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-4 w-4" strokeWidth={2.5} />
+            </button>
+          )}
+        </label>
+      </div>
+    )
+  }
   return (
-    <div className={cn('flex h-[calc(3.5rem-1px)] items-center gap-2', topRow && 'max-lg:h-[62px] max-lg:pb-1.5 max-lg:pt-3 max-sm:px-1')}>
+    <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
       <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <input
         ref={inputRef}

@@ -1,4 +1,5 @@
-import { ProfileButton } from '@/components/nav/ProfileButton'
+import { PlaceHeader } from '@/components/nav/Places'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
@@ -55,6 +56,11 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   const navigate = useNavigate()
   const { openAt } = useConceptPopup()
   const { syllabi } = useWikiSyllabus()
+  // Below lg the page opens on the app's top row (the exam, the profile button)
+  // with the search as a pill on the line under it, as on Practice; the strip's
+  // exam and way back move into those two lines. On a wide screen the rail
+  // carries the exam and the reader, and the bar keeps its field and strip.
+  const phone = useIsMobile(1023)
 
   useEffect(() => {
     let cancelled = false
@@ -201,8 +207,11 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
     <>
       {isExpanded && <SearchBackdrop onDismiss={dismiss} />}
 
+      {phone && <PlaceHeader lead={pageTitle ? pageIcon : undefined} />}
+
       <FloatingSearchBar
         ref={containerRef}
+        className={phone ? 'border-b-0' : undefined}
         banner={
           // Status banner — thin, full-width, hidden while a dropdown is open
           pageTitle && !isExpanded
@@ -219,12 +228,11 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             onClear={dismiss}
             placeholder="Search concepts"
             ariaLabel="Search study guides"
-            // Learn's top row on a phone: the profile button, until the search is in use.
-            topRow
-            trailing={!active && <ProfileButton className="lg:hidden" />}
+            pill={phone}
+            leading={phone && pageTitle ? backLink : undefined}
           />
 
-          {pageTitle && (
+          {pageTitle && !(phone && pageIcon) && (
             <FloatingSearchStrip title={pageTitle} icon={pageIcon} backLink={backLink}>
               {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
             </FloatingSearchStrip>

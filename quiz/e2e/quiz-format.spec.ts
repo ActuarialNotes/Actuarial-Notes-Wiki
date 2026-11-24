@@ -110,15 +110,21 @@ test.describe('practice home', () => {
     await expect(page.getByRole('button', { name: 'Leave the exam' })).toBeVisible()
   })
 
-  test("today's plan is not on the page, and the rows lead to Flashcards and Search", async ({ page }) => {
+  test("today's plan is not on the page, a row leads to Flashcards, and the search finds questions over the page", async ({ page }) => {
     await page.goto('/?topic=Exam%205')
     await expect(page.getByTestId('practice')).toBeVisible()
     await expect(page.getByTestId('todays-plan-tile')).toHaveCount(0)
     await expect(page.getByText("Today's Study Plan")).toHaveCount(0)
     await expect(page.getByTestId('practice').getByRole('link', { name: /Flashcards/ })).toHaveAttribute('href', '/flashcards')
-    await page.getByTestId('practice-search').click()
-    await expect(page).toHaveURL(/\/search/)
-    await expect(page.getByRole('searchbox', { name: 'Search' })).toBeVisible()
+    // The search stays on Practice: its results are laid over the page,
+    // questions only, the Exam filter on the exam showing.
+    await page.getByRole('searchbox', { name: 'Search questions' }).fill('loss')
+    const results = page.getByTestId('practice-search-results')
+    await expect(results.getByTestId('search-question').first()).toBeVisible({ timeout: 30_000 })
+    await expect(page).not.toHaveURL(/\/search/)
+    await expect(results.getByRole('button', { name: /Exam 5/ })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(results).toHaveCount(0)
   })
 
   test('the page opens on the exam in focus, and an address that names another exam is a visit', async ({ page }) => {

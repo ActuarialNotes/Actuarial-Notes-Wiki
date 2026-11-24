@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { usePageLabel } from '@/hooks/useBack'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronRight, Loader2, Search } from 'lucide-react'
+import { ChevronRight, Loader2 } from 'lucide-react'
 import { ExamStatusBanner } from '@/components/FloatingSearchBar'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/examProgress'
@@ -60,6 +60,7 @@ import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
 import { PlaceTopRow } from '@/components/nav/Places'
+import { PracticeSearch } from '@/components/practice/PracticeSearch'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
 import { GROUND } from '@/components/ui/OutlineCard'
 import { QuizCard } from '@/components/practice/QuizCard'
@@ -545,14 +546,7 @@ export default function Landing() {
             <div className="mt-3 overflow-hidden rounded-xl"><ExamStatusBanner status={status} /></div>
           )}
 
-          <Link
-            to="/search"
-            data-testid="practice-search"
-            className="mt-5 flex h-12 items-center gap-3 rounded-full border border-border px-4 text-base transition-colors hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground"
-          >
-            <Search className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
-            Search
-          </Link>
+          <PracticeSearch exam={topic} questions={allQuestions} className="mt-5" />
 
           {currentExam?.progressKey && (
             <Suspense fallback={null}>

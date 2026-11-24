@@ -13,7 +13,7 @@ import {
   drawSignature,
   formatTargetDate,
   groupConceptsBySyllabus,
-  isExamList,
+  quizTabExam,
   newQuestionCount,
   orderConceptsBySyllabus,
   papersFilter,
@@ -132,12 +132,17 @@ describe('the exams', () => {
     expect(formatTargetDate('2026-09-15T12:00:00')).toBe('Sep 26')
   })
 
-  it("knows the exam list's address", () => {
-    expect(isExamList('/')).toBe(true)
-    expect(isExamList('/?autostart=1')).toBe(true)
-    expect(isExamList('/?topic=Exam%205')).toBe(false)
-    expect(isExamList('/?topic=Exam%205#x')).toBe(false)
-    expect(isExamList('/quiz')).toBe(false)
+  it('opens the tab on the exam its address names, else the exam in focus', () => {
+    const p = { progressKey: 'P', examId: 'P-1' }
+    expect(quizTabExam('Exam 5', p)?.value).toBe('Exam 5')
+    expect(quizTabExam('', p)?.value).toBe('Probability')
+    // A regional exam's bank is its page's: 6C has one, 6U has none.
+    expect(quizTabExam('', { progressKey: 'CAS-6', examId: '6C' })?.value).toBe('Exam 6C')
+    expect(quizTabExam('', { progressKey: 'CAS-6', examId: '6U' })).toBeUndefined()
+    // No exams, an exam with no bank, an address naming no exam: no builder.
+    expect(quizTabExam('', null)).toBeUndefined()
+    expect(quizTabExam('', { progressKey: 'CAS-PCPA', examId: 'PCPA' })).toBeUndefined()
+    expect(quizTabExam('Exam Nothing', p)).toBeUndefined()
   })
 })
 

@@ -84,14 +84,13 @@ test.describe('quiz in progress', () => {
   })
 
   // Quit leads back to where the quiz was started — here, Exam P's builder,
-  // still open — rather than the exam list (lib/navTrail.ts).
+  // still open (lib/navTrail.ts).
   test('quitting returns to the builder the quiz was started from', async ({ page }) => {
-    const examP = page.locator('button[data-tour="quiz-exam-p"]')
-    const changeExam = page.getByRole('button', { name: 'Change exam' })
+    const switcher = page.getByTestId('exam-switcher')
     const start = page.locator('[data-tour="start-quiz"]')
 
-    await page.goto('/')
-    await examP.click()
+    await page.goto('/?topic=Probability')
+    await expect(switcher).toBeVisible()
     await start.click()
     await page.waitForURL('**/quiz?**')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
@@ -102,7 +101,7 @@ test.describe('quiz in progress', () => {
     await page.getByRole('button', { name: 'Leave the quiz' }).click()
     await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
     await page.waitForURL(url => url.pathname === '/' && url.searchParams.has('topic'))
-    await expect(changeExam).toBeVisible()
+    await expect(switcher).toHaveAccessibleName('Switch exam, Exam P-1')
     await expect(pill(page)).toHaveCount(0)
   })
 
@@ -117,7 +116,8 @@ test.describe('quiz in progress', () => {
       await page.getByRole('button', { name: 'Leave the quiz' }).click()
       await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
       await page.waitForURL(url => url.pathname === '/')
-      await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+      // A visitor with no exams lands on Add an exam.
+      await expect(page.getByTestId('add-exam')).toBeVisible()
       await expect(pill(page)).toHaveCount(0)
     })
   })

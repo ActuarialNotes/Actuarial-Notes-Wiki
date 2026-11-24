@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
-import { ExamLogo } from '@/components/ExamLogo'
-import { FloatingSearchBack } from '@/components/FloatingSearchBar'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
 import { QuizStudyGuideButton } from '@/components/landing/QuizStudyGuideButton'
 import { examAccentStyle } from '@/lib/examColors'
 import { examStudyGuideFor } from '@/lib/examMenu'
+import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { filterQuestions, type Question } from '@/lib/parser'
 import { quizWikiExamId, type QuizExam } from '@/lib/quizBuilder'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -21,7 +20,8 @@ export function useQuizExamStrip(
   exam: QuizExam | undefined,
   questions: Question[],
   syllabi: WikiExamSyllabus[],
-  onBack: () => void,
+  /** The exam's study guide page id, when the builder is open on an exam the reader hasn't added. */
+  visiting: string | null,
 ) {
   const topic = exam?.value ?? ''
   const examBank = useMemo(
@@ -32,8 +32,8 @@ export function useQuizExamStrip(
   if (!exam) return undefined
   return {
     title: exam.label,
-    icon: <ExamLogo examKey={exam.progressKey} size="strip" />,
-    backLink: <FloatingSearchBack label="Change exam" onClick={onBack} />,
+    // The strip's icon is the exam switcher: this exam, and the way to the reader's others.
+    icon: <ExamSwitcherButton examKey={exam.progressKey} label={exam.label} visiting={visiting} />,
     actions: (
       // The exam's scope, so what is chosen in the strip fills with its colour.
       <span className="inline-flex items-center gap-0.5 shrink-0" style={examAccentStyle(exam.progressKey)}>

@@ -554,7 +554,7 @@ once and needs You to exist.
 | **B. Today** (built 2026-11-23) | §4: the new Dashboard, the session sized by time, the free session, the Syllabus and Analytics screens, the session length sheet. The icons removed from the header keep working from Settings until You exists | A |
 | **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
-| **E. Exam switcher** (step 1 built 2026-11-23: the state, the sheet, Today and the exam page) | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
+| **E. Exam switcher** (built 2026-11-24) | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
 | **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
@@ -712,8 +712,7 @@ What was decided while building it:
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
 
-**Phase E is being built, one step per PR.** Step 1 (2026-11-23) is the state and the sheet,
-on Today and the exam page. The rules are `lib/examFocus.ts`; the stored half is
+**Phase E is built.** The rules are `lib/examFocus.ts`; the stored half is
 `contexts/ExamProgressContext.tsx`, the hook `hooks/useExamInFocus.ts`, the screens
 `components/switcher/` (mounted once by `ExamSwitcherHost` in `App.tsx`, opened through
 `stores/examSwitcher.ts`). What was decided with the maintainer before building it:
@@ -752,10 +751,31 @@ on Today and the exam page. The rules are `lib/examFocus.ts`; the stored half is
   question are full screens on a phone and the same panel on desktop.
 - **Search engines:** nothing changes. The static pages, the hub's exam links and the sitemap
   are built from the vault (`lib/seo.ts`), not from any exam list in the app.
-- **Still to do, a place per PR:** the exam list on Study Guides, the exam list on the Quiz
-  tab, and the exam strips on Resources and the Store. Settings' "Add exams" still opens the
-  old exams panel (`ExamsPopout`), which also holds the credential track; it goes with You
-  (Phase H).
+- **Each place, and what it lost:**
+  - **Study Guides** (`pages/wiki/WikiHome.tsx`) leads with the exam in focus as one row to
+    its study guide, then "Your exams" (the sheet; "Add an exam" for a reader with none), the
+    Resources row and the six credentials, each opening its page, whose route lists what it
+    requires. The exam ladder, its "In progress" group and the SOA / CAS / CIA picker are gone;
+    the full ladder is Add an exam. An exam page's back arrow reads "Study Guides".
+  - **The Quiz tab** (`hooks/useQuizExamScreen.ts`, `quizTabExam`) opens on the builder of the
+    exam in focus; `/?topic=` opens that exam's builder, as a visit when it isn't the reader's.
+    The strip's logo and name are the switcher, in place of the "Change exam" arrow. A reader
+    with no exams gets Add an exam; an exam in focus with no question bank gets one sentence
+    and the way to its study guide. The exam ladder and the body picker are gone; the Games
+    row sits above the builder.
+  - **Resources** (`shelfExams`) shows the exam in focus's readings; `?exam=` names another
+    exam (or an exam's regions together) and `?exam=all` every exam. One switch in the title
+    row, this exam or All exams, replaces the body picker, the strip of logos and the region
+    picker. With every exam showing, the shelf is every body's.
+  - **The Store** opens on the exam in focus's kit; `?exam=<key>` and `?exam=all` as before.
+    The same switch replaces its picker, strip and region picker; an exam sat by region opens
+    on the region of the page in focus, and `?region=` still names another.
+- **Not changed:** Flashcards keeps its own SOA / CAS picker (it is a row of Practice in
+  Phase G). Settings' "Add exams" still opens the old exams panel (`ExamsPopout`), which also
+  holds the credential track; it goes with You (Phase H). The parked onboarding tour pointed
+  at the Quiz tab's Exam P row, which is gone. Exam names still differ by place ("Exam P" on
+  Today, the sheet and the Store; "Exam P-1" on Study Guides, the Quiz tab and Resources), as
+  they did before this phase.
 
 For every phase:
 

@@ -109,6 +109,7 @@ One thing, one name. Use these exactly.
 | The one exam every place opens on | the **exam in focus** in docs and code; on screen it is never named: the control shows the exam ("Exam P") and the sheet is **Your exams** | active exam, current exam, selected exam |
 | Taking an exam on | **Add an exam** (the screen and the row), **Add Exam P** (the button for one exam); an exam on the list is **Added** | Track, Follow, Enrol, Start studying |
 | The date question | **When is your exam?**, with **Another date** and **Not sure yet** | Target date, Sitting, Exam window (as the question) |
+| Every exam, on Resources and the Store | **All exams**, beside the exam's own name on one switch | Everything, Any exam, All |
 | The sheet's Edit actions | **Change date**, **Mark as passed**, **Remove** | Delete, Complete, Archive |
 | How long a session is | **session length** (10, 25, 45 or 120 minutes) | session size, duration, time budget |
 | The session's three steps | **Fix mistakes**, **Learn**, **Review**, in that order; finished, they read **Fixed**, **Learned**, **Reviewed** | Mistakes, New, Refresh, Revise |

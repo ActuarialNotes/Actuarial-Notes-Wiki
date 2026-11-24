@@ -146,6 +146,32 @@ export function resourceFacetsToParams(selection: ResourceFacetSelection, params
   return next
 }
 
+// ── The exam the shelf shows ─────────────────────────────────────────────────
+
+/** `?exam=all`: the reader chose every exam over the exam in focus. */
+export const ALL_EXAMS = 'all'
+
+export interface ShelfExams {
+  /** The exams whose readings the shelf shows; empty for every exam. */
+  exams: Set<string>
+  /** Every exam, by the reader's choice or because there is none to narrow to. */
+  all: boolean
+  /** The shelf follows the exam in focus: the address names none. */
+  fromFocus: boolean
+}
+
+/**
+ * Which exams the Resources shelf shows (docs/redesign-spec.md §6): the ones
+ * its address names, every exam when it says `all`, else the exam in focus
+ * (`focusLabel`, the exam page's name: "Exam P-1"), else every exam.
+ */
+export function shelfExams(selected: ReadonlySet<string>, focusLabel: string | null): ShelfExams {
+  if (selected.has(ALL_EXAMS)) return { exams: new Set(), all: true, fromFocus: false }
+  if (selected.size > 0) return { exams: new Set(selected), all: false, fromFocus: false }
+  if (focusLabel) return { exams: new Set([focusLabel]), all: false, fromFocus: true }
+  return { exams: new Set(), all: true, fromFocus: false }
+}
+
 // ── The exam strip ───────────────────────────────────────────────────────────
 //
 // The Exam filter is drawn as the Store's strip of exam logos

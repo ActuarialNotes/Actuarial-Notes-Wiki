@@ -1,6 +1,8 @@
 import { lazy, Suspense, useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { usePageLabel } from '@/hooks/useBack'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiRoute } from '@/lib/wikiRoutes'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { ExamStatusBanner } from '@/components/FloatingSearchBar'
@@ -27,7 +29,6 @@ import { examStatus } from '@/lib/examStatus'
 import { difficultyLevelsToParam, inDifficultyLevels } from '@/lib/quizDifficulty'
 import { formatPace, paceForExam } from '@/lib/quizTiming'
 import { estimateSeconds, formatEstimate, questionsWord, topicPills } from '@/lib/quizSetup'
-import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import {
   conceptLevels,
   groupConceptsBySyllabus,
@@ -54,7 +55,7 @@ import { useQuizExamScreen } from '@/hooks/useQuizExamScreen'
 import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { ConceptGroupList } from '@/components/landing/ConceptGroupList'
-import { QuizExamLadder } from '@/components/landing/QuizExamLadder'
+import { ExamSwitcherButton } from '@/components/switcher/ExamSwitcherButton'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
 import { GAMES_ENABLED } from '@/lib/featureFlags'
@@ -87,6 +88,7 @@ import type { Question } from '@/lib/parser'
 // papers, each opening the sheet in its own form.
 
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
+const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 
 /** Which form of the setup sheet is open. */
@@ -104,7 +106,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { progress: examProgress, targetDates, selectedTrack, examVariants } = useExamProgress()
+  const { progress: examProgress, targetDates } = useExamProgress()
   const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -121,18 +123,8 @@ export default function Landing() {
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   const initialConcept = searchParams.get('concept') ?? ''
 
-  // Shared with the Study Guides tab — same key, same fallback. See
-  // lib/bodyFilter.ts.
-  const [filterOverride, setFilterOverride] = useState<ExamBody | null>(loadBody)
-  const activeFilter = filterOverride ?? defaultBody(selectedTrack)
-
-  function handleSetFilter(f: ExamBody) {
-    saveBody(f)
-    setFilterOverride(f)
-  }
-
-  // The exam list or one exam's setup screen, and the moves between them.
-  const { topic, openExam, closeExam } = useQuizExamScreen()
+  // The exam the tab is on: the address's, else the exam in focus.
+  const { topic, visiting, focusWithoutBank, hasExams, loading: examLoading } = useQuizExamScreen()
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
@@ -454,7 +446,14 @@ export default function Landing() {
   const hasTopic = topic !== ''
 
   // The exam being configured, named in the search bar's strip.
-  const examStrip = useQuizExamStrip(currentExam, allQuestions, syllabi, closeExam)
+  const visitingPageId = useMemo(
+    () => (currentExam
+      ? syllabi.find(sy => wikiExamIdToProgressKey(sy.examId) === currentExam.progressKey
+        && (!currentExam.examId || sy.examId === currentExam.examId))?.examId ?? null
+      : null),
+    [currentExam, syllabi],
+  )
+  const examStrip = useQuizExamStrip(currentExam, allQuestions, syllabi, visiting ? visitingPageId : null)
 
   // ── Question count ─────────────────────────────────────────────────────
   const countOptions = useMemo(
@@ -552,14 +551,12 @@ export default function Landing() {
       <QuizTitleRow
         hasTopic={hasTopic}
         signedIn={!!user}
-        body={activeFilter}
-        onBodyChange={handleSetFilter}
         concept={selectedConcept}
         conceptCount={conceptAvailableCount}
         onClearConcept={() => setSelectedConcept('')}
       />
 
-      {GAMES_ENABLED && !hasTopic && <QuizGamesPanel />}
+      {GAMES_ENABLED && <QuizGamesPanel />}
 
       {hasTopic && currentExam?.progressKey && (
         <Suspense fallback={null}>
@@ -567,19 +564,31 @@ export default function Landing() {
         </Suspense>
       )}
 
-      {!hasTopic && (
-        <QuizExamLadder
-          body={activeFilter}
-          syllabi={syllabi}
-          questions={allQuestions}
-          examProgress={examProgress}
-          examVariants={examVariants}
-          targetDates={targetDates}
-          todayQuizByExam={todayQuizByExam}
-          onOpenExam={openExam}
-        />
+      {/* No builder to show: a reader with no exams adds one here (R11); an
+          exam in focus with no question bank says so. */}
+      {!hasTopic && !examLoading && (
+        focusWithoutBank ? (
+          <div className="mx-auto flex max-w-xl flex-col items-start gap-4 pt-2" data-testid="quiz-no-bank">
+            <ExamSwitcherButton examKey={wikiExamIdToProgressKey(focusWithoutBank.examId)} label={focusWithoutBank.examLabel} />
+            <p className="text-[17px] leading-normal">{focusWithoutBank.examLabel} has no practice questions yet.</p>
+            {focusWithoutBank.fileName && (
+              <Link
+                to={wikiRoute({ kind: 'exam', name: focusWithoutBank.fileName })}
+                className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-5 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Open its study guide
+              </Link>
+            )}
+          </div>
+        ) : !hasExams ? (
+          <div className="mx-auto w-full max-w-[460px]">
+            <Suspense fallback={null}>
+              <AddExamFlow />
+            </Suspense>
+          </div>
+        ) : null
       )}
-      {/* A track heading opens its credential's page here, as on Study Guides. */}
+      {/* A game's row, or a search result, opens a concept here. */}
       {!hasTopic && <ConceptPopup />}
 
       {hasTopic && (

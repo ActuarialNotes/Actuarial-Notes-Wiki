@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { WikiIndexItem } from './wikiIndex'
 import {
+  ALL_EXAMS,
+  shelfExams,
   bodyForExam,
   emptyResourceFacets,
   filterResources,
@@ -167,5 +169,21 @@ describe('the exam strip', () => {
     expect(names(resourcesForBody(SHELF, strips.CAS))).toEqual([
       'Ross', 'Werner', 'Friedland', 'Marshall', 'MCT Guideline', 'Reference sheet',
     ])
+  })
+})
+
+describe('the exams the shelf shows', () => {
+  it('are the address\'s, then the exam in focus, then every exam', () => {
+    expect(shelfExams(new Set(['Exam 7']), 'Exam P-1')).toEqual({ exams: new Set(['Exam 7']), all: false, fromFocus: false })
+    expect(shelfExams(new Set(), 'Exam P-1')).toEqual({ exams: new Set(['Exam P-1']), all: false, fromFocus: true })
+    expect(shelfExams(new Set(), null)).toEqual({ exams: new Set(), all: true, fromFocus: false })
+  })
+
+  it('are every exam when the address says all, whatever is in focus', () => {
+    expect(shelfExams(new Set([ALL_EXAMS]), 'Exam P-1')).toEqual({ exams: new Set(), all: true, fromFocus: false })
+  })
+
+  it('keep an exam\'s regions together', () => {
+    expect(shelfExams(new Set(['Exam 6C', 'Exam 6U']), null).exams).toEqual(new Set(['Exam 6C', 'Exam 6U']))
   })
 })

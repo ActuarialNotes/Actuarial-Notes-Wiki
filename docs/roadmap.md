@@ -439,11 +439,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   same day, and so was Phase D (Learn: the exam page's objectives as cards with their concepts
   as pills, the concept page, and "Practice this" at the foot of a concept there and in the
   reader). E (the exam switcher) is next.
-  **Phase E (the exam switcher) is in progress:** the exam in focus, the sheet, Add an exam and
-  "When is your exam?" are built on Today and the exam page, and a visitor has Today from the
-  browser's record (R11); the exam lists on Study Guides and Quiz and the strips on Resources
-  and the Store adopt it next, a PR each.
-
+  **Phase E (the exam switcher) is built (2026-11-24):** one exam in focus, kept with the
+  account; the sheet, Add an exam and "When is your exam?"; a visitor has Today from the
+  browser's record (R11). Today, the exam page, Study Guides, the Quiz tab, Resources and the
+  Store read it, and their exam lists, strips and body pickers are gone. Phases F to I are open.
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the

@@ -134,10 +134,19 @@ export function formatTargetDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
 }
 
-/** The Quiz tab's exam list — `/` with no exam open. */
-export function isExamList(path: string): boolean {
-  const [pathname, search = ''] = path.split('?')
-  return pathname === '/' && !new URLSearchParams(search.split('#')[0]).get('topic')
+/**
+ * The exam the Quiz tab opens on: the one its address names (`?topic=`), else
+ * the exam in focus when it has a question bank. Undefined when neither does:
+ * a reader with no exams, or one whose exam in focus has no questions yet.
+ */
+export function quizTabExam(
+  urlTopic: string,
+  focus: { progressKey: string; examId: string } | null,
+  exams: readonly QuizExam[] = QUIZ_EXAMS,
+): QuizExam | undefined {
+  if (urlTopic) return quizExamFor(urlTopic, exams)
+  if (!focus) return undefined
+  return exams.find(e => e.progressKey === focus.progressKey && (!e.examId || e.examId === focus.examId))
 }
 
 // ─── The builder's choices ────────────────────────────────────────────────────

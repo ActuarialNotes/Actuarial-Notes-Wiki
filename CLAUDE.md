@@ -136,10 +136,12 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   `trailing`. The menu always portals to the body and is placed by `lib/menuPlacement.ts`, so
   no host's stacking context or viewport edge can clip it.
   `components/ExamRow.tsx` is **the** exam row — logo, name with its Beta / In Development
-  tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
-  Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
+  tag, topic, a line of facts as plain text, and a chevron. The exam lists it was drawn in are
+  gone (the exam switcher replaced them, `examFocus.ts` below): Study Guides draws it once, for
+  the exam in focus (exam date, "NN% of the syllabus"; no bar).
   It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
-  "tap to go there" entry on those two pages uses (Games, the general guide).
+  "tap to go there" entry uses (Games on the Quiz tab; Your exams, Resources and the
+  credentials on Study Guides).
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
@@ -445,16 +447,16 @@ before touching that area**:
   concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
   the exam page: back to where the reader came from, the level button, more, the article,
   **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next. **Phase E, the exam switcher, is being built** a
-  place at a time (§8): the exam in focus, the sheet, Add an exam and the date question are on
-  Today and the exam page (`examFocus.ts` below).
+  Previous, Practice this, Next. **Phase E, the exam switcher, is built** (§8): one
+  exam in focus, the sheet, Add an exam and the date question, read by Today, the exam page,
+  Study Guides, the Quiz tab, Resources and the Store (`examFocus.ts` below).
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
 - `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects; its header is the
-  Resources page's — a search bar, the SOA / CAS picker, the body's exam strip, and a region
-  picker under an exam with regional syllabi like Exam 6 — `lib/storeExams.ts`,
+  Resources page's — a search bar and one switch, the exam in focus or All exams; an exam with
+  regional syllabi like Exam 6 opens on the region of the page in focus — `lib/storeExams.ts`,
   `lib/examVariants.ts`): real products
   — exam **registration**, **study materials**, the **calculators** SOA and CAS allow, the
   syllabus **textbooks** — each opening a sheet of what its seller says about it, whose one
@@ -1306,14 +1308,11 @@ Other important `lib/` modules:
   and a finished quiz hands its entry to the review (`replace` with `REPLACE_AS_PUSH` from
   `viewTransition.ts`, still drawn as a push), so Back from a review never lands on a quiz that
   is over. Pure and tested; the flows are in `e2e/wiki.spec.ts` and `e2e/quiz-resume.spec.ts`.
-- `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
-  Guides tabs. The Study Guides tab's two pages (exams, resources) offer a third body, the
-  **CIA** (`GuideBody`, its ACIA and FCIA tracks — `CIA_TRACK_KEYS`); a page without CIA
-  material reads a stored `CIA` as no choice (`loadBody`) and opens on the reader's track's
-  body. One choice, one storage key, one fallback: the two tabs are one ladder seen
-  twice, and they each used to own a copy of the rule. The copies had drifted in opposite
-  directions, so a reader on the DEFAULT track (neither body's) opened one tab on CAS and the
-  other on SOA and switching tabs looked like the picker changing itself. Pure and tested.
+- `bodyFilter.ts` — the **SOA / CAS / CIA picker**: which body's exams a list shows, one stored
+  choice with one fallback (the reader's track's body). Until Phase E it rode the title row of
+  the Quiz tab, Study Guides, Resources and the Store; those four read the exam in focus now and
+  have no picker. It is the picker on **Add an exam** (`GuideBody`, with the CIA) and on
+  Flashcards (`ExamBody`; a stored `CIA` reads as no choice there, `loadBody`). Pure and tested.
 - `paging.ts` — a long list a page at a time: 24 items, then **Show more** (`hooks/usePagedList.ts`,
   `components/ShowMore.tsx`). The Resources shelf and question search use it (Data Sources'
   catalogue folds each of its groups itself); how far a list was opened is kept per list and filter choice in sessionStorage, so the
@@ -1386,23 +1385,32 @@ Other important `lib/` modules:
   square (`components/today/ConceptSquares.tsx`) names its concept when pointed at and opens it in
   the concept popup.
 - `examFocus.ts` — the **exam in focus** and the **exam switcher** (`docs/redesign-spec.md` §6
-  and §8, Phase E; step 1 built: Today and the exam page read it, the Study Guides and Quiz
-  lists and the Resources and Store strips don't yet). One exam every place opens on: always one
-  of the reader's exams, the one last used (`resolveFocus`; the nearest date the first time),
-  kept on the account (`user_metadata.exam_in_focus`) and mirrored in the browser by
+  and §8, Phase E, built). One exam every place opens on: always one of the reader's exams, the
+  one last used (`resolveFocus`; the nearest date the first time), kept on the account
+  (`user_metadata.exam_in_focus`) and mirrored in the browser by
   `contexts/ExamProgressContext.tsx`, where the account's value wins on load and on return to
-  the tab. `hooks/useExamInFocus.ts` is the hook. An address naming one of the reader's exams
-  puts it in focus; any other exam page is a **visit** and leaves the focus alone
-  (`addressFocus`). The module is also what the sheet lists (`switcherRows`), what Add an exam
-  lists (`addExamSections`: ready and beta exams by credential, in-development ones folded) and
-  which sittings "When is your exam?" offers (`offeredSittings`: rows of `data/examSittings.ts`,
-  never made up). A **visitor's exams live in the browser** (`quiz.browserExams`, read and
-  written by the same context, joined to the account once on sign-in), so `useExamProgress`
-  works signed out and Today is open to a visitor. The screens are `components/switcher/`:
-  `ExamSwitcherButton` (the control: logo, name, chevron), `ExamSwitcherSheet` (Your exams, with
-  Edit: change date, mark as passed, remove) and `AddExamFlow`, mounted once by
-  `ExamSwitcherHost` and opened through `stores/examSwitcher.ts`. Pure and tested; the flows are
-  `e2e/exam-switcher.spec.ts`.
+  the tab. `hooks/useExamInFocus.ts` is the hook. **An address that names an exam still opens
+  that exam**: if it is one of the reader's it comes into focus, and any other is a **visit**
+  that leaves the focus alone (`addressFocus`); reading an exam never requires adding it. The
+  module is also what the sheet lists (`switcherRows`), what Add an exam lists
+  (`addExamSections`: ready and beta exams by credential, in-development ones folded; it is the
+  full ladder) and which sittings "When is your exam?" offers (`offeredSittings`: rows of
+  `data/examSittings.ts`, never made up). A **visitor's exams live in the browser**
+  (`quiz.browserExams`, read and written by the same context, joined to the account once on
+  sign-in), so `useExamProgress` works signed out and Today is open to a visitor. The screens are
+  `components/switcher/`: `ExamSwitcherButton` (the control: logo, name, chevron),
+  `ExamSwitcherSheet` (Your exams, with Edit: change date, mark as passed, remove) and
+  `AddExamFlow`, mounted once by `ExamSwitcherHost` and opened through `stores/examSwitcher.ts`.
+  **Each place reads it and has no chooser of its own:** Today; the exam page (the strip's logo
+  and name are the control); Study Guides' home (`pages/wiki/WikiHome.tsx`: the exam in focus as
+  one row, Your exams, Resources, the six credentials); the Quiz tab (`hooks/useQuizExamScreen.ts`,
+  `quizTabExam` in `lib/quizBuilder.ts`: the builder of `?topic=`, else of the exam in focus; Add
+  an exam for a reader with none; a sentence for an exam with no bank); Resources (`shelfExams`
+  in `lib/resourceFilters.ts`: `?exam=` names, `?exam=all`, else the exam in focus) and the Store
+  (`?exam=<key>`, `?exam=all`, else the exam in focus, on the region of the page in focus). The
+  last two carry one switch, this exam or **All exams**. Pure and tested; the flows are
+  `e2e/exam-switcher.spec.ts`. The parked onboarding tour's `quiz-exam-p` target went with the
+  Quiz tab's exam list; re-enabling the tour means re-pointing that step.
 - `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
   by difficulty) that Today's Analytics overlay draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator

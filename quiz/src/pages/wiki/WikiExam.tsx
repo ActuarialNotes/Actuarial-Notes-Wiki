@@ -386,7 +386,7 @@ export default function WikiExam() {
   )
   // Always back to the exam list: the browser's Back when the reader came
   // from it (its filters and scroll intact), and up to it from anywhere else.
-  const back = useBack({ to: '/wiki', label: 'All exams' }, EXAM_LIST_ONLY)
+  const back = useBack({ to: '/wiki', label: 'Study Guides' }, EXAM_LIST_ONLY)
   const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
   // How far along this exam's material is. The page's own id, since 6C and 6U
   // share a progress key and not a status.

@@ -1,5 +1,6 @@
 import { expect, test } from './test'
 import { signIn } from './fixtures/signedIn'
+import { studying } from './fixtures/visitor'
 
 // The exam switcher (docs/redesign-spec.md §6): one exam in focus, the sheet
 // of the reader's exams, Add an exam, "When is your exam?" and Edit. A
@@ -148,4 +149,39 @@ test('an exam page\'s address puts the reader\'s exam in focus; any other exam i
   await page.getByTestId('exam-date').getByRole('button', { name: 'Add Exam MAS-I' }).click()
   await expect(page).toHaveURL(/\/dashboard$/)
   await expect(page.getByTestId('today-exam')).toHaveAccessibleName('Switch exam, Exam MAS-I', { timeout: 30_000 })
+})
+
+test('the Quiz tab opens on the exam in focus, and the switcher changes it', async ({ page }) => {
+  await studying(page, [{ exam_id: 'P', target_date: '2027-01-14' }, { exam_id: 'FM', target_date: '2027-04-14' }])
+  await page.goto('/')
+  const control = page.getByTestId('exam-switcher')
+  await expect(control).toHaveAccessibleName('Switch exam, Exam P-1', { timeout: 30_000 })
+  await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
+
+  await control.click()
+  await page.getByRole('dialog', { name: 'Your exams' }).getByRole('radio', { name: /^Exam FM/ }).click()
+  await expect(control).toHaveAccessibleName('Switch exam, Exam FM-2')
+
+  // An address that names an exam still opens it; one the reader hasn't added is a visit.
+  await page.goto('/?topic=Exam%205')
+  await expect(control).toHaveAccessibleName('Switch exam, Exam 5', { timeout: 30_000 })
+  expect(await page.evaluate(() => localStorage.getItem('quiz.dashboard.activeExamId'))).toBe('FM-2')
+  // One the reader has added comes into focus.
+  await page.goto('/?topic=Probability')
+  await expect(control).toHaveAccessibleName('Switch exam, Exam P-1', { timeout: 30_000 })
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('quiz.dashboard.activeExamId'))).toBe('P-1')
+})
+
+test('the Quiz tab with no exams is Add an exam, and an exam with no questions says so', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible({ timeout: 30_000 })
+
+  await page.evaluate(() => localStorage.setItem('quiz.browserExams', JSON.stringify([
+    { exam_id: 'CAS-PCPA', status: 'in_progress', target_date: null },
+  ])))
+  await page.reload()
+  const none = page.getByTestId('quiz-no-bank')
+  await expect(none).toContainText('has no practice questions yet.', { timeout: 30_000 })
+  await none.getByRole('link', { name: 'Open its study guide' }).click()
+  await expect(page).toHaveURL(/\/wiki\/exam\//)
 })

@@ -1,4 +1,5 @@
 import { test, expect } from './test'
+import { studying } from './fixtures/visitor'
 
 // The Store (docs/store.md): real products, each bought on its seller's own
 // page. Nothing here is bought in the app, so the smoke checks the shelf
@@ -13,10 +14,10 @@ test.describe('store', () => {
       await expect(page.getByRole('heading', { name: aisle, exact: true })).toBeVisible()
     }
 
-    // The exam strip is a radiogroup: choosing FM opens FM's kit, its steps
-    // with registration in the spotlight.
-    await page.getByRole('radio', { name: 'Exam FM' }).click()
-    await expect(page).toHaveURL(/exam=FM/)
+    // An address that names an exam opens its kit, its steps with registration
+    // in the spotlight; All exams is one tap away.
+    await page.goto('/store?exam=FM')
+    await expect(page.getByRole('radiogroup', { name: 'Exams shown' }).getByRole('radio', { name: 'Exam FM' })).toBeChecked()
     const kit = page.getByTestId('store-kit')
     await expect(kit.getByTestId('store-kit-next')).toContainText('Register')
     await expect(page.getByTestId('store-item-register-FM')).toBeVisible()
@@ -37,36 +38,34 @@ test.describe('store', () => {
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 
-  test('switches between the SOA and CAS ladders, and searches the shelf', async ({ page }) => {
+  test('opens on the exam in focus, shows every exam, and searches the shelf', async ({ page }) => {
+    await studying(page)
     await page.goto('/store')
-    await page.getByRole('radio', { name: 'SOA', exact: true }).click()
-    await expect(page.getByRole('radio', { name: 'Exam FAM' })).toBeVisible()
-    await expect(page.getByRole('radio', { name: 'Exam 5' })).toHaveCount(0)
-    await page.getByRole('radio', { name: 'Exam FAM' }).click()
-    await expect(page.getByTestId('store-item-register-FAM')).toBeVisible()
+    const shown = page.getByRole('radiogroup', { name: 'Exams shown' })
+    await expect(shown.getByRole('radio', { name: 'Exam P' })).toBeChecked()
+    await expect(page.getByTestId('store-kit')).toBeVisible()
+    await expect(page.getByTestId('store-item-register-P')).toBeVisible()
 
-    // The SOA's exams past FM are off the CAS ladder, so the choice goes.
-    await page.getByRole('radio', { name: 'CAS', exact: true }).click()
-    await expect(page).not.toHaveURL(/exam=FAM/)
-    await expect(page.getByRole('radio', { name: 'Exam FAM' })).toHaveCount(0)
+    await shown.getByRole('radio', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/exam=all/)
+    await expect(page.getByTestId('store-kit')).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Registration', exact: true })).toBeVisible()
 
-    // The search bar narrows every aisle at once, and rides the URL.
+    // The search bar narrows every aisle at once, on either body's exams, and rides the URL.
     await page.getByRole('textbox', { name: 'Search the Store' }).fill('Exam 9')
     await expect(page).toHaveURL(/q=Exam/)
     await expect(page.getByTestId('store-item-register-CAS-9')).toBeVisible()
     await expect(page.getByTestId('store-item-register-CAS-5')).toHaveCount(0)
   })
 
-  test('shows Exam 6 once, with its regions under the strip', async ({ page }) => {
+  test('opens Exam 6 on the region the reader is studying', async ({ page }) => {
+    await studying(page, [{ exam_id: 'CAS-6', variant: 'CA' }])
     await page.goto('/store')
-    await page.getByRole('radio', { name: 'CAS', exact: true }).click()
-    await expect(page.getByRole('radio', { name: 'Exam 6', exact: true })).toHaveCount(1)
-    await page.getByRole('radio', { name: 'Exam 6', exact: true }).click()
-    const regions = page.getByTestId('exam-variants')
-    await expect(regions).toBeVisible()
-    await regions.getByRole('radio', { name: 'Canada' }).click()
-    await expect(page).toHaveURL(/region=6C/)
+    await expect(page.getByRole('radiogroup', { name: 'Exams shown' }).getByRole('radio', { name: 'Exam 6' })).toBeChecked()
     await expect(page.getByTestId('store-item-register-CAS-6')).toBeVisible()
+    // An address can still name a region.
+    await page.goto('/store?exam=CAS-6&region=6U')
+    await expect(page.getByTestId('store-kit')).toBeVisible()
   })
 
   test('opens a product sheet whose button goes to the seller', async ({ page }) => {

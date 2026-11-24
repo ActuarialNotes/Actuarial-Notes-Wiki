@@ -1,4 +1,5 @@
 import { test, expect, type Page } from './test'
+import { studying } from './fixtures/visitor'
 
 // Paper on a desk (lib/viewTransition.ts, components/PaperRouter.tsx): every
 // change of page is a view transition — the desk slides between tabs, a sheet
@@ -38,15 +39,10 @@ function shell(page: Page) {
     const bar = document.querySelector('[class*="sticky"][class*="top-0"][class*="z-50"]')
     const input = document.querySelector('input[type="text"]')
     const h1 = document.querySelector('h1')
-    const picker = document.querySelector('[aria-label="Examining body"]')
-    // The picker is anchored by its right edge: Study Guides offers a third
-    // body (the CIA), so its picker is wider than the Quiz tab's.
-    const anchored = (r: DOMRect) => ({ right: Math.round(r.right), y: Math.round(r.y), h: Math.round(r.height) })
     return {
       bar: bar ? round(bar.getBoundingClientRect()) : null,
       input: input ? round(input.getBoundingClientRect()) : null,
       title: h1 ? round(h1.getBoundingClientRect()) : null,
-      picker: picker ? anchored(picker.getBoundingClientRect()) : null,
     }
   })
 }
@@ -74,6 +70,7 @@ test.describe('tab-switch view transitions', () => {
   })
 
   test('switching tabs runs a transition, and lands', async ({ page }) => {
+    await studying(page)
     await page.goto('/')
     await page.evaluate(() => {
       const w = window as unknown as { __vtCalls: number }
@@ -96,7 +93,7 @@ test.describe('tab-switch view transitions', () => {
 
     await page.getByRole('link', { name: 'Quiz' }).first().click()
     await page.waitForURL(url => url.pathname === '/')
-    await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+    await expect(page.getByTestId('exam-switcher')).toBeVisible()
   })
 
   test('each kind of move is drawn as its own paper move', async ({ page }) => {
@@ -114,8 +111,9 @@ test.describe('tab-switch view transitions', () => {
     })
     const moves = () => page.evaluate(() => (window as unknown as { __moves: string[] }).__moves)
 
+    await studying(page)
     await page.goto('/')
-    await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
+    await expect(page.getByTestId('exam-switcher')).toBeVisible()
 
     // Quiz → Study Guides: the tab to the left.
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
@@ -152,24 +150,7 @@ test.describe('tab-switch view transitions', () => {
       }) as typeof document.startViewTransition
     })
     const moves = () => page.evaluate(() => (window as unknown as { __moves: string[] }).__moves)
-    const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
-
-    // The Quiz tab's exam list and one exam's builder are both `/`: picking
-    // an exam lays the builder over the list, opened at its top, and the back
-    // arrow swipes it off onto the list as it was left.
     await page.goto('/')
-    const examP = page.locator('button[data-tour="quiz-exam-p"]')
-    await expect(examP).toBeVisible()
-    await page.evaluate(() => window.scrollTo(0, 120))
-    await examP.scrollIntoViewIfNeeded()
-    const listY = await scrollY()
-    await examP.click()
-    const changeExam = page.getByRole('button', { name: 'Change exam' })
-    await expect(changeExam).toBeVisible()
-    expect(await scrollY()).toBe(0)
-    await changeExam.click()
-    await expect(examP).toBeVisible()
-    expect(await scrollY()).toBe(listY)
 
     // Games is a page of its own; Quiz Battle's way in and its setups are all `/battle`.
     await page.getByTestId('quiz-games-entry').click()
@@ -187,7 +168,7 @@ test.describe('tab-switch view transitions', () => {
     await page.getByRole('button', { name: 'Back', exact: true }).click()
     await expect(page.getByTestId('battle-home')).toBeVisible()
 
-    await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'push', 'pop'])
+    await expect.poll(moves).toEqual(['push', 'push', 'push', 'pop'])
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })
 
@@ -228,28 +209,21 @@ test.describe('tab-switch view transitions', () => {
     await expect(page.locator('.paper-sheet')).toHaveCSS('view-transition-name', 'none')
   })
 
-  test('the two tabs open on the same shell, and the same examining body', async ({ page }) => {
+  test('the two tabs open on the same shell', async ({ page }) => {
     await page.goto('/')
     // Exact: the Quiz Battle card's title is a heading on the same page.
     await expect(page.getByRole('heading', { name: 'Quiz', exact: true })).toBeVisible()
     const quiz = await shell(page)
-    const quizBody = await page.locator('[data-segment][aria-checked="true"]').getAttribute('data-segment')
 
     await page.goto('/wiki')
     await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
     const study = await shell(page)
-    const studyBody = await page.locator('[data-segment][aria-checked="true"]').getAttribute('data-segment')
-
-    // A fresh reader is on the DEFAULT track, which is neither body's. The two
-    // tabs used to fall back in opposite directions from there.
-    expect(quizBody).toBe(studyBody)
 
     expect(quiz.bar).not.toBeNull()
     expect(quiz.bar).toEqual(study.bar)
     expect(quiz.input).toEqual(study.input)
     expect(quiz.title?.y).toBe(study.title?.y)
     expect(quiz.title?.x).toBe(study.title?.x)
-    expect(quiz.picker).toEqual(study.picker)
   })
 })
 

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
-import { SegmentedControl } from '@/components/ui/SegmentedControl'
-import type { ExamBody } from '@/lib/bodyFilter'
 import { cn } from '@/lib/utils'
 
 /**
@@ -19,8 +17,6 @@ import { cn } from '@/lib/utils'
 export function QuizTitleRow({
   hasTopic,
   signedIn,
-  body,
-  onBodyChange,
   concept,
   conceptCount,
   onClearConcept,
@@ -28,9 +24,6 @@ export function QuizTitleRow({
   /** An exam's builder is open. */
   hasTopic: boolean
   signedIn: boolean
-  /** The examining body the exam list is showing. */
-  body: ExamBody
-  onBodyChange: (body: ExamBody) => void
   /** A single-concept filter, from the dashboard or a search; '' for none. */
   concept: string
   /** How many questions that concept holds. */
@@ -52,21 +45,6 @@ export function QuizTitleRow({
               <span className="hidden sm:inline"> to save progress</span>
             </Link>
           )}
-          {/* The body picker rides the title row, the shape the Study Guides
-              tab opens on — it governs the whole exam list below, so it sits
-              with the title rather than in a label row of its own. */}
-          <SegmentedControl
-            label="Examining body"
-            size="lg"
-            pill
-            value={body}
-            onChange={onBodyChange}
-            options={[
-              { value: 'SOA', label: 'SOA' },
-              { value: 'CAS', label: 'CAS' },
-            ]}
-            className="shrink-0"
-          />
         </div>
       )}
 

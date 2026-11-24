@@ -134,25 +134,7 @@ export function formatTargetDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
 }
 
-/**
- * The exam the Quiz tab opens on: the one its address names (`?topic=`), else
- * the exam in focus when it has a question bank. Undefined when neither does:
- * a reader with no exams, or one whose exam in focus has no questions yet.
- */
-export function quizTabExam(
-  urlTopic: string,
-  focus: { progressKey: string; examId: string } | null,
-  exams: readonly QuizExam[] = QUIZ_EXAMS,
-): QuizExam | undefined {
-  if (urlTopic) return quizExamFor(urlTopic, exams)
-  if (!focus) return undefined
-  return exams.find(e => e.progressKey === focus.progressKey && (!e.examId || e.examId === focus.examId))
-}
-
 // ─── The builder's choices ────────────────────────────────────────────────────
-
-/** The question counts a quiz offers, beside today's plan's "Full plan". */
-export const QUICK_COUNTS = [1, 3, 5, 10]
 
 /**
  * Where the builder's questions come from: today's plan, a hand-picked set of
@@ -299,29 +281,6 @@ export function drawSignature(input: {
     [...input.concepts].sort().join(','),
     input.levelsParam ?? '',
   ].join('§')
-}
-
-/**
- * The filter the search bar opens on: the exam (and paper) as its Exam /
- * Sitting choices, ticked, and the concepts as the pool.
- */
-export function quizSearchFilter(input: {
-  topic: string
-  source: QuizSource
-  sitting: QuizSitting
-  concept: string
-  concepts: readonly string[]
-  /** Today's plan, when it is the source in use. */
-  todaysPlan: StudyPlan | null
-}): QuestionFilter {
-  const { topic, source, sitting, concept, concepts, todaysPlan } = input
-  if (concept) return { concept }
-  if (!topic) return {}
-  // Past papers: the shelf's selection is the pool. Opening the search while
-  // Spring 2019 is picked should show that paper, not the whole exam.
-  if (source === 'papers') return papersFilter(topic, sitting)
-  if (todaysPlan) return conceptsFilter(topic, planConceptsToday(todaysPlan))
-  return conceptsFilter(topic, concepts)
 }
 
 // ─── The syllabus ─────────────────────────────────────────────────────────────

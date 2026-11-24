@@ -13,7 +13,6 @@ import {
   drawSignature,
   formatTargetDate,
   groupConceptsBySyllabus,
-  quizTabExam,
   newQuestionCount,
   orderConceptsBySyllabus,
   papersFilter,
@@ -22,7 +21,6 @@ import {
   quizLaunchUrl,
   quizQuestionCount,
   quizQuestionCounts,
-  quizSearchFilter,
   quizTrackGroups,
   quizWikiExamId,
   savedConceptsKey,
@@ -131,19 +129,6 @@ describe('the exams', () => {
   it('dates an exam row by month and year', () => {
     expect(formatTargetDate('2026-09-15T12:00:00')).toBe('Sep 26')
   })
-
-  it('opens the tab on the exam its address names, else the exam in focus', () => {
-    const p = { progressKey: 'P', examId: 'P-1' }
-    expect(quizTabExam('Exam 5', p)?.value).toBe('Exam 5')
-    expect(quizTabExam('', p)?.value).toBe('Probability')
-    // A regional exam's bank is its page's: 6C has one, 6U has none.
-    expect(quizTabExam('', { progressKey: 'CAS-6', examId: '6C' })?.value).toBe('Exam 6C')
-    expect(quizTabExam('', { progressKey: 'CAS-6', examId: '6U' })).toBeUndefined()
-    // No exams, an exam with no bank, an address naming no exam: no builder.
-    expect(quizTabExam('', null)).toBeUndefined()
-    expect(quizTabExam('', { progressKey: 'CAS-PCPA', examId: 'PCPA' })).toBeUndefined()
-    expect(quizTabExam('Exam Nothing', p)).toBeUndefined()
-  })
 })
 
 describe('the draw', () => {
@@ -204,19 +189,6 @@ describe('the draw', () => {
     expect(drawSignature({ ...input, concepts: ['A', 'B'] })).toBe(drawSignature(input))
     expect(drawSignature({ ...input, sitting: { year: 2019 } })).toContain('2019|')
     expect(drawSignature({ ...input, levelsParam: 'easy' })).not.toBe(drawSignature(input))
-  })
-
-  it('opens the search on the pool the builder shows', () => {
-    const base = { topic: 'Exam 5', source: 'custom' as const, sitting: null, concept: '', concepts: ['Trend'], todaysPlan: null }
-    expect(quizSearchFilter(base)).toEqual({ exam: 'Exam 5', concepts: ['Trend'] })
-    expect(quizSearchFilter({ ...base, concept: 'Trend' })).toEqual({ concept: 'Trend' })
-    expect(quizSearchFilter({ ...base, topic: '' })).toEqual({})
-    expect(quizSearchFilter({ ...base, source: 'papers', sitting: { year: 2019, session: 'Fall' } }))
-      .toEqual({ exam: 'Exam 5', year: 2019, session: 'Fall' })
-    expect(quizSearchFilter({ ...base, source: 'today', todaysPlan: plan({ todaysConcepts: ['Chain Ladder'] }) }))
-      .toEqual({ exam: 'Exam 5', concepts: ['Chain Ladder'] })
-    expect(quizSearchFilter({ ...base, source: 'today', todaysPlan: plan({ status: 'review_mode', reviewConcepts: [] }) }))
-      .toEqual({ exam: 'Exam 5' })
   })
 
   it("names the past-paper shelf's documents", () => {

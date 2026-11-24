@@ -5,7 +5,7 @@ import { examAccentStyle } from '@/lib/examColors'
 import { Group, GroupRow } from '@/components/ui/GroupedList'
 import { InfoSheet } from '@/components/ui/InfoSheet'
 import { GROUP_ACTION_ROW, PublisherChip, RowChevron, RowTile } from '@/components/ui/infoRows'
-import { useOpenQuizSearch } from '@/components/quizSearchContext'
+import { useNavigate } from 'react-router-dom'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { examAbout } from '@/data/examSittingDetails'
@@ -50,7 +50,7 @@ export function QuizExamInfoButton({
   questions: readonly Question[]
 }) {
   const [open, setOpen] = useState(false)
-  const openSearch = useOpenQuizSearch()
+  const navigate = useNavigate()
   const triggerRef = useRef<HTMLButtonElement>(null)
   const label = `About the ${examLabel} question bank`
 
@@ -82,7 +82,7 @@ export function QuizExamInfoButton({
           wikiExamId={wikiExamId}
           questions={questions}
           onClose={close}
-          onBrowse={openSearch ? () => { setOpen(false); openSearch() } : undefined}
+          onBrowse={() => { setOpen(false); navigate(`/search?tab=questions&exam=${encodeURIComponent(exam)}`) }}
         />
       )}
     </>

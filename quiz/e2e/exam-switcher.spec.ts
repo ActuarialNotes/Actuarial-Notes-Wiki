@@ -154,7 +154,7 @@ test('an exam page\'s address puts the reader\'s exam in focus; any other exam i
 test('the Quiz tab opens on the exam in focus, and the switcher changes it', async ({ page }) => {
   await studying(page, [{ exam_id: 'P', target_date: '2027-01-14' }, { exam_id: 'FM', target_date: '2027-04-14' }])
   await page.goto('/')
-  const control = page.getByTestId('exam-switcher')
+  const control = page.getByTestId('practice-exam')
   await expect(control).toHaveAccessibleName('Switch exam, Exam P-1', { timeout: 30_000 })
   await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
 

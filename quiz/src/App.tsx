@@ -88,6 +88,7 @@ const { Component: Settings, preload: loadSettings } = lazyRoute(() => import('@
 const { Component: You, preload: loadYou } = lazyRoute(() => import('@/pages/You'))
 const { Component: League, preload: loadLeague } = lazyRoute(() => import('@/pages/League'))
 const { Component: Search, preload: loadSearch } = lazyRoute(() => import('@/pages/Search'))
+const { Component: PastPapers, preload: loadPastPapers } = lazyRoute(() => import('@/pages/PastPapers'))
 const { Component: Upgrade, preload: loadUpgrade } = lazyRoute(() => import('@/pages/Upgrade'))
 // The onboarding tour is parked (TOUR_ENABLED is off): lazy, so a parked
 // feature costs first paint nothing.
@@ -124,6 +125,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/you') return loadYou()
   if (route === '/you/league') return loadLeague()
   if (route === '/search') return loadSearch()
+  if (route === '/papers') return loadPastPapers()
   if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
@@ -448,6 +450,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 {/* Analytics was a screen of its own; it is an overlay on Today now. */}
                 <Route path="/dashboard/analytics" element={<Navigate to="/dashboard?show=analytics" replace />} />
                 <Route path="/search" element={<Suspense fallback={<WikiFallback />}><Search /></Suspense>} />
+                <Route path="/papers" element={<ErrorBoundary><Suspense fallback={<WikiFallback />}><PastPapers /></Suspense></ErrorBoundary>} />
                 <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Suspense fallback={<WikiFallback />}><Settings /></Suspense>} />

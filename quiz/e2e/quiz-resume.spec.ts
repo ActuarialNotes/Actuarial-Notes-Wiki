@@ -86,7 +86,7 @@ test.describe('quiz in progress', () => {
   // Quit leads back to where the quiz was started — here, Exam P's builder,
   // still open (lib/navTrail.ts).
   test('quitting returns to the builder the quiz was started from', async ({ page }) => {
-    const switcher = page.getByTestId('exam-switcher')
+    const switcher = page.getByTestId('practice-exam')
     const start = page.locator('[data-tour="start-quiz"]')
 
     await page.goto('/?topic=Probability')

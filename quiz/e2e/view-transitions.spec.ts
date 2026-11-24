@@ -32,21 +32,6 @@ function transitionNames(page: Page, move: string): Promise<string[]> {
   }, move)
 }
 
-/** The shell geometry the two tabs must share. */
-function shell(page: Page) {
-  return page.evaluate(() => {
-    const round = (r: DOMRect) => ({ x: Math.round(r.x), y: Math.round(r.y), h: Math.round(r.height) })
-    const bar = document.querySelector('[class*="sticky"][class*="top-0"][class*="z-50"]')
-    const input = document.querySelector('input[type="text"]')
-    const h1 = document.querySelector('h1')
-    return {
-      bar: bar ? round(bar.getBoundingClientRect()) : null,
-      input: input ? round(input.getBoundingClientRect()) : null,
-      title: h1 ? round(h1.getBoundingClientRect()) : null,
-    }
-  })
-}
-
 test.describe('tab-switch view transitions', () => {
   test.use({ reducedMotion: 'no-preference' })
 
@@ -93,7 +78,7 @@ test.describe('tab-switch view transitions', () => {
 
     await page.getByRole('link', { name: 'Quiz' }).first().click()
     await page.waitForURL(url => url.pathname === '/')
-    await expect(page.getByTestId('exam-switcher')).toBeVisible()
+    await expect(page.getByTestId('practice-exam')).toBeVisible()
   })
 
   test('each kind of move is drawn as its own paper move', async ({ page }) => {
@@ -113,7 +98,7 @@ test.describe('tab-switch view transitions', () => {
 
     await studying(page)
     await page.goto('/')
-    await expect(page.getByTestId('exam-switcher')).toBeVisible()
+    await expect(page.getByTestId('practice-exam')).toBeVisible()
 
     // Quiz → Study Guides: the tab to the left.
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
@@ -207,23 +192,6 @@ test.describe('tab-switch view transitions', () => {
 
     await expect.poll(turns).toEqual([{ move: 'turn', named: true }, { move: 'return', named: true }])
     await expect(page.locator('.paper-sheet')).toHaveCSS('view-transition-name', 'none')
-  })
-
-  test('the two tabs open on the same shell', async ({ page }) => {
-    await page.goto('/')
-    // Exact: the Quiz Battle card's title is a heading on the same page.
-    await expect(page.getByRole('heading', { name: 'Quiz', exact: true })).toBeVisible()
-    const quiz = await shell(page)
-
-    await page.goto('/wiki')
-    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
-    const study = await shell(page)
-
-    expect(quiz.bar).not.toBeNull()
-    expect(quiz.bar).toEqual(study.bar)
-    expect(quiz.input).toEqual(study.input)
-    expect(quiz.title?.y).toBe(study.title?.y)
-    expect(quiz.title?.x).toBe(study.title?.x)
   })
 })
 

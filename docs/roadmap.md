@@ -442,11 +442,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   Tools screen by exam, the tool page's outlined answer with Learn the method and Practice this,
   an attempt's overview, and briefs open to every reader) was built the same day. Phase H (You: the profile at `/you`, the league at
   `/you/league` and Settings as one grouped screen, replacing the level badge's popup and the
-  sidebar's theme, sound and account menu) was built the same day.
+  sidebar's theme, sound and account menu) was built the same day. Phase G (Practice: the home with the quiz card and its rows, the
+  setup popup, Past papers with a paper's last result, Flashcards as one card at a time with a
+  Deck popup, and the one search at `/search`) was built the same day too.
   **Phase E (the exam switcher) is built (2026-11-24):** one exam in focus, kept with the
   account; the sheet, Add an exam and "When is your exam?"; a visitor has Today from the
-  browser's record (R11). Today, the exam page, Study Guides, the Quiz tab, Resources and the
-  Store read it, and their exam lists, strips and body pickers are gone. Phases G and F are open.
+  browser's record (R11). Today, the exam page, Study Guides, Practice, Resources and the
+  Store read it, and their exam lists, strips and body pickers are gone. Phase F (the navigation) is open.
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
   say what is assigned, and the outline taking up most of the page. `docs/resource-page-v2.md` is the
@@ -1085,7 +1087,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
 | `docs/design-review.md` | Review: the whole app against the Laws of UX, and a redesign proposal (mock-ups in `design-review-mockups.html`) | X11 (§3.4) | Active. Phase 0 built | 2026-11-15 |
-| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phases A (the visual base), B (Today), C (the session), D (Learn), H (You) and I (Apply) built; see the spec | 2026-11-23 |
+| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phases A (the visual base), B (Today), C (the session), D (Learn), G (Practice), H (You) and I (Apply) built; see the spec | 2026-11-23 |
 | `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Active. Phase 1 built | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |

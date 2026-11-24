@@ -1,9 +1,11 @@
 # The past-paper browser
 
-The **Past Papers** source on the quiz builder (`quiz/src/pages/Landing.tsx`) is a browser of
-the exam's **past sittings**, not a single generated draw. Scrolling the shelf shows every
-paper the exam has released, how many questions each one holds, and — once the figures are
-filled in — the sitting's **effective pass ratio**.
+**Past papers** (`quiz/src/pages/PastPapers.tsx`, `/papers`, a row on Practice) is a browser of
+the exam's **past sittings**, not a single generated draw: one row for every paper the exam has
+released, newest first, the older ones folded under one row, and a paper the reader has already
+sat showing its last result as a small bar. A row opens the paper's popup, which carries how many
+questions it holds, the **pass ratio** where one is published, the paper's documents and Start
+Practice Exam.
 
 ## What it's called on screen
 
@@ -14,20 +16,34 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 
 | Label | Where | When |
 |---|---|---|
-| `examSourceLabel(rows)` → **Past Papers** | The paper tile on the quiz setup screen, and the sheet it opens | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
-| `examSourceLabel(rows)` → **By Source** | The same tile | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
-| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The in-quiz mode pill, the quit dialog, the completion heading (the setup screen's tile says *Practice exam*) | The session is sat as a practice exam — a past paper, or the practice exam tile's draw |
+| `examSourceLabel(rows)` → **Past papers** | The row on Practice, and the screen it opens | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
+| `examSourceLabel(rows)` → **Sample questions** | The same row, which opens a popup | It has none — Exam P and FM draw on the SOA's rolling sample set, published as a questions PDF and a solutions PDF |
+| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The row on Practice, the popups' Start button, the quit dialog, the completion heading | The session is sat as a practice exam: a past paper, or a draw from the whole bank |
 
-**The setup screen, and where the shelf sits on it.** An exam's quiz setup screen is a card
-for the reader's own **Quiz** (a short set from the topics, count and difficulties picked;
-answers as you go by default) and, under it, two tiles for whole papers: **Practice exam** — the
-whole bank drawn to the paper's shape (`drawPracticeExam`) — and **Past Papers**, which opens this
-shelf in the setup sheet. Both are sat as a **Practice Exam** (full length, every difficulty,
-answers at the end by default; the sheet's switches change the reveal, the clock and the concept
-links, remembered for the format). The mode id `mock-exam` is the format; `source === 'papers'`
-is the shelf. A link carrying `mode=mock-exam` opens the screen with the shelf's sheet up. A
-past paper is no longer sat as a short quiz from the builder: what a few questions of one sitting
-were for, the card's topics and count now do.
+**Where it sits.** Practice's home (`docs/redesign-spec.md` §7a) is a card for the reader's own
+**quiz** and three rows. **Practice Exam** opens a popup for the whole bank drawn to the paper's
+shape (`drawPracticeExam`). **Past papers** goes to the shelf at `/papers?topic=<bank label>`.
+Both are sat as a **Practice Exam** (full length, every difficulty, answers at the end by
+default; the popup's three switches change the reveal, the clock and the concept links,
+remembered for the format). The mode id `mock-exam` is the format. A link to `/` carrying
+`mode=mock-exam` goes on to `/papers`, and `/papers?paper=2019|Spring` opens that paper's popup.
+
+**The shelf** (`foldPapers` in `lib/practiceHome.ts`) lists the newest eight sittings and puts
+the rest under one row named for the years it spans ("2011 to 2015"), never splitting a year. A
+paper not added yet is dimmed and says so.
+
+**A paper's popup** (`components/practice/PaperPopup.tsx`; decided 2026-11-23, the design draws
+no screen for it): the questions the bank holds for the sitting and the time they take at the
+exam's pace; the pass ratio under its own label ("Effective pass rate" is a CAS measure, so an
+SOA sitting only ever shows "Pass rate"); **Last sat**; the examiner's report (or the sample
+set's two PDFs), read in the app; the switches; **Start Practice Exam**. A paper not added yet
+has no Start.
+
+**The last result** (`lib/paperResults.ts`) is written when a quiz launched as a sitting
+(`year=` in its address) is finished in the practice-exam format: how many of its questions were
+correct, incorrect, partial and unanswered, kept in the browser under the sitting's key. A retry
+of the paper's misses is not the paper and leaves it alone. The bar is in the answer colours
+(`docs/style-guide.md` §13.10).
 
 **A practice exam of no one sitting is shaped like the paper** (`lib/practiceExam.ts`,
 `drawPracticeExam`, used by `useQuestions` and the builder's shuffle alike):
@@ -68,7 +84,9 @@ hard it turned out to be, or that a sitting exists but hasn't been imported yet.
 |---|---|
 | `quiz/src/data/pastExams.ts` | The authored catalogue: which sittings exist, plus their published statistics |
 | `quiz/src/lib/pastExams.ts` | Pure read side: merges the catalogue with the question bank into `PastExamRow[]` |
-| `quiz/src/components/PastExamBrowser.tsx` | The shelf UI |
+| `quiz/src/pages/PastPapers.tsx` | The shelf: a row a sitting, the fold, the last-result bar |
+| `quiz/src/components/practice/PaperPopup.tsx` | What a paper opens to |
+| `quiz/src/lib/paperResults.ts` | A paper's last result, kept in the browser |
 
 ### Rows come from the catalogue *and* the bank
 
@@ -118,7 +136,7 @@ casact.org lists none earlier. They are filed in the Exam 9 bank under their own
 and since today's Exam 9 kept only four of their readings, 149 of their 172 questions are
 `off_syllabus`: the shelf still holds every paper whole. Exam P and Exam FM have
 **no** sittings — the SOA publishes a rolling sample-question set rather than dated papers —
-so their browser is the Mix row alone, with the sample-questions PDF linked underneath.
+so they have no shelf: Practice offers **Sample questions**, a popup with the sample set's PDFs.
 
 A sitting is transcribed from the examining body's list, never inferred from what the bank
 happens to hold — the same rule the pass ratios below follow, and for the same reason: a row
@@ -148,7 +166,7 @@ The examining bodies serve no CORS headers, so the browser cannot fetch these ta
 itself — the request is blocked before it starts. The fetch therefore happens server-side:
 
 ```
-PastExamBrowser ← PastPaperShelf ← Landing ← applyPassRates(rows, records)
+PaperPopup ← PastPapers ← applyPassRates(rows, records)
                                                ↑
                                hooks/useExamPassRates → GET /api/pass-rates?exam=Exam%205
                                                                ↓  (Vercel function)
@@ -244,18 +262,11 @@ than dropping it.
 
 ### The papers and the pass rates
 
-The selected row carries its own papers: the report (and, for the SOA's sample sets, the
-solutions as a second button) sits on that row, before its checkmark — on a phone, on a line
-of its own under the label. A radio can't contain a link, so each row is a `div` whose radio
-stretches an `::after` over the whole row, with the PDF buttons raised above that overlay as
-siblings; a tap anywhere else on the row still selects it.
-
 | Control | What it is | Shown when |
 |---|---|---|
-| Examiner's report | The selected sitting's paper, opened in the in-app PDF viewer (icon + `PDF` tag), on the selected row | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF (on the Mix row) |
+| Examiner's report | The sitting's paper, a row in its popup, opened in the in-app PDF viewer | `getSittingPdfLink` has that sitting. For an exam with no dated papers, the Sample questions popup carries `getExamPdfLink`'s question PDF and `getExamSolutionsPdfLink`'s solutions |
 
-The report tracks the *selection*, so it moves with the checkmark as you go down the shelf
-— a sitting whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.
+A sitting whose report isn't in `SITTING_PDF_LINKS` shows no row rather than a dead one.
 
 ## Reading the paper (`PdfViewerPanel`)
 

@@ -476,24 +476,6 @@ html:has(.concept-popup-aside[data-focus="true"]) [data-above-reader] {
   }
 }
 
-/* Gallery panel: the page's top bar sits above everything, so start under it —
-   the 3.5rem row the app header used to hold below lg, and the Flashcards
-   search bar holds at every width (see components/FlashcardsSearchBar.tsx).
-   On desktop the panel also respects the sidebar width, so the sidebar stays
-   visible. */
-.gallery-panel {
-  top: 3.5rem;
-}
-
-@media (min-width: 1024px) {
-  .gallery-panel {
-    left: var(--sidebar-width, 16rem);
-    transition-property: left;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 200ms;
-  }
-}
-
 /* Focus mode: the concept is the only thing on screen. The panel fills the
    viewport and layers above the floating search bar (z-50), the fixed mobile
    header (z-30) and the in-flow desktop sidebar, so no other chrome shows through

@@ -30,11 +30,10 @@ differences are listed in §9.
 | Apply | Apply | `Apply` (home), `ApplyTools`, `Tool`, `Project` (an attempt in progress) | Designed, phone only. `Tool` is a restyle of the existing template, not a redesign |
 
 Not drawn: the feedback screen after a correct answer; the "Edit" state of the exam switcher;
-desktop layouts for anything but Today; a past paper's own screen (pass rate, the paper and
-examiner's report PDFs); the flashcard deck's management (add, remove, reorder, the grid);
-Projects' locked state for a reader without Pro; Apply for an exam with no project and no
+desktop layouts for anything but Today; Projects' locked state for a reader without Pro; Apply for an exam with no project and no
 tools; Workflows' own screens (unchanged by this design); the Store, Help and Gem Shop behind
-the profile.
+the profile. A past paper's own screen and the flashcard deck's management were not drawn
+either; both were decided when Practice was built (§8, Phase G).
 
 Each canvas file is `project/<Name>.dc.html`: plain HTML with inline styles, readable with the
 Artifact tool's `read` action. Every figure in them is sample data (Exam P at 27%, 52 days,
@@ -555,7 +554,7 @@ once and needs You to exist.
 | **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** (built 2026-11-24) | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
-| **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
+| **G. Practice** (built 2026-11-23) | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** (built 2026-11-23) | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** (built 2026-11-23) | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
@@ -714,6 +713,64 @@ What was decided while building it:
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
 
+**Phase G is built.** Practice's home is `pages/Landing.tsx` (still at `/`, the sidebar row
+still "Quiz" until Phase F) over `components/practice/` and `lib/practiceHome.ts`; Past papers is
+`pages/PastPapers.tsx` (`/papers`); Flashcards is `pages/Flashcards.tsx` with
+`components/flashcards/`; the one search is `pages/Search.tsx` over `lib/oneSearch.ts`. What was
+decided while building it, the first four with the maintainer (2026-11-23):
+
+- **A past paper opens a popup**, not a screen and not the paper itself: the sitting's name,
+  how many questions it holds and the time at the exam's pace, the pass rate where one is
+  published (under its own label, "Pass rate" or "Effective pass rate"), the reader's last
+  result with its counts, rows that open the paper's documents in the app's PDF reader, the
+  three switches, and **Start Practice Exam**. A paper not added yet opens the same popup with
+  "Not added yet", its pass rate and documents, and no Start. The **Practice Exam** row opens
+  the same popup with no paper's facts, since a three-hour paper shouldn't start on one tap and
+  its switches (R3) need somewhere to be.
+- **The deck is a popup on the card screen.** **Deck** opens the grid: tap a card to go to it,
+  drag to reorder, remove one, clear the completed ones, Remove all. **+** opens the existing
+  picker. **More** holds Read the concept, Shuffle, Show the back first, what the back shows
+  (definition, formulas, figures), Focus mode, Clear completed, Study them all again, Remove
+  this card and Keyboard shortcuts. **Again** and **Got it** stay under a flipped card as
+  outlined buttons, and the end-of-deck summary is a popup. Nothing a reader could do before
+  was removed but the gallery's flippable tiles and the orderings no control reached.
+- **Search covers every exam, the exam in focus first.** Within each kind the exam in focus's
+  results lead, in match order, and a result from another exam carries its exam's name.
+- **The one search replaces three:** the old Search page (same address, `/search`), the Quiz
+  tab's floating search and the Flashcards bar. The Study Guides bar stays until Phase F,
+  because whether Learn gets the search row is still open (§10, question 8). The Store, Tools
+  and Data Sources search their own things and are unchanged.
+- **The exam shown** is `?topic=` when the address names one, else the exam in focus when it
+  has a question bank (`practiceTopic`; Phase E dropped the exam last practised in the browser
+  and the exam list). An address naming one of the reader's exams puts it in focus.
+- **Since Phase E** the exam at the top is the exam switcher and the old exam list is gone
+  (below). The bank's info button sits where the profile button will be. Games are a row at
+  the foot of the home.
+- **The count** is typed by pressing it; the presets (1, 3, 5, 10) are gone.
+- **Topics** are checkboxes one learning objective each; with nothing picked every topic is
+  ticked, and unticking one picks all the others. The chevron unfolds a topic's concepts, each
+  a checkbox with its level square. A topic's count is its questions at the levels picked.
+- **A paper's last result** is kept in the browser (`lib/paperResults.ts`) when a whole sitting
+  launched from Past papers is finished as a Practice Exam: correct, incorrect, partial and
+  unanswered. "Fix these N" afterwards doesn't replace it. It is not on the account, so
+  another device shows no bar; a sitting sat before this was built shows none either.
+- **Sample questions** is a row only where the exam has no released sittings and its body
+  publishes the sample set as PDFs (Exam P, FM); it opens a popup with those PDFs and Start
+  Practice Exam. An exam with neither (the DISCs) has no such row.
+- **A question's dot** in search goes by the latest answer (`useQuestionAttempts` now reads the
+  answers in order). A signed-out reader's answers aren't kept, so no dot is drawn.
+- **Practice these N** starts at most 100 questions, as "Practice the first 100".
+- **In search**, a concept opens in the reader, a resource goes to its page and a question to
+  its own page; the Info button on a question's row is unchanged. Rows are no longer ticked one
+  by one, and the old page's topic picker and today's-plan toggle are gone.
+- **The top row** of Past papers, Flashcards and Search is a back arrow to Practice (or to the
+  page left) with no navigation button on a phone; Practice's own top row carries it.
+- **Removed:** the exam-coloured card, its count presets and folded settings, today's plan's
+  tile (locked or not), the Practice exam and Past Papers tiles, the "Mix" row, the pass-rate
+  column on the shelf, the registration of a quiz from a single sitting as a short quiz
+  (already gone), the Flashcards page's gallery, toolbar and search bar.
+- **Desktop** is not on the canvas: every Practice screen is one column, 36rem wide.
+- **Not built here:** §5.2's written part was built with Phase C.
 **Phase H is built.** You is three pages under the existing sidebar: the profile at `/you`
 (`pages/You.tsx`), the league at `/you/league` (`pages/League.tsx`) and Settings at `/settings`
 (`pages/Settings.tsx`), over `components/you/` (`rows.tsx`: the top row, a group of rows, a row
@@ -851,8 +908,7 @@ while building it (the first four with the maintainer, 2026-11-23):
   An address that names any other exam is a **visit**: the page reads and practises as before,
   the switcher at its top left names that exam, the sheet offers "Add Exam X" above "Add an
   exam", and the focus stays where it was. Reading an exam page never requires adding it.
-- **A reader with no exams** sees Add an exam as the whole of Today (and, once the Quiz tab
-  adopts the switcher, of Quiz). Study Guides keeps the general guide and the credentials.
+- **A reader with no exams** sees Add an exam as the whole of Today and of Practice. Study Guides keeps the general guide and the credentials.
 - **Visitors (R11).** A visitor's exams and dates are kept in the browser
   (`quiz.browserExams`), so `useExamProgress` works signed out; Today is open to them with a
   Sign in button where the level badge is. On sign-in the exams the account has no row for are
@@ -880,12 +936,14 @@ while building it (the first four with the maintainer, 2026-11-23):
     Resources row and the six credentials, each opening its page, whose route lists what it
     requires. The exam ladder, its "In progress" group and the SOA / CAS / CIA picker are gone;
     the full ladder is Add an exam. An exam page's back arrow reads "Study Guides".
-  - **The Quiz tab** (`hooks/useQuizExamScreen.ts`, `quizTabExam`) opens on the builder of the
-    exam in focus; `/?topic=` opens that exam's builder, as a visit when it isn't the reader's.
-    The strip's logo and name are the switcher, in place of the "Change exam" arrow. A reader
-    with no exams gets Add an exam; an exam in focus with no question bank gets one sentence
-    and the way to its study guide. The exam ladder and the body picker are gone; the Games
-    row sits above the builder.
+  - **Practice** (`hooks/useQuizExamScreen.ts`, `practiceTopic`) opens on the exam in focus;
+    `/?topic=` opens that exam, as a visit when it isn't the reader's. The exam at the top is
+    the switcher, in place of Phase G's popup of the reader's exams and its "All exams" row. A
+    reader with no exams gets Add an exam; an exam in focus with no question bank gets one
+    sentence and the way to its study guide. The old exam list (`/?exams=1`, with its body
+    picker) is gone and that address reads as the bare page; the exam last practised in the
+    browser is no longer remembered apart from the exam in focus. The Games row sits at the
+    foot of the home.
   - **Resources** (`shelfExams`) shows the exam in focus's readings; `?exam=` names another
     exam (or an exam's regions together) and `?exam=all` every exam. One switch in the title
     row, this exam or All exams, replaces the body picker, the strip of logos and the region
@@ -896,9 +954,10 @@ while building it (the first four with the maintainer, 2026-11-23):
 - **Not changed:** Flashcards keeps its own SOA / CAS picker (it is a row of Practice in
   Phase G). Settings (Phase H) lists the reader's exams and its "Add an exam" row opens the
   switcher's Add an exam; the old exams panel (`ExamsPopout`) is no longer opened from anywhere.
-  You, the league, Apply and Tools read the exam in focus through the same hook. The parked onboarding tour pointed
+  You, the league, Apply, Tools and the one search read the exam in focus through the same
+  hook; the league keeps its own popup for which exam's table it shows. The parked onboarding tour pointed
   at the Quiz tab's Exam P row, which is gone. Exam names still differ by place ("Exam P" on
-  Today, the sheet and the Store; "Exam P-1" on Study Guides, the Quiz tab and Resources), as
+  Today, the sheet and the Store; "Exam P-1" on Study Guides, Practice and Resources), as
   they did before this phase.
 
 For every phase:
@@ -941,7 +1000,8 @@ For every phase:
 4. Whether the concept figures go monochrome (§7.2).
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).
-6. Whether search defaults to the exam in focus or to every exam (§7a.4 draws every exam).
+6. ~~Whether search defaults to the exam in focus or to every exam.~~ Decided 2026-11-23: every
+   exam, with the exam in focus's results first within each kind (§8, Phase G).
 7. ~~What Apply shows for an exam with no project and no tools, and what a reader without Pro
    sees of Projects (§7c).~~ Decided 2026-11-23; see §8, Phase I.
 8. Whether the search row also belongs on Learn.

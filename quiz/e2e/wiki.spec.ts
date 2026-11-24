@@ -85,7 +85,7 @@ test.describe('wiki', () => {
     // the same way, into the builder.
     await studying(page)
     await page.goto('/')
-    await expect(page.getByTestId('exam-switcher')).toHaveAccessibleName('Switch exam, Exam P-1')
+    await expect(page.getByTestId('practice-exam')).toHaveAccessibleName('Switch exam, Exam P-1')
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
     await page.locator('a[data-tour="exam-p"]').click()
     const back = page.getByRole('link', { name: 'Back to Study Guides' })
@@ -93,7 +93,7 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki$/)
     await page.goBack()
     await expect(page).toHaveURL(url => url.pathname === '/')
-    await expect(page.getByTestId('exam-switcher')).toBeVisible()
+    await expect(page.getByTestId('practice-exam')).toBeVisible()
     await expect(page.locator('[data-tour="start-quiz"]')).toBeVisible()
   })
 

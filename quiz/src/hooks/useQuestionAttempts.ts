@@ -6,6 +6,8 @@ export interface QuestionAttemptSummary {
   question_id: string
   attempt_count: number
   correct_count: number
+  /** Whether the latest attempt was right. */
+  last_correct: boolean
 }
 
 export function useQuestionAttempts(): {
@@ -26,8 +28,9 @@ export function useQuestionAttempts(): {
   const fetchAttempts = useCallback((userId: string, isStale: () => boolean = () => false) => {
     supabase
       .from('question_responses')
-      .select('question_id, is_correct')
+      .select('question_id, is_correct, answered_at')
       .eq('user_id', userId)
+      .order('answered_at', { ascending: true })
       .then(({ data }: { data: { question_id: string; is_correct: boolean }[] | null }) => {
         if (!data || isStale()) return
         const map = new Map<string, QuestionAttemptSummary>()
@@ -36,11 +39,14 @@ export function useQuestionAttempts(): {
           if (existing) {
             existing.attempt_count++
             if (row.is_correct) existing.correct_count++
+            // Rows arrive oldest first, so the last one read is the latest.
+            existing.last_correct = row.is_correct
           } else {
             map.set(row.question_id, {
               question_id: row.question_id,
               attempt_count: 1,
               correct_count: row.is_correct ? 1 : 0,
+              last_correct: row.is_correct,
             })
           }
         }

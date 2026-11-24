@@ -109,8 +109,12 @@ export function drawsOwnTopRow(pathname: string): boolean {
 }
 
 function bare(path: string): string {
-  const pathname = path.split(/[?#]/)[0] || '/'
-  try { return decodeURI(pathname) } catch { return pathname }
+  // One spelling for a page however its address was written: `+` or `%20`
+  // for a space, with or without the file's `.md`.
+  const pathname = (path.split(/[?#]/)[0] || '/').replace(/\+/g, ' ')
+  let plain = pathname
+  try { plain = decodeURIComponent(pathname) } catch { /* keep it as written */ }
+  return plain.replace(/\.md$/i, '')
 }
 
 /**

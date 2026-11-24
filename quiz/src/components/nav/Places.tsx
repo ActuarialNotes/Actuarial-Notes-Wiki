@@ -138,9 +138,8 @@ export function PlaceHeader() {
 function usePlaceBarFlag(shown: boolean) {
   useEffect(() => {
     const root = document.documentElement
-    if (shown) root.setAttribute('data-place-bar', '')
-    else root.removeAttribute('data-place-bar')
-    return () => root.removeAttribute('data-place-bar')
+    root.classList.toggle('has-place-bar', shown)
+    return () => root.classList.remove('has-place-bar')
   }, [shown])
 }
 

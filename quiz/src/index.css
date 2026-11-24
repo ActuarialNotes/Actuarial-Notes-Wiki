@@ -473,7 +473,7 @@ html:has(.concept-popup-aside[data-focus="true"]) [data-above-reader] {
   --place-bar-height: 0px;
 }
 @media (max-width: 1023.98px) {
-  :root[data-place-bar] {
+  :root.has-place-bar {
     --place-bar-height: calc(4.0625rem + max(0.875rem, env(safe-area-inset-bottom)));
   }
 }

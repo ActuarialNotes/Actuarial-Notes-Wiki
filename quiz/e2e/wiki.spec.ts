@@ -90,6 +90,8 @@ test.describe('wiki', () => {
     // Learn opens on the exam in focus's study guide; from there it leads up to Study Guides.
     await learn.click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
+    // The page is laid down once its chunk has come, and Learn leads up only from there.
+    await expect(page.getByRole('heading', { name: 'Exam P-1', level: 1 })).toBeVisible()
     await learn.click()
     await expect(page).toHaveURL(/\/wiki$/)
     await page.locator('a[data-tour="exam-p"]').click()

@@ -45,6 +45,8 @@ test.describe('quiz in progress', () => {
     // It stays with them from page to page.
     await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Apply' }).first().click()
     await page.waitForURL('**/apply')
+    // The page is laid down once its chunk has come; the pill's choice closes on a change of page.
+    await expect(page.getByRole('heading', { name: 'Apply', level: 1 })).toBeVisible()
     await expect(pill(page)).toBeVisible()
 
     await pill(page).click()

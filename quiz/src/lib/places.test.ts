@@ -130,5 +130,6 @@ describe('learnTarget', () => {
   it('leads up to Study Guides from the exam in focus\'s own guide', () => {
     expect(learnTarget(home, home, home)).toBe('/wiki')
     expect(learnTarget('/wiki/exam/Exam%20P-1%20(SOA)', null, '/wiki/exam/Exam P-1 (SOA)')).toBe('/wiki')
+    expect(learnTarget('/wiki/exam/Exam+P-1+(SOA)', null, '/wiki/exam/Exam+P-1+(SOA).md')).toBe('/wiki')
   })
 })

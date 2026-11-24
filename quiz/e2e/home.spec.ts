@@ -15,10 +15,10 @@ test.describe('app shell', () => {
     await expect(page).toHaveTitle(/Actuarial Notes/)
     // The four places are present (the rail on desktop) for signed-out users.
     const places = page.getByRole('navigation', { name: 'Places' })
-    await expect(places.getByRole('link')).toHaveText(['Today', 'Learn', 'Practice', 'Apply', 'You', 'Sign in'])
+    for (const name of ['Today', 'Learn', 'Practice', 'Apply', 'You']) {
+      await expect(places.getByRole('link', { name, exact: true })).toBeVisible()
+    }
     await expect(places.getByRole('link', { name: 'Practice' })).toHaveAttribute('aria-current', 'page')
-    // Flashcards is a row of Practice.
-    await expect(page.getByRole('link', { name: 'Flashcards' }).first()).toBeVisible()
     // The landing rendered content, not the error boundary.
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 

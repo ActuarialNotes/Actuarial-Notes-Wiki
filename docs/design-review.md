@@ -521,7 +521,11 @@ settings) and F10 (the results were a transcript).
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
-Phases E to I are not built.
+**Phase G (Practice) was built the same day**: the Quiz tab opens on the exam in focus with the
+quiz as an outlined card and rows for a Practice Exam, Past papers and Flashcards (F3: Flashcards
+is a row of Practice, though its sidebar row stays until the navigation is built); the setup is a
+black popup; a past paper shows the reader's last result; and one search covers concepts,
+resources and questions (F6). Phases E, F, H and I are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

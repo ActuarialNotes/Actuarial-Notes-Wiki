@@ -4,6 +4,7 @@ import { useTodayExam } from '@/hooks/useTodayExam'
 import { bankLabelFor } from '@/lib/examIds'
 import { PRACTICE_EXAM_KEY, practiceTopic } from '@/lib/practiceHome'
 import { quizExamFor } from '@/lib/quizBuilder'
+import { moveScreen } from '@/lib/viewTransition'
 
 function remembered(): string {
   try { return localStorage.getItem(PRACTICE_EXAM_KEY) ?? '' } catch { return '' }
@@ -49,10 +50,13 @@ export function useQuizExamScreen() {
   const openExam = useCallback((value: string) => {
     const exam = quizExamFor(value)
     if (exam) selectByKey(exam.progressKey)
-    navigate(`/?topic=${encodeURIComponent(value)}`)
+    // Both screens are `/`, so the router sees no page move; the page names it
+    // (lib/viewTransition.ts): an exam is laid over the list, and the list is
+    // what lies under it.
+    moveScreen('push', () => navigate(`/?topic=${encodeURIComponent(value)}`))
   }, [navigate, selectByKey])
 
-  const showExams = useCallback(() => navigate('/?exams=1'), [navigate])
+  const showExams = useCallback(() => moveScreen('pop', () => navigate('/?exams=1')), [navigate])
 
   // A change of exam, or to the list, opens at the top like a new page.
   const shown = useRef(topic)
@@ -62,5 +66,13 @@ export function useQuizExamScreen() {
     window.scrollTo(0, 0)
   }, [topic])
 
-  return { topic, openExam, showExams, focusLoading: loading && !urlTopic && !showList }
+  const focusLoading = loading && !urlTopic && !showList
+  // With no exam to open on, the bare address is the exam list. It moves to the
+  // list's own address, so Back from an exam picked there returns to the list
+  // and not to the exam just remembered.
+  useEffect(() => {
+    if (!topic && !showList && !focusLoading) navigate('/?exams=1', { replace: true })
+  }, [topic, showList, focusLoading, navigate])
+
+  return { topic, openExam, showExams, focusLoading }
 }

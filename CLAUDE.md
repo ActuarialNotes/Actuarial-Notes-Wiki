@@ -90,7 +90,9 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 
 
 ### Inside `quiz/src/`
-- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
+- `pages/` — route-level views (Quiz, Review, Dashboard, `Landing.tsx` — Practice's home, `/` —
+  `PastPapers.tsx` — `/papers` — `Flashcards.tsx` — one card at a time under Practice, its deck
+  in `components/flashcards/DeckPopup.tsx` — `Search.tsx` — the one search — Settings,
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
@@ -445,7 +447,14 @@ before touching that area**:
   concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
   the exam page: back to where the reader came from, the level button, more, the article,
   **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next.
+  Previous, Practice this, Next. **Phase G, Practice, is built** (§8 again): Practice's home,
+  the setup popup, Past papers, Flashcards as a row and the one search; see `quizBuilder.ts`,
+  `pastExams.ts` and `oneSearch.ts` below. Flashcards (`pages/Flashcards.tsx`) is one card at a
+  time with Previous, **Practice this** and Next at the foot; the deck (the grid, reorder, remove)
+  is the **Deck** popup, adding is **+**, and shuffle, the back's content and focus mode are in
+  **More**. `/papers`, `/flashcards` and `/search` are sheets over Practice (`deskPlace`), each
+  with a back arrow to it (`components/practice/PracticeHeader.tsx`) and no phone navigation
+  button of its own.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -929,9 +938,9 @@ Other important `lib/` modules:
 - `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
   answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
   page has always read a `reveal` search param; this module is the reader's side of
-  it — the *Show answers after each question* switch in the quiz setup sheet
-  (`components/landing/QuizSetupSheet.tsx`, opened by any pill on the setup card or by a
-  paper tile), remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  it — the *Show answers after each question* switch in the quiz setup popup
+  (`components/practice/SetupSheet.tsx`, opened by any pill on Practice's quiz card; a Practice
+  Exam's and a past paper's popups carry the same three switches), remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
   different things: a quiz is practice *with* feedback (`during`), a practice exam is
   a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
   mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
@@ -949,25 +958,27 @@ Other important `lib/` modules:
   on screen are marked. On by default for a quiz, off for a practice exam — the setup sheet's
   *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Question info**
   panel's concept rows open the same popup. Pure and tested.
-- `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
+- `quizBuilder.ts` — the **quiz builder** (Practice's home, `pages/Landing.tsx`) as data: the
   exams it offers and their track headings (`QUIZ_EXAMS`, `quizTrackGroups`), an exam's
   concepts in syllabus order and grouped by objective, today's plan's pool
   (`todaysPlanSelection`), the pool each source covers (`builderPool`), the draw's size and
   signature, and the `/quiz` address every launch writes (`quizLaunchUrl` — each kind keeps
   its key order, since a quiz resumes by its address). The page holds only the state that
-  joins it to what it draws — `components/landing/` (the exam ladder, and an exam's **setup
-  screen**: `QuizHeroCard`, the reader's own quiz in the exam's colour — a big count, the time
-  it should take, a pill for each topic, the settings (difficulty, timed, when answers show) as a
-  row of icons, and Start; the count, a pill or an icon opens the sheet at its own section
-  (`SetupSection`, the sheet's `focus`); `QuizLaunchTiles`, today's
-  plan under it — Pro's to start, shown locked and not a button to anyone else, so the plan never
-  stands above building your own — then **Practice exam** and **Past Papers** side by side, the
-  same height; and `QuizSetupSheet`, the sheet a pill or tile opens: topics (the concept groups),
-  how many (the presets, or any number typed in *Other*), difficulty, and how it's sat as switches, ending in its own Start) and the
-  `useQuizExamScreen` / `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` /
-  `useDashboardAutostart` hooks. What the card says — the time estimate at the paper's pace, the
-  topics' pills (an objective picked whole is one pill), the difficulty pill — is
-  `lib/quizSetup.ts`. Pure and tested.
+  joins it to what it draws: `components/landing/` is the exam list (`?exams=1`, the way to another
+  exam until the exam switcher) and `components/practice/` the rest. **Practice's home**
+  (`docs/redesign-spec.md` §7a, built as Phase G) opens on the exam in focus (`useQuizExamScreen`,
+  `practiceTopic` in `lib/practiceHome.ts`: `?topic=`, else Today's exam, else the one last
+  practised in this browser): a search row to `/search`; `QuizCard`, the reader's quiz as an
+  outline (the count between a minus and a plus, typed when pressed, the time it should take, four
+  pills that each say a setting's current value — `settingPills` — and Start, the page's one filled
+  button); then rows for **Practice Exam**, **Past papers** (`/papers`, `pages/PastPapers.tsx`; or
+  **Sample questions**, a popup, for an exam with no released sittings) and **Flashcards**. A pill
+  opens `StartPopup` (`SetupSheet.tsx`, a black popup) at its section: topics as checkboxes with
+  their question counts (`topicQuestionCounts`, `toggleTopic`; a chevron unfolds a topic's
+  concepts), difficulty as three buttons with counts, three switches, and its own Start. Today's
+  Study Plan has no tile here; the page still launches the session Today's Start hands over
+  (`useDashboardAutostart`, `useTodaysPlanQuiz`). What the card says is `lib/quizSetup.ts` and
+  `lib/practiceHome.ts`. Pure and tested; the flows are `e2e/quiz-format.spec.ts`.
 - `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (the setup sheet, the
   card's quiz only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
   an unticked level is out of the pool, so the setup card's count, the count clamp and
@@ -1160,14 +1171,19 @@ Other important `lib/` modules:
   chapters. The authored half is `data/storeCatalog.ts` (sellers, study materials,
   calculator policies and calculators — `storeCatalog.test.ts` holds each offer to its
   seller's domain and each calculator to its line on both lists).
-- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Past Papers** source:
+- `pastExams.ts` — the past-sitting shelf behind Practice's **Past papers** row:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   A sitting is sat in the paper's own order, not shuffled: `inPaperOrder` sorts on the
   number in the question id (`cas5-2019s-q12` → 12), which `useQuestions` applies whenever
   the draw is a sitting — so a converted question's id must keep its `-q<n>` suffix.
-  Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
+  Drawn by `pages/PastPapers.tsx` (`/papers`): one row a sitting, the older ones folded under one
+  row (`foldPapers`), and a paper already sat showing its last result as a bar in the answer
+  colours — `lib/paperResults.ts`, kept in the browser when a whole sitting is finished as a
+  Practice Exam (`keepPaperResult` in `stores/quizStore.ts`). A row opens `PaperPopup`
+  (`components/practice/`): the paper's size, the pass rate where one is published, the last
+  result, its PDFs and Start Practice Exam. See `docs/mock-exam-browser.md`.
 - `syllabusChapters.ts` — the syllabus's **chapters**: which learning objective each stop of
   an exam page's walk belongs to, read off the page's `[!example]` callouts
   (`buildObjectiveIndex`), and the marks that cut the **concept popup's** progress bar into
@@ -1251,8 +1267,9 @@ Other important `lib/` modules:
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
-  none. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
-  sidebar, at any width. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
+  none. Two exceptions: `isSessionRoute` (`/quiz` and `/review` have neither the header nor the
+  sidebar, at any width), and Practice's own screens (`/papers`, `/flashcards`, `/search`), which
+  draw a back arrow to Practice in place of the button. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
   sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
@@ -1507,18 +1524,23 @@ Other important `lib/` modules:
   blurred container, the input line (the hamburger on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
-  wiki's `WikiFloatingSearch`, Data Sources' `CoworkTopBar` and
-  `FlashcardsSearchBar` are all built from these and a
+  wiki's `WikiFloatingSearch` and Data Sources' `CoworkTopBar` are built from these and a
   search feels the same wherever a reader is. `components/SearchHighlight.tsx` is the matched run,
-  marked — the one implementation the wiki search, the search panel, the Search page and
-  Cowork all call. (The quiz builder's `QuizFloatingSearch` still draws its own.)
-- `appSearch.ts` — the matching behind the **Flashcards** top bar
-  (`components/FlashcardsSearchBar.tsx`): `rankMatch` / `searchBy` are the ranking its lists share
-  (a name that *starts* with the query, then one that contains it, then one every query word
-  appears in; a hit on a later field never outranks one on the name), and `buildStudyIndex` searches
-  the bundled exam pages, never GitHub's rate-limited API. Today has no search bar (the Dashboard's
-  was removed with it); its top row carries the phone's navigation button instead
-  (`mobileNavHost.ts`). Pure and tested.
+  marked — the one implementation the wiki search, the one search and Cowork all call (`INK_MARK`
+  is the redesign's mark, the text colour filled).
+- `oneSearch.ts` / `appSearch.ts` — **the one search** (`/search`, `pages/Search.tsx`, lazy;
+  `docs/redesign-spec.md` §7a.4, R18), opened from Practice's search row and by Ctrl/⌘ K. It
+  replaced the old Search page, the Quiz tab's floating search and the Flashcards bar. The field,
+  then four tabs with counts — All, Concepts, Resources, Questions — over every exam, the exam in
+  focus's results first within each kind and a result from another exam labelled with it
+  (`runSearch`, `focusFirst`). Under All each kind shows its first few and a row for the rest; the
+  Questions tab adds `QuestionFilterBar`, a dot a row (green last answered right, red last
+  missed, an empty ring not tried — `attemptDot`; none for a signed-out reader) and the filled
+  **Practice these N**, which starts a quiz on the results (the first 100). Query, tab and filters
+  ride the URL (`?q=&tab=&difficulty=…`; the old `?type=` and `?concept=` links still land).
+  `appSearch.ts` is the ranking (`rankMatch` / `searchBy`: a name that *starts* with the query,
+  then one that contains it, then one every query word appears in). Pure and tested; the flows
+  are `e2e/question-search.spec.ts`.
 - `conceptGraph.ts` / `conceptRecipes.ts` / `conceptCraft.ts` / `craftMedals.ts` / `craftLayout.ts` — **Concept Craft**
   (`docs/concept-craft.md`). `conceptGraph.ts` is the derived graph: `pageMentions` (what a page
   says about other concepts — every link, and every topic concept named in its text, longest

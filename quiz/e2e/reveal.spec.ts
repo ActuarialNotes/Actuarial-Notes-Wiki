@@ -42,10 +42,10 @@ test.describe('answer reveal', () => {
     await expect(page.getByText(VERDICT).first()).toBeVisible()
   })
 
-  test('the builder checkbox is remembered across visits', async ({ page }) => {
+  test('the setup switch is remembered across visits', async ({ page }) => {
     const label = 'Show answers after each question'
-    // The choice lives in the card's settings, which unfold from their icons.
-    const settings = page.getByTestId('quiz-settings-toggle')
+    // The choice lives in the setup popup, which the card's pill for it opens.
+    const settings = page.getByTestId('quiz-pill-reveal')
     await page.goto('/?topic=Probability')
     await settings.click()
     const box = page.getByRole('switch', { name: label })
@@ -55,6 +55,7 @@ test.describe('answer reveal', () => {
 
     await box.click()
     await expect(box).toHaveAttribute('aria-checked', 'false')
+    await expect(settings).toContainText('At the end')
 
     await page.goto('/?topic=Probability')
     await settings.click()

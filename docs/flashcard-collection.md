@@ -111,7 +111,7 @@ like the same card wherever it appears:
 
 | Surface | Where |
 | --- | --- |
-| Deck / gallery card | `SortableCard` in `pages/Flashcards.tsx` (the deck passes `animateCollected={false}` so the Level 3 border doesn't travel while you read) |
+| Deck card | the Deck popup's tile, `components/flashcards/DeckPopup.tsx` |
 | Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the tile's own content |
 | The card in the level-up ceremony | `components/collect/CollectCard3D.tsx` — a card being collected shows the Level 3 edge until it lands, so the sealed pack looks like the prize |
 

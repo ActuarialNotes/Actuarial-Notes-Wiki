@@ -118,7 +118,7 @@ test.describe('practice home', () => {
     await expect(page.getByTestId('practice').getByRole('link', { name: /Flashcards/ })).toHaveAttribute('href', '/flashcards')
     await page.getByTestId('practice-search').click()
     await expect(page).toHaveURL(/\/search/)
-    await expect(page.getByRole('textbox', { name: 'Search' })).toBeVisible()
+    await expect(page.getByRole('searchbox', { name: 'Search' })).toBeVisible()
   })
 
   test('the page opens on the exam last practised, and the exam at the top leads to the others', async ({ page }) => {

@@ -64,9 +64,10 @@ test.describe("examiner's report viewer", () => {
     await page.route('**/api/exam-pdf**', route =>
       route.fulfill({ status: 200, contentType: 'application/pdf', body: SAMPLE_PDF }),
     )
-    await page.goto('/?topic=Exam%205&mode=mock-exam')
-    // The report link tracks the *selection*, so a paper has to be picked first.
-    await page.getByRole('radio', { name: /Spring 2019/ }).click()
+    // The report is a row of a paper's popup, so a paper has to be opened first.
+    await page.goto('/papers?topic=Exam%205')
+    await page.getByRole('button', { name: /Spring 2019/ }).click()
+    await expect(page.getByRole('dialog', { name: 'Spring 2019' })).toBeVisible()
   })
 
   test('reads the paper in the panel: renders, pages, zooms', async ({ page }) => {
@@ -125,7 +126,7 @@ test.describe("examiner's report viewer", () => {
     await page.keyboard.press('Escape')
     await expect(panel).toHaveAttribute('data-focus', 'false')
 
-    // A second Esc closes the panel, leaving the builder as it was.
+    // A second Esc closes the panel, leaving the paper's popup as it was.
     await page.keyboard.press('Escape')
     await expect(panel).toHaveCount(0)
     await expect(page.getByRole('link', { name: /Examiner's Report/ })).toBeVisible()

@@ -54,7 +54,7 @@ test.describe('search', () => {
     await page.goto('/search?q=p-004&tab=questions')
 
     await expect(page.getByTestId('search-question')).toHaveCount(1)
-    await page.getByRole('button', { name: 'Practice this 1' }).click()
+    await page.getByRole('button', { name: 'Practice this question' }).click()
 
     await expect(page).toHaveURL(/\/quiz\?/)
     await expect(page).toHaveURL(/selection=stored/)

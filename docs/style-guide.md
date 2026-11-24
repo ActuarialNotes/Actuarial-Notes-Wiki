@@ -1156,3 +1156,40 @@ Built with Phase D (`docs/redesign-spec.md` §7), in `components/learn/`:
 - **Example and trap cards** (`MarkdownCallout.tsx`) are outlines on every surface: the
   example in the line colour with an outlined "Example" pill, the trap in the text colour with
   its warning icon. Neither carries a hue.
+
+### 13.8 Practice's pieces
+
+Built with Phase G (`docs/redesign-spec.md` §7a), in `components/practice/` unless said:
+
+- **The quiz card** (`QuizCard.tsx`): an `OUTLINE_CARD`. The count is a 56px figure with
+  "questions" beside it at 18px, between two 52px round outlined buttons; the time it should take
+  is under it at 15px. Pressing the figure turns it into a field.
+- **A setting pill**: 44px, fully rounded, a 1.5px outline in the text colour, a 17px icon and
+  the setting's *current value* (R16). Never the setting's name, never an icon alone.
+- **A row that leads somewhere** (Practice Exam, Past papers, Flashcards; a sitting): 60 to 64px,
+  the name at 17px semibold, one fact at the right at 15px, a chevron, a hairline between rows.
+- **The search row**: a 48px fully rounded link outlined in the line colour, a search icon and
+  "Search". The search's own field is the same shape with a 1.5px outline in the text colour.
+- **The top row of a screen under Practice** (`PracticeHeader.tsx`): a back arrow, an optional
+  exam logo, the name at 22px bold, and round 44px outlined buttons at the right
+  (`PRACTICE_HEADER_BUTTON`).
+- **A popup that ends in Start** (`StartPopup` in `SetupSheet.tsx`): the popup of §13.5 with a
+  close button beside its title and the filled button held at its foot while the rest scrolls.
+  Its sections are headed at 15px bold (`PopupSection`).
+- **A checkbox**: a 24px square with 7px corners, outlined 1.5px in the text colour when empty
+  and filled with it when ticked (a bar when partly). **A switch**: 52 by 32px, outlined in the
+  text colour, filled with it when on, its knob in the opposite colour. **A choice of several**
+  (difficulty): 56px buttons with 16px corners, outlined, filled with the text colour when in,
+  the count under the label at 13px. None of these takes an answer colour.
+- **A paper's last result** (`PaperResultBar`): an 8px bar, 96px wide on a row, cut into
+  correct, incorrect, partial and unanswered in the answer colours (§13.3), each piece as wide
+  as its count. The key under the list names the four.
+- **Search tabs** (`pages/Search.tsx`): 38px pills with their counts, the selected one filled
+  with the text colour. A matched word is `INK_MARK` (`components/SearchHighlight.tsx`): the
+  text colour filled, the ground colour as text.
+- **An attempt dot** on a question's row: `AnswerDot` green or red by the latest answer, an
+  empty ring in the text colour for a question not tried, nothing for a signed-out reader.
+- **A flashcard** (`pages/Flashcards.tsx`): one card, a 1.5px outline in the text colour with
+  26px corners, the name at 24px bold with its level square at the right, the definition at
+  17px, each formula in a box outlined in the line colour. The foot is the reader's: Previous
+  and Next as 58px round outlined buttons either side of the filled **Practice this**.

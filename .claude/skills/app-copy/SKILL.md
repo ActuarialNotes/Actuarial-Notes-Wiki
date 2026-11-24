@@ -126,7 +126,18 @@ One thing, one name. Use these exactly.
 | An objective's weight | "23–30% of the exam", as the syllabus prints it | weight, weighting |
 | Adding an exam from its page | **Add exam** | Track, Start, Enrol |
 | The daily plan | **Today's Study Plan** as a title, tile or button; "today's study plan" mid-sentence | Today's plan, Custom Study Plan, Study Plan |
-| The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`), beside **Past Papers** | Practice exam, Exam, mock exam |
+| The whole-paper mode | **Practice Exam** (`PRACTICE_EXAM_LABEL`); its button is **Start Practice Exam** | Practice exam, Exam, mock exam |
+| An exam's released sittings | **Past papers** (`examSourceLabel`); **Sample questions** for an exam with none released | Past Papers, By Source, Mix |
+| The quiz tab's page | **Practice** (the sidebar row reads Quiz until the navigation is rebuilt) | Quiz builder, Quiz setup |
+| The quiz card's settings, as pills | the current value: **All topics** / "3 topics"; **All levels** / "Easy + Medium"; **Timed** / **Untimed**; **As you go** / **At the end** | Topics:, Difficulty:, Answers: |
+| The setup popup | **Your quiz**, with **Topics**, **Difficulty** and its button "Start 12 questions" | Quiz settings, Configure |
+| A paper's last result | **Last sat**, with "14 correct, 7 incorrect, 3 unanswered" | Score, Best, Result |
+| A paper the bank doesn't hold | **Not added yet** | Unavailable, Coming soon |
+| The flashcards' grid | **Deck** ("6 cards"); adding is **Add cards** | Gallery, Manage, Add flashcards |
+| A flashcard's two grades | **Again**, **Got it** | Wrong, Know it |
+| Search's tabs | **All**, **Concepts**, **Resources**, **Questions**; the rest of a kind is "6 more" | Everything, Show all, See more |
+| Starting a quiz from search results | **Practice these 38**; "Practice the first 100" past the cap | Start quiz, Quiz these |
+| A question's history, as a dot | "Answered correctly", "Answered incorrectly", "Not attempted" | Right, Wrong, New |
 | Fact Check verdicts | **Fact checked** / **Not fact checked**; a problem is an **issue** | Verified, finding |
 | Exam status | **Not started**, **In progress**, **Passed**; **In Development** ("Syllabus outline only. No practice questions yet."); **Beta** ("Questions and pages are still being added and checked.") | Completed, In Progress, Not Started |
 | Concept levels | **New**, **Level 1**, **Level 2**, **Level 3**, **Forgotten**; "levelled up" | L1, mastered, Decayed, Cleared |

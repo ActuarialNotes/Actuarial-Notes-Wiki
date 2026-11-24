@@ -154,9 +154,10 @@ test.describe('tab-switch view transitions', () => {
     const moves = () => page.evaluate(() => (window as unknown as { __moves: string[] }).__moves)
     const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
 
-    // The Quiz tab's exam list and one exam's builder are both `/`: picking
-    // an exam lays the builder over the list, opened at its top, and the back
-    // arrow swipes it off onto the list as it was left.
+    // The exam list and Practice on one exam are both `/`: picking an exam
+    // lays Practice over the list, opened at its top, and the exam at the top
+    // swipes it off onto the list again. The browser's Back returns to the
+    // list as it was left.
     await page.goto('/')
     const examP = page.locator('button[data-tour="quiz-exam-p"]')
     await expect(examP).toBeVisible()
@@ -164,12 +165,15 @@ test.describe('tab-switch view transitions', () => {
     await examP.scrollIntoViewIfNeeded()
     const listY = await scrollY()
     await examP.click()
-    const changeExam = page.getByRole('button', { name: 'Change exam' })
-    await expect(changeExam).toBeVisible()
+    const practiceExam = page.getByTestId('practice-exam')
+    await expect(practiceExam).toBeVisible()
     expect(await scrollY()).toBe(0)
-    await changeExam.click()
+    await page.goBack()
     await expect(examP).toBeVisible()
-    expect(await scrollY()).toBe(listY)
+    await expect.poll(scrollY).toBe(listY)
+    await examP.click()
+    await practiceExam.click()
+    await expect(examP).toBeVisible()
 
     // Games is a page of its own; Quiz Battle's way in and its setups are all `/battle`.
     await page.getByTestId('quiz-games-entry').click()
@@ -187,7 +191,7 @@ test.describe('tab-switch view transitions', () => {
     await page.getByRole('button', { name: 'Back', exact: true }).click()
     await expect(page.getByTestId('battle-home')).toBeVisible()
 
-    await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'push', 'pop'])
+    await expect.poll(moves).toEqual(['push', 'push', 'pop', 'push', 'push', 'push', 'pop'])
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })
 
@@ -228,7 +232,7 @@ test.describe('tab-switch view transitions', () => {
     await expect(page.locator('.paper-sheet')).toHaveCSS('view-transition-name', 'none')
   })
 
-  test('the two tabs open on the same shell, and the same examining body', async ({ page }) => {
+  test('the two tabs open on the same examining body, their titles and pickers in line', async ({ page }) => {
     await page.goto('/')
     // Exact: the Quiz Battle card's title is a heading on the same page.
     await expect(page.getByRole('heading', { name: 'Quiz', exact: true })).toBeVisible()
@@ -244,12 +248,13 @@ test.describe('tab-switch view transitions', () => {
     // tabs used to fall back in opposite directions from there.
     expect(quizBody).toBe(studyBody)
 
-    expect(quiz.bar).not.toBeNull()
-    expect(quiz.bar).toEqual(study.bar)
-    expect(quiz.input).toEqual(study.input)
-    expect(quiz.title?.y).toBe(study.title?.y)
+    // The exam list lost its search bar when the one search was built
+    // (docs/redesign-spec.md §7a.4), so it sits higher than Study Guides
+    // until the exam switcher replaces it. The title and the picker still
+    // line up left and right.
     expect(quiz.title?.x).toBe(study.title?.x)
-    expect(quiz.picker).toEqual(study.picker)
+    expect(quiz.picker?.right).toBe(study.picker?.right)
+    expect(quiz.picker?.h).toBe(study.picker?.h)
   })
 })
 

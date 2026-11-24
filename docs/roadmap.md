@@ -438,7 +438,10 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   written part's Full / Partial / None, the results with To fix and Levelled up) was built the
   same day, and so was Phase D (Learn: the exam page's objectives as cards with their concepts
   as pills, the concept page, and "Practice this" at the foot of a concept there and in the
-  reader). E (the exam switcher) is next.
+  reader), and Phase G (Practice: the home with the quiz card and its rows, the setup popup,
+  Past papers with a paper's last result, Flashcards as one card at a time with a Deck popup, and
+  the one search at `/search`). E (the exam switcher), H (You), I (Apply) and F (the navigation)
+  are not built.
 
 - **C-RP2: resource page v2, the Reference Card (proposed 2026-11-11; phase 1 built the same day).** A phone review of the
   Ross page found the syllabus assignment written as a block of text, an outline that doesn't
@@ -1078,7 +1081,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-11-01 |
 | `docs/design-review.md` | Review: the whole app against the Laws of UX, and a redesign proposal (mock-ups in `design-review-mockups.html`) | X11 (§3.4) | Active. Phase 0 built | 2026-11-15 |
-| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phases A (the visual base), B (Today), C (the session) and D (Learn) built; see the spec | 2026-11-23 |
+| `docs/redesign-spec.md` | Build spec for the redesign: visual rules, decisions, each designed screen mapped to its code, phases A–I (screens on a linked design canvas) | X11 (§3.4) | Active. Every place designed on a phone; Phases A (the visual base), B (Today), C (the session), D (Learn) and G (Practice) built; see the spec | 2026-11-23 |
 | `docs/resource-page-v2.md` | Subplan: resource page redesign (the Reference Card) | C-RP2 (§3.4) | Active. Phase 1 built | 2026-11-11 |
 | `docs/learning-review.md` | Review: Study Mode against the research on exam preparation | L11–L18 (§3.4) | Proposed | 2026-11-01 |
 | `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) closed 2026-10-25; Phase 2 next | 2026-10-25 |

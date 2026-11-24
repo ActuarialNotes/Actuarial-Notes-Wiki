@@ -30,11 +30,10 @@ differences are listed in §9.
 | Apply | Apply | `Apply` (home), `ApplyTools`, `Tool`, `Project` (an attempt in progress) | Designed, phone only. `Tool` is a restyle of the existing template, not a redesign |
 
 Not drawn: the feedback screen after a correct answer; the "Edit" state of the exam switcher;
-desktop layouts for anything but Today; a past paper's own screen (pass rate, the paper and
-examiner's report PDFs); the flashcard deck's management (add, remove, reorder, the grid);
-Projects' locked state for a reader without Pro; Apply for an exam with no project and no
+desktop layouts for anything but Today; Projects' locked state for a reader without Pro; Apply for an exam with no project and no
 tools; Workflows' own screens (unchanged by this design); the Store, Help and Gem Shop behind
-the profile.
+the profile. A past paper's own screen and the flashcard deck's management were not drawn
+either; both were decided when Practice was built (§8, Phase G).
 
 Each canvas file is `project/<Name>.dc.html`: plain HTML with inline styles, readable with the
 Artifact tool's `read` action. Every figure in them is sample data (Exam P at 27%, 52 days,
@@ -555,7 +554,7 @@ once and needs You to exist.
 | **C. The session** (built 2026-11-23) | §5: question header, feedback, "Try a similar one", results | A |
 | **D. Learn** (built 2026-11-23) | §7: exam page and concept page, the reader's "Practice this" | A |
 | **E. Exam switcher** | §6: the exam in focus, the sheet, Add an exam. The old exam lists and strips are removed as each place adopts it | B, D |
-| **G. Practice** | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
+| **G. Practice** (built 2026-11-23) | §7a: the home, the setup sheet's restyle, past papers, flashcards as a row, and the one search. §5.2's written part | A, C |
 | **H. You** | §7b: profile, league, Settings. The Dashboard's export, reminders and help move here | A |
 | **I. Apply** | §7c: the home, the tools list, the two additions to a tool, the project overview | A, D |
 | **F. Navigation** | The place bar and rail, the profile button; Flashcards, the Store and the old tabs lose their sidebar rows | B, D, G, H, I |
@@ -712,6 +711,67 @@ What was decided while building it:
   project buttons, the weight bar under an objective row, the dimmed repeat links.
 - **Desktop** is not on the canvas: both pages are one column at reading width.
 
+**Phase G is built.** Practice's home is `pages/Landing.tsx` (still at `/`, the sidebar row
+still "Quiz" until Phase F) over `components/practice/` and `lib/practiceHome.ts`; Past papers is
+`pages/PastPapers.tsx` (`/papers`); Flashcards is `pages/Flashcards.tsx` with
+`components/flashcards/`; the one search is `pages/Search.tsx` over `lib/oneSearch.ts`. What was
+decided while building it, the first four with the maintainer (2026-11-23):
+
+- **A past paper opens a popup**, not a screen and not the paper itself: the sitting's name,
+  how many questions it holds and the time at the exam's pace, the pass rate where one is
+  published (under its own label, "Pass rate" or "Effective pass rate"), the reader's last
+  result with its counts, rows that open the paper's documents in the app's PDF reader, the
+  three switches, and **Start Practice Exam**. A paper not added yet opens the same popup with
+  "Not added yet", its pass rate and documents, and no Start. The **Practice Exam** row opens
+  the same popup with no paper's facts, since a three-hour paper shouldn't start on one tap and
+  its switches (R3) need somewhere to be.
+- **The deck is a popup on the card screen.** **Deck** opens the grid: tap a card to go to it,
+  drag to reorder, remove one, clear the completed ones, Remove all. **+** opens the existing
+  picker. **More** holds Read the concept, Shuffle, Show the back first, what the back shows
+  (definition, formulas, figures), Focus mode, Clear completed, Study them all again, Remove
+  this card and Keyboard shortcuts. **Again** and **Got it** stay under a flipped card as
+  outlined buttons, and the end-of-deck summary is a popup. Nothing a reader could do before
+  was removed but the gallery's flippable tiles and the orderings no control reached.
+- **Search covers every exam, the exam in focus first.** Within each kind the exam in focus's
+  results lead, in match order, and a result from another exam carries its exam's name.
+- **The one search replaces three:** the old Search page (same address, `/search`), the Quiz
+  tab's floating search and the Flashcards bar. The Study Guides bar stays until Phase F,
+  because whether Learn gets the search row is still open (§10, question 8). The Store, Tools
+  and Data Sources search their own things and are unchanged.
+- **The exam in focus** is `?topic=` when the address names one, else the exam Today shows
+  (for a reader studying an exam with a question bank), else the exam last practised in this
+  browser, else the exam list (`practiceTopic`). Opening an exam here also switches Today to it
+  when it is one the reader is studying.
+- **Until Phase E:** the exam at the top opens the reader's exams with a question bank and an
+  "All exams" row; "All exams" (and the exam itself, for a reader with no exams) leads to the
+  old exam list at `/?exams=1`, which keeps its look. The bank's info button sits where the
+  profile button will be. Games are a row on that list.
+- **The count** is typed by pressing it; the presets (1, 3, 5, 10) are gone.
+- **Topics** are checkboxes one learning objective each; with nothing picked every topic is
+  ticked, and unticking one picks all the others. The chevron unfolds a topic's concepts, each
+  a checkbox with its level square. A topic's count is its questions at the levels picked.
+- **A paper's last result** is kept in the browser (`lib/paperResults.ts`) when a whole sitting
+  launched from Past papers is finished as a Practice Exam: correct, incorrect, partial and
+  unanswered. "Fix these N" afterwards doesn't replace it. It is not on the account, so
+  another device shows no bar; a sitting sat before this was built shows none either.
+- **Sample questions** is a row only where the exam has no released sittings and its body
+  publishes the sample set as PDFs (Exam P, FM); it opens a popup with those PDFs and Start
+  Practice Exam. An exam with neither (the DISCs) has no such row.
+- **A question's dot** in search goes by the latest answer (`useQuestionAttempts` now reads the
+  answers in order). A signed-out reader's answers aren't kept, so no dot is drawn.
+- **Practice these N** starts at most 100 questions, as "Practice the first 100".
+- **In search**, a concept opens in the reader, a resource goes to its page and a question to
+  its own page; the Info button on a question's row is unchanged. Rows are no longer ticked one
+  by one, and the old page's topic picker and today's-plan toggle are gone.
+- **The top row** of Past papers, Flashcards and Search is a back arrow to Practice (or to the
+  page left) with no navigation button on a phone; Practice's own top row carries it.
+- **Removed:** the exam-coloured card, its count presets and folded settings, today's plan's
+  tile (locked or not), the Practice exam and Past Papers tiles, the "Mix" row, the pass-rate
+  column on the shelf, the registration of a quiz from a single sitting as a short quiz
+  (already gone), the Flashcards page's gallery, toolbar and search bar.
+- **Desktop** is not on the canvas: every Practice screen is one column, 36rem wide.
+- **Not built here:** §5.2's written part was built with Phase C.
+
 For every phase:
 
 - Reader-facing words follow `docs/writing-style.md` and the `app-copy` skill. *Practice* is
@@ -752,7 +812,8 @@ For every phase:
 4. Whether the concept figures go monochrome (§7.2).
 5. Whether `Syllabus` stays a separate, lighter screen or is the exam page (§4.4 assumes the
    exam page).
-6. Whether search defaults to the exam in focus or to every exam (§7a.4 draws every exam).
+6. ~~Whether search defaults to the exam in focus or to every exam.~~ Decided 2026-11-23: every
+   exam, with the exam in focus's results first within each kind (§8, Phase G).
 7. What Apply shows for an exam with no project and no tools, and what a reader without Pro
    sees of Projects (§7c). The review's suggestion: let anyone read a brief.
 8. Whether the search row also belongs on Learn.

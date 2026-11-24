@@ -135,6 +135,10 @@ LinkedIn, is dropped too. Google arrivals are kept by default. Opening `?interna
 browser on every team device (Safari and Chrome on the phone included) is the better fix; in-app
 browsers will still lose the tag.
 
+## The page
+
+Top to bottom: five headline figures; the day's notes (*what changed and what to do*, the only hand-written part); **1. Usage** (daily people, then four weekly activity panels); **2. Engagement** (the funnel, the three rates that matter, the source table); **3. Account journeys**; and **More detail**, folded: what people study, returns by first-visit day, audience and devices, errors and data quality, method.
+
 ## What the numbers mean
 
 | Figure | Source and definition |
@@ -148,7 +152,8 @@ browsers will still lose the tag.
 | Daily returns (D1, D2, …) | Active users by `firstSessionDate` × `date`: people first seen on day X and active again n days later. Someone back on several days counts in several columns. The day's "New" equals `first_visit`, which is the check that this is right. |
 | Search / social / ChatGPT rows | `sessionDefaultChannelGroup` of the session in which each event fired. |
 | Accounts | Supabase `auth.users` minus `team_emails`. An account is listed if it did anything in the window other than a subscription update (a Stripe renewal isn't a visit). A *return* is any later day with activity. *Practised on a return* is a later day with an answer. |
-| Weekly activity (section 1a) | Monday-to-Sunday weeks. *Pages read* = `page_view` + `content_view` events (a concept popup or the PDF reader has no URL of its own); *Questions answered* = `question_answered` events; *Quizzes finished* = `quiz_completed` events, all in the human segment. *Answers saved to accounts* = `question_responses` rows from listed accounts, which includes readers GA4 never sees. Each panel has its own scale. |
+| Weekly activity (section 1, *What they did, week by week*) | Monday-to-Sunday weeks. *Pages read* = `page_view` + `content_view` events (a concept popup or the PDF reader has no URL of its own); *Questions answered* = `question_answered` events; *Quizzes finished* = `quiz_completed` events, all in the human segment. *Answers saved to accounts* = `question_responses` rows from listed accounts, which includes readers GA4 never sees. Each panel has its own scale. |
+| Account journeys (section 3) | One strip per listed account that answered something or came back after its first day, most answers first: a ring on the sign-up day, a dot per day with answers (area by questions answered), a tick per day the app was only opened. Accounts that only signed up are listed in one line beneath. Each account's days are also written out, with runs of app-only days folded into one line. Guests can't be followed one by one. |
 | Answers saved by reader accounts | `question_responses` rows from listed accounts in the window. |
 | Guest share of answers | 1 − database answers ÷ GA4 `question_answered` events: a floor (see **Traps**). |
 

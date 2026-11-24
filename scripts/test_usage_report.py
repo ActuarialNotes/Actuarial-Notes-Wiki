@@ -117,7 +117,24 @@ class Compute(unittest.TestCase):
         self.assertEqual(w[0]["pages"], 57)  # page_view + content_view
         self.assertEqual((w[1]["answered"], w[1]["saved"], w[1]["quizzes"]), (40, 10, 3))
         self.assertEqual(self.F["scalars"]["pages_read"], 57)
-        self.assertIn("1a. What people do", render.render(self.F, "", "2026-11-02 10:00 EST"))
+        self.assertIn("What they did, week by week", render.render(self.F, "", "2026-11-02 10:00 EST"))
+
+    def test_journeys(self):
+        rows = render.journey_rows(self.F)
+        self.assertEqual(rows[0]["uid"], "aaaa1111")  # most answers first
+        page = render.render(self.F, "", "2026-11-02 10:00 EST")
+        self.assertIn("3. Account journeys", page)
+        self.assertIn('class="lane-practice"', page)
+        self.assertNotIn("x@example.com", page)
+
+    def test_journey_folds_app_open_days(self):
+        r = {"uid": "u1", "masked": "zz***@example.com", "created": "2026-11-01", "confirmed": True,
+             "answers": 3, "correct": 2, "active": ["2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04"],
+             "days": {"2026-11-01": {"signup": {}}, "2026-11-02": {"login": {}}, "2026-11-03": {"sess": {}},
+                      "2026-11-04": {"ans": {"n": 3, "s": 2}}}}
+        out = render.journey_details([r])
+        self.assertIn("Opened the app on 2 days without saving anything (Nov 2–Nov 3)", out)
+        self.assertIn("Answered <b>3</b> questions", out)
 
     def test_accounts(self):
         S = self.S

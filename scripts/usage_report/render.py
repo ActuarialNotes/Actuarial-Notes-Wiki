@@ -237,44 +237,131 @@ def describe_day(k: dict) -> str:
     return "<br>".join(out)
 
 
-def account_tables(F: dict) -> tuple[str, str, str]:
-    rows = F["account_rows"]
-    who = lambda r: f"<b>{esc(r['masked'])}</b> <code>{r['uid']}</code>"  # noqa: E731
-    summary = [[who(r), fmt_day(r["created"]), len(r["returns"]),
-                ", ".join(fmt_day(d) for d in r["returns"]) or "—", r["answers"]] for r in rows]
-    # grid: one column per day offset after first access
-    maxoff = max([(dt.date.fromisoformat(d) - dt.date.fromisoformat(r["created"])).days
-                  for r in rows for d in r["returns"]] + [1])
-    gh = "<tr><th>Account</th><th>First access</th>" + "".join(f'<th class="n">D{k}</th>' for k in range(1, maxoff + 1)) + "</tr>"
-    gb = []
-    for r in sorted(rows, key=lambda r: r["created"]):
-        offs = {(dt.date.fromisoformat(d) - dt.date.fromisoformat(r["created"])).days: d for d in r["returns"]}
-        cells = ""
-        for k in range(1, maxoff + 1):
-            if k in offs:
-                p = offs[k] in r["practised_returns"]
-                cells += f'<td class="n {"cp" if p else "c1"}" title="{fmt_day(offs[k])}{" · practised" if p else ""}">{"●" if p else "○"}</td>'
-            else:
-                cells += '<td class="n"></td>'
-        first_p = " ●" if "ans" in r["days"].get(r["created"], {}) else ""
-        gb.append(f"<tr><td>{who(r)}</td><td class=\"day\">{fmt_day(r['created'])}<span class=\"dotp\">{first_p}</span></td>{cells}</tr>")
-    grid = f'<div class="tbl"><table class="ret"><thead>{gh}</thead><tbody>{"".join(gb)}</tbody></table></div>'
-    body = []
+# ── account journeys ───────────────────────────────────────────────────────────
+
+def _plain(html_text: str) -> str:
+    """describe_day's HTML as plain text for an SVG <title> tooltip."""
+    import re
+    return html.unescape(re.sub(r"<[^>]+>", "", html_text.replace("<br>", " · ")))
+
+
+def _answered(k: dict) -> int:
+    return int(k["ans"]["n"]) if "ans" in k else 0
+
+
+def journey_rows(F: dict) -> list[dict]:
+    """Accounts that did something after signing up, most answers first."""
+    rows = []
+    for r in F["account_rows"]:
+        days = {d: k for d, k in r["days"].items() if any(x != "sub" for x in k) or d == r["created"]}
+        if not days:
+            continue
+        r = dict(r, active=sorted(days), last=max(days))
+        rows.append(r)
+    rows.sort(key=lambda r: (-r["answers"], -len(r["active"]), r["created"]))
+    return rows
+
+
+def swimlanes(rows: list[dict], end: str) -> str:
+    """One strip per account: a ring on its sign-up day, a dot per day it practised
+    (area by questions answered), a small mark per day it only opened the app."""
+    t0 = min(dt.date.fromisoformat(r["created"]) for r in rows)
+    t1 = dt.date.fromisoformat(end)
+    span = max((t1 - t0).days, 1)
+    W, H, pad = 720, 26, 10
+    x = lambda d: pad + (W - 2 * pad) * (dt.date.fromisoformat(d) - t0).days / span  # noqa: E731
+    biggest = max([_answered(k) for r in rows for k in r["days"].values()] + [1])
+    rad = lambda a: 3 + 7 * (a / biggest) ** 0.5  # noqa: E731
+    ticks, d = [], t0.replace(day=1)
+    while d <= t1:
+        for day_ in (1, 15):
+            dd = d.replace(day=day_)
+            if t0 <= dd <= t1:
+                ticks.append(dd)
+        d = (d.replace(day=28) + dt.timedelta(days=4)).replace(day=1)
+    axis = ['<svg viewBox="0 0 %d 22" class="chart lane-axis" aria-hidden="true">' % W]
+    for tk in ticks:
+        xx = x(tk.isoformat())
+        axis.append(f'<text x="{xx:.1f}" y="15" class="tick" text-anchor="middle">{tk.strftime("%b %-d")}</text>')
+    axis.append("</svg>")
+    out = ['<div class="lanes-scroll"><div class="lanes">', "".join(axis)]
     for r in rows:
-        days = [d for d in r["days"] if any(k != "sub" for k in r["days"][d]) or d == r["created"]] or list(r["days"])
-        meta = f"Signed up {fmt_day(r['created'])}" + ("" if r["confirmed"] else " · email never confirmed")
-        for j, d in enumerate(days):
-            off = (dt.date.fromisoformat(d) - dt.date.fromisoformat(r["created"])).days
-            tag = "Sign-up day" if off == 0 else (f"Return · day {off}" if off > 0 else "Before sign-up")
-            first = f"<td rowspan='{len(days)}' class='who'>{who(r)}<div class='small muted'>{meta}</div></td>" if j == 0 else ""
-            body.append(f"<tr class='{'grp' if j == 0 else ''}'>{first}<td class='day'>{fmt_day(d)}<div class='small muted'>{tag}</div></td><td>{describe_day(r['days'][d])}</td></tr>")
-    days_tbl = f'<div class="tbl acct"><table><thead><tr><th>Account</th><th>Day</th><th>What they did</th></tr></thead><tbody>{"".join(body)}</tbody></table></div>'
-    return table(["Account", "Signed up", "Return days", "Returned on", "Questions answered"], summary, numeric_from=2), grid, days_tbl
+        pct = f", {round(100*r['correct']/r['answers'])}% right" if r["answers"] else ""
+        label = (f'<div class="lane-head"><span><b>{esc(r["masked"])}</b> <code>{r["uid"]}</code></span>'
+                 f'<span class="lane-sum">{n(r["answers"])} answers{pct} · {plural(len(r["active"]), "active day")} · last {fmt_day(r["last"], False)}</span></div>')
+        g = [f'<svg viewBox="0 0 {W} {H}" class="chart lane" role="img" aria-label="Journey of {esc(r["masked"])}">']
+        for tk in ticks:
+            xx = x(tk.isoformat())
+            g.append(f'<line x1="{xx:.1f}" x2="{xx:.1f}" y1="0" y2="{H}" class="grid"/>')
+        g.append(f'<line x1="{x(r["created"]):.1f}" x2="{x(r["last"]):.1f}" y1="{H/2}" y2="{H/2}" class="lane-span"/>')
+        for d in r["active"]:
+            k = r["days"][d]
+            tip = f"<title>{fmt_day(d)}: {esc(_plain(describe_day(k)))}</title>"
+            a = _answered(k)
+            if a:
+                g.append(f'<circle cx="{x(d):.1f}" cy="{H/2}" r="{rad(a):.1f}" class="lane-practice">{tip}</circle>')
+            elif d == r["created"]:
+                g.append(f'<circle cx="{x(d):.1f}" cy="{H/2}" r="4.5" class="lane-signup">{tip}</circle>')
+            else:
+                g.append(f'<rect x="{x(d)-1.5:.1f}" y="{H/2-5}" width="3" height="10" rx="1" class="lane-open">{tip}</rect>')
+            if d == r["created"] and a:
+                g.append(f'<circle cx="{x(d):.1f}" cy="{H/2}" r="{rad(a)+3:.1f}" class="lane-signup-ring"/>')
+        g.append("</svg>")
+        out.append(f'<div class="lane-row">{label}{"".join(g)}</div>')
+    out.append("".join(axis).replace("lane-axis", "lane-axis lane-axis-bottom"))
+    out.append("</div></div>")
+    return "".join(out)
+
+
+def journey_details(rows: list[dict]) -> str:
+    """Each account's days in words, with runs of app-open-only days folded into one line."""
+    items = []
+    for r in rows:
+        lines, run = [], []
+
+        def flush():
+            if run:
+                rng = fmt_day(run[0], False) + (f"–{fmt_day(run[-1], False)}" if len(run) > 1 else "")
+                lines.append(f'<li class="muted">Opened the app on {plural(len(run), "day")} without saving anything ({rng})</li>')
+                run.clear()
+        for d in r["active"]:
+            text = describe_day(r["days"][d])
+            if "nothing saved" in text and d != r["created"]:
+                run.append(d)
+                continue
+            flush()
+            lines.append(f"<li><span class=\"jd\">{fmt_day(d)}</span><div>{text}</div></li>")
+        flush()
+        pct = f", {round(100*r['correct']/r['answers'])}% right" if r["answers"] else ""
+        meta = f"signed up {fmt_day(r['created'], False)}" + ("" if r["confirmed"] else ", email never confirmed")
+        items.append(f'<details class="journey"><summary><b>{esc(r["masked"])}</b> <code>{r["uid"]}</code> '
+                     f'<span class="muted">· {meta} · {n(r["answers"])} answers{pct}</span></summary><ul>{"".join(lines)}</ul></details>')
+    return "".join(items)
 
 
 # ── the page ───────────────────────────────────────────────────────────────────
 
 EXTRA_CSS = """
+.lanes-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.lanes{min-width:600px;display:flex;flex-direction:column;gap:2px;padding:10px 14px}
+.lane-row{border-top:1px solid var(--line);padding-top:6px} .lane-row:first-of-type{border-top:0}
+.lane-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13.5px;line-height:1.3}
+.lane-head code{font-size:11.5px;color:var(--muted)} .lane-sum{color:var(--muted);font-variant-numeric:tabular-nums}
+.chart.lane .lane-span{stroke:var(--line);stroke-width:2}
+.chart.lane .lane-practice{fill:var(--accent)} .chart.lane .lane-open{fill:var(--muted);opacity:.55}
+.chart.lane .lane-signup{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+.chart.lane .lane-signup-ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.6}
+.chart.lane circle:hover,.chart.lane rect:hover{opacity:.7}
+.lane-axis-bottom{margin-top:4px}
+.legend .sw{display:inline-block;vertical-align:-2px;margin-right:6px}
+.journey{border-top:1px solid var(--line);padding:8px 0} .journey summary{font-size:14.5px;color:var(--fg)}
+.journey summary code{font-size:12px;color:var(--muted)} .journey ul{margin-top:8px;font-size:14px;gap:8px}
+.journey li{list-style:none;margin-left:-20px;display:grid;grid-template-columns:110px 1fr;gap:10px}
+.journey li.muted{display:block;padding-left:120px}
+@media (max-width:640px){.journey li{grid-template-columns:1fr;gap:0} .journey li.muted{padding-left:0}}
+.jd{color:var(--muted);white-space:nowrap}
+.more>details{border-top:1px solid var(--line);padding:12px 0} .more>details>summary{font-family:var(--display);font-size:19px;font-weight:600;color:var(--fg)}
+.more>details[open]>summary{margin-bottom:12px} .more>details>*:not(summary)+*{margin-top:12px}
 .multiples{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media (max-width:640px){.multiples{grid-template-columns:1fr}}
 .mult{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 14px 6px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .mult-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px}
@@ -308,37 +395,29 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
                 f'{c["returned"]} ({rate(c,"returned")}%)', f'{c["hours"]} h'] for c in chans]
     search = next(c for c in chans if c["label"].startswith("Google"))
     social = next(c for c in chans if c["label"].startswith("LinkedIn"))
-    real = [c for c in chans if c["new"] >= 30]
-    worst_return = min(real, key=lambda c: rate(c, "returned"))["label"] if real else ""
     dev_rows = [[name.capitalize(), q, a, f"{100 - round(100*a/q) if q else 0}%"]
                 for name, (q, a) in sorted(F["device_funnel"].items(), key=lambda x: -x[1][0]) if q]
     weeks = F.get("weekly_engaged", [])
     this_w, last_w = S.get("engaged_this_week", 0), S.get("engaged_last_week", 0)
-    week_line = (f"This week has {this_w} engaged people so far, " +
-                 ("already more than last week's " if this_w > last_w else "against last week's ") + f"{last_w}.") if weeks else ""
     li_days = ", ".join(f"{fmt_day(d, False)} ({v})" for d, v in F["linkedin_top_days"]) or "none"
     countries = ", ".join(f"{esc(c)} {u}" for c, u, _ in F["countries"][:5])
     topics = table(["Exam picked in the quiz builder", "People"], [[esc(t), u] for t, u in F["topics"]])
     exams = table(["Exam study guide read", "People", "Time"], [[esc(e), u, f"{h} h"] for e, u, h in F["exam_pages"]])
     exc_pages = ", ".join(f"<code>{esc(p)}</code> ({u})" for p, _, u in F["exception_pages"][:3])
     exc_browsers = "; ".join(f"{esc(b)}: {k} of {u} people" for b, k, u in F["exception_browsers"][:4])
-    acct_summary, acct_grid, acct_days = account_tables(F)
-    acct_table = table(["Of the accounts readers created in the window", "Count"], [
-        ["Created", S["accounts_created"]], ["Answered at least one question", S["accounts_practised"]],
-        ["Set an exam date", S["accounts_exam_date"]],
-        ["Built a flashcard deck of 60+ cards but answered nothing", S["accounts_big_deck_no_answers"]],
-        ["Never confirmed their email", S["accounts_unconfirmed"]],
-        ["Pro through Stripe (all readers)", S["paying_subscribers"]],
-        ["Pro through an access key", S["accounts_pro_key"]], ["Pro through a beta code", S["accounts_beta"]]])
+    jrows = journey_rows(F)
+    lane_rows = [r for r in jrows if r["answers"] or len(r["active"]) > 1]
+    quiet = [r for r in jrows if r not in lane_rows]
+    quiet_line = (f"<p class=\"small muted\">{plural(len(quiet), 'more account')} signed up and did nothing else: "
+                  + ", ".join(f"{esc(r['masked'])} ({fmt_day(r['created'], False)})" for r in quiet) + ".</p>") if quiet else ""
     paying = "".join(
         f"<li>A paying subscriber (<code>{p['uid']}</code>) renews {fmt_day(p['period_end'])}" +
         (" and has answered no questions." if not next((r["answers"] for r in F["account_rows"] if r["uid"] == p["uid"]), 0) else ".") + "</li>"
         for p in F["paying"] if p.get("period_end"))
-    top_acct = F["account_rows"][:3]
-    top_line = "; ".join(f"<code>{r['uid']}</code> {r['answers']} answers ({round(100*r['correct']/r['answers'])}% right) on {plural(len([d for d in r['days'] if 'ans' in r['days'][d]]), 'day')}"
-                         for r in top_acct if r["answers"])
     notes = notes_html.strip() or '<p class="muted">No notes for this run. Write the day\'s reading of the numbers and the actions in a notes file and pass it with <code>--notes</code>.</p>'
     scalars_json = json.dumps({"end": F["end"], "generated": generated, "scalars": S}, sort_keys=True)
+    week_kpi = (f"{'this week so far' if partial else 'this week'}, against {last_w} last week") if weeks else ""
+    today_note = " Today is partial, and GA4 is still processing it." if partial else ""
 
     return f"""<title>Actuarial Notes Usage</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -348,19 +427,17 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
 <main>
 <header>
   <div class="eyebrow">Usage report · {window}{" (today is partial)" if partial else ""} · generated {esc(generated)}</div>
-  <h1>Who actually uses Actuarial Notes, and where they stop</h1>
-  <p class="muted">Sources: GA4 and the production Supabase database. Bots, the e2e suite and the team's own devices and accounts are taken out of every number below; the method is at the end.</p>
+  <h1>How people use Actuarial Notes</h1>
+  <p class="muted">From GA4 and the production database, with bots, the e2e suite and the team taken out. How each number is made is under <i>More detail</i> at the end.</p>
 </header>
 
 <section>
-  <h2>The short version</h2>
   <div class="kpis">
-    <div class="kpi"><b>{n(S['engaged'])}</b><span>people who engaged (of ~{n(round(S['ga_users_all'], -2))} GA4 "users")</span></div>
-    <div class="kpi"><b>{S['first_quiz']}</b><span>opened a quiz</span></div>
-    <div class="kpi"><b>{S['question_answered']}</b><span>answered at least one question</span></div>
+    <div class="kpi"><b>{n(S['engaged'])}</b><span>people engaged with the app</span></div>
+    <div class="kpi"><b>{this_w}</b><span>engaged {week_kpi}</span></div>
+    <div class="kpi"><b>{S['question_answered']}</b><span>people answered a question</span></div>
     <div class="kpi"><b>{S['day2_return']}</b><span>came back on a later day</span></div>
-    <div class="kpi"><b>{S['accounts_created']}</b><span>new accounts, {S['accounts_practised']} of which practised</span></div>
-    <div class="kpi"><b>{S['paying_subscribers']}</b><span>paying subscriber{'s' if S['paying_subscribers'] != 1 else ''}{f", {S['paying_without_answers']} with no questions answered" if S['paying_without_answers'] else ''}</span></div>
+    <div class="kpi"><b>{S['accounts_created']}</b><span>accounts created, {S['accounts_practised']} practised</span></div>
   </div>
 </section>
 
@@ -370,108 +447,85 @@ def render(F: dict, notes_html: str = "", generated: str = "") -> str:
 </section>
 
 <section>
-  <h2>1. How many people, and when</h2>
+  <h2>1. Usage</h2>
   <div class="figure">
-    <div class="legend"><span><i style="background:var(--accent-soft)"></i>Visitors after the bot and team filters (upper bound)</span><span><i style="background:var(--accent)"></i>Engaged people (fired <code>user_engagement</code>)</span></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Engaged people</span><span><i style="background:var(--accent-soft)"></i>All visitors after the filters (an upper bound)</span></div>
     {daily_chart(F)}
-    <p class="small muted">Daily, {window}, in the property's time zone. Hover a bar for the day's numbers.{" Today is partial, and GA4 is still processing it." if partial else ""}</p>
+    <p class="small muted">Daily, in the property's time zone. Hover a bar for the day's numbers.{today_note}</p>
   </div>
-  <ul>
-    <li><b>{S['engaged_share_of_ga_pct']}% of GA4's users are people who engaged.</b> The rest are the e2e suite ({n(S['e2e_users'])}), crawlers and the team. {week_line} The busiest week had {S.get('engaged_peak_week', 0)}.</li>
-    <li><b>LinkedIn</b> sent {S['linkedin_visitors']} visitors in the window; its biggest days were {li_days}.</li>
-    <li><b>Where people are:</b> {countries}.</li>
-    <li><b>Device:</b> {S['mobile_share_pct']}% of people are on mobile, but they produce only {S['mobile_time_pct']}% of engagement time.</li>
-    <li><b>Concentration:</b> five devices produced {S['top5_device_time_pct']}% of all engagement time ({S['engaged_hours']} hours in total).</li>
-  </ul>
-</section>
-
-<section>
-  <h2>1a. What people do</h2>
-  <p class="muted small">Week by week, Monday to Sunday, each measure on its own scale. {"The last bar (lighter) is this week so far. " if partial else ""}The number beside each title is the window's total. Pages include the single page each distributed-bot visit loads.</p>
+  <h3>What they did, week by week</h3>
+  <p class="small muted">Monday to Sunday, each measure on its own scale; the number beside each title is the window's total.{" The lighter last bar is this week so far." if partial else ""}</p>
   {activity_chart(F, partial)}
 </section>
 
 <section>
-  <h2>2. From first visit to habit</h2>
+  <h2>2. Engagement: from first visit to habit</h2>
   <div class="figure">{funnel_chart(S)}
-    <p class="small muted">People who fired each event at least once in the window. GA4 counts browser IDs, so one person on two browsers counts twice. "Signed up" is GA4's <code>sign_up</code>, which under-counts: readers created {S['accounts_created']} accounts.</p>
+    <p class="small muted">People (browser IDs) who did each at least once in the window.</p>
   </div>
-  {table(["Device", "Opened quiz", "Answered", "Lost"], dev_rows)}
   <ul>
-    <li><b>{S['quiz_drop_pct']}% of people who open a quiz never answer a question</b> (mobile {S['mobile_quiz_drop_pct']}%, desktop {S['desktop_quiz_drop_pct']}%). <code>quiz_started</code> fires when the quiz loads, before the pre-quiz concept list; nothing is tracked between that and the first answer.</li>
-    <li><b>Where first quizzes start:</b> {S['first_quiz_from_builder']} from the quiz builder (<code>/</code>), {S['first_quiz_from_question_pages']} from a question page (<code>/wiki/question/…</code>).</li>
-    <li><b>Finishing a quiz:</b> {S['quiz_completed']} people. {S['streak_extended']} extended a streak, {S['quest_completed']} completed a daily quest, {S['concept_collected']} collected a flashcard.</li>
-    <li><b>Return visits:</b> {S['next_visit_pct']}% of new browsers came back on a later day ({S['day2_return']} of {S['first_visit']}). Returning visitors are {S['returning_share_pct']}% of people but {S['returning_time_pct']}% of engagement time.</li>
+    <li><b>{S['quiz_drop_pct']}% of people who open a quiz never answer a question</b>: {S['mobile_quiz_drop_pct']}% on mobile, {S['desktop_quiz_drop_pct']}% on desktop.</li>
+    <li><b>{S['next_visit_pct']}% of new visitors came back on a later day</b> ({S['day2_return']} of {n(S['first_visit'])}). Returning visitors are {S['returning_share_pct']}% of people but {S['returning_time_pct']}% of the time spent in the app.</li>
+    <li><b>Search</b> sends the most engaged visitors ({search['engaged']} of {search['new']}), but only {rate(search,'quiz')}% start a quiz; {S['question_landing_sessions']} sessions began on a question page. <b>LinkedIn</b> visitors start quizzes at {rate(social,'quiz')}%.</li>
   </ul>
+  {table(["Source", "New visitors", "Engaged", "Start quiz", "Answer", "Came back", "Time"], ch_rows)}
 </section>
 
-<section id="returns">
-  <h2>2a. Daily returns</h2>
-  <p>Each row is the people whose first visit fell on that day; D<i>n</i> counts how many were back <i>n</i> days later. Someone back on several days appears in several columns.</p>
-  {cohort_table(F)}
+<section id="journeys">
+  <h2>3. Account journeys</h2>
+  <p>Every reader account active in the window, one line each, most answers first. Guests can't be followed one by one: GA4 doesn't link a browser's visits to a person.</p>
+  <div class="legend">
+    <span><svg width="14" height="14" class="sw"><circle cx="7" cy="7" r="5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/></svg>Signed up</span>
+    <span><svg width="16" height="16" class="sw"><circle cx="8" cy="8" r="7" fill="var(--accent)"/></svg>Practised (size = questions answered)</span>
+    <span><svg width="8" height="14" class="sw"><rect x="2.5" y="2" width="3" height="10" rx="1" fill="var(--muted)" opacity=".55"/></svg>Opened the app, saved nothing</span>
+  </div>
+  {swimlanes(lane_rows, F["end"]) if lane_rows else "<p>No account was active in the window.</p>"}
+  {quiet_line}
   <ul>
-    <li><b>{S['cohort_d1']} of {n(S['cohort_new'])} new visitors ({S['next_day_pct']}%) came back the next day.</b> Then {S['cohort_d2']} on D2, {S['cohort_d3']} on D3, {S['cohort_d4']} on D4, and {S['cohort_d8plus']} return visits on D8 or later. The last few days' visitors haven't had time to come back.</li>
-  </ul>
-  <h3>Accounts</h3>
-  <p>The same view for signed-in accounts. ● answered questions that day, ○ the app was open but nothing was answered.</p>
-  {acct_grid}
-</section>
-
-<section>
-  <h2>3. Where people come from</h2>
-  {table(["Source", "New visitors", "Engaged", "Start quiz", "Answer", "Return later", "Engaged time"], ch_rows)}
-  <ul>
-    <li><b>Search</b> engages {round(100*search['engaged']/max(search['new'],1))}% of the people it sends, but only {rate(search,'quiz')}% start a quiz. Since question pages went live, {S['question_landing_sessions']} sessions landed on one ({S['question_landing_google']} from Google, {S['question_landing_engaged']} engaged).</li>
-    <li><b>Social</b> visitors start quizzes at {rate(social,'quiz')}%; {rate(social,'returned')}% came back on a later day. The lowest return rate among sources with 30+ visitors: {esc(worst_return)}.</li>
-    <li><b>ChatGPT</b> sent {S['chatgpt_visitors']} visitors, {S['chatgpt_engaged']} of them engaged. The distributed bot also fakes chatgpt.com as its referrer, so the visitor count overstates it.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>4. What people study</h2>
-  <div class="two">{topics}{exams}</div>
-  <ul><li><b>Features used:</b> flashcard review {S['flashcard_reviewed']}, Concept Craft {S['craft_combined']} ({S['craft_combinations']} combinations), Quiz Battle {S['battle_started']}, PCPA project {S['project_started']}, Store outbound {S['store_outbound_clicked']}, search {S['search']} people.</li></ul>
-</section>
-
-<section>
-  <h2>5. Accounts</h2>
-  <p>{S['all_accounts']} accounts exist; {S['team_accounts']} are the team's. Readers created {S['accounts_created']} in the window.</p>
-  {acct_table}
-  <ul>
-    <li><b>Most active accounts:</b> {top_line or 'none answered anything'}.</li>
-    <li><b>{S['accounts_returned']} of {S['accounts_shown']} accounts came back on a later day</b>, {S['accounts_practised_on_return']} of them to practise. {S['accounts_never_back']} never came back after their first day.</li>
+    <li><b>{S['accounts_returned']} of {S['accounts_shown']} accounts came back after their first day</b>, {S['accounts_practised_on_return']} of them to practise.</li>
+    <li><b>{S['accounts_pro_key'] + S['paying_subscribers'] + S['accounts_beta']} have Pro:</b> {S['paying_subscribers']} through Stripe, {S['accounts_pro_key']} through an access key ({S['pro_keys_readers']} of {S['pro_keys_total']} keys reached a reader).</li>
     {paying}
-    <li><b>Pro access keys:</b> {S['pro_keys_readers']} of {S['pro_keys_total']} reached a reader.</li>
-    <li><b>Guests do most of the practice:</b> GA4 counts {S['answer_events']} answers; the database holds {S['db_answers']} from readers' accounts, so at least {S['guest_answer_share_min_pct']}% came from guests. GA4 also misses readers who block it, so treat that as a floor.</li>
-    <li><b>Daily-plan email:</b> {S['email_optins']} reader{'s' if S['email_optins'] != 1 else ''} opted in; {S['email_optins_never_sent']} never received one (it goes to Pro accounts only). Content reports from readers: {S['content_reports']}.</li>
   </ul>
+  <h3>Each journey, day by day</h3>
+  <p class="small muted">Open an account to read its days. Runs of days where the app was only opened are folded into one line.</p>
+  <div>{journey_details(lane_rows)}</div>
+  <script>document.querySelectorAll('.lanes-scroll').forEach(e => {{ e.scrollLeft = e.scrollWidth; }});</script>
 </section>
 
-<section id="accounts">
-  <h2>5a. Every account, day by day</h2>
-  <p>Every reader account active in the window. Emails are masked; the code is the start of the account's Supabase ID.</p>
-  <h3>Who came back</h3>
-  {acct_summary}
-  <h3>Activity on each day</h3>
-  {acct_days}
-</section>
-
-<section>
-  <h2>6. Errors and data quality</h2>
-  <ul>
-    <li><b>{S['exception']} people ({S['exception_pct']}% of engaged people) hit a JavaScript exception</b>, most on {exc_pages}. By browser: {exc_browsers}. The error text isn't readable until <code>description</code> is registered as a custom dimension in GA4.</li>
-    <li><b>Team traffic:</b> tagged internal traffic is {S['internal_ids']} browser IDs and {S['internal_time_pct']}% of production engagement time.</li>
-    <li><b>Bots:</b> the Singapore crawler ({n(S['crawler_singapore'])} IDs at 1280×1200), a headless Linux crawler ({S['crawler_linux']}), and a distributed Windows 1920×1080 bot no filter can remove.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Method</h2>
-  <ul class="small">
-    <li><b>Window:</b> {window}, GA4 property time zone.</li>
-    <li><b>GA4 people:</b> production host only; minus GA4's Internal Traffic label; minus crawler signatures (screen sizes and OS listed in <code>scripts/usage_report/segments.py</code>); minus the team's untagged devices from the private config. About {n(S['visitors'])} visitors remain; the headline counts the {n(S['engaged'])} who fired <code>user_engagement</code>, which the distributed bot never does.</li>
-    <li><b>Supabase:</b> the team's accounts are left out; guests leave nothing in the database.</li>
-    <li>How to produce this report: <code>docs/usage-report.md</code>.</li>
-  </ul>
+<section class="more">
+  <h2>More detail</h2>
+  <details><summary>What people study</summary>
+    <div class="two">{topics}{exams}</div>
+    <p class="small">Other features, people who used each: flashcard review {S['flashcard_reviewed']}, Concept Craft {S['craft_combined']}, Quiz Battle {S['battle_started']}, PCPA project {S['project_started']}, Store link {S['store_outbound_clicked']}, search {S['search']}.</p>
+  </details>
+  <details><summary>Returns by first-visit day</summary>
+    <p class="small">Each row is the people whose first visit fell on that day; D<i>n</i> counts how many were back <i>n</i> days later. {S['cohort_d1']} of {n(S['cohort_new'])} ({S['next_day_pct']}%) came back the next day.</p>
+    {cohort_table(F)}
+  </details>
+  <details><summary>Audience and devices</summary>
+    <ul class="small">
+      <li><b>Where people are:</b> {countries}.</li>
+      <li><b>Device:</b> {S['mobile_share_pct']}% of people are on mobile, producing {S['mobile_time_pct']}% of the time spent.</li>
+      {table(["Device", "Opened quiz", "Answered", "Lost"], dev_rows)}
+      <li><b>Concentration:</b> five devices produced {S['top5_device_time_pct']}% of all time spent ({S['engaged_hours']} hours in total).</li>
+      <li><b>LinkedIn</b> sent {S['linkedin_visitors']} visitors; its biggest days were {li_days}. <b>ChatGPT</b> sent {S['chatgpt_visitors']}, {S['chatgpt_engaged']} of them engaged.</li>
+      <li><b>Guests vs accounts:</b> GA4 recorded {n(S['answer_events'])} answers and accounts saved {n(S['db_answers'])}; at least {S['guest_answer_share_min_pct']}% of answers came from guests.</li>
+      <li><b>Daily-plan email:</b> {S['email_optins']} opted in. Content reports from readers: {S['content_reports']}.</li>
+    </ul>
+  </details>
+  <details><summary>Errors and data quality</summary>
+    <ul class="small">
+      <li><b>{S['exception']} people ({S['exception_pct']}% of engaged people) hit a JavaScript error</b>, most on {exc_pages}. By browser: {exc_browsers}. The error text can't be read until <code>description</code> is registered in GA4.</li>
+      <li><b>Taken out:</b> the e2e suite ({n(S['e2e_users'])} IDs), the Singapore crawler ({n(S['crawler_singapore'])}), a Linux crawler ({S['crawler_linux']}), and team traffic ({S['internal_ids']} tagged IDs, {S['internal_time_pct']}% of time). Engaged people are {S['engaged_share_of_ga_pct']}% of GA4's {n(S['ga_users_all'])} "users".</li>
+    </ul>
+  </details>
+  <details><summary>Method</summary>
+    <ul class="small">
+      <li><b>Window:</b> {window}, GA4 property time zone.</li>
+      <li><b>GA4 people:</b> production host only; minus GA4's Internal Traffic label; minus crawler signatures (<code>scripts/usage_report/segments.py</code>); minus the team's untagged devices from the private config. About {n(S['visitors'])} visitors remain; <i>engaged</i> means they fired <code>user_engagement</code>, which the distributed bot never does.</li>
+      <li><b>Database:</b> the team's accounts are left out; guests leave nothing in it. Emails are masked; the code is the start of the account's ID.</li>
+      <li>How to produce this report: <code>docs/usage-report.md</code>.</li>
+    </ul>
+  </details>
 </section>
 </main>"""

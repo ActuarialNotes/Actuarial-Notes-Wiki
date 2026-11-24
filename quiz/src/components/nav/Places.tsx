@@ -88,8 +88,10 @@ function Wordmark({ className }: { className?: string }) {
  * before it. With no exam to name, the app's name stands at the left.
  */
 export function PlaceTopRow({
-  examKey, label, visiting = null, testId, desk = false, profile = true, claimable, className, children,
+  examKey, label, visiting = null, testId, desk = false, profile = true, claimable, className, children, lead,
 }: {
+  /** Stands in for the exam at the left: a page's own exam control (Learn's exam page). */
+  lead?: ReactNode
   /** The exam the page shows (its exam_progress key), or null when it shows none. */
   examKey?: string | null
   label?: string
@@ -105,7 +107,9 @@ export function PlaceTopRow({
 }) {
   return (
     <div className={cn('flex items-center gap-2', !desk && !children && 'lg:hidden', className)}>
-      {examKey && label
+      {lead
+        ? <span className="paper-chrome-lead flex min-w-0 items-center lg:hidden">{lead}</span>
+        : examKey && label
         ? <ExamSwitcherButton examKey={examKey} label={label} visiting={visiting} testId={testId} className={cn('paper-chrome-lead', !desk && 'lg:hidden')} />
         : <Wordmark className="paper-chrome-lead lg:hidden" />}
       <span className="flex-1" />
@@ -120,7 +124,7 @@ export function PlaceTopRow({
  * (`drawsOwnTopRow` in lib/places.ts): the exam in focus and the profile
  * button. The sign-in screens get the app's name alone.
  */
-export function PlaceHeader() {
+export function PlaceHeader({ lead }: { lead?: ReactNode } = {}) {
   const { pathname } = useLocation()
   const { active, activeKey } = useExamInFocus()
   const signingIn = pathname === '/auth' || pathname.startsWith('/auth/')
@@ -129,6 +133,7 @@ export function PlaceHeader() {
       examKey={signingIn ? null : activeKey}
       label={active?.examLabel}
       profile={!signingIn}
+      lead={lead}
       className="px-5 pt-3"
     />
   )

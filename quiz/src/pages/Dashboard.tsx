@@ -9,7 +9,7 @@
 // the week, which is the account's.
 
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown, ChevronRight, GraduationCap, Loader2, LogIn, PlusCircle, X } from 'lucide-react'
 import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveExamCard'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
@@ -17,7 +17,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import ExamsPopout from '@/components/ExamsPopout'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MobileNavButton } from '@/components/MobileNavButton'
-import type { LeagueExamOption } from '@/components/LeaderboardPanel'
+import { YOU_PATH } from '@/lib/you'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamSheet } from '@/components/today/ExamSheet'
 import { DayNoteCard, SessionCard } from '@/components/today/SessionCard'
@@ -77,7 +77,7 @@ const AnalyticsTilePeek = lazy(() => import('@/components/today/AnalyticsPeek').
 const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsSummaryPeek })))
 const AnalyticsOverlay = lazy(() => import('@/components/today/AnalyticsScreen').then(m => ({ default: m.AnalyticsOverlay })))
 const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
-const DashboardRemindersModal = lazy(() => import('@/components/DashboardRemindersModal').then(m => ({ default: m.DashboardRemindersModal })))
+const DailyEmailSheet = lazy(() => import('@/components/you/DailyEmailSheet').then(m => ({ default: m.DailyEmailSheet })))
 
 /** The span the Analytics tile's figure covers, in days. */
 const TILE_SPAN = 30
@@ -411,18 +411,6 @@ export default function Dashboard() {
     gemsToday,
   })
 
-  const leagueExams = useMemo<LeagueExamOption[]>(() => {
-    const seen = new Set<string>()
-    const out: LeagueExamOption[] = []
-    for (const s of exam.exams) {
-      const id = wikiExamIdToProgressKey(s.examId)
-      if (seen.has(id)) continue
-      seen.add(id)
-      out.push({ id, label: s.examLabel })
-    }
-    return out
-  }, [exam.exams])
-
   const questContext = useMemo<QuestContext | undefined>(() => {
     if (masteryLoading || planLoading) return undefined
     const forgottenDue = masteryRecords.filter(r => decayIfStale(r, new Date()).state === 'forgotten').length
@@ -559,9 +547,11 @@ export default function Dashboard() {
               <span className="ml-auto flex shrink-0 items-center">
                 {!isGuest && (
                   XP_ENABLED ? (
-                    <LevelBadge avatarUrl={avatarUrl} size={44} questContext={questContext} leagueExams={leagueExams} activeExamId={activeKey} />
+                    <LevelBadge size={44} questContext={questContext} />
                   ) : (
-                    <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
+                    <Link to={YOU_PATH} aria-label="You" data-testid="today-you" className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                      <AvatarDisplay avatarUrl={avatarUrl} initials={displayName.slice(0, 2).toUpperCase()} size={44} />
+                    </Link>
                   )
                 )}
               </span>
@@ -711,12 +701,11 @@ export default function Dashboard() {
     )}
     {!isGuest && DAILY_PLAN_EMAIL_ENABLED && remindersOpen && (
       <Suspense fallback={null}>
-        <DashboardRemindersModal
-          open
-          onClose={() => setRemindersOpen(false)}
+        <DailyEmailSheet
           email={user?.email ?? ''}
           isPro={isPro}
           subscriptionLoading={subscriptionLoading}
+          onClose={() => setRemindersOpen(false)}
         />
       </Suspense>
     )}

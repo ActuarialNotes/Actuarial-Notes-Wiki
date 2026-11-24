@@ -171,7 +171,7 @@ Each of these produced a wrong number at least once while the report was being b
    whose day-0 count matches `first_visit`. Reports published before Nov 8, 2026 used the cohort
    engine with both metrics, so their return figures were low.
 3. **GA4 misses some readers entirely.** One reader saved 31 answers on Nov 4–5, 2026 while GA4
-   recorded 5 answers from anyone: a blocker or the in-app analytics opt-out (Settings → Privacy).
+   recorded 5 answers from anyone: a blocker or the in-app analytics opt-out (Settings → Your data).
    Every GA4 figure is a floor, and so is the guest share of answers.
 4. **`sign_up` under-counts.** It fired for 7 IDs while readers created 16 accounts; email
    confirmation often lands in another browser. Count accounts in Supabase.

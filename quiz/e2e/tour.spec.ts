@@ -70,6 +70,17 @@ test.describe('onboarding tour', () => {
     await expect(tour(page).getByText('Open a study guide')).toBeVisible()
   })
 
+  // Replaying the tour moved from Settings → Support to Help, on You
+  // (docs/redesign-spec.md §7b).
+  test('Help, on You, starts the tour again', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Dismiss tour' }).click()
+    await page.goto('/you')
+    await page.getByTestId('you-help').click()
+    await page.getByRole('dialog', { name: 'Help' }).getByRole('button', { name: 'Take the tour' }).click()
+    await expect(tour(page).getByText('Welcome to Actuarial Notes')).toBeVisible()
+  })
+
   test('dismissing the corner button keeps the tour away on the next visit', async ({ page }) => {
     await page.goto('/')
     await page.getByRole('button', { name: 'Dismiss tour' }).click()

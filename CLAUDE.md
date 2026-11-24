@@ -90,7 +90,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
 
 
 ### Inside `quiz/src/`
-- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
+- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, `You.tsx`, `League.tsx` and Settings — the profile, the league and Settings, `/you`, `/you/league`, `/settings`, lazy —
   `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Workflows: the library
   at `/workflows` and a board at `/workflows/:id`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
@@ -376,7 +376,7 @@ before touching that area**:
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user
-  agents), not opted out (Settings → Privacy) — the rules being `lib/analyticsPolicy.ts`,
+  agents), not opted out (Settings → Your data) — the rules being `lib/analyticsPolicy.ts`,
   pure and tested. The app sends its own page views (`usePageTracking`: one per settled
   address, never for a page rewriting its query in place, URL cleaned, `content_group`
   set), `user_id` + user properties (`components/AnalyticsTracker.tsx`), `content_view`
@@ -445,7 +445,22 @@ before touching that area**:
   concept's page (`pages/wiki/WikiConcept.tsx`, `?from=<exam>`), which no longer redirects into
   the exam page: back to where the reader came from, the level button, more, the article,
   **Next in <objective>** and the fixed **Practice this**. The concept popup ends the same way:
-  Previous, Practice this, Next.
+  Previous, Practice this, Next. **Phase H, You, is built** (§7b and §8; style guide §13.8): three
+  pages under the existing sidebar. The profile, `/you` (`pages/You.tsx`): the reader's character,
+  name, Pro tag and level, the streak and gems, a Today card with the daily goal and the day's
+  quests (a finished one shows Collect), and rows to League, Settings, Store and Help. The league,
+  `/you/league` (`pages/League.tsx`): one exam's table for the week, the reader's row filled,
+  lines labelled Promoted and Relegated, the days left, Leave at the foot, and for a reader not
+  in it the way to join. Settings, `/settings` (`pages/Settings.tsx`): one screen in four groups
+  (Studying, App, Account, Your data) with every value on its row, each row edited in place or in
+  a popup (`components/you/SettingsSheets.tsx`), then Sign out and Delete account as plain red
+  text; it holds no quiz settings (R3). `lib/you.ts` is what each row says and the league's table
+  (`leagueTable`); `components/you/rows.tsx` the shared row, group, switch and top row. A visitor
+  keeps what the browser keeps (level, streak, goal, quests; theme, sound, session length) and is
+  asked to sign in for the rest. It replaced the level badge's popup, the sidebar's theme and
+  sound buttons and its account menu: Today's level badge and the sidebar's account row are links
+  to `/you` until Phase F's profile button. Below `lg` the three screens have no app header
+  (`isYouRoute`). The flows are `e2e/you.spec.ts`.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1251,7 +1266,7 @@ Other important `lib/` modules:
   header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
-  none. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
+  none. You's three screens (`isYouRoute` in `lib/you.ts`) are listed there too: their top row's control is the way out, a cross or a back arrow, with no hamburger. `isSessionRoute` is the exception: `/quiz` and `/review` have neither the header nor the
   sidebar, at any width. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
@@ -1405,9 +1420,9 @@ Other important `lib/` modules:
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`
   persists `XpState` to the `user_xp` table (signed-in) or localStorage (guests) and is
   called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
-  + `components/LevelBadge.tsx` (the Dashboard header level badge — a level ring that
-  replaces the mascot icon and opens an XP/daily-goal popup) and
-  `components/DailyGoalPicker.tsx` (the goal presets, behind the popup's *Change goal*). Gated by `XP_ENABLED`.
+  + the profile, `/you` (the level with its bar, and the daily goal on its Today card, which
+  opens `GoalSheet`, the goal presets), and `components/LevelBadge.tsx`, the ring on Today that
+  links there. Gated by `XP_ENABLED`.
 - `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
   loop. `quests.ts` is the pure, tested core: it generates a *personalized* daily
   board from the catalogue authored in `data/quests.ts` (one always-achievable "core"
@@ -1419,8 +1434,9 @@ Other important `lib/` modules:
   context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
   `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
   `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
-  `hooks/useQuests.ts`, the Level badge's Quests tab (`components/QuestsPanel.tsx`, whose
-  Collect button is `QuestsCard.tsx`'s `CollectButton`) and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  `hooks/useQuests.ts`, the profile's Today card (`pages/You.tsx`: a row per quest with its
+  progress, Collect on a finished one, and `QuestSheet` for what it counts and pays) and
+  `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
   layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
@@ -1433,19 +1449,17 @@ Other important `lib/` modules:
   `supabase/migrations/20260710_leagues.sql`) because a leaderboard is cross-user — the
   client can never write its own weekly XP or read the raw member table. `recordLeagueXp`
   is fired alongside `recordXp` from `quizStore` on quiz completion, credited to the
-  quiz's exam (quest XP is not — quests are cross-exam). Surfaced not as its own card but
-  as the **League tab** in the Level-badge popup (`components/LevelBadge.tsx` hosts
-  Quests/League tabs — the popup header shows the level + level-progress bar and the
-  daily goal is the first row of the Quests tab → `components/LeaderboardPanel.tsx` with
-  a per-exam selector and the join/leave, `components/QuestsPanel.tsx`; its footer's *Change goal*
-  swaps in `components/DailyGoalPicker.tsx`). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
+  quiz's exam (quest XP is not — quests are cross-exam). Surfaced as the profile's **League**
+  row (the tier and rank, or Join) and the league's own screen, `/you/league`
+  (`pages/League.tsx`: the week's table with its Promoted and Relegated lines, the exam switched
+  in place, joining and leaving). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
 - `dailyEmail.ts` — pure core of the opt-in daily study-plan email: derives "today's
   concepts" from a cached (possibly stale) study plan and the local send-time math. The
   actual sending happens server-side in the `daily-plan-email` edge function, which
   mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
   contract as the league SQL; `duplicationContracts.test.ts` runs both copies against
   golden vectors, and holds the SQL rollover to `leagues.ts` the same way). Prefs live in `user_email_prefs`
-  (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
+  (`hooks/useEmailPrefs.ts` + `components/you/DailyEmailSheet.tsx`, opened from Settings' Daily email row). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `accuracyTrend.ts` / `difficultyBreakdown.ts` / `registrationNudge.ts` — three answers to one
   reader's review: the accuracy figures behind Today's **Analytics** tile and screen (via
@@ -1582,7 +1596,7 @@ Other important `lib/` modules:
   `buildKnowledgeBase` turns it into the export through the app's own parsers (`parseQuestion`,
   `parseExamSyllabus`, `extractSourceMaterial`, `factCheckBadge`), withholding any question with an
   open critical finding. `aiConnector.ts` holds the public addresses (connector URL, skill zip) the
-  Settings card (`components/AiConnectorCard.tsx`) and `llms.txt` hand out. The run-time half is
+  Settings popup (`AiAssistantsSheet` in `components/you/SettingsSheets.tsx`) and `llms.txt` hand out. The run-time half is
   plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
   `knowledgeBase.js` index + search, `load.js`, `usage.js` the usage log and link tags); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
@@ -1629,7 +1643,7 @@ Other important `lib/` modules:
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `PODCAST_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`, `GAMES_ENABLED` — off: the Quiz tab's Games row is hidden while Quiz Battle and Concept Craft are in development, their pages still open by address; the e2e build sets `VITE_GAMES_PREVIEW=on`; `TOOLS_STORE_NAV_ENABLED` — off: the sidebar's Tools, Data Sources and Store rows are hidden, their pages still open by address and Workflows keeps its row; the e2e build sets `VITE_SIDEBAR_PREVIEW=on`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
-  mount it and Settings → Support hides the "Take the tour" row. The component, store and
+  mount it and Help, on You, hides the "Take the tour" row. The component, store and
   the `data-tour` markers across the app are left intact — re-enabling is a one-line change.
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `flashcardSync.ts` — cross-device persistence for the flashcard state: the collected

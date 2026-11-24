@@ -521,7 +521,11 @@ settings) and F10 (the results were a transcript).
 the same day**: the exam page's objectives as cards with the syllabus's sentences and their
 concepts as pills, "Practice <objective>", the concept page's level button, "more" and
 "Practice this", and the same foot in the reader (F10 to F13's next step, less the tool link).
-Phases E to I are not built.
+**Phase H (You) was built the same day**: the profile (character, level, streak, gems, the
+daily goal and the day's quests), the league as its own screen, and Settings as one grouped
+screen with every value on its row. Theme and sound left the sidebar's foot for Settings, and
+the level badge's popup is gone (F1's two menus for one account, and F15's settings scattered
+over three places). Phases E, G, I and F are not built.
 
 The "Choose any answer to continue" caption, left from Phase 0, went with Phase C, along with
 the shortcut it described (a tap on any option moved on).

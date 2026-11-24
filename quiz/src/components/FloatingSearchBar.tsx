@@ -101,6 +101,13 @@ export interface FloatingSearchInputProps {
   inputRef?: Ref<HTMLInputElement>
   /** A control at the end of the line: the profile button, on a place's own bar. */
   trailing?: ReactNode
+  /**
+   * The line is the page's top row on a phone: below `lg` it is laid out as
+   * `PlaceTopRow` is (12px down, a 44px row, 20px in from each side), so the
+   * profile button sits where it sits on every other page and doesn't move
+   * when the reader changes page.
+   */
+  topRow?: boolean
 }
 
 export function FloatingSearchInput({
@@ -112,10 +119,11 @@ export function FloatingSearchInput({
   ariaLabel,
   inputRef,
   trailing,
+  topRow = false,
 }: FloatingSearchInputProps) {
   useSearchTracking(value)
   return (
-    <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
+    <div className={cn('flex h-[calc(3.5rem-1px)] items-center gap-2', topRow && 'max-lg:h-[62px] max-lg:pb-1.5 max-lg:pt-3 max-sm:px-1')}>
       <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <input
         ref={inputRef}

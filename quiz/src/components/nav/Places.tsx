@@ -106,8 +106,8 @@ export function PlaceTopRow({
   return (
     <div className={cn('flex items-center gap-2', !desk && !children && 'lg:hidden', className)}>
       {examKey && label
-        ? <ExamSwitcherButton examKey={examKey} label={label} visiting={visiting} testId={testId} className={cn(!desk && 'lg:hidden')} />
-        : <Wordmark className="lg:hidden" />}
+        ? <ExamSwitcherButton examKey={examKey} label={label} visiting={visiting} testId={testId} className={cn('paper-chrome-lead', !desk && 'lg:hidden')} />
+        : <Wordmark className="paper-chrome-lead lg:hidden" />}
       <span className="flex-1" />
       {children}
       {profile && <ProfileButton claimable={claimable} className="lg:hidden" />}

@@ -2092,7 +2092,18 @@ summary .katex-display,
 /* The Tutor (docs/tutor.md §9) is chrome the same way: it sits in the corner
    of every page and belongs to none of them. */
 .paper-chrome-tutor { view-transition-name: paper-tutor; }
+/* A phone's top row is chrome too where it doesn't change: the profile button
+   (or a visitor's Sign in) and the exam at the left stand in the same place on
+   every page (PlaceTopRow, Learn's search bar), so they stay put while the page
+   moves under them, and only cross-fade if what they show differs. On a wide
+   screen the rail carries both. */
+@media (max-width: 1023.98px) {
+  .paper-chrome-profile { view-transition-name: paper-profile; }
+  .paper-chrome-lead { view-transition-name: paper-lead; }
+}
 
+::view-transition-group(paper-profile),
+::view-transition-group(paper-lead),
 ::view-transition-group(paper-rail),
 ::view-transition-group(paper-bar),
 ::view-transition-group(paper-resume),
@@ -2107,9 +2118,22 @@ summary .katex-display,
 ::view-transition-old(paper-resume),
 ::view-transition-new(paper-resume),
 ::view-transition-old(paper-tutor),
-::view-transition-new(paper-tutor) {
+::view-transition-new(paper-tutor),
+::view-transition-old(paper-profile),
+::view-transition-new(paper-profile),
+::view-transition-old(paper-lead),
+::view-transition-new(paper-lead) {
   animation-duration: 180ms;
   animation-timing-function: ease-out;
+}
+
+/* The exam at the left can change width (another exam, or the app's name):
+   draw each picture at its own size from the left rather than stretched to the
+   other's. */
+::view-transition-old(paper-lead),
+::view-transition-new(paper-lead) {
+  inline-size: auto;
+  block-size: auto;
 }
 
 /* ── The page is the sheet ──

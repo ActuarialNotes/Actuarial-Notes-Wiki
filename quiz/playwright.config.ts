@@ -37,6 +37,8 @@ const buildEnv = {
   VITE_COMMUNITY_PREVIEW: 'on',
   // Games (Quiz Battle, Concept Craft) are hidden from the Quiz tab while in development.
   VITE_GAMES_PREVIEW: 'on',
+  // The Tools card is hidden from Apply's home for now.
+  VITE_TOOLS_PREVIEW: 'on',
 }
 
 export default defineConfig({

@@ -25,7 +25,7 @@ import { useWorkflowsAccess } from '@/hooks/useWorkflowsAccess'
 import { openAttempts, projectsCount, recentTools, stepsLabel, toolsCount, workflowsCount } from '@/lib/apply'
 import { attemptOverview, recordTally } from '@/lib/attemptOverview'
 import { attemptRoute, visibleTo } from '@/lib/pcpaAttempt'
-import { TOOLS_ENABLED } from '@/lib/featureFlags'
+import { TOOLS_ENABLED, TOOLS_LISTED } from '@/lib/featureFlags'
 import { CATALOGUE_TOOLS } from '@/lib/toolCatalogue'
 import { toolConcept, toolsForExam } from '@/lib/toolExam'
 import { readRecent } from '@/lib/toolRecent'
@@ -146,7 +146,7 @@ export default function Apply() {
       <div className="mx-auto flex max-w-xl flex-col gap-2.5 px-3 pb-24 pt-6 sm:px-6 lg:pt-10">
         <h1 className="px-2 pb-3 text-[28px] font-bold tracking-tight">Apply</h1>
         <ProjectsCard />
-        {TOOLS_ENABLED && <ToolsCard />}
+        {TOOLS_ENABLED && TOOLS_LISTED && <ToolsCard />}
         {workflows && <WorkflowsCard />}
       </div>
     </div>

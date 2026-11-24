@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { TickBox } from '@/components/ui/TickBox'
 import { Popup, PopupTitle } from '@/components/ui/Popup'
 import { LevelSquare } from '@/components/LevelSquare'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
@@ -104,26 +105,6 @@ export function PopupSection({
   )
 }
 
-/** A 24px box: filled with the text colour when ticked, a bar when partly. */
-function Box({ state }: { state: 'all' | 'some' | 'none' }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        'flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px]',
-        state === 'none' ? 'border-[1.5px] border-foreground' : 'bg-foreground text-ground',
-      )}
-    >
-      {state === 'all' && (
-        <svg viewBox="0 0 24 24" className="h-[15px] w-[15px]" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 12l5 5 9-10" />
-        </svg>
-      )}
-      {state === 'some' && <span className="h-[3px] w-3 rounded-full bg-ground" />}
-    </span>
-  )
-}
-
 const ROW_FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring'
 
 /**
@@ -162,7 +143,7 @@ export function TopicChoices({
                 onClick={() => onToggleTopic(group.name)}
                 className={cn('flex min-h-[52px] min-w-0 flex-1 items-center gap-3.5 py-2 text-left', ROW_FOCUS)}
               >
-                <Box state={tick} />
+                <TickBox state={tick} />
                 <span className="min-w-0 flex-1 text-base font-medium leading-snug">{group.name}</span>
                 <span className="shrink-0 text-[15px] tabular-nums">{counts.get(group.name) ?? 0}</span>
               </button>
@@ -191,7 +172,7 @@ export function TopicChoices({
                       onClick={() => onToggleConcept(concept)}
                       className={cn('flex min-h-[44px] items-center gap-3 py-1.5 text-left', ROW_FOCUS)}
                     >
-                      <Box state={on ? 'all' : 'none'} />
+                      <TickBox state={on ? 'all' : 'none'} />
                       <span className="min-w-0 flex-1 text-[15px] leading-snug">{concept}</span>
                       {level !== undefined && <LevelSquare state={level} size="sm" today={today.has(concept)} />}
                     </button>

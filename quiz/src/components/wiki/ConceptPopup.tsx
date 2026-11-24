@@ -19,7 +19,7 @@ import { NavProgressBar } from '@/components/NavProgressBar'
 import { objectiveMarks } from '@/lib/syllabusChapters'
 import { INK_MENU, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/ink'
 import { PracticeButton } from '@/components/learn/PracticeButton'
-import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { useConceptQuestionCount } from '@/hooks/usePractice'
 import { conceptPracticeUrl } from '@/lib/practiceLaunch'
 
 /** Previous and Next in the reader's foot: 52px circles, outlined. */
@@ -387,16 +387,16 @@ export function ConceptPopup() {
             </div>
   ) : null
 
-  // "Practice this": a quiz on the concept being read, when the bank has
-  // questions on it. Starting it leaves the reader.
+  // "Practice": the concept's questions on the search, when the bank has
+  // questions on it. Following it leaves the reader.
   const practice = practiceConcept && practiceCount ? (
     <PracticeButton
       size="foot"
-      to={conceptPracticeUrl(practiceConcept, practiceCount, practiceSettings())}
+      to={conceptPracticeUrl(practiceConcept)}
       onClick={close}
       className="w-full"
     >
-      Practice this
+      Practice
     </PracticeButton>
   ) : null
 

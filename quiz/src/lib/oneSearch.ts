@@ -279,10 +279,50 @@ export function resourceMetaLine(result: ResourceResult): string {
   return [item.author ?? '', item.year ? String(item.year) : '', otherExam ?? ''].filter(Boolean).join(' · ')
 }
 
-/** The most questions one "Practice these" starts. */
+/** The most questions one practice starts. */
 export const PRACTICE_LIMIT = 100
+
+/** How many questions the count starts at, when the results hold more. */
+export const PRACTICE_DEFAULT = 10
 
 /** The ids "Practice these N" starts: the results in order, up to the limit. */
 export function practiceIds(results: readonly QuestionResult[]): string[] {
   return results.slice(0, PRACTICE_LIMIT).map(r => r.question.id)
+}
+
+/**
+ * The count the Questions tab's stepper shows: the reader's choice held
+ * between 1 and what the results hold (never past the limit), or the default
+ * while they have made none. 0 when nothing is found.
+ */
+export function practiceCount(chosen: number | null, found: number): number {
+  const most = Math.min(found, PRACTICE_LIMIT)
+  if (most <= 0) return 0
+  const n = chosen ?? PRACTICE_DEFAULT
+  return Math.max(1, Math.min(most, Math.floor(n)))
+}
+
+/**
+ * `count` of the results, drawn at random, for a practice of so many: each
+ * question equally likely, none twice. The quiz shuffles a pinned list, so
+ * the order here does not matter.
+ */
+export function drawIds(
+  results: readonly QuestionResult[],
+  count: number,
+  random: () => number = Math.random,
+): string[] {
+  const ids = results.map(r => r.question.id)
+  const n = Math.max(0, Math.min(count, ids.length, PRACTICE_LIMIT))
+  // A partial Fisher-Yates: the first n places are the draw.
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor(random() * (ids.length - i))
+    ;[ids[i], ids[j]] = [ids[j]!, ids[i]!]
+  }
+  return ids.slice(0, n)
+}
+
+/** The ticked questions still among the results, in the results' order. */
+export function pickedIds(results: readonly QuestionResult[], picked: ReadonlySet<string>): string[] {
+  return results.filter(r => picked.has(r.question.id)).map(r => r.question.id).slice(0, PRACTICE_LIMIT)
 }

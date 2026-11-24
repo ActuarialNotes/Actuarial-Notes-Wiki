@@ -56,7 +56,7 @@ import { FlashcardsMoreMenu } from '@/components/flashcards/FlashcardsMoreMenu'
 import { PracticeButton } from '@/components/learn/PracticeButton'
 import { PRACTICE_HEADER_BUTTON, PracticeHeader } from '@/components/practice/PracticeHeader'
 import { LevelSquare } from '@/components/LevelSquare'
-import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { useConceptQuestionCount } from '@/hooks/usePractice'
 import { conceptPracticeUrl } from '@/lib/practiceLaunch'
 import { trackFlashcardReviewed } from '@/lib/analytics'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
@@ -1840,10 +1840,10 @@ function FlashcardsDeck() {
           </button>
           {practiceConcept && practiceCount ? (
             <PracticeButton
-              to={conceptPracticeUrl(practiceConcept, practiceCount, practiceSettings())}
+              to={conceptPracticeUrl(practiceConcept)}
               className="flex-1"
             >
-              Practice this
+              Practice
             </PracticeButton>
           ) : (
             <span className="flex-1 text-center text-base font-semibold tabular-nums" data-testid="flashcards-position">

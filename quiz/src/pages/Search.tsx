@@ -4,13 +4,15 @@
 // this page draws them.
 //
 // Four tabs with counts. All shows each kind's first few results and a row for
-// the rest; Questions adds the question filters and ends in the screen's one
-// filled button, which starts a quiz on the results.
+// the rest; Questions adds the question filters, a box on every question to
+// pick it, and ends in the screen's one filled button: the picked questions,
+// or so many of the results at random (the count beside it). A concept's
+// Practice button opens this tab on the concept's questions.
 
 import { PRACTICE_EXAM_KEY } from '@/lib/practiceHome'
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronRight, Play, Search as SearchIcon, X } from 'lucide-react'
+import { ChevronRight, Minus, Play, Plus, Search as SearchIcon, X } from 'lucide-react'
 import { AnswerDot } from '@/components/AnswerDot'
 import { LevelSquare } from '@/components/LevelSquare'
 import { MarkdownText } from '@/components/MarkdownText'
@@ -20,6 +22,7 @@ import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { INK_MARK, highlightMatch } from '@/components/SearchHighlight'
 import { ShowMore } from '@/components/ShowMore'
 import { Button } from '@/components/ui/button'
+import { TickBox } from '@/components/ui/TickBox'
 import { GROUND } from '@/components/ui/OutlineCard'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
@@ -40,7 +43,9 @@ import {
   SEARCH_TABS,
   attemptDot,
   conceptPlaceLine,
-  practiceIds,
+  drawIds,
+  pickedIds,
+  practiceCount,
   previewOf,
   questionMetaLine,
   resourceMetaLine,
@@ -163,13 +168,26 @@ export default function Search() {
     `one-search:${query}:${searchParamsFromState({ ...state, query: '', tab: 'all' }).toString()}`,
   )
 
-  const practiceCount = Math.min(results.questions.length, PRACTICE_LIMIT)
-  const showPractice = tab === 'questions' && !questionsLoading && practiceCount > 0
+  // The questions ticked, and the count drawn when none are. Both are this
+  // visit's: a tick on a question the filters hide waits for it to come back.
+  const [picked, setPicked] = useState<ReadonlySet<string>>(() => new Set())
+  const [chosenCount, setChosenCount] = useState<number | null>(null)
+  const pickedList = useMemo(() => pickedIds(results.questions, picked), [results.questions, picked])
+  const found = results.questions.length
+  const count = practiceCount(chosenCount, found)
+  const togglePick = useCallback((id: string) => {
+    setPicked(prev => {
+      const next = new Set(prev)
+      if (!next.delete(id)) next.add(id)
+      return next
+    })
+  }, [])
+
+  const showPractice = tab === 'questions' && !questionsLoading && (count > 0 || pickedList.length > 0)
   const practiceBarRef = useRef<HTMLDivElement>(null)
   useActionBarHeight(practiceBarRef, showPractice)
 
-  function startPractice() {
-    const ids = practiceIds(results.questions)
+  function startPractice(ids: readonly string[]) {
     if (ids.length === 0) return
     storeSelectedIds(ids)
     const url = new URL(
@@ -206,6 +224,8 @@ export default function Search() {
       result={r}
       query={query}
       dot={tracked ? attemptDot(attempts.get(r.question.id)) : null}
+      picked={tab === 'questions' ? picked.has(r.question.id) : undefined}
+      onTogglePick={togglePick}
     />
   )
 
@@ -355,16 +375,66 @@ export default function Search() {
           ref={practiceBarRef}
           className="fixed bottom-0 left-0 right-0 z-40 bg-ground px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3 lg:left-[var(--sidebar-width)]"
         >
-          <Button size="main" data-sound="begin" onClick={startPractice} className="mx-auto flex w-full max-w-xl rounded-full">
-            <Play className="h-[18px] w-[18px] fill-current" aria-hidden="true" />
-            {results.questions.length > PRACTICE_LIMIT
-              ? `Practice the first ${practiceCount}`
-              : practiceCount === 1 ? 'Practice this question' : `Practice these ${practiceCount}`}
-          </Button>
+          <div className="mx-auto flex w-full max-w-xl items-center gap-2.5" data-testid="search-practice">
+            {pickedList.length > 0 ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setPicked(new Set())}
+                  className={cn('h-[58px] shrink-0 rounded-full border-[1.5px] border-foreground px-5 text-base font-bold transition-colors hover:bg-foreground/10', ROW_FOCUS)}
+                >
+                  Clear
+                </button>
+                <Button size="main" data-sound="begin" onClick={() => startPractice(pickedList)} className="min-w-0 flex-1 rounded-full">
+                  <Play className="h-[18px] w-[18px] shrink-0 fill-current" aria-hidden="true" />
+                  <span className="truncate">Practice {pickedList.length} picked</span>
+                </Button>
+              </>
+            ) : (
+              <>
+                {found > 1 && (
+                  <PracticeCount
+                    count={count}
+                    most={Math.min(found, PRACTICE_LIMIT)}
+                    onChange={setChosenCount}
+                  />
+                )}
+                <Button size="main" data-sound="begin" onClick={() => startPractice(drawIds(results.questions, count))} className="min-w-0 flex-1 rounded-full">
+                  <Play className="h-[18px] w-[18px] shrink-0 fill-current" aria-hidden="true" />
+                  <span className="truncate">
+                    {found === 1
+                      ? 'Practice this question'
+                      : count === found ? `Practice all ${count}` : `Practice ${count} at random`}
+                  </span>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       )}
 
       <ConceptPopup />
+    </div>
+  )
+}
+
+/** How many questions to draw: a minus, the count and a plus, as one outlined pill. */
+function PracticeCount({ count, most, onChange }: { count: number; most: number; onChange: (next: number) => void }) {
+  const step = cn(
+    'flex h-full w-11 items-center justify-center transition-colors enabled:hover:bg-foreground/10 disabled:opacity-40',
+    ROW_FOCUS,
+  )
+  return (
+    <div role="group" aria-label="How many questions" className="flex h-[58px] shrink-0 items-center overflow-hidden rounded-full border-[1.5px] border-foreground">
+      <button type="button" aria-label="One question fewer" disabled={count <= 1} onClick={() => onChange(count - 1)} className={cn(step, 'rounded-l-full')}>
+        <Minus className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+      </button>
+      <span aria-live="polite" aria-label={`${count} questions`} className="min-w-[2.5ch] text-center text-[17px] font-bold tabular-nums">
+        {count}
+      </span>
+      <button type="button" aria-label="One question more" disabled={count >= most} onClick={() => onChange(count + 1)} className={cn(step, 'rounded-r-full')}>
+        <Plus className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+      </button>
     </div>
   )
 }
@@ -491,16 +561,34 @@ function QuestionRow({
   result,
   query,
   dot,
+  picked,
+  onTogglePick,
 }: {
   result: QuestionResult
   query: string
   /** The reader's record on it; null when there is no record to read (signed out). */
   dot: ReturnType<typeof attemptDot> | null
+  /** Whether it is ticked for practice; undefined draws no box (All's preview). */
+  picked?: boolean
+  onTogglePick?: (id: string) => void
 }) {
   const [infoOpen, setInfoOpen] = useState(false)
   const { question } = result
   return (
     <li className={cn(ROW_RULE, 'flex items-start gap-1')} data-testid="search-question">
+      {picked !== undefined && onTogglePick && (
+        <button
+          type="button"
+          role="checkbox"
+          aria-checked={picked}
+          aria-label={`Pick for practice: ${questionMetaLine(result)}`}
+          data-sound="tick"
+          onClick={() => onTogglePick(question.id)}
+          className={cn('-ml-1 flex shrink-0 items-start rounded-lg py-3 pl-1 pr-2', ROW_FOCUS)}
+        >
+          <TickBox state={picked ? 'all' : 'none'} className="mt-0.5" />
+        </button>
+      )}
       <Link
         to={`/wiki/question/${encodeURIComponent(question.id)}`}
         className={cn('flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3', ROW_FOCUS)}

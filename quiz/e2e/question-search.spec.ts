@@ -49,7 +49,7 @@ test.describe('search', () => {
     // A concept opened over the results closes when the reader goes to another page.
     await page.goto('/search?q=bayes+theorem&tab=concepts')
     await page.locator('main a[href^="/wiki/concept/"]').first().click()
-    const practiceThis = page.getByRole('link', { name: 'Practice this' })
+    const practiceThis = page.getByRole('link', { name: 'Practice', exact: true })
     await expect(practiceThis).toBeVisible()
     await studyGuides.click()
     await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
@@ -72,7 +72,7 @@ test.describe('search', () => {
     // The row for the rest opens that kind's tab.
     await questions.getByRole('button', { name: /^\d+ more$/ }).click()
     await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
-    await expect(page.getByRole('button', { name: /^Practice (these|the first) \d+$/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
   })
 
   test('"Practice these N" starts a quiz on the results', async ({ page }) => {
@@ -89,6 +89,26 @@ test.describe('search', () => {
   test('an old link to the question search still lands', async ({ page }) => {
     await page.goto('/search?type=questions&q=poisson')
     await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
-    await expect(page.getByRole('button', { name: /^Practice (these|the first) \d+$/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
+  })
+
+  test("a concept's questions: picked ones, or so many at random", async ({ page }) => {
+    await page.goto('/search?tab=questions&concept=Bayes+Theorem')
+    await expect(page.getByRole('tab', { name: /^Questions/ })).toHaveAttribute('aria-selected', 'true')
+    const rows = page.getByTestId('search-question')
+    await expect(rows.first()).toBeVisible({ timeout: 30_000 })
+
+    // A count, stepped, draws that many at random.
+    const bar = page.getByTestId('search-practice')
+    await expect(bar.getByRole('button', { name: /^Practice (all \d+|\d+ at random)$/ })).toBeVisible()
+    await bar.getByRole('button', { name: 'One question fewer' }).click()
+
+    // Ticking questions practises those instead.
+    await rows.nth(0).getByRole('checkbox').click()
+    await rows.nth(1).getByRole('checkbox').click()
+    await expect(rows.nth(0).getByRole('checkbox')).toHaveAttribute('aria-checked', 'true')
+    await bar.getByRole('button', { name: 'Practice 2 picked' }).click()
+    await expect(page).toHaveURL(/\/quiz\?.*count=2/)
+    await expect(page).toHaveURL(/selection=stored/)
   })
 })

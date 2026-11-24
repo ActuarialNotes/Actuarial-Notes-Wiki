@@ -29,7 +29,7 @@ import { GROUND, OUTLINE_ROW_RULE, OUTLINE_TILE } from '@/components/ui/OutlineC
 import { backLabel, useBack, usePageLabel, type Back } from '@/hooks/useBack'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
-import { practiceSettings, useConceptQuestionCount } from '@/hooks/usePractice'
+import { useConceptQuestionCount } from '@/hooks/usePractice'
 import { useExamInFocus } from '@/hooks/useExamInFocus'
 import { ToolTemplate, type PinnedAnswer } from '@/components/tools/ToolTemplate'
 import { FROM_PARAM } from '@/lib/toolTemplate'
@@ -296,8 +296,8 @@ export function ToolPage({ slug }: { slug: string }) {
           className="sticky bottom-0 z-30 border-t border-border bg-background px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3"
         >
           <div className="mx-auto max-w-2xl">
-            <PracticeButton to={conceptPracticeUrl(concept, questionCount, practiceSettings())} aside={questionCountLabel(questionCount)}>
-              Practice this
+            <PracticeButton to={conceptPracticeUrl(concept)} aside={questionCountLabel(questionCount)}>
+              Practice
             </PracticeButton>
           </div>
         </div>

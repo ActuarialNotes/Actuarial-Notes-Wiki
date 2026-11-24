@@ -1,4 +1,4 @@
-// The filled Practice button (docs/redesign-spec.md §7): "Practice this" at
+// The filled Practice button (docs/redesign-spec.md §7): "Practice" at
 // the foot of a concept, "Practice <objective>" at the end of an opened
 // objective. A link, so it can be opened in a new tab like any other.
 

@@ -83,7 +83,7 @@ test.describe('flashcard focus mode on a phone', () => {
 test.describe('flashcards under Practice', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
-  test('the Deck popup lists the cards and a tap goes to one; the foot is Previous, Practice this, Next', async ({ page }) => {
+  test('the Deck popup lists the cards and a tap goes to one; the foot is Previous, Practice, Next', async ({ page }) => {
     await serveVault(page)
     await page.addInitScript(() => {
       localStorage.setItem('actuarial_flashcards', JSON.stringify([
@@ -111,9 +111,9 @@ test.describe('flashcards under Practice', () => {
     await expect(card).toContainText('Permutation')
 
     // Permutation has questions in the bank, so its card can be practised.
-    const practice = page.getByTestId('flashcards-foot').getByRole('link', { name: /Practice this/ })
+    const practice = page.getByTestId('flashcards-foot').getByRole('link', { name: 'Practice', exact: true })
     await expect(practice).toBeVisible({ timeout: 20_000 })
-    await expect(practice).toHaveAttribute('href', /\/quiz\?/)
+    await expect(practice).toHaveAttribute('href', /^\/search\?tab=questions&concept=Permutation$/)
 
     // Removing a card in the deck takes it out.
     await page.getByRole('button', { name: /^Deck, 3 cards/ }).click()

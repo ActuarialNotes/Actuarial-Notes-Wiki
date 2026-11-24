@@ -1,21 +1,23 @@
-// "Practice this" and "Practice <objective>" (docs/redesign-spec.md §7): the
-// quiz a concept page's foot, the reader's foot and an opened objective start.
-// One short quiz, never the whole pool: the foot says how many questions
-// there are, and Start on the Quiz tab is where a reader sizes one.
+// "Practice" and "Practice <objective>" (docs/redesign-spec.md §7). A
+// concept's Practice (a concept page's foot, the reader's foot, a flashcard, a
+// tool) opens the one search on the concept's questions, where the reader
+// picks the questions or how many to draw. An opened objective's starts one
+// short quiz on its concepts.
 
+import { conceptLabel } from './questionFilters'
 import { quizLaunchUrl, type LaunchSettings } from './quizBuilder'
 
 /** How many questions a Practice button starts, when the pool holds more. */
 export const PRACTICE_SIZE = 10
 
-/** A quiz on one concept. `available` is how many questions are tagged with it. */
-export function conceptPracticeUrl(concept: string, available: number, settings: LaunchSettings): string {
-  return quizLaunchUrl({
-    kind: 'concept',
-    concept,
-    levels: null,
-    count: available > PRACTICE_SIZE ? PRACTICE_SIZE : undefined,
-  }, settings)
+/**
+ * One concept's questions on the one search's Questions tab
+ * (lib/oneSearch.ts). The Concepts filter names a concept the way
+ * `conceptLabel` does, so the name is written that way to tick its option.
+ */
+export function conceptPracticeUrl(concept: string): string {
+  const params = new URLSearchParams({ tab: 'questions', concept: conceptLabel(concept) })
+  return `/search?${params.toString()}`
 }
 
 /** A quiz on one learning objective's concepts, from the exam's own bank. */

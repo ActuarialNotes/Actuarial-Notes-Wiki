@@ -9,7 +9,7 @@
 // the week, which is the account's.
 
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronRight, Loader2 } from 'lucide-react'
 import { ActiveExamCardEmpty, ActiveExamCardLoading } from '@/components/ActiveExamCard'
 import { PlaceTopRow } from '@/components/nav/Places'
@@ -442,19 +442,8 @@ export default function Dashboard() {
             label={activeSyllabus?.examLabel}
             testId="today-exam"
             claimable={claimable}
-            className={cn('px-1 lg:hidden', dim)}
-          >
-            {isGuest && (
-              // A visitor's exams and progress are this browser's; signing in keeps them.
-              <Link
-                to="/auth"
-                state={{ from: '/dashboard' }}
-                className="flex h-11 items-center rounded-full border-[1.5px] border-foreground px-4 text-[15px] font-semibold hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Sign in
-              </Link>
-            )}
-          </PlaceTopRow>
+            className={cn('px-2 lg:hidden', dim)}
+          />
 
           {exam.loading ? (
             <ActiveExamCardLoading />

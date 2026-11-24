@@ -220,7 +220,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             placeholder="Search concepts"
             ariaLabel="Search study guides"
             // Learn's top row on a phone: the profile button, until the search is in use.
-            trailing={!active && <ProfileButton className="-mr-1 scale-[0.82] lg:hidden" />}
+            topRow
+            trailing={!active && <ProfileButton className="lg:hidden" />}
           />
 
           {pageTitle && (

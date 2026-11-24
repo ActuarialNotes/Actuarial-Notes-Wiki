@@ -31,13 +31,15 @@ test.describe('search', () => {
     await expect(page).toHaveURL(/\/search\?/)
   })
 
-  test('a result is not where Learn opens, and a concept opened here stays here', async ({ page }) => {
+  test('a result is not where Learn opens, and a concept opens on its study guide', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/search?q=p-004&tab=questions')
     const studyGuides = page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' })
 
     // A question's page, then Learn: its home, from the page and from another place.
-    await page.getByTestId('search-question').first().getByRole('link').first().click()
+    const row = page.getByTestId('search-question').first()
+    await row.getByRole('button', { name: 'Show the whole question' }).click()
+    await row.getByRole('link', { name: 'Open question' }).click()
     await expect(page).toHaveURL(/\/wiki\/question\/p-004/)
     await studyGuides.click()
     await expect(page).toHaveURL(/\/wiki$/)
@@ -46,14 +48,12 @@ test.describe('search', () => {
     await studyGuides.click()
     await expect(page).toHaveURL(/\/wiki$/)
 
-    // A concept opened over the results closes when the reader goes to another page.
+    // A concept opens on its exam's study guide, lit there and in the reader.
     await page.goto('/search?q=bayes+theorem&tab=concepts')
-    await page.locator('main a[href^="/wiki/concept/"]').first().click()
-    const practiceThis = page.getByRole('link', { name: 'Practice', exact: true })
-    await expect(practiceThis).toBeVisible()
-    await studyGuides.click()
-    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
-    await expect(practiceThis).toHaveCount(0)
+    await page.locator('main a[data-result]').first().click()
+    await expect(page).toHaveURL(/\/wiki\/exam\/.*concept=Bayes/)
+    await expect(page.locator('[data-pill="Bayes Theorem"]')).toHaveAttribute('aria-current', 'true', { timeout: 30_000 })
+    await expect(page.getByTestId('practice-button')).toBeVisible()
   })
 
   test('the tabs count what the query found, and All shows each kind', async ({ page }) => {
@@ -92,9 +92,9 @@ test.describe('search', () => {
 
     // An apostrophe the page's name doesn't have, and a slip, still find the concept.
     await field.fill("bayes' theorem")
-    await expect(page.locator('main a[href^="/wiki/concept/Bayes"]').first()).toBeVisible({ timeout: 30_000 })
+    await expect(page.locator('main a[data-result]', { hasText: 'Bayes Theorem' }).first()).toBeVisible({ timeout: 30_000 })
     await field.fill('varience')
-    await expect(page.locator('main a[href^="/wiki/concept/Variance"]').first()).toBeVisible()
+    await expect(page.locator('main a[data-result]', { hasText: /^Variance/ }).first()).toBeVisible()
 
     // Down goes into the results, Up comes back to the field.
     await field.press('ArrowDown')

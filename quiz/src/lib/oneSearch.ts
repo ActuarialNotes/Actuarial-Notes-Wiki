@@ -98,8 +98,8 @@ export interface SearchFocus {
 
 export interface ConceptResult {
   item: WikiIndexItem
-  /** Where it sits on a syllabus: the exam, and the learning objective under it. */
-  place: { exam: string; topic: string } | null
+  /** Where it sits on a syllabus: the exam, the learning objective under it, and the exam page's name. */
+  place: { exam: string; topic: string; examFile: string } | null
   /** The exam it belongs to, when that isn't the exam in focus. */
   otherExam: string | null
 }
@@ -194,7 +194,10 @@ function conceptPlace(
   if (on.length === 0) return { place: null, inFocus: false }
   const mine = focus ? on.find(p => p.syllabus.examId === focus.examId) : undefined
   const at = mine ?? on[0]!
-  return { place: { exam: at.syllabus.examLabel, topic: at.topic }, inFocus: !!mine }
+  return {
+    place: { exam: at.syllabus.examLabel, topic: at.topic, examFile: at.syllabus.fileName ?? at.syllabus.examLabel },
+    inFocus: !!mine,
+  }
 }
 
 // ─── Questions ───────────────────────────────────────────────────────────────

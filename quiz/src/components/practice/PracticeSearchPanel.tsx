@@ -143,7 +143,7 @@ export default function PracticeSearchPanel({ query: typed, exam, questions, ini
                 />
               ))}
             </ul>
-            <ShowMore nextSize={paged.nextSize} remaining={paged.remaining} noun="questions" onShowMore={paged.showMore} />
+            <ShowMore auto nextSize={paged.nextSize} remaining={paged.remaining} noun="questions" onShowMore={paged.showMore} />
           </>
         )}
       </div>

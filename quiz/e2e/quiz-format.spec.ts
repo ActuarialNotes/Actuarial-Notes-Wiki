@@ -129,7 +129,13 @@ test.describe('practice home', () => {
     await expect(page).not.toHaveURL(/\/search/)
     await expect(results.getByRole('button', { name: /Exam 5/ })).toBeVisible()
     // A question opened from the results and left again finds them as they were.
-    await results.getByTestId('search-question').first().getByRole('link').first().click()
+    // Pressing a row ticks it; the chevron opens the whole question, which links to its page.
+    const row = results.getByTestId('search-question').first()
+    await row.getByRole('checkbox').click()
+    await expect(row.getByRole('checkbox')).toHaveAttribute('aria-checked', 'true')
+    await expect(page).not.toHaveURL(/\/wiki\/question\//)
+    await row.getByRole('button', { name: 'Show the whole question' }).click()
+    await row.getByRole('link', { name: 'Open question' }).click()
     await expect(page).toHaveURL(/\/wiki\/question\//)
     await page.goBack()
     await expect(search).toHaveValue('loss')

@@ -4,13 +4,14 @@
 
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Minus, Plus } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react'
 import { AnswerDot } from '@/components/AnswerDot'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { INK_MARK } from '@/components/SearchHighlight'
 import { TickBox } from '@/components/ui/TickBox'
 import { ATTEMPT_DOT_LABEL, attemptDot, questionMetaLine, type QuestionResult } from '@/lib/oneSearch'
+import type { Question } from '@/lib/parser'
 import { matchedRun, questionPreview } from '@/lib/questionPreview'
 import { cn } from '@/lib/utils'
 
@@ -66,6 +67,50 @@ function Preview({ result, query }: { result: QuestionResult; query: string }) {
 /** The keyboard's and the sticky rows' margins: a row brought into view clears the field above and the button below. */
 export const ROW_SCROLL = 'scroll-mt-36 scroll-mb-28'
 
+/**
+ * The whole question, opened under its row: the stem with its tables and
+ * figures, the options, each part's prompt. Never an answer.
+ */
+function FullQuestion({ question }: { question: Question }) {
+  const options = (list: Question['options']) => list.length > 0 && (
+    <ul className="mt-2 flex flex-col gap-1.5">
+      {list.map(o => (
+        <li key={o.key} className="flex gap-2 text-[15px] leading-snug">
+          <span className="shrink-0 font-semibold">{o.key})</span>
+          <MarkdownText inline className="min-w-0">{o.text}</MarkdownText>
+        </li>
+      ))}
+    </ul>
+  )
+  return (
+    <div className="flex flex-col gap-3 pb-4 pl-9 pr-1 text-[15px] leading-relaxed" data-testid="search-question-full">
+      {question.stem.trim() && <MarkdownText className="min-w-0">{question.stem}</MarkdownText>}
+      {options(question.options)}
+      {(question.parts ?? []).map(part => (
+        <div key={part.label} className="flex gap-2">
+          <span className="shrink-0 font-semibold">{part.label})</span>
+          <div className="min-w-0 flex-1">
+            <MarkdownText className="min-w-0">{part.stem}</MarkdownText>
+            {options(part.options)}
+          </div>
+        </div>
+      ))}
+      <Link
+        to={`/wiki/question/${encodeURIComponent(question.id)}`}
+        className={cn('inline-flex h-10 items-center gap-1.5 self-start rounded-full border-[1.5px] border-foreground px-4 text-[14px] font-bold transition-colors hover:bg-foreground/10', ROW_FOCUS)}
+      >
+        Open question
+        <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+      </Link>
+    </div>
+  )
+}
+
+/**
+ * A question among the results. Pressing the row ticks it for practice; the
+ * chevron opens the whole question under it, which is where its own page is
+ * linked from; Info says where it came from.
+ */
 export const QuestionRow = memo(function QuestionRow({
   result,
   query,
@@ -77,54 +122,62 @@ export const QuestionRow = memo(function QuestionRow({
   query: string
   /** The reader's record on it; null when there is no record to read (signed out). */
   dot: ReturnType<typeof attemptDot> | null
-  /** Whether it is ticked for practice; undefined draws no box (All's preview). */
-  picked?: boolean
-  onTogglePick?: (id: string) => void
+  /** Whether it is ticked for practice. */
+  picked: boolean
+  onTogglePick: (id: string) => void
 }) {
   const [infoOpen, setInfoOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const { question } = result
+  const Chevron = expanded ? ChevronUp : ChevronDown
   return (
-    <li className={cn(ROW_RULE, 'flex items-start gap-1')} data-testid="search-question">
-      {picked !== undefined && onTogglePick && (
+    <li className={ROW_RULE} data-testid="search-question">
+      <div className="flex items-start gap-0.5">
         <button
           type="button"
           role="checkbox"
           aria-checked={picked}
           aria-label={`Pick for practice: ${questionMetaLine(result)}`}
           data-sound="tick"
+          data-result
           onClick={() => onTogglePick(question.id)}
-          className={cn('-ml-1 flex shrink-0 items-start rounded-lg py-3 pl-1 pr-2', ROW_FOCUS)}
+          className={cn('-ml-1 flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3 pl-1 text-left', ROW_FOCUS, ROW_SCROLL)}
         >
           <TickBox state={picked ? 'all' : 'none'} className="mt-0.5" />
-        </button>
-      )}
-      <Link
-        to={`/wiki/question/${encodeURIComponent(question.id)}`}
-        data-result
-        className={cn('flex min-w-0 flex-1 items-start gap-3 rounded-lg py-3', ROW_FOCUS, ROW_SCROLL)}
-      >
-        {dot === 'untried' ? (
-          <span
-            role="img"
-            aria-label={ATTEMPT_DOT_LABEL.untried}
-            className="mt-[7px] box-border h-2.5 w-2.5 shrink-0 rounded-full border-[1.5px] border-foreground"
-          />
-        ) : dot ? (
-          <span role="img" aria-label={ATTEMPT_DOT_LABEL[dot]} className="mt-[7px] flex shrink-0">
-            <AnswerDot state={dot} decorative />
+          {dot === 'untried' ? (
+            <span
+              role="img"
+              aria-label={ATTEMPT_DOT_LABEL.untried}
+              className="mt-[7px] box-border h-2.5 w-2.5 shrink-0 rounded-full border-[1.5px] border-foreground"
+            />
+          ) : dot ? (
+            <span role="img" aria-label={ATTEMPT_DOT_LABEL[dot]} className="mt-[7px] flex shrink-0">
+              <AnswerDot state={dot} decorative />
+            </span>
+          ) : null}
+          <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
+            {!expanded && <span className="line-clamp-2 text-[16px] leading-[1.45]"><Preview result={result} query={query} /></span>}
+            <span className="truncate text-[14px]">{questionMetaLine(result)}</span>
           </span>
-        ) : null}
-        <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
-          <span className="line-clamp-2 text-[16px] leading-[1.45]"><Preview result={result} query={query} /></span>
-          <span className="truncate text-[14px]">{questionMetaLine(result)}</span>
-        </span>
-      </Link>
-      <QuestionInfoButton
-        question={question}
-        open={infoOpen}
-        onOpenChange={setInfoOpen}
-        className="mt-1 shrink-0 text-foreground"
-      />
+        </button>
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-label={expanded ? 'Show less of the question' : 'Show the whole question'}
+          title={expanded ? 'Show less' : 'Show the whole question'}
+          onClick={() => setExpanded(v => !v)}
+          className={cn('mt-1 flex h-11 w-10 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-foreground/10', ROW_FOCUS)}
+        >
+          <Chevron className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+        </button>
+        <QuestionInfoButton
+          question={question}
+          open={infoOpen}
+          onOpenChange={setInfoOpen}
+          className="mt-1 shrink-0 px-2 text-foreground sm:px-2"
+        />
+      </div>
+      {expanded && <FullQuestion question={question} />}
     </li>
   )
 })

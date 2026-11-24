@@ -31,6 +31,12 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   // ALTAM's the same way: its sample set (`altam-<n>`, many of them old MLC and
   // LTAM written-answer questions) and its released sittings, Spring 2023 on.
   'Exam ALTAM': 'ALTAM',
+  // PA and ATPA are sat as projects: a written exam on a data set, and a
+  // take-home assessment. The SOA releases PA's sittings as projects and one
+  // ATPA sample assessment, so each bank is the vault's own questions on the
+  // syllabus concepts (`pa-an-001`, `atpa-an-001`, …).
+  'Exam PA': 'PA',
+  'Exam ATPA': 'ATPA',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   // The three DISC courses. The Institutes sells their sample questions and

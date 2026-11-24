@@ -57,8 +57,10 @@ const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CA
 // vault's own; ASTAM from its written-answer sample set and its seven released
 // sittings (Spring 2023 to Spring 2026), and two of the vault's own; ALTAM from
 // its sample set and seven sittings alone.
-// The SOA exams past FM — PA, the ATPA assessment and
-// the FSA pathway's fellowship exams — have pages transcribed from their
+// PA and the ATPA assessment left it once their banks, the vault's own
+// questions (the SOA publishes their practice as projects), covered every
+// concept on their syllabi.
+// The FSA pathway's fellowship exams have pages transcribed from their
 // syllabi by the syllabus pipeline (docs/syllabus-pipeline.md), and nothing else
 // yet: no question bank, concept pages mostly unwritten.
 // The non-exam requirements — the three VEEs, the SOA's e-learning modules
@@ -69,7 +71,6 @@ const READY_EXAMS = new Set<string>(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CA
 const IN_DEVELOPMENT_EXAMS = new Set([
   'VEE-MS', 'VEE-ECON', 'VEE-AF',
   'PAF', 'ASF', 'FAP', 'APC', 'FSA-DMAC', 'FSA-FAC', 'CAS-APC',
-  'PA', 'ATPA',
   'FSA-CFE101', 'FSA-CFE201',
   'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351',
   'FSA-GH101', 'FSA-GH201', 'FSA-GH301',

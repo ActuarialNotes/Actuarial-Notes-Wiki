@@ -39,6 +39,8 @@ const EXAM_DISPLAY_NAMES: Record<string, string> = {
   'FM': 'Exam FM',
   'FAM': 'Exam FAM',
   'SRM': 'Exam SRM',
+  'PA': 'Exam PA',
+  'ATPA': 'ATPA',
   'ASTAM': 'Exam ASTAM',
   'ALTAM': 'Exam ALTAM',
   'MAS-I': 'Exam MAS-I',

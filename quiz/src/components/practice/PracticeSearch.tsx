@@ -1,7 +1,8 @@
 // Practice's search (docs/redesign-spec.md §7a): a field under the top row
-// that searches questions only, opening on the exam the page shows. Its panel
-// opens as soon as the field is entered, on that exam's questions and their
-// filters, and typing narrows them; it is laid over the page, under the field,
+// that searches questions only, opening on the exam the page shows. A tap on
+// the field opens its panel, on that exam's questions and their filters,
+// without bringing up the keyboard; a second tap, on the field, does, and
+// typing narrows them; it is laid over the page, under the field,
 // as Learn's search is, and nothing navigates until a question is opened or a
 // quiz is started. The results are a chunk of their own (PracticeSearchPanel),
 // fetched when the field is first used.
@@ -177,6 +178,7 @@ export function PracticeSearch({ exam, questions, className }: {
             )}
           >
             <Search className="h-[18px] w-[18px] shrink-0" strokeWidth={2.2} aria-hidden="true" />
+            {open ? (
             <input
               ref={inputRef}
               type="search"
@@ -190,6 +192,23 @@ export function PracticeSearch({ exam, questions, className }: {
               spellCheck={false}
               className="h-full w-0 min-w-0 flex-1 bg-transparent text-[16px] text-foreground outline-none placeholder:text-foreground [&::-webkit-search-cancel-button]:hidden"
             />
+            ) : (
+              // Closed, the field is a button: a tap opens the search without
+              // bringing up the keyboard, and a second tap, on the field, does.
+              // Opened from the keyboard, the field takes the focus at once.
+              <button
+                type="button"
+                aria-label="Search questions"
+                onClick={e => {
+                  setOpen(true)
+                  remember(query)
+                  if (e.detail === 0) requestAnimationFrame(() => inputRef.current?.focus())
+                }}
+                className="h-full min-w-0 flex-1 truncate bg-transparent text-left text-[16px] text-foreground outline-none"
+              >
+                {query || 'Search questions'}
+              </button>
+            )}
             {open && (query || !sheet) && (
               <button
                 type="button"

@@ -118,9 +118,11 @@ test.describe('practice home', () => {
     await expect(page.getByTestId('practice').getByRole('link', { name: /Flashcards/ })).toHaveAttribute('href', '/flashcards')
     // The search stays on Practice: its results are laid over the page,
     // questions only, the Exam filter on the exam showing.
-    // Entering the field is enough: the exam's questions and their filters open under it.
+    // A tap on the field is enough: the exam's questions and their filters open
+    // under it, with the field not yet focused (no keyboard on a phone).
+    await page.getByRole('button', { name: 'Search questions' }).click()
     const search = page.getByRole('searchbox', { name: 'Search questions' })
-    await search.focus()
+    await expect(search).not.toBeFocused()
     const results = page.getByTestId('practice-search-results')
     await expect(results.getByTestId('search-question').first()).toBeVisible({ timeout: 30_000 })
     await expect(results.getByRole('button', { name: /Exam 5/ })).toBeVisible()

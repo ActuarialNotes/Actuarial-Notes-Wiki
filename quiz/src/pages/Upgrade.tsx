@@ -1,40 +1,42 @@
 import { useState } from 'react'
-import { useBack } from '@/hooks/useBack'
-import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Loader2, Lock, Tag } from 'lucide-react'
+import { backLabel, useBack } from '@/hooks/useBack'
+import { Link, useNavigate } from 'react-router-dom'
+import { ChevronLeft, Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { requestProCelebration } from '@/lib/proCelebration'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { ProBadge } from '@/components/ProBadge'
+import { GROUND, OutlineCard, OUTLINE_TILE } from '@/components/ui/OutlineCard'
 import { CheckMark } from '@/components/CheckMark'
-import { AnalyticsArt, PlanQuizArt, PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { AnalyticsArt, PodcastArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
+
+// The screen is drawn in the redesign's system (docs/style-guide.md §13): the
+// one ground, outlined cards, one text colour, and one filled button, Get Pro,
+// fixed to the foot. It is a sheet over You, so it opens on a back arrow and
+// has no place bar (lib/places.ts).
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
 // today, told as what it does for the reader. Keep this list honest: a
 // benefit belongs here only once a surface checks for it (natural-voice
 // Listen and Cowork are off it until they ship), and a reader's own mastery
 // levels are free, so they are not on it (docs/pro-proposal.md §3). The daily
-// session is free too (docs/redesign-spec.md, R1): what Pro sells of it is the
-// plan that paces it to the exam date. The copy follows the app-copy skill
-// (.claude/skills/app-copy/).
+// session is free too (docs/redesign-spec.md, R1), and so is starting it: what
+// Pro sells of it is the plan that chooses what it learns and reviews, paced to
+// the exam date. The copy follows the app-copy skill (.claude/skills/app-copy/).
 const HEADLINE_BENEFITS = [
   'A study plan paced to your exam date',
   'Study in syllabus order, or the heaviest topics first',
   'Each day’s list in your inbox, at the time you choose',
-  'Quiz yourself on today’s study plan in one tap',
   'Listen to each day’s plan as a short episode',
   'Analytics on your accuracy, your pace and the marks you’re losing',
   'Rehearse the PCPA project from start to finish',
 ]
 
-// Every card is the same shape and the same width: a picture of the surface,
-// a title, a line or two.
+// Every card is the same shape: a picture of the surface, a title, a line or two.
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
     title: 'Pace Your Plan to Your Exam Date',
@@ -47,18 +49,13 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: StrategyArt,
   },
   {
-    title: 'Quiz Today’s Study Plan',
-    body: 'Pick Today’s Study Plan on the Quiz tab and the questions come from the concepts your plan has scheduled for today. One quiz to finish the day, or a few questions whenever you have a minute.',
-    Art: PlanQuizArt,
-  },
-  {
     title: 'Listen to Today’s Plan',
-    body: 'Each day’s concepts read aloud as one short episode: the definition, the key formulas and the trap to watch for. Play it from your plan, or from the Listen button in the daily email, and keep going with your phone locked.',
+    body: 'Each day’s concepts read aloud as one short episode: the definition, the key formulas and the trap to watch for. Play it from Today, or from the Listen button in the daily email, and keep going with your phone locked.',
     Art: PodcastArt,
   },
   {
     title: 'Read Your Analytics',
-    body: 'See how often you get questions right over the last week, month or three months, and how your time per question compares with the exam’s. The syllabus sections costing you the most marks are listed first, each one a tap from a quiz on it.',
+    body: 'See how often you get questions right over the last week, month or three months, and how your time per question compares with the exam’s. The syllabus sections costing you the most marks are listed with what each one cost.',
     Art: AnalyticsArt,
   },
   {
@@ -67,6 +64,8 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     Art: ProjectArt,
   },
 ]
+
+const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground'
 
 // What a reader sees when checkout or a code fails: never the server's own
 // words (R5 in the app-copy skill), which can be a config error or "Unauthorized".
@@ -84,7 +83,7 @@ function betaCodeMessage(raw: string): string {
 
 export default function Upgrade() {
   const navigate = useNavigate()
-  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
+  const back = useBack({ to: '/you', label: 'You' })
   const { user } = useAuth()
   const { isPro, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)
@@ -159,161 +158,128 @@ export default function Upgrade() {
     }
   }
 
-  // The one action on the page, drawn twice — beside the price up top, and
-  // again once the reader has scrolled through what they'd be paying for.
-  const cta = subLoading ? (
-    <Button disabled size="lg" className="w-full">
-      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-      Loading…
-    </Button>
-  ) : isPro ? (
-    <div className="space-y-2">
-      <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-        You're on Pro. Thank you.
-      </div>
-      <Button variant="outline" className="w-full" onClick={back.go}>
-        Back to {back.label}
-      </Button>
-    </div>
-  ) : (
-    <div className="space-y-2">
-      <Button onClick={handleUpgrade} disabled={submitting} size="lg" className="w-full gap-2 text-base">
-        {submitting ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Redirecting to Stripe…
-          </>
-        ) : (
-          <>
-            {user ? 'Get Pro' : 'Sign in to get Pro'}
-            <ArrowRight className="h-4 w-4" />
-          </>
-        )}
-      </Button>
-      <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-        <Lock className="h-3 w-3" />
-        Secure checkout via Stripe · Cancel anytime
-      </p>
-    </div>
-  )
+  const waiting = subLoading || submitting
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-10 sm:py-12 space-y-10">
-      <div className="text-center space-y-3">
-        <div className="flex items-center justify-center gap-2 text-sm font-semibold text-muted-foreground">
-          Actuarial Notes
-          <ProBadge size="md" />
+    <div className={cn(GROUND, 'min-h-dvh')} data-testid="upgrade">
+      <div className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col lg:max-w-[760px] lg:pt-6">
+        <div className="flex items-center gap-2 pl-2 pr-5 pt-3">
+          <Link
+            to={back.to}
+            state={RESTORE_SCROLL}
+            onClick={back.onLinkClick}
+            aria-label={backLabel(back)}
+            title={backLabel(back)}
+            data-testid="upgrade-back"
+            className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-full', FOCUS)}
+          >
+            <ChevronLeft className="h-[22px] w-[22px]" strokeWidth={2.5} aria-hidden="true" />
+          </Link>
+          <span className="min-w-0 flex-1 truncate text-[17px] font-semibold">Actuarial Notes</span>
+          <span className="shrink-0 rounded-full border-[1.5px] border-foreground px-2.5 py-0.5 text-[13px] font-bold">Pro</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
-          Know you’re ready before you sit.
-        </h1>
-        <p className="mx-auto max-w-md text-muted-foreground text-balance">
-          A daily session sized to the time you have is free. Pro paces it to your
-          exam date, and changes the plan when you fall behind or start to forget.
-        </p>
-      </div>
 
-      <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
-        <CardContent className="p-6 space-y-5">
-          <div className="flex items-baseline justify-center gap-1.5">
-            <span className="text-5xl font-bold tracking-tight">$10</span>
-            <span className="text-muted-foreground">/ month</span>
+        <div className="flex flex-1 flex-col gap-9 px-5 pb-8 pt-5">
+          <div className="flex flex-col gap-3">
+            <h1 className="text-[34px] font-bold leading-[1.1] tracking-[-0.02em] text-balance">
+              Know you’re ready before you sit.
+            </h1>
+            <p className="text-[17px] leading-normal">
+              A daily session sized to the time you have is free. Pro paces it to your
+              exam date, and changes the plan when you fall behind or start to forget.
+            </p>
           </div>
-          <ul className="space-y-2 text-sm">
-            {HEADLINE_BENEFITS.map(b => (
-              <li key={b} className="flex items-start gap-2.5">
-                <CheckMark className="h-4 w-4 mt-0.5" />
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-          {error && (
-            <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error}
-            </div>
-          )}
-          {cta}
-        </CardContent>
-      </Card>
 
-      <section className="space-y-4">
-        <h2 className="text-center text-xl font-semibold">What you get</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {BENEFITS.map(({ title, body, Art }, i) => (
-            // An odd card out at the end is centred on its row, still one
-            // column wide, rather than leaving a hole beside it.
-            <Card
-              key={title}
-              className={cn(
-                'overflow-hidden',
-                BENEFITS.length % 2 === 1 && i === BENEFITS.length - 1 &&
-                  'sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.5rem)]',
+          <OutlineCard className="flex flex-col gap-5">
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-[64px] font-bold leading-none tracking-[-0.03em]">$10</span>
+              <span className="text-[20px] font-medium">a month</span>
+            </div>
+            <ul className="flex flex-col gap-3 text-[15px] leading-snug">
+              {HEADLINE_BENEFITS.map(b => (
+                <li key={b} className="flex items-start gap-3">
+                  <CheckMark className="mt-px h-[18px] w-[18px] text-foreground" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            {isPro && !subLoading && (
+              <p className="border-t border-border pt-4 text-[17px] font-semibold" data-testid="upgrade-on-pro">
+                You’re on Pro. Thank you.
+              </p>
+            )}
+          </OutlineCard>
+
+          <section className="flex flex-col gap-3" aria-labelledby="upgrade-what">
+            <h2 id="upgrade-what" className="text-[22px] font-bold">What you get</h2>
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-2">
+              {BENEFITS.map(({ title, body, Art }) => (
+                <OutlineCard key={title} className="flex min-w-0 flex-col gap-4 p-4">
+                  <Art />
+                  <div className="flex flex-col gap-1.5 px-1 pb-1">
+                    <h3 className="text-[17px] font-bold">{title}</h3>
+                    <p className="text-[15px] leading-normal">{body}</p>
+                  </div>
+                </OutlineCard>
+              ))}
+            </div>
+          </section>
+
+          {!isPro && !subLoading && (
+            <section className="flex flex-col gap-2" aria-labelledby="upgrade-code">
+              <h2 id="upgrade-code" className="text-[15px] font-bold">Have a code?</h2>
+              {betaSuccess ? (
+                <p className="text-[17px] font-semibold">That worked. You have Pro now.</p>
+              ) : (
+                <>
+                  <div className="flex gap-2">
+                    <input
+                      aria-labelledby="upgrade-code"
+                      placeholder="Enter code"
+                      value={betaCode}
+                      onChange={e => setBetaCode(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleBetaCode()}
+                      disabled={betaSubmitting}
+                      autoCapitalize="off"
+                      autoCorrect="off"
+                      spellCheck={false}
+                      className={cn(
+                        OUTLINE_TILE,
+                        'h-12 min-w-0 flex-1 rounded-full px-5 font-mono text-[15px] placeholder:text-foreground/60',
+                        'focus-visible:border-foreground focus-visible:outline-none disabled:opacity-50',
+                      )}
+                    />
+                    <Button
+                      variant="edge"
+                      size="lg"
+                      onClick={handleBetaCode}
+                      disabled={betaSubmitting || !betaCode.trim()}
+                    >
+                      {betaSubmitting ? <Loader2 className="h-4 w-4 animate-spin" aria-label="Redeeming" /> : 'Redeem'}
+                    </Button>
+                  </div>
+                  {betaError && <p role="alert" className="text-[15px] text-answer-incorrect">{betaError}</p>}
+                </>
               )}
-            >
-              <CardContent className="p-4 space-y-3">
-                <Art />
-                <div className="space-y-1">
-                  <h3 className="font-semibold">{title}</h3>
-                  <p className="text-sm text-muted-foreground">{body}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+            </section>
+          )}
         </div>
 
-      </section>
-
-      {!isPro && !subLoading && (
-        <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
-          <CardContent className="p-6 space-y-4 text-center">
-            <div className="space-y-1">
-              <p className="text-lg font-semibold">Get Pro</p>
-            </div>
-            {cta}
-          </CardContent>
-        </Card>
-      )}
-
-      {!isPro && !subLoading && (
-        <Card className="mx-auto max-w-md">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Tag className="h-4 w-4 text-muted-foreground" />
-              Have a code?
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {betaSuccess ? (
-              <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-                That worked. You have Pro now.
-              </div>
-            ) : (
-              <>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Enter code"
-                    value={betaCode}
-                    onChange={e => setBetaCode(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleBetaCode()}
-                    disabled={betaSubmitting}
-                    className="font-mono"
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={handleBetaCode}
-                    disabled={betaSubmitting || !betaCode.trim()}
-                  >
-                    {betaSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Redeem'}
-                  </Button>
-                </div>
-                {betaError && (
-                  <p className="text-sm text-destructive">{betaError}</p>
-                )}
-              </>
-            )}
-          </CardContent>
-        </Card>
-      )}
+        {!isPro && (
+          <div className="sticky bottom-0 z-30 flex flex-col gap-2 border-t border-border bg-ground px-5 pb-[max(0.875rem,env(safe-area-inset-bottom))] pt-3">
+            {error && <p role="alert" className="text-[15px] text-answer-incorrect">{error}</p>}
+            <Button onClick={handleUpgrade} disabled={waiting} size="main" className="w-full" data-testid="upgrade-get-pro">
+              {submitting ? (
+                <>
+                  <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden="true" />
+                  Opening checkout…
+                </>
+              ) : user ? 'Get Pro' : 'Sign in to get Pro'}
+            </Button>
+            <p className="text-center text-[13px]">Secure checkout with Stripe. Cancel anytime.</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -1349,7 +1349,7 @@ Other important `lib/` modules:
   the exam in focus, Study Guides one step up; from another place it returns to the page last
   read there). `showsPlaceBar` says where the phone's bar is drawn: on every page a reader moves
   between places from, and off a screen that owns the bottom edge or the whole screen, each with
-  its own way back (the session, a game's board, You's three screens, a concept, a question or a
+  its own way back (the session, a game's board, You's three screens, Upgrade with Get Pro at its foot, a concept, a question or a
   tool with its Practice this foot, Flashcards and Search, an attempt or a brief, a workflow's
   board). `drawsOwnTopRow` says which pages open on a top row of their own below `lg`; `App.tsx`
   gives every other page the app's (`PlaceHeader`: the exam in focus and the profile button), so

@@ -46,7 +46,7 @@ describe('placeOf', () => {
 
 describe('showsPlaceBar', () => {
   it('is drawn under each place\'s home and the pages a reader moves on from', () => {
-    for (const path of ['/dashboard', '/wiki', '/wiki/exam/Exam+P-1+(SOA)', '/wiki/resources', '/', '/papers', '/games', '/apply', '/project', '/tools', '/workflows', '/data-sources', '/store', '/store/gems', '/community', '/upgrade']) {
+    for (const path of ['/dashboard', '/wiki', '/wiki/exam/Exam+P-1+(SOA)', '/wiki/resources', '/', '/papers', '/games', '/apply', '/project', '/tools', '/workflows', '/data-sources', '/store', '/store/gems', '/community']) {
       expect(showsPlaceBar(path)).toBe(true)
     }
   })
@@ -59,6 +59,10 @@ describe('showsPlaceBar', () => {
 
   it('is off You\'s screens, which a cross or a back arrow leaves', () => {
     for (const path of ['/you', '/you/league', '/settings']) expect(showsPlaceBar(path)).toBe(false)
+  })
+
+  it('is off Upgrade, whose foot is Get Pro', () => {
+    expect(showsPlaceBar('/upgrade')).toBe(false)
   })
 
   it('is off a screen whose foot is its own: a concept, a question, a tool, the flashcards, the search', () => {
@@ -76,13 +80,13 @@ describe('showsPlaceBar', () => {
 
 describe('drawsOwnTopRow', () => {
   it('claims the pages that open on a row of their own', () => {
-    for (const path of ['/', '/dashboard', '/wiki', '/wiki/concept/Bayes+Theorem', '/research/projects', '/flashcards', '/papers', '/search', '/project/pcpa/p-1', '/craft', '/store', '/tools', '/tools/chain-ladder', '/workflows', '/data-sources', '/you', '/you/league', '/settings', '/quiz', '/review']) {
+    for (const path of ['/', '/dashboard', '/wiki', '/wiki/concept/Bayes+Theorem', '/research/projects', '/flashcards', '/papers', '/search', '/project/pcpa/p-1', '/craft', '/store', '/tools', '/tools/chain-ladder', '/workflows', '/data-sources', '/you', '/you/league', '/settings', '/upgrade', '/quiz', '/review']) {
       expect(drawsOwnTopRow(path)).toBe(true)
     }
   })
 
   it('leaves every other page to the app\'s top row', () => {
-    for (const path of ['/apply', '/project', '/games', '/battle', '/store/gems', '/community', '/upgrade', '/auth']) {
+    for (const path of ['/apply', '/project', '/games', '/battle', '/store/gems', '/community', '/auth']) {
       expect(drawsOwnTopRow(path)).toBe(false)
     }
   })

@@ -61,13 +61,13 @@ export function isSessionRoute(pathname: string): boolean {
  * It is on every page a reader moves between places from. It is off a screen
  * that owns the bottom edge or the whole screen, each of which has its own way
  * back: the session, a game's board, You's three screens (a cross or a back
- * arrow), a concept or a question being read and a tool being used (their
+ * arrow), Upgrade (a back arrow, and Get Pro at its foot), a concept or a question being read and a tool being used (their
  * foot is Practice this), the flashcards and the search (sheets over
  * Practice), a project being worked and a workflow's board.
  */
 export function showsPlaceBar(pathname: string): boolean {
   if (isSessionRoute(pathname)) return false
-  if (isYouRoute(pathname)) return false
+  if (isYouRoute(pathname) || pathname === '/upgrade') return false
   if (isUnder(pathname, '/auth') || isUnder(pathname, '/design')) return false
   if (isUnder(pathname, '/battle') || isUnder(pathname, '/craft')) return false
   if (pathname === '/flashcards' || pathname === '/search') return false
@@ -102,8 +102,8 @@ export function drawsOwnTopRow(pathname: string): boolean {
   if (pathname === '/store') return true
   // Tools, Workflows and Data Sources: a search bar or a board's header.
   if (isUnder(pathname, '/tools') || isUnder(pathname, '/workflows') || isUnder(pathname, '/data-sources')) return true
-  // You's three screens: a cross or a back arrow.
-  if (isYouRoute(pathname)) return true
+  // You's three screens: a cross or a back arrow. Upgrade, over them: a back arrow.
+  if (isYouRoute(pathname) || pathname === '/upgrade') return true
   // The study guides and the flag-gated research tab: a search bar on every page.
   return isUnder(pathname, '/wiki') || isUnder(pathname, '/research')
 }

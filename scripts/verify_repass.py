@@ -199,6 +199,9 @@ def blind_markdown(path: str, units: list[dict]) -> str:
              "Solve each with code before opening the page (P5). Then compare every line of the page's working.", ""]
     for i, u in qs:
         lines += [f"- **C{i}** {u['question']}"]
+        table = [ln for ln in u["text"].splitlines() if re.match(r">\s*\|", ln)]
+        if table:
+            lines += ["", *table, ""]
     return "\n".join(lines) + "\n"
 
 
@@ -220,15 +223,15 @@ The rules that decide the outcome:
 
 For each page folder you are given, in this order:
 
-1. `blind.md`: each worked example's question. Solve each one with Python (run it) and
-   keep your answers.
-2. `claims.md`: the page cut into numbered claims. `page.md` is the page as a reader
-   sees it. `log.md` is everything earlier checks found: read it all; an open finding
-   there is to be confirmed or reported fixed, not found again.
-3. `sources.md`: the sources the last check read, each with where its excerpt is:
-   `source/<key>/pNNNN.txt`, one file per PDF page. Read the pages it names. Where it
-   names no page (a web page kept whole), grep the file for the claim's terms and read
-   around the hits; don't read it end to end.
+1. `blind.md`: each worked example's question. Solve them all in one Python script
+   (run it) and keep your answers.
+2. `bundle.md`, read once, whole: the page cut into numbered claims; the sources the
+   last check read, with the text of the pages they named; then the log of every
+   earlier check. An open finding in the log is to be confirmed or reported fixed,
+   not found again.
+3. `page.md`: the page as a reader sees it, for the worked examples' working.
+   A source that names no page comes with the command that finds the passage. Use it:
+   a claim is not confirmed by a citation's summary of what the source says.
 4. Check every claim:
    - a **formula**: find it in a source. A difference of notation is noted, not an error.
      A missing condition, a wrong sign, bound, exponent or index is an error.
@@ -281,6 +284,7 @@ def build(anchor: str, pages: list[dict], out: Path, fetch: bool = True, root: P
 
     out.mkdir(parents=True, exist_ok=True)
     wanted: dict[str, set[int]] = defaultdict(set)
+    page_sources: dict[str, list] = {}
     manifest = {"anchor": anchor, "pages": []}
     for p in pages:
         text = (root / p["path"]).read_text(encoding="utf-8")
@@ -296,12 +300,17 @@ def build(anchor: str, pages: list[dict], out: Path, fetch: bool = True, root: P
         src_lines = [f"# Sources the last pass read: {p['path']}", ""]
         for s in p["sources"]:
             url, pp = source_url(s), source_pages(s)
-            if url:
-                wanted[url].update(pp)
-                where = f"`source/{S.cache_key(url)}/` pages {S.ranges(pp)}" if pp else f"`source/{S.cache_key(url)}/` (no page named: search it)"
-                src_lines += [f"- {s}", f"  - excerpt: {where}"]
+            src_lines += [f"- {s}"]
+            if not url:
+                src_lines += ["  - no URL recorded"]
+                continue
+            wanted[url].update(pp)
+            page_sources.setdefault(p["path"], []).append((url, pp, s))
+            if pp:
+                src_lines += [f"  - excerpt: PDF pages {S.ranges(pp)}, in `bundle.md`"]
             else:
-                src_lines += [f"- {s}", "  - no URL recorded"]
+                src_lines += [f"  - no page named. Find the passage: `python3 scripts/verify_sources.py search \"{url}\" \"<term>\"`, "
+                              f"then `python3 scripts/verify_sources.py text \"{url}\" --pages <n>`"]
         (d / "sources.md").write_text("\n".join(src_lines) + "\n", encoding="utf-8")
         claims = [u for u in units if u["kind"] != "heading"]
         manifest["pages"].append({"path": p["path"], "dir": str(d.relative_to(out)),
@@ -326,9 +335,40 @@ def build(anchor: str, pages: list[dict], out: Path, fetch: bool = True, root: P
                 entry["error"] = str(exc)[:200]
         sources[key] = entry
     manifest["sources"] = sources
+    for p in manifest["pages"]:
+        write_bundle(out, p, page_sources.get(p["path"], []), sources)
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
     (out / "CHECKER.md").write_text(CHECKER, encoding="utf-8")
     return manifest
+
+
+def write_bundle(out: Path, page: dict, cited: list, sources: dict) -> None:
+    """One file a checker reads once: the claims, the excerpts and the log."""
+    import verify_sources as S
+    d = out / page["dir"]
+    parts = [(d / "claims.md").read_text(encoding="utf-8"), "\n---\n", (d / "sources.md").read_text(encoding="utf-8")]
+    done: set[tuple[str, int]] = set()
+    for url, pp, citation in cited:
+        key = S.cache_key(url)
+        entry = sources.get(key, {})
+        recorded = re.search(r"sha256:([0-9a-f]{64})", citation)
+        if recorded and entry.get("sha256") and recorded.group(1) != entry["sha256"]:
+            parts.append(f"\n> The copy in the cache (sha256 {entry['sha256'][:12]}…) is not the copy the last check read "
+                         f"({recorded.group(1)[:12]}…): {url}. Cite the cache's.\n")
+        single = entry.get("total_pages") == 1
+        for n in (pp or ([1] if single else [])):
+            f = out / "source" / key / f"p{n:04d}.txt"
+            if (key, n) in done or not f.exists():
+                continue
+            done.add((key, n))
+            text = f.read_text(encoding="utf-8")
+            if single and len(text) > 20000:
+                parts.append(f"\n## Source: {url}\n\nA long web page ({len(text) // 1000}k characters), kept at `{f}`. "
+                             "Grep it for the claim's terms and read around the hits.\n")
+            else:
+                parts.append(f"\n## Source: {url} — {'the page' if single else f'PDF page {n}'}\n\n{text}\n")
+    parts += ["\n---\n# The page's log (every earlier check)\n\n", (d / "log.md").read_text(encoding="utf-8")]
+    (d / "bundle.md").write_text("".join(parts), encoding="utf-8")
 
 
 # ─── Seeded errors: measuring the checker ─────────────────────────────────────
@@ -411,63 +451,79 @@ def seed_packet(src: Path, out: Path, per_page: int, seed: int) -> dict:
         for u in units:                      # a seeded copy shows no carried/new tags: they would give the plant away
             u["carried"], u["new_numbers"] = False, []
         (d / "claims.md").write_text(claims_markdown(p["path"], units).replace(" · new", ""), encoding="utf-8")
+        bundle = (d / "bundle.md").read_text(encoding="utf-8")
+        (d / "bundle.md").write_text((d / "claims.md").read_text(encoding="utf-8") + bundle[bundle.index("\n---\n"):],
+                                     encoding="utf-8")
         key[p["path"]] = planted
     return key
 
 
-def _digits(s: str) -> str:
-    return re.sub(r"\s+", "", s)
+def _flat(s: str) -> str:
+    return re.sub(r"[\s\\\\$>]+", "", s)
+
+
+def _changed(p: dict) -> str:
+    """The characters around where the planted line departs from the original."""
+    a, b = _flat(p["was"]), _flat(p["now"])
+    i = next((k for k, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
+    return b[max(0, i - 10): i + 10]
+
+
+def catches(plant: dict, finding: dict) -> bool:
+    """A finding catches a plant when it quotes the planted line, or the part that changed."""
+    quote = _flat(str(finding.get("quote", "")))
+    now = _flat(plant["now"].lstrip("> -"))
+    return bool(quote) and (quote in now and len(quote) >= 6 or now[:60] in quote or _changed(plant) in quote)
 
 
 def score(key: dict, findings_dir: Path) -> dict:
-    """A plant is caught when some finding on its page quotes the planted line
-    (or the part of it that changed)."""
     rows, caught = [], 0
     for path, planted in key.items():
         f = findings_dir / f"{slug(path)}.json"
         found = json.loads(f.read_text()).get("findings", []) if f.exists() else []
-        blob = _digits(" ".join(json.dumps(x, ensure_ascii=False) for x in found))
-        blob = blob.replace("\\\\", "\\")
         for p in planted:
-            now = _digits(p["now"].lstrip("> -"))
-            hit = bool(found) and (now[:60] in blob or _changed(p) in blob)
+            hit = any(catches(p, x) for x in found)
             caught += hit
-            rows.append({"page": path, **p, "caught": hit})
-    total = sum(len(v) for v in key.values())
-    return {"planted": total, "caught": caught, "rows": rows}
-
-
-def _changed(p: dict) -> str:
-    """The 24 characters around where the planted line departs from the original."""
-    a, b = _digits(p["was"]), _digits(p["now"])
-    i = next((k for k, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
-    return b[max(0, i - 12): i + 12]
+            rows.append({"page": path, **p, "caught": hit, "checked": f.exists()})
+    return {"planted": sum(len(v) for v in key.values()), "caught": caught, "rows": rows}
 
 
 # ─── Findings → verify_record batch ops ───────────────────────────────────────
 
-def ops_from_findings(findings_dir: Path, packet: Path) -> list[dict]:
-    """Each checker result as recorder ops. A page with nothing open and a cited
-    source passes; a page with a finding is recorded with the finding and left
-    `in_review` until it is fixed and re-read."""
+def ops_from_findings(findings_dir: Path, packet: Path, key: dict | None = None) -> tuple[list[dict], list[str]]:
+    """Each checker result as recorder ops, and the pages to check again.
+
+    A page with nothing open and a cited source passes; a page with a finding is
+    recorded with the finding and left `in_review` until it is fixed and re-read.
+    With a `key` (the packet was seeded), a finding that is a planted error is
+    dropped, and a page whose plant the checker missed is recorded not at all: its
+    check is not trusted, and it goes back for a stronger one.
+    """
     manifest = json.loads((packet / "manifest.json").read_text())
     ops: list[dict] = []
+    again: list[str] = []
     for p in manifest["pages"]:
         f = findings_dir / f"{slug(p['path'])}.json"
         if not f.exists():
             continue
         r = json.loads(f.read_text())
-        for x in r.get("findings", []):
+        found = r.get("findings", [])
+        planted = (key or {}).get(p["path"], [])
+        if any(not any(catches(pl, x) for x in found) for pl in planted):
+            again.append(p["path"])
+            continue
+        found = [x for x in found if not any(catches(pl, x) for pl in planted)]
+        for x in found:
             ops.append({"op": "finding", "path": p["path"], "severity": x["severity"], "title": x.get("title", ""),
                         "locus": x["locus"], "claim": x["claim"], "evidence": x["evidence"],
                         "proposed_action": x.get("proposed_action", ""), "source_rank": x.get("source_rank")})
         sources = r.get("sources") or []
-        blocking = [x for x in r.get("findings", []) if x["severity"] in ("critical", "major", "minor")]
+        blocking = [x for x in found if x["severity"] in ("critical", "major", "minor")]
         status = "verified" if sources and not blocking and r.get("verdict") != "unreachable" else "in_review"
         ops.append({"op": "pass", "path": p["path"], "status": status,
                     "confidence": r.get("confidence", "high") if status == "verified" else None,
                     "source": sources, "checks": r.get("checks", ""), "note": r.get("note", "")})
-    return ops
+    return ops, again
 
 
 # ─── CLI ──────────────────────────────────────────────────────────────────────
@@ -497,6 +553,7 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("ops")
     p.add_argument("findings")
     p.add_argument("--packet", required=True)
+    p.add_argument("--key", help="the seeded packet's answer key")
     args = ap.parse_args(argv)
 
     if args.cmd == "plan":
@@ -534,11 +591,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "score":
         r = score(json.loads(Path(args.key).read_text()), Path(args.findings))
         for row in r["rows"]:
-            print(("caught " if row["caught"] else "MISSED ") + f"{row['kind']:8s} {row['page']}:{row['line']}  {row['now'][:90]}")
+            print(("caught " if row["caught"] else "MISSED " if row["checked"] else "no file ") + f"{row['kind']:8s} {row['page']}:{row['line']}  {row['now'][:90]}")
         print(f"{r['caught']} of {r['planted']} caught")
         return 0
     if args.cmd == "ops":
-        print(json.dumps(ops_from_findings(Path(args.findings), Path(args.packet)), indent=1, ensure_ascii=False))
+        key = json.loads(Path(args.key).read_text()) if args.key else None
+        ops, again = ops_from_findings(Path(args.findings), Path(args.packet), key)
+        print(json.dumps(ops, indent=1, ensure_ascii=False))
+        for path in again:
+            print(f"check again (a planted error was missed): {path}", file=sys.stderr)
         return 0
     return 1
 

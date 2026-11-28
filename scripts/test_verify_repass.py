@@ -100,30 +100,41 @@ class Seeding(unittest.TestCase):
 
 
 class Ops(unittest.TestCase):
+    key = None
     def _run(self, result):
         with tempfile.TemporaryDirectory() as d:
             d = Path(d)
             (d / "manifest.json").write_text(json.dumps({"pages": [{"path": "Concepts/Widget.md", "dir": "pages/Widget"}]}))
             (d / "f").mkdir()
             (d / "f" / "Widget.json").write_text(json.dumps(result))
-            return R.ops_from_findings(d / "f", d)
+            return R.ops_from_findings(d / "f", d, self.key)
 
     def test_a_clean_page_with_a_source_passes_as_verified(self):
-        ops = self._run({"verdict": "clean", "sources": ["S, p.1, sha256:ab — https://x.org"], "findings": [], "checks": "c"})
+        ops, _ = self._run({"verdict": "clean", "sources": ["S, p.1, sha256:ab — https://x.org"], "findings": [], "checks": "c"})
         self.assertEqual([(o["op"], o.get("status")) for o in ops], [("pass", "verified")])
 
     def test_no_source_never_verifies(self):
-        self.assertEqual(self._run({"verdict": "clean", "sources": [], "findings": []})[0]["status"], "in_review")
+        self.assertEqual(self._run({"verdict": "clean", "sources": [], "findings": []})[0][0]["status"], "in_review")
 
     def test_an_open_finding_holds_the_page_in_review(self):
-        ops = self._run({"verdict": "findings", "sources": ["S — https://x.org"], "findings": [
+        ops, _ = self._run({"verdict": "findings", "sources": ["S — https://x.org"], "findings": [
             {"severity": "critical", "locus": "C2", "claim": "a", "evidence": "b"}]})
         self.assertEqual([(o["op"], o.get("status")) for o in ops], [("finding", None), ("pass", "in_review")])
 
     def test_a_nit_alone_does_not_hold_a_page(self):
-        ops = self._run({"verdict": "findings", "sources": ["S — https://x.org"], "findings": [
+        ops, _ = self._run({"verdict": "findings", "sources": ["S — https://x.org"], "findings": [
             {"severity": "nit", "locus": "C2", "claim": "a", "evidence": "b"}]})
         self.assertEqual(ops[-1]["status"], "verified")
+
+    def test_a_planted_error_is_dropped_when_caught_and_holds_the_page_back_when_missed(self):
+        plant = {"kind": "formula", "line": 5, "was": "> $$W = a + b$$", "now": "> $$W = a - b$$"}
+        self.key = {"Concepts/Widget.md": [plant]}
+        result = {"verdict": "findings", "sources": ["S — https://x.org"], "findings": [
+            {"severity": "critical", "locus": "C2", "quote": "$$W = a - b$$", "claim": "a", "evidence": "b"}]}
+        ops, again = self._run(result)
+        self.assertEqual(([(o["op"], o.get("status")) for o in ops], again), ([("pass", "verified")], []))
+        ops, again = self._run({**result, "findings": []})
+        self.assertEqual((ops, again), ([], ["Concepts/Widget.md"]))
 
 
 if __name__ == "__main__":

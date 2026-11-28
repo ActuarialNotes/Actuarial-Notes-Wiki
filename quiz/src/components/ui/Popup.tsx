@@ -7,6 +7,7 @@
 // popup (`InfoSheet`) draws the same shape and keeps its own keys.
 
 import { useEffect, useRef, type ReactNode } from 'react'
+import { useDragToClose } from '@/hooks/useDragToClose'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { cn } from '@/lib/utils'
 
@@ -46,6 +47,9 @@ export function Popup({
   className?: string
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
+  const backdropRef = useRef<HTMLDivElement>(null)
+  // Below `sm` the sheet is pulled down by its handle to close it.
+  useDragToClose(panelRef, onClose, { backdrop: backdropRef, enabled: !full })
   const onCloseRef = useRef(onClose)
   onCloseRef.current = onClose
   const suspendedRef = useRef(suspended)
@@ -101,7 +105,7 @@ export function Popup({
         style={aboveReader ? { bottom: 'var(--concept-split-height, 0px)' } : undefined}
       >
         {/* The page behind, dimmed to about 30%. No blur: it stays readable as a page. */}
-        <div className="absolute inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
+        <div ref={backdropRef} className="absolute inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
         <div
           ref={panelRef}
           role="dialog"
@@ -119,7 +123,11 @@ export function Popup({
             className,
           )}
         >
-          {!full && <span aria-hidden="true" className="h-1 w-10 shrink-0 self-center rounded-full bg-foreground sm:hidden" />}
+          {!full && (
+            <span data-sheet-handle aria-hidden="true" className="-mx-5 -mb-2 -mt-2.5 flex shrink-0 touch-none justify-center pb-2 pt-2.5 sm:hidden">
+              <span className="h-1 w-10 rounded-full bg-foreground" />
+            </span>
+          )}
           {children}
         </div>
       </div>

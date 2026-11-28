@@ -11,11 +11,17 @@ import { cn } from '@/lib/utils'
 // rows, the solution as plain text with its formulas in outlined boxes, and a
 // row per concept that opens it in the reader.
 
-/** The question, folded to its ask; a tap reopens it. */
-export function FoldedQuestion({ question, children, defaultOpen = false }: {
+/**
+ * The question, folded to its ask; a tap reopens it. `folded` is drawn under
+ * it only while it is folded: the answer rows, which the opened question's own
+ * options already mark, so they would say the same thing twice.
+ */
+export function FoldedQuestion({ question, children, folded, defaultOpen = false }: {
   question: { stem: string; parts?: { label: string; stem: string }[] }
   /** The question in full: what the fold opens to. */
   children: ReactNode
+  /** Shown below the fold while it is closed. */
+  folded?: ReactNode
   defaultOpen?: boolean
 }) {
   const [open, setOpen] = useState(defaultOpen)
@@ -34,6 +40,7 @@ export function FoldedQuestion({ question, children, defaultOpen = false }: {
         <ChevronDown aria-hidden="true" strokeWidth={2.5} className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')} />
       </button>
       {open && <div className="pb-2 pt-1">{children}</div>}
+      {!open && folded && <div className="mt-3.5">{folded}</div>}
     </div>
   )
 }

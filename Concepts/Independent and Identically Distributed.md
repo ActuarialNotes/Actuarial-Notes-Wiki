@@ -1,19 +1,17 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-11-06
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:2e158f028dd917dcf132b16486e3ac37507d032c5ed4d77aa398d911f33e103f
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 independent trials process: mutually independent with the same distribution (PDF p.151); Thm 6.7 V(cX) = c^2 V(X) and Thm 6.9 E(S_n) = n mu, V(S_n) = n sigma^2 (PDF pp.267-268); §9.2 Central Limit Theorem (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Order Statistics: F_1(x) = 1 - [1 - F(x)]^n and F_n(x) = [F(x)]^n for an i.i.d. sample, HTML fetched 2026-11-06, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Poisson Distribution: independent Poisson N, M with parameters a, b: N + M is Poisson(a + b), HTML fetched 2026-11-06, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Gamma Distribution (Poisson process): T_n, the sum of n independent exponential inter-arrival times, has the gamma distribution, HTML fetched 2026-11-06, sha256:bbea5da3e0577d07d2670905b5727657c25b044f8382e17cee3bdfdd723bbe16 — https://www.randomservices.org/random/poisson/Gamma.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Central Limit Theorem: the sum or average of many i.i.d. variables is approximately normal, HTML fetched 2026-11-06, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: functions g_i(X_i) of independent variables are independent; the indicator sequence is exchangeable, HTML fetched 2026-11-06, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 objective (order statistics, linear combinations of independent variables) and outcomes f, h, i (Central Limit Theorem for i.i.d. sums) (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 0
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, Def. 4.4-4.5 (PDF p.151-152); Thms 6.7, 6.9 (PDF pp.267-268); §9.2 (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e"
+    - "Order Statistics, 7. Order Statistics, Distribution of order statistics: F_1 and F_n for an i.i.d. sample, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
+    - "The Central Limit Theorem, opening statement, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
+    - "Independence, §2.5 (exchangeability of indicator sequence), sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
+    - "Expected value, conditional expected values paragraph, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Independent and Identically Distributed.md
 ---

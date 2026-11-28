@@ -1,21 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:8e80c309e760ac193ce8aa1f2ca5fd1e8f934a3d6d36590c608d23b04af6d31e
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 1.1 p.18 (PDF p.26): discrete = finite or countably infinite sample space, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §3.2.1 CDF: F_X(x)=P(X<=x), defined for discrete, continuous and mixed; discrete CDF a staircase, jump = P(X=x), sha256:ddcdb7ea63d9e918e1d8e69af197212e089af8cf665730306927c861bd3f5f6f — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 7.1 p.286 (PDF p.294): convolution m3(j)=sum_k m1(k)m2(j-k) for independent integer-valued X, Y, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.1 Expected value: definitions (discrete, continuous, mixed), may not exist, change of variables, increasing property P(X<=Y)=1, symmetry -> E(X)=a, independence E(XY)=E(X)E(Y), E(X|A) via conditional density, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.9 Expected value as an integral: E(X)=int_0^inf P(X>x)dx for X>=0; E(X)=sum_{k>=1} P(X>=k) on N; E(X;A)=E(X 1_A), sha256:13db7b0f6f791843abcef65cf16e1214b8e745e3f9eeac74e01cc96fa3a032bc — https://www.randomservices.org/random/expect/Integral.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 14.4 Poisson distribution: M+N Poisson with parameter a+b for independent Poisson M, N, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.5 Covariance and correlation: cov=E(XY)-E(X)E(Y); cor=cov/(sd sd); var(X+Y)=var(X)+var(Y)+2cov(X,Y), sha256:23ef4758146296b9865ca3f82f0e849934a667dcc8643afaa28147ad146feef7 — https://www.randomservices.org/random/expect/Covariance.html"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, fetched 2026-11-06), §5.1.3 conditional PMF P_{X|Y}=P_{XY}/P_Y, sha256:937740fa7d0feecdb1a09585b50e5fc6bea5ed4cfae6425ad7aa56855a0f58e4 — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
-    - "SOA, Exam P syllabus, November 2026, Topic 3 Multivariate Random Variables, LOs a)-i), incl. g) linear combinations of independent discrete and of normal random variables (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, p.286 Def. 7.1 convolution, PDF p.294, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, p.226 Def. 6.1 and Thm 6.6 variance identity, PDF pp.234, 266, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "https://www.randomservices.org/random/expect/Integral.html, 9. Expected Value as an Integral, Discrete Distributions, sha256:13db7b0f6f791843abcef65cf16e1214b8e745e3f9eeac74e01cc96fa3a032bc — https://www.randomservices.org/random/expect/Integral.html"
+    - "https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php, 3.2.1 Cumulative Distribution Function, sha256:910b2e66fd7bd071ad22fc4cf82cee8f5e3adf102e5ab75876050301e2bb8e43 — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php"
+    - "https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php, 5.1.3 Conditioning and Independence, sha256:850dd9e91b2a4bed994194bba7d64751bccf18af296e2eba51a0f7580c6a0b6a — https://www.probabilitycourse.com/chapter5/5_1_3_conditioning_independence.php"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Discrete Random Variable.md

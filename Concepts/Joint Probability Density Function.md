@@ -1,15 +1,15 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-09-28
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:86baa3f9b352d1106bcf4e4d7a91a8bf2ed58835651a4a4ff9e0deeeaa146efd
   sources:
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.1 Joint Probability Density Function (probability as the double integral; marginal PDFs; normalisation with inner limit in the outer variable), web page as fetched 2026-09-28, sha256:256703bb60bfcdf98140e34bd6b476a7875aabd59ced22f8f881189b09ec8886 — https://www.probabilitycourse.com/chapter5/5_2_1_joint_pdf.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.3 Conditioning and Independence (f_X|Y = f_XY/f_Y; independence iff f_XY = f_X f_Y), web page as fetched 2026-09-28, sha256:a87cccc76b2d0a5139f26cd6a59fa1aac41b982e3e3d2d16bb353b9c41dac04c — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 4.2 (density factorisation iff independent, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-  open_findings: 0
+    - "Joint Probability Density Function | Joint Continuity | PDF, §5.2.1, eq. 5.15 (probability as double integral), normalisation, marginal PDFs, sha256:496f9d67cc9a2074503fd7ffa9d0c6e185a6744d7b60a86078a52ae60f225f22 — https://www.probabilitycourse.com/chapter5/5_2_1_joint_pdf.php"
+    - "Conditioning and Independence | Law of Total Probability, §5.2.3, conditional PDF f_{Y|X}(y|x) = f_XY(x,y)/f_X(x), sha256:af73df7c214c87397f4ac78f80e7bc7445eb9254884adb06e45db6f5ea6ca2b4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, Thm 4.2 (PDF p.173); Thm 6.11 and 6.12 (PDF p.278), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Joint Probability Density Function.md
 ---

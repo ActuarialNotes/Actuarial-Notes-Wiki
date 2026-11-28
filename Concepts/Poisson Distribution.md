@@ -1,16 +1,17 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-11-06
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:a1ec85f796374683da7a215218fa1e348d9f6f6f760b8dc13a6c782057388a22
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Poisson as limit of binomial with np = lambda, b(n,p,k)/b(n,p,k-1) ~ lambda/k, eq. 5.2 p.189 (PDF p.197); §6.2 Poisson variance lambda p.263 (PDF p.271), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 13.4 The Poisson Distribution: P(N_t=n) = e^{-rt}(rt)^n/n!; modes at a-1 and a for integer a; sum of independent Poissons; N_s given N_t = n is binomial(n, s/t), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "OpenStax Calculus Volume 2 (HTML fetched 2026-11-06), §6.3 Example 6.16: Maclaurin series of e^x = sum x^n/n!, all x, sha256:d31b601074d1b8cc7241191e2d4ec581e3524ae4ec5907a6c500f2ad4683f9dd — https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series"
-    - "OpenStax Calculus Volume 1 (HTML fetched 2026-11-06), §1.5 natural log as the inverse of e^x, sha256:bb31120fbd3eefab30afe72f26fb353e84b3d34084c59d0f8b0521d1b4703113 — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions"
-  open_findings: 0
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Poisson as limit of binomial with np = lambda, ratio approximately lambda/k, eq. 5.2, PDF p.197; §6.2 Poisson variance lambda, PDF p.271, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 13.4 The Poisson Distribution: pdf e^-a a^n/n!; g(n-1) < g(n) iff n < a; modes floor(a), or a-1 and a; E(N)=var(N)=a; N+M Poisson(a+b) for independent N, M; N_s given N_t=n binomial(n, s/t); binomial convergence, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "CAS, Tables for Exam MAS-I (version date 01/15/2018), Appendix B.2.1.1 Poisson: p0=e^-lambda, pk=e^-lambda lambda^k/k!, E[N]=Var[N]=lambda, p.15, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "OpenStax Calculus Volume 2, §6.3 Example 6.16: Maclaurin series of e^x = sum x^n/n!, all x, sha256:d31b601074d1b8cc7241191e2d4ec581e3524ae4ec5907a6c500f2ad4683f9dd — https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series"
+    - "OpenStax Calculus Volume 1, §1.5 natural logarithm as the inverse of e^x, sha256:bb31120fbd3eefab30afe72f26fb353e84b3d34084c59d0f8b0521d1b4703113 — https://openstax.org/books/calculus-volume-1/pages/1-5-exponential-and-logarithmic-functions"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Poisson Distribution.md
 ---

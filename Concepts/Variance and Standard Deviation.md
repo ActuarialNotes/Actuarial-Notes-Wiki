@@ -1,14 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:ea5e2b66a5387c51186ebe9a2c2be2e9b7ee49400dafb5d5ce9117864043b264
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorems 6.6-6.8, Exercise 6.2.23, Exercise 6.3.17, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §5.3.1 Covariance and Correlation (independent implies Cov = 0, converse not necessarily true; uncorrelated implies Var(X+Y) = Var(X) + Var(Y)), sha256:b6bc17d7f786f7ac8d2836f42d6524c99e8909254d473f1edef7909f1da9620e — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (SD of the sum of n independent policies sqrt(n) sigma, less than n sigma; CV = SD/mean) (PDF pp.4-5), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Grinstead & Snell, Introduction to Probability, §6.2 Thm 6.6–6.7 (pp.258–259), §6.3 Thm 6.8–6.9 (pp.259–260), Exercise 6.3.17 (p.289), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05), pooling section, PDF pp.4-5, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Covariance and Correlation, sha256:5c6e480937de94c3d9a36dd838e39f249b0a7aab4845c6f3fc539526fae31625 — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Variance and Standard Deviation.md

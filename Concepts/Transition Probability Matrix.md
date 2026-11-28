@@ -1,19 +1,16 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-10-05
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:59ecd6ad9d412d04c3f5a72cfde88fb6a0aaa2f6e472476f28703a5f57ca9dfa
   sources:
-    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on the NTNU TMA4265 page; an edition earlier than the 11th-13th the 2026 outline lists), p.185 (P_ij >= 0, rows sum to 1), Ex. 4.4 pp.186-187 (two-day dependence made Markov by a four-state chain), §4.2 pp.189-191 (Chapman-Kolmogorov; P{X_n = j} = Σ_i α_i P^n_ij), p.203 (finite-state: recurrent states are positive recurrent), Thm 4.1 and Remark (iii) p.205 (unique stationary solution for an irreducible positive recurrent chain), Exercise 20 p.266 (doubly stochastic), sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
-    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), ch.16 §3 Discrete-Time Markov Chains (P_n = P^n; 'Doubly Stochastic Matrices': uniform invariant on a finite S), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 — https://www.randomservices.org/random/markov/Discrete.html"
-    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), Discrete-Time Markov Chains, 'Limiting Behavior' (a finite irreducible set is a positive recurrent class; an irreducible positive recurrent chain has a unique invariant pdf), sha256:d4719c5e1cb9ad3be4fbf84c8dd849390f7d1ad15ced112f6312be83e5545680 — https://www.randomservices.org/random/markov/Limiting.html"
-    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), Introduction to General Markov Processes, 'Enlarging the State Space' (future depending on the last two states: Y_n = (X_n, X_{n+1}) is a homogeneous Markov process), sha256:69b4f54fd8c976d8a7093b3bfb9e0b3e836aa60794d1ad262e55c9b4b27f043c — https://www.randomservices.org/random/markov/General.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed.), Ch. 11: Thm 11.2 u(n) = uP^n (row vector) PDF p.417; Def. 11.1 absorbing state p_ii = 1 PDF p.424, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Daniel, 'Multi-state transition models with actuarial applications' (2004; CAS study note reprint), non-homogeneous Markov chains PDF pp.4, 6 and Thm 1.18 PDF p.7 (kQ_n = Q_n Q_{n+1} … Q_{n+k-1}; Q^k when homogeneous), sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 — https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
-    - "CreditMetrics Technical Document (J.P. Morgan 1997; RiskMetrics reprint), §6.4, PDF p.91 ('since default is an absorbing state, eventually all firms will default'), sha256:b9e9cf7e01f8cc89dedd1ca1c1df377714c6ecefa99c587d1addbb130d7367c7 — https://www.msci.com/documents/10199/93396227-d449-4229-9143-24a94dab122f"
-  open_findings: 0
+    - "https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf, §4.1 p.185; §4.2 pp.189-191; Ex. 4.20 Exercise 20 p.266, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "https://www.randomservices.org/random/markov/Limiting.html, Stationary and Limiting Distributions, Limiting Behavior, Revisited; invariant pdf for irreducible positive recurrent chain, sha256:d4719c5e1cb9ad3be4fbf84c8dd849390f7d1ad15ced112f6312be83e5545680 — https://www.randomservices.org/random/markov/Limiting.html"
+    - "https://www.randomservices.org/random/markov/General.html, General Markov Processes, Enlarging the State Space, sha256:69b4f54fd8c976d8a7093b3bfb9e0b3e836aa60794d1ad262e55c9b4b27f043c — https://www.randomservices.org/random/markov/General.html"
+    - "https://www.randomservices.org/random/markov/Discrete.html, Discrete-Time Markov Chains, Doubly Stochastic Matrices, sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 — https://www.randomservices.org/random/markov/Discrete.html"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Transition Probability Matrix.md
 ---

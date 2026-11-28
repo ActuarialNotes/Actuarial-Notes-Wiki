@@ -1,22 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:39ddc0073d5e6fc3d2815d6b561d2655b119ceae45bcc8919485fb938cc5c152
   sources:
-    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §4 Definition: independent iff joint cdf = product of marginal cdfs, equivalently pmf/pdf products; Ex. 12 cell-by-cell check pp.9-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
-    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, Property 5 Var(X+Y) = Var X + Var Y + 2Cov; Property 6 and Warning: converse false (p.1), sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.4 (PDF p.151); Def. 4.7 and Thm 4.2 density factorisation (PDF p.173); Thm 6.8 Var(X+Y) = V(X)+V(Y) for independent X, Y (PDF p.267), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.3 Conditioning and Independence: f_X|Y = f_XY/f_Y; E[X|Y=y], Var(X|Y=y); independence gives f_X|Y = f_X, E[XY] = EX EY and E[g(X)h(Y)] = E[g(X)]E[h(Y)], HTML fetched 2026-11-06, sha256:5d697207bda40aa9ff1ce9a59db1231fe112d2fd061fed5ce08921d8c889c03a — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: functions g_i(X_i) of independent variables are independent; the indicator sequence is exchangeable, HTML fetched 2026-11-06, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Poisson Distribution: independent Poisson N, M with parameters a, b: N + M is Poisson(a + b), HTML fetched 2026-11-06, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "SOA Exam FAM syllabus, February 2027, Topic 2 Severity, Frequency, and Aggregate Models, outcomes e-k (PDF p.3), sha256:da98474b74b0a9e9153b8ce198f30195dfbe394b3e300e785e58f12663b447e4 — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-2-fam-syllabus.pdf"
-    - "SOA Exam ALTAM syllabus, October 2026, Topic 3 Joint Life Insurance and Annuities, outcomes a-b (independence or dependence of future lifetimes) (PDF p.3), sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, Domain D (Brehm et al.) task 5 'Select models to manage diverse risks and evaluate correlations of risks' (PDF p.6) and Brehm chapters 1-5 (PDF p.7), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-    - "Wikipedia, Copula (statistics): Sklar's theorem (joint distribution = copula of the marginals) and the independence copula C(u,v) = uv, HTML fetched 2026-11-06, sha256:0e663c458baaef81b2713afb34d7f77eca2f8bd460043883f22cc02b2d51c556 — https://en.wikipedia.org/wiki/Copula_(statistics)"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 outcomes g-i (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §4 Independence, Definition, Examples 12-13, pp.9-10, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
+    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7b: Covariance and Correlation, §2.1 Properties of covariance 1-6 and Warning, p.1, sha256:71f8a7b5f3b2233de2e8722ec1372f5704195efc2a6fb72c50c8ef505f92c4dc — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-b.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed.), Def. 4.4 (PDF p.151); Def. 4.7 and Thm 4.2 (PDF p.173); Thms 6.7-6.8 (PDF p.267), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.2.3 Conditioning and Independence: E[g(X)h(Y)]=E[g(X)]E[h(Y)], sha256:af73df7c214c87397f4ac78f80e7bc7445eb9254884adb06e45db6f5ea6ca2b4 — https://www.probabilitycourse.com/chapter5/5_2_3_conditioning_independence.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 2.5 Independence: definition via events {X_i in A_i}; g_i(X_i) independent, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Independent Random Variables.md

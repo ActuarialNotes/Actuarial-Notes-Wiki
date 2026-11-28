@@ -2064,7 +2064,7 @@ compile — don't "clean up" the flagged code as dead.
   `verify_paper.py` (one past paper and every question sat on it: blind stems, stems
   located and diffed in the booklet, the report side), `verify_route.py` (concept →
   syllabus task → reading → focus pages, one packet per reading), `verify_record.py batch`
-  and `verify_targets.py --by-source`. Cloud sessions get PyMuPDF and Tesseract from
+  and `verify_targets.py --by-source`. `verify_repass.py` re-verifies **rewritten** pages (`docs/verification-plan.md` §4a): one packet per source from the pages each stale file's last check cited, the page cut into claims, a planted error on every page to prove the checker read it (`seed`, `score`), and the results as `verify_record.py batch` ops (`ops`). Tests: `scripts/test_verify_repass.py`. Cloud sessions get PyMuPDF and Tesseract from
   `.claude/hooks/session-start.sh`. Tests: `scripts/test_verify_wave0.py`. `verify_check.py` is the CI gate (and `--sync` the repair pass);
   `verify_record.py` is the only supported way to write a finding, resolution or status —
   it dedupes findings by fingerprint and refuses to mark anything `verified` without a

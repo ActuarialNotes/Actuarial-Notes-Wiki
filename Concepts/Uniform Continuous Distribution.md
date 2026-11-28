@@ -1,16 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:e480fc8489b5c65e6985bdcf98aabfb78d9c1ca43090d73778ada6a4519e451a
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §2.2 Example 2.17 p.68 (PDF p.76): 'The only continuous density function with this property is the exponential density'; §5.1 geometric memoryless (PDF p.194); §5.2 uniform density 1/(b-a) and exponential density (PDF pp.213-216), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 5.21 The Uniform Distribution on an Interval: f = 1/(b-a); E(X)=(a+b)/2; var(X)=(b-a)^2/12; X = a + wU location-scale family (HTML fetched 2026-11-06), sha256:8e9ed89d801bc2780eab168757688e254a9484275e8d068c1fd000bf625c8558 — https://www.randomservices.org/random/special/UniformContinuous.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 5.20 General Uniform Distributions: P(X in A)=lambda(A)/lambda(S); conditional distribution given X in R is uniform on R; (X,Y) uniform on S x T iff X, Y independent and each uniform (HTML fetched 2026-11-06), sha256:df0f3d671bbd4ee0a72d98431cfd36e142ce833eb5c78d96dcfcb9c6650d7575 — https://www.randomservices.org/random/special/Uniform.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 6.5 E(X) = sum_j E(X|F_j)P(F_j) (PDF p.247), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Risk and Insurance study note P-21-05, VI Limits on Policy Benefits: deductible pays the loss in excess of the deductible, losses vs claim payments, benefit limits (PDF pp.7-9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "https://www.randomservices.org/random/special/UniformContinuous.html, §5.21 The Uniform Distribution on an Interval: E(X)=(a+b)/2, var=(b-a)^2/12, Related Distributions (location-scale), sha256:8e9ed89d801bc2780eab168757688e254a9484275e8d068c1fd000bf625c8558 — https://www.randomservices.org/random/special/UniformContinuous.html"
+    - "https://www.randomservices.org/random/special/Uniform.html, §5.20 General Uniform Distributions: conditional distribution given X in R; product of independent uniforms, sha256:df0f3d671bbd4ee0a72d98431cfd36e142ce833eb5c78d96dcfcb9c6650d7575 — https://www.randomservices.org/random/special/Uniform.html"
+    - "https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf, Q473 (PDF p.131-132): uniform loss, deductible d, claim uniform on [0,1-d] with probability 1-d, sha256:147ff95346ea891a1fc9e889f412701a3a41561dcd6f330d285422249ae25c84 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, §2.2 Example 2.17 p.68 (PDF p.76): only continuous density with the memoryless property is exponential; §5.2 uniform density 1/(b-a) (PDF p.213), memoryless (PDF p.214), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Uniform Continuous Distribution.md

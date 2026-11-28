@@ -1,19 +1,18 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-11-06
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:53bd6361d5368583b58000f7fa515cebffa170fbcab3b7abe1a9026613de76dd
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), Def. 6.1 p.226 (PDF p.234, absolute convergence; no expected value otherwise); Thm 6.2 linearity, expectations add whether or not independent; Def. 6.3 variance and standard deviation p.257; Thms 6.6 Var=E(X^2)-mu^2, 6.7 V(cX)=c^2V(X), V(X+c)=V(X), 6.8 V(X+Y)=V(X)+V(Y) independent, 6.9 sigma(S_n)=sigma sqrt(n) (pp.258-260, PDF pp.265-268), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Exam C tables (Loss Models 3rd ed. Appendix A excerpts), A.2.3.1 Pareto (E[X^k] for -1<k<alpha, no M(t)) PDF p.8; A.3.2.1 Gamma (M(t)=(1-theta t)^-alpha, t<1/theta; E[X^k]) PDF p.9; A.3.3.1 Exponential (M(t), E[X^k]=theta^k k!, E[X^x]=theta(1-e^{-x/theta})) and A.5.1.1 Lognormal (E[X^k]=exp(k mu + k^2 sigma^2/2), no M(t)) PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.4 Skewness and kurtosis: skw = E[((X-mu)/sigma)^3]; symmetric -> skw 0, converse false; mu_3 = E(X^3)-3mu E(X^2)+2mu^3; normal kurtosis 3; exponential skw 2, kur 9, sha256:45d1ae0c75cf3412cbf7e56ea88b6715cbd7520b581ff1e2808468f3d5b534c2 — https://www.randomservices.org/random/expect/Skew.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.6 Generating functions: M^(n)(0)=E(X^n) when M finite on an open interval about 0; Pareto E(X^n)=inf for n>=a, M(t)=inf for t>0; lognormal has all moments but infinite MGF; odd standard normal moments 0; sum of independent normals normal, sha256:40fa48baaa2d9caa1ce28569da70af31c2cf65cd86f0fe091974481ad6a2b625 — https://www.randomservices.org/random/expect/Generating.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, fetched 2026-11-06), 4.1 Expected value: definitions (discrete, continuous, mixed), may not exist, change of variables, increasing property P(X<=Y)=1, symmetry -> E(X)=a, independence E(XY)=E(X)E(Y), E(X|A) via conditional density, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
-    - "Mack, Measuring the Variability of Chain Ladder Reserve Estimates, CAS Forum Spring 1994, printed pp.117-118 (PDF pp.18-19): normal 95% interval R +- 2 s.e.; lower limit negative when s.e. > 50% of R and the distribution is rather skewed; lognormal with equal mean and variance, eq. (10) sigma^2 = ln(1 + s.e.^2/R^2), mu = ln R - sigma^2/2; percentiles from it, sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/database/forum_94spforum_94spf101.pdf"
-    - "CAS, Exam 7 Content Outline, Fall 2026, Complete text references: Mack (1994) and Shapland (2016) on the syllabus (pp.4-5), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
-  open_findings: 0
+    - "https://www.randomservices.org/random/expect/Generating.html, §4.6 Generating functions, The Moment Generating Function, sha256:40fa48baaa2d9caa1ce28569da70af31c2cf65cd86f0fe091974481ad6a2b625 — https://www.randomservices.org/random/expect/Generating.html"
+    - "https://www.randomservices.org/random/expect/Skew.html, §4.4 Skewness and kurtosis, Skewness, sha256:45d1ae0c75cf3412cbf7e56ea88b6715cbd7520b581ff1e2808468f3d5b534c2 — https://www.randomservices.org/random/expect/Skew.html"
+    - "https://www.randomservices.org/random/expect/Properties.html, §4.1 Expected value, continuous distribution and change of variables, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, §6.2 Theorem 6.6, PDF p.266 (printed p.258), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "https://www.casact.org/sites/default/files/database/forum_94spforum_94spf101.pdf, printed pp.117-118, eq. (10), PDF pp.18-19, sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/database/forum_94spforum_94spf101.pdf"
+    - "https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf, A.2.3.1 Pareto, PDF p.8; A.3.3.1 Exponential, PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Moment.md
 ---

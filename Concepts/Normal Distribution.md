@@ -1,16 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:bcf2b66f05ac39a98b0bc8a550bb97c51f0afa4d75fcd97a9f3ce9d23bcf7315
   sources:
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 5.6 The Normal Distribution: phi'(z)=-z phi(z); Phi and Phi^-1 have no closed form; Phi(-z)=1-Phi(z); location-scale family, quantile mu + sigma Phi^-1(p); sum of independent normals normal, linear transformations (HTML fetched 2026-11-06), sha256:f4e2fe70308bf064dc44f62716075c9be463a2de262cb0aca8de1d6a0c6ffc84 — https://www.randomservices.org/random/special/Normal.html"
-    - "SOA, Exam P normal distribution table (rev. 4/29/21), standard normal table rows z=0.7-2.0 and selected-percentile row (0.90 1.2816, 0.95 1.6449, 0.975 1.9600, 0.99 2.3263), PDF p.2, read 2026-11-06, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
-    - "Wikipedia, Truncated normal distribution, One sided truncation (of lower tail): E(X | X>a) = mu + sigma phi(alpha)/Z, alpha=(a-mu)/sigma, Z = 1 - Phi(alpha) (HTML fetched 2026-11-06), sha256:dec14d4864f0614704b51dea05d7e16f652f951d55cf24920b0fc3e0dad2be1f — https://en.wikipedia.org/wiki/Truncated_normal_distribution"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, 6.4 The Central Limit Theorem: continuity correction for integer-valued sums (HTML fetched 2026-11-06), sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.4 and Thm 9.6 Central Limit Theorem (PDF pp.351, 365), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random Services, 4. The Normal Distribution, §4 The Normal Distribution: density, Phi, location-scale, linear transformations, sums, sha256:f4e2fe70308bf064dc44f62716075c9be463a2de262cb0aca8de1d6a0c6ffc84 — https://www.randomservices.org/random/special/Normal.html"
+    - "Siegrist, Random Services, 6.4 The Central Limit Theorem, The Continuity Correction, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html"
+    - "SOA, Exam P normal distribution table (rev. 4/29/21), p.2, standard normal table and selected-percentile row, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
+    - "Wikipedia, Truncated normal distribution, One sided truncation (of lower tail), cache copy, sha256:3d7840bbb7152c8604dc5c13aead1f5957707ea860e11daa58b64c05dca6189c — https://en.wikipedia.org/wiki/Truncated_normal_distribution"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Normal Distribution.md

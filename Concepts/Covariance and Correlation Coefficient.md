@@ -1,14 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:56181d08966da5e85f03b7d2f3e61e16845106945f22b6bd7ade8d07b409062f
   sources:
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Covariance and Correlation (Cov = E[XY]-EX EY; Lemma 5.3 bilinearity; rho = Cov/(sigma_X sigma_Y); -1 <= rho <= 1; independent implies uncorrelated, converse not necessarily true), web page as fetched 2026-09-28, sha256:330faf8fb05f924926ce40a5e577b79910d97ec946263f40c64bf5e1277a9f82 — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Ex. 6.2.23 (PDF p.275), Exercises 6.3.17-18 (PDF p.289), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.3.1 Covariance and Correlation: Cov = E[XY]-EX EY, Lemma 5.3 (Cov(X,X)=Var(X), Cov(X+c,Y)=Cov(X,Y), Cov(X+Y,Z)=Cov(X,Z)+Cov(Y,Z), general sum formula), rho = Cov/(sigma_X sigma_Y), -1<=rho<=1 — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes, §4.5 Covariance and Correlation: cov(a+bX,Y)=b cov(X,Y), constant independent of any variable, correlation dimensionless, converse of 'independent implies uncorrelated' fails — https://www.randomservices.org/random/expect/Covariance.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed.), Exercise 6.3.17(a)-(c) p.281 (PDF p.289): cov(X,Y)=E(XY)-E(X)E(Y); cov=0 if independent; V(X+Y)=V(X)+V(Y)+2cov — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 3 Multivariate Random Variables, learning outcome e) covariance and correlation coefficient for discrete random variables (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Covariance and Correlation Coefficient.md

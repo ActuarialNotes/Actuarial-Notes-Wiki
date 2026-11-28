@@ -258,6 +258,54 @@ the plan's prototype figures within a few concepts. A reading packet now names p
 *Basics of Reinsurance Pricing* covers 12 concepts on 22 of its 52 pages, *Clash Cover*
 on page 22 alone.
 
+## 4a. Re-verifying a rewritten page (`verify_repass.py`, built 2026-11-28)
+
+The November rewrite of the concept pages into the new shape left 791 of them `stale`. They
+are rewrites, not edits: on a sample of 60, 94% of sentences were not in the page's last
+verified revision, so checking only a diff saves nothing. What a stale page does keep is
+its route. Its `sources:` name every document the last check read, with the pages. The
+re-pass uses that, and `scripts/verify_repass.py` does the mechanical half
+(tests: `scripts/test_verify_repass.py`).
+
+1. **`plan`** groups the stale pages into packets, one per source document. A page joins
+   the packet of the source it cites that the most stale pages cite.
+2. **`build --source <part of the URL> --out <dir>`** writes the packet outside the repo.
+   For each page: `blind.md` (each worked example's question, and its table, without the
+   working), `bundle.md` (the page cut into numbered claims, each tagged `carried` if the
+   same words were in its last verified revision, then the text of the source pages the
+   last check named, then the page's whole log) and `page.md`. `CHECKER.md` is the
+   checker's procedure and its output format. The last verified revision is read from git,
+   so a shallow clone needs `git fetch --unshallow --filter=blob:none origin main` first.
+3. **`seed <packet> --out <dir> --key <file>`** copies the packet and plants one error on
+   every page: a sign, exponent or index in a formula (right of its `=` only, so the plant
+   is false), or a number in an example's working. The checker is given the seeded copy
+   and is not told. Keep the key out of the packet.
+4. **The check.** One agent takes three pages. It solves the examples in code before it
+   opens the page (P5), reads each bundle once, and writes one JSON file a page: a verdict,
+   what it checked, the sources it read, and each finding with the page's exact line quoted.
+   It records nothing and edits nothing.
+5. **`score <key> <findings dir>`** says which plants were caught.
+   **`ops <findings dir> --packet <dir> --key <file>`** turns the results into
+   `verify_record.py batch` operations. A finding that is a plant is dropped. A page whose
+   plant was missed gets no record: it is checked again by a stronger model with a new
+   plant. A page with a source cited and nothing worse than a nit passes as `verified`; a
+   page with a finding is recorded `in_review` with the finding.
+6. **Fix, re-read, then re-quote.** A finding is fixed by a writer and that page re-read
+   (content plan §1.2 rule 2). Only then are the exam's answerability items re-quoted
+   (`answerability_lib.py resolve`), since a fix changes the words a quote must match.
+
+**Which model.** The first packet (Grinstead & Snell, 61 Exam P pages, run `e368`) measured
+it. On 8 pages with 24 planted errors, Haiku and Opus each caught 24 and Sonnet 22. Haiku
+then checked 53 pages; Opus re-checked 9 of them, the 4 whose plant had been inconclusive
+and 5 Haiku had passed, and found nothing Haiku had not. So the first pass is Haiku's, with
+a plant on every page, and Opus takes any page whose plant is missed and one page in ten
+of the rest. A packet costs about 90k Haiku tokens a page.
+
+**What the first packet found.** 38 of 61 pages verified; 23 `in_review` on 6 major, 24
+minor and 6 nit findings, none critical. The major ones are conditions the rewrite left
+off, two of them fixes an earlier check had recorded as applied. A rewrite does undo
+earlier corrections, so a rewritten page is never passed on the strength of its last check.
+
 ## 5. The packet procedure
 
 The waves — what is run in which order, and how far each has got — are

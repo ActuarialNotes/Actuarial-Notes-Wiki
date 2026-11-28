@@ -1,18 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:657702862ea48f0dde8f702089b2dfcb0fcdb9d09a68d1264b173e3890d4f102
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes' Formula: hypotheses partition Ω, prior, evidence, P(E|H_i), posterior; eqs (4.1)-(4.3) P(E)=Σ P(H_k)P(E|H_k) (pp.145-146, PDF pp.153-154), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.3 Bayes' Rule (Bayes' rule with LTP denominator over a partition), read 2026-11-06, sha256:47b55f920c18f40f4e9332d6d9dc13e065da3b748de97d18a8dcf53d52a2d48d — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.4 Conditional Independence (P(A∩B|C)=P(A|C)P(B|C); two-coin example, P(A∩B)=Σ P(A|C_i)P(B|C_i)P(C_i)), read 2026-11-06, sha256:c0648f3ab8dbef113ddc1bd80d29e311a705fbd2a4adc143f549eb567a2e28d6 — https://www.probabilitycourse.com/chapter1/1_4_4_conditional_independence.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §1.4.2 Law of Total Probability (partition of S; P(A)=Σ P(A|B_i)P(B_i)), read 2026-11-06, sha256:e670bbb6d9b77df6d4a0c8d7fa5d5317d0bc1991eb0f7fb8e4df15a2b41a3825 — https://www.probabilitycourse.com/chapter1/1_4_2_total_probability.php"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Poisson distribution P(Y=k)=e^{−λt}(λt)^k/k! (Ch. 5 exercise 11, PDF p.206), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Exam P Sample Solutions (2026-05 file), Q306 solution, PDF p.84 (Bayes with survival likelihoods P(T>1|H), P(T>1|A) for 'still in force'), read 2026-11-06, sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2), Topic 2 outcome b (PDF p.3), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, §4.1 Bayes' formula, eqs (4.1)-(4.3), PDF pp.153-154, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Bayes' Rule, §1.4.3 Bayes' Rule, sha256:867c787d2cd9944ad19bbe866fe4824579d6ad917fcb542af790408377ba091e — https://www.probabilitycourse.com/chapter1/1_4_3_bayes_rule.php"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, Ch.5 Poisson pmf, PDF p.206, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf, Q306 solution, PDF p.84, sha256:147ff95346ea891a1fc9e889f412701a3a41561dcd6f330d285422249ae25c84 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md

@@ -34,3 +34,42 @@ created: 2026-09-28
 - checks_run: Recomputed: mu=0.65, sigma^2=0.5275, P(S_2=2)=0.2725; CV table 1.117/0.112/0.0112 with SD 0.726/7.26/72.6; 0.85^3=0.6141; symmetry example P(C)=0.875, 0.5714, 1.714; Try-its SD 2,828 vs 20,000, CV 0.057 vs 0.40, 1/sqrt(50)=14%; max of five exponentials 0.3484; P(X1>3X2)=1/4 (sympy). Formulas against G&S Def 4.5, Thms 6.7-6.9, §9.2; Siegrist Order Statistics (F^n, 1-[1-F]^n), Poisson additivity, Gamma (sum of exponentials), CLT, Independence (exchangeable); Exam P syllabus outcome i (CLT for i.i.d. sums). Links resolve.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.5 independent trials process: mutually independent with the same distribution (PDF p.151); Thm 6.7 V(cX) = c^2 V(X) and Thm 6.9 E(S_n) = n mu, V(S_n) = n sigma^2 (PDF pp.267-268); §9.2 Central Limit Theorem (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Order Statistics: F_1(x) = 1 - [1 - F(x)]^n and F_n(x) = [F(x)]^n for an i.i.d. sample, HTML fetched 2026-11-06, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Poisson Distribution: independent Poisson N, M with parameters a, b: N + M is Poisson(a + b), HTML fetched 2026-11-06, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Gamma Distribution (Poisson process): T_n, the sum of n independent exponential inter-arrival times, has the gamma distribution, HTML fetched 2026-11-06, sha256:bbea5da3e0577d07d2670905b5727657c25b044f8382e17cee3bdfdd723bbe16 — https://www.randomservices.org/random/poisson/Gamma.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), The Central Limit Theorem: the sum or average of many i.i.d. variables is approximately normal, HTML fetched 2026-11-06, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 2.5 Independence: functions g_i(X_i) of independent variables are independent; the indicator sequence is exchangeable, HTML fetched 2026-11-06, sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html; SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 objective (order statistics, linear combinations of independent variables) and outcomes f, h, i (Central Limit Theorem for i.i.d. sums) (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Re-check of the rewritten page (teaching-style rewrite). Every claim and number checked; all prior findings remain closed.
+
+## [F-001] Symmetry claims not in any source read
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: minor
+- status: open
+- locus: The equally-likely-smallest result
+- claim: For n i.i.d. continuous variables each is equally likely to be the smallest, so P(X_1 = X_(1)) = 1/n.
+- evidence: The result is true (it follows from the product form in C2, which is source-backed), but no excerpt read this session states it. Siegrist Independence §2.5 gives exchangeability only for indicator sequences. Not confirmed by a source.
+- source_rank: 5
+- proposed_action: Leave the claim, and cite a source that states it, or mark it as derived from the product form of the joint density.
+- applied: false
+- fingerprint: 9213c1fa6c2c
+
+## [F-002] Conditional symmetry not in any source read
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: minor
+- status: open
+- locus: Conditioning on an event that treats items alike
+- claim: Symmetry survives conditioning on a permutation-invariant event G, so E[N | G] = n P(item 1 has the property | G).
+- evidence: Siegrist Expected value says only that expected-value results have conditional analogues. No excerpt read this session states that symmetry is preserved under conditioning on a symmetric event. The linearity step is valid; the symmetry premise is reasoned, not sourced.
+- source_rank: 5
+- proposed_action: Cite a source for conditional exchangeability, or state the premise as a derivation.
+- applied: false
+- fingerprint: c216986f2ac5
+
+## [C-004] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- status_set: in_review
+- checks_run: Blind answers computed first in Python: C4 = 0.2725 (0.15*0.50*2 + 0.35^2); C9 = mean 65, variance 52.75, SD 7.2629; C16 = 0.85^3 = 0.614125; C19 = 1/3. All four page answers agree with these (the page rounds 0.6141 and 7.26). Claims C1-C3 (joint pmf/density as product, i.i.d. as independent + same distribution) checked against G&S Def. 4.4-4.5 (PDF pp.151-152). C5-C8 (E[S_n]=n mu, Var(S_n)=n sigma^2, average variance sigma^2/n) checked against G&S Thm 6.7 and Thm 6.9 (PDF pp.267-268). C8 CLT approximation checked against G&S §9.2 (PDF p.348) and Siegrist CLT opening statement. C10 trap (variance of nX is n^2 sigma^2, of a sum of n i.i.d. is n sigma^2) follows from Thm 6.7 and Thm 6.9. C12 F(x)^n for the maximum and C13 for the minimum checked against Siegrist Order Statistics, 'Distribution of order statistics': F_1(x) = 1 - [1 - F(x)]^n and F_n(x) = [F(x)]^n. C13 as printed, (1 + F(x))^n, does not match: the source gives 1 - F(x) inside the bracket, so P(X_(1) > x) = [1 - F(x)]^n. C14-C15 (F is the common cdf; order-statistic names) consistent with the source. C18 (each variable equally likely to be the smallest) and C20-C21 (symmetry and linearity after conditioning on a symmetric event) are not stated in any source excerpt read this session: Siegrist Independence §2.5 states exchangeability only for indicator sequences, and Siegrist Properties §4.1 states only that expected-value results have conditional analogues. Not confirmed, so listed as unsourced. C22 is a definitional bullet. The page's worked examples (C4, C9, C16, C19) were recomputed and match.
+- sources_checked: https://math.dartmouth.edu/~prob/prob/prob.pdf, Def. 4.4-4.5 (PDF p.151-152); Thms 6.7, 6.9 (PDF pp.267-268); §9.2 (PDF p.348), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e; Order Statistics, 7. Order Statistics, Distribution of order statistics: F_1 and F_n for an i.i.d. sample, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html; The Central Limit Theorem, opening statement, sha256:ee6dc9f8e9feb14f19f96a0206c3289a4aedfc014f5e3dabf79422e1dc29f9e3 — https://www.randomservices.org/random/sample/CLT.html; Independence, §2.5 (exchangeability of indicator sequence), sha256:5f47788c1c3a1a7a6b7b916b9d339bb59184c723dc6d2ccd05fd1a11639054c9 — https://www.randomservices.org/random/prob/Independence.html; Expected value, conditional expected values paragraph, sha256:3228c869ff2a03804690236fc072d1cf7bd9b040855c67156791b50e7d3cfba9 — https://www.randomservices.org/random/expect/Properties.html

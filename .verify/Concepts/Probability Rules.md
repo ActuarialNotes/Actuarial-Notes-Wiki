@@ -46,3 +46,26 @@ created: 2026-09-27
 - confidence: high
 - checks_run: Re-verified after resolving F-001: complement = G&S Thm 1.1 property 5; addition = Thm 1.4; multiplication P(A ∩ B) = P(A | B) P(B) = eq. (4.2) and the proof of Thm 4.1; product form iff independent = Thm 4.1; total probability over a partition = eq. (4.3) with H1..Hm pairwise disjoint covering Ω; disjoint events with positive probability have P(A | B) = 0 ≠ P(A), so they are not independent (Def. 4.1); examples recomputed: 0.60 + 0.45 − 0.25 = 0.80, neither 0.20; 1 − 0.9^5 = 0.40951 ≈ 0.41; (6/10)(5/9)(4/8) = 120/720 = 1/6.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 5 (p.22, PDF p.30), Thm 1.4 (p.24, PDF p.32), Def. 4.1 (p.139, PDF p.147), Thm 4.1 (p.140, PDF p.148), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.2 Probability — Axioms of Probability, fetched 2026-09-28, sha256:ce6639e8688b5f1a5d2d5c4430f172a938d0a6573450984852a1415e28e93df1 — https://www.probabilitycourse.com/chapter1/1_3_2_probability.php
+
+## [F-002] Integer-count complement identity not covered by any source read
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: minor
+- status: open
+- locus: The count sentence
+- claim: For a count N, {N >= k} is the complement of {N <= k-1}, so P(N >= k) = 1 - P(N <= k-1).
+- evidence: The identity is arithmetically correct for integer-valued N and follows from Thm 1.1 property 5, but no excerpt read this session states the integer-count case. Listed under unsourced; filed minor because it is a fact no source read supports directly.
+- source_rank: 5
+- applied: false
+- fingerprint: 87960fe09ad6
+
+## [C-003] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- status_set: in_review
+- checks_run: Blind examples solved first in Python: C6 1-0.9^5 = 0.40951 (page's approx 0.41 is fine as ≈); C11 0.60+0.45-0.25 = 0.80, neither = 0.20 (agrees); C16 (6/10)(5/9)(4/8) = 1/6 (agrees); C21 0.3*0.2 + 0.7*0.1 = 0.13 (agrees). Claim-by-claim against G&S (prob.pdf) excerpts read this session: C3 complement formula checked against Thm 1.1 property 5 (P(A~) = 1 - P(A)): page line 5 has '1 + P(E)' - wrong sign, critical. C2/C4 and page line 9 (P(E)=1-P(E^c)) agree with Thm 1.1(5). C7-C10 addition rule checked against Thm 1.4 (eq 1.1) and its proof: formula, overlap subtraction, and disjoint reduction agree. C12-C15 multiplication rule checked against eq. (4.2)/Thm 4.1 and Def 4.1: P(E|F)P(F) = P(E n F), and product form iff independent, agree. Branch weights = conditional probabilities and path = product of branches checked against Example 4.5 and its tree (p.135). C17-C20 total probability checked against eq. (4.3) with pairwise disjoint H_i covering the sample space, and the sum-to-1 statement via Thm 1.1; agrees. C22 trap: derived from Def 4.1 with P(E),P(F)>0 and P(E n F)=0 giving P(E|F)=0 != P(E); agrees. C5 count sentence 'P(N>=k) = 1 - P(N<=k-1)' is arithmetically right for integer N (complement of N>=k is N<=k-1) but no excerpt covers integer counts; filed minor under unsourced. Prior open finding F-001 (rounded = 0.41) is resolved by the page now reading '0.40951 ≈ 0.41'; confirmed fixed, not re-filed. The log's earlier 'verified' result for the complement rule was not borne out by the current page text.
+- sources_checked: https://math.dartmouth.edu/~prob/prob/prob.pdf, §1.2 Thm 1.1 property 5 (p.22, PDF p.30), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; https://math.dartmouth.edu/~prob/prob/prob.pdf, Thm 1.4 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; https://math.dartmouth.edu/~prob/prob/prob.pdf, Def. 4.1 (p.139, PDF p.147), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; https://math.dartmouth.edu/~prob/prob/prob.pdf, Thm 4.1 (p.140, PDF p.148), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; https://math.dartmouth.edu/~prob/prob/prob.pdf, eq. (4.3) (p.146, PDF p.154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; https://math.dartmouth.edu/~prob/prob/prob.pdf, Example 4.5 (p.135, PDF p.143), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf

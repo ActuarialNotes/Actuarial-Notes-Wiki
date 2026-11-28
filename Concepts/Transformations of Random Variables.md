@@ -1,18 +1,17 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-09-28
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:7ee04aa4760ccee7c325560d1f3e90c3c6204cb76d7c81778d23dd67780f21f1
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorem 5.1 and Corollary 5.1, Corollary 5.2 with the simulation paragraph before it, Ch. 5 Exercise 21, Theorems 6.2 and 6.7, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §4.1.3 Functions of Continuous Random Variables (CDF method, method of transformations theorem for strictly monotonic differentiable g, Uniform(-1,1) squared example), sha256:fc521c3f2e55589d01948dd57e551aee1c34ccda1a11b52302064a9672de23bf — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §4.1.2 Expected Value and Variance (LOTUS, E[aX+b] = aEX + b, Var(aX+b) = a^2 Var(X) (4.4)), sha256:120c9fb88296609ab0cd0c2d2e74064ec745b889842a1a93703e328dbf9266ab — https://www.probabilitycourse.com/chapter4/4_1_2_expected_val_variance.php"
-    - "SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), A.3.3.1 Exponential (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), Deductibles, Benefit Limits and Inflation sections (PDF pp.7-9), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-    - "SOA Probability Exam syllabus, November 2026, Topic 2 (univariate random variables) learning outcomes c), d), e) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 0
+    - "Grinstead & Snell, Introduction to Probability, 2nd rev. ed., Cor 5.1, p.218 (PDF); Ch.5 §5.2 gamma density g_n, p.215 (PDF); Ch.7 Ex.1 exercise, p.308 (PDF), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §4.1.3, Theorem (eq. 4.5) method of transformations, sha256:ce2867a1fa5a71ba4944ec4cb15fa46bfee43a552eb69f3ddb16bcd7ff73658c — https://www.probabilitycourse.com/chapter4/4_1_3_functions_continuous_var.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §4.1.2, eq. (4.4), Var(aX+b)=a^2 Var(X), sha256:fc4bb0f4d0b0825145a313c588ad29b5419d8dc220538939d42b494285c2ec1a — https://www.probabilitycourse.com/chapter4/4_1_2_expected_val_variance.php"
+    - "SOA Tables for Exam C (Fall 2009), A.3.3.1 Exponential, PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Anderson & Brown, Risk and Insurance, SOA study note P-21-05, Deductibles, benefit limits and inflation, PDF pp.7-9, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Transformations of Random Variables.md
 ---

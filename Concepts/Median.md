@@ -1,19 +1,16 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-11-06
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:eb7cadf61972aaec1e14cf15678e4945a33d43a2c5386a2a43f6465ae577951f
   sources:
-    - "Siegrist, Random (randomservices.org), 2.7 Distribution and Quantile Functions: quantile of order p has F(x-) <= p <= F(x); F^-1(p) = min{x: F(x) >= p} the smallest quantile; a quantile of order 1/2 is a median, HTML fetched 2026-11-06, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
-    - "SOA Exam P Sample Solutions (2026-05 file), Q61 (PDF p.20-21: exponential median, then the maximum benefit), Q181 (PDF p.53: median payment = median loss less deductible; 20th percentile max(0, 200-250) = 0), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA, Tables for Exam C (Fall 2009), exponential F(x), VaR_p = -theta ln(1-p), E[X^x] (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "NIST/SEMATECH e-Handbook, sec. 1.3.5.1 Measures of Location: sample median Y_((N+1)/2) for odd N, average of the two middle values for even N; median based on ranks, not distorted by extreme values; right-skewed -> mean > median; normal mean = median = mode, fetched 2026-11-06, sha256:33ce7517829e7097a99e8278bab71bc8ef71ac1d166edde5c07b8fa132466b98 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm"
-    - "Siegrist, The Lognormal Distribution: quantile exp(mu + sigma Phi^-1(p)) (median e^mu), mean exp(mu + sigma^2/2), HTML fetched 2026-11-06, sha256:cec8c0b516a0fcc03bb953f82c186e3faa8ec2eee2479caf48df2850bfe2c51c — https://www.randomservices.org/random/special/LogNormal.html"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), §5.2 exponential density F = 1 - e^{-lambda x}, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes c) (expected values incl. mode, median, percentiles) and e) (amount an insurance company pays to a policyholder given deductibles, coinsurance percentages, benefit limits, inflation), PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 0
+    - "https://www.randomservices.org/random/dist/CDF.html, §2.7 Distribution and Quantile Functions, Quantile Functions, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
+    - "https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf, Q181, PDF p.53; Q61, PDF pp.20-21, sha256:147ff95346ea891a1fc9e889f412701a3a41561dcd6f330d285422249ae25c84 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm, §1.3.5.1 Measures of Location, sha256:4ec8ba684c77cb2904fb638eeb8f129dd4b39ad2396da1b7e0fb390fde49c6e7 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm"
+    - "https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf, A.3.3.1 Exponential, PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Median.md
 ---

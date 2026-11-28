@@ -198,3 +198,57 @@ created: 2026-09-28
 - checks_run: Full re-check of the rewritten page. Recomputed before re-reading: 5000 ln2 = 3465.74; E[(X-1000)+] = 5000 e^-0.2 = 4093.65; F(4000) = 0.5507; P(X<3000) = 0.4512; discrete CDF 0.35/0.60/0.80/1.00, median 1, mean 1.25; sample 300,800,1200,2600,4500 median 1200 mean 1880, with 9000 median 1900 mean 3066.67; fire density 1-(1-x)^2 -> m = 0.2929, mean 1/3, mode 0; 400 ln2 = 277.26, P(X<250) = 0.4647 -> median benefit 250; theta = 2000/ln2 = 2885.39, P(X>5000) = 2^-2.5 = 0.1768 vs e^-2.5 = 0.0821. Definition (smallest m with F(m) >= 0.5) traced to Siegrist 2.7; deductible/limit pass-through to SOA Q181 and Q61 (method; page uses its own numbers); sample median and skew ordering to NIST; lognormal median/mean to Siegrist. Prior open findings: none (F-001..F-006 all resolved).
 - sources_checked: Siegrist, Random (randomservices.org), 2.7 Distribution and Quantile Functions: quantile of order p has F(x-) <= p <= F(x); F^-1(p) = min{x: F(x) >= p} the smallest quantile; a quantile of order 1/2 is a median, HTML fetched 2026-11-06, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html; SOA Exam P Sample Solutions (2026-05 file), Q61 (PDF p.20-21: exponential median, then the maximum benefit), Q181 (PDF p.53: median payment = median loss less deductible; 20th percentile max(0, 200-250) = 0), sha256:e10d2649bdf708541f87849c85ef6cde195019cfc8a46ee9647f6733d74d04b2 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA, Tables for Exam C (Fall 2009), exponential F(x), VaR_p = -theta ln(1-p), E[X^x] (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; NIST/SEMATECH e-Handbook, sec. 1.3.5.1 Measures of Location: sample median Y_((N+1)/2) for odd N, average of the two middle values for even N; median based on ranks, not distorted by extreme values; right-skewed -> mean > median; normal mean = median = mode, fetched 2026-11-06, sha256:33ce7517829e7097a99e8278bab71bc8ef71ac1d166edde5c07b8fa132466b98 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm; Siegrist, The Lognormal Distribution: quantile exp(mu + sigma Phi^-1(p)) (median e^mu), mean exp(mu + sigma^2/2), HTML fetched 2026-11-06, sha256:cec8c0b516a0fcc03bb953f82c186e3faa8ec2eee2479caf48df2850bfe2c51c — https://www.randomservices.org/random/special/LogNormal.html; Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), §5.2 exponential density F = 1 - e^{-lambda x}, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA Probability Exam syllabus, November 2026, Topic 2 learning outcomes c) (expected values incl. mode, median, percentiles) and e) (amount an insurance company pays to a policyholder given deductibles, coinsurance percentages, benefit limits, inflation), PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Rewrite checked claim by claim against sources read this session; all numbers recomputed.
+
+## [F-007] Median equals mean is not true for every symmetric distribution
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: minor
+- status: open
+- locus: The symmetric-distribution sentence
+- claim: For any symmetric distribution the median equals the mean (examples: normal and uniform).
+- evidence: NIST 1.3.5.1 says only that for a normal distribution the mean, median and mode are equivalent; it does not state the general symmetric rule, and its own Cauchy example is symmetric with no finite mean. Under the page's own smallest-m definition (Siegrist §2.7), a variable with P(X=0)=P(X=1)=1/2 is symmetric, has median 0 (F(0)=0.5 already reaches 0.5) and mean 0.5. The uniform example holds only for the continuous uniform. The log entry F-003 was marked applied with NIST's wording (normal only), but the text now reads 'symmetric', so the fix has been lost.
+- source_rank: 3
+- proposed_action: For a normal distribution the median equals the mean; for a skewed distribution the mean is pulled toward the heavier tail (NIST 1.3.5.1).
+- applied: false
+- fingerprint: ee5f1d3b16ad
+
+## [F-008] Transformation rule fails for non-decreasing g with a jump under the page's definition
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: minor
+- status: open
+- locus: The transformed-loss rule
+- claim: For any non-decreasing g, g(m) is the median of g(X).
+- evidence: Siegrist §2.7 defines the median as the smallest m with F(m) >= 0.5 (F^-1(p) = min{x: F(x) >= p}). Take X uniform on (0,1), m = 0.5, and g(x) = 0 for x < 1/2, 1 for x >= 1/2. Then g(m) = 1, but g(X) has P(0)=P(1)=1/2, so its smallest median is 0. The rule holds for continuous non-decreasing g, such as the deductible and limit payments, which the next sentence uses; the general statement needs that restriction. Under Siegrist's wider quantile definition, 1 is also a quantile of order 1/2, so the page's word 'the median' is ambiguous as well.
+- source_rank: 1
+- proposed_action: If $g$ is continuous and non-decreasing, the value of $g$ at the median of $X$ is a median of $g(X)$: $$\text{median of } g(X) = g(m)$$ — or restrict the rule to the continuous payment functions the next sentence names.
+- applied: false
+- fingerprint: c83314867e64
+
+## [F-009] Deductible and limit are described as the non-decreasing things
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- severity: nit
+- status: open
+- locus: The sentence on deductibles and limits
+- claim: A deductible d and a limit u are non-decreasing.
+- evidence: d and u are fixed numbers, not functions of the loss; the payment functions max(x - d, 0) and min(x, u) are the non-decreasing maps. The formulas on the page are correct (SOA Exam P sample solution Q181, PDF p.53: median payment = median loss less deductible).
+- source_rank: 1
+- proposed_action: The payment rules are non-decreasing: a deductible d gives max(x - d, 0) and a limit u gives min(x, u), so the median payment is max(m - d, 0) and min(m, u).
+- applied: false
+- fingerprint: 4472a6cfedd6
+
+## [C-006] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-11-28T14:55Z/e368
+- date: 2026-11-28
+- status_set: in_review
+- checks_run: Blind (blind.md, solved before opening page): C6 median of exponential mean 5000 = 5000 ln2 = 3465.74; C9 claim count median = 1 (F(0)=0.35, F(1)=0.60); C13 median of per-loss payment max(X-1000,0) with X exponential mean 5000 = 3465.74 - 1000 = 2465.74 (P(Y=0)=0.1813); C15 sample sorted 300,800,1200,2600,4500,9000: median 1900, mean 3066.67. Claim by claim: C1-C2 continuous median F(m)=0.5 and C3 density area checked against Siegrist §2.7 (quantile of order p is x with F(x-) <= p <= F(x)) and the SOA Exam P sample solution Q61 (exponential median solves F(m)=0.5). C4 idea (median depends on order; mean pulled toward heavy tail) checked against NIST 1.3.5.1 (rank-based; right-skewed means mean > median). C5 symmetric claim: NIST states only that for a normal distribution mean = median = mode; it does not state the general symmetric rule. Under the page's own smallest-m definition (Siegrist §2.7, F^-1(p)=min{x:F(x)>=p}) a symmetric discrete variable with P(0)=P(1)=1/2 has median 0 and mean 0.5, so the general claim fails (finding 2). C7-C8 smallest m with F(m) >= 0.5: checked against Siegrist §2.7 F^-1 definition; consistent. C10-C11 non-decreasing g: Siegrist's definition makes every value in [0,1] a quantile of order 0.5 for the example X uniform on (0,1), g = 0 below 1/2 and 1 from 1/2; the page's g(m)=1 is not the smallest median of g(X) (which is 0), so the general statement fails under the page's convention (finding 3). The continuous case (deductible and limit payments) is fine. C12 deductible payment median max(m-d,0) and limit min(m,u): checked against SOA Q181 (median payment = median loss less deductible, 500-250=250) and the continuous non-decreasing argument; consistent. The sentence 'A deductible d and a limit u are both non-decreasing' misdescribes d and u as functions; the payment functions are the non-decreasing ones (nit, finding 4). C13 example: 3,466 - 1,000 = 2,466 matches my 2465.74. The third line 'With a deductible of 4,000, F(4000) = 0.551, so more than half of losses pay nothing and the median payment is 3' is recomputed: F(4000) = 1 - e^-0.8 = 0.5507, so P(payment = 0) = 0.5507 > 0.5 and the smallest median payment is 0, not 3 (finding 1, critical). The page's own clause 'more than half pay nothing' contradicts the value 3. C14-C15 sample median: NIST 1.3.5.1 (average of two middle values for even N) and my computation agree: 1900; mean 18400/6 = 3066.67 matches the page's 3,067. C16 trap: E[(X-1000)+] = E[X] - E[X ∧ 1000] with E[X ∧ x] = θ(1 - e^-x/θ) from the Exam C tables (A.3.3.1, PDF p.11): 5000 - 906.35 = 4093.65 ≈ 4,094, not 4000, so the trap's figure is right. Log: F-001 to F-006 all resolved; F-003 is marked applied with the NIST wording (normal only), but the current page reads 'For a symmetric distribution', so that fix is no longer in the text. Noted in finding 2. Examples recomputed: 4 (C6, C9, C13 and its third line, C15, plus the C16 trap figure = 5 numbers, 4 worked examples).
+- sources_checked: https://www.randomservices.org/random/dist/CDF.html, §2.7 Distribution and Quantile Functions, Quantile Functions, sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html; https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf, Q181, PDF p.53; Q61, PDF pp.20-21, sha256:147ff95346ea891a1fc9e889f412701a3a41561dcd6f330d285422249ae25c84 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm, §1.3.5.1 Measures of Location, sha256:4ec8ba684c77cb2904fb638eeb8f129dd4b39ad2396da1b7e0fb390fde49c6e7 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm; https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf, A.3.3.1 Exponential, PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf

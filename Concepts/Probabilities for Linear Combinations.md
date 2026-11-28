@@ -1,16 +1,15 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-11-06
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:80a0cd83b441a96e6e1729478d48b550aa6200dc378e9af4114dd415dcb65621
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ex. 6.3.17(a)-(c) and 6.3.18(a)-(c) printed p.281 (PDF p.289); Def. 7.1 p.286 (PDF p.294); Thm 7.1 and sum of two exponentials (PDF pp.299-301); Examples 7.5-7.6 (PDF p.302); Thms 9.4 and 9.6 (PDF pp.351, 365); continuity correction (PDF p.340), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 14.4 The Poisson Distribution: E(N)=var(N); sum of independent Poisson(a), Poisson(b) is Poisson(a+b), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
-    - "SOA Exam P normal distribution table (rev. 4/29/21), standard normal table, Phi(1.00)=0.8413, Phi(1.54)=0.9382, Phi(2.22)=0.9868, PDF p.2, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
-    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 0
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, Thm 7.1 and Def. 7.1, PDF pp.294, 299; Thms 9.4, 9.6, PDF pp.351, 365; Ex. 6.23 (printed p.282, PDF p.290); Thms 6.10, 6.14, 6.16 (PDF pp.277-280), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e"
+    - "https://www.randomservices.org/random/poisson/Poisson.html, The Poisson Distribution, 14.4 Sums: Poisson closed under independent sums, sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688"
+    - "https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf, The Normal Distribution, PDF p.2, sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Probabilities for Linear Combinations.md
 ---

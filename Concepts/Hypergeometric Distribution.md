@@ -1,16 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:c3d7f46371178a92562a29892cb82da3aaf3571c370df51ca389700542cd32c5
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201): h(N,k,n,x) = C(k,x)C(N-k,n-x)/C(N,n), every sample of size n equally likely; approaches binomial(n, k/N) for large N, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.2 The Hypergeometric Distribution: var(Y) = n(r/m)(1-r/m)(m-n)/(m-1); draws negatively correlated, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 12.3 The Multivariate Hypergeometric Distribution: joint pdf; grouping; conditional distribution given some counts is multivariate hypergeometric, sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-11-06), §3.1.5 Special Distributions: hypergeometric pmf and range, sha256:243fabcf9cfa4cb3ed8fd32387f2d6d1e4738844becf688fb9e66dbb5d080dc8 — https://www.probabilitycourse.com/chapter3/3_1_5_special_discrete_distr.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org, HTML fetched 2026-11-06), 11.2 The Binomial Distribution: f_n(k) > f_n(k-1) iff p/k > (1-p)/(n-k+1); given Y_n = k each outcome sequence has probability 1/C(n,k), not depending on p, sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §5.1 Hypergeometric Distribution p.193 (PDF p.201): h(N,k,n,x), samples of size n counted, tends to binomial(n, k/N), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.2 The Hypergeometric Distribution: E(Y)=nr/m, var(Y)=n(r/m)(1-r/m)(m-n)/(m-1), finite population correction factor, draws negatively correlated, convergence to binomial, sha256:56414fcd41140fbad38e3e39034536cd06144012f8457ed797740bec97e44487 — https://www.randomservices.org/random/urn/Hypergeometric.html"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 12.3 The Multivariate Hypergeometric Distribution: joint pdf, grouping, conditional distribution, sha256:ce429ccb0682c9be25603fb52bab837daa32b2910c2aeba0603daf193a8cf978 — https://www.randomservices.org/random/urn/MultiHypergeometric.html"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §3.1.5 hypergeometric range max(0,k-r)..min(k,b), sha256:6fcde1e4f4b639f6b93d0c3c972c4f6ae2fd66711d85d10fa7f21925add76b5f — https://www.probabilitycourse.com/chapter3/3_1_5_special_discrete_distr.php"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), 11.2 The Binomial Distribution: given Y_n = k in Bernoulli trials, the success trials are a random sample of size k without replacement; Y_m given Y_n=k hypergeometric, sha256:223ab179871c6da69d1e68811192935c2f12d9762a62de02336f446dd47b10b9 — https://www.randomservices.org/random/bernoulli/Binomial.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hypergeometric Distribution.md

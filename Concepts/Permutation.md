@@ -1,17 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:625029c13cc94fa738ca887276c11f8881639c8ec16a9187aaef6ceb01ea202d
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Counting Technique (stages, multiply, PDF pp.83-84), Thm 3.1 n!, Def 3.2 and Thm 3.2 k-permutations n(n−1)…(n−k+1) (PDF p.88); §3.2 binomial coefficients C(n,j) = number of j-subsets, Thm 3.4 Pascal recurrence, Thm 3.5 C(n,j)=(n)_j/j! (pp.93-94, PDF pp.101-102), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §3.1 Fixed Points and hat check problem, derangements (PDF pp.90, 93); Example 3.12: P(A_i)=(n−1)!/n!, P(no fixed point)=1/2!−1/3!+…+(−1)^n/n!, table n=4: .375 (pp.105-106, PDF pp.113-114), read 2026-11-06, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.2 Ordered Sampling without Replacement (k-permutations P^n_k=n!/(n−k)!), read 2026-11-06, sha256:94bbffcd92f0a2250a3d2df2a11b3347b31df476c48aa30db7cedddeb5578f51 — https://www.probabilitycourse.com/chapter2/2_1_2_ordered_without_replacement.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §2.1.3 Unordered Sampling without Replacement (P^n_k=C(n,k)k!; C(n,k)=n!/(k!(n−k)!), 0≤k≤n; C(n,k)=C(n,n−k); Σ C(n,k)=2^n; multinomial coefficients n!/(n1!…nr!)), read 2026-11-06, sha256:ad36b1a87daa3fd5d6a5e94a71c1a118182c7fd38a04af4a9cbf7b71e3ca62ae — https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (randomservices.org), Foundations > Combinatorial Structures (multiplication principle; n^(k)=C(n,k)k!; Pascal's rule C(n,k)=C(n−1,k−1)+C(n−1,k) with committee proof; sum_{j=n}^m C(j,n)=C(m+1,n+1) and sum j = C(m+1,2); round table (n−1)!; permutations with indistinguishable objects n!/(n1!…nk!); committee with officers), read 2026-11-06, sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability learning outcomes a-g (PDF p.2), Topic 2 outcome b (PDF p.3), read 2026-11-06, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Grinstead & Snell, Introduction to Probability, §3.1 Thm 3.1, Def. 3.2, Thm 3.2 (PDF p.88); factorial 0!=1 (PDF p.88), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random Services, Combinatorial Structures: permutations with indistinguishable objects; round table (n-1)!; couples seating exercise (2880, 1152, 384), sha256:63ef90fd651593defb33d7772ecbe92f6198b6b655219a5cb726c76cdc393ccb — https://www.randomservices.org/random/foundations/Structures.html"
+    - "Siegrist, Random Services, The Matching Problem: permutations fixing a set J of k positions, (n-j)!, sha256:6c44b9152bd3fe3f4e53e442c55bb21d299ee229e7ae996e5bb893b424b2857f — https://www.randomservices.org/random/urn/Matching.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Permutation.md

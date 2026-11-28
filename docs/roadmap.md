@@ -322,6 +322,14 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    cleared by teaching G3's rename test a head noun shared across "and"; G1, G2, G3 and G6 pass.
    Their G7 passed in Phase Q, and their G4 and G5 are Phase 2's (item 0). Next here: PA and
    ATPA, after Phase 2.
+0c. **V12: re-verify the rewritten concept pages.** 🟡 Started 2026-11-28. The rewrite of the concept
+   pages into the new shape (from 2026-11-06) left 791 of them `stale`, so every `ready` exam fails G4
+   and G8 (`publication_readiness.py --hold` warns; it does not fail). By §0.3 rule 1 this is ahead of
+   the rest of the lane. Method: `verification-plan.md` §4a (`scripts/verify_repass.py`). First packet
+   done (Grinstead & Snell, run `e368`): 61 Exam P pages, 38 verified, 23 `in_review` on 6 major and
+   24 minor findings. Left: those 23 pages' fixes; 730 stale pages in 102 packets, Exams P and FM
+   first, then Exam 5 and MAS-I; then each exam's G8 items re-quoted. No more pages are converted to
+   the new shape except with their fact check in the same PR.
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -899,6 +907,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ✅ 2026-10-18 | — | Reconstructed from the per-file logs: `.verify/_runs/2026-10-11T02-10Z-e7.md` and `…-dv14.md`. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
 | V11 | **Every question file verified** (content plan, Phase Q) | ✅ 2026-10-25 | **Now** | 3,639 of 3,639 served questions verified (from 2,826), 291 of 293 off-syllabus (2026-10-25, after Q5; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the reports re-read, Q4 Exam 9's and 8's off-syllabus (156), Q5 the residue and the maintainer's calls. Takes over the G7 halves of C5 and C9. |
+| V12 | **Re-verify the rewritten concept pages** | 🟡 2026-11-28 | **Now** | 791 concept pages stale after the new-shape rewrite. `verify_repass.py` (verification plan §4a); first packet 61 pages: 38 verified, 23 in review. 730 left |
 
 ### 4.5 A: AI and practitioner products
 

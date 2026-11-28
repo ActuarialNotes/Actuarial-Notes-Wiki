@@ -1,15 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-11-06
+  status: verified
+  confidence: high
+  last_checked: 2026-11-28
   last_checked_by: agent:validate-v1
   content_hash: sha256:197c46fc2cc4bc80405f535d0a714a6063c77eea705c7fceac2769710d8a93e7
   sources:
-    - "Orloff & Bloom, MIT OCW 18.05 (Spring 2022), Reading 7a: Joint Distributions, Independence, §3.4 joint cdf F(x,y) = P(X<=x, Y<=y), double integral of the density p.5; §3.5 properties: non-decreasing, 0 at lower-left, 1 at upper-right p.6, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), §5.2.2 Joint CDF: F_X(x) = F(x,inf); F(inf,inf) = 1; F(-inf,y) = F(x,-inf) = 0; rectangle rule F(x2,y2) - F(x1,y2) - F(x2,y1) + F(x1,y1); independence gives F = F_X F_Y; f = d2F/dxdy, HTML fetched 2026-11-06, sha256:e13e9b9b4648413fda67c6474c945f7a80b9cbced541aae04663da2c8af8829e — https://www.probabilitycourse.com/chapter5/5_2_2_joint_cdf.php"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 4.7 independence iff the joint cdf factors (PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 outcome a, joint CDFs for discrete random variables (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "18.05 S22 Reading 7a: Joint Distributions, Independence, §3.4 Joint cdf, discrete case, PDF p.5, sha256:12cf136bbcbef819e1a2530cbfcf15ea06ae83ec4f9ce6c0f6186c87b01d09f4 — https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class07-prep-a.pdf"
+    - "Joint Cumulative Distribution Function | Examples | CDF, §5.2.2 Joint CDF: marginal limits, F(inf,inf)=1, rectangle rule, independence, sha256:0f6d211de3cf4a21cfc39ed309f23e9a90b1a157e9fcdf57afbe66b037efe00b — https://www.probabilitycourse.com/chapter5/5_2_2_joint_cdf.php"
+    - "https://math.dartmouth.edu/~prob/prob/prob.pdf, Def. 4.6, Def. 4.7, Eq. 4.4 (PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e"
+    - "SOA Probability Exam (Exam P) syllabus, November 2026, Topic 3 outcome a (PDF p.4), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Joint Cumulative Distribution Function.md

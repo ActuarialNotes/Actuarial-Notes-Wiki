@@ -122,6 +122,38 @@ export function ProjectArt() {
   )
 }
 
+const SHEET_ROWS: string[][] = [
+  ['AY', '12', '24', '36'],
+  ['2022', '410', '480', '500'],
+  ['2023', '430', '505', ''],
+  ['2024', '455', '', ''],
+]
+
+/** Open in spreadsheet: a question's triangle laid out, a formula in the bar. */
+export function SpreadsheetArt() {
+  return (
+    <ArtFrame className="flex flex-col gap-2.5">
+      <div className="truncate rounded-[8px] border border-border px-2.5 py-2 font-mono text-[12px]">
+        <span className="font-bold">D3</span> =C3*D2/C2
+      </div>
+      <div className="grid grid-cols-4 overflow-hidden rounded-[8px] border border-border tabular-nums">
+        {SHEET_ROWS.flatMap((row, r) => row.map((cell, c) => (
+          <div
+            key={`${r}-${c}`}
+            className={cn(
+              'border-b border-r border-border px-2 py-1.5 text-right [&:nth-child(4n)]:border-r-0 [&:nth-last-child(-n+4)]:border-b-0',
+              (r === 0 || c === 0) && 'font-bold',
+              r === 2 && c === 3 && 'outline outline-2 -outline-offset-2 outline-foreground',
+            )}
+          >
+            {cell || '\u00a0'}
+          </div>
+        )))}
+      </div>
+    </ArtFrame>
+  )
+}
+
 // A studied day's answers: how many were right, how many missed.
 const ANSWER_DAYS: { right: number; missed: number }[] = [
   { right: 3, missed: 3 }, { right: 6, missed: 4 }, { right: 0, missed: 0 },

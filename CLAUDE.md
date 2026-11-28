@@ -336,7 +336,8 @@ before touching that area**:
 - `docs/question-spreadsheet.md` — **Open in Spreadsheet**: a question from an exam sat with a
   spreadsheet (the CAS exams at Pearson VUE — `data/examSpreadsheets.ts`, by progress key) gets an
   **Open in spreadsheet** row in the question screen's More menu (and a **Use spreadsheet**
-  button at a part that asks for numbers). The sheet opens docked beside the question (right
+  button at a part that asks for numbers). It is **Pro**: a reader without Pro gets the row with a Pro
+  tag, leading to Upgrade, and no button at the parts. The sheet opens docked beside the question (right
   of a wide screen, bottom of a narrow one), pops out into a movable window, and starts with the
   question's own tables (`questionWorkbook` in `lib/questionSheet.ts`, read mechanically, never
   retyped). An **Insert H3** button under an answer box drops the selected cell in at the caret.

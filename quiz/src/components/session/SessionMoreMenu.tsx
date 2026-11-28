@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Bookmark, BookmarkCheck, ChevronLeft, Info, Keyboard, Sheet, SlidersHorizontal, Volume2, VolumeX } from 'lucide-react'
 import { Popup, PopupTitle } from '@/components/ui/Popup'
 import { cn } from '@/lib/utils'
@@ -11,11 +12,12 @@ function Row({ icon, label, value, onClick, className, ...rest }: {
   icon: ReactNode
   label: string
   /** The setting as it stands, at the right. */
-  value?: string
+  value?: ReactNode
   onClick: () => void
   className?: string
   'aria-pressed'?: boolean
   'data-sound'?: string
+  'data-testid'?: string
 }) {
   return (
     <li className={cn('border-b border-border last:border-b-0', className)}>
@@ -49,8 +51,11 @@ export function SessionMoreMenu({
   flagged: boolean
   onFlag: () => void
   onInfo: () => void
-  /** The exam is sat with a spreadsheet: whether its pane is open, and the toggle. */
-  spreadsheet?: { open: boolean; onToggle: () => void }
+  /**
+   * The exam is sat with a spreadsheet: whether its pane is open, and the
+   * toggle. `locked` for a reader without Pro, whose row leads to Upgrade.
+   */
+  spreadsheet?: { open: boolean; onToggle: () => void } | { locked: true }
   soundOn: boolean
   onSound: () => void
   onSettings: () => void
@@ -58,6 +63,7 @@ export function SessionMoreMenu({
   /** Go back a question; absent on the first. */
   onPrevious?: () => void
 }) {
+  const navigate = useNavigate()
   const icon = 'h-[22px] w-[22px]'
   const then = (act: () => void) => () => { onClose(); act() }
   return (
@@ -71,7 +77,16 @@ export function SessionMoreMenu({
           onClick={then(onFlag)}
         />
         <Row icon={<Info className={icon} />} label="Question info" onClick={then(onInfo)} />
-        {spreadsheet && (
+        {spreadsheet && 'locked' in spreadsheet && (
+          <Row
+            icon={<Sheet className={icon} />}
+            label="Open in spreadsheet"
+            value={<span className="rounded-full border-[1.5px] border-foreground px-2.5 py-0.5 text-[13px] font-bold">Pro</span>}
+            data-testid="more-spreadsheet-pro"
+            onClick={then(() => navigate('/upgrade'))}
+          />
+        )}
+        {spreadsheet && !('locked' in spreadsheet) && (
           <Row
             icon={<Sheet className={icon} />}
             label={spreadsheet.open ? 'Close the spreadsheet' : 'Open in spreadsheet'}

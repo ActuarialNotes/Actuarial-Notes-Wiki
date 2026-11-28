@@ -558,6 +558,19 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   default until decided. Ranking under §0.3: items 1–4 are packaging over existing code; the Study
   Group is a new surface, so Later until its privacy and moderation design exists. *(Proposed 2026-10-30.)*
 
+- **Pro for MAS-I onwards (the maintainer's direction, 2026-11-28).** The buyer is a candidate
+  sitting MAS-I or a later CAS exam. Four features were chosen to make Pro worth paying for, none
+  built yet: (1) **exam-day simulation with a verdict**, a timed Practice Exam under the Pearson
+  VUE spreadsheet rules ending in a debrief (the score against the published pass mark, where the
+  time went, what to fix; a pass mark is transcribed from the CAS or not shown); (2) **written-answer
+  feedback across attempts** for Exams 5 to 9 (which command words lose credit, with the
+  examiners' sentences), over L14's checklist and the suggested grade; (3) **study anywhere**: a
+  hands-free audio quiz, the daily podcast as a feed for a podcast app, and a printable pack of the
+  reader's misses and Forgotten concepts for the last week; (4) **the connector with the reader's
+  record**, signed in, so Claude can quiz on what the reader is weak at. An AI-powered Tutor is
+  the maintainer's longer aim and waits on paying for a model. **Done 2026-11-28:** Open in
+  Spreadsheet is Pro (it was free); D13 is settled for it.
+
 - **A7: the tools a Cowork agent needs.** `docs/cowork-agent-tools.md` reviews the connector's
   10 MCP tools and 37 calculators against Cowork: six tools are the core (`search`, `fetch`,
   `get_concept`, `list_tools`, `describe_tool`, `run_tool`), but the connector exposes nothing of
@@ -1012,7 +1025,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | ✅ settled 2026-10-25: `off_syllabus` where most of a question's points rest on a dropped reading (2012 Q9 only); the rest served; 2012 q20 stays. Re-applied 2026-10-31 by the maintainer: 2017 Q15 off-syllabus, the other ten served, the Patrik facts they use taught from Patrik and labelled as the earlier reading |
 | D11 | **Delete** the retired comprehension checks (the folder, the parser, the skill), or keep them parked | `flashcard-collection.md` | R2 | Keep them parked |
 | D12 | Listen: the voice; whether it is Pro-only | `listen-recordings.md` | X4 | The test voice; free |
-| D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
+| D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change. Decided 2026-11-28 for one feature: Open in Spreadsheet is Pro |
 | D14 | **Make CI a required check on `main`** | the 2026-08-31 assessment | E2 | — (a repo setting) |
 | D15 | The 9 ambiguous concept-gap targets, and the 21 stubs | CONCEPT_GAPS §13 | C11 | Link the existing pages, as proposed |
 | D16 | Actuaria Phase 4: ranked play and seasons | — | — | 🗑 moot: Actuaria was removed 2026-11-11 |

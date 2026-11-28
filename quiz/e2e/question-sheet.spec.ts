@@ -1,11 +1,14 @@
 import { test, expect, type Page } from './test'
+import { signIn } from './fixtures/signedIn'
 
 // Open in Spreadsheet (docs/question-spreadsheet.md): a CAS question opens a
 // spreadsheet holding its own tables, docked beside it; a selected cell drops
 // into the answer with Insert; the exam-day rules refuse or flag a function the
 // Pearson VUE spreadsheet doesn't have; and the sheet pops out into a window.
+// The spreadsheet is Pro's: a reader without Pro gets a row that leads to Upgrade.
 
 async function openQuestion(page: Page, ids: string) {
+  await signIn(page, { pro: true })
   await page.goto(`/quiz?ids=${ids}`)
   const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
   // The spreadsheet is a row in the question screen's More menu.
@@ -90,7 +93,23 @@ test.describe('question spreadsheet', () => {
     await expect(sheet).toHaveCount(0)
   })
 
+  test('without Pro, the row leads to Upgrade and no part offers the spreadsheet', async ({ page }) => {
+    await signIn(page, { pro: false })
+    await page.goto('/quiz?ids=cas5-2013f-q21')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const more = page.getByRole('button', { name: 'More', exact: true })
+    await expect(startQuiz.or(more).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+    await expect(page.getByRole('button', { name: 'Use spreadsheet' })).toHaveCount(0)
+    await more.click()
+    const row = page.getByTestId('more-spreadsheet-pro')
+    await expect(row).toContainText('Pro')
+    await row.click()
+    await expect(page).toHaveURL(/\/upgrade$/)
+  })
+
   test('offers no spreadsheet for an exam sat without one', async ({ page }) => {
+    await signIn(page, { pro: true })
     await page.goto('/quiz?ids=p-004')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
     const more = page.getByRole('button', { name: 'More', exact: true })

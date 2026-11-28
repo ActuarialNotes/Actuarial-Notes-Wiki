@@ -14,7 +14,9 @@ in that environment is part of preparing for the exam.
 
 - **Open in spreadsheet**, a row of the question screen's **More** menu
   (`components/session/SessionMoreMenu.tsx`). It shows only for a question whose exam has a
-  spreadsheet profile (below). The sheet stays open from question to question until it is closed,
+  spreadsheet profile (below). **The spreadsheet is Pro's (2026-11-28; it was free):** a
+  reader without Pro sees the row with a Pro tag, which leads to Upgrade, and no part carries
+  Use spreadsheet (`sheetAllowed` / `sheetRow` in `pages/Quiz.tsx`). The sheet stays open from question to question until it is closed,
   and while it is open the row reads **Close the spreadsheet**. (It was a button in the question
   bar, beside Flag and Info, until the session was rebuilt on 2026-11-23.)
 - **Use spreadsheet, at the part.** A part that asks for numbers carries the same toggle beside its

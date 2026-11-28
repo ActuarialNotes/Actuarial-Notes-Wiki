@@ -337,7 +337,8 @@ before touching that area**:
 - `docs/question-spreadsheet.md` — **Open in Spreadsheet**: a question from an exam sat with a
   spreadsheet (the CAS exams at Pearson VUE — `data/examSpreadsheets.ts`, by progress key) gets an
   **Open in spreadsheet** row in the question screen's More menu (and a **Use spreadsheet**
-  button at a part that asks for numbers). The sheet opens docked beside the question (right
+  button at a part that asks for numbers). It is **Pro**: a reader without Pro gets the row with a Pro
+  tag, leading to Upgrade, and no button at the parts. The sheet opens docked beside the question (right
   of a wide screen, bottom of a narrow one), pops out into a movable window, and starts with the
   question's own tables (`questionWorkbook` in `lib/questionSheet.ts`, read mechanically, never
   retyped). An **Insert H3** button under an answer box drops the selected cell in at the caret.
@@ -1361,7 +1362,7 @@ Other important `lib/` modules:
   the exam in focus, Study Guides one step up; from another place it returns to the page last
   read there). `showsPlaceBar` says where the phone's bar is drawn: on every page a reader moves
   between places from, and off a screen that owns the bottom edge or the whole screen, each with
-  its own way back (the session, a game's board, You's three screens, a concept, a question or a
+  its own way back (the session, a game's board, You's three screens, Upgrade with Get Pro at its foot, a concept, a question or a
   tool with its Practice this foot, Flashcards and Search, an attempt or a brief, a workflow's
   board). `drawsOwnTopRow` says which pages open on a top row of their own below `lg`; `App.tsx`
   gives every other page the app's (`PlaceHeader`: the exam in focus and the profile button), so

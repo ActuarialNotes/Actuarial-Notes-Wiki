@@ -67,7 +67,7 @@ Highest priority: the reader moves from black outline to grey fill in one tap.
 | 3.2 | **Resources** and a resource page (`WikiResources.tsx`, `ResourceReferenceCard`, `ResourceMetaCard`) | Filled cards, metadata pills under 13px, a green "Fact checked" pill, two solid controls at once (the exam and the vintage) | Ground, 13px, Hue, One filled button |
 | 3.3 | **Store** (`pages/Store.tsx`, `components/store/`) | Filled cards throughout; green "Free option"; three solid controls on the kit (the exam, "Your kit", Register); the exam's colour on the kit's ticks and bars | Ground, Hue, One filled button, 13px |
 | 3.4 | **Gem Shop** | Filled cards, a green "FREE" tag | Ground, Hue |
-| 3.5 | **Upgrade** | A filled price card; green ticks drawn by hand where `CheckMark` in the text colour belongs | Ground, Hue |
+| ~~3.5~~ | ~~**Upgrade**~~ | Done 2026-11-25: outlined cards on the ground, `CheckMark` in the text colour, the benefit pictures redrawn in outlines, a back arrow for a top row and one filled button, Get Pro, fixed to the foot with no place bar under it | |
 | 3.6 | **A tool's page** (`components/tools/ToolTemplate.tsx`) | Only the answer card was outlined, as Phase I decided. The chain strip, "Takes from" and the input groups are filled grey, and a chosen value is solid in the exam's colour | Ground, Hue. Needs a decision: Phase I kept the sheets' colour |
 | 3.7 | **Data Sources**, **Workflows** | Filled cards and grey captions; Workflows' own screens were left out of the design | Ground, One text colour |
 | 3.8 | **Projects' views** (workspace, report, results, submit) | Filled panels, much text under 13px | Ground, 13px |
@@ -79,7 +79,7 @@ Highest priority: the reader moves from black outline to grey fill in one tap.
 
 - ~~**4.1 The top row.**~~ Settled with Phase F (2026-11-24): a place's top row on a phone is
   the exam showing and the profile button (Today, Practice, and the app's own row on Apply,
-  Projects, Games and Upgrade); Learn keeps its search bar and carries the profile button on
+  Projects and Games); Learn keeps its search bar and carries the profile button on
   its line; a screen under a place opens on a back arrow and a title; You's screens on a
   cross or a back arrow. The wordmark row and the hamburger are gone.
 - **4.2 Search.** R18 says one search. Learn, Tools, the Store and Data Sources each keep a

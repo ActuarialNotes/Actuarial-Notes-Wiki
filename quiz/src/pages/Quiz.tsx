@@ -47,6 +47,7 @@ import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
 import { LoadingMark } from '@/components/LoadingMark'
 import { spreadsheetProfileFor } from '@/data/examSpreadsheets'
+import { useSubscription } from '@/hooks/useSubscription'
 import { examAccentStyle } from '@/lib/examColors'
 import { lazyRoute } from '@/lib/lazyRoute'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
@@ -176,6 +177,7 @@ export default function Quiz() {
     setSheet,
     setSheetOpen,
   } = useQuizStore()
+  const { isPro, loading: subscriptionLoading } = useSubscription()
 
   // A quiz outlives this page: the reader can go anywhere in the app mid-quiz
   // and the "Return to quiz" pill (components/QuizResumeButton.tsx) brings them
@@ -722,8 +724,16 @@ export default function Quiz() {
 
   // The exam this question is from, as its logo in the header's right corner.
   const examLogoKey = EXAM_LABEL_TO_ID[currentQuestion.exam]
-  // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet offers.
+  // The spreadsheet the exam is sat with, if any — what Open in Spreadsheet
+  // offers. Using it is Pro's: a free reader's More row leads to Upgrade, and
+  // the parts carry no Use spreadsheet button.
   const sheetProfile = spreadsheetProfileFor(examLogoKey)
+  const sheetAllowed = !!sheetProfile && isPro
+  const sheetRow = !sheetProfile || subscriptionLoading
+    ? undefined
+    : isPro
+      ? { open: sheetOpen, onToggle: () => setSheetOpen(!sheetOpen) }
+      : { locked: true as const }
 
   const examWord = mode === 'mock-exam' ? 'exam' : 'quiz'
 
@@ -777,7 +787,7 @@ export default function Quiz() {
           flagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
           onInfo={() => setShowQuestionInfo(true)}
-          spreadsheet={sheetProfile ? { open: sheetOpen, onToggle: () => setSheetOpen(!sheetOpen) } : undefined}
+          spreadsheet={sheetRow}
           soundOn={soundEnabled}
           onSound={() => { toggleSound(); playSound('toggleOn') }}
           onSettings={() => setShowSettings(true)}
@@ -889,7 +899,7 @@ export default function Quiz() {
           essaySelfGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
           onEssaySelfGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
           conceptNames={conceptNames}
-          spreadsheet={!!sheetProfile}
+          spreadsheet={sheetAllowed}
         />
       </div>
 
@@ -939,7 +949,7 @@ export default function Quiz() {
       </div>
     </div>
     </div>
-    {sheetOpen && sheetProfile && (
+    {sheetOpen && sheetProfile && sheetAllowed && (
       <div style={examLogoKey ? examAccentStyle(examLogoKey) : undefined}>
         <Suspense fallback={null}>
           <QuestionSheet

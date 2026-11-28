@@ -32,9 +32,9 @@ test.describe('wiki', () => {
     await expect(page.getByTestId('credential-FCAS')).toBeVisible()
     await page.getByTestId('study-guides-add-exam').click()
     await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible()
-    // An in-development exam opens its study guide; reading it needs no adding.
+    // An in-development requirement opens its study guide; reading it needs no adding.
     await page.getByTestId('add-exam').getByRole('button', { name: /^In development/ }).click()
-    await page.getByTestId('add-exam').getByRole('link', { name: /Exam PA/ }).click()
+    await page.getByTestId('add-exam').getByRole('link', { name: /PAF/ }).click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
     await expect(page.getByTestId('exam-page')).toBeVisible()
   })

@@ -20,9 +20,9 @@ test('a visitor\'s Today is Add an exam, and adding one lands on Today', async (
   // SOA first: the ready and beta exams as rows, the rest folded.
   await expect(add.getByRole('button', { name: 'SOA' })).toHaveAttribute('aria-pressed', 'true')
   await expect(add.getByRole('button', { name: /^Exam FAM/ })).toBeVisible()
-  await expect(add.getByRole('link', { name: /Exam PA/ })).toHaveCount(0)
+  await expect(add.getByRole('link', { name: /PAF/ })).toHaveCount(0)
   await add.getByRole('button', { name: /^In development/ }).click()
-  await expect(add.getByRole('link', { name: /Exam PA/ })).toBeVisible()
+  await expect(add.getByRole('link', { name: /PAF/ })).toBeVisible()
 
   await add.getByRole('button', { name: /^Exam P\b/ }).click()
   const date = page.getByTestId('exam-date')

@@ -534,10 +534,22 @@ export const SESSION_STEP_LABEL: Record<SessionStepKind, { todo: string; done: s
   review: { todo: 'Review', done: 'Reviewed' },
 }
 
-/** "3 fix, 2 learn, 4 review": what a length holds, for a screen reader. */
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
+
+/** "9 questions": how many a length holds, one for each miss and each concept. */
+export function questionsLine(counts: SessionCounts): string {
+  return plural(counts.fix + counts.learn + counts.review, 'question')
+}
+
+/** "Fix 3 mistakes, learn 2 concepts, review 4 concepts": what a length holds, in the order it is done. */
 export function countsSummary(counts: SessionCounts): string {
-  const parts = SESSION_STEP_ORDER.filter(k => counts[k] > 0).map(k => `${counts[k]} ${k}`)
-  return parts.length > 0 ? parts.join(', ') : 'nothing waiting'
+  const parts: string[] = []
+  if (counts.fix > 0) parts.push(`fix ${plural(counts.fix, 'mistake')}`)
+  if (counts.learn > 0) parts.push(`learn ${plural(counts.learn, 'concept')}`)
+  if (counts.review > 0) parts.push(`review ${plural(counts.review, 'concept')}`)
+  if (parts.length === 0) return 'Nothing waiting'
+  const line = parts.join(', ')
+  return line[0].toUpperCase() + line.slice(1)
 }
 
 // ── The week ─────────────────────────────────────────────────────────────────

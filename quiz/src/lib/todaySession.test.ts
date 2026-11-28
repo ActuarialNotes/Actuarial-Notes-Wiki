@@ -7,6 +7,7 @@ import {
   sessionMinutes,
   buildSession,
   countsSummary,
+  questionsLine,
   learnCandidates,
   lengthFor,
   lengthFromStored,
@@ -311,9 +312,11 @@ describe('reading a session against the day', () => {
 
 describe('words', () => {
   it('says what a length holds', () => {
-    expect(countsSummary({ fix: 3, learn: 2, review: 4 })).toBe('3 fix, 2 learn, 4 review')
-    expect(countsSummary({ fix: 0, learn: 3, review: 0 })).toBe('3 learn')
-    expect(countsSummary({ fix: 0, learn: 0, review: 0 })).toBe('nothing waiting')
+    expect(countsSummary({ fix: 3, learn: 2, review: 4 })).toBe('Fix 3 mistakes, learn 2 concepts, review 4 concepts')
+    expect(countsSummary({ fix: 0, learn: 1, review: 0 })).toBe('Learn 1 concept')
+    expect(countsSummary({ fix: 0, learn: 0, review: 0 })).toBe('Nothing waiting')
+    expect(questionsLine({ fix: 3, learn: 2, review: 4 })).toBe('9 questions')
+    expect(questionsLine({ fix: 0, learn: 1, review: 0 })).toBe('1 question')
   })
 })
 

@@ -605,6 +605,8 @@ export interface SessionMistakes {
   concepts?: string[]
   /** The ones among `concepts` that are the session's Learn step; the rest are Review. */
   learn?: string[]
+  /** Questions the session wants on `concepts`: one per concept it lists, askable or not. */
+  count?: number
 }
 
 /** Hands Start's session to the quiz builder; null clears it. */
@@ -631,8 +633,9 @@ export function peekSessionMistakes(): SessionMistakes | null {
     const learn = Array.isArray(v.learn)
       ? v.learn.filter((c): c is string => typeof c === 'string')
       : []
+    const count = typeof v.count === 'number' && v.count > 0 ? Math.floor(v.count) : undefined
     return concepts.length > 0
-      ? { ids, plan: false, concepts, learn }
+      ? { ids, plan: false, concepts, learn, ...(count ? { count } : {}) }
       : { ids, plan: v.plan !== false }
   } catch { return null }
 }

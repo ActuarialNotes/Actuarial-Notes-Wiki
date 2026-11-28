@@ -338,9 +338,9 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     openDashboard(allConceptRefs, walk, 'study-plan', idx === -1 ? 0 : idx, { studyPlanLabel: "Today's session" })
   }, [view, allConceptRefs, openDashboard])
 
-  const launch = useCallback((ids: string[], concepts: string[], learn: string[] = []) => {
+  const launch = useCallback((ids: string[], concepts: string[], learn: string[] = [], count?: number) => {
     if (!examLabel) return
-    storeSessionMistakes({ ids, plan: false, concepts, learn })
+    storeSessionMistakes({ ids, plan: false, concepts, learn, count })
     setLaunching(true)
     navigate(`/?topic=${encodeURIComponent(examLabel)}&mode=quiz&autostart=1`)
   }, [examLabel, navigate])
@@ -358,7 +358,9 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     const learn = new Set(
       view.steps.filter(s => s.kind === 'learn').flatMap(s => s.items.map(i => i.key.toLowerCase())),
     )
-    launch(fixIds, askable, askable.filter(c => learn.has(c.toLowerCase())))
+    // One question for each concept still to do, whether or not a question
+    // is tagged with its name: the quiz is as long as the card says.
+    launch(fixIds, askable, askable.filter(c => learn.has(c.toLowerCase())), concepts.length)
   }, [view, launching, quizzable, launch, openConcept])
 
   const missedToday = useMemo(

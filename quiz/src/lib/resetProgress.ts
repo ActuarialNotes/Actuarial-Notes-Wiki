@@ -7,7 +7,8 @@
 // three must be cleared for the heatmap
 // and mastery state to reset. study_plan_cache is derived from mastery, so
 // it's cleared (not the whole exam_progress row, which also holds the user's
-// manually-set exam status/target date).
+// manually-set exam status/target date). written_part_grades, the written
+// parts' own grades, goes with the sessions they were marked in.
 
 import { supabase } from '@/lib/supabase'
 import { EXAM_ID_TO_LABEL } from '@/lib/examIds'
@@ -40,6 +41,7 @@ export async function resetProgressData(userId: string, examId: string | null): 
   let masteryQuery = supabase.from('concept_mastery').delete().eq('user_id', userId)
   let completionsQuery = supabase.from('daily_completions').delete().eq('user_id', userId)
   let levelEventsQuery = supabase.from('concept_level_events').delete().eq('user_id', userId)
+  let writtenQuery = supabase.from('written_part_grades').delete().eq('user_id', userId)
   let progressQuery = supabase.from('exam_progress').update({ study_plan_cache: null }).eq('user_id', userId)
 
   if (examId !== null) {
@@ -56,6 +58,9 @@ export async function resetProgressData(userId: string, examId: string | null): 
     if (examLabel) sessionsQuery = sessionsQuery.eq('exam', examLabel)
     const { error: sessionsError } = await sessionsQuery
     if (sessionsError) return sessionsError.message
+    if (examLabel) writtenQuery = writtenQuery.eq('exam', examLabel)
+    const { error: writtenError } = await writtenQuery
+    if (writtenError && !['42P01', 'PGRST205'].includes(writtenError.code ?? '')) return writtenError.message
   }
 
   const { error: masteryError } = await masteryQuery

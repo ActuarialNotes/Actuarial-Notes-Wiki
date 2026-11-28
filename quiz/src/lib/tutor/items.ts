@@ -103,6 +103,48 @@ function kindOf(text: string): PartKind | null {
   return null
 }
 
+// A word the kind patterns read that names no instruction: "which" and "why"
+// say what kind of answer is wanted, but a reader is never told to "Which".
+const NOT_A_COMMAND = new Set(['which', 'why'])
+const SPELLING: Record<string, string> = { summarise: 'summarize' }
+
+function wordOf(sentence: string, pattern: RegExp): string | null {
+  const re = new RegExp(pattern.source, 'g')
+  for (const m of sentence.toLowerCase().matchAll(re)) {
+    const word = SPELLING[m[1]] ?? m[1]
+    if (!NOT_A_COMMAND.has(word)) return word
+  }
+  return null
+}
+
+/** The command word of the sentence `kindOf` reads, null when it names none; undefined when no sentence has a kind. */
+function commandOf(text: string): string | null | undefined {
+  for (const sentence of sentences(text).reverse()) {
+    const lower = sentence.toLowerCase()
+    if (!JUDGMENT.test(lower) && !CALCULATION.test(lower) && !EXPLANATION.test(lower)) continue
+    for (const pattern of [JUDGMENT, CALCULATION, EXPLANATION]) {
+      const word = wordOf(sentence, pattern)
+      if (word) return word[0].toUpperCase() + word.slice(1)
+    }
+    return null
+  }
+  return undefined
+}
+
+/**
+ * The command word of a part's instruction — "Explain", "Calculate",
+ * "Recommend" — read from the sentence `partKind` reads its kind from, a
+ * judgment word first, then a calculation word, then an explanation word. It
+ * usually belongs to the part's kind, not always: "Explain which method is
+ * better" is a judgment (the "which") whose command word is Explain. A part
+ * whose own prompt names no kind takes the preamble's word; null when the
+ * sentence asks "Which…?" or "Why…?" and names no instruction.
+ */
+export function commandWord(prompt: string, preamble = ''): string | null {
+  const own = commandOf(prompt)
+  return own !== undefined ? own : commandOf(preamble) ?? null
+}
+
 /**
  * What a part asks for, from the command word of its instruction — the last
  * sentence that has one. A part with none ("A very long-tailed line of

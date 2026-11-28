@@ -55,6 +55,8 @@ export interface BankRound {
   questions: Question[]
   responses: Record<string, { chosen: string; timeSpent: number }>
   manualGrades: Record<string, SelfGrade>
+  /** Each banked question's part, for its `written_part_grades` row (lib/writtenGrades.ts). */
+  partLabels: Record<string, string | null>
 }
 
 /** A batch of answers, cut into rounds with no question twice in one. */
@@ -64,13 +66,14 @@ export function bankRounds(answers: readonly BankedAnswer[]): BankRound[] {
     const q = bankQuestion(a.item)
     let round = rounds.find(r => !r.questions.some(x => x.id === q.id))
     if (!round) {
-      round = { questions: [], responses: {}, manualGrades: {} }
+      round = { questions: [], responses: {}, manualGrades: {}, partLabels: {} }
       rounds.push(round)
     }
     round.questions.push(q)
     const written = a.item.options.length === 0
     round.responses[q.id] = { chosen: written ? a.answer.trim() || '(worked on paper)' : a.answer, timeSpent: a.seconds }
     if (written) round.manualGrades[q.id] = a.grade
+    round.partLabels[q.id] = a.item.partLabel
   }
   return rounds
 }

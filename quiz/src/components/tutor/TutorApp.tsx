@@ -146,7 +146,7 @@ export default function TutorApp() {
     if (batch.length === 0) return
     for (const round of bankRounds(batch)) {
       try {
-        await recordReviewAnswers(user?.id ?? null, round.questions, round.responses, recordsRef.current, round.manualGrades)
+        await recordReviewAnswers(user?.id ?? null, round.questions, round.responses, recordsRef.current, round.manualGrades, { source: 'tutor', partLabels: round.partLabels })
       } catch (err) {
         console.warn('Tutor: banking answers failed:', err)
       }

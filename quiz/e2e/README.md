@@ -18,6 +18,7 @@ and the god-component refactors (P3.1) can't silently break them.
 | `store.spec.ts`  | The Store's aisles render, the exam strip and aisle pills narrow them, a product sheet's button goes out to the seller in a new tab, and the Gem Shop's catalog renders at `/store/gems` (the old `/store?tab=` links sent on to it) |
 | `auth.spec.ts`   | Sign-in form renders and toggles to sign-up |
 | `battle.spec.ts` | Quiz Battle: a same-screen battle played to the end (buzz, miss, steal, results, rematch), an online battle between two pages over BroadcastChannel (`VITE_BATTLE_TRANSPORT=local`), the empty matchmaking lobby said so, and two strangers matched from the lobby into a battle and back |
+| `written-answers.spec.ts` | Analytics' Written answers (Pro, Exam 5): points kept by kind of part and command word, a word opening the parts it lost with each attempt and the examiners' sentences, and Practice this question |
 
 ## Writing a spec
 

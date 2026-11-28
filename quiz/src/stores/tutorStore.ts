@@ -1,61 +1,37 @@
 import { create } from 'zustand'
-import { capLog, type ConfusionReason, type OfferKind, type OfferResponse, type TutorEvent } from '@/lib/tutor/log'
+import { capLog, type OfferKind, type OfferResponse, type TutorEvent } from '@/lib/tutor/log'
 import type { Offer } from '@/lib/tutor/moments'
 import type { BankedAnswer } from '@/lib/tutor/bank'
-import type { PartKind } from '@/lib/tutor/items'
 import type { TutorStep } from '@/lib/tutor/scheduler'
 
 // The Tutor's state (docs/tutor.md §11): the event log and the settings beside
 // it, persisted per account in localStorage, plus what is only true while the
-// app is open — the panel, the running session, the bubble on screen and the
-// answers waiting to be banked. Everything the Tutor *knows* is a fold over
-// `events` (lib/tutor/log.ts); nothing derived is stored here.
-
-export type SessionMinutes = 10 | 20 | 30 | 45
-export const SESSION_MINUTES: readonly SessionMinutes[] = [10, 20, 30, 45]
+// app is open — whether the Tutor is open, the part being answered, the bubble
+// it put up unasked and the answers waiting to be banked. Everything the Tutor
+// *knows* is a fold over `events` (lib/tutor/log.ts); nothing derived is stored
+// here.
 
 export interface TutorSettings {
-  sessionMinutes: SessionMinutes
-  /** No bubbles: the dot and the count only. */
+  /** No bubbles: the Tutor speaks only when tapped. */
   quiet: boolean
   /** Folded into a tab on the screen's edge. */
   hidden: boolean
 }
 
-export const DEFAULT_SETTINGS: TutorSettings = { sessionMinutes: 20, quiet: false, hidden: false }
+export const DEFAULT_SETTINGS: TutorSettings = { quiet: false, hidden: false }
 
-export type TutorView = 'now' | 'confusing' | 'journey'
-
-/** What a session was started to work on, when not simply the day's plan. */
-export interface SessionFocus {
-  concepts: string[]
-  kind?: PartKind | null
-}
-
-export interface TutorSession {
-  startedAt: string
-  /** Items served, in order. */
-  served: string[]
-  answered: number
-  minutes: number
-  /** New concepts the candidate chose to skip reading. */
-  skipRead: string[]
-  focus: SessionFocus | null
-  /** The session's planned work is done; what follows is extra practice. */
-  extra: boolean
-  /** The step on screen — kept here so closing the panel mid-item loses nothing. */
-  current: TutorStep | null
-  /** When it was put on screen. */
-  currentAt: string | null
-}
+export type ItemStep = Extract<TutorStep, { type: 'item' }>
 
 interface TutorState {
   userId: string | null
   events: TutorEvent[]
   settings: TutorSettings
+  /** The Tutor has been tapped open. */
   panelOpen: boolean
-  view: TutorView
-  session: TutorSession | null
+  /** The part on screen, and when it was put there: kept so closing mid-part loses nothing. */
+  current: { step: ItemStep; at: string } | null
+  /** Parts served since the app was opened, in order, so none comes round twice. */
+  served: string[]
   bubble: Offer | null
   /** Answered, not yet banked into mastery/XP (lib/tutor/bank.ts). */
   pending: BankedAnswer[]
@@ -63,17 +39,12 @@ interface TutorState {
   load: (userId: string) => void
   append: (event: TutorEvent) => void
   setSettings: (patch: Partial<TutorSettings>) => void
-  openPanel: (view?: TutorView) => void
+  openPanel: () => void
   closePanel: () => void
-  startSession: (focus?: SessionFocus | null) => void
-  endSession: () => void
+  setCurrent: (step: ItemStep | null) => void
   recordAnswer: (banked: BankedAnswer, event: TutorEvent) => void
-  skipRead: (concept: string) => void
-  setExtra: () => void
-  setCurrent: (step: TutorStep | null) => void
   showBubble: (offer: Offer) => void
   answerBubble: (response: Exclude<OfferResponse, 'shown'>) => void
-  flagConfusion: (concept: string, reason: ConfusionReason) => void
   takePending: () => BankedAnswer[]
 }
 
@@ -123,15 +94,15 @@ export const useTutorStore = create<TutorState>((set, get) => {
     events: [],
     settings: DEFAULT_SETTINGS,
     panelOpen: false,
-    view: 'now',
-    session: null,
+    current: null,
+    served: [],
     bubble: null,
     pending: [],
 
     load: userId => {
       if (get().userId === userId) return
       const data = read(userId)
-      set({ userId, events: data.events, settings: data.settings, session: null, bubble: null, pending: [] })
+      set({ userId, events: data.events, settings: data.settings, current: null, served: [], bubble: null, pending: [] })
     },
 
     append: event => appendEvents([event]),
@@ -142,42 +113,23 @@ export const useTutorStore = create<TutorState>((set, get) => {
       write(get().userId, { events: get().events, settings })
     },
 
-    openPanel: view => set({ panelOpen: true, bubble: null, ...(view ? { view } : {}) }),
+    openPanel: () => set({ panelOpen: true, bubble: null }),
     closePanel: () => set({ panelOpen: false }),
 
-    startSession: (focus = null) => set({
-      session: { startedAt: now(), served: [], answered: 0, minutes: 0, skipRead: [], focus, extra: false, current: null, currentAt: null },
-      panelOpen: true,
-      bubble: null,
-    }),
-    endSession: () => set({ session: null }),
-
-    recordAnswer: (banked, event) => {
-      appendEvents([event])
-      const s = get().session
+    setCurrent: step => {
+      if (!step) return set({ current: null })
+      const served = get().served
       set({
-        pending: [...get().pending, banked],
-        session: s ? { ...s, answered: s.answered + 1, minutes: s.minutes + banked.item.minutes } : s,
+        current: { step, at: now() },
+        served: served[served.length - 1] === step.item.id ? served : [...served, step.item.id],
+        panelOpen: true,
+        bubble: null,
       })
     },
 
-    skipRead: concept => {
-      const s = get().session
-      if (s) set({ session: { ...s, skipRead: [...s.skipRead, concept] } })
-    },
-
-    setExtra: () => {
-      const s = get().session
-      if (s && !s.extra) set({ session: { ...s, extra: true } })
-    },
-
-    setCurrent: step => {
-      const s = get().session
-      if (!s) return
-      const served = step?.type === 'item' && s.served[s.served.length - 1] !== step.item.id
-        ? [...s.served, step.item.id]
-        : s.served
-      set({ session: { ...s, current: step, currentAt: now(), served } })
+    recordAnswer: (banked, event) => {
+      appendEvents([event])
+      set({ pending: [...get().pending, banked] })
     },
 
     showBubble: offer => {
@@ -191,8 +143,6 @@ export const useTutorStore = create<TutorState>((set, get) => {
       set({ bubble: null })
       appendEvents([offerEvent(b.kind, response)])
     },
-
-    flagConfusion: (concept, reason) => appendEvents([{ t: 'confused', at: now(), concept, reason }]),
 
     takePending: () => {
       const p = get().pending

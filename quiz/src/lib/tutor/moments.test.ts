@@ -14,8 +14,6 @@ function input(events: TutorEvent[], extra: Partial<MomentInput> = {}): MomentIn
     busy: false,
     leftPage: null,
     servable: () => true,
-    waiting: 0,
-    nextNew: null,
     ...extra,
   }
 }
@@ -42,7 +40,7 @@ describe('the quiet rules', () => {
     expect(nextOffer(input([], { leftPage: read, busy: true }))).toBeNull()
   })
 
-  it('keep bubbles eight minutes apart, three after reading', () => {
+  it('keep bubbles three minutes apart', () => {
     const shown: TutorEvent = { t: 'offer', at: ago(4), kind: 'arrival', response: 'shown' }
     expect(nextOffer(input([shown], { leftPage: read }))).toMatchObject({ kind: 'post-read' })
     const justNow: TutorEvent = { t: 'offer', at: ago(1), kind: 'arrival', response: 'shown' }
@@ -57,22 +55,5 @@ describe('the quiet rules', () => {
       { t: 'offer', at: ago(29), kind: 'post-read', response: 'declined' },
     ]
     expect(nextOffer(input(declined, { leftPage: read }))).toBeNull()
-  })
-})
-
-describe('arrival (M5)', () => {
-  it('briefs once a day, when there is something to do', () => {
-    expect(nextOffer(input([], { waiting: 3 }))).toEqual({ kind: 'arrival' })
-    expect(nextOffer(input([], { waiting: 0, nextNew: null }))).toBeNull()
-    const today: TutorEvent = { t: 'offer', at: ago(120), kind: 'arrival', response: 'shown' }
-    expect(nextOffer(input([today], { waiting: 3 }))).toBeNull()
-  })
-})
-
-describe('the reading streak (M6)', () => {
-  it('nudges after four pages in fifteen minutes with nothing retrieved', () => {
-    const reads: TutorEvent[] = ['A', 'B', 'C', 'D'].map((c, i) => ({ t: 'read', at: ago(12 - i * 3), concept: c, seconds: 60 }))
-    expect(nextOffer(input(reads))).toEqual({ kind: 'reading-streak', concept: 'D' })
-    expect(nextOffer(input(reads.slice(0, 3)))).toBeNull()
   })
 })

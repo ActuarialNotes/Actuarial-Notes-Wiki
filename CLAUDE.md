@@ -111,7 +111,7 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   (`OnlineBattle.tsx` the online sessions, `BattleActionBar.tsx`'s round result and reactions,
   `BattleResults.tsx`'s review row); their styles and Tailwind utilities are `battle.css`, in the
   lazy chunk), `components/craft/` (Concept Craft's board,
-  deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
+  deck and a connection's card), `components/tutor/` (the Tutor's character, its one-line bubble, the panel a part opens in and the
   practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
   rest), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
@@ -2336,10 +2336,12 @@ The reader's own Gem Shop character — the animal and colourway on their accoun
 bottom-right corner of every page (`components/tutor/`), for the accounts its
 rollout stage admits — **Preview**: `TUTOR_APPROVED_EMAILS` in `lib/tutor/access.ts`, one
 account; **Beta** (one line, `TUTOR_STAGE = 'beta'`) adds every Pro subscriber. To anyone else
-it doesn't exist and its lazy chunk is never fetched. It walks an **Exam 5** candidate through
-the exam and is **purely algorithmic**: no model, no generated text — every word of feedback is
+it doesn't exist and its lazy chunk is never fetched. **Tapped, it says one thing**: one sentence
+about what is on screen and at most one button (`tutorSays` in `lib/tutor/says.ts`), the button
+opening one past-paper part or a page to read. It has no tabs, no sessions and no plan of its own
+(Today owns the day's session). It covers **Exam 5** and is **purely algorithmic**: no model, no generated text — every word of feedback is
 the vault's (concept page, sample answer, examiners' report) or a templated sentence about the
-candidate's own record (`lib/tutor/copy.ts`). `docs/tutor.md` is the full account; four things
+candidate's own record (`lib/tutor/says.ts`, `lib/tutor/copy.ts`). `docs/tutor.md` is the full account; four things
 to know before changing it:
 
 1. **The engine is `lib/tutor/`, all pure and tested.** `items.ts` (a question's lettered parts
@@ -2347,8 +2349,8 @@ to know before changing it:
    sentences, verbatim), `memory.ts` (FSRS-4.5 + the exam-horizon cap), `log.ts` (the
    append-only event log and its fold — relearning, flags, calibration), `scheduler.ts` (the
    next step: relearn → due → new, page first), `journey.ts` (phases, the exam date),
-   `diagnosis.ts` (what is confusing), `moments.ts` (when to speak), `context.ts` (what is on
-   screen), `bank.ts` (answers into the rest of the app). `tutorVault.test.ts` runs it over the
+   `diagnosis.ts` (what is confusing), `moments.ts` (the one time it speaks unasked, after a page is
+   read), `context.ts` (what is on screen), `says.ts` (the one line and its button), `bank.ts` (answers into the rest of the app). `tutorVault.test.ts` runs it over the
    real Exam 5 bank.
 2. **It keeps a scheduler, never a score.** Levels are the mastery ladder's and readiness is
    `computeExamReadiness`'s; the Tutor prints neither of its own and pays no reward of its own.
@@ -2356,7 +2358,7 @@ to know before changing it:
    its question's id with only its own concepts, so they count everywhere a quiz answer does.
 3. **Its record is an event log** in localStorage (`actuarial_tutor_v1:<user id>`); everything
    it knows is `foldLog(events, ladderSeeds, now)`. Don't store derived state.
-4. **The quiet rules are the feature.** No bubble during a quiz, a battle, the PDF reader, a
-   focused field or focus mode; bubbles 8 minutes apart; two declines of a kind and it stops for
-   the day (`moments.ts`).
+4. **The quiet rules are the feature.** It isn't drawn during a quiz or a battle; no bubble over
+   the PDF reader, a focused field or focus mode; bubbles 3 minutes apart; two declines and it
+   stops for the day (`moments.ts`). Don't add a second line, a list or a tab to what it says.
 

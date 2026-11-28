@@ -2408,9 +2408,10 @@ summary .katex-display,
 
 /* ── The Tutor's place on the page (docs/tutor.md §9) ──
    The character rides above whatever is parked on the bottom edge — a page's action
-   bar or the concept popup's split pane — the way the resume dock does. Its
-   panel opens above it on a wide screen, and drops to the bottom of the screen
-   when the split pane leaves too little room above; on a phone it is a sheet. */
+   bar or the concept popup's split pane — the way the resume dock does. What it
+   says is a bubble beside it. A part it serves opens in a panel above it on a
+   wide screen, dropping to the bottom of the screen when the split pane leaves
+   too little room above; on a phone the panel is a sheet. */
 .tutor-dock {
   bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px), var(--place-bar-height, 0px)) + 1rem);
 }

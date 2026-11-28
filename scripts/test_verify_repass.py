@@ -84,6 +84,12 @@ class Seeding(unittest.TestCase):
             self.assertEqual(was[p["line"] - 1], p["was"])
             self.assertEqual(now[p["line"] - 1], p["now"])
 
+    def test_a_formula_is_changed_only_right_of_its_equals_sign(self):
+        body, planted = R.mutate("> $$\\text{Var}(X - Y) = \\sigma_X^2 + \\sigma_Y^2$$\n", 1, random.Random(1))
+        self.assertIn("Var}(X - Y) =", body)
+        self.assertEqual(len(planted), 1)
+        self.assertEqual(R.mutate("> $$F(x) = P(X \\le x)$$\n", 1, random.Random(1))[1], [])
+
     def test_the_same_seed_plants_the_same_errors(self):
         self.assertEqual(R.mutate(PAGE, 3, random.Random(5)), R.mutate(PAGE, 3, random.Random(5)))
 

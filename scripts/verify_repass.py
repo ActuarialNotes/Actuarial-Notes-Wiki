@@ -363,7 +363,8 @@ def write_bundle(out: Path, page: dict, cited: list, sources: dict) -> None:
             done.add((key, n))
             text = f.read_text(encoding="utf-8")
             if single and len(text) > 20000:
-                parts.append(f"\n## Source: {url}\n\nA long web page ({len(text) // 1000}k characters), kept at `{f}`. "
+                parts.append(f"\n## Source: {url}\n\nA long web page ({len(text) // 1000}k characters), kept in the packet at "
+                             f"`source/{key}/{f.name}`. "
                              "Grep it for the claim's terms and read around the hits.\n")
             else:
                 parts.append(f"\n## Source: {url} — {'the page' if single else f'PDF page {n}'}\n\n{text}\n")
@@ -377,8 +378,11 @@ WORD_SWAPS = [("at most", "at least"), ("at least", "at most"), ("increases", "d
               ("decreases", "increases"), ("above", "below"), ("below", "above"),
               ("larger", "smaller"), ("smaller", "larger"), ("independent", "dependent"),
               ("sum", "product"), ("divided by", "multiplied by")]
-MATH_SWAPS = [(" + ", " - "), (" - ", " + "), ("1-", "1+"), ("1 -", "1 +"), (r"\le ", "< "),
-              (r"\ge ", "> "), ("^2", "^3"), (r"\sqrt", ""), ("n-1", "n"), (r"\cdot", "+")]
+# Swaps that make a formula false. Applied only right of its first "=": on the left
+# they often leave it true (Var(aX - b) is Var(aX + b)), and a plant that is still
+# true measures nothing. A strict bound for a weak one is left out for the same reason.
+MATH_SWAPS = [(" + ", " - "), (" - ", " + "), ("1-", "1+"), ("1 -", "1 +"),
+              ("^2", "^3"), (r"\sqrt", ""), ("n-1", "n"), (r"\cdot", "+")]
 
 
 def _bump(num: str, rng: random.Random) -> str:
@@ -404,9 +408,10 @@ def mutate(body: str, per_page: int, rng: random.Random) -> tuple[str, list[dict
         if not line.startswith(">"):
             in_example = False
         if line.startswith("> $$") and not in_example:
+            lhs, eq, rhs = line.partition("=")
             for a, b in MATH_SWAPS:
-                if a in line and line.replace(a, b, 1) != line:
-                    cands["formula"].append((i, line.replace(a, b, 1)))
+                if eq and a in rhs and r"\pm" not in rhs:
+                    cands["formula"].append((i, lhs + eq + rhs.replace(a, b, 1)))
                     break
         elif in_example and "=" in line:
             nums = list(NUM_RE.finditer(line))

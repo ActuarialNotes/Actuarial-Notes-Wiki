@@ -1473,7 +1473,7 @@ Other important `lib/` modules:
   `planBudget` is the shortest session holding every concept the plan has today, offered first in
   the length sheet at its minutes (`sessionMinutes`); a shorter length takes the first of the
   plan, a longer one finishes it and goes on to the plan's next concepts and what is due for
-  review (`SessionSupply.more`); a free reader's are the next New concepts in syllabus order
+  review (`SessionSupply.more`). **A session of N items is a quiz of N questions**: Start hands the builder the count, and the quiz covers every concept first and then adds more questions on the same concepts (never just the fewest that cover them); the length sheet prints each row's questions and what they are (`questionsLine`, `countsSummary`). A free reader's are the next New concepts in syllabus order
   and the concepts closest to stepping down (`learnCandidates`, `reviewCandidates`). The session
   is **built once a day and kept in the browser** (`StoredSession`, by `hooks/useTodaySession.ts`)
   and read against the day (`readSession`): finished when everything has been tried. Start hands

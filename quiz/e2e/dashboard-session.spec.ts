@@ -105,10 +105,21 @@ test('a plan opens at the length today\'s plan takes, and a longer length goes p
   const planRow = sheet.getByRole('radio').first()
   await expect(planRow).toHaveAccessibleName(/^Today's plan, \d+ minutes/)
   await expect(planRow).toBeChecked()
+  // Each row says how many questions it holds and what they are.
+  await expect(planRow).toContainText(/\d+ questions?/)
+  await expect(sheet.getByRole('radio', { name: /^120 minutes/ })).toContainText(/concepts/)
   await sheet.getByRole('radio', { name: /^120 minutes/ }).click()
   await sheet.getByRole('button', { name: 'Done' }).click()
   await expect(card.getByRole('button', { name: 'Session length, 120 minutes. Change' })).toBeVisible()
   await expect.poll(total).toBeGreaterThan(planned)
+
+  // The quiz is as long as the session says: one question for each miss and
+  // each concept, not the fewest that happen to cover the concepts.
+  const questions = await total()
+  await page.getByTestId('today-start').click()
+  await expect(page).toHaveURL(/\/quiz\?selection=stored/, { timeout: 30_000 })
+  const ids = await page.evaluate(() => JSON.parse(sessionStorage.getItem('actuarial_selected_ids') ?? '[]') as string[])
+  expect(ids.length).toBe(questions)
 })
 
 test('a step unfolds its concepts, and a tapped one opens in the reader with its row lit', async ({ page }) => {

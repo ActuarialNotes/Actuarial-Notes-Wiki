@@ -271,16 +271,22 @@ export default function Landing() {
     const mistakeIds = (sessionMistakes?.ids ?? []).filter(id => known.has(id))
     const withPlan = sessionMistakes?.plan !== false && planReady
     clearSessionMistakes()
-    // Today's session, sized by time: the fewest questions that cover the
-    // concepts it named, after the misses it fixes. No plan is needed, so a
-    // free reader's session launches the same way.
+    // Today's session, sized by time: after the misses it fixes, one question
+    // for each concept it named, so the quiz is as long as the session says.
+    // Every concept is covered first (one question can cover several), then
+    // the rest are more questions on the same concepts. No plan is needed, so
+    // a free reader's session launches the same way.
     const sessionConcepts = sessionMistakes?.concepts ?? []
     if (sessionConcepts.length > 0) {
-      const pool = questionsOnConcepts(allQuestions, topic, sessionConcepts)
+      const fixing = new Set(mistakeIds)
+      const pool = questionsOnConcepts(allQuestions, topic, sessionConcepts).filter(q => !fixing.has(q.id))
       const cover = pool.length > 0
         ? selectQuestionsForCoverage(
             pool, sessionConcepts,
-            minQuestionsToCoverConcepts(pool, sessionConcepts, { seenIds: todayAnsweredIds }),
+            Math.max(
+              sessionMistakes?.count ?? sessionConcepts.length,
+              minQuestionsToCoverConcepts(pool, sessionConcepts, { seenIds: todayAnsweredIds }),
+            ),
             { seenIds: todayAnsweredIds },
           )
         : []

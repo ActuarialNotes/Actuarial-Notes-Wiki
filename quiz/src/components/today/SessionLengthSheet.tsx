@@ -1,7 +1,8 @@
 // "How long today?" (docs/redesign-spec.md §4.3): with a paid plan, today's
 // plan first, at the minutes it takes; then the four fixed lengths, a shorter
-// one taking part of the plan and a longer one going past it. Each row shows
-// what fits as dots, one per question, grouped Fix, Learn, Review. "Use this
+// one taking part of the plan and a longer one going past it. Each row says
+// how many questions fit and what they are: mistakes to fix, concepts to
+// learn, concepts to review. "Use this
 // every day" keeps the choice as the reader's length (R9); without it the
 // choice is for today.
 
@@ -13,9 +14,8 @@ import {
   DEFAULT_SESSION_LENGTH,
   PLAN_LENGTH,
   SESSION_LENGTHS,
-  SESSION_STEP_LABEL,
-  SESSION_STEP_ORDER,
   countsSummary,
+  questionsLine,
   type SessionChoice,
   type SessionOption,
 } from '@/lib/todaySession'
@@ -31,7 +31,7 @@ export function SessionLengthSheet({
   onClose,
 }: {
   choice: SessionChoice
-  /** The rows, with what fits in each for the exam Today shows; without counts the rows carry no dots. */
+  /** The rows, with what fits in each for the exam Today shows; without counts a row is its minutes alone. */
   options?: SessionOption[]
   /** Opened from Settings: the choice is the reader's length for every day, and nothing asks. */
   standing?: boolean
@@ -44,7 +44,6 @@ export function SessionLengthSheet({
     options.some(o => o.choice === choice) ? choice : DEFAULT_SESSION_LENGTH,
   )
   const [everyDay, setEveryDay] = useState(true)
-  const hasCounts = options.some(o => o.counts)
 
   return (
     <Popup onClose={onClose} labelledBy={titleId}>
@@ -64,7 +63,7 @@ export function SessionLengthSheet({
               type="button"
               role="radio"
               aria-checked={on}
-              aria-label={counts ? `${name}: ${countsSummary(counts)}` : name}
+              aria-label={counts ? `${name}: ${questionsLine(counts)}. ${countsSummary(counts)}` : name}
               onClick={() => setPicked(option.choice)}
               className={cn(
                 'grid min-h-[72px] grid-cols-[88px_minmax(0,1fr)_28px] items-center gap-x-3.5 rounded-[18px] px-[18px] py-3 text-left',
@@ -85,30 +84,19 @@ export function SessionLengthSheet({
                   </span>
                 )}
               </span>
-              <span aria-hidden="true" className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                {counts && SESSION_STEP_ORDER.filter(kind => counts[kind] > 0).map(kind => (
-                  <span key={kind} className="flex flex-wrap gap-[3px]">
-                    {Array.from({ length: counts[kind] }, (_, i) => (
-                      <span key={i} className="h-1.5 w-1.5 rounded-full bg-foreground" />
-                    ))}
-                  </span>
-                ))}
+              <span aria-hidden="true" className="flex min-w-0 flex-col gap-0.5">
+                {counts && (
+                  <>
+                    <span className="text-[15px] font-semibold tabular-nums">{questionsLine(counts)}</span>
+                    <span className="text-[13px] leading-snug">{countsSummary(counts)}</span>
+                  </>
+                )}
               </span>
               {on && <CheckMark className="h-7 w-7 text-foreground" />}
             </button>
           )
         })}
       </div>
-
-      {/* The key: the dots' groups, in the order they are drawn. */}
-      {hasCounts && <ul aria-hidden="true" className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
-        {SESSION_STEP_ORDER.map(kind => (
-          <li key={kind} className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
-            {SESSION_STEP_LABEL[kind].todo}
-          </li>
-        ))}
-      </ul>}
 
       {!standing && <label className="flex min-h-[44px] cursor-pointer items-center gap-3 text-base">
         <input

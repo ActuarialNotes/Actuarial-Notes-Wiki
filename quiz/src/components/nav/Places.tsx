@@ -107,11 +107,16 @@ export function PlaceTopRow({
 }) {
   return (
     <div className={cn('flex items-center gap-2', !desk && !children && 'lg:hidden', className)}>
-      {lead
-        ? <span className="paper-chrome-lead flex min-w-0 items-center lg:hidden">{lead}</span>
-        : examKey && label
-        ? <ExamSwitcherButton examKey={examKey} label={label} visiting={visiting} testId={testId} className={cn('paper-chrome-lead', !desk && 'lg:hidden')} />
-        : <Wordmark className="paper-chrome-lead lg:hidden" />}
+      {/* One element carries the name whatever stands in it. A page often
+          learns what to show here a frame after it mounts, and a named element
+          that is replaced while a move is drawing ends the move on the spot. */}
+      <span className={cn('paper-chrome-lead flex min-w-0 items-center', !(desk && !lead && examKey && label) && 'lg:hidden')}>
+        {lead
+          ? lead
+          : examKey && label
+          ? <ExamSwitcherButton examKey={examKey} label={label} visiting={visiting} testId={testId} />
+          : <Wordmark />}
+      </span>
       <span className="flex-1" />
       {children}
       {profile && <ProfileButton claimable={claimable} className="lg:hidden" />}

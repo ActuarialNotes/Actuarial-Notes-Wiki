@@ -59,11 +59,14 @@ export function ProfileButton({ claimable = 0, className }: {
 }) {
   const { signedIn } = useProfileName()
   const { pathname, search } = useLocation()
+  // One element carries the name for a visitor and an account alike: a named
+  // element replaced while a page move is drawing ends the move on the spot.
+  const shell = cn('paper-chrome-profile flex shrink-0 items-center gap-2', className)
   if (!signedIn) {
     // A visitor: Sign in, then the empty ring, which still opens You (what the
     // browser keeps: the streak, the goal, quests, theme and sound).
     return (
-      <span className={cn('paper-chrome-profile flex shrink-0 items-center gap-2', className)}>
+      <span className={shell}>
         <Link
           to="/auth"
           state={{ from: pathname + search }}
@@ -85,14 +88,12 @@ export function ProfileButton({ claimable = 0, className }: {
   }
   const ready = claimable > 0 ? `. ${claimable} ${claimable === 1 ? 'quest' : 'quests'} to collect` : ''
   return (
+    <span className={shell}>
     <Link
       to={YOU_PATH}
       aria-label={`You${ready}`}
       data-testid="profile-button"
-      className={cn(
-        'paper-chrome-profile relative block shrink-0 rounded-full outline-none transition-transform duration-150 active:scale-90 focus-visible:ring-2 focus-visible:ring-ring',
-        className,
-      )}
+      className="relative block shrink-0 rounded-full outline-none transition-transform duration-150 active:scale-90 focus-visible:ring-2 focus-visible:ring-ring"
     >
       <ProfileRing size={44} />
       {claimable > 0 && (
@@ -101,5 +102,6 @@ export function ProfileButton({ claimable = 0, className }: {
         </span>
       )}
     </Link>
+    </span>
   )
 }

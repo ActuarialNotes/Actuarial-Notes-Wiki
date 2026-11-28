@@ -877,7 +877,8 @@ The browser's View Transitions API does the drawing. The app supplies two things
 - **The pictures.** `index.css` ("Paper on a desk") animates the two snapshots per move.
   The sidebar rail and the phone header are lifted out and held still above the sheets, and
   each page sheet is cut to `<main>`'s width (`--paper-inset`) so it carries its own edge and
-  shadow. The desk between sheets is the `--desk` token.
+  shadow. Behind the pictures is the page's own colour (`--background`), and two sheets
+  sliding side by side touch: no second colour ever shows between or beside them.
 
 Rules to keep — the first three are what make it read as *one* motion rather than several:
 

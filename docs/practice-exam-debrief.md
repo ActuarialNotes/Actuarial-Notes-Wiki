@@ -1,6 +1,6 @@
 # The Practice Exam debrief: the estimated score (method, proposed)
 
-Status: **method agreed 2026-11-28 (decisions 1–3 and 5; 4 open), not built.** Roadmap: "Pro for MAS-I onwards", item (1). This
+Status: **built 2026-11-28** (§7). Decision 4, the SOA exams, is still open. Roadmap: "Pro for MAS-I onwards", item (1). This
 doc is the first step the roadmap names: read what the CAS publishes about scoring, then write
 down the method before any code. Everything below is either a quote from a CAS document (with
 its address) or a rule this doc proposes, and the two are kept apart.
@@ -54,7 +54,7 @@ The pass mark as a share of available points, over the sittings those PDFs list 
 | 8 | 6 | 62.2% | 69.1% | 70.5% |
 | 9 | 6 | 69.4% | 71.5% | 73.3% |
 
-(Working figures from the research pass; the build transcribes the PDFs by script, below.)
+(Shares as printed. `quiz/src/data/casPassMarks.json` holds every row, read off the PDFs by script.)
 
 **The MAS marks were net of a guessing penalty.** The 2020 Syllabus: "one-quarter of the point
 value for each question will be deducted for each incorrect answer". The Fall 2019 MAS-I booklet:
@@ -141,3 +141,21 @@ Practice Exams still get the rest of the debrief.
 4. **SOA exams:** out of this build (proposed), or a separate read of the SOA's scoring.
 5. **The MAS Scoring guides:** settled 2026-11-28: their "no penalty for a wrong answer" is right
    since Fall 2022. The build adds the date and cites the CAS's notice.
+
+## 7. What is built
+
+- `scripts/cas_pass_marks.py` reads the eight pass-mark PDFs (cached outside the repo, each
+  file's sha256 recorded) into `quiz/src/data/casPassMarks.json`, 81 sittings. Never edit the
+  JSON; re-run the script. `--check` fails if the committed file differs from the PDFs. Tests:
+  `scripts/test_cas_pass_marks.py`.
+- `quiz/src/lib/practiceExamEstimate.ts`, pure and tested: `casGrade` (the scale),
+  `restatePenalisedShare` (the MAS restatement), `paperScore` (every question counted, ungraded
+  written parts named), `estimateGrade` (a sitting's own mark, or the 2014–2019 range) and
+  `debriefSections` (each section's points lost, time spent and the time its points allow).
+- `components/session/PracticeExamDebrief.tsx`, on the results screen of a Practice Exam:
+  **Estimated grade** and **By section** (a row practices that section's misses as a quiz). A
+  reader without Pro sees one row, **See your estimated grade**, leading to Upgrade, and only on
+  an exam the estimate covers. The Upgrade page lists it.
+- The MAS-I and MAS-II Scoring guides now date "no penalty for a wrong answer" to Fall 2022 and
+  cite the CAS's notice.
+- Flow: `quiz/e2e/practice-exam-debrief.spec.ts`.

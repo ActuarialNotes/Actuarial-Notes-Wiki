@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { GROUND, OutlineCard, OUTLINE_TILE } from '@/components/ui/OutlineCard'
 import { CheckMark } from '@/components/CheckMark'
-import { AnalyticsArt, PodcastArt, ProjectArt, SpreadsheetArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { AnalyticsArt, DebriefArt, PodcastArt, ProjectArt, SpreadsheetArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
@@ -34,6 +34,7 @@ const HEADLINE_BENEFITS = [
   'Listen to each day’s plan as a short episode',
   'Analytics on your accuracy, your pace and the marks you’re losing',
   'Work past-paper questions in the exam’s own spreadsheet',
+  'An estimated grade at the end of a CAS Practice Exam',
   'Rehearse the PCPA project from start to finish',
 ]
 
@@ -63,6 +64,11 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
     title: 'Open Questions in a Spreadsheet',
     body: 'A question from an exam sat at Pearson VUE opens beside a spreadsheet that already holds its tables. Formulas are checked against Pearson VUE’s own function list, so you practice with what you’ll have on the day.',
     Art: SpreadsheetArt,
+  },
+  {
+    title: 'See Your Estimated Grade',
+    body: 'At the end of a CAS Practice Exam, see an estimate of your grade on the CAS’s 0 to 10 scale, against the pass marks the CAS published up to 2019. Each syllabus section shows the points you lost and the time you spent on it.',
+    Art: DebriefArt,
   },
   {
     title: 'Rehearse the PCPA Project',

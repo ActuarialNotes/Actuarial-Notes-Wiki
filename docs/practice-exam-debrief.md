@@ -1,6 +1,6 @@
 # The Practice Exam debrief: the estimated score (method, proposed)
 
-Status: **proposed 2026-11-28, not built.** Roadmap: "Pro for MAS-I onwards", item (1). This
+Status: **method agreed 2026-11-28 (decisions 1–3 and 5; 4 open), not built.** Roadmap: "Pro for MAS-I onwards", item (1). This
 doc is the first step the roadmap names: read what the CAS publishes about scoring, then write
 down the method before any code. Everything below is either a quote from a CAS document (with
 its address) or a rule this doc proposes, and the two are kept apart.
@@ -59,8 +59,12 @@ The pass mark as a share of available points, over the sittings those PDFs list 
 **The MAS marks were net of a guessing penalty.** The 2020 Syllabus: "one-quarter of the point
 value for each question will be deducted for each incorrect answer". The Fall 2019 MAS-I booklet:
 "45 multiple choice questions each worth 2 points". So 58% on that scale is not 58% of questions
-right. The 2026 Syllabus no longer has the paragraph, and no current CAS page states the rule for
-computer-based exams either way.
+right. The penalty is gone since Fall 2022: "Guessing Penalty Eliminated Beginning Fall 2022"
+(`https://www.casact.org/article/guessing-penalty-eliminated-beginning-fall-2022`, 06/02/2022):
+"When the Casualty Actuarial Society began administering the multiple-choice exams MAS-I and
+MAS-II in 2018, a 0.25-point penalty was assessed for each incorrect response … Effective with the
+Fall 2022 exam sittings, the guessing penalty for exams MAS-I and MAS-II will be eliminated." So
+every published MAS mark is on the old rule, and today's exam is on a new one.
 
 **Pass ratios are still published** (`Exam_Statistics_from_2011-Present_Summer_2026.pdf`), with an
 "ineffective" count: candidates "Below 50% of Pass Mark", i.e. a grade of 0.
@@ -92,11 +96,14 @@ highest share. Output: the median grade, with the spread: "Estimated grade 4 (3 
   self-graded written parts full / half / none, a blank worth nothing). Written parts the reader
   hasn't graded stop the estimate: the debrief asks for the grades first, rather than counting
   them as zero.
-- *MAS-I and MAS-II:* the published marks are net of the quarter-point deduction, so the paper is
-  scored under the same rule before comparing: +1 a right answer, −¼ a wrong one, 0 a blank, as a
-  share of the questions. Comparing an unpenalised score with a penalised pass mark would flatter
-  the reader by several points. The debrief says why in one line. (The bank's free-entry
-  questions count as right or wrong with no deduction, since the rule was for multiple choice.)
+- *MAS-I and MAS-II:* the reader is scored on today's rule, the share of questions right with no
+  deduction. Each published mark, set on the old rule, is restated on today's: for a candidate who
+  answers every question (which today's rule rewards), a penalised share *s* is a share right of
+  *r* = (4*s* + 1) / 5. Spring 2019 MAS-I's 51.5 of 90 (57.2%) becomes 65.8% right. Restated, the
+  marks run 64.9% to 67.1% for MAS-I and 61.0% to 65.0% for MAS-II, against 56% to 59% and 51% to
+  56% as printed. Comparing a plain share with the printed marks would flatter the reader by about
+  eight points. The restatement is exact only for a paper with no blanks, and 2018–2019
+  candidates could leave blanks, so the debrief names it as the estimate's main caveat for MAS.
 
 **D. Labels.** It is always called an **estimate**, and the debrief says in one line what it
 rests on: "Based on the CAS's 0 to 10 scale and its published pass marks for 2014 to 2019. The
@@ -126,13 +133,11 @@ Practice Exams still get the rest of the debrief.
 
 ## 6. Decisions for the maintainer
 
-1. **The range in B:** lowest/median/highest share (proposed), or the median alone.
-2. **MAS scoring in C:** score under the old quarter-point rule to match the marks (proposed), or
-   show the unpenalised share against the marks with a warning.
-3. **Who sees it:** the debrief is Pro (the roadmap's direction). Proposed: a free reader sees
-   the results screen as now, with one Pro row "See your estimated grade".
+1. **The range in B:** settled 2026-11-28: the median grade with the lowest-to-highest range.
+2. **MAS scoring in C:** settled 2026-11-28: the penalty ended in Fall 2022, so the reader is
+   scored on today's rule and the old marks are restated onto it.
+3. **Who sees it:** settled 2026-11-28: the debrief is Pro; a free reader sees the results screen
+   as now, with one Pro row "See your estimated grade".
 4. **SOA exams:** out of this build (proposed), or a separate read of the SOA's scoring.
-5. **A vault fix found on the way:** `Guides/Exam MAS-I (CAS)/Scoring.md` and its MAS-II sibling
-   say "There is **no penalty for a wrong answer**". No CAS page found states that for today's
-   exams, and before 2020 there was one. Proposed: cut the sentence, or replace it with what the
-   CAS does say.
+5. **The MAS Scoring guides:** settled 2026-11-28: their "no penalty for a wrong answer" is right
+   since Fall 2022. The build adds the date and cites the CAS's notice.

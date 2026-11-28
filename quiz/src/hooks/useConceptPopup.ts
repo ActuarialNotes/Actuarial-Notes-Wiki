@@ -1,4 +1,5 @@
 import type { ObjectiveIndex } from '@/lib/syllabusChapters'
+import { createContext } from 'react'
 import { create } from 'zustand'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import {
@@ -84,6 +85,11 @@ interface ConceptPopupState {
   sourcePath: string | null
   /** The address the popup was opened on. */
   openedOn: string | null
+  /**
+   * Opened from something that lies over the page (Practice's search): the
+   * pane is drawn above it instead of under.
+   */
+  raised: boolean
   // What the walk is — see WalkKind. Decides whether the footer offers the
   // syllabus-filter picker at all.
   walkKind: WalkKind
@@ -95,7 +101,7 @@ interface ConceptPopupState {
   objectives: ObjectiveIndex | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number; objectives?: ObjectiveIndex | null; walk?: WalkKind }) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number; objectives?: ObjectiveIndex | null; walk?: WalkKind; raised?: boolean }) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -139,7 +145,7 @@ function currentPathname(): string | null {
   return typeof window === 'undefined' ? null : window.location.pathname
 }
 
-const CLOSED = { open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, openedOn: null, walkKind: 'syllabus' as WalkKind, objectives: null, dashboardContext: null }
+const CLOSED = { open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, openedOn: null, raised: false, walkKind: 'syllabus' as WalkKind, objectives: null, dashboardContext: null }
 
 export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   open: false,
@@ -151,6 +157,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   occurrenceIndex: 0,
   sourcePath: null,
   openedOn: null,
+  raised: false,
   walkKind: 'syllabus',
   objectives: null,
   dashboardContext: null,
@@ -168,6 +175,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
       sourcePath,
       openedOn: currentPathname(),
+      raised: !!options?.raised,
       walkKind: options?.walk ?? 'syllabus',
       // Kept whatever the filter is: a study-plan or source-material walk is
       // still a walk through the same syllabus, so its concepts still belong to
@@ -315,3 +323,51 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     if (open && !sourcePath && openedOn && openedOn !== pathname) set(CLOSED)
   },
 }))
+
+/**
+ * **A concept always opens in the reader, over the page it was tapped on.**
+ * For a surface with no walk of its own (a question's concepts in Question
+ * info, the podcast's chapters, a link in an explanation): `names` is what
+ * Previous and Next step through and `index` the one tapped. `raised` draws
+ * the pane above an overlay the tap came from.
+ */
+export function openConceptOverlay(names: string[], index = 0, options: { raised?: boolean } = {}): void {
+  if (names.length === 0) return
+  const state = useConceptPopup.getState()
+  // The reader is already open: the concept stacks on the page being read,
+  // like a link followed there, so closing it returns to that page.
+  if (state.open) {
+    const name = names[Math.max(0, Math.min(index, names.length - 1))]
+    state.pushPage(state.pageIndex, { kind: 'concept', name })
+    if (options.raised) useConceptPopup.setState({ raised: true })
+    return
+  }
+  state.openAt(
+    names.map(name => ({ kind: 'concept' as const, name })),
+    index,
+    null,
+    null,
+    null,
+    { walk: 'question', raised: options.raised },
+  )
+}
+
+/**
+ * How many pages have a reader of their own on screen. The app's root keeps
+ * one for every page that has none (`components/ConceptPopupHost.tsx`), so a
+ * concept can be opened from anywhere.
+ */
+export const useConceptPopupMounts = create<{ count: number; mount: () => () => void }>(set => ({
+  count: 0,
+  mount: () => {
+    set(s => ({ count: s.count + 1 }))
+    return () => set(s => ({ count: s.count - 1 }))
+  },
+}))
+
+/**
+ * A full-screen dialog that would cover the reader (the concept's questions,
+ * Learning Progress) provides its own close here; a concept tapped inside it
+ * closes the dialog first, so the reader is what the reader sees.
+ */
+export const ClosesForConcept = createContext<(() => void) | null>(null)

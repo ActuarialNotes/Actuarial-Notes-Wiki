@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { BookOpen, ChevronDown, ExternalLink, Info } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
 import { conceptLabel } from '@/lib/questionFilters'
-import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
+import { slugForLink } from '@/lib/conceptMatch'
+import { ClosesForConcept, openConceptOverlay } from '@/hooks/useConceptPopup'
 import { questionFigures, questionSource, questionTitle } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { BannerTile, InfoBanner, InfoFinePrint, InfoSheet, Stat } from '@/components/ui/InfoSheet'
@@ -56,6 +56,7 @@ export function QuestionInfoDialog({
   onClose,
 }: QuestionInfoDialogProps) {
   const [showFactCheck, setShowFactCheck] = useState(false)
+  const closeHost = useContext(ClosesForConcept)
   // Paper: the panel sliding in, same as the shortcuts sheet next to it.
   useSoundOnMount('open')
   useEffect(() => {
@@ -144,8 +145,14 @@ export function QuestionInfoDialog({
         <QuestionConcepts
           links={question.wiki_link}
           exam={examKey}
-          onOpen={onClose}
-          onRead={onOpenConcept && ((i: number) => { onClose(); onOpenConcept(question.wiki_link, i) })}
+          // A concept opens in the reader, over the page: the quiz walks the
+          // question's concepts its own way, any other surface the plain way.
+          onRead={(i: number) => {
+            onClose()
+            if (onOpenConcept) return onOpenConcept(question.wiki_link, i)
+            closeHost?.()
+            openConceptOverlay(question.wiki_link.map(link => slugForLink(link) ?? conceptLabel(link)), i, { raised: true })
+          }}
         />
       </Group>
 
@@ -202,21 +209,18 @@ function factCheckDate(question: Question): string | null {
  * The concepts the question is tagged with (`wiki_link`), folded shut. Closed
  * by default for the reason the study metadata waits for the answer: a list of
  * concepts narrows a question down. Opening it is the reader's choice. Each
- * row goes to the concept's page — the quiz outlives the page
- * (`lib/quizResume.ts`), so the Return pill brings the reader back to it.
+ * row opens the concept in the reader, over the page the panel was opened on.
  */
 function QuestionConcepts({
   links,
   exam,
-  onOpen,
   onRead,
 }: {
   links: string[]
   /** The question's exam (progress key): each concept's icon is its colour. */
   exam?: string
-  onOpen: () => void
-  /** Read the concept at this index in the popup, rather than going to its page. */
-  onRead?: (index: number) => void
+  /** Read the concept at this index in the reader. */
+  onRead: (index: number) => void
 }) {
   const [open, setOpen] = useState(false)
   if (links.length === 0) return null
@@ -247,19 +251,10 @@ function QuestionConcepts({
             <RowChevron />
           </>
         )
-        return onRead ? (
+        return (
           <button key={link} type="button" data-sound="tap" onClick={() => onRead(i)} className={cn(GROUP_ACTION_ROW, 'pl-6')}>
             {body}
           </button>
-        ) : (
-          <Link
-            key={link}
-            to={wikiRoute(hrefToEntryRef(link) ?? { kind: 'concept', name })}
-            onClick={onOpen}
-            className={cn(GROUP_ACTION_ROW, 'pl-6')}
-          >
-            {body}
-          </Link>
         )
       })}
     </>

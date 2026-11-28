@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { ClosesForConcept } from '@/hooks/useConceptPopup'
 import { useNavigate } from 'react-router-dom'
 import { Loader2, Play, X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
@@ -147,6 +148,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   }
 
   return (
+    <ClosesForConcept.Provider value={onClose}>
     <OverlayPortal>
     <div
       ref={dialogRef}
@@ -310,5 +312,6 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
       </div>
     </div>
     </OverlayPortal>
+    </ClosesForConcept.Provider>
   )
 }

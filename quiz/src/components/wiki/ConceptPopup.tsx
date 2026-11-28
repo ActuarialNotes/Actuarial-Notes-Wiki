@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2, Minimize2 } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, Lock, Maximize2, Minimize2 } from 'lucide-react'
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { useSplitHeight } from '@/hooks/useSplitHeight'
+import { useConceptPopup, useConceptPopupMounts } from '@/hooks/useConceptPopup'
+import { SPLIT_MIN_PX, useSplitHeight } from '@/hooks/useSplitHeight'
+import { useDragToClose } from '@/hooks/useDragToClose'
+import { PANE_SHELL, SheetHandle } from '@/components/ui/SheetHandle'
 import { useIsReadingPdf, type PdfReaderDoc } from '@/hooks/usePdfReader'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
 import { PdfPagePanel } from '@/components/wiki/PdfPagePanel'
@@ -49,11 +51,17 @@ function pageKey(ref: StackPageRef): string {
  * Previous / Next take the footer's place — it is what the arrows turn — and
  * the walk's footer comes back with the page it folds down to.
  */
-export function ConceptPopup() {
+export function ConceptPopup({ fallback = false }: { /** The app root's own, for a page that mounts none. */ fallback?: boolean } = {}) {
+  const mount = useConceptPopupMounts(s => s.mount)
+  useEffect(() => (fallback ? undefined : mount()), [fallback, mount])
+  const raised = useConceptPopup(s => s.raised)
   const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, walkKind, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
   const activePage: StackPageRef | undefined = pages[pageIndex]
-  const { height, beginDrag } = useSplitHeight()
+  const { height, resize } = useSplitHeight()
+  // The handle resizes the pane, and pulled down past its smallest closes it.
+  const paneRef = useRef<HTMLElement>(null)
+  useDragToClose(paneRef, close, { enabled: open && !!current, handleOnly: true, anyWidth: true, minHeight: SPLIT_MIN_PX, onResize: resize })
   // Focus mode — the popup's counterpart to the Flashcards page focus mode:
   // it fills the viewport (covering the sidebar, the mobile header and the
   // search bar) and
@@ -405,7 +413,8 @@ export function ConceptPopup() {
 
   return (
     <aside
-      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      ref={paneRef}
+      className={`concept-popup-aside fixed left-0 right-0 bottom-0 flex flex-col ${raised ? 'z-[56]' : 'z-40'} ${PANE_SHELL}`}
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"
@@ -413,21 +422,7 @@ export function ConceptPopup() {
     >
       {/* Drag handle — hidden in focus mode, visible otherwise */}
       {!focusMode && (
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize concept panel"
-          onMouseDown={e => {
-            e.preventDefault()
-            beginDrag(e.clientY)
-          }}
-          onTouchStart={e => {
-            if (e.touches[0]) beginDrag(e.touches[0].clientY)
-          }}
-          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-        >
-          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-        </div>
+        <SheetHandle label="Resize or close the concept panel" />
       )}
 
       {/* The stack, running down the pane: the trail folded into title bars

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
+import { openConceptOverlay } from '@/hooks/useConceptPopup'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Loader2, ExternalLink } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
@@ -28,7 +29,15 @@ export function WikiContent({ link }: WikiContentProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
 
   const title = linkToTitle(link)
-  const fullPageRoute = wikiRoute(hrefToEntryRef(link) ?? { kind: 'concept', name: title })
+  const entry = hrefToEntryRef(link) ?? { kind: 'concept' as const, name: title }
+  const fullPageRoute = wikiRoute(entry)
+  // A concept's whole page is read in the reader, over this one.
+  function readHere(e: MouseEvent<HTMLAnchorElement>) {
+    if (entry.kind !== 'concept') return
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    e.preventDefault()
+    openConceptOverlay([entry.name], 0, { raised: true })
+  }
 
   async function handleToggle() {
     const nextOpen = !open
@@ -72,6 +81,7 @@ export function WikiContent({ link }: WikiContentProps) {
               </p>
               <Link
                 to={fullPageRoute}
+                onClick={readHere}
                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
               >
                 Open in wiki
@@ -84,6 +94,7 @@ export function WikiContent({ link }: WikiContentProps) {
               <WikiArticle markdown={content} className="prose-sm prose-headings:mt-3 prose-headings:mb-1 prose-p:my-2" />
               <Link
                 to={fullPageRoute}
+                onClick={readHere}
                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
               >
                 Open full page

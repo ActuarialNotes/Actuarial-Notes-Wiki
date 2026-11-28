@@ -1,4 +1,5 @@
 import { Suspense, createContext, lazy, useCallback, useContext, useMemo, useRef, type ReactNode, type RefObject } from 'react'
+import { openConceptOverlay } from '@/hooks/useConceptPopup'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -184,6 +185,8 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     e.preventDefault()
     const suppressed = onWikiLink?.(ref, e)
     if (suppressed === true) return
+    // A concept is read over the page it is linked from, never by leaving it.
+    if (ref.kind === 'concept' && !onWikiLink) return openConceptOverlay([ref.name], 0, { raised: true })
     navigate(wikiRoute(ref))
   }, [navigate, onWikiLink])
 

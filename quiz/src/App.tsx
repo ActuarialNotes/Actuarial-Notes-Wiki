@@ -20,6 +20,7 @@ import MathFocus from '@/components/MathFocus'
 import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
+import { ConceptPopupHost } from '@/components/ConceptPopupHost'
 import { ExamSwitcherHost } from '@/components/switcher/ExamSwitcherHost'
 import { PracticeOverlayHost } from '@/components/practice/PracticeOverlayHost'
 import FlashcardSync from '@/components/FlashcardSync'
@@ -556,6 +557,8 @@ export default function App({ initialSession }: { initialSession: Session | null
             {/* The app's one PDF reader. Root-level so a document opened from a
                 dialog, a sheet or a card clears it and outlives it. */}
             <PdfReaderHost />
+            {/* The concept reader, for a page that mounts none of its own. */}
+            <ConceptPopupHost />
             <ExamSwitcherHost />
             <PracticeOverlayHost />
             {/* A quiz in progress, or a place in the battle queue, from anywhere else in the app. */}

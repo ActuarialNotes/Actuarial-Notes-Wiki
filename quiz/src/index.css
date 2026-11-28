@@ -501,6 +501,9 @@ html:has(.concept-popup-aside[data-focus="true"]) [data-above-reader] {
   bottom: 0;
   height: 100dvh;
   z-index: 56;
+  /* The whole screen is no sheet: no edge and no rounded corners. */
+  border-width: 0;
+  border-radius: 0;
 }
 
 @media (min-width: 1024px) {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { openConceptOverlay } from '@/hooks/useConceptPopup'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
@@ -123,6 +124,13 @@ export default function WikiQuestion() {
                   <Link
                     key={name}
                     to={wikiRoute({ kind: 'concept', name })}
+                    // The address is the concept's page (a new tab, a crawler);
+                    // a plain click reads it here, over the question.
+                    onClick={e => {
+                      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+                      e.preventDefault()
+                      openConceptOverlay(concepts, concepts.indexOf(name))
+                    }}
                     className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
                   >
                     {name}

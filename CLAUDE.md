@@ -1523,6 +1523,12 @@ Other important `lib/` modules:
   last two carry one switch, this exam or **All exams**. Pure and tested; the flows are
   `e2e/exam-switcher.spec.ts`. You, the league, Apply, Tools and the one search read the same
   hook. The parked onboarding tour's `quiz-exam-p` target went with the exam list; re-enabling the tour means re-pointing that step.
+  **Study Guides' home and Practice carry a Your exams / All exams switch** (`ExamScopeSwitch` in
+  `components/switcher/ExamScope.tsx`, `?exams=all`): All exams is every exam by society
+  (`AllExamsList.tsx`, lazy, over `addExamSections`), each opening its study guide (Learn) or its
+  questions (Practice, `/?topic=`, only exams with a bank) as a visit, never adding it; on Practice
+  a visit keeps All exams lit. A reader with no exams sees one **Add an exam** row
+  (`AddExamPanel`, opening the switcher) on Today, Study Guides and Practice, never the inline flow.
 - `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
   by difficulty) that Today's Analytics overlay draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator

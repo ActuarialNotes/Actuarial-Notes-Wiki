@@ -39,6 +39,15 @@ test.describe('wiki', () => {
     await expect(page.getByTestId('exam-page')).toBeVisible()
   })
 
+  test('All exams opens any exam\'s study guide without adding it', async ({ page }) => {
+    await page.goto('/wiki')
+    await page.getByTestId('exam-scope').getByRole('button', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/exams=all/)
+    await page.getByTestId('all-exams').getByRole('link', { name: /^Exam FM\b/ }).click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await expect(page.getByTestId('exam-page')).toBeVisible()
+  })
+
   // Leaving a page and coming back returns to where it was left — by Back, or
   // by the exam page's back arrow — while a new page opens at its top.
   // lib/routeScrollMemory.ts; the router records the place as the page is left.

@@ -9,14 +9,18 @@ test.use({ viewport: { width: 390, height: 844 } })
 
 const MISSED = ['p-008', 'p-012', 'p-020', 'p-031', 'p-044']
 
-async function setUp(page: import('@playwright/test').Page, pro: boolean) {
+/** `length`: the session length the reader has kept; none opens on the default, today's plan. */
+async function setUp(page: import('@playwright/test').Page, pro: boolean, length: number | null = 25) {
   await page.clock.setFixedTime(new Date('2026-11-07T10:00:00'))
   await signIn(page, { pro, examProgress: [{ exam_id: 'P', status: 'in_progress', target_date: '2027-01-14' }] })
-  await page.addInitScript(() => {
+  await page.addInitScript(minutes => {
+    if (minutes !== null && !localStorage.getItem('actuarial_session_length_v1')) {
+      localStorage.setItem('actuarial_session_length_v1', JSON.stringify({ everyDay: minutes }))
+    }
     localStorage.setItem('actuarial_study_plan_config_v1_P', JSON.stringify({
       targetReadyDate: '2026-12-15', targetStrengthLevel: 'strong_all', planStartDate: '2026-10-20',
     }))
-  })
+  }, length)
   const rows = [
     { question_id: 'p-004', is_correct: true, answered_at: '2026-11-02T15:00:00Z', time_spent_seconds: 200 },
     ...MISSED.map((id, i) => ({ question_id: id, is_correct: false, answered_at: `2026-11-0${i + 1}T15:00:00Z`, time_spent_seconds: 400 })),
@@ -71,7 +75,9 @@ test('the session length sheet resizes the session, for today or every day', asy
   const card = page.getByRole('region', { name: "Today's session" })
   await card.getByRole('button', { name: /Session length, 25 minutes/ }).click({ timeout: 30_000 })
   const sheet = page.getByRole('dialog', { name: 'How long today?' })
-  await expect(sheet.getByRole('radio')).toHaveCount(4)
+  // Today's plan first, then the four fixed lengths.
+  await expect(sheet.getByRole('radio')).toHaveCount(5)
+  await expect(sheet.getByRole('radio').first()).toHaveAccessibleName(/^Today's plan, \d+ minutes/)
   await expect(sheet.getByRole('radio', { name: /^25 minutes/ })).toBeChecked()
   await sheet.getByRole('radio', { name: /^45 minutes/ }).click()
   await sheet.getByRole('checkbox', { name: 'Use this every day' }).uncheck()
@@ -81,6 +87,28 @@ test('the session length sheet resizes the session, for today or every day', asy
   // For today only: the every-day length is still 25.
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('actuarial_session_length_v1') ?? '{}'))
   expect(stored).toEqual({ everyDay: 25, today: { day: '2026-11-07', minutes: 45 } })
+})
+
+test('a plan opens at the length today\'s plan takes, and a longer length goes past it', async ({ page }) => {
+  await setUp(page, true, null)
+  await page.goto('/dashboard')
+  const card = page.getByRole('region', { name: "Today's session" })
+  const lengthButton = card.getByRole('button', { name: /^Session length, \d+ minutes\. Change$/ })
+  await expect(lengthButton).toBeVisible({ timeout: 30_000 })
+  const total = async () => (await card.locator('[data-step]').evaluateAll(els => els.map(e => Number(e.querySelector('.font-bold')?.textContent))))
+    .reduce((a, b) => a + b, 0)
+  await expect(card.locator('[data-step]').first()).toBeVisible()
+  const planned = await total()
+
+  await lengthButton.click()
+  const sheet = page.getByRole('dialog', { name: 'How long today?' })
+  const planRow = sheet.getByRole('radio').first()
+  await expect(planRow).toHaveAccessibleName(/^Today's plan, \d+ minutes/)
+  await expect(planRow).toBeChecked()
+  await sheet.getByRole('radio', { name: /^120 minutes/ }).click()
+  await sheet.getByRole('button', { name: 'Done' }).click()
+  await expect(card.getByRole('button', { name: 'Session length, 120 minutes. Change' })).toBeVisible()
+  await expect.poll(total).toBeGreaterThan(planned)
 })
 
 test('a step unfolds its concepts, and a tapped one opens in the reader with its row lit', async ({ page }) => {

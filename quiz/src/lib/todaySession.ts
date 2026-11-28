@@ -1,9 +1,14 @@
 // **Today's session**: the one card of work on Today, as data
 // (docs/redesign-spec.md §4.2, §4.3).
 //
-// A session is sized by time. The reader picks 10, 25, 45 or 120 minutes; that
-// many minutes at the exam's own pace is a number of questions, and the
-// questions are shared between up to three steps in the order they are done:
+// A session is sized by time. With a paid plan the plan says how long today's
+// work takes (`planBudget`: the shortest session that holds every concept the
+// plan has for today), and that is the length offered first. The reader can
+// instead pick 10, 25, 45 or 120 minutes; that many minutes at the exam's own
+// pace is a number of questions. A shorter session takes the first of today's
+// plan; a longer one finishes it and goes on into what the plan has next and
+// what is due for review (`SessionSupply.more`). The questions are shared
+// between up to three steps in the order they are done:
 //
 //   Fix mistakes   questions missed and not yet answered right, oldest first
 //   Learn          concepts still New
@@ -35,6 +40,11 @@ import { secondsPerUnit, type ExamPace } from './quizTiming'
 export const SESSION_LENGTHS = [10, 25, 45, 120] as const
 export type SessionLength = (typeof SESSION_LENGTHS)[number]
 export const DEFAULT_SESSION_LENGTH: SessionLength = 25
+/** "As long as today's plan takes": a length that is worked out each day. */
+export const PLAN_LENGTH = 'plan' as const
+export type SessionChoice = SessionLength | typeof PLAN_LENGTH
+/** Every choice, the plan's first. */
+export const SESSION_CHOICES: readonly SessionChoice[] = [PLAN_LENGTH, ...SESSION_LENGTHS]
 /** The length "Keep going" adds once today's session is finished. */
 export const KEEP_GOING_LENGTH: SessionLength = 10
 
@@ -42,31 +52,35 @@ export function isSessionLength(value: unknown): value is SessionLength {
   return typeof value === 'number' && (SESSION_LENGTHS as readonly number[]).includes(value)
 }
 
+export function isSessionChoice(value: unknown): value is SessionChoice {
+  return value === PLAN_LENGTH || isSessionLength(value)
+}
+
 /**
  * The reader's session length: one setting for every exam (R9), with a choice
  * made for today alone standing over it until the day ends.
  */
 export interface StoredLength {
-  /** "Use this every day". */
-  everyDay: SessionLength
+  /** "Use this every day". Today's plan until the reader picks a length. */
+  everyDay: SessionChoice
   /** A length picked without "Use this every day": that day only. */
-  today?: { day: string; minutes: SessionLength }
+  today?: { day: string; minutes: SessionChoice }
 }
 
 export function lengthFromStored(raw: unknown): StoredLength {
   const v = (raw && typeof raw === 'object' ? raw : {}) as Partial<StoredLength>
-  const everyDay = isSessionLength(v.everyDay) ? v.everyDay : DEFAULT_SESSION_LENGTH
-  const today = v.today && typeof v.today.day === 'string' && isSessionLength(v.today.minutes)
+  const everyDay = isSessionChoice(v.everyDay) ? v.everyDay : PLAN_LENGTH
+  const today = v.today && typeof v.today.day === 'string' && isSessionChoice(v.today.minutes)
     ? { day: v.today.day, minutes: v.today.minutes }
     : undefined
   return today ? { everyDay, today } : { everyDay }
 }
 
-export function lengthFor(stored: StoredLength, day: string): SessionLength {
+export function lengthFor(stored: StoredLength, day: string): SessionChoice {
   return stored.today && stored.today.day === day ? stored.today.minutes : stored.everyDay
 }
 
-export function withLength(stored: StoredLength, minutes: SessionLength, day: string, everyDay: boolean): StoredLength {
+export function withLength(stored: StoredLength, minutes: SessionChoice, day: string, everyDay: boolean): StoredLength {
   return everyDay ? { everyDay: minutes } : { everyDay: stored.everyDay, today: { day, minutes } }
 }
 
@@ -102,6 +116,12 @@ export function secondsPerQuestion(pace: ExamPace | null, averagePoints: number 
 export function sessionBudget(minutes: number, secondsEach: number): number {
   if (!(secondsEach > 0)) return 1
   return Math.max(1, Math.round((minutes * 60) / secondsEach))
+}
+
+/** Minutes `questions` take at that pace, rounded up to the next 5, never under 5. */
+export function sessionMinutes(questions: number, secondsEach: number): number {
+  const raw = (Math.max(0, questions) * Math.max(0, secondsEach)) / 60
+  return Math.max(5, Math.ceil(raw / 5) * 5)
 }
 
 // ── The split ────────────────────────────────────────────────────────────────
@@ -159,6 +179,15 @@ export function splitSession(n: number, supply: SessionCounts): SessionCounts {
   return take
 }
 
+/** One row of "How long today?". */
+export interface SessionOption {
+  choice: SessionChoice
+  /** Minutes it runs; for today's plan, what the plan takes (null where that isn't known). */
+  minutes: number | null
+  /** What it would hold if the session were built now: the row's dots. */
+  counts?: SessionCounts
+}
+
 // ── What a free session draws from ───────────────────────────────────────────
 
 export interface ConceptStanding {
@@ -208,16 +237,25 @@ export function learnCandidates(concepts: readonly ConceptStanding[]): string[] 
 export interface SessionSupply {
   /** Outstanding missed question ids, oldest first. */
   mistakes: readonly string[]
-  /** Concepts to learn, in the order they are introduced. */
+  /** Concepts to learn, in the order they are introduced. With a plan: today's. */
   learn: readonly string[]
-  /** Concepts to review, most pressing first. */
+  /** Concepts to review, most pressing first. With a plan: today's. */
   review: readonly string[]
+  /**
+   * A paid plan only: what a session longer than the plan goes on to, once
+   * today's plan is in it (the plan's next concepts, what is due for review).
+   * Present means `learn` and `review` are today's plan.
+   */
+  more?: { learn: readonly string[]; review: readonly string[] }
 }
 
 /** One day's session for one exam, as kept in the browser. */
 export interface StoredSession {
   day: string
-  minutes: SessionLength
+  /** The length chosen: a number of minutes, or today's plan. */
+  choice: SessionChoice
+  /** The minutes it was built for (for today's plan, what the plan takes). */
+  minutes: number
   /** Missed question ids to fix. */
   fix: string[]
   /** Outstanding misses when it was built: the "of 15" beside Fix. */
@@ -238,26 +276,97 @@ function unique(names: readonly string[]): string[] {
   return out
 }
 
-/** The counts a budget of `n` questions takes from a supply. */
-export function sessionCounts(n: number, supply: SessionSupply): SessionCounts {
-  const learn = unique(supply.learn)
-  const learnKeys = new Set(learn.map(c => c.toLowerCase()))
-  const review = unique(supply.review).filter(c => !learnKeys.has(c.toLowerCase()))
-  return splitSession(n, { fix: supply.mistakes.length, learn: learn.length, review: review.length })
+interface Tiers {
+  mistakes: readonly string[]
+  /** Today's plan (or, with no plan, everything). */
+  first: { learn: string[]; review: string[] }
+  /** What comes after today's plan, each concept once and none of the first's. */
+  then: { learn: string[]; review: string[] }
 }
 
-export function buildSession(day: string, minutes: SessionLength, n: number, supply: SessionSupply): StoredSession {
-  const learn = unique(supply.learn)
-  const learnKeys = new Set(learn.map(c => c.toLowerCase()))
-  const review = unique(supply.review).filter(c => !learnKeys.has(c.toLowerCase()))
-  const counts = splitSession(n, { fix: supply.mistakes.length, learn: learn.length, review: review.length })
+function tiers(supply: SessionSupply): Tiers {
+  const seen = new Set<string>()
+  const take = (names: readonly string[]) => unique(names).filter(n => {
+    const key = n.toLowerCase()
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+  const first = { learn: take(supply.learn), review: [] as string[] }
+  first.review = take(supply.review)
+  const then = { learn: take(supply.more?.learn ?? []), review: [] as string[] }
+  then.review = take(supply.more?.review ?? [])
+  return { mistakes: supply.mistakes, first, then }
+}
+
+/**
+ * The smallest budget whose split takes every concept of the first tier, or
+ * null when there is none to take.
+ */
+function firstTierBudget(t: Tiers): number | null {
+  const concepts = t.first.learn.length + t.first.review.length
+  if (concepts === 0) return null
+  const supply = { fix: t.mistakes.length, learn: t.first.learn.length, review: t.first.review.length }
+  for (let n = concepts; n <= concepts + t.mistakes.length; n++) {
+    const c = splitSession(n, supply)
+    if (c.learn === supply.learn && c.review === supply.review) return n
+  }
+  return concepts + t.mistakes.length
+}
+
+/**
+ * Questions today's plan takes: the shortest session that holds every concept
+ * the plan has for today, with Fix getting its share alongside them. Null with
+ * no plan, or when the plan has nothing left for today.
+ */
+export function planBudget(supply: SessionSupply): number | null {
+  if (!supply.more) return null
+  return firstTierBudget(tiers(supply))
+}
+
+/**
+ * How `n` questions are drawn: with a plan, today's plan comes first (as much
+ * of it as `n` holds), and only what is left over goes on to the misses still
+ * waiting and the plan's `more`.
+ */
+function drawSession(n: number, supply: SessionSupply): { fix: number; learn: string[]; review: string[] } {
+  const t = tiers(supply)
+  if (!supply.more) {
+    const c = splitSession(n, { fix: t.mistakes.length, learn: t.first.learn.length, review: t.first.review.length })
+    return { fix: c.fix, learn: t.first.learn.slice(0, c.learn), review: t.first.review.slice(0, c.review) }
+  }
+  const budget = Math.max(0, Math.floor(n))
+  const planN = firstTierBudget(t) ?? 0
+  const first = splitSession(Math.min(budget, planN), {
+    fix: t.mistakes.length, learn: t.first.learn.length, review: t.first.review.length,
+  })
+  const left = budget - first.fix - first.learn - first.review
+  const then = splitSession(left, {
+    fix: t.mistakes.length - first.fix, learn: t.then.learn.length, review: t.then.review.length,
+  })
+  return {
+    fix: first.fix + then.fix,
+    learn: [...t.first.learn.slice(0, first.learn), ...t.then.learn.slice(0, then.learn)],
+    review: [...t.first.review.slice(0, first.review), ...t.then.review.slice(0, then.review)],
+  }
+}
+
+/** The counts a budget of `n` questions takes from a supply. */
+export function sessionCounts(n: number, supply: SessionSupply): SessionCounts {
+  const d = drawSession(n, supply)
+  return { fix: d.fix, learn: d.learn.length, review: d.review.length }
+}
+
+export function buildSession(day: string, choice: SessionChoice, minutes: number, n: number, supply: SessionSupply): StoredSession {
+  const d = drawSession(n, supply)
   return {
     day,
+    choice,
     minutes,
-    fix: supply.mistakes.slice(0, counts.fix),
+    fix: supply.mistakes.slice(0, d.fix),
     fixOf: supply.mistakes.length,
-    learn: learn.slice(0, counts.learn),
-    review: review.slice(0, counts.review),
+    learn: d.learn,
+    review: d.review,
   }
 }
 
@@ -269,15 +378,18 @@ export function sessionFromStored(raw: unknown): StoredSession | null {
   if (!raw || typeof raw !== 'object') return null
   const v = raw as Partial<StoredSession>
   const strings = (x: unknown): x is string[] => Array.isArray(x) && x.every(s => typeof s === 'string')
-  if (typeof v.day !== 'string' || !isSessionLength(v.minutes)) return null
+  if (typeof v.day !== 'string' || typeof v.minutes !== 'number' || !(v.minutes > 0)) return null
+  // A session kept before the plan's length existed carries its minutes only.
+  const choice = isSessionChoice(v.choice) ? v.choice : isSessionLength(v.minutes) ? v.minutes : null
+  if (choice === null) return null
   if (!strings(v.fix) || !strings(v.learn) || !strings(v.review)) return null
   const fixOf = typeof v.fixOf === 'number' && v.fixOf >= v.fix.length ? v.fixOf : v.fix.length
-  return { day: v.day, minutes: v.minutes, fix: v.fix, fixOf, learn: v.learn, review: v.review }
+  return { day: v.day, choice, minutes: v.minutes, fix: v.fix, fixOf, learn: v.learn, review: v.review }
 }
 
 /** Whether a kept session is still the one to show: today's, at the chosen length. */
-export function sessionIsCurrent(session: StoredSession | null, day: string, minutes: SessionLength): session is StoredSession {
-  return !!session && session.day === day && session.minutes === minutes
+export function sessionIsCurrent(session: StoredSession | null, day: string, choice: SessionChoice): session is StoredSession {
+  return !!session && session.day === day && session.choice === choice
 }
 
 // ── Reading a session against the day ────────────────────────────────────────
@@ -320,7 +432,7 @@ export interface SessionStep {
 }
 
 export interface SessionView {
-  minutes: SessionLength
+  minutes: number
   /** Steps with something in them, in the order they are done. */
   steps: SessionStep[]
   questions: number

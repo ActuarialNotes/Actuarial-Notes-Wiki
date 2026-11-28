@@ -154,6 +154,26 @@ export function SpreadsheetArt() {
   )
 }
 
+// A Practice Exam's debrief: the estimated grade, then its sections.
+export function DebriefArt() {
+  return (
+    <ArtFrame className="flex flex-col gap-2.5">
+      <div className="flex items-baseline gap-2.5">
+        <span className="text-[32px] font-bold leading-none tabular-nums">5</span>
+        <span className="text-[13px]">93% of the Fall 2019 pass mark</span>
+      </div>
+      <ul className="flex flex-col text-[12px]">
+        {[['Ratemaking', 'Lost 6 of 24 points, 1 hr 52 min of 1 hr 45 min'], ['Reserving', 'Lost 3 of 29 points, 1 hr 30 min of 2 hr 7 min']].map(([name, line]) => (
+          <li key={name} className="border-b border-border py-1 last:border-b-0">
+            <span className="block font-bold">{name}</span>
+            <span className="block truncate">{line}</span>
+          </li>
+        ))}
+      </ul>
+    </ArtFrame>
+  )
+}
+
 // A studied day's answers: how many were right, how many missed.
 const ANSWER_DAYS: { right: number; missed: number }[] = [
   { right: 3, missed: 3 }, { right: 6, missed: 4 }, { right: 0, missed: 0 },

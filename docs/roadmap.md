@@ -564,7 +564,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   VUE spreadsheet rules ending in a debrief (an estimated score, where the time went, what to fix). **Decided 2026-11-28:** every Practice
   Exam gets the estimate, labelled as one and grounded in what the CAS publishes about scoring
   (the pass marks its examiner's reports print, the 0 to 10 scale with 6 a pass, the pass
-  ratios); the first step of the build is to read those sources and write down the method; (2) **written-answer
+  ratios); the first step of the build is to read those sources and write down the method (**built 2026-11-28**: `docs/practice-exam-debrief.md`; the SOA exams' estimate is still open); (2) **written-answer
   feedback across attempts** for Exams 5 to 9 (which command words lose credit, with the
   examiners' sentences), over L14's checklist and the suggested grade; **built 2026-11-28**
   (`docs/answer-checking.md`, "Feedback across attempts"): each graded written part is a row of

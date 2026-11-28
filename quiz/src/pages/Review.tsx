@@ -29,6 +29,8 @@ import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { getDailyGems } from '@/lib/dailyProgressStore'
 import { useGems } from '@/hooks/useGems'
+import { useSubscription } from '@/hooks/useSubscription'
+import { PracticeExamDebrief } from '@/components/session/PracticeExamDebrief'
 import { GuestSavePrompt } from '@/components/GuestSavePrompt'
 import { markGuestSavePromptAsked, readGuestSavePromptAsked, shouldAskGuestToSave } from '@/lib/guestSavePrompt'
 import { ANSWER_LABEL } from '@/lib/answerState'
@@ -103,6 +105,7 @@ export default function Review() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { balance: gemBalance, loading: gemsLoading } = useGems()
   const { resetQuiz } = useQuizStore()
+  const { isPro, loading: subscriptionLoading } = useSubscription()
   const { syllabi } = useWikiSyllabus()
   const openConceptAt = useConceptPopup(s => s.openAt)
   const [session, setSession] = useState<CompletedSession | null>(null)
@@ -257,10 +260,10 @@ export default function Review() {
   const retryIds = fixRows.map(row => row.question.id)
   const retryMode = session.mode
 
-  function handleTryAgain() {
-    if (retryIds.length === 0) return
+  function handleTryAgain(ids: string[] = retryIds, mode: string = retryMode) {
+    if (ids.length === 0) return
     try {
-      sessionStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(retryIds))
+      sessionStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(ids))
     } catch {
       /* ignore quota/private-mode errors */
     }
@@ -269,13 +272,14 @@ export default function Review() {
     // filterQuestions) and a stale `count` could truncate the retry set.
     const params = new URLSearchParams({
       selection: 'stored',
-      mode: retryMode,
-      count: String(retryIds.length),
+      mode,
+      count: String(ids.length),
     })
     // Carry the reveal the finished session ran under; with none in the URL the
     // quiz falls back to the reader's saved choice for this mode, which is a
     // better guess than pinning the retry to 'during'.
-    const reveal = searchParams.get('reveal')
+    // A section practiced from a Practice Exam's debrief is a quiz, under the quiz's own choice.
+    const reveal = mode === retryMode ? searchParams.get('reveal') : null
     if (reveal) params.set('reveal', reveal)
     const from = searchParams.get('from')
     if (from) params.set('from', from)
@@ -409,6 +413,18 @@ export default function Review() {
         </ul>
       </section>
 
+      {/* A Practice Exam's debrief: the estimated grade, and each section's points and time. */}
+      {session.mode === 'mock-exam' && !subscriptionLoading && (
+        <PracticeExamDebrief
+          questions={session.questions}
+          responses={session.responses}
+          manualGrades={manualGrades}
+          syllabus={syllabus}
+          isPro={isPro}
+          onPractice={ids => handleTryAgain(ids, 'quiz')}
+        />
+      )}
+
       {/* 3: what to fix, and the screen's one filled button. */}
       {fixRows.length > 0 && (
         <section aria-labelledby="results-to-fix" className="flex flex-col">
@@ -425,7 +441,7 @@ export default function Review() {
               </ResultRow>
             ))}
           </ul>
-          <Button size="main" className="mt-2.5 w-full" onClick={handleTryAgain}>
+          <Button size="main" className="mt-2.5 w-full" onClick={() => handleTryAgain()}>
             Fix {retryIds.length === 1 ? 'this 1' : `these ${retryIds.length}`}
           </Button>
         </section>

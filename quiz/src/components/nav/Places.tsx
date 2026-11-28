@@ -60,7 +60,7 @@ function lastLearnPath(): string | null {
 }
 
 /** Each place with where it leads from the page showing, and whether the reader is in it. */
-function usePlaceLinks() {
+export function usePlaceLinks() {
   const { pathname } = useLocation()
   const { active } = useExamInFocus()
   const current = placeOf(pathname)

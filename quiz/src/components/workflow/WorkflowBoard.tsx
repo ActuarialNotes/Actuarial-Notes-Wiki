@@ -397,6 +397,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
   return (
     <div
       ref={rootRef}
+      data-press="none"
       className="craft-floor relative h-full w-full touch-none select-none overflow-hidden"
       style={{
         // The floor's dots are the grid a card snaps to: the board's texture is its lattice.

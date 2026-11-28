@@ -7,6 +7,7 @@
 // prints. A pill opens its concept in the reader over this page, as a reading
 // and an old `?concept=` link do.
 
+import { AnimatedNumber } from '@/components/AnimatedNumber'
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ChevronDown, ChevronRight, ChevronUp, Loader2, Plus } from 'lucide-react'
@@ -534,7 +535,7 @@ export default function WikiExam() {
               data-testid="exam-syllabus"
               className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3.5"
             >
-              <span className="text-2xl font-bold tabular-nums">{syllabusPct}%</span>
+              <span className="text-2xl font-bold tabular-nums"><AnimatedNumber value={syllabusPct} />%</span>
               <SyllabusBar pct={syllabusPct} tick={tick} thick />
               <span className="text-[15px] tabular-nums">
                 {examState === 'completed'

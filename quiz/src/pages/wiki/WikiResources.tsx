@@ -10,6 +10,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useExamProgress } from '@/contexts/examProgress'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useFlipList } from '@/hooks/useFlipList'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { RESOURCES_ROUTE, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
@@ -217,6 +218,8 @@ export default function WikiResources() {
   }, [entries, pool, facetSelection])
   // A page of the shelf at a time; the body and the filters make it a different shelf.
   const paged = usePagedList(filtered, `resources:${[...shelf.exams].join('|')}:${searchParams.toString()}`)
+  // A filter rearranges the shelf: the cards that stay slide to their new places.
+  const shelfRef = useFlipList<HTMLDivElement>(`${[...shelf.exams].join('|')}:${searchParams.toString()}`)
   const options = useMemo(
     () => Object.fromEntries(DROPDOWN_FACETS.map(facet => [
       facet,
@@ -367,17 +370,19 @@ export default function WikiResources() {
         </div>
       ) : (
         <>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div ref={shelfRef} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {paged.shown.map(entry => {
             const at = opened.indexOf(entry)
+            const key = entry.stub ? `stub:${entry.item.name}` : entry.item.path
             return (
+              <div key={key} data-flip={key} className="grid">
               <ResourceShelfCard
-                key={entry.stub ? `stub:${entry.item.name}` : entry.item.path}
                 book={entry.item}
                 change={entry.change}
                 edition={vintage?.edition.label ?? null}
                 onOpen={entry.stub ? undefined : () => openAt(refs, at, RESOURCES_ROUTE)}
               />
+              </div>
             )
           })}
         </div>

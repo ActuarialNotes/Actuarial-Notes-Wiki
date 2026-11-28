@@ -6,6 +6,7 @@
 // Syllabus tile opens (`SyllabusOverlay`), which is also what its heading
 // opens on desktop.
 
+import { AnimatedNumber } from '@/components/AnimatedNumber'
 import { useEffect, useId, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, X } from 'lucide-react'
@@ -75,7 +76,7 @@ export function SyllabusPanel({
         <h2 className="text-xl font-bold">Syllabus</h2>
         <SyllabusBar pct={pct} gain={gain} tick={tick} thick />
         <span className="flex items-baseline gap-2 text-xl font-bold tabular-nums">
-          {pct}%
+          <span><AnimatedNumber value={pct} />%</span>
           <GainMark gain={gain} className="text-sm" />
         </span>
       </button>

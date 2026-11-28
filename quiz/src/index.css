@@ -2607,3 +2607,78 @@ summary .katex-display,
 .session-solution br:has(+ .session-formula) {
   display: none;
 }
+
+/* ── Fluid in place ──
+   The small moves inside a page, on the same curve as the page moves.
+
+   .reveal      content that unfolds as it appears and, marked `data-leaving`
+                (hooks/usePresence.ts), folds shut before it is taken away.
+                Its one child is clipped only while it moves, so a focus ring
+                or a menu inside is never cut off at rest.
+   .bar-fill    a progress bar's fill, which grows to its new width
+   .rise-in     something new at the foot of a screen (the answer's feedback,
+                the button that follows Check) settling in from just below */
+.reveal {
+  display: grid;
+  animation: reveal-open 260ms var(--paper-ease);
+}
+.reveal > * {
+  min-height: 0;
+  animation: reveal-clip 260ms;
+}
+.reveal[data-leaving] {
+  animation: reveal-close 200ms var(--paper-ease) both;
+}
+.reveal[data-leaving] > * {
+  overflow: hidden;
+}
+@keyframes reveal-open {
+  from { grid-template-rows: 0fr; opacity: 0; }
+  to { grid-template-rows: 1fr; }
+}
+@keyframes reveal-close {
+  from { grid-template-rows: 1fr; }
+  to { grid-template-rows: 0fr; opacity: 0; }
+}
+@keyframes reveal-clip {
+  from, to { overflow: hidden; }
+}
+
+.bar-fill {
+  transition: width 500ms var(--paper-ease);
+}
+
+.rise-in {
+  animation: rise-in 220ms var(--paper-ease) backwards;
+}
+@keyframes rise-in {
+  from { opacity: 0; translate: 0 8px; }
+}
+
+/* A press answers at once: the control gives a little under the finger, before
+   anything it leads to has rendered. `scale` rather than `transform`, so a
+   control placed with a transform keeps its place. A control that mustn't
+   move (a card dragged about a board) is marked `data-press="none"`, or sits
+   inside something that is. */
+:where(button, [role="button"], [role="tab"], [role="radio"], a[href]):where(:not(:disabled, [aria-disabled="true"], [data-press="none"], [data-press="none"] *)) {
+  transition: scale 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+:where(button, [role="button"], [role="tab"], [role="radio"], a[href]):where(:not(:disabled, [aria-disabled="true"], [data-press="none"], [data-press="none"] *)):active {
+  scale: 0.975;
+  transition-duration: 60ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal > *,
+  .reveal[data-leaving],
+  .rise-in {
+    animation: none;
+  }
+  .bar-fill {
+    transition: none;
+  }
+  :where(button, [role="button"], [role="tab"], [role="radio"], a[href]):active {
+    scale: none;
+  }
+}

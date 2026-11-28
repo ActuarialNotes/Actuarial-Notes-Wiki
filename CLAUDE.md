@@ -1416,6 +1416,17 @@ Other important `lib/` modules:
   element for the page's life** (the top row's `paper-chrome-lead` / `-profile` wrappers): a
   named element replaced while a move is drawing ends the move on the spot.
   Pure and tested. See `docs/style-guide.md` §9.1.
+- `pickSlide.ts` / `flipList.ts` / `countTween.ts` / `swipeNav.ts` — **the moves inside a page**
+  (`docs/style-guide.md` §9.2), each the pure half of one shared piece: the chosen one of a set
+  slides its fill to the new choice (`components/PickSlide.tsx`, one listener in `App` reading the
+  ARIA attributes, so no control opts in; `data-pick-slide="none"` opts out); a filtered list
+  slides the items that stay (`hooks/useFlipList.ts`, `data-flip`); a figure counts to its new
+  value (`components/AnimatedNumber.tsx`); and on a phone a sideways swipe goes to the place
+  beside this one, or turns a quiz's question (`components/SwipeNav.tsx`, read when the finger
+  lifts; `data-no-swipe` opts out). Beside them: `.reveal` with `hooks/usePresence.ts` folds
+  content open and shut, a global rule in `index.css` makes every control give under a press
+  (`data-press="none"` for a board), and a sheet let go keeps its speed (`settleMs`,
+  `coastHeight`, `rubberBand` in `sheetDrag.ts`). Use these before writing a new animation.
 - `routeScrollMemory.ts` — **the reader's place** across pages: `PaperRouter` records the
   window's scroll as a page is *left* (keyed by history entry, mirrored to sessionStorage)
   and `arrivalScroll` decides on arrival — Back/Forward return to where that entry was left,

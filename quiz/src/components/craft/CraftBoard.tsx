@@ -696,6 +696,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   return (
     <div
       ref={rootRef}
+      data-press="none"
       className="craft-floor relative h-full w-full touch-none select-none overflow-hidden"
       style={{
         backgroundSize: `${22 * v.k}px ${22 * v.k}px`,

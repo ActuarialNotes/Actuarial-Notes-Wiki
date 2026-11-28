@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { backdropOpacity, closesOnRelease, dragOffset, flickCloses, sheetPlacement, startsDrag, startsResize } from './sheetDrag'
+import {
+  backdropOpacity, closesOnRelease, coastHeight, dragOffset, flickCloses, releaseVelocity, rubberBand, RUBBER_ROOM,
+  settleMs, sheetPlacement, startsDrag, startsResize,
+} from './sheetDrag'
 
 describe('startsDrag', () => {
   it('needs a move down past the slop', () => {
@@ -63,7 +66,13 @@ describe('startsResize', () => {
 describe('sheetPlacement', () => {
   it('grows the sheet as the handle goes up, to the room there is', () => {
     expect(sheetPlacement(300, -100, 300, 700)).toEqual({ height: 400, offset: 0 })
-    expect(sheetPlacement(300, -900, 300, 700)).toEqual({ height: 700, offset: 0 })
+    expect(sheetPlacement(300, -400, 300, 700)).toEqual({ height: 700, offset: 0 })
+  })
+  it('gives a little past its tallest, and never more than the rubber room', () => {
+    const over = sheetPlacement(300, -900, 300, 700)
+    expect(over.offset).toBe(0)
+    expect(over.height).toBeGreaterThan(700)
+    expect(over.height).toBeLessThan(700 + RUBBER_ROOM)
   })
   it('shrinks it as the handle goes down, to its smallest', () => {
     expect(sheetPlacement(500, 100, 300, 700)).toEqual({ height: 400, offset: 0 })
@@ -84,5 +93,58 @@ describe('flickCloses', () => {
     expect(flickCloses(0.6, 100)).toBe(false)
     expect(flickCloses(1.5, 30)).toBe(false)
     expect(flickCloses(-2, -100)).toBe(false)
+  })
+})
+
+describe('rubberBand', () => {
+  it('is nothing at or inside the limit', () => {
+    expect(rubberBand(0)).toBe(0)
+    expect(rubberBand(-20)).toBe(0)
+  })
+  it('follows less and less, and never reaches the room', () => {
+    const a = rubberBand(20)
+    const b = rubberBand(40)
+    expect(a).toBeGreaterThan(0)
+    expect(b - a).toBeLessThan(a)
+    expect(rubberBand(100000)).toBeLessThan(RUBBER_ROOM)
+  })
+})
+
+describe('releaseVelocity', () => {
+  it('is the speed over the last 100ms', () => {
+    const samples = [{ t: 0, y: 0 }, { t: 400, y: 10 }, { t: 450, y: 60 }, { t: 500, y: 110 }]
+    expect(releaseVelocity(samples, 500)).toBeCloseTo(1)
+  })
+  it('is zero for a finger that had stopped, or with nothing to go on', () => {
+    expect(releaseVelocity([{ t: 0, y: 0 }, { t: 100, y: 80 }], 600)).toBe(0)
+    expect(releaseVelocity([], 0)).toBe(0)
+  })
+})
+
+describe('settleMs', () => {
+  it('is shorter after a flick than after a slow pull', () => {
+    expect(settleMs(300, 2)).toBeLessThan(settleMs(300, 0))
+  })
+  it('stays between 140 and 360ms', () => {
+    expect(settleMs(0, 0)).toBe(140)
+    expect(settleMs(5, 3)).toBe(140)
+    expect(settleMs(5000, 0)).toBe(360)
+  })
+})
+
+describe('coastHeight', () => {
+  it('stays where it was let go when the finger had stopped', () => {
+    expect(coastHeight(400, 0, 200, 800)).toBe(400)
+  })
+  it('carries on the way it was thrown', () => {
+    expect(coastHeight(400, -1, 200, 800)).toBe(520)
+    expect(coastHeight(400, 1, 200, 800)).toBe(280)
+  })
+  it('stops at its smallest and its tallest', () => {
+    expect(coastHeight(250, 3, 200, 800)).toBe(200)
+    expect(coastHeight(700, -3, 200, 800)).toBe(800)
+  })
+  it('goes all the way up when it would rest just short', () => {
+    expect(coastHeight(780, 0, 200, 800)).toBe(800)
   })
 })

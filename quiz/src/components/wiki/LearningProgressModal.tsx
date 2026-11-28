@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { ClosesForConcept } from '@/hooks/useConceptPopup'
 import { ChevronDown, Loader2, TrendingUp } from 'lucide-react'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
@@ -230,6 +231,7 @@ export function LearningProgressModal({ conceptName, onClose, examFile }: Learni
   const level = shownLevel ? levelFigure(shownLevel) : null
 
   return (
+    <ClosesForConcept.Provider value={onClose}>
     <InfoSheet
       onClose={onClose}
       label={`Learning Progress: ${conceptName}`}
@@ -256,6 +258,7 @@ export function LearningProgressModal({ conceptName, onClose, examFile }: Learni
         onLevelChange={setShownLevel}
       />
     </InfoSheet>
+    </ClosesForConcept.Provider>
   )
 }
 

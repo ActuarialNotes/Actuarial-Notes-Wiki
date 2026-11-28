@@ -37,3 +37,45 @@ export function backdropOpacity(offset: number, height: number): number {
   if (height <= 0) return 1
   return Math.max(0, Math.min(1, 1 - offset / height))
 }
+
+// **…and pulled by its handle to resize it.** Dragging the handle up makes the
+// sheet taller, up to the room there is; dragging down makes it shorter, down
+// to its smallest size, and any further pull takes the sheet with the finger,
+// which is the pull that closes it.
+
+/**
+ * Whether a touch on the handle that has moved (dx, dy) starts resizing the
+ * sheet upwards: it is moving up more than sideways. (A move down is
+ * `startsDrag`'s.)
+ */
+export function startsResize(dx: number, dy: number, onHandle: boolean): boolean {
+  if (!onHandle) return false
+  if (dy >= -DRAG_SLOP) return false
+  return Math.abs(dx) <= -dy
+}
+
+/**
+ * Where a sheet `startHeight` tall sits for a finger `dy` below where the
+ * drag began: its height, held between `min` and `max`, and how far it has
+ * been pulled down past its smallest size.
+ */
+export function sheetPlacement(
+  startHeight: number,
+  dy: number,
+  min: number,
+  max: number,
+): { height: number; offset: number } {
+  const floor = Math.min(min, max)
+  const wanted = startHeight - dy
+  if (wanted >= floor) return { height: Math.min(wanted, max), offset: 0 }
+  return { height: floor, offset: floor - wanted }
+}
+
+/**
+ * Whether letting go of the handle closes the sheet although it was not
+ * pulled past its smallest size: a hard flick down (over 1 px/ms) that has
+ * already travelled 60px.
+ */
+export function flickCloses(velocity: number, travelled: number): boolean {
+  return velocity > 1 && travelled > 60
+}

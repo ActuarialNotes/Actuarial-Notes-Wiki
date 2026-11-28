@@ -17,6 +17,7 @@
 import { useRef, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { X } from 'lucide-react'
 import { useDragToClose } from '@/hooks/useDragToClose'
+import { SheetHandle } from '@/components/ui/SheetHandle'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { cn } from '@/lib/utils'
 
@@ -47,7 +48,7 @@ export function InfoSheet({
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
   const backdropRef = useRef<HTMLDivElement>(null)
-  // Below `sm` the sheet is pulled down by its handle to close it.
+  // Below `sm` the sheet is resized by its handle, and pulled down to close it.
   useDragToClose(panelRef, onClose, { backdrop: backdropRef })
   return (
     <OverlayPortal>
@@ -71,9 +72,7 @@ export function InfoSheet({
           )}
           style={style}
         >
-          <span data-sheet-handle aria-hidden="true" className="-mx-5 -mb-2 -mt-2.5 flex shrink-0 touch-none justify-center pb-2 pt-2.5 sm:hidden">
-            <span className="h-1 w-10 rounded-full bg-foreground" />
-          </span>
+          <SheetHandle className="-mx-5 -mb-2 -mt-2.5 sm:hidden" />
           {children}
         </div>
       </div>

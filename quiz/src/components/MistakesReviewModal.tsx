@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, ChevronRight, GripHorizontal, Maximize2, Minimize2, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2, X } from 'lucide-react'
 import { QuestionCard } from '@/components/QuestionCard'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,9 @@ import type { RecentMistake } from '@/lib/recentMistakes'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { recordReviewAnswers, type QuizResponse } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
-import { useSplitHeight } from '@/hooks/useSplitHeight'
+import { SPLIT_MIN_PX, useSplitHeight } from '@/hooks/useSplitHeight'
+import { useDragToClose } from '@/hooks/useDragToClose'
+import { PANE_SHELL, SheetHandle } from '@/components/ui/SheetHandle'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { trackMistakeReviewed } from '@/lib/analytics'
 import { daysSince } from '@/lib/learningSignals'
@@ -82,7 +84,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
   useSoundOnMount('open')
   // Same drag-to-resize handle, and the same persisted height, as the concept
   // popup: one preferred panel size for both.
-  const { height, beginDrag } = useSplitHeight()
+  const { height, resize } = useSplitHeight()
   // Focus mode fills the viewport and strips the chrome back to the question and
   // Previous/Next — driven entirely by the shared `.concept-popup-aside` CSS.
   const [focusMode, setFocusMode] = useState(false)
@@ -127,6 +129,9 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
     play('close')
     onClose()
   }, [play, onClose])
+  // The handle resizes the pane, and pulled down past its smallest closes it.
+  const paneRef = useRef<HTMLElement>(null)
+  useDragToClose(paneRef, close, { handleOnly: true, anyWidth: true, minHeight: SPLIT_MIN_PX, onResize: resize })
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -219,10 +224,11 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
 
   return createPortal(
     <aside
+      ref={paneRef}
       // The concept popup's class: it carries the sidebar-width offset on
       // desktop and the whole focus-mode layer in index.css, so both panels
       // sit and expand identically.
-      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-50 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className={`concept-popup-aside fixed left-0 right-0 bottom-0 z-50 flex flex-col ${PANE_SHELL}`}
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       // Non-modal, like the concept popup: the page behind stays live and
@@ -232,21 +238,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
     >
       {/* Drag handle — hidden in focus mode, visible otherwise */}
       {!focusMode && (
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize fix-mistakes panel"
-          onMouseDown={e => {
-            e.preventDefault()
-            beginDrag(e.clientY)
-          }}
-          onTouchStart={e => {
-            if (e.touches[0]) beginDrag(e.touches[0].clientY)
-          }}
-          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-        >
-          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-        </div>
+        <SheetHandle label="Resize or close the fix-mistakes panel" />
       )}
 
       {/* Header. Focus mode spans the full viewport, so the header and the body

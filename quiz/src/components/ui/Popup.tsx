@@ -1,13 +1,14 @@
 // The redesign's popup (docs/redesign-spec.md §2.3, R14; style guide §13.5):
 // the ground colour with a 1.5px edge in the text colour, over a page dimmed
 // to about a third. Below `sm` it is a sheet rising from the foot of the
-// screen with a grab handle; from `sm` it is a panel in the middle.
+// screen with a handle that resizes and closes it; from `sm` it is a panel in the middle.
 //
 // The session length sheet and the exam switcher are built from it. An info
 // popup (`InfoSheet`) draws the same shape and keeps its own keys.
 
 import { useEffect, useRef, type ReactNode } from 'react'
 import { useDragToClose } from '@/hooks/useDragToClose'
+import { SheetHandle } from '@/components/ui/SheetHandle'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { cn } from '@/lib/utils'
 
@@ -48,7 +49,7 @@ export function Popup({
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
   const backdropRef = useRef<HTMLDivElement>(null)
-  // Below `sm` the sheet is pulled down by its handle to close it.
+  // Below `sm` the sheet is resized by its handle, and pulled down to close it.
   useDragToClose(panelRef, onClose, { backdrop: backdropRef, enabled: !full })
   const onCloseRef = useRef(onClose)
   onCloseRef.current = onClose
@@ -123,11 +124,7 @@ export function Popup({
             className,
           )}
         >
-          {!full && (
-            <span data-sheet-handle aria-hidden="true" className="-mx-5 -mb-2 -mt-2.5 flex shrink-0 touch-none justify-center pb-2 pt-2.5 sm:hidden">
-              <span className="h-1 w-10 rounded-full bg-foreground" />
-            </span>
-          )}
+          {!full && <SheetHandle className="-mx-5 -mb-2 -mt-2.5 sm:hidden" />}
           {children}
         </div>
       </div>

@@ -1344,6 +1344,17 @@ Other important `lib/` modules:
   for the whole app, so a concept opened outside the wiki (the search, Today, Flashcards, a
   tool) is closed when the reader goes to another page (`closeIfLeft`, called from `App.tsx` on
   every change of path); without it the popup came up again over the next page that mounts it.
+- `sheetDrag.ts` — **a sheet's handle**: the line at the top of every sheet (`components/ui/SheetHandle.tsx`)
+  is dragged up to make the sheet taller and down to make it shorter, and pulled past its smallest
+  size (or flicked) to close it. `hooks/useDragToClose.ts` is the one hook: `Popup`, `InfoSheet` and
+  the tools' value sheet use it below `sm`; the concept reader, the PDF reader and Fix mistakes
+  (`PANE_SHELL`, a popup's sheet at every width) use it handle-only, with a mouse too, their height
+  kept by `hooks/useSplitHeight.ts`. Pure and tested.
+  **A concept always opens in the reader, over the page it was tapped on**: a surface with no walk
+  of its own calls `openConceptOverlay` (`hooks/useConceptPopup.ts`), which stacks on a reader that
+  is already open; `components/ConceptPopupHost.tsx`, at the app's root, is the reader for a page
+  that mounts none; a full-screen dialog that would cover it provides `ClosesForConcept`. A link's
+  address stays the concept's page, for a new tab.
 - `places.ts` — **the four places** (`docs/redesign-spec.md` R2, §8 Phase F): Today, Learn,
   Practice and Apply (`PLACES`), which place a path is in (`placeOf`; You, the Store, Community
   and Upgrade are in none), and where Learn leads (`learnTarget`: its home is the study guide of

@@ -33,7 +33,7 @@ export function BottomSheet({ title, symbol, value, onClose, style, children }: 
 }) {
   const titleId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
-  // On a phone the sheet is pulled down by its handle to close it.
+  // On a phone the sheet is resized by its handle, and pulled down to close it.
   useDragToClose(panelRef, onClose)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

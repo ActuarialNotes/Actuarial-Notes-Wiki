@@ -18,8 +18,8 @@ interface QuestionInfoButtonProps {
   showStudyMeta?: boolean
   /**
    * Open one of the question's concepts in the concept popup — `links` is
-   * the question's `wiki_link` tags, `index` the one tapped. Without it, a
-   * concept row goes to the concept's page.
+   * the question's `wiki_link` tags, `index` the one tapped. Without it, the
+   * tapped concept opens in the reader on its own walk of the question's concepts.
    */
   onOpenConcept?: (links: string[], index: number) => void
   className?: string

@@ -5,13 +5,15 @@ import {
   ChevronRight,
   Download,
   ExternalLink,
-  GripHorizontal,
+  
   Loader2,
   Maximize2,
   Minimize2,
   X,
 } from 'lucide-react'
-import { useSplitHeight } from '@/hooks/useSplitHeight'
+import { SPLIT_MIN_PX, useSplitHeight } from '@/hooks/useSplitHeight'
+import { useDragToClose } from '@/hooks/useDragToClose'
+import { PANE_SHELL, SheetHandle } from '@/components/ui/SheetHandle'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { usePdfDocument } from '@/hooks/usePdfDocument'
 import { usePdfChapters } from '@/hooks/usePdfChapters'
@@ -810,13 +812,17 @@ export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: P
   const { play } = useSoundEffects()
   // A sheet of paper sliding out, same as the concept popup opening.
   useSoundOnMount('open')
-  const { height, beginDrag } = useSplitHeight()
+  const { height, resize } = useSplitHeight()
   const [focusMode, setFocusMode] = useState(false)
 
   const close = useCallback(() => {
     play('close')
     onClose()
   }, [play, onClose])
+
+  // The handle resizes the pane, and pulled down past its smallest closes it.
+  const paneRef = useRef<HTMLElement>(null)
+  useDragToClose(paneRef, close, { handleOnly: true, anyWidth: true, minHeight: SPLIT_MIN_PX, onResize: resize })
 
   // Esc leaves focus mode first, then closes — same as the concept popup.
   useEffect(() => {
@@ -839,6 +845,7 @@ export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: P
 
   return createPortal(
     <aside
+      ref={paneRef}
       // The concept popup's class carries the sidebar-width offset on desktop
       // and the whole focus-mode layer in index.css, so both panels sit and
       // expand identically. `pdf-viewer-aside` is the one difference: the
@@ -846,7 +853,7 @@ export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: P
       // button, an exam page's syllabus button, the quiz's Question info panel,
       // the Fact Check sheet — so it layers above every host that can open it,
       // in focus mode included. See index.css.
-      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[135] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className={`concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[135] flex flex-col ${PANE_SHELL}`}
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       // Non-modal, like the concept popup: the shelf behind stays live, so this
@@ -855,21 +862,7 @@ export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: P
       aria-label={subtitle ? `${title}, ${subtitle}` : title}
     >
       {!focusMode && (
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize document panel"
-          onMouseDown={e => {
-            e.preventDefault()
-            beginDrag(e.clientY)
-          }}
-          onTouchStart={e => {
-            if (e.touches[0]) beginDrag(e.touches[0].clientY)
-          }}
-          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-        >
-          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-        </div>
+        <SheetHandle label="Resize or close the document panel" />
       )}
 
       <PdfDocumentView

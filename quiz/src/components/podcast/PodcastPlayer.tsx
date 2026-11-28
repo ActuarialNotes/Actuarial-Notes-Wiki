@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, type MouseEvent } from 'react'
+import { openConceptOverlay } from '@/hooks/useConceptPopup'
 import { Link } from 'react-router-dom'
 import { Headphones, Loader2, Pause, Play, RotateCcw, RotateCw, X } from 'lucide-react'
 import { usePodcast, PODCAST_RATES, type PodcastEpisode } from '@/stores/podcastStore'
@@ -117,6 +118,14 @@ function EpisodePanel({ id, episode }: { id: string; episode: PodcastEpisode }) 
   const setRate = usePodcast(s => s.setRate)
   const goToChapter = usePodcast(s => s.goToChapter)
   const closePanel = usePodcast(s => s.closePanel)
+  // A concept is read over the page the player is on; the link's address is
+  // its own page, for a new tab.
+  const readConcept = (e: MouseEvent<HTMLAnchorElement>, name: string) => {
+    closePanel()
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    e.preventDefault()
+    openConceptOverlay([name])
+  }
   const stop = usePodcast(s => s.stop)
   const headingId = useId()
   const current = chapterIndexAt(episode.chapters, time)
@@ -216,7 +225,7 @@ function EpisodePanel({ id, episode }: { id: string; episode: PodcastEpisode }) 
             {c.kind !== 'bridge' && (
               <Link
                 to={wikiRoute({ kind: 'concept', name: c.name })}
-                onClick={closePanel}
+                onClick={e => readConcept(e, c.name)}
                 className="shrink-0 rounded px-2 py-1 text-xs font-medium text-primary hover:underline"
               >
                 Read
@@ -232,7 +241,7 @@ function EpisodePanel({ id, episode }: { id: string; episode: PodcastEpisode }) 
           {episode.unread.map((name, i) => (
             <span key={name}>
               {i > 0 && ', '}
-              <Link to={wikiRoute({ kind: 'concept', name })} onClick={closePanel} className="text-foreground underline-offset-2 hover:underline">{name}</Link>
+              <Link to={wikiRoute({ kind: 'concept', name })} onClick={e => readConcept(e, name)} className="text-foreground underline-offset-2 hover:underline">{name}</Link>
             </span>
           ))}
         </div>

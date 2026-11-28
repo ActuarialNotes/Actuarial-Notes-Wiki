@@ -41,7 +41,7 @@ function startingFacets(exam: string, stored: Record<string, string[]> | undefin
   return exam ? toggleFacet(emptyFacets(), 'exam', exam) : emptyFacets()
 }
 
-export default function PracticeSearchPanel({ query: typed, exam, questions, initialFacets, onFacets }: {
+export default function PracticeSearchPanel({ query: typed, exam, questions, initialFacets, onFacets, facetsShown = FACETS_SHOWN }: {
   query: string
   exam: string
   questions: Question[]
@@ -49,6 +49,8 @@ export default function PracticeSearchPanel({ query: typed, exam, questions, ini
   initialFacets?: Record<string, string[]>
   /** Told each change of the filters, so they can be kept for the way back. */
   onFacets?: (facets: Record<string, string[]>) => void
+  /** The filters drawn, when not the usual ones (a concept's practice adds Concepts). */
+  facetsShown?: readonly QuestionFacet[]
 }) {
   const navigate = useNavigate()
   const quizSettings = useQuizBuilderSettings('quiz')
@@ -58,7 +60,7 @@ export default function PracticeSearchPanel({ query: typed, exam, questions, ini
 
   // The Exam filter opens on the exam the page shows; the reader can widen it.
   const [facets, setFacets] = useState<FacetSelection>(() => startingFacets(exam, initialFacets))
-  const facetKey = FACETS_SHOWN.map(f => [...facets[f]].sort().join(',')).join('|')
+  const facetKey = facetsShown.map(f => [...facets[f]].sort().join(',')).join('|')
   useEffect(() => {
     onFacets?.(Object.fromEntries(QUESTION_FACETS.map(f => [f, [...facets[f]]])))
     // `facetKey` is the filters' content.
@@ -118,7 +120,7 @@ export default function PracticeSearchPanel({ query: typed, exam, questions, ini
           pool={pool}
           selection={facets}
           onToggle={(facet, value) => setFacets(prev => toggleFacet(prev, facet, value))}
-          facets={FACETS_SHOWN}
+          facets={facetsShown}
         />
       </div>
 

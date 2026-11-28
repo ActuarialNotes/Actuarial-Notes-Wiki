@@ -405,7 +405,7 @@ export function resourceMetaLine(result: ResourceResult): string {
 export const PRACTICE_LIMIT = 100
 
 /** How many questions the count starts at, when the results hold more. */
-export const PRACTICE_DEFAULT = 10
+export const PRACTICE_DEFAULT = 3
 
 /** The ids "Practice these N" starts: the results in order, up to the limit. */
 export function practiceIds(results: readonly QuestionResult[]): string[] {

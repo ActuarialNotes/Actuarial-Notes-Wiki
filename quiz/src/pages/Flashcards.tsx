@@ -1841,6 +1841,7 @@ function FlashcardsDeck() {
           {practiceConcept && practiceCount ? (
             <PracticeButton
               to={conceptPracticeUrl(practiceConcept)}
+              concept={practiceConcept}
               className="flex-1"
             >
               Practice

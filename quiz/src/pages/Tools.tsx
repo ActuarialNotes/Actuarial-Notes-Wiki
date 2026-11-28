@@ -296,7 +296,7 @@ export function ToolPage({ slug }: { slug: string }) {
           className="sticky bottom-[var(--place-bar-height,0px)] z-30 border-t border-border bg-background px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3"
         >
           <div className="mx-auto max-w-2xl">
-            <PracticeButton to={conceptPracticeUrl(concept)} aside={questionCountLabel(questionCount)}>
+            <PracticeButton to={conceptPracticeUrl(concept)} concept={concept} aside={questionCountLabel(questionCount)}>
               Practice
             </PracticeButton>
           </div>

@@ -324,6 +324,18 @@ test.describe('learn', () => {
     await expect(reader.getByRole('button', { name: 'Previous' })).toBeVisible()
     await expect(reader.getByRole('link', { name: 'Practice', exact: true }))
       .toHaveAttribute('href', '/search?tab=questions&concept=Conditional+Probability', { timeout: 30_000 })
+
+    // Practice opens the concept's questions over the page, three to start.
+    const url = page.url()
+    await reader.getByRole('link', { name: 'Practice', exact: true }).click()
+    const overlay = page.getByRole('dialog', { name: 'Practice Conditional Probability' })
+    await expect(overlay).toBeVisible()
+    await expect(overlay.getByTestId('practice-search-start')).toContainText('Practice 3', { timeout: 30_000 })
+    expect(page.url()).toBe(url)
+    await overlay.getByRole('button', { name: 'Close' }).click()
+    await expect(overlay).toBeHidden()
+    await expect(reader).toBeVisible()
+
     await reader.getByRole('button', { name: 'Next' }).click()
     await expect(page.getByRole('complementary', { name: /^Concept: (?!Conditional Probability)/ })).toBeVisible()
   })

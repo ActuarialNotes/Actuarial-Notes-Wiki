@@ -1,10 +1,13 @@
 // The filled Practice button (docs/redesign-spec.md §7): "Practice" at
 // the foot of a concept, "Practice <objective>" at the end of an opened
-// objective. A link, so it can be opened in a new tab like any other.
+// objective. A link, so it can be opened in a new tab like any other. Given
+// a `concept`, a plain click opens the concept's questions over the page
+// (components/practice/PracticeOverlay.tsx) instead of going to the search.
 
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { usePracticeOverlay } from '@/stores/practiceOverlay'
 
 function PlayMark({ className }: { className?: string }) {
   return (
@@ -20,9 +23,12 @@ export function PracticeButton({
   aside,
   size = 'main',
   onClick,
+  concept,
   className,
 }: {
   to: string
+  /** The concept whose questions a plain click opens over the page. */
+  concept?: string
   children: ReactNode
   /** Set lighter after the label: "152 questions". */
   aside?: ReactNode
@@ -31,10 +37,16 @@ export function PracticeButton({
   onClick?: () => void
   className?: string
 }) {
+  const openPractice = usePracticeOverlay(s => s.open)
   return (
     <Link
       to={to}
-      onClick={onClick}
+      onClick={e => {
+        onClick?.()
+        if (!concept || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+        e.preventDefault()
+        openPractice(concept)
+      }}
       data-testid="practice-button"
       className={cn(
         'flex min-w-0 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ground',

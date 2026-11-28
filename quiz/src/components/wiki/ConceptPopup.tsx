@@ -21,6 +21,7 @@ import { INK_MENU, inkChevron, inkMenuItem, inkTrigger } from '@/components/ui/i
 import { PracticeButton } from '@/components/learn/PracticeButton'
 import { useConceptQuestionCount } from '@/hooks/usePractice'
 import { conceptPracticeUrl } from '@/lib/practiceLaunch'
+import { usePracticeOverlay } from '@/stores/practiceOverlay'
 
 /** Previous and Next in the reader's foot: 52px circles, outlined. */
 const FOOT_ARROW =
@@ -161,6 +162,8 @@ export function ConceptPopup() {
       // Same hand-over for a document opened on the page: Esc closes the
       // reader, arrows turn its pages, and neither reaches the concept behind.
       if (readingPdf) return
+      // A concept's practice open over the popup has the keys too.
+      if (usePracticeOverlay.getState().concept) return
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
@@ -393,7 +396,7 @@ export function ConceptPopup() {
     <PracticeButton
       size="foot"
       to={conceptPracticeUrl(practiceConcept)}
-      onClick={close}
+      concept={practiceConcept}
       className="w-full"
     >
       Practice

@@ -21,6 +21,7 @@ import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import { ExamSwitcherHost } from '@/components/switcher/ExamSwitcherHost'
+import { PracticeOverlayHost } from '@/components/practice/PracticeOverlayHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import Toast from '@/components/Toast'
@@ -556,6 +557,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 dialog, a sheet or a card clears it and outlives it. */}
             <PdfReaderHost />
             <ExamSwitcherHost />
+            <PracticeOverlayHost />
             {/* A quiz in progress, or a place in the battle queue, from anywhere else in the app. */}
             <ResumeDock />
             {/* The Tutor (docs/tutor.md) — the reader's own character, for the

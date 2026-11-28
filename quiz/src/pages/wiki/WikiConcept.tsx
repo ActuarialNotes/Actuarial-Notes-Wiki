@@ -235,6 +235,7 @@ export default function WikiConcept() {
         >
           <PracticeButton
             to={conceptPracticeUrl(conceptName)}
+            concept={conceptName}
             aside={questionCountLabel(questionCount)}
           >
             Practice

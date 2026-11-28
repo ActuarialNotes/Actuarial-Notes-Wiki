@@ -136,9 +136,10 @@ registered as a *virtual* vault file so it opens in the same popup viewer as a r
   (`ConceptMoreButton`, the same menu cut down with `rows="more"`: Add to Flashcards and Fact
   Check, under the surface's own Listen, figure and focus-mode rows) and the filled **Practice**
   at the foot (`PracticeButton`, `lib/practiceLaunch.ts`, the count from `hooks/usePractice.ts`),
-  which opens the one search's Questions tab on the concept's questions
-  (`/search?tab=questions&concept=…`): the reader ticks the ones to practise, or steps a count drawn
-  at random (`practiceCount` / `drawIds` / `pickedIds` in `lib/oneSearch.ts`). **An exam's title is text too and opens no menu**: the exam page
+  which opens the concept's questions **over the page** (`components/practice/PracticeOverlay.tsx`,
+  mounted once by `PracticeOverlayHost`, opened through `stores/practiceOverlay.ts`; the link's
+  `/search?tab=questions&concept=…` is still what a new tab gets): the reader ticks the ones to
+  practise, or steps a count (3 to start, `PRACTICE_DEFAULT`) drawn at random (`practiceCount` / `drawIds` / `pickedIds` in `lib/oneSearch.ts`). **An exam's title is text too and opens no menu**: the exam page
   (`pages/wiki/WikiExam.tsx`) prints the syllabus bar in its header, starts a quiz from an
   opened objective's **Practice <objective>**, and keeps Fact Check as a row at its foot. A
   surface adds only rows about *itself* (a card's Study and Remove) through `leading` /

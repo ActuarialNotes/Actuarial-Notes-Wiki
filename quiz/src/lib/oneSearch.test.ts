@@ -249,7 +249,7 @@ describe('practiceIds', () => {
 describe('practiceCount', () => {
   it('starts at the default, or all of a smaller pool', () => {
     expect(practiceCount(null, 152)).toBe(PRACTICE_DEFAULT)
-    expect(practiceCount(null, 4)).toBe(4)
+    expect(practiceCount(null, 2)).toBe(2)
     expect(practiceCount(null, 0)).toBe(0)
   })
   it("holds the reader's choice between 1 and what was found, never past the limit", () => {

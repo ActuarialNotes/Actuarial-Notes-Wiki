@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { examFootNotes, linesShown, nextInObjective, noteLabel, objectiveOf, parseExamPage } from './examPage'
+import { examFootNotes, linesShown, nextInObjective, noteLabel, objectiveOf, objectiveWalk, parseExamPage, stopOf } from './examPage'
+import { objectiveMarks } from './syllabusChapters'
 import { parseExamMetadata, parseExamSyllabus } from './wikiParser'
 
 const PAGE = `---
@@ -159,5 +160,42 @@ describe('the vault', () => {
       // Every line says something, or carries pills.
       for (const line of o.lines) expect(line.text.length + line.pills.length).toBeGreaterThan(0)
     })
+  })
+})
+
+describe('objectiveWalk', () => {
+  const md = `# Exam X
+
+> [!example]- Ratemaking {40%}
+> 1. Define [[Frequency]] and [[Severity]]
+> 2. Use [[Pure Premium]]
+
+> [!example]- Stochastic Models {60%}
+> 1. Model claim frequencies using [[Frequency]] and [[Poisson Process|Poisson Processes]]
+`
+  const page = parseExamPage(md)
+  const walk = objectiveWalk(page.objectives)
+
+  it('stops at a concept under every objective that names it', () => {
+    expect(walk.stops.map(s => `${s.name}@${s.objective}`)).toEqual([
+      'Frequency@0', 'Severity@0', 'Pure Premium@0', 'Frequency@1', 'Poisson Process@1',
+    ])
+    expect(walk.list.map(r => r.name)).toEqual(['Frequency', 'Severity', 'Pure Premium', 'Poisson Process'])
+  })
+
+  it('opens a pill at its own stop, so Next goes on from there', () => {
+    const at = stopOf(walk.stops, 'Frequency', 1)
+    expect(at).toBe(3)
+    expect(walk.stops[at + 1].name).toBe('Poisson Process')
+    expect(stopOf(walk.stops, 'Frequency')).toBe(0)
+    expect(stopOf(walk.stops, 'Nothing')).toBe(-1)
+  })
+
+  it('cuts the bar at the objectives the stops are under', () => {
+    const marks = objectiveMarks(walk.stops, walk.index)
+    expect(marks).toEqual([
+      { start: 1, label: 'Ratemaking' },
+      { start: 4, label: 'Stochastic Models' },
+    ])
   })
 })

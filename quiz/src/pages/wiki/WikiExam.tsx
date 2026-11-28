@@ -14,7 +14,7 @@ import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/hooks/useWikiPage'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useConceptPopup, type OccurrenceRef } from '@/hooks/useConceptPopup'
 import { useConceptHighlight } from '@/hooks/useConceptHighlight'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -34,7 +34,7 @@ import { useExamProgress } from '@/contexts/examProgress'
 import { useAuth } from '@/hooks/useAuth'
 import { daysBetween, todayISO } from '@/lib/studyPlan'
 import { examPageIdFromFile, examProgressKeyFromFile, examQuizTopic, todaysPlanConcepts } from '@/lib/examMenu'
-import { examFootNotes, linesShown, objectiveOf, parseExamPage, type ObjectivePill } from '@/lib/examPage'
+import { examFootNotes, linesShown, objectiveOf, objectiveWalk, parseExamPage, stopOf, type ObjectivePill } from '@/lib/examPage'
 import { examStatus } from '@/lib/examStatus'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
@@ -256,6 +256,17 @@ export default function WikiExam() {
     const current = s.open && s.sourcePath === `${examFileName}.md` ? s.list[s.index] : undefined
     return current?.kind === 'concept' ? current.name : null
   })
+  // …and, on the walk down the pills, which objective's pill it is: a concept
+  // two objectives name is a stop under each.
+  const walk = useMemo(() => (page ? objectiveWalk(page.objectives) : null), [page])
+  const walkOccurrences = useMemo<OccurrenceRef[] | null>(
+    () => walk?.stops.map(st => ({ name: st.name, occurrence: st.occurrence })) ?? null,
+    [walk],
+  )
+  const readingObjective = useConceptPopup(s => {
+    if (!walk || !s.open || s.occurrences !== walkOccurrences) return null
+    return walk.stops[s.occurrenceIndex]?.objective ?? null
+  })
 
   const pillState = useMemo(() => {
     const lookup = buildMasteryLookup(examRecords)
@@ -338,6 +349,25 @@ export default function WikiExam() {
     openAt(resList, Math.max(at, 0), `${examFileName}.md`, null, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, objectives })
   }, [conceptList, resourceRefs, examFileName, openAt, objectives])
 
+  // Open a concept on the walk down the pills, at the pill under `objective`
+  // (or its first), or on its own when the objectives don't name it.
+  const openConcept = useCallback((ref: WikiEntryRef, objective?: number | null) => {
+    const stops = walk?.stops ?? []
+    const at = stopOf(stops, ref.name, objective)
+    if (!walk || at < 0) {
+      const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+      openAt(idx >= 0 ? conceptList : [ref], Math.max(idx, 0), `${examFileName}.md`, null, resourceRefs, { objectives })
+      return
+    }
+    const name = stops[at].name.toLowerCase()
+    const idx = walk.list.findIndex(r => r.name.toLowerCase() === name)
+    openAt(walk.list, Math.max(idx, 0), `${examFileName}.md`, null, resourceRefs, {
+      objectives: walk.index,
+      occurrences: walkOccurrences,
+      occurrenceIndex: at,
+    })
+  }, [walk, walkOccurrences, conceptList, openAt, examFileName, resourceRefs, objectives])
+
   // A link in a foot row, or a card on the shelf: a reading opens in the
   // reader, a concept goes to its page.
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -356,10 +386,11 @@ export default function WikiExam() {
       openResource(pill.ref)
       return
     }
-    // A concept opens in the reader over this page, on the walk of the syllabus.
-    const idx = conceptList.findIndex(r => r.name.toLowerCase() === pill.name.toLowerCase())
-    openAt(idx >= 0 ? conceptList : [pill.ref], Math.max(idx, 0), `${examFileName}.md`, null, resourceRefs, { objectives })
-  }, [openResource, conceptList, openAt, examFileName, resourceRefs, objectives])
+    // A concept opens in the reader over this page, on the walk of the
+    // syllabus, at this pill: Next goes on from here, not from where the
+    // concept was first named.
+    openConcept(pill.ref, openIndex)
+  }, [openResource, openConcept, openIndex])
 
   // The concept the reader is showing over this page: its pill is lit, and the
   // objective that holds it opens as the walk moves on.
@@ -367,6 +398,11 @@ export default function WikiExam() {
     if (!reading || !page) return
     const key = reading.toLowerCase()
     setOpenIndex(prev => {
+      // On the walk down the pills the stop says which objective it is under.
+      if (readingObjective !== null) {
+        if (readingObjective !== prev) saveOpenObjective(examFileName, readingObjective)
+        return readingObjective
+      }
       const open = prev !== null ? page.objectives[prev] : undefined
       if (open?.concepts.some(p => p.name.toLowerCase() === key)) return prev
       const at = objectiveOf(page.objectives, reading)
@@ -374,7 +410,7 @@ export default function WikiExam() {
       saveOpenObjective(examFileName, at)
       return at
     })
-  }, [reading, page, examFileName])
+  }, [reading, readingObjective, page, examFileName])
 
   // …and the page scrolls to that pill, once for each concept the reader
   // shows. The pill is drawn only when its objective has opened, which is a
@@ -384,13 +420,14 @@ export default function WikiExam() {
   const scrolledTo = useRef<string | null>(null)
   useEffect(() => {
     if (!reading) { scrolledTo.current = null; return }
-    if (!page || scrolledTo.current === reading) return
+    const target = `${reading}@${readingObjective ?? ''}`
+    if (!page || scrolledTo.current === target) return
     let frame = 0
     let tries = 0
     const look = () => {
       const pill = document.querySelector(`[data-pill="${CSS.escape(reading)}"]`)
       if (pill) {
-        scrolledTo.current = reading
+        scrolledTo.current = target
         pill.scrollIntoView({ block: 'start', behavior: 'smooth' })
       } else if (++tries < 60) {
         frame = requestAnimationFrame(look)
@@ -398,7 +435,7 @@ export default function WikiExam() {
     }
     frame = requestAnimationFrame(look)
     return () => cancelAnimationFrame(frame)
-  }, [reading, page, openIndex])
+  }, [reading, readingObjective, page, openIndex])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -415,10 +452,8 @@ export default function WikiExam() {
       setOpenIndex(at)
       saveOpenObjective(examFileName, at)
     }
-    const idx = conceptList.findIndex(r => r.name.toLowerCase() === conceptParam.toLowerCase())
-    const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
-    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, null, resourceRefs, { objectives })
-  }, [conceptParam, page, conceptList, examFileName, openAt, resourceRefs, objectives])
+    openConcept({ kind: 'concept', name: conceptParam }, at >= 0 ? at : null)
+  }, [conceptParam, page, examFileName, openConcept])
 
   // Likewise with `?resource=`: the reading opens in the reader over its study guide.
   useEffect(() => {

@@ -14,6 +14,7 @@
 import { splitWeightTag } from './examWeight'
 import { cleanWikiLinks } from './wikiParser'
 import { hrefToEntryRef, type WikiEntryRef } from './wikiRoutes'
+import { isSyllabusConcept, type ObjectiveIndex } from './syllabusChapters'
 
 /** A concept under a syllabus sentence. */
 export interface ObjectivePill {
@@ -245,4 +246,58 @@ export function nextInObjective(
   const at = o.concepts.findIndex(p => p.name.toLowerCase() === key)
   const next = o.concepts.slice(at + 1).find(p => p.ref.kind === 'concept')
   return next ? { objective: o.name, next } : null
+}
+
+/** One stop of the walk down an exam page: a pill, in page order. */
+export interface ObjectiveStop {
+  name: string
+  /** Which of the page's pills for this concept this one is (0 for the first). */
+  occurrence: number
+  /** The objective the pill is drawn under. */
+  objective: number
+}
+
+/** The reader's walk down the exam page's pills. */
+export interface ObjectiveWalk {
+  /** Every concept once, in the order the page first names it. */
+  list: WikiEntryRef[]
+  /** Every pill, in page order: a concept named by two objectives is two stops. */
+  stops: ObjectiveStop[]
+  /** The chapters of the walk, keyed the way `stops` count. */
+  index: ObjectiveIndex
+}
+
+/**
+ * The walk the concept popup takes over an exam page. It steps through the
+ * pills as the page draws them, so a concept two objectives name is visited in
+ * both, and Next from the later one goes on through the later objective rather
+ * than back to where the concept first appeared.
+ */
+export function objectiveWalk(objectives: readonly ExamObjective[]): ObjectiveWalk {
+  const list: WikiEntryRef[] = []
+  const stops: ObjectiveStop[] = []
+  const index: ObjectiveIndex = { byOccurrence: {}, byConcept: {} }
+  const counts = new Map<string, number>()
+  objectives.forEach((o, at) => {
+    for (const pill of o.concepts) {
+      if (!isSyllabusConcept(pill.ref)) continue
+      const key = pill.name.toLowerCase()
+      const occurrence = counts.get(key) ?? 0
+      counts.set(key, occurrence + 1)
+      if (occurrence === 0) {
+        list.push({ kind: 'concept', name: pill.name })
+        index.byConcept[key] = o.name
+      }
+      index.byOccurrence[`${key}#${occurrence}`] = o.name
+      stops.push({ name: pill.name, occurrence, objective: at })
+    }
+  })
+  return { list, stops, index }
+}
+
+/** The stop for a pill under an objective, or the concept's first stop; -1 for none. */
+export function stopOf(stops: readonly ObjectiveStop[], concept: string, objective?: number | null): number {
+  const key = concept.toLowerCase()
+  const here = objective == null ? -1 : stops.findIndex(s => s.objective === objective && s.name.toLowerCase() === key)
+  return here >= 0 ? here : stops.findIndex(s => s.name.toLowerCase() === key)
 }

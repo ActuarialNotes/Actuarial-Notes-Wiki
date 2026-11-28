@@ -23,18 +23,22 @@ import { paceForExam, pointsForPace } from '@/lib/quizTiming'
 import { localDayKey } from '@/lib/streak'
 import { todayISO, type StudyPlan } from '@/lib/studyPlan'
 import {
+  DEFAULT_SESSION_LENGTH,
   KEEP_GOING_LENGTH,
-  SESSION_LENGTHS,
+  PLAN_LENGTH,
+  SESSION_CHOICES,
   buildSession,
-  isSessionLength,
+  isSessionChoice,
   learnCandidates,
   lengthFor,
   lengthFromStored,
+  planBudget,
   readSession,
   reviewCandidates,
   secondsPerQuestion,
   sessionBudget,
   sessionCounts,
+  sessionMinutes,
   sessionFromStored,
   sessionIsCurrent,
   sessionIsEmpty,
@@ -42,8 +46,8 @@ import {
   sessionWalk,
   withLength,
   type ConceptStanding,
-  type SessionCounts,
-  type SessionLength,
+  type SessionChoice,
+  type SessionOption,
   type SessionSupply,
   type SessionView,
   type StoredLength,
@@ -62,7 +66,7 @@ export function readLength(accountMinutes: unknown): StoredLength {
     const raw = localStorage.getItem(SESSION_LENGTH_KEY)
     if (raw) return lengthFromStored(JSON.parse(raw))
   } catch { /* private window */ }
-  return lengthFromStored(isSessionLength(accountMinutes) ? { everyDay: accountMinutes } : null)
+  return lengthFromStored(isSessionChoice(accountMinutes) ? { everyDay: accountMinutes } : null)
 }
 
 /** Keep the reader's session length: in the browser, and on the account when asked. */
@@ -116,15 +120,15 @@ export interface TodaySessionInput {
 }
 
 export interface TodaySession {
-  /** The reader's length today. */
-  minutes: SessionLength
-  setMinutes: (minutes: SessionLength, everyDay: boolean) => void
+  /** The reader's choice today. */
+  choice: SessionChoice
+  setMinutes: (minutes: SessionChoice, everyDay: boolean) => void
   /** Today's session read against the day; null until it is built, or when nothing is waiting. */
   view: SessionView | null
   /** Built, and nothing was waiting. */
   empty: boolean
-  /** What each length would hold if the session were built now: the sheet's dots. */
-  countsByLength: Record<SessionLength, SessionCounts>
+  /** The sheet's rows: today's plan first when there is one, then the fixed lengths. */
+  options: SessionOption[]
   /** Misses outstanding now, for "Fix" beside a length. */
   launching: boolean
   /** Run what is left of the session as one quiz. */
@@ -148,7 +152,7 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
 
   // ── Length ────────────────────────────────────────────────────────────────
   const [length, setLength] = useState<StoredLength>(() => readLength(accountMinutes))
-  const minutes = lengthFor(length, today)
+  const choice = lengthFor(length, today)
   const saveLength = useCallback((next: StoredLength, toAccount: boolean) => {
     setLength(next)
     saveSessionLength(userId, next, toAccount)
@@ -217,9 +221,17 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
   const supply = useMemo<SessionSupply>(() => {
     // Oldest first: the hook hands the misses newest first.
     const outstanding = [...mistakes].reverse().map(m => m.question.id)
-    const planConcepts = planConceptsToday(plan).filter(n => !planDone.has(n.toLowerCase()))
-    if (plan && planConcepts.length > 0) {
-      // A paid plan: what it introduces today, then what it brings back.
+    // The next New concepts in syllabus order, and the concepts closest to
+    // stepping down a level. Where the exam has a bank, only concepts it can
+    // ask a question on, since the session is a quiz.
+    const pool = quizzable.size > 0 ? standings.filter(c => quizzable.has(c.name.toLowerCase())) : standings
+    const freeLearn = learnCandidates(pool)
+    const freeReview = reviewCandidates(pool, now, today, iso => localDayKey(new Date(iso)))
+    if (plan) {
+      // A paid plan: what it introduces today, then what it brings back. A
+      // longer session goes on to what the plan introduces next, then the
+      // rest of the syllabus, and to what is due for review.
+      const planConcepts = planConceptsToday(plan).filter(n => !planDone.has(n.toLowerCase()))
       const scheduledNew = new Set(
         plan.assignments
           .filter(a => a.scheduledDate === today && a.initialState === 'new')
@@ -227,24 +239,43 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
       )
       const learn = plan.status === 'review_mode' ? [] : planConcepts.filter(n => scheduledNew.has(n.toLowerCase()))
       const learnKeys = new Set(learn.map(n => n.toLowerCase()))
-      return { mistakes: outstanding, learn, review: planConcepts.filter(n => !learnKeys.has(n.toLowerCase())) }
+      const newNow = new Set(freeLearn.map(n => n.toLowerCase()))
+      const upcoming = plan.status === 'review_mode' ? [] : plan.assignments
+        .filter(a => a.scheduledDate > today && newNow.has(a.conceptName.toLowerCase()))
+        .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
+        .map(a => a.conceptName)
+      return {
+        mistakes: outstanding,
+        learn,
+        review: planConcepts.filter(n => !learnKeys.has(n.toLowerCase())),
+        more: {
+          learn: plan.status === 'review_mode' ? [] : [...upcoming, ...freeLearn],
+          review: freeReview,
+        },
+      }
     }
-    // A free session: the next New concepts in syllabus order, and the
-    // concepts closest to stepping down a level. Where the exam has a bank,
-    // only concepts it can ask a question on, since the session is a quiz.
-    const pool = quizzable.size > 0 ? standings.filter(c => quizzable.has(c.name.toLowerCase())) : standings
-    return {
-      mistakes: outstanding,
-      learn: learnCandidates(pool),
-      review: reviewCandidates(pool, now, today, iso => localDayKey(new Date(iso))),
-    }
+    return { mistakes: outstanding, learn: freeLearn, review: freeReview }
   }, [mistakes, plan, planDone, today, standings, quizzable, now])
 
-  const countsByLength = useMemo(() => {
-    const out = {} as Record<SessionLength, SessionCounts>
-    for (const m of SESSION_LENGTHS) out[m] = sessionCounts(sessionBudget(m, secondsEach), supply)
-    return out
-  }, [secondsEach, supply])
+  /** Questions and minutes today's plan takes; null with no plan, or nothing left in it today. */
+  const planQuestions = useMemo(() => planBudget(supply), [supply])
+  const planMinutes = planQuestions === null ? null : sessionMinutes(planQuestions, secondsEach)
+
+  /** A choice as minutes and questions. Today's plan with nothing to size it by is the default length. */
+  const sized = useCallback((c: SessionChoice): { minutes: number; n: number } => {
+    if (c === PLAN_LENGTH) {
+      if (planQuestions !== null && planMinutes !== null) return { minutes: planMinutes, n: planQuestions }
+      return { minutes: DEFAULT_SESSION_LENGTH, n: sessionBudget(DEFAULT_SESSION_LENGTH, secondsEach) }
+    }
+    return { minutes: c, n: sessionBudget(c, secondsEach) }
+  }, [planQuestions, planMinutes, secondsEach])
+
+  const options = useMemo<SessionOption[]>(() => SESSION_CHOICES
+    .filter(c => c !== PLAN_LENGTH || planQuestions !== null)
+    .map(c => {
+      const { minutes, n } = sized(c)
+      return { choice: c, minutes, counts: sessionCounts(n, supply) }
+    }), [sized, planQuestions, supply])
 
   // ── Today's session, frozen ───────────────────────────────────────────────
   const key = examKey ? sessionKey(userId, examKey) : null
@@ -256,9 +287,10 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
   }, [key])
 
   const ready = !!key && !!syllabus && !loading && !mistakesLoading
-  const build = useCallback((forMinutes: SessionLength) => {
+  const build = useCallback((forChoice: SessionChoice) => {
     if (!key) return
-    const next = buildSession(today, forMinutes, sessionBudget(forMinutes, secondsEach), supply)
+    const { minutes, n } = sized(forChoice)
+    const next = buildSession(today, forChoice, minutes, n, supply)
     if (sessionIsEmpty(next)) {
       setStored(null)
       setEmpty(true)
@@ -268,21 +300,21 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     setEmpty(false)
     setStored(next)
     try { localStorage.setItem(key, JSON.stringify(next)) } catch { /* private window */ }
-  }, [key, today, secondsEach, supply])
+  }, [key, today, sized, supply])
 
   useEffect(() => {
     if (!ready || empty) return
-    if (!sessionIsCurrent(stored, today, minutes)) build(minutes)
-  }, [ready, empty, stored, today, minutes, build])
+    if (!sessionIsCurrent(stored, today, choice)) build(choice)
+  }, [ready, empty, stored, today, choice, build])
 
-  const setMinutes = useCallback((next: SessionLength, everyDay: boolean) => {
+  const setMinutes = useCallback((next: SessionChoice, everyDay: boolean) => {
     setEmpty(false)
     saveLength(withLength(length, next, today, everyDay), everyDay)
   }, [length, today, saveLength])
 
   const mistakeById = useMemo(() => new Map(mistakes.map(m => [m.question.id, m])), [mistakes])
   const view = useMemo(() => {
-    if (!sessionIsCurrent(stored, today, minutes)) return null
+    if (!sessionIsCurrent(stored, today, choice)) return null
     return readSession(stored, {
       // Until the misses have loaded nothing reads as fixed.
       isOutstanding: id => mistakesLoading || mistakeById.has(id),
@@ -291,7 +323,7 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
       conceptAchieved: name => achievedToday.has(name.toLowerCase()),
       conceptOfMistake: id => mistakeById.get(id)?.problemConcepts[0]?.name ?? null,
     })
-  }, [stored, today, minutes, mistakesLoading, mistakeById, todayAnsweredIds, attemptedToday, achievedToday])
+  }, [stored, today, choice, mistakesLoading, mistakeById, todayAnsweredIds, attemptedToday, achievedToday])
 
   // ── Launching ─────────────────────────────────────────────────────────────
   const [launching, setLaunching] = useState(false)
@@ -342,5 +374,5 @@ export function useTodaySession(input: TodaySessionInput): TodaySession {
     build(KEEP_GOING_LENGTH)
   }, [length, today, saveLength, build])
 
-  return { minutes, setMinutes, view, empty, countsByLength, launching, start, missedToday, fixMissed, keepGoing, openConcept, conceptRefs: allConceptRefs }
+  return { choice, setMinutes, view, empty, options, launching, start, missedToday, fixMissed, keepGoing, openConcept, conceptRefs: allConceptRefs }
 }

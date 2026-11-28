@@ -125,7 +125,8 @@ test.describe('You, on a phone', () => {
 
     await expect(settings.getByTestId('settings-exam-P')).toContainText('Jan 14, 2027')
     await expect(settings.getByTestId('settings-exam-FM')).toContainText('Apr 14, 2027')
-    await expect(settings.getByTestId('settings-length')).toContainText('25 min')
+    // A Pro account's session runs as long as today's plan until a length is picked.
+    await expect(settings.getByTestId('settings-length')).toContainText("Today's plan")
     await expect(settings.getByTestId('settings-goal')).toContainText('100 XP')
     await expect(settings.getByTestId('settings-daily-email')).toContainText('Off')
     await expect(settings.getByTestId('settings-name')).toContainText('Ada')

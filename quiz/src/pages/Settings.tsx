@@ -26,7 +26,7 @@ import { TRACKS } from '@/data/tracks'
 import { isAnalyticsOptedOut, setAnalyticsOptOut } from '@/lib/analytics'
 import { DAILY_PLAN_EMAIL_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { supabase } from '@/lib/supabase'
-import { withLength, type SessionLength } from '@/lib/todaySession'
+import { DEFAULT_SESSION_LENGTH, PLAN_LENGTH, SESSION_CHOICES, withLength, type SessionChoice } from '@/lib/todaySession'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { YOU_PATH, dailyEmailValue, examDateValue, proRowValue, readerName, signInProvider, soundValue } from '@/lib/you'
 import { todayISO } from '@/lib/studyPlan'
@@ -103,7 +103,7 @@ export default function Settings() {
       target_date: examRows.find(r => r.exam_id === key)?.target_date ?? null,
     }])
 
-  const pickLength = (minutes: SessionLength) => {
+  const pickLength = (minutes: SessionChoice) => {
     const next = withLength(length, minutes, todayISO(), true)
     setLength(next)
     saveSessionLength(user?.id ?? null, next, true)
@@ -159,7 +159,10 @@ export default function Settings() {
               testId="settings-add-exam"
             />
           )}
-          <Row label="Session length" value={`${length.everyDay} min`} onClick={() => setSheet('length')} testId="settings-length" />
+          <Row label="Session length" value={
+            length.everyDay !== PLAN_LENGTH ? `${length.everyDay} min`
+              : isPro ? "Today's plan" : `${DEFAULT_SESSION_LENGTH} min`
+          } onClick={() => setSheet('length')} testId="settings-length" />
           {XP_ENABLED && <Row label="Daily goal" value={`${xp.goal.xp} XP`} onClick={() => setSheet('goal')} testId="settings-goal" />}
           {user && DAILY_PLAN_EMAIL_ENABLED && (
             <Row
@@ -236,7 +239,16 @@ export default function Settings() {
       </div>
 
       {sheet === 'length' && (
-        <SessionLengthSheet standing minutes={length.everyDay} onPick={pickLength} onClose={close} />
+        <SessionLengthSheet
+          standing
+          choice={length.everyDay}
+          // Only a paid plan has a plan to size a session by.
+          options={SESSION_CHOICES
+            .filter(c => c !== PLAN_LENGTH || isPro)
+            .map(c => ({ choice: c, minutes: c === PLAN_LENGTH ? null : c }))}
+          onPick={pickLength}
+          onClose={close}
+        />
       )}
       {sheet === 'goal' && <GoalSheet onClose={close} />}
       {sheet === 'email-daily' && user && (

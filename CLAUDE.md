@@ -1469,7 +1469,11 @@ Other important `lib/` modules:
   exam with no pace uses a 5-minute default kept in the code), shared between **Fix mistakes**,
   **Learn** and **Review** by `splitSession` (a third to Fix, a third of the rest to Learn, the
   rest to Review; a floor of one each; unused shares to Review, Fix, Learn). A paid plan's Learn
-  and Review are today's study plan; a free reader's are the next New concepts in syllabus order
+  and Review are today's study plan, and its default length is **Today's plan** (`PLAN_LENGTH`):
+  `planBudget` is the shortest session holding every concept the plan has today, offered first in
+  the length sheet at its minutes (`sessionMinutes`); a shorter length takes the first of the
+  plan, a longer one finishes it and goes on to the plan's next concepts and what is due for
+  review (`SessionSupply.more`); a free reader's are the next New concepts in syllabus order
   and the concepts closest to stepping down (`learnCandidates`, `reviewCandidates`). The session
   is **built once a day and kept in the browser** (`StoredSession`, by `hooks/useTodaySession.ts`)
   and read against the day (`readSession`): finished when everything has been tried. Start hands

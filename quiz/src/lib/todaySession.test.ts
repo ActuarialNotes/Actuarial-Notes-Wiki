@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest'
 import {
   DEFAULT_SECONDS_PER_QUESTION,
   DEFAULT_SESSION_LENGTH,
+  PLAN_LENGTH,
+  planBudget,
+  sessionMinutes,
   buildSession,
   countsSummary,
   learnCandidates,
@@ -40,9 +43,10 @@ const NOTHING: SessionFacts = {
 }
 
 describe('the session length', () => {
-  it('is 25 minutes until the reader picks one', () => {
-    expect(lengthFromStored(null)).toEqual({ everyDay: DEFAULT_SESSION_LENGTH })
-    expect(lengthFromStored({ everyDay: 7 })).toEqual({ everyDay: 25 })
+  it('is today\'s plan until the reader picks a length', () => {
+    expect(lengthFromStored(null)).toEqual({ everyDay: PLAN_LENGTH })
+    expect(lengthFromStored({ everyDay: 7 })).toEqual({ everyDay: PLAN_LENGTH })
+    expect(lengthFromStored({ everyDay: 25 })).toEqual({ everyDay: DEFAULT_SESSION_LENGTH })
   })
 
   it('keeps a choice for every day, or for today alone', () => {
@@ -161,9 +165,10 @@ describe('building a session', () => {
   }
 
   it('takes the oldest misses and the first concepts, each concept once', () => {
-    const s = buildSession('2026-11-23', 25, 6, supply)
+    const s = buildSession('2026-11-23', 25, 25, 6, supply)
     expect(s).toEqual({
       day: '2026-11-23',
+      choice: 25,
       minutes: 25,
       fix: ['q1', 'q2'],
       fixOf: 5,
@@ -174,23 +179,75 @@ describe('building a session', () => {
   })
 
   it('reads back only what it wrote', () => {
-    const s = buildSession('2026-11-23', 25, 6, supply)
+    const s = buildSession('2026-11-23', 25, 25, 6, supply)
     expect(sessionFromStored(JSON.parse(JSON.stringify(s)))).toEqual(s)
     expect(sessionFromStored({ day: '2026-11-23', minutes: 30, fix: [], learn: [], review: [] })).toBeNull()
+    expect(sessionFromStored({ day: '2026-11-23', minutes: 25, fix: [], learn: [], review: [] }))
+      .toEqual({ day: '2026-11-23', choice: 25, minutes: 25, fix: [], fixOf: 0, learn: [], review: [] })
+    const plan = buildSession('2026-11-23', PLAN_LENGTH, 35, 6, supply)
+    expect(sessionFromStored(JSON.parse(JSON.stringify(plan)))).toEqual(plan)
     expect(sessionFromStored({ day: '2026-11-23', minutes: 25, fix: [1], learn: [], review: [] })).toBeNull()
   })
 
   it('is kept for its day and its length only', () => {
-    const s = buildSession('2026-11-23', 25, 6, supply)
+    const s = buildSession('2026-11-23', 25, 25, 6, supply)
     expect(sessionIsCurrent(s, '2026-11-23', 25)).toBe(true)
     expect(sessionIsCurrent(s, '2026-11-24', 25)).toBe(false)
     expect(sessionIsCurrent(s, '2026-11-23', 45)).toBe(false)
     expect(sessionIsCurrent(null, '2026-11-23', 25)).toBe(false)
+    expect(sessionIsCurrent(s, '2026-11-23', PLAN_LENGTH)).toBe(false)
+  })
+})
+
+describe('a session with a plan', () => {
+  const supply = {
+    mistakes: ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'],
+    learn: ['Covariance', 'Correlation'],
+    review: [],
+    more: { learn: ['Moment', 'Covariance', 'Median'], review: ['Percentile', 'Mode'] },
+  }
+
+  it('takes as long as the shortest session holding all of today\'s plan', () => {
+    const n = planBudget(supply)
+    expect(n).toBe(7)
+    expect(sessionCounts(n!, supply)).toEqual({ fix: 5, learn: 2, review: 0 })
+    expect(sessionCounts(n! - 1, supply).learn).toBeLessThan(2)
+    expect(planBudget({ ...supply, more: undefined })).toBeNull()
+    expect(planBudget({ ...supply, learn: [] })).toBeNull()
+  })
+
+  it('takes the first of the plan in a shorter session', () => {
+    const s = buildSession('2026-11-23', 10, 10, 3, supply)
+    expect(s.learn).toEqual(['Covariance'])
+    expect(s.review).toEqual([])
+  })
+
+  it('finishes the plan and goes on past it in a longer one', () => {
+    const s = buildSession('2026-11-23', 45, 45, 16, supply)
+    expect(s.learn.slice(0, 2)).toEqual(['Covariance', 'Correlation'])
+    expect(s.learn).toContain('Moment')
+    expect(s.learn.filter(n => n === 'Covariance')).toHaveLength(1)
+    expect(s.review.length).toBeGreaterThan(0)
+    expect(s.fix.length + s.learn.length + s.review.length).toBe(16)
+    // Each longer length holds more.
+    const sizes = [3, 7, 12, 30].map(n => {
+      const c = sessionCounts(n, supply)
+      return c.fix + c.learn + c.review
+    })
+    expect(sizes).toEqual([3, 7, 12, 16])
+  })
+})
+
+describe('minutes for a number of questions', () => {
+  it('rounds up to the next five, never under five', () => {
+    expect(sessionMinutes(7, 300)).toBe(35)
+    expect(sessionMinutes(1, 60)).toBe(5)
+    expect(sessionMinutes(3, 340)).toBe(20)
   })
 })
 
 describe('reading a session against the day', () => {
-  const session = buildSession('2026-11-23', 25, 9, {
+  const session = buildSession('2026-11-23', 25, 25, 9, {
     mistakes: Array.from({ length: 15 }, (_, i) => `q${i + 1}`),
     learn: ['Joint Probability Function', 'Covariance'],
     review: ['Set Function', 'Moment', 'Median', 'Percentile'],
@@ -209,7 +266,7 @@ describe('reading a session against the day', () => {
   })
 
   it('leaves out a step with nothing in it', () => {
-    const first = buildSession('2026-11-23', 10, 3, { mistakes: [], learn: ['Simple Interest', 'Compound Interest', 'Present Value'], review: [] })
+    const first = buildSession('2026-11-23', 10, 10, 3, { mistakes: [], learn: ['Simple Interest', 'Compound Interest', 'Present Value'], review: [] })
     expect(readSession(first, NOTHING).steps.map(s => s.kind)).toEqual(['learn'])
   })
 

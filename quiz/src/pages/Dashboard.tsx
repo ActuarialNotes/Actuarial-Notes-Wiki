@@ -565,8 +565,8 @@ export default function Dashboard() {
     )}
     {lengthOpen && (
       <SessionLengthSheet
-        minutes={session.minutes}
-        countsByLength={session.countsByLength}
+        choice={session.choice}
+        options={session.options}
         onPick={session.setMinutes}
         onClose={() => setLengthOpen(false)}
       />

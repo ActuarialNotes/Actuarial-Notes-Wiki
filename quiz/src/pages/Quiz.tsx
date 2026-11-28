@@ -36,6 +36,7 @@ import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
 import { QuizSettingsDialog, type QuizSettings } from '@/components/QuizSettingsButton'
 import { moveScreen, REPLACE_AS_PUSH } from '@/lib/viewTransition'
+import { SWIPE_EVENT, type SwipeDirection } from '@/lib/swipeNav'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
@@ -473,6 +474,21 @@ export default function Quiz() {
     '?': () => setShowShortcutsHelp(v => !v),
     'i': () => { if (currentQuestion) setShowQuestionInfo(v => !v) },
   }, !anyDialogOpen && !conceptPopupOpen && !showConceptList && status !== 'idle' && status !== 'complete')
+
+  // A swipe turns the question the way the arrow keys do (components/SwipeNav.tsx):
+  // forward to the next once this one is answered, back to the one before. It
+  // never finishes the quiz, which is a button's job.
+  const swipeRef = useRef<(direction: SwipeDirection) => void>(() => {})
+  swipeRef.current = direction => {
+    if (anyDialogOpen || conceptPopupOpen || showConceptList || status === 'idle' || status === 'complete') return
+    if (direction === 'back') { if (currentIndex > 0) goToPreviousQuestion() }
+    else if (isLocked && !isLastQuestion) handleNextFromAnswer()
+  }
+  useEffect(() => {
+    const onSwipe = (e: Event) => swipeRef.current((e as CustomEvent<SwipeDirection>).detail)
+    window.addEventListener(SWIPE_EVENT, onSwipe)
+    return () => window.removeEventListener(SWIPE_EVENT, onSwipe)
+  }, [])
 
   function handleQuit() {
     leavingRef.current = true
@@ -926,7 +942,7 @@ export default function Quiz() {
           </Button>
         )}
         {isLocked && showExplanation && missed && similar && (
-          <Button variant="edge" size="main" onClick={handleTrySimilar} className={FOOT_BUTTON}>
+          <Button variant="edge" size="main" onClick={handleTrySimilar} className={cn(FOOT_BUTTON, 'rise-in')}>
             Try a similar one
           </Button>
         )}
@@ -940,7 +956,7 @@ export default function Quiz() {
             onClick={handleNextFromAnswer}
             size="main"
             disabled={isLastQuestion && isSubmitting}
-            className={FOOT_BUTTON}
+            className={cn(FOOT_BUTTON, 'rise-in')}
           >
             {isLastQuestion && isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : null}
             {isLastQuestion ? finishLabel : 'Next'}

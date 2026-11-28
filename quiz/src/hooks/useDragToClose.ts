@@ -2,8 +2,12 @@ import { useEffect, useRef, type RefObject } from 'react'
 import {
   backdropOpacity,
   closesOnRelease,
+  coastHeight,
   DRAG_SLOP,
   flickCloses,
+  releaseVelocity,
+  SETTLE_EASE,
+  settleMs,
   sheetPlacement,
   startsDrag,
   startsResize,
@@ -11,7 +15,6 @@ import {
 
 /** Below `sm`, where a popup is a sheet from the foot of the screen with a handle. */
 const SHEET_QUERY = '(max-width: 639.98px)'
-const SETTLE_MS = 200
 /** How long after closing a sheet that is still mounted counts as kept open. */
 const KEPT_OPEN_MS = 1000
 /** The most of the screen a sheet with no `max-height` of its own may take. */
@@ -94,11 +97,12 @@ export function useDragToClose(
       if (!b) return
       b.style.opacity = value === null ? '' : String(value)
     }
-    const place = (y: number, animate: boolean) => {
-      el.style.transition = animate ? `transform ${SETTLE_MS}ms ease-out` : 'none'
+    /** Put the sheet `y` below its place: at once (`ms` 0), or settling over `ms`. */
+    const place = (y: number, ms: number) => {
+      el.style.transition = ms ? `transform ${ms}ms ${SETTLE_EASE}, height ${ms}ms ${SETTLE_EASE}` : 'none'
       el.style.transform = y ? `translateY(${y}px)` : ''
       const b = backdrop?.current
-      if (b) b.style.transition = animate ? `opacity ${SETTLE_MS}ms ease-out` : 'none'
+      if (b) b.style.transition = ms ? `opacity ${ms}ms ease-out` : 'none'
       fade(backdropOpacity(y, el.offsetHeight))
     }
     const reset = () => {
@@ -161,11 +165,11 @@ export function useDragToClose(
         height = next.height
         // Back at the height it takes by itself, the sheet is left to size itself again.
         el.style.height = minHeight === undefined && height === natural ? '' : `${height}px`
-        resized.current?.(height, false)
+        resized.current?.(Math.min(height, maxHeight()), false)
       }
       samples.push({ t, y })
       if (samples.length > 12) samples = samples.slice(-6)
-      place(offset, false)
+      place(offset, 0)
       return true
     }
 
@@ -174,22 +178,24 @@ export function useDragToClose(
       tracking = false
       if (!dragging) return
       dragging = false
-      const recent = samples.filter(s => t - s.t <= 100)
-      const first = recent[0] ?? samples[samples.length - 1]
+      const velocity = releaseVelocity(samples, t)
       const last = samples[samples.length - 1]
-      const velocity = last && first && last.t > first.t ? (last.y - first.y) / (last.t - first.t) : 0
       const travelled = last ? last.y - origin.y : 0
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const closes = closesOnRelease(offset, el.offsetHeight, velocity)
         || (onHandle && flickCloses(velocity, travelled))
       if (closes) {
         // A sheet pulled shut opens next at the height it had before the pull.
         const restore = () => { if (sized) resized.current?.(startHeight, true) }
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (still) {
           close.current()
           restore()
           return
         }
-        place(el.offsetHeight + 40, true)
+        // It leaves at the speed it was thrown.
+        const away = el.offsetHeight + 40
+        const ms = settleMs(away - offset, velocity)
+        place(away, ms)
         timer = window.setTimeout(() => {
           close.current()
           restore()
@@ -198,11 +204,25 @@ export function useDragToClose(
           // so putting it back at once flashed the sheet and the dimmed page.
           // Only a caller that kept it open, well after, gets it back.
           timer = window.setTimeout(() => { if (el.isConnected) reset() }, KEPT_OPEN_MS)
-        }, SETTLE_MS)
+        }, ms)
       } else {
-        if (sized) resized.current?.(height, true)
-        place(0, true)
-        timer = window.setTimeout(reset, SETTLE_MS)
+        // A resized sheet carries on a little the way it was thrown.
+        const rest = sized ? coastHeight(height, still ? 0 : velocity, floor(), maxHeight()) : height
+        const ms = still ? 0 : settleMs(Math.max(offset, Math.abs(rest - height)), velocity)
+        place(0, ms)
+        if (sized) {
+          height = rest
+          // Back at the height it takes by itself, the sheet is left to size itself again.
+          const own = minHeight === undefined && rest === natural
+          el.style.height = `${rest}px`
+          resized.current?.(rest, true)
+          timer = window.setTimeout(() => {
+            reset()
+            if (own) el.style.height = ''
+          }, ms)
+        } else {
+          timer = window.setTimeout(reset, ms)
+        }
       }
     }
 

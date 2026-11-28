@@ -4,8 +4,10 @@
 // each with the concepts it names as pills, ending in the page's one filled
 // button, "Practice <objective>".
 
+import { AnimatedNumber } from '@/components/AnimatedNumber'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { usePresence } from '@/hooks/usePresence'
 import { Link } from 'react-router-dom'
 import { LevelSquare, LevelSquares } from '@/components/LevelSquare'
 import { MarkdownText } from '@/components/MarkdownText'
@@ -146,9 +148,11 @@ export function ObjectiveCard({
 }) {
   const Chevron = open ? ChevronUp : ChevronDown
   const hidden = objective.lines.length - shown
+  // The lines stay for a moment after the card is closed, so it folds shut rather than snapping.
+  const { mounted, leaving } = usePresence(open, 200)
   return (
     <section
-      className={cn(OUTLINE_CARD, 'flex flex-col px-5', open ? 'gap-[18px] pb-5 pt-[18px]' : 'py-[18px]')}
+      className={cn(OUTLINE_CARD, 'flex flex-col px-5 pt-[18px]', mounted ? 'pb-5' : 'pb-[18px]')}
       data-objective={objective.name}
     >
       <button
@@ -159,7 +163,7 @@ export function ObjectiveCard({
       >
         <span className="flex w-full items-baseline gap-2.5">
           <span className="min-w-0 flex-1 text-[19px] font-bold leading-snug">{objective.name}</span>
-          {figures && <span className="shrink-0 text-[17px] font-bold tabular-nums">{figures.pct}%</span>}
+          {figures && <span className="shrink-0 text-[17px] font-bold tabular-nums"><AnimatedNumber value={figures.pct} />%</span>}
           <Chevron className="h-4 w-4 shrink-0 self-center" strokeWidth={2.5} aria-hidden="true" />
         </span>
         {!open && figures && figures.states.length > 0 && (
@@ -168,8 +172,9 @@ export function ObjectiveCard({
         {objective.weight && <span className="text-sm">{objective.weight} of the exam</span>}
       </button>
 
-      {open && (
-        <>
+      {mounted && (
+        <div className="reveal" data-leaving={leaving || undefined} {...(leaving ? { inert: '' } : {})}>
+        <div className="flex flex-col gap-[18px] pt-[18px]">
           <div className="flex flex-col gap-4 border-t border-border">
             {objective.lines.slice(0, shown).map((line, i) => (
               <Line key={i} line={line} first={i === 0} pillState={pillState} from={from} onOpen={onOpenPill} />
@@ -187,7 +192,8 @@ export function ObjectiveCard({
             </button>
           )}
           {practice}
-        </>
+        </div>
+        </div>
       )}
     </section>
   )

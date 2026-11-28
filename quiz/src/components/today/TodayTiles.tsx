@@ -2,6 +2,7 @@
 // §4.2): the days left, the week, the Syllabus and Analytics tiles, and the
 // free plan's one row to Upgrade.
 
+import { AnimatedNumber } from '@/components/AnimatedNumber'
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Lock } from 'lucide-react'
@@ -204,7 +205,7 @@ export function SyllabusBar({
   return (
     <span aria-hidden="true" className={cn('relative block rounded-full bg-border', thick ? 'h-2.5' : 'h-2', className)}>
       <span
-        className={cn('absolute inset-y-0 left-0 bg-foreground', raised > 0 ? 'rounded-l-full' : 'rounded-full')}
+        className={cn('bar-fill absolute inset-y-0 left-0 bg-foreground', raised > 0 ? 'rounded-l-full' : 'rounded-full')}
         style={{ width: `${base}%` }}
       />
       {raised > 0 && (
@@ -262,7 +263,7 @@ export function SyllabusTile({
     <button type="button" onClick={onOpen} aria-haspopup="dialog" aria-label={label} data-testid="today-syllabus" className={TILE}>
       <TileHead>Syllabus</TileHead>
       <span className="flex items-baseline gap-2">
-        <span className="text-2xl font-bold leading-none tabular-nums">{pct}%</span>
+        <span className="text-2xl font-bold leading-none tabular-nums"><AnimatedNumber value={pct} />%</span>
         <GainMark gain={gain} className="text-sm" />
       </span>
       <span className="flex h-4 items-center">

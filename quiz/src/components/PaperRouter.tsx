@@ -18,6 +18,8 @@ function sessionStore(): Storage | undefined {
 const RESTORE_TIMEOUT_MS = 3000
 /** Frames a restore must hold for before it is left to the page. */
 const RESTORE_SETTLE_FRAMES = 10
+/** The most routes warmed from the links on one page. */
+const WARM_LINKS = 12
 const TAKE_OVER = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
 let cancelRestore: (() => void) | null = null
 
@@ -232,6 +234,31 @@ export default function PaperRouter({
       document.removeEventListener('focusin', onIntent, true)
     }
   }, [])
+
+  // On a phone there is no pointer over a link before the tap, so the links
+  // on screen are warmed once the page has settled and the browser is idle.
+  // Not for a reader saving data or on a slow connection.
+  useEffect(() => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    if (connection?.saveData === true || /(^|-)[23]g$/.test(connection?.effectiveType ?? '')) return
+    const warm = () => {
+      const seen = new Set<string>()
+      for (const anchor of document.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+        if (seen.size >= WARM_LINKS) break
+        if (anchor.origin !== window.location.origin || seen.has(anchor.pathname)) continue
+        const box = anchor.getBoundingClientRect()
+        if (box.width === 0 || box.bottom < 0 || box.top > window.innerHeight) continue
+        seen.add(anchor.pathname)
+        preloadRef.current?.(anchor.pathname)?.catch(() => { /* retried on the click */ })
+      }
+    }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(warm, { timeout: 2000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const timer = window.setTimeout(warm, 600)
+    return () => window.clearTimeout(timer)
+  }, [state.location.pathname])
 
   return (
     <Router location={state.location} navigationType={state.action} navigator={history}>

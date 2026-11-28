@@ -919,6 +919,26 @@ Rules to keep — the first three are what make it read as *one* motion rather t
 
 ---
 
+### 9.2 Fluid in place — the moves inside a page
+
+The page moves of §9.1 have small counterparts inside a page. Each is one shared piece; reach
+for it before writing a new animation. All of them do nothing for a reader who asked for less
+motion.
+
+| Move | What it is | How to get it |
+|---|---|---|
+| **The pick slides** | When the chosen one of a set changes, its fill travels from the old choice to the new one. | Nothing: `components/PickSlide.tsx` (mounted once in `App`) reads `aria-current` / `aria-selected` / `aria-checked` / `aria-pressed`, so the rail, tabs, segmented switches and radio rows all have it. Opt a set out with `data-pick-slide="none"`. Rules in `lib/pickSlide.ts`. |
+| **A press answers at once** | A control gives a little under the finger (`scale: 0.975`). | Nothing: a global rule in `index.css` for buttons, links, tabs and radios. Mark a subtree `data-press="none"` where a control is dragged (the boards). |
+| **Fold open, fold shut** | Content unfolds as it appears and folds before it goes. | Wrap it in `.reveal` with one child; for the closing half use `hooks/usePresence.ts` and `data-leaving` (the objective cards). |
+| **Numbers count** | A figure counts to its new value. | `components/AnimatedNumber.tsx` (`lib/countTween.ts`), inside `tabular-nums`. A bar's fill takes `.bar-fill`. |
+| **A list rearranges** | After a filter, the items that stay slide to their new places and new ones fade in. | `hooks/useFlipList.ts` on the list, `data-flip="<key>"` on each item (`lib/flipList.ts`; the Resources shelf). |
+| **A sheet has weight** | A sheet let go keeps the speed it was thrown at, a resize carries a little further, and a pull past its tallest gives and springs back. | Nothing: `hooks/useDragToClose.ts` over `lib/sheetDrag.ts` (`settleMs`, `coastHeight`, `rubberBand`). |
+| **A swipe moves the desk** | On a phone, a sideways swipe on a page with the place bar goes to the place beside it; in a quiz it turns the question (forward only once answered, never to finish). | `components/SwipeNav.tsx` over `lib/swipeNav.ts`. It reads the swipe when the finger lifts and then draws the ordinary move; the page does not follow the finger. Anything that uses a sideways drag itself is left alone, and `data-no-swipe` opts a subtree out. |
+| **Something new at the foot** | The button that follows Check settles in from just below. | `.rise-in`. |
+
+Routes are also warmed for the links on screen once a page is idle (`PaperRouter`), since a
+phone has no pointer over a link before the tap.
+
 ## 10. Iconography
 
 - **lucide-react** is the single icon set. Don't mix in other icon libraries or inline SVGs

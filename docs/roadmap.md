@@ -790,6 +790,48 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   MAS-II (25–70% when hands favour well-stocked topics); showing the strongest pairs on the
   draw screen is proposed, not built (redesign doc O9). Phase 3 is open.
 
+- **L22–L29: eight ideas from a brainstorm with the maintainer (proposed 2026-11-28).** What
+  would make the app more useful to a learner, beyond what is already ranked. Each is derived
+  from what the vault already holds: no model, nothing authored, nothing invented. In the order
+  proposed:
+  1. **L22, how often a concept is tested** (S). On a concept page and an objective's card:
+     the sittings it was on, the last one, and the points it usually carried, counted from the
+     bank's `wiki_link` tags and sitting ids. Only for an exam with released sittings, and only
+     over the papers the bank holds, named as such. Off-syllabus questions are left out. The
+     count could later order the study plan.
+  2. **L23, what the examiners said, on the concept page** (S–M). The Tutor reads the
+     lost-credit sentences out of the examiners' reports for Exam 5 (`lib/tutor/examinerNotes.ts`,
+     `lossPassages`). Show them verbatim as a card on the concept's page, each linked to its
+     question, for every written exam (5 to 9).
+  3. **L24, why I missed it** (M). One tap after a miss: didn't know it, misread it, arithmetic,
+     ran out of time. Stored with the response, so Fix mistakes and Analytics can tell a gap in
+     knowledge from a gap in exam technique. Needs a column on `question_responses`.
+  4. **L25, a solution one step at a time** (M). Before the whole explanation, **Show the next
+     step**, cut where the explanation's own lines of working already break. Never rewrites an
+     explanation; one with no break to cut at opens whole. A lighter relative of L16.
+  5. **L26, the command-word trainer** (M). For the written exams, a part's command word
+     ("briefly describe", "calculate", "fully discuss") beside how much the sample answers
+     wrote for its points, and practice by command word. `commandWord` in `lib/tutor/items.ts`
+     and the Written answers section already read the words.
+  6. **L27, a formula sheet per exam** (M). Every formula box of the exam's concept pages in
+     syllabus order, filtered by level, printable. Read off the pages at build time.
+  7. **L28, a syllabus change notice** (S). When `data/syllabusVintages.ts` gains an edition
+     for one of the reader's exams, Today says what was added and dropped once, linking to the
+     Resources shelf's Vintage view.
+  8. **L29, Anki export** (S–M). The reader's deck as a file Anki imports, formulas kept as
+     LaTeX.
+  **L22 and L23 built 2026-11-28** as one card, **On past papers**, under a concept's article on
+  its page and in the reader (`lib/conceptPapers.ts`, `components/learn/PastPapersCard.tsx`). A
+  line and a row of squares per exam whose papers tested it ("On 10 of 14 Exam 5 papers from
+  2013 to 2019"), a moved question counted on the paper it was sat on, then **Where candidates
+  lost credit**: the reports' sentences on the parts about the concept, newest paper first.
+  Left out: the objective's card (an objective is on nearly every paper, so the line said
+  little) and ordering the study plan by the count.
+  L22, L23 and L27 are drawn by the app from the bank and the pages as they are. None edits a
+  vault file, so no page's fact check goes stale (P4).
+  L22 goes first: it is the smallest, every count is checkable against the bank, and L23 lands
+  on the same card of the concept page straight after it. *(Brainstorm, 2026-11-28.)*
+
 ---
 
 ## 4. Tracks
@@ -854,6 +896,14 @@ Shipped:
 | L16 | Completion problems (faded worked examples) | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L17 | Placement check when an exam is added | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L18 | Ask how the exam went | ⬜ | Proposed | `learning-review.md` §3.8; D34. The outcome metric in §7. |
+| L22 | How often a concept is tested | ✅ 2026-11-28 | Built | §3.4. `lib/conceptPapers.ts`, `components/learn/PastPapersCard.tsx`: **On past papers**, on the concept's page and in the reader. Not on the objective's card. |
+| L23 | What the examiners said, on the concept page | ✅ 2026-11-28 | Built | §3.4. **Where candidates lost credit**, in the same card: `lossPassages`, verbatim, each linked to its question. |
+| L24 | Why I missed it | ⬜ | Proposed | §3.4. One tap after a miss; a column on `question_responses`. |
+| L25 | A solution one step at a time | ⬜ | Proposed | §3.4. Cut at the explanation's own breaks. Near L16. |
+| L26 | Command-word trainer | ⬜ | Proposed | §3.4. Written exams; `commandWord`. |
+| L27 | A formula sheet per exam | ⬜ | Proposed | §3.4. The concept pages' formula boxes, in syllabus order. |
+| L28 | Syllabus change notice | ⬜ | Proposed | §3.4. From `data/syllabusVintages.ts`. |
+| L29 | Anki export | ⬜ | Proposed | §3.4. The reader's deck. |
 | — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
 | — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
 | — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
@@ -1231,6 +1281,11 @@ ls Concepts/*.md | wc -l; python3 -c "import sys; sys.path.insert(0, 'scripts');
 ```
 
 ## Appendix B: Revision history
+
+- **2026-11-28, eight learner ideas (L22–L29).** From a brainstorm with the maintainer: how
+  often a concept is tested, the examiners' words on the concept page, why a question was
+  missed, step-by-step solutions, a command-word trainer, a formula sheet, a syllabus change
+  notice and Anki export. Proposed in §3.4, L22 first.
 
 - **2026-11-24, PA and ATPA to beta (C9).** Taken ahead of Phase 2 at the maintainer's choice,
   with the banks' fact check and answerability check left for later: G7 and G8 now fail on both.

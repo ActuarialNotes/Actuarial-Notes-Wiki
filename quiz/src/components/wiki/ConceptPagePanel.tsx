@@ -4,6 +4,7 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { PastPapersCard } from '@/components/learn/PastPapersCard'
 import { extractImages } from '@/lib/wikiMarkdown'
 import { ResourceReferenceCard } from '@/components/wiki/ResourceReferenceCard'
 import { openAncestorDetails } from '@/lib/resourceContents'
@@ -439,6 +440,9 @@ export function ConceptPagePanel({
                   return true
                 }}
               />
+              {entry.kind === 'concept' && (
+                <PastPapersCard key={entry.name} concept={entry.name} className="mt-6" />
+              )}
             </>
           )
         )}

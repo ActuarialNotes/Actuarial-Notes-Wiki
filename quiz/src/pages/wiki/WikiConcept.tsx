@@ -24,6 +24,7 @@ import { LevelSquare } from '@/components/LevelSquare'
 import { ConceptLevelButton, useConceptLevel } from '@/components/learn/ConceptLevelButton'
 import { ConceptMoreButton, MoreRow } from '@/components/learn/ConceptMoreButton'
 import { PracticeButton } from '@/components/learn/PracticeButton'
+import { PastPapersCard } from '@/components/learn/PastPapersCard'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useStandalonePage } from '@/hooks/useStandalonePage'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
@@ -225,6 +226,9 @@ export default function WikiConcept() {
           )}
         </div>
       )}
+
+      {/* How often the past papers tested it, and what the examiners said (lib/conceptPapers.ts). */}
+      {content !== null && !listen && <PastPapersCard key={conceptName} concept={conceptName} className="mt-7" />}
 
       {content !== null && next && guide && <NextConcept objective={next.objective} next={next.next} from={guide.id} />}
 

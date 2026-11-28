@@ -1275,6 +1275,15 @@ Other important `lib/` modules:
   Practice Exam (`keepPaperResult` in `stores/quizStore.ts`). A row opens `PaperPopup`
   (`components/practice/`): the paper's size, the pass rate where one is published, the last
   result, its PDFs and Start Practice Exam. See `docs/mock-exam-browser.md`.
+- `conceptPapers.ts` — **a concept on the past papers** (roadmap L22, L23), the **On past papers**
+  card under a concept's article on its page and in the reader
+  (`components/learn/PastPapersCard.tsx`). `conceptPaperSeries` counts, per exam whose papers
+  tested the concept, how many of the papers the bank holds it is on (one square a paper), a
+  moved question counted on the paper it was sat on (`originally_exam`), an off-syllabus or
+  withheld question left out; `conceptExaminerNotes` is **Where candidates lost credit**: the
+  Tutor's `lossPassages` over the report of every part about the concept, verbatim, each linked
+  to its question. Read off the bank at draw time, so no vault file changes and no fact check
+  goes stale. Pure and tested over the Exam 5, 7 and 9 banks.
 - `syllabusChapters.ts` — the syllabus's **chapters**: which learning objective each stop of
   an exam page's walk belongs to, read off the page's `[!example]` callouts
   (`buildObjectiveIndex`), and the marks that cut the **concept popup's** progress bar into

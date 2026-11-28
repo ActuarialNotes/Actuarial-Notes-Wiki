@@ -378,6 +378,10 @@ export default function Quiz() {
   const conceptPopupOpen = useConceptPopup(s => s.open)
   const conceptSource = currentQuestion ? `quiz:${currentQuestion.id}` : undefined
   useConceptHighlight(cardRef, conceptSource)
+  // A concept opened from the rows under the answer is highlighted there, on
+  // the row tapped, not on its mention in the question far above it.
+  const rowsSource = conceptSource ? `${conceptSource}:rows` : undefined
+  useConceptHighlight(cardRef, rowsSource, '[data-concept-rows]')
   const conceptNames = useMemo(() => {
     if (!linkConcepts || !currentQuestion) return undefined
     const names = currentQuestion.wiki_link.map(slugForLink).filter((n): n is string => !!n)
@@ -415,11 +419,12 @@ export default function Quiz() {
 
   // The Info panel's concept rows open the same popup, over every concept the
   // question is tagged with — whether the text names it or not.
-  function openTaggedConcept(links: string[], index: number) {
-    if (!conceptSource) return
+  function openTaggedConcept(links: string[], index: number, source = conceptSource) {
+    if (!source) return
     const refs = links.map(link => ({ kind: 'concept' as const, name: slugForLink(link) ?? link }))
-    openConceptAt(refs, index, conceptSource, null, null, { walk: 'question' })
+    openConceptAt(refs, index, source, null, null, { walk: 'question' })
   }
+  const openRowConcept = (links: string[], index: number) => openTaggedConcept(links, index, rowsSource)
 
   const pendingAnswer = pendingAnswerFor(pending, currentQuestion)
   const committedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
@@ -903,7 +908,7 @@ export default function Quiz() {
           showExplanation={showExplanation}
           isLocked={isLocked}
           feedback
-          onOpenConcept={openTaggedConcept}
+          onOpenConcept={openRowConcept}
           selfGrade={currentQuestion.type === 'free-entry' ? manualGrades[currentQuestion.id] : undefined}
           onSelfGrade={currentQuestion.type === 'free-entry' ? (grade) => setManualGrade(currentQuestion.id, grade) : undefined}
           // Multi-part grades (both graded free-entry parts and answerless essay

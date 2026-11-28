@@ -168,6 +168,16 @@
   border-radius: var(--radius);
 }
 
+/* A concept row under a quiz answer (components/session/AnswerFeedback.tsx):
+   ringed like the rows above, keeping its own rounded corners. */
+.wiki-link--active.concept-row-card,
+.dark .wiki-link--active.concept-row-card {
+  background: transparent;
+  color: inherit !important;
+  box-shadow: 0 0 0 2px hsl(var(--primary));
+  border-radius: 1rem;
+}
+
 /* Wiki: a repeated mention of a concept already linked earlier in the same
    learning objective. Kept clickable but rendered dimmer (lower opacity + a
    dotted underline) so the first/primary link is the one that stands out. */

@@ -22,7 +22,12 @@ export function refKey(ref: WikiEntryRef): string {
  * `sourcePath` omitted matches any popup that names a source — the article's
  * old behaviour, kept for an article rendered without one.
  */
-export function useConceptHighlight(rootRef: RefObject<HTMLElement>, sourcePath?: string): void {
+export function useConceptHighlight(
+  rootRef: RefObject<HTMLElement>,
+  sourcePath?: string,
+  /** Only mentions inside an element matching this selector count (the quiz's concept rows). */
+  scope?: string,
+): void {
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
   const popupSource = useConceptPopup(s => s.sourcePath)
@@ -56,7 +61,7 @@ export function useConceptHighlight(rootRef: RefObject<HTMLElement>, sourcePath?
         : popupCurrent.kind === 'concept'
         ? `resource:${popupCurrent.name.toLowerCase()}`
         : null
-    const matches = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
+    const matches = Array.from(root.querySelectorAll<HTMLElement>(scope ? `${scope} [data-wikiref]` : '[data-wikiref]'))
       .filter(el => {
         const attr = el.getAttribute('data-wikiref')
         return attr === key || (altKey !== null && attr === altKey)
@@ -113,5 +118,5 @@ export function useConceptHighlight(rootRef: RefObject<HTMLElement>, sourcePath?
     // 1. ConceptPopup.useEffect has run and set --concept-split-height.
     // 2. Any callout re-renders have been committed and laid out.
     requestAnimationFrame(() => requestAnimationFrame(doScroll))
-  }, [rootRef, popupOpen, popupIndex, popupOccurrences, popupOccurrenceIndex, popupSource, popupCurrent, sourcePath])
+  }, [rootRef, popupOpen, popupIndex, popupOccurrences, popupOccurrenceIndex, popupSource, popupCurrent, sourcePath, scope])
 }

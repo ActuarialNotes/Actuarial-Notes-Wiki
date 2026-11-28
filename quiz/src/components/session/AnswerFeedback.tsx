@@ -3,6 +3,7 @@ import { BookOpen, Check, ChevronDown, ChevronRight, X } from 'lucide-react'
 import { MarkdownText, QUESTION_MD_CLASS } from '@/components/MarkdownText'
 import { ANSWER_EDGE, ANSWER_SOLID, ANSWER_TEXT, type AnswerState } from '@/lib/answerState'
 import { askLine, conceptName } from '@/lib/sessionResults'
+import { slugForLink } from '@/lib/conceptMatch'
 import { cn } from '@/lib/utils'
 
 // The pieces of the feedback after an answer (docs/redesign-spec.md §5.2): the
@@ -130,13 +131,17 @@ export function ConceptRows({ links, onOpen }: {
   const named = links.map((link, index) => ({ link, index, name: conceptName(link) })).filter(c => c.name)
   if (named.length === 0) return null
   return (
-    <ul className="flex flex-col gap-2.5" aria-label="Concepts">
+    // `data-concept-rows` and each row's `data-wikiref` are what the quiz's
+    // highlight looks for (hooks/useConceptHighlight.ts): a row tapped is the
+    // row ringed while the popup shows its concept.
+    <ul data-concept-rows className="flex flex-col gap-2.5" aria-label="Concepts">
       {named.map(c => (
         <li key={c.link}>
           <button
             type="button"
+            data-wikiref={`concept:${(slugForLink(c.link) ?? c.link).toLowerCase()}`}
             onClick={() => onOpen([...links], c.index)}
-            className="flex min-h-[56px] w-full items-center gap-3.5 rounded-2xl border border-border px-4 text-left text-[17px] font-semibold transition-colors hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="concept-row-card flex min-h-[56px] w-full items-center gap-3.5 rounded-2xl border border-border px-4 text-left text-[17px] font-semibold transition-colors hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <BookOpen aria-hidden="true" className="h-[22px] w-[22px] shrink-0" />
             <span className="min-w-0 flex-1">{c.name}</span>

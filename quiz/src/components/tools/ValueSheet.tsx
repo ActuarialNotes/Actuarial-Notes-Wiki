@@ -10,7 +10,7 @@
 // A bottom sheet on a phone, a centred one from `sm` — the quiz setup sheet's
 // frame. Every change applies as it is made; the card behind recomputes live.
 
-import { useEffect, useId, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Delete, X } from 'lucide-react'
 import type { PendingFigure } from '@/lib/toolBank'
 import { FigureDetails, FigureLine } from './FigureNote'
@@ -18,6 +18,7 @@ import { GHOST, readFigure, readLabel } from './figureRead'
 import { type BankFigure, type ChoiceField, type NumberField } from '@/lib/tools'
 import { fromDisplay } from '@/lib/tools/format'
 import { keypadValue, pressKey, type KeypadKey, type ValueSource } from '@/lib/toolTemplate'
+import { useDragToClose } from '@/hooks/useDragToClose'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
@@ -31,6 +32,9 @@ export function BottomSheet({ title, symbol, value, onClose, style, children }: 
   children: ReactNode
 }) {
   const titleId = useId()
+  const panelRef = useRef<HTMLDivElement>(null)
+  // On a phone the sheet is pulled down by its handle to close it.
+  useDragToClose(panelRef, onClose)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
@@ -48,13 +52,16 @@ export function BottomSheet({ title, symbol, value, onClose, style, children }: 
         onClick={e => { if (e.target === e.currentTarget) onClose() }}
       >
         <div
+          ref={panelRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
           className="flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-background text-foreground shadow-2xl sm:max-w-sm sm:rounded-3xl"
           data-testid="value-sheet"
         >
-          <div className="mx-auto mt-2 h-1 w-9 shrink-0 rounded-full bg-border sm:hidden" aria-hidden />
+          <div data-sheet-handle className="flex shrink-0 touch-none justify-center pt-2 pb-1 -mb-1 sm:hidden" aria-hidden>
+            <div className="h-1 w-9 rounded-full bg-border" />
+          </div>
           <div className="flex shrink-0 items-center gap-3 px-4 pb-1 pt-3">
             {symbol && <Symbol>{symbol}</Symbol>}
             <h2 id={titleId} className="min-w-0 flex-1 truncate text-base font-semibold">{title}</h2>

@@ -14,8 +14,9 @@
 // what only a maintainer reads. Nothing in it takes the exam's colour but the
 // exam's own logo. See `docs/style-guide.md` §7.2c.
 
-import type { CSSProperties, ReactNode, Ref } from 'react'
+import { useRef, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { X } from 'lucide-react'
+import { useDragToClose } from '@/hooks/useDragToClose'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { cn } from '@/lib/utils'
 
@@ -44,6 +45,10 @@ export function InfoSheet({
   className?: string
   dialogRef?: Ref<HTMLDivElement>
 }) {
+  const panelRef = useRef<HTMLDivElement>(null)
+  const backdropRef = useRef<HTMLDivElement>(null)
+  // Below `sm` the sheet is pulled down by its handle to close it.
+  useDragToClose(panelRef, onClose, { backdrop: backdropRef })
   return (
     <OverlayPortal>
       <div
@@ -55,8 +60,9 @@ export function InfoSheet({
         aria-labelledby={labelledBy}
       >
         {/* The page behind, dimmed to about 30%. No blur: it stays readable as a page. */}
-        <div className="absolute inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
+        <div ref={backdropRef} className="absolute inset-0 bg-ground/70" onClick={onClose} aria-hidden="true" />
         <div
+          ref={panelRef}
           className={cn(
             'relative z-10 flex max-h-[92dvh] w-full flex-col gap-4 overflow-y-auto bg-ground text-foreground',
             'rounded-t-[22px] border-[1.5px] border-b-0 border-foreground px-5 pb-7 pt-2.5',
@@ -65,7 +71,9 @@ export function InfoSheet({
           )}
           style={style}
         >
-          <span aria-hidden="true" className="h-1 w-10 shrink-0 self-center rounded-full bg-foreground sm:hidden" />
+          <span data-sheet-handle aria-hidden="true" className="-mx-5 -mb-2 -mt-2.5 flex shrink-0 touch-none justify-center pb-2 pt-2.5 sm:hidden">
+            <span className="h-1 w-10 rounded-full bg-foreground" />
+          </span>
           {children}
         </div>
       </div>

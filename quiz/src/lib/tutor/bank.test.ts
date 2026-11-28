@@ -49,4 +49,14 @@ describe('banking an item', () => {
     expect(rounds.map(r => r.questions.map(q => q.id))).toEqual([['q1', 'q2'], ['q1']])
     expect(rounds[1].questions[0].wiki_link).toEqual(['Concepts/Z'])
   })
+
+  it('names each banked question’s part, so its grade is kept against the part', () => {
+    const rounds = bankRounds([
+      { item: item('q1#a', ['X']), grade: 'correct', answer: '1', seconds: 30 },
+      { item: item('q1#b', ['Z'], { partLabel: 'b' }), grade: 'incorrect', answer: '3', seconds: 30 },
+      { item: item('q2', ['Y'], { partLabel: null }), grade: 'partial', answer: '2', seconds: 30 },
+    ])
+    expect(rounds[0].partLabels).toEqual({ q1: 'a', q2: null })
+    expect(rounds[1].partLabels).toEqual({ q1: 'b' })
+  })
 })

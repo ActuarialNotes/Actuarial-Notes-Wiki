@@ -542,7 +542,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   8. **Calibration** — "how sure were you?"; needs a confidence tap per answer, which is L2/L3
      widened in the learning review (M).
   9. **Accuracy by format** — multiple choice against self-graded written parts, whose grades are
-     kept apart from `question_responses` (M).
+     kept apart from `question_responses`, in `written_part_grades` since 2026-11-28 (M).
   Two items from the card's review stay open as decisions: whether the **headline** counts first
   tries only (the split is now shown beside it, so the default is to keep all answers), and a
   **target line** — reader-set, or a pass mark only where one is published (default: none).
@@ -559,14 +559,16 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   Group is a new surface, so Later until its privacy and moderation design exists. *(Proposed 2026-10-30.)*
 
 - **Pro for MAS-I onwards (the maintainer's direction, 2026-11-28).** The buyer is a candidate
-  sitting MAS-I or a later CAS exam. Four features were chosen to make Pro worth paying for, none
-  built yet: (1) **exam-day simulation with a verdict**, a timed Practice Exam under the Pearson
+  sitting MAS-I or a later CAS exam. Four features were chosen to make Pro worth paying for; the second is
+  built: (1) **exam-day simulation with a verdict**, a timed Practice Exam under the Pearson
   VUE spreadsheet rules ending in a debrief (an estimated score, where the time went, what to fix). **Decided 2026-11-28:** every Practice
   Exam gets the estimate, labelled as one and grounded in what the CAS publishes about scoring
   (the pass marks its examiner's reports print, the 0 to 10 scale with 6 a pass, the pass
   ratios); the first step of the build is to read those sources and write down the method; (2) **written-answer
   feedback across attempts** for Exams 5 to 9 (which command words lose credit, with the
-  examiners' sentences), over L14's checklist and the suggested grade; (3) **study anywhere**: a
+  examiners' sentences), over L14's checklist and the suggested grade; **built 2026-11-28**
+  (`docs/answer-checking.md`, "Feedback across attempts"): each graded written part is a row of
+  `written_part_grades`, and Analytics has a Written answers section for Exams 5 to 9; (3) **study anywhere**: a
   hands-free audio quiz, the daily podcast as a feed for a podcast app, and a printable pack of the
   reader's misses and Forgotten concepts for the last week; (4) **the connector with the reader's
   record**, signed in, so Claude can quiz on what the reader is weak at. An AI-powered Tutor is

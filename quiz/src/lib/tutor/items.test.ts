@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { parseQuestion } from '../parser'
 import { DEFAULT_TUTOR_EXAM } from './exams'
-import { buildItems, isServable, itemsByConcept, itemsForQuestion, partConcepts, partKind, MIN_ITEM_MINUTES } from './items'
+import { buildItems, commandWord, isServable, itemsByConcept, itemsForQuestion, partConcepts, partKind, MIN_ITEM_MINUTES } from './items'
 
 const exam5 = DEFAULT_TUTOR_EXAM
 
@@ -142,5 +142,32 @@ describe('a question as items', () => {
     const map = itemsByConcept(buildItems([q], exam5))
     expect(map.get('loss trend')?.map(i => i.id)).toEqual(['cas5-2019f-q3#a'])
     expect(map.get('large loss')?.map(i => i.id)).toEqual(['cas5-2019f-q3#b'])
+  })
+})
+
+describe('commandWord', () => {
+  it('names the instruction’s own verb', () => {
+    expect(commandWord('Calculate the indicated rate change.')).toBe('Calculate')
+    expect(commandWord('Briefly describe two reasons the trend may differ.')).toBe('Describe')
+    expect(commandWord('Briefly explain why the method is biased.')).toBe('Explain')
+  })
+
+  it('reads the last instruction, a judgment word first', () => {
+    expect(commandWord('Calculate the rate change and recommend whether to cap it.')).toBe('Recommend')
+    expect(commandWord('Given the data. Briefly justify the selection.')).toBe('Justify')
+  })
+
+  it('skips "which" and "why", which name no instruction', () => {
+    expect(commandWord('Explain which method is more responsive.')).toBe('Explain')
+    expect(commandWord('Which method is better?')).toBeNull()
+  })
+
+  it('takes the preamble’s word for a part whose prompt names none', () => {
+    expect(commandWord('A very long-tailed line of business.', 'For each scenario, recommend a method.')).toBe('Recommend')
+    expect(commandWord('Which is better?', 'Explain each.')).toBeNull()
+  })
+
+  it('spells a word one way', () => {
+    expect(commandWord('Summarise the findings.')).toBe('Summarize')
   })
 })

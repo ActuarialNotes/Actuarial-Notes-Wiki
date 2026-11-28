@@ -32,6 +32,8 @@ import { useExamProgress } from '@/contexts/examProgress'
 import { LOCALIZED_EXAMS } from '@/data/examSittings'
 import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
 import { useAccuracyTrend } from '@/hooks/useAccuracyTrend'
+import { useWrittenGrades } from '@/hooks/useWrittenGrades'
+import { hasWrittenFeedback } from '@/lib/writtenGrades'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -311,6 +313,10 @@ export default function Dashboard() {
   // ── Analytics (Pro): no one else's answers are read for it ────────────────
   const { trends, rows: answerRows } = useAccuracyTrend(isPro ? examLabel : null, allQuestions)
   const accuracyPct = trends ? accuracyPercent(trends[TILE_SPAN].total) : null
+  // Written answers (Pro, the CAS's written papers): read once Analytics is open.
+  const writtenRows = useWrittenGrades(
+    isPro && overlay === 'analytics' && hasWrittenFeedback(examLabel) ? examLabel : null,
+  )
 
   // ── What used to ride the plan card ───────────────────────────────────────
   const planConcepts = useMemo(() => planConceptsToday(plan), [plan])
@@ -557,6 +563,7 @@ export default function Dashboard() {
           examKey={activeKey}
           syllabus={activeSyllabus}
           questions={allQuestions}
+          writtenRows={writtenRows}
           onClose={() => setOverlay(null)}
         />
       </Suspense>

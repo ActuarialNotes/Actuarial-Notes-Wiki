@@ -24,6 +24,8 @@ import type { PendingAnswer } from '@/lib/pendingAnswer'
 import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
 import { scoredQuestions } from '@/lib/quizScore'
 import { finalSegments, type StepKind } from '@/lib/sessionProgress'
+import { writtenGradeDrafts, writtenGradeRows, type WrittenSource } from '@/lib/writtenGrades'
+import { useChecklistStore } from '@/stores/checklistStore'
 import { paperKey, savePaperResult, sittingOf, tallyStates } from '@/lib/paperResults'
 
 // A concept's flashcard is collected the moment it first reaches Level 1 —
@@ -473,6 +475,45 @@ interface PersistableSession {
   totalSeconds: number | null
   masteryTransitions: MasteryTransition[]
   manualGrades?: Record<string, SelfGrade>
+  /** Where the written parts were marked (`written_part_grades.source`); a quiz by default. */
+  writtenSource?: WrittenSource
+  /** A free-entry question standing for one part of a real one (the Tutor's): its part, by id. */
+  partLabels?: Record<string, string | null>
+}
+
+/**
+ * Each self-graded written part as a `written_part_grades` row
+ * (lib/writtenGrades.ts), with the grade the answer checks suggested. The
+ * checks are their own chunk, fetched only when a lettered part was graded.
+ * Never throws: a failure here must not cost the quiz its save.
+ */
+async function persistWrittenGrades(
+  userId: string,
+  sessionId: string | null,
+  questions: readonly Question[],
+  responses: Record<string, Response>,
+  manualGrades: Record<string, SelfGrade>,
+  source: WrittenSource,
+  partLabels: Record<string, string | null> | undefined,
+  at: string,
+): Promise<void> {
+  try {
+    if (Object.keys(manualGrades).length === 0) return
+    const needsChecks = Object.keys(manualGrades).some(k => k.includes('__'))
+    const checks = needsChecks ? await import('@/lib/answerChecks').catch(() => null) : null
+    const drafts = writtenGradeDrafts(questions, responses, manualGrades, {
+      checks,
+      ticks: useChecklistStore.getState().ticks,
+      partLabels,
+    })
+    if (drafts.length === 0) return
+    const rows = writtenGradeRows(drafts, { userId, sessionId, source, at })
+    const { error } = await supabase.from('written_part_grades').insert(rows)
+    // Before the migration is applied the table is missing; the quiz is saved all the same.
+    if (error) console.warn('written_part_grades insert failed:', error.message)
+  } catch (err) {
+    console.warn('written_part_grades insert threw:', err)
+  }
 }
 
 // Writes a completed quiz to Supabase: quiz_sessions, question_responses,
@@ -481,7 +522,7 @@ interface PersistableSession {
 // sessions completed while signed out and persisted retroactively after the
 // user signs in).
 async function persistSessionToCloud(userId: string, params: PersistableSession): Promise<{ error: string | null }> {
-  const { questions: served, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {} } = params
+  const { questions: served, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {}, writtenSource = 'quiz', partLabels } = params
   // A quiz's unanswered questions were never tried, so they are recorded
   // nowhere — not in the session's total, not as a wrong response. A practice
   // exam's blanks are part of its score and are kept.
@@ -562,6 +603,8 @@ async function persistSessionToCloud(userId: string, params: PersistableSession)
   const { error: respError } = await supabase
     .from('question_responses')
     .insert(responseRows)
+
+  await persistWrittenGrades(userId, (session as { id: string }).id, questions, responses, manualGrades, writtenSource, partLabels, answeredAt)
 
   // Signal same-tab listeners to refetch immediately — Supabase Realtime doesn't
   // fire for quiz_sessions because it's not in the realtime publication.
@@ -995,6 +1038,7 @@ export async function recordReviewAnswers(
   responses: Record<string, QuizResponse>,
   priorMasteryRecords: ConceptMasteryRecord[] = [],
   manualGrades: Record<string, SelfGrade> = {},
+  written: { source: WrittenSource; partLabels?: Record<string, string | null> } = { source: 'review' },
 ): Promise<void> {
   const answered = questions.filter(q => responses[q.id] !== undefined)
   if (answered.length === 0) return
@@ -1044,6 +1088,8 @@ export async function recordReviewAnswers(
     totalSeconds: answered.reduce((sum, q) => sum + (responses[q.id]?.timeSpent ?? 0), 0),
     masteryTransitions,
     manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
+    writtenSource: written.source,
+    partLabels: written.partLabels,
   })
   if (error) console.error('Failed to save reviewed answers:', error)
 }

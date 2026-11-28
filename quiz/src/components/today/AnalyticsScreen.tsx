@@ -27,6 +27,11 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { LoadingMark } from '@/components/LoadingMark'
 import { Popup } from '@/components/ui/Popup'
 import { CloseButton } from './SyllabusPanel'
+import { useNavigate } from 'react-router-dom'
+import { WrittenAnswersSection, WrittenGroupView, type WrittenGroup } from './WrittenAnswers'
+import { hasWrittenFeedback, type GradeRecord } from '@/lib/writtenFeedback'
+import { quizLaunchUrl, storeSelectedIds } from '@/lib/quizBuilder'
+import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
 
 function loadSpan(): AccuracySpan {
   try { return spanFromStored(localStorage.getItem(ANALYTICS_SPAN_KEY)) } catch { return spanFromStored(null) }
@@ -72,6 +77,12 @@ export interface AnalyticsScreenProps {
   examKey: string
   syllabus: WikiExamSyllabus
   questions: readonly Question[]
+  /**
+   * The reader's written-part grades for the exam (`useWrittenGrades`): null
+   * while they are read, and for an exam with no written paper, which draws
+   * no Written answers section.
+   */
+  writtenRows?: readonly GradeRecord[] | null
   onClose: () => void
 }
 
@@ -93,10 +104,14 @@ export function AnalyticsOverlay({ trends, rows, onClose, ...rest }: AnalyticsSc
 }
 
 function AnalyticsBody({
-  trends, rows, examLabel, examKey, syllabus, questions, onClose, titleId,
+  trends, rows, examLabel, examKey, syllabus, questions, writtenRows = null, onClose, titleId,
 }: Omit<AnalyticsScreenProps, 'trends' | 'rows'> & { trends: AccuracyTrends; rows: readonly AnswerRow[]; titleId: string }) {
   const [span, setSpanState] = useState<AccuracySpan>(loadSpan)
   const setSpan = (s: AccuracySpan) => { setSpanState(s); saveSpan(s) }
+  const [writtenGroup, setWrittenGroup] = useState<WrittenGroup | null>(null)
+  const navigate = useNavigate()
+  const quizSettings = useQuizBuilderSettings('quiz')
+  const showWritten = hasWrittenFeedback(examLabel) && writtenRows !== null
 
   const today = todayISO()
   const trend = trends[span]
@@ -113,6 +128,33 @@ function AnalyticsBody({
 
   const total = trend.total
   const percent = accuracyPercent(total)
+
+  function practice(ids: readonly string[]) {
+    if (ids.length === 0) return
+    storeSelectedIds(ids)
+    onClose()
+    navigate(quizLaunchUrl(
+      { kind: 'plan', count: ids.length },
+      { mode: 'quiz', reveal: quizSettings.reveal, links: quizSettings.conceptLinks ? '1' : '0', timed: quizSettings.timed },
+    ))
+  }
+
+  if (writtenGroup && showWritten) {
+    return (
+      <div data-testid="analytics-overlay" className="flex flex-col gap-[26px]">
+        <h2 id={titleId} className="sr-only">Analytics</h2>
+        <WrittenGroupView
+          rows={writtenRows}
+          questions={examQuestions}
+          today={today}
+          span={span}
+          group={writtenGroup}
+          onBack={() => setWrittenGroup(null)}
+          onPractice={practice}
+        />
+      </div>
+    )
+  }
 
   return (
       <div data-testid="analytics-overlay" className="flex flex-col gap-[26px]">
@@ -243,6 +285,16 @@ function AnalyticsBody({
                 })}
               </ul>
             </div>
+
+            {showWritten && (
+              <WrittenAnswersSection
+                rows={writtenRows}
+                questions={examQuestions}
+                today={today}
+                span={span}
+                onOpen={setWrittenGroup}
+              />
+            )}
           </>
         )}
       </div>

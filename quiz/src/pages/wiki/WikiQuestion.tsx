@@ -205,7 +205,7 @@ function QuestionPractice({ question, next, nextName, concept }: {
   saveRef.current = () => {
     if (savedRef.current || !response) return
     savedRef.current = true
-    void recordReviewAnswers(user?.id ?? null, [question], { [question.id]: response }, masteryRecords, manualGrades)
+    void recordReviewAnswers(user?.id ?? null, [question], { [question.id]: response }, masteryRecords, manualGrades, { source: 'page' })
   }
   useEffect(() => {
     const onHide = () => saveRef.current()

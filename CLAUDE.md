@@ -1547,6 +1547,16 @@ Other important `lib/` modules:
   questions (Practice, `/?topic=`, only exams with a bank) as a visit, never adding it; on Practice
   a visit keeps All exams lit. A reader with no exams sees one **Add an exam** row
   (`AddExamPanel`, opening the switcher) on Today, Study Guides and Practice, never the inline flow.
+- `writtenGrades.ts` / `writtenFeedback.ts` — **written-answer feedback across attempts** (Pro,
+  Exams 5 to 9; `docs/answer-checking.md`, "Feedback across attempts"). `writtenGrades.ts` turns a
+  quiz's `manualGrades` into `written_part_grades` rows (one per self-graded part, with the grade
+  the checks suggested; written by `persistSessionToCloud` for quizzes, Fix mistakes, a question's
+  page and the Tutor). Nothing read off the vault is stored: `writtenFeedback.ts` reads each part's
+  kind, command word (`commandWord` in `lib/tutor/items.ts`) and examiners' lost-credit sentences
+  (`lossPassages`) at draw time, for the **Written answers** section of Today's Analytics overlay
+  (`components/today/WrittenAnswers.tsx`, `hooks/useWrittenGrades.ts`): points kept by kind and by
+  command word over the span, and a group's lost parts with every attempt and the report's words.
+  Pure and tested over the five banks; the flow is `e2e/written-answers.spec.ts`.
 - `analyticsSummary.ts` — the Analytics figures' helpers (`dailyColumns`, `formatMarks`, accuracy
   by difficulty) that Today's Analytics overlay draws through `lib/todayAnalytics.ts`. Pure and tested.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator

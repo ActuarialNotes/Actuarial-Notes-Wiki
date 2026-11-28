@@ -224,9 +224,53 @@ checklist no longer shows the old keyword count (`estimateEssayScore`).
 
 ## Both layers: not yet
 
-- **No measure of agreement with readers' own grades.** The bank says what the accepted answers
-  are, not what readers write. The grade a reader gives beside the one suggested is the measure,
-  and nothing records it yet. That record is also what would decide whether layer 3 is worth
-  building.
+- **No measure of agreement with readers' own grades yet.** The bank says what the accepted
+  answers are, not what readers write. The grade a reader gives beside the one suggested is the
+  measure. Since 2026-11-28 it is recorded (`written_part_grades.suggested`, below) but not yet
+  read. That record is also what would decide whether layer 3 is worth building.
 - The Tutor's practice card (`components/tutor/TutorPractice.tsx`) and the mistakes review draw
   their own grade controls and don't show either suggestion.
+
+## Feedback across attempts (Pro, Exams 5 to 9)
+
+Roadmap §3.4, "Pro for MAS-I onwards", item 2. Built 2026-11-28.
+
+**What is stored.** `written_part_grades`
+(`supabase/migrations/20261128_written_part_grades.sql`) has one row each time a signed-in reader
+grades a written part: the question and part (`null` for an unlettered question), the exam, the
+grade, the grade the checks suggested then, the part's points, where it was graded (`quiz`,
+`review` for Fix mistakes, `page` for a question's own page, `tutor`) and when. Rows are written
+for every signed-in reader, Pro or not, so an upgrade starts with a history. A reader inserts,
+reads and deletes their own rows (Reset History deletes them). The reader's answer text is not
+stored, and neither is anything read off the vault: the part's kind, command word, prompt and
+report are worked out when the screen is drawn, so a corrected question changes every history.
+`lib/writtenGrades.ts` turns a quiz's `manualGrades` into the rows (`writtenGradeDrafts`) and
+recomputes the suggestion from the same inputs the grade buttons used (`suggestedGrade`: the
+final figure, else the checklist's ticks). `persistSessionToCloud` in `stores/quizStore.ts` writes
+them after the quiz's responses, fetching the checks' chunk only when a lettered part was graded.
+The Tutor banks a part as a one-part question, so `bankRounds` carries each one's part label
+(`partLabels`).
+
+**What the screen shows.** A **Written answers** section at the foot of Today's Analytics overlay
+(`components/today/WrittenAnswers.tsx`). It is drawn only for Exams 5, 6C, 7, 8 and 9
+(`WRITTEN_FEEDBACK_EXAMS`), only for Pro, and the rows are read only once the overlay is open
+(`hooks/useWrittenGrades.ts`, 181 days). Over the overlay's span (7, 30 or 90 days),
+`lib/writtenFeedback.ts` gives:
+
+- the share of written-part points kept, each part weighed by its points, beside the span before;
+- the share by **kind of part**, calculation, explanation or judgment (`partKind`);
+- the share by **command word** (`commandWord` in `lib/tutor/items.ts`: the instruction's own
+  verb, read from the sentence the kind is read from). A word with fewer than three graded parts
+  goes under Other. Rows are sorted by points lost.
+
+Each row has the last five grades as dots. Tapping one replaces the overlay's view with the parts
+it lost credit on (`lostParts`): every attempt at each part, oldest first ("None → Partial"), and
+the examiners' sentences on where candidates lost credit **on that part**, word for word
+(`lossPassages`, the Tutor's reader). A part whose report says nothing about lost credit shows no
+quote; nothing is borrowed from another part. **Practice these N** starts a quiz on those
+questions. `writtenFeedback.test.ts` reads every written part of the five banks: 96–100% name a
+command word and 79–91% have at least one sentence to quote. The flow is
+`e2e/written-answers.spec.ts`.
+
+**Not yet.** Agreement between the reader's grade and the suggested one isn't shown.
+Signed-out readers keep no grades.

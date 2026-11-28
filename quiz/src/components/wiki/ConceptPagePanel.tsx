@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
-import { Headphones, ImageIcon, Loader2, Maximize2, X } from 'lucide-react'
+import { Headphones, ImageIcon, Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
@@ -14,7 +14,6 @@ import { listenCarriesOver, setListenReading } from '@/hooks/useListenCarry'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
-import { ConceptLevelButton } from '@/components/learn/ConceptLevelButton'
 import { ConceptMoreButton, MoreRow } from '@/components/learn/ConceptMoreButton'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
@@ -35,10 +34,9 @@ const POPUP_HEADING_CLASS = 'prose-h2:text-lg sm:prose-h2:text-xl'
  * The open page of the concept popup's stack: its header and its body (the
  * article or the Listen view), with the gallery it opens.
  *
- * A concept's header is its name as plain text, the reader's level as a button
- * (`ConceptLevelButton`, opening Learning Progress) and "more"
- * (`ConceptMoreButton`: Listen, the figure, focus mode, Add to Flashcards, Fact
- * Check). A reading's title is still the trigger of its action menu, with the
+ * A concept's header is its name as plain text, "more" (`ConceptMoreButton`:
+ * the reader's level, opening Learning Progress, then Listen, the figure, Add to
+ * Flashcards, Fact Check), the focus-mode toggle and the close button. A reading's title is still the trigger of its action menu, with the
  * figures toggle and Listen beside it.
  *
  * Mounted per page, keyed by the ref, so opening another page of the stack is a
@@ -67,8 +65,6 @@ export interface ConceptPagePanelProps {
   onClose: () => void
   /** Popup-level controls (the focus-mode toggle), shown on the active panel. */
   trailing?: React.ReactNode
-  /** Enter or leave focus mode: a concept's "more" menu carries the way in. */
-  onToggleFocus?: () => void
   /**
    * Set when the footer's Previous / Next was pressed while the gallery was
    * open: this page should open its own gallery once loaded, and report back
@@ -90,7 +86,6 @@ export function ConceptPagePanel({
   onOpenPdf,
   onClose,
   trailing,
-  onToggleFocus,
   gallerySeek = 0,
   onGallerySeekResolved,
   onGalleryOpenChange,
@@ -232,16 +227,16 @@ export function ConceptPagePanel({
           below share a max-width reading column to keep line lengths sane on
           desktop and stay aligned with each other. */}
       {entry.kind === 'concept' ? (
-        // A concept (docs/redesign-spec.md §7.2): its name as plain text, the
-        // reader's level as a button, and "more". Practice is the popup's foot.
-        // The view switches (Listen, the figure, focus mode) are rows of "more",
-        // so the title keeps the width; the way out of focus mode stays a button.
+        // A concept (docs/redesign-spec.md §7.2): its name as plain text, then
+        // "more", the focus toggle and close. Practice is the popup's foot. The
+        // level and the view switches (Listen, the figure) are rows of "more",
+        // so the title keeps the width.
         <div className={`flex items-center gap-1.5 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'pl-4 pr-2 sm:pl-6'}`}>
           <h2 className="min-w-0 flex-1 truncate text-lg font-bold sm:text-xl" title={entry.name}>{headerTitle}</h2>
-          <ConceptLevelButton conceptName={entry.name} />
           <ConceptMoreButton
             entry={entry}
             content={content}
+            levelRow
             rows={close => (
               <>
                 <MoreRow
@@ -264,15 +259,11 @@ export function ConceptPagePanel({
                     {figuresShown ? `Hide ${figuresName}` : `Show ${figuresName}`}
                   </MoreRow>
                 )}
-                {onToggleFocus && !focusMode && (
-                  <MoreRow icon={<Maximize2 />} onClick={() => { onToggleFocus(); close() }}>
-                    Focus mode
-                  </MoreRow>
-                )}
               </>
             )}
           />
-          {focusMode ? trailing : (
+          {trailing}
+          {!focusMode && (
             <button
               type="button"
               onClick={onClose}

@@ -13,6 +13,9 @@ import { showAddedToDeck } from '@/hooks/useToast'
 import { playSound } from '@/lib/soundEngine'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { MasteryBadge } from '@/components/MasteryBadge'
+import { LevelSquare } from '@/components/LevelSquare'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
+import { INK_MENU, inkMenuItem } from '@/components/ui/ink'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
@@ -80,6 +83,12 @@ export interface ConceptActionMenuProps {
    * menu keeps Add to Flashcards and Fact Check, with the host's rows around them.
    */
   rows?: 'all' | 'more'
+  /**
+   * In the `more` form, lead the shared rows with the reader's level, opening
+   * Learning Progress — for a host whose header has no level button of its own
+   * (the concept popup).
+   */
+  levelRow?: boolean
 }
 
 export function ConceptActionMenu({
@@ -92,6 +101,7 @@ export function ConceptActionMenu({
   leading,
   trailing,
   rows = 'all',
+  levelRow = false,
 }: ConceptActionMenuProps) {
   const more = rows === 'more'
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
@@ -216,7 +226,7 @@ export function ConceptActionMenu({
   const verification = useMemo(() => (markdown ? parseVerification(markdown) : null), [markdown])
   const factCheck = useMemo(() => factCheckBadge(verification), [verification])
 
-  const menuClass = `fixed ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 overflow-y-auto`
+  const menuClass = `fixed z-[70] overflow-y-auto ${MENU_WIDTH_CLASS} ${INK_MENU}`
 
   // The height comes from the room measured, so a long menu scrolls inside the
   // viewport instead of continuing past its edge.
@@ -236,15 +246,28 @@ export function ConceptActionMenu({
       onPointerDown={stopPropagation ? e => e.stopPropagation() : undefined}
       onClick={stopPropagation ? e => e.stopPropagation() : undefined}
     >
+      {more && levelRow && entry.kind === 'concept' && (
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="concept-level"
+          aria-label={`${MASTERY_LABEL[masteryState ?? 'new']}. Open Learning Progress`}
+          onClick={() => { setShowLearningProgress(true); onClose() }}
+          className={ACTION_MENU_ROW_CLASS}
+        >
+          <span className="flex w-4 shrink-0 justify-center"><LevelSquare state={masteryState ?? 'new'} size="sm" decorative /></span>
+          <span className="flex-1 whitespace-nowrap text-left">{MASTERY_LABEL[masteryState ?? 'new']}</span>
+        </button>
+      )}
       {leading}
       <>
 {!more && (<>
           <button
             type="button"
             onClick={() => { setShowQuestionsModal(true); onClose() }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+            className={ACTION_MENU_ROW_CLASS}
           >
-            <Play className="h-3.5 w-3.5 shrink-0" />
+            <Play className="h-4 w-4 shrink-0" />
             <span className="flex-1 text-left">Start Quiz</span>
             {questionCount !== null && questionCount > 0 && (
               <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
@@ -257,9 +280,9 @@ export function ConceptActionMenu({
               type="button"
               disabled={isOnWiki}
               onClick={() => { routerNavigate(wikiRoute(entry)); onClose() }}
-              className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isOnWiki ? 'opacity-40 cursor-not-allowed' : 'hover:bg-accent'}`}
+              className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
             >
-              <BookOpen className="h-3.5 w-3.5 shrink-0" />
+              <BookOpen className="h-4 w-4 shrink-0" />
               Open in Study Guide
             </button>
           )}
@@ -276,12 +299,12 @@ export function ConceptActionMenu({
               }}
               className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
             >
-              <BookOpen className="h-3.5 w-3.5 shrink-0" />
+              <BookOpen className="h-4 w-4 shrink-0" />
               Open in Study Guide
             </button>
           )}
 </>)}
-          <div className="flex items-center hover:bg-accent transition-colors">
+          <div className="flex items-center rounded-lg transition-colors hover:bg-muted">
             <button
               type="button"
               data-tour="add-flashcard"
@@ -290,9 +313,9 @@ export function ConceptActionMenu({
                 if (!hasCard(entry.name)) { playSound('addToDeck'); showAddedToDeck(1) }
                 addCard(entry)
               }}
-              className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
+              className="flex min-h-10 flex-1 items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[15px] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
             >
-              <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center text-sm">
                 {hasCard(entry.name) ? '✓' : '+'}
               </span>
               <span className="flex-1">{hasCard(entry.name) ? 'Added to Flashcards' : 'Add to Flashcards'}</span>
@@ -320,9 +343,9 @@ export function ConceptActionMenu({
           <button
             type="button"
             onClick={() => { setShowLearningProgress(true); onClose() }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+            className={ACTION_MENU_ROW_CLASS}
           >
-            <TrendingUp className="h-3.5 w-3.5 shrink-0" />
+            <TrendingUp className="h-4 w-4 shrink-0" />
             <span className="flex-1 text-left whitespace-nowrap">Learning Progress</span>
             {/* The concept's level reads on the row that opens the graph explaining
                 how it got there. No record yet is New. */}
@@ -336,9 +359,9 @@ export function ConceptActionMenu({
         <button
           type="button"
           onClick={() => { setShowFactCheck(true); onClose() }}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+          className={ACTION_MENU_ROW_CLASS}
         >
-          <CheckCheck className="h-3.5 w-3.5 shrink-0" />
+          <CheckCheck className="h-4 w-4 shrink-0" />
           <span className="flex-1 text-left whitespace-nowrap">Fact Check</span>
           <span
             className={`shrink-0 whitespace-nowrap text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${FACT_CHECK_TONE_CLASSES[factCheck.tone]}`}
@@ -390,5 +413,4 @@ function samePlacement(a: MenuPlacement, b: MenuPlacement): boolean {
  * The row every host uses for a menu item it adds through `leading` /
  * `trailing`, so an added row can't drift from the shared ones.
  */
-export const ACTION_MENU_ROW_CLASS =
-  'w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors'
+export const ACTION_MENU_ROW_CLASS = inkMenuItem(false, 'text-foreground')

@@ -293,7 +293,7 @@ export function ConceptPopup() {
       type="button"
       onClick={() => setFocusMode(v => !v)}
       aria-pressed={focusMode}
-      className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       title={focusMode ? 'Exit focus mode (Esc)' : 'Focus mode'}
       aria-label={focusMode ? 'Exit focus mode' : 'Focus mode'}
     >
@@ -463,7 +463,6 @@ export function ConceptPopup() {
                   onOpenPdf={openPdfFrom(i)}
                   onClose={() => closePageAt(i)}
                   trailing={focusToggle}
-                  onToggleFocus={() => setFocusMode(v => !v)}
                   gallerySeek={gallerySeek}
                   onGallerySeekResolved={handleGallerySeek}
                   onGalleryOpenChange={setShowGalleryInPanel}

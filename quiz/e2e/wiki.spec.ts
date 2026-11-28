@@ -320,7 +320,11 @@ test.describe('learn', () => {
     await expect(page.locator('[data-objective="General Probability"]').getByRole('button', { name: /General Probability/ }))
       .toHaveAttribute('aria-expanded', 'true')
     await expect(reader.getByRole('heading', { level: 2, name: 'Conditional Probability' })).toBeVisible()
-    await expect(reader.getByRole('button', { name: 'New. Open Learning Progress' })).toBeVisible()
+    // The level is the first row of More; focus mode sits beside the close button.
+    await expect(reader.getByRole('button', { name: 'Focus mode' })).toBeVisible()
+    await reader.getByRole('button', { name: 'More for Conditional Probability' }).click()
+    await expect(page.locator('[data-play-menu]').getByRole('menuitem', { name: 'New. Open Learning Progress' })).toBeVisible()
+    await page.keyboard.press('Escape')
     await expect(reader.getByRole('button', { name: 'Previous' })).toBeVisible()
     await expect(reader.getByRole('link', { name: 'Practice', exact: true }))
       .toHaveAttribute('href', '/search?tab=questions&concept=Conditional+Probability', { timeout: 30_000 })

@@ -536,25 +536,31 @@ export function QuestionCard({
       return (
         <div className="w-full space-y-[26px]">
           <div className="space-y-3.5">
-            <FoldedQuestion question={question}>
+            <p role="status" className="sr-only">{correct ? 'Correct' : mine ? 'Incorrect' : 'Unanswered'}</p>
+            <FoldedQuestion
+              question={question}
+              // Opened, the options mark the reader's answer and the right one
+              // themselves, so the two rows below are drawn only while folded.
+              folded={(
+                <div className="flex flex-col gap-2">
+                  {mine && !correct && (
+                    <AnswerRow state="incorrect" solid={false} yours>
+                      <MarkdownText inline className="[&_p]:my-0">{mine.text}</MarkdownText>
+                    </AnswerRow>
+                  )}
+                  {right && (
+                    <AnswerRow state="correct" solid yours={correct}>
+                      <MarkdownText inline className="[&_p]:my-0">{right.text}</MarkdownText>
+                    </AnswerRow>
+                  )}
+                </div>
+              )}
+            >
               <div className="space-y-6">
                 <div>{meta}{stem}</div>
                 {options}
               </div>
             </FoldedQuestion>
-            <div className="flex flex-col gap-2">
-              <p role="status" className="sr-only">{correct ? 'Correct' : mine ? 'Incorrect' : 'Unanswered'}</p>
-              {mine && !correct && (
-                <AnswerRow state="incorrect" solid={false} yours>
-                  <MarkdownText inline className="[&_p]:my-0">{mine.text}</MarkdownText>
-                </AnswerRow>
-              )}
-              {right && (
-                <AnswerRow state="correct" solid yours={correct}>
-                  <MarkdownText inline className="[&_p]:my-0">{right.text}</MarkdownText>
-                </AnswerRow>
-              )}
-            </div>
           </div>
           {lesson}
         </div>

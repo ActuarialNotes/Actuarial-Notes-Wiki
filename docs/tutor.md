@@ -17,6 +17,14 @@ record ("You've been sure and wrong on this twice"). It is the app's existing pa
 question bank, the syllabus, the mastery ladder, the study plan, the examiner reports —
 orchestrated by a schedule a learner would otherwise have to keep in their head.
 
+**Since 2026-11-28 the Tutor says one thing.** Tapped, it shows one sentence about what is on
+screen and at most one button (§8); the button opens one past-paper part, or a page to read. Its
+three views (*Now*, *Confusing*, *Journey*), its own sessions and day plan, the count on the
+character, the "I'm confused" menu and the arrival and reading-streak bubbles were removed: Today
+owns the day's session, and the Tutor was repeating it with different numbers. The engine
+(§5–§7) is unchanged; what the diagnosis finds can be the one line. Where an older section below
+still describes a session or a view, this paragraph and §4, §8 and §9 are current.
+
 This document is the plan: why it exists (§1), the learning science it is built on (§2), the
 walk through the exam it guides (§3), when it serves a question (§4), what it serves (§5), how
 it decides when a concept is due (§6), how it finds what is confusing (§7), what it knows about
@@ -121,29 +129,25 @@ the Tutor doesn't print a second one.
 
 ## 4. When a question is served — the moments
 
-"Exactly the right moment" means a rule. Each moment is a trigger plus the conditions under which
-an offer is worth an interruption; everything else waits quietly as a count on the character.
+The Tutor speaks unasked at one moment. Everything else waits until the character is tapped (§8).
 
 | | Moment | Trigger | Why then |
 |---|---|---|---|
 | **M1** | **After reading** | A syllabus concept's page has been open at least **40 s**, and the candidate has *left* it (closed the popup or moved on) | The page is out of sight, so the answer is retrieved rather than copied, while the encoding is still fresh. Not offered if the concept was checked in the last 24 h — that would be massing. |
-| **M2** | **Due** | A concept's next review date has passed | Never a bubble on its own: a count on the character, and the head of the day's plan. |
-| **M3** | **Relearn** | A missed item, three items and five minutes later | Successive relearning: soon enough to still matter, late enough to be retrieval. Inside a running session only; otherwise it waits for tomorrow. |
-| **M4** | **Debrief** | `/review` after a quiz | One offer: the concept that cost the most in that quiz, and its sibling. *(Phase 2.)* |
-| **M5** | **Arrival** | The first page of the day | A one-line briefing: what's due and what's next. |
-| **M6** | **Reading streak** | Four concept pages read in fifteen minutes with no retrieval in between | The fluency illusion, caught in the act. |
 
-And the rules that keep it unobtrusive — the part that decides whether a tool like this is used
-or switched off:
+The bubble says "You just read <concept>." with **Check yourself** and **Not now**. A miss is still
+relearned after a gap (successive relearning): the part that was missed is the one that comes
+back, as the one line's button, from the next day on. Removed on 2026-11-28: the arrival briefing
+(M5) and the reading-streak nudge (M6), and the due count on the character (M2).
+
+The rules that keep it unobtrusive:
 
 - **Never** while a quiz is in progress, a battle is on, the PDF reader is open, a field has
-  focus or a page is in focus mode. The character stays, silent.
-- **One bubble at a time**, at least **8 minutes** apart (M1 may follow 3 minutes after another
-  bubble — it is the highest-value moment). A bubble hides itself after 12 seconds and leaves a
-  dot behind.
-- **Two declines** of one kind in a row and that kind is off for the rest of the day.
-- **Quiet mode**: no bubbles at all, only the dot and the count.
-- **Hide**: the character folds into a tab on the edge of the screen until it is tapped.
+  focus or a page is in focus mode. During a quiz or a battle the character isn't drawn at all.
+- **One bubble at a time**, at least **3 minutes** apart. A bubble hides itself after 12 seconds.
+- **Two declines** in a row and it is off for the rest of the day.
+- The `quiet` and `hidden` settings are still read from a stored record (a hidden Tutor is a tab
+  on the screen's edge that brings it back), but no screen sets them since the Journey view went.
 
 ---
 
@@ -334,17 +338,29 @@ plainly; it is the most common pattern in learners, and the cheapest to fix once
 
 The Tutor reads, without any page having to tell it: the route, the concept popup's open page
 (`useConceptPopup`), whether a quiz is running (`quizStore`), whether the PDF reader is open, and
-how long the current page has been open. `lib/tutor/context.ts` turns that into a **surface** and
-the panel leads with a card about it:
+how long the current page has been open. `lib/tutor/context.ts` turns that into a **surface**,
+and `lib/tutor/says.ts` (`tutorSays`) into **one sentence and at most one button**. The first row
+that applies wins:
 
-| Surface | The card |
-|---|---|
-| A **concept** on Exam 5's syllabus (page or popup) | Its level (the ladder's), when it is next due, **how often CAS has tested it** — "on 11 of 14 papers, 31 parts, 24.5 points", counted from the bank — where candidates lose points on it, its siblings. *Check yourself* and *I'm confused*. |
-| The **Exam 5 study guide** | The phase, the day's plan, the exam date. |
-| A **quiz** in progress | Nothing: silent. |
-| The **review** after a quiz | The debrief offer (M4, Phase 2). |
-| The **dashboard** | The briefing. |
-| Another exam's pages | "The Tutor covers Exam 5 for now." |
+| On screen | What it says | Button |
+|---|---|---|
+| A syllabus **concept** missed earlier | "You missed this on Tuesday." (the same day: "… Try it again tomorrow.", no button) | Try it again — the part that was missed |
+| … marked *Sure* and short of full credit | "You were sure about this and lost points." | Try it again |
+| … due | "This is due for a check." | Check yourself |
+| … not checked yet | **How often CAS has asked about it**: "Asked on 9 of 14 papers.", counted from the bank | Check yourself |
+| … known | "Next check in 6 days." | none |
+| … with no part in the bank | "No past-paper part covers this concept yet." | none |
+| The **review** after a quiz | "That quiz lost points on Loss Ratio." (the first missed concept it can serve) | Go over it |
+| The **Exam 5 study guide** | "Exposure Base is next on the syllabus." | Read it |
+| Anywhere else, and the rows above with nothing to say | The most pressing single thing: a miss ready to come back, then what is due, then the first finding of §7 | Try it again / Check yourself / Read <foundation> |
+| Nothing pressing | "Nothing is due." | none |
+| Exam day, or after the sitting | The phase's own line (`PHASES`) | none |
+| Another exam's pages, or a concept off the syllabus | "The Tutor only covers Exam 5 for now." | none |
+| A **quiz** or a **battle** | The character isn't drawn. | |
+
+A check is **one part**. It opens in the bubble grown to a panel; after **Next** the Tutor is back
+to one line, about the same screen and the record as it now stands. There are no Tutor sessions:
+the day's session is Today's.
 
 "How often CAS has tested it" is the fact candidates go looking for in forums; here it is computed
 from the papers themselves.
@@ -358,27 +374,25 @@ colourway on their account (`user_metadata.avatar_url`), the same one the Gem Sh
 and draws, drawn by the same `AvatarDisplay`. A skin bought in the shop is the Tutor the next time
 it looks up; that is the gem economy's cosmetics given something to do. An account with no animal
 equipped (a colour or a photo) is tutored by the first free character, the fox, until it picks
-one — the Journey view's *Change* opens the Gem Shop's own character picker, where an owned
-character or colourway equips and a locked one leads to the shop (`lib/tutor/character.ts`).
+one (`lib/tutor/character.ts`); the character is changed where it always was, on You.
 
 It sits in a 52-pixel disc, bottom right, riding above a page's action bar and the concept popup's
 split pane the way the resume dock does; chrome in a page move (`paper-chrome-tutor`). Its moods
-are done *to* the drawing, never inside it, so a bought skin is shown exactly as bought, with the
-primary colour kept for one thing: the dot that says it has something.
+are done *to* the drawing, never inside it, so a bought skin is shown exactly as bought.
 
 | State | Looks like |
 |---|---|
 | Idle | Still |
-| Has something | The primary dot, with the count of due items |
-| Speaking | A bubble beside it, one line and two buttons |
+| Speaking | A bubble beside it: one line and at most one button (two, with *Not now*, when it spoke unasked) |
 | Thinking | A slow breath while the bank loads (none under reduced motion) |
 | Pleased | A small hop on a relearned item answered with full credit |
 | Quiet | Greyed, dozing |
 
-The **panel** opens from it: on a desktop a 26-rem card above the character (40 rem while a session runs, because a part carries a table), on a phone a bottom
-sheet. It is a complementary panel, not a dialog — the page behind stays live — and it closes
-with `Esc`. When the Tutor sends the candidate to *read* something it folds itself away and waits;
-M1 brings it back when the page is left.
+Tapped, it speaks: the bubble of §8, beside the character at every width, folding when it is
+tapped again, on `Esc`, or when the reader goes to another page. A **part** opens in a panel: on
+a desktop a 40-rem card above the character (a part carries a table), on a phone a bottom sheet.
+It is a complementary panel, not a dialog — the page behind stays live. When the Tutor sends the
+candidate to *read* something it folds itself away; M1 brings it back when the page is left.
 
 ---
 
@@ -491,13 +505,14 @@ A/B the moments' constants against `concept_retention`.
 | `lib/tutor/moments.ts` | §4: when to offer, and the quiet rules |
 | `lib/tutor/context.ts` | §8: route + popup + quiz → place; how often a concept was asked |
 | `lib/tutor/bank.ts` | §5.4: answers shaped for `recordReviewAnswers` |
-| `lib/tutor/copy.ts` | The only sentences the Tutor writes itself |
-| `stores/tutorStore.ts` | The log, settings, the panel and session state; persistence |
+| `lib/tutor/says.ts` | §8: the one line for what is on screen, and its one button |
+| `lib/tutor/copy.ts` | The part card's labels, and a finding as a sentence |
+| `stores/tutorStore.ts` | The log, settings, whether it is open and the part on screen; persistence |
 | `hooks/useTutorEngine.ts` | The app's data (syllabus, mastery, exam date, study plan, bank, concept pages) → the model |
 | `components/tutor/TutorHost.tsx` | The gate, in the entry bundle; lazy-loads the rest |
-| `components/tutor/TutorApp.tsx` | The lazy root: the character and its bubble, context, moments, banking, actions |
+| `components/tutor/TutorApp.tsx` | The lazy root: the character and its bubble, context, the one moment, banking |
 | `lib/tutor/character.ts`, `components/tutor/TutorCharacter.tsx` | Who the Tutor is — the account's own Gem Shop character — and its moods |
-| `components/tutor/TutorPanel.tsx` | The panel; its views are `TutorNowView`, `TutorConfusingView`, `TutorJourneyView` and `TutorSessionView` |
+| `components/tutor/TutorPanel.tsx`, `TutorPractice.tsx` | The panel a part opens in, and the part's card |
 | `components/tutor/TutorPractice.tsx` | The practice card |
 
 All of `lib/tutor/` is pure; the impure edges are the store (localStorage), the engine hook and

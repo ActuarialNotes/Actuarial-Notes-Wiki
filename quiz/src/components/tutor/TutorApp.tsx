@@ -2,30 +2,33 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TutorCharacter, type TutorMood } from '@/components/tutor/TutorCharacter'
 import { TutorPanel } from '@/components/tutor/TutorPanel'
-import type { TutorActions } from '@/components/tutor/actions'
+import { TutorPractice } from '@/components/tutor/TutorPractice'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
 import { useTutorEngine } from '@/hooks/useTutorEngine'
-import { useExamProgress } from '@/contexts/examProgress'
 import { useQuizStore, recordReviewAnswers } from '@/stores/quizStore'
-import { useTutorStore, type SessionFocus } from '@/stores/tutorStore'
+import { useTutorStore, type ItemStep } from '@/stores/tutorStore'
+import { questionCredit, type SelfGrade } from '@/lib/parser'
 import { isQuizInProgress } from '@/lib/quizResume'
-import { trackTutorAnswer, trackTutorConfused, trackTutorOffer, trackTutorSession } from '@/lib/analytics'
+import { trackTutorAnswer, trackTutorOffer } from '@/lib/analytics'
 import { bankRounds } from '@/lib/tutor/bank'
 import { hostsConceptPopup, isQuietSurface, studyGuideHref, tutorPlace } from '@/lib/tutor/context'
 import { conceptModel } from '@/lib/tutor/log'
 import { BUBBLE_SECONDS, READ_DWELL_SECONDS, nextOffer } from '@/lib/tutor/moments'
-import { offerLine } from '@/lib/tutor/copy'
-import { elapsedDays } from '@/lib/tutor/memory'
+import { afterReadingLine, reasonOf, tutorSays, type TutorAct, type TutorLine } from '@/lib/tutor/says'
+import { pickItem } from '@/lib/tutor/scheduler'
+import { elapsedDays, type Confidence } from '@/lib/tutor/memory'
 import { tutorCharacter } from '@/lib/tutor/character'
 
 // The Tutor, running (docs/tutor.md): the reader's own character in the
-// corner — the one they dress in the Gem Shop — its bubble and its
-// panel, and the four things that happen around them — watching what is on
-// screen, deciding when a moment is worth a bubble, banking answers into the
-// rest of the app, and carrying out what the views ask for. A lazy chunk:
-// `TutorHost` loads it only for an account the Tutor is open to.
+// corner — the one they dress in the Gem Shop. Tapped, it says one thing about
+// what is on screen and offers at most one thing to do about it
+// (lib/tutor/says.ts); that thing is one past-paper part, answered in the
+// bubble grown to a panel, or a page to read. Around that: watching what is on
+// screen, the one moment it speaks unasked (a syllabus page just read), and
+// banking answers into the rest of the app. A lazy chunk: `TutorHost` loads it
+// only for an account the Tutor is open to.
 
 /** A page left counts for an after-reading offer this long. */
 const LEFT_PAGE_MINUTES = 5
@@ -33,6 +36,8 @@ const LEFT_PAGE_MINUTES = 5
 const MOMENT_TICK_MS = 20_000
 /** Answers banked in one go, at most. */
 const BANK_EVERY = 5
+
+const NO_CONCEPTS: string[] = []
 
 function isTyping(): boolean {
   const el = document.activeElement as HTMLElement | null
@@ -48,7 +53,6 @@ export default function TutorApp() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { updateTargetDate } = useExamProgress()
   const load = useTutorStore(s => s.load)
   // Signed out happens only in the preview build: a guest's record.
   useEffect(() => { load(user?.id ?? 'guest') }, [user?.id, load])
@@ -72,6 +76,7 @@ export default function TutorApp() {
   const settings = useTutorStore(s => s.settings)
   const panelOpen = useTutorStore(s => s.panelOpen)
   const bubble = useTutorStore(s => s.bubble)
+  const current = useTutorStore(s => s.current)
   const pendingCount = useTutorStore(s => s.pending.length)
   const append = useTutorStore(s => s.append)
 
@@ -119,14 +124,12 @@ export default function TutorApp() {
       busy: panelOpen || bubble !== null,
       leftPage: fresh,
       servable,
-      waiting: engine.plan.relearn + engine.plan.due,
-      nextNew: engine.plan.newConcepts[0] ?? null,
     })
     if (!offer) return
     useTutorStore.getState().showBubble(offer)
     trackTutorOffer({ kind: offer.kind, exam: exam.label, response: 'shown' })
-    if (offer.kind === 'post-read') setLeftPage(null)
-  }, [tick, leftPage, engine.ready, engine.model, engine.plan, engine.phase, settings.quiet, settings.hidden, quietSurface, panelOpen, bubble, servable, exam.label])
+    setLeftPage(null)
+  }, [tick, leftPage, engine.ready, engine.model, engine.phase, settings.quiet, settings.hidden, quietSurface, panelOpen, bubble, servable, exam.label])
 
   // A bubble folds into the dot on its own.
   useEffect(() => {
@@ -173,82 +176,65 @@ export default function TutorApp() {
   }, [pleased])
   const mood: TutorMood = pleased ? 'pleased' : !engine.ready ? 'thinking' : settings.quiet ? 'quiet' : 'idle'
 
-  // ── What the views can ask for ───────────────────────────────────────────
-  const actions = useMemo<TutorActions>(() => {
-    const store = useTutorStore.getState
-    const open = (concept: string, also?: string) => {
-      store().closePanel()
-      if (hostsConceptPopup(pathname)) {
-        const popup = useConceptPopup.getState()
-        popup.openAt([{ kind: 'concept', name: concept }], 0, pathname)
-        if (also) useConceptPopup.getState().pushPage(0, { kind: 'concept', name: also })
-      } else {
-        navigate(studyGuideHref(exam.pageFile, concept))
-      }
-    }
-    const startSession = (focus: SessionFocus | null = null) => store().startSession(focus)
-    return {
-      startSession,
-      endSession: () => {
-        const s = store().session
-        if (s) trackTutorSession({ exam: exam.label, items: s.answered, minutes: Math.round(s.minutes), phase: engine.phase })
-        store().endSession()
-        useTutorStore.setState({ view: 'now' })
-        // After the card on screen has unmounted — a part marked but not yet
-        // moved on from is recorded on the way out — bank the lot.
-        window.setTimeout(() => { void flush() }, 0)
-      },
-      read: concept => open(concept),
-      compare: (a, b) => open(a, b),
-      answer: (step, grade, confidence, answer, seconds) => {
-        const { item } = step
-        const before = conceptModel(engine.model, step.concept)
-        const at = new Date()
-        store().recordAnswer(
-          { item, grade, answer, seconds },
-          {
-            t: 'answer', at: at.toISOString(), item: item.id, question: item.questionId, concepts: item.concepts,
-            kind: item.kind, points: item.points, difficulty: item.difficulty, grade, confidence, seconds,
-          },
-        )
-        trackTutorAnswer({
-          exam: exam.label,
-          kind: item.kind,
-          grade,
-          confidence: confidence ?? 'none',
-          relearn: step.reason === 'relearn',
-          days_since_last: before?.lastAnswerAt ? Math.round(elapsedDays(before.lastAnswerAt, at)) : -1,
-        })
-        if (step.reason === 'relearn' && grade === 'correct') setPleased(true)
-      },
-      confused: (concept, reason, concepts) => {
-        store().flagConfusion(concept, reason)
-        trackTutorConfused({ exam: exam.label, reason })
-        if (reason === 'meaning') open(concept)
-        else if (reason === 'difference') open(concept, concepts?.[0])
-        else if (reason === 'calculation') startSession({ concepts: [concept], kind: 'calculation' })
-        else if (reason === 'when') startSession({ concepts: [concept], kind: 'judgment' })
-        else startSession({ concepts: [...(concepts ?? []).slice(0, 2), concept] })
-      },
-      setExamDate: day => updateTargetDate(exam.progressKey, day),
-    }
-  }, [pathname, navigate, exam, engine.model, engine.phase, flush, updateTargetDate])
+  // ── The one thing it says (lib/tutor/says.ts) ────────────────────────────
+  // After a quiz, the concepts it lost points on, in question order.
+  const quizStatus = useQuizStore(s => s.status)
+  const missed = useMemo(() => {
+    if (place.surface !== 'review' || quizStatus !== 'complete') return NO_CONCEPTS
+    const { questions, responses, manualGrades } = useQuizStore.getState()
+    const lost = new Set(
+      questions.filter(q => questionCredit(q, responses[q.id]?.chosen ?? '', manualGrades) < 1).map(q => q.id),
+    )
+    return [...new Set(engine.items.filter(i => lost.has(i.questionId)).flatMap(i => i.concepts))]
+  }, [place.surface, quizStatus, engine.items])
 
-  function acceptBubble() {
-    const b = useTutorStore.getState().bubble
-    if (!b) return
-    useTutorStore.getState().answerBubble('accepted')
-    trackTutorOffer({ kind: b.kind, exam: exam.label, response: 'accepted' })
-    if ((b.kind === 'post-read' || b.kind === 'reading-streak') && b.concept) {
-      const s = useTutorStore.getState().session
-      if (s?.current?.type === 'read' && s.current.concept.toLowerCase() === b.concept.toLowerCase()) {
-        useTutorStore.getState().openPanel()
-      } else {
-        actions.startSession({ concepts: [b.concept] })
-      }
+  const today = engine.today
+  const line = useMemo<TutorLine>(() => {
+    if (bubble?.concept) return afterReadingLine(bubble.concept, reasonOf(engine.model, bubble.concept, today, engine.examDate.day))
+    return tutorSays({
+      place,
+      ready: engine.ready,
+      examLabel: exam.label,
+      examPage: exam.pageFile,
+      base: engine.base,
+      findings: engine.findings,
+      missed,
+    })
+  }, [bubble, place, engine.ready, engine.model, engine.base, engine.findings, engine.examDate.day, today, exam, missed])
+
+  // A part marked and then left (the Tutor closed before Next) was recorded on
+  // the way out: it's done with.
+  useEffect(() => {
+    if (panelOpen || !current) return
+    if ((engine.model.items.get(current.step.item.id)?.lastAt ?? '') >= current.at) useTutorStore.getState().setCurrent(null)
+  }, [panelOpen, current, engine.model])
+
+  // Opened to say one thing about a page, it folds when the reader moves on.
+  useEffect(() => {
+    const s = useTutorStore.getState()
+    if (s.panelOpen && !s.current) s.closePanel()
+  }, [pathname])
+
+  const read = useCallback((concept: string) => {
+    useTutorStore.getState().closePanel()
+    if (hostsConceptPopup(pathname)) {
+      useConceptPopup.getState().openAt([{ kind: 'concept', name: concept }], 0, pathname)
     } else {
-      useTutorStore.getState().openPanel('now')
+      navigate(studyGuideHref(exam.pageFile, concept))
     }
+  }, [pathname, navigate, exam.pageFile])
+
+  function doAct(act: TutorAct) {
+    const b = useTutorStore.getState().bubble
+    if (b) {
+      useTutorStore.getState().answerBubble('accepted')
+      trackTutorOffer({ kind: b.kind, exam: exam.label, response: 'accepted' })
+    }
+    if (act.type === 'read') return read(act.concept)
+    const { served, setCurrent } = useTutorStore.getState()
+    const item = (act.item ? engine.items.find(i => i.id === act.item) : null)
+      ?? pickItem({ ...engine.base, served }, act.concept)
+    if (item) setCurrent({ type: 'item', item, concept: act.concept, reason: act.reason })
   }
 
   function declineBubble() {
@@ -258,7 +244,37 @@ export default function TutorApp() {
     trackTutorOffer({ kind: b.kind, exam: exam.label, response: 'declined' })
   }
 
-  const waiting = engine.ready ? engine.plan.relearn + engine.plan.due : 0
+  function close() {
+    useTutorStore.getState().closePanel()
+    // After the card on screen has unmounted — a part marked but not yet
+    // moved on from is recorded on the way out — bank the lot.
+    window.setTimeout(() => { void flush() }, 0)
+  }
+
+  function recordAnswer(step: ItemStep, grade: SelfGrade, confidence: Confidence | null, answer: string, seconds: number) {
+    const { item } = step
+    const before = conceptModel(engine.model, step.concept)
+    const at = new Date()
+    useTutorStore.getState().recordAnswer(
+      { item, grade, answer, seconds },
+      {
+        t: 'answer', at: at.toISOString(), item: item.id, question: item.questionId, concepts: item.concepts,
+        kind: item.kind, points: item.points, difficulty: item.difficulty, grade, confidence, seconds,
+      },
+    )
+    trackTutorAnswer({
+      exam: exam.label,
+      kind: item.kind,
+      grade,
+      confidence: confidence ?? 'none',
+      relearn: step.reason === 'relearn',
+      days_since_last: before?.lastAnswerAt ? Math.round(elapsedDays(before.lastAnswerAt, at)) : -1,
+    })
+    if (step.reason === 'relearn' && grade === 'correct') setPleased(true)
+  }
+
+  // A quiz or a battle has the whole screen and its own clock: the Tutor isn't there.
+  if (place.surface === 'quiz' || place.surface === 'battle') return null
 
   if (settings.hidden) {
     return (
@@ -270,60 +286,81 @@ export default function TutorApp() {
         className="paper-chrome-tutor tutor-dock fixed right-0 z-[45] flex h-12 w-5 items-center justify-center rounded-l-xl bg-card shadow-md ring-1 ring-border transition-colors hover:bg-accent"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-foreground" aria-hidden="true" />
-        {waiting > 0 && <span className="sr-only">{waiting} waiting</span>}
       </button>
     )
   }
 
+  const part = panelOpen ? current : null
+  const speaking = !part && (panelOpen || bubble !== null)
+
   return (
     <>
-      {/* On a phone the open panel is a sheet over the bottom edge: the character steps aside. */}
-      <div className={`paper-chrome-tutor tutor-dock pointer-events-none fixed right-4 z-[45] flex items-end gap-2 ${panelOpen ? 'max-sm:hidden' : ''}`}>
-        {bubble && !panelOpen && (
-          <div
-            role="status"
-            className="tutor-bubble pointer-events-auto mb-1 w-[min(17rem,calc(100vw-6rem))] space-y-2 rounded-2xl rounded-br-md bg-popover p-3 text-sm text-popover-foreground shadow-lg ring-1 ring-border"
+      {/* On a phone an open part is a sheet over the bottom edge: the character steps aside. */}
+      <div className={`paper-chrome-tutor tutor-dock pointer-events-none fixed right-4 z-[45] flex items-end gap-2 ${part ? 'max-sm:hidden' : ''}`}>
+        {speaking && (
+          <aside
+            role="complementary"
+            aria-label="Tutor"
+            aria-live="polite"
+            onKeyDown={e => {
+              if (e.key !== 'Escape') return
+              e.stopPropagation()
+              if (bubble) declineBubble()
+              else close()
+            }}
+            className="tutor-bubble pointer-events-auto mb-1 w-[min(18rem,calc(100vw-6rem))] space-y-3 rounded-2xl rounded-br-md bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-border"
           >
-            <p>{offerLine(bubble, engine.plan)}</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={acceptBubble}
-                className="h-8 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {bubble.kind === 'arrival' ? 'Show me' : 'Yes'}
-              </button>
-              <button
-                type="button"
-                onClick={declineBubble}
-                className="h-8 rounded-lg px-3 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Not now
-              </button>
-            </div>
-          </div>
+            <p className="text-sm leading-relaxed">{line.text}</p>
+            {(line.act || bubble) && (
+              <div className="flex flex-wrap gap-2">
+                {line.act && (
+                  <button
+                    type="button"
+                    onClick={() => doAct(line.act!)}
+                    className="h-9 rounded-lg bg-primary px-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {line.act.label}
+                  </button>
+                )}
+                {bubble && (
+                  <button
+                    type="button"
+                    onClick={declineBubble}
+                    className="h-9 rounded-lg px-3 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Not now
+                  </button>
+                )}
+              </div>
+            )}
+          </aside>
         )}
         <button
           type="button"
           data-sound={panelOpen ? 'close' : 'open'}
-          onClick={() => (panelOpen ? useTutorStore.getState().closePanel() : useTutorStore.getState().openPanel())}
+          onClick={() => (panelOpen ? close() : useTutorStore.getState().openPanel())}
           aria-expanded={panelOpen}
-          aria-label={waiting > 0 ? `Tutor, ${waiting} waiting` : 'Tutor'}
+          aria-label="Tutor"
           title="Tutor"
           className="pointer-events-auto relative flex h-[3.25rem] w-[3.25rem] items-center justify-center rounded-full bg-card shadow-lg ring-1 ring-border transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:scale-100"
         >
           <TutorCharacter avatarUrl={character.avatarUrl} size={44} mood={mood} />
-          {waiting > 0 && !panelOpen && (
-            <span
-              aria-hidden="true"
-              className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-primary-foreground"
-            >
-              {waiting > 99 ? '99+' : waiting}
-            </span>
-          )}
         </button>
       </div>
-      {panelOpen && <TutorPanel engine={engine} actions={actions} place={place} character={character} />}
+      {part && (
+        <TutorPanel character={character} onClose={close}>
+          <TutorPractice
+            key={part.step.item.id}
+            item={part.step.item}
+            concept={part.step.concept}
+            reason={part.step.reason}
+            conceptItems={engine.byConcept.get(part.step.concept.toLowerCase()) ?? []}
+            onGraded={(grade, confidence, answer, seconds) => recordAnswer(part.step, grade, confidence, answer, seconds)}
+            onNext={() => useTutorStore.getState().setCurrent(null)}
+            onRead={read}
+          />
+        </TutorPanel>
+      )}
     </>
   )
 }

@@ -20,14 +20,14 @@ import {
   type ExamDate,
   type JourneyPhase,
 } from '@/lib/tutor/journey'
-import { dayPlan, tutorSyllabus, type DayPlan, type SchedulerInput, type SyllabusConcept } from '@/lib/tutor/scheduler'
-import { foundationsOf, oneWayFoundations } from '@/lib/tutor/diagnosis'
+import { tutorSyllabus, type SchedulerInput, type SyllabusConcept } from '@/lib/tutor/scheduler'
+import { diagnose, foundationsOf, oneWayFoundations, type Finding } from '@/lib/tutor/diagnosis'
 import { useTutorStore } from '@/stores/tutorStore'
 
 // The Tutor's engine, wired to the app (docs/tutor.md §15): the bundled
 // syllabus page, the candidate's mastery rows, their exam date, today's study
 // plan and the question bank, folded with the Tutor's own log into the one
-// model every view reads. Everything it computes is a pure lib/tutor/ call;
+// model the Tutor reads. Everything it computes is a pure lib/tutor/ call;
 // this hook only gathers the inputs and keeps the clock.
 
 export interface TutorEngine {
@@ -47,9 +47,10 @@ export interface TutorEngine {
   phase: JourneyPhase
   now: Date
   today: string
-  /** The scheduler's input, before a session's own state is added. */
+  /** The scheduler's input, before the parts already served are added. */
   base: SchedulerInput
-  plan: DayPlan
+  /** What the record says is confusing (§7), the most telling first. */
+  findings: Finding[]
   /** Each concept's foundations — what its page defines it by (§7.5), lowercased key. */
   foundations: Map<string, string[]>
 }
@@ -168,8 +169,11 @@ export function useTutorEngine(): TutorEngine {
     introducedToday: introducedOn(model, now),
   }), [syllabus, items, byConcept, model, now, examDate.day, phase, ladder, planNew])
 
-  const plan = useMemo(() => dayPlan(base), [base])
   const foundations = useFoundations(syllabus, questions !== null)
+  const findings = useMemo(
+    () => diagnose({ syllabus, model, foundations, ladder }),
+    [syllabus, model, foundations, ladder],
+  )
 
   return {
     ready: questions !== null && syllabus.length > 0,
@@ -187,7 +191,7 @@ export function useTutorEngine(): TutorEngine {
     now,
     today,
     base,
-    plan,
+    findings,
     foundations,
   }
 }

@@ -1,15 +1,11 @@
 // The sentences the Tutor composes about a candidate's own record. Everything
 // else it shows is the vault's words; these are the only ones it writes, so
-// they live in one place, plain and short. No guilt, no exclamation marks, no
+// they live here and in says.ts, plain and short. No guilt, no exclamation marks, no
 // praise it can't back with a number.
 
 import type { Finding } from './diagnosis'
-import type { DayPlan, StepReason } from './scheduler'
-import type { ExamHistory } from './context'
-import type { ExamDate, JourneyPhase } from './journey'
-import type { Offer } from './moments'
+import type { StepReason } from './scheduler'
 import { PART_KIND_LABEL } from './items'
-import { daysFromTo } from './memory'
 
 export const REASON_LABEL: Record<StepReason, string> = {
   relearn: 'Relearn',
@@ -24,18 +20,10 @@ export const REASON_LABEL: Record<StepReason, string> = {
 export const REASON_LINE: Record<StepReason, string> = {
   relearn: 'You missed this earlier. Getting it back is what makes it stick.',
   due: 'Due for a check. Recall is fading.',
-  new: 'Your first check, with the page fresh in mind.',
+  new: 'Your first check on this concept.',
   'sure-wrong': 'You were sure last time and lost points. Corrected confident errors stick best.',
   confused: 'You said this was confusing.',
-  practice: 'Extra practice on what has faded most.',
-}
-
-function capitalise(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-function plural(n: number, one: string, many = `${one}s`): string {
-  return `${n} ${n === 1 ? one : many}`
+  practice: 'Extra practice, ahead of its next check.',
 }
 
 /** "12 min", "1 h 5 min". */
@@ -48,68 +36,11 @@ export function formatMinutes(minutes: number): string {
   return rest ? `${h} h ${rest} min` : `${h} h`
 }
 
-/** What a bubble says. */
-export function offerLine(offer: Offer, plan: DayPlan | null): string {
-  switch (offer.kind) {
-    case 'post-read':
-      return `Check yourself on ${offer.concept}?`
-    case 'reading-streak':
-      return `That's a few pages read. Test yourself on ${offer.concept}?`
-    case 'arrival': {
-      if (!plan) return 'Ready when you are.'
-      const parts: string[] = []
-      if (plan.relearn) parts.push(`${plural(plan.relearn, 'miss', 'misses')} to relearn`)
-      if (plan.due) parts.push(`${plan.due} due`)
-      const next = plan.newConcepts[0]
-      if (parts.length === 0) return next ? `Today starts with ${next}.` : 'Nothing due today.'
-      return `${capitalise(parts.join(' and '))} today${next ? `, then ${next}` : ''}.`
-    }
-    case 'relearn':
-      return 'Something you missed is ready to try again.'
-    case 'debrief':
-      return 'Go over the points your last quiz lost?'
-  }
-}
-
-/** The day's plan as one line. */
-export function planLine(plan: DayPlan): string {
-  const parts: string[] = []
-  if (plan.relearn) parts.push(`${plan.relearn} to relearn`)
-  if (plan.due) parts.push(`${plan.due} due`)
-  if (plan.newConcepts.length) parts.push(`${plan.newConcepts.length} new`)
-  if (parts.length === 0) return 'Nothing due today. Extra practice picks what has faded most.'
-  return `${parts.join(' · ')}, about ${formatMinutes(plan.minutes)}`
-}
-
-export function historyLine(h: ExamHistory): string | null {
-  if (h.papers === 0) return null
-  return `Asked on ${h.papers} of ${h.totalPapers} papers · ${plural(h.parts, 'part')} · ${h.points} points`
-}
-
-function formatDay(day: string): string {
-  return new Date(`${day}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-/** The exam date, and where it came from. */
-export function examDateLine(exam: ExamDate, today: string): string {
-  if (!exam.day) return 'No sitting set. CAS hasn’t published the next window, so set the date you’re aiming for.'
-  const days = daysFromTo(today, exam.day)
-  const when = days > 1 ? `in ${days} days` : days === 1 ? 'tomorrow' : days === 0 ? 'today' : `${-days} days ago`
-  const source = exam.source === 'target' ? 'your exam date' : 'the next published window'
-  return `${formatDay(exam.day)}, ${when} (${source})`
-}
-
-export function phaseLine(phase: JourneyPhase, daysLeft: number | null): string {
-  // setup, exam and after say everything in their PHASES purpose, which is drawn beside this.
-  if (phase === 'exam' || phase === 'after' || phase === 'setup') return ''
-  return daysLeft != null ? `${plural(daysLeft, 'day')} to go.` : ''
-}
-
 function pct(x: number): string {
   return `${Math.round(x * 100)}%`
 }
 
-/** A finding as the line the Confusing view leads with. */
+/** A finding as one line. */
 export function findingLine(f: Finding): string {
   switch (f.type) {
     case 'sure-wrong':
@@ -128,30 +59,6 @@ export function findingLine(f: Finding): string {
       return f.guessRate != null
         ? `When you're sure, you're right ${pct(f.sureRate)} of the time; when guessing, ${pct(f.guessRate)}.`
         : `When you're sure, you're right ${pct(f.sureRate)} of the time.`
-  }
-}
-
-/** The second line: why it matters, or what to do. */
-export function findingAdvice(f: Finding): string {
-  switch (f.type) {
-    case 'sure-wrong':
-      return 'Confident errors are the ones that stick best once corrected. Try it again.'
-    case 'confused':
-      return 'Two full-credit answers and the flag clears.'
-    case 'persistent':
-      return 'Read the page again, starting with the worked example, then try a different part.'
-    case 'siblings':
-      return 'Read them side by side, then answer one of each.'
-    case 'foundation':
-      return `Get ${f.foundations.join(' and ')} to Level 2 first.`
-    case 'kind-gap':
-      return f.weak === 'calculation'
-        ? 'Work the page’s worked examples, then the calculations.'
-        : 'CAS gives these points for naming the reason. Practice saying why.'
-    case 'calibration':
-      return f.overconfident
-        ? 'Pick Sure only when you’d bet on it. Your rating decides what comes back first.'
-        : 'Your confidence is a good guide. Keep rating it honestly.'
   }
 }
 

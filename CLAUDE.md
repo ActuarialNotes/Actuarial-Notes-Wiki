@@ -1397,7 +1397,13 @@ Other important `lib/` modules:
   `PaperRouter` warms a route's chunk when the pointer reaches its link, and
   `WarmStudyGuides` in `App.tsx` fetches the Study Guides chunk when the app is idle. Dialogs
   get the matching entrance from the `paper-scrim` class (or `paper-fade` + `paper-drop` for
-  a separate backdrop and panel).
+  a separate backdrop and panel). Their closing is drawn too, by
+  `components/OverlayExit.tsx` (mounted once in `App`): an element with one of those classes,
+  or the reader's pane, is put back for a 180ms exit when it is removed, marked
+  `data-paper-leaving`, inert. Behind the pictures is the page's own colour and sheets slide
+  edge to edge, so no second colour shows between them. A named piece of chrome must be **one
+  element for the page's life** (the top row's `paper-chrome-lead` / `-profile` wrappers): a
+  named element replaced while a move is drawing ends the move on the spot.
   Pure and tested. See `docs/style-guide.md` §9.1.
 - `routeScrollMemory.ts` — **the reader's place** across pages: `PaperRouter` records the
   window's scroll as a page is *left* (keyed by history entry, mirrored to sessionStorage)

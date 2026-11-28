@@ -82,6 +82,48 @@ test.describe('tab-switch view transitions', () => {
     await expect(page.getByTestId('practice-exam')).toBeVisible()
   })
 
+  test('a move onto a page that redraws its top row runs to its end', async ({ page }) => {
+    // On a phone the exam at the left and the profile button are held still
+    // through a move. An exam's study guide learns what stands at the left a
+    // frame after it mounts; a named element replaced mid-move ends the move
+    // on the spot, which on screen is a jump.
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.addInitScript(() => {
+      const w = window as unknown as { __runs: number[] }
+      w.__runs = []
+      const original = document.startViewTransition?.bind(document)
+      if (!original) return
+      document.startViewTransition = ((cb: () => void) => {
+        const transition = original(cb)
+        let ready = 0
+        transition.ready.then(() => { ready = performance.now() }, () => {})
+        transition.finished.then(() => { w.__runs.push(ready ? performance.now() - ready : 0) })
+        return transition
+      }) as typeof document.startViewTransition
+    })
+    await studying(page)
+    await page.goto('/')
+    await expect(page.getByTestId('practice-exam')).toBeVisible()
+    await page.getByRole('navigation', { name: 'Places' }).getByRole('link', { name: 'Learn' }).click()
+    await expect(page.getByRole('heading', { name: 'Exam P-1', level: 1 })).toBeVisible()
+    const runs = () => page.evaluate(() => (window as unknown as { __runs: number[] }).__runs)
+    await expect.poll(async () => (await runs()).length).toBe(1)
+    // `--paper-duration` is 400ms; a move cut short ends within a frame or two.
+    expect((await runs())[0]).toBeGreaterThan(300)
+  })
+
+  test('a popup is drawn leaving, and is gone', async ({ page }) => {
+    await studying(page)
+    await page.goto('/dashboard')
+    await page.getByRole('button', { name: /Switch exam/ }).first().click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toBeVisible()
+    await page.keyboard.press('Escape')
+    // Closed at once for the reader: what is left for the exit is a picture.
+    await expect(dialog).toHaveCount(0)
+    await expect(page.locator('[data-paper-leaving]')).toHaveCount(0)
+  })
+
   test('each kind of move is drawn as its own paper move', async ({ page }) => {
     // Record the move written to the root as each transition starts.
     await page.addInitScript(() => {

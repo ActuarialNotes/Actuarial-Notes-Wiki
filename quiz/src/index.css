@@ -37,9 +37,6 @@
     --input: 0 0% 55%;
     --ring: 0 0% 0%;
     --radius: 0.5rem;
-    /* The desk the pages lie on — only ever seen between two sheets while one
-       slides (see "Paper on a desk"), so it is a step darker than the page. */
-    --desk: 0 0% 80%;
     --shadow-sheet: rgba(0,0,0,0.30);
     /* The pick — the fill of whatever is *chosen* (a selected chip, an open
        dropdown, the picked menu row, an active tool). Black and white outside
@@ -86,7 +83,6 @@
     --border: 0 0% 26%;
     --input: 0 0% 42%;
     --ring: 0 0% 100%;
-    --desk: 0 0% 13%;
     --shadow-sheet: rgba(0,0,0,0.75);
     --pick: hsl(var(--foreground));
     --pick-foreground: hsl(var(--background));
@@ -2064,11 +2060,14 @@ summary .katex-display,
      that it reads as depth rather than as a second sheet leaving. */
   --paper-under-shift: -28%;
   --paper-under-opacity: 0.6;
-  --paper-gap: 24px;
 }
 
+/* What is behind the pictures is the page's own colour, never a second one:
+   two sheets sliding side by side land on fractions of a pixel, and a
+   scrollbar's gutter is no part of either picture, so anything else here
+   shows as a thin vertical line travelling with the page. */
 ::view-transition {
-  background: hsl(var(--desk));
+  background: hsl(var(--background));
   pointer-events: none;
 }
 
@@ -2128,6 +2127,11 @@ summary .katex-display,
 ::view-transition-new(paper-lead) {
   animation-duration: 180ms;
   animation-timing-function: ease-out;
+  /* A piece of chrome the arriving page doesn't have (the place bar on the way
+     into a quiz) fades out and stays out. The fill is otherwise inherited from
+     its group, whose animation is off, so the piece came back at full strength
+     for the rest of the move and then vanished with it. */
+  animation-fill-mode: both;
 }
 
 /* The exam at the left can change width (another exam, or the app's name):
@@ -2146,7 +2150,8 @@ summary .katex-display,
    viewport-wide picture dragging a sidebar-shaped hole across the desk. The
    cut is done by drawing the snapshot unscaled, aligned right, into a box the
    page's width (`object-fit: none`), which leaves the box's own edge free to
-   carry the shadow. */
+   carry the shadow. The box is filled with the page's colour, so wherever the
+   picture is empty (a scrollbar's gutter) the sheet is still whole. */
 :root:is([data-paper="next"], [data-paper="prev"], [data-paper="push"], [data-paper="pop"])::view-transition-old(root),
 :root:is([data-paper="next"], [data-paper="prev"], [data-paper="push"], [data-paper="pop"])::view-transition-new(root) {
   left: var(--paper-inset, 0px);
@@ -2157,6 +2162,7 @@ summary .katex-display,
   /* Unlike an <img>, these pseudo-elements don't clip their picture to their
      box: without this the part cut away paints to the left of the sheet. */
   overflow: clip;
+  background: hsl(var(--background));
   mix-blend-mode: normal;
   animation-duration: var(--paper-duration);
   animation-timing-function: var(--paper-ease);
@@ -2168,18 +2174,12 @@ summary .katex-display,
 }
 
 /* next: the desk slides left — the tab to the right comes in beside the one
-   going, the two moving as one strip. prev is the mirror. */
+   going, the two edge to edge and moving as one strip, with nothing between
+   them. prev is the mirror. */
 :root[data-paper="next"]::view-transition-old(root) { animation-name: paper-slide-out-left; }
 :root[data-paper="next"]::view-transition-new(root) { animation-name: paper-slide-in-right; }
 :root[data-paper="prev"]::view-transition-old(root) { animation-name: paper-slide-out-right; }
 :root[data-paper="prev"]::view-transition-new(root) { animation-name: paper-slide-in-left; }
-
-:root[data-paper="next"]::view-transition-old(root),
-:root[data-paper="next"]::view-transition-new(root),
-:root[data-paper="prev"]::view-transition-old(root),
-:root[data-paper="prev"]::view-transition-new(root) {
-  box-shadow: 0 0 24px 0 var(--shadow-sheet);
-}
 
 /* push: the new sheet is laid over from the right; the one it covers slips
    a little left and shades. */
@@ -2198,10 +2198,10 @@ summary .katex-display,
 }
 :root[data-paper="pop"]::view-transition-new(root) { animation-name: paper-uncover; }
 
-@keyframes paper-slide-out-left  { to   { transform: translateX(calc(-100% - var(--paper-gap))); } }
-@keyframes paper-slide-in-right  { from { transform: translateX(calc(100% + var(--paper-gap))); } }
-@keyframes paper-slide-out-right { to   { transform: translateX(calc(100% + var(--paper-gap))); } }
-@keyframes paper-slide-in-left   { from { transform: translateX(calc(-100% - var(--paper-gap))); } }
+@keyframes paper-slide-out-left  { to   { transform: translateX(-100%); } }
+@keyframes paper-slide-in-right  { from { transform: translateX(100%); } }
+@keyframes paper-slide-out-right { to   { transform: translateX(100%); } }
+@keyframes paper-slide-in-left   { from { transform: translateX(-100%); } }
 @keyframes paper-lay-over        { from { transform: translateX(100%); } }
 @keyframes paper-swipe-off       { to   { transform: translateX(100%); } }
 @keyframes paper-slip-under {
@@ -2313,6 +2313,36 @@ summary .katex-display,
   .paper-drop {
     animation: none;
   }
+}
+
+/* ── …and picked up again ──
+   Closing is drawn too, briefly: the room comes back and the sheet drops away
+   the way it came. The dialog itself is gone the moment it is closed (focus,
+   keys and the page under it are the reader's again at once); what is drawn
+   is the element it left, put back for these 180ms by
+   components/OverlayExit.tsx and marked `data-paper-leaving`. It takes no
+   clicks. The reader's pane leaves by the foot of the screen, where it rose
+   from. */
+[data-paper-leaving] {
+  pointer-events: none !important;
+}
+.paper-scrim[data-paper-leaving],
+.paper-fade[data-paper-leaving] {
+  animation: paper-scrim-out 180ms ease-in both;
+}
+.paper-scrim[data-paper-leaving] > :not([aria-hidden="true"]),
+.paper-drop[data-paper-leaving] {
+  animation: paper-pick-up 180ms ease-in both;
+}
+.concept-popup-aside[data-paper-leaving] {
+  animation: concept-popup-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes paper-scrim-out { to { opacity: 0; } }
+@keyframes paper-pick-up {
+  to { opacity: 0; translate: 0 18px; scale: 0.985; }
+}
+@keyframes concept-popup-out {
+  to { transform: translateY(100%); }
 }
 
 

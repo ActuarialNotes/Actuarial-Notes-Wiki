@@ -17,6 +17,7 @@ import Flashcards from '@/pages/Flashcards'
 import { PlaceBar, PlaceHeader, PlaceRail } from '@/components/nav/Places'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
+import OverlayExit from '@/components/OverlayExit'
 import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
@@ -426,6 +427,7 @@ export default function App({ initialSession }: { initialSession: Session | null
       <WarmStudyGuides />
       <GlobalKeyHandler />
       <SoundEffects />
+      <OverlayExit />
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
         <ExamProgressProvider>

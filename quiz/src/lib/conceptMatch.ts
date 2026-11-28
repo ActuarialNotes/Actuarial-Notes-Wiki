@@ -12,7 +12,9 @@
 // back to the raw target. Centralising that here keeps the study plan,
 // readiness scoring, the topic list, and the dashboard in agreement.
 
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { examDisplayName, hrefToEntryRef } from '@/lib/wikiRoutes'
+import { compareExamLabels } from '@/lib/resourceExams'
+import { findSyllabiForConcept } from '@/lib/wikiParser'
 import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
@@ -72,6 +74,28 @@ export function resolveConceptState(
 // Lives in `wikiParser.ts` (which imports nothing) so the build's SEO pass can
 // use the same match; re-exported here for the callers that always had it.
 export { findSyllabiForConcept } from '@/lib/wikiParser'
+
+/**
+ * The one exam a concept is being read for, among the syllabi that name it:
+ * the first of `preferred` (exam page file names, without `.md` — the page on
+ * screen, then the exam in focus) that names it, else the first in ladder
+ * order (Exam P before an ACIA module). Null for a concept on no syllabus.
+ */
+export function conceptExam(
+  syllabi: WikiExamSyllabus[],
+  conceptName: string,
+  preferred: (string | null | undefined)[] = [],
+): WikiExamSyllabus | null {
+  const naming = findSyllabiForConcept(syllabi, conceptName)
+  for (const file of preferred) {
+    if (!file) continue
+    const want = file.replace(/\.md$/i, '').toLowerCase()
+    const hit = naming.find(s => s.fileName?.toLowerCase() === want)
+    if (hit) return hit
+  }
+  const label = (s: WikiExamSyllabus) => (s.fileName ? examDisplayName(s.fileName) : s.examLabel)
+  return [...naming].sort((a, b) => compareExamLabels(label(a), label(b)))[0] ?? null
+}
 
 /**
  * Re-key mastery records from their stored (file/base name) slug to the

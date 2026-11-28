@@ -167,7 +167,7 @@ export default function WikiConcept() {
         <span className="flex-1" />
         {content !== null && (
           <>
-            <ConceptLevelButton conceptName={conceptName} />
+            <ConceptLevelButton conceptName={conceptName} examFile={guide?.syllabus.fileName} />
             <ConceptMoreButton
               entry={conceptEntry}
               content={content}

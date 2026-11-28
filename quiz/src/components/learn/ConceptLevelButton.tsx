@@ -20,7 +20,7 @@ export function useConceptLevel(conceptName: string): MasteryState {
   }, [records, conceptName])
 }
 
-export function ConceptLevelButton({ conceptName, className }: { conceptName: string; className?: string }) {
+export function ConceptLevelButton({ conceptName, examFile, className }: { conceptName: string; examFile?: string | null; className?: string }) {
   const level = useConceptLevel(conceptName)
   const [open, setOpen] = useState(false)
   return (
@@ -39,7 +39,7 @@ export function ConceptLevelButton({ conceptName, className }: { conceptName: st
         <LevelSquare state={level} size="sm" decorative />
         {MASTERY_LABEL[level]}
       </button>
-      {open && <LearningProgressModal conceptName={conceptName} onClose={() => setOpen(false)} />}
+      {open && <LearningProgressModal conceptName={conceptName} examFile={examFile} onClose={() => setOpen(false)} />}
     </>
   )
 }

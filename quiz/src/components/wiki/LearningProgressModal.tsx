@@ -10,7 +10,10 @@ import { LevelSquare } from '@/components/LevelSquare'
 import { BannerTile, InfoBanner, InfoSheet, Stat } from '@/components/ui/InfoSheet'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { findSyllabiForConcept, wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { conceptExam } from '@/lib/conceptMatch'
+import { useExamInFocus } from '@/hooks/useExamInFocus'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { dialogOpenOver } from '@/lib/layeredDialog'
 
@@ -190,9 +193,11 @@ export function LearningProgressPanelView({
 interface LearningProgressModalProps {
   conceptName: string
   onClose: () => void
+  /** The exam page the concept is being read for (file name), when the surface knows it. */
+  examFile?: string | null
 }
 
-export function LearningProgressModal({ conceptName, onClose }: LearningProgressModalProps) {
+export function LearningProgressModal({ conceptName, onClose, examFile }: LearningProgressModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const history = useConceptLearningHistory(conceptName)
@@ -207,10 +212,17 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // The exam whose syllabus names the concept: its logo and name lead the
-  // header. A concept on no syllabus gets a plain tile.
+  // The exam the concept is being read for leads the header with its logo and
+  // name: the page that says so, else the exam page the concept popup was
+  // opened over, else the exam in focus, else the first in ladder order whose
+  // syllabus names it. A concept on no syllabus gets a plain tile.
   const { syllabi } = useWikiSyllabus()
-  const syllabus = useMemo(() => findSyllabiForConcept(syllabi, conceptName)[0] ?? null, [syllabi, conceptName])
+  const { active } = useExamInFocus()
+  const popupSource = useConceptPopup(s => (s.open ? s.sourcePath : null))
+  const syllabus = useMemo(
+    () => conceptExam(syllabi, conceptName, [examFile, popupSource, active?.fileName]),
+    [syllabi, conceptName, examFile, popupSource, active?.fileName],
+  )
   const examKey = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
 
   const attempts = history.attemptDots.length

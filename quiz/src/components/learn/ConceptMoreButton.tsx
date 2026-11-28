@@ -13,12 +13,15 @@ export function ConceptMoreButton({
   entry,
   content,
   rows,
+  levelRow,
   className,
 }: {
   entry: WikiEntryRef
   content?: string | null
   /** The surface's own rows, above the shared ones. Given a way to close the menu. */
   rows?: (close: () => void) => ReactNode
+  /** Lead the menu with the reader's level (a header with no level button). */
+  levelRow?: boolean
   className?: string
 }) {
   const ref = useRef<HTMLButtonElement>(null)
@@ -61,6 +64,7 @@ export function ConceptMoreButton({
         anchorRef={ref}
         content={content}
         rows="more"
+        levelRow={levelRow}
         leading={rows?.(close)}
       />
     </>
@@ -81,7 +85,7 @@ export function MoreRow({
 }) {
   return (
     <button type="button" role="menuitem" aria-pressed={pressed} onClick={onClick} className={ACTION_MENU_ROW_CLASS}>
-      <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center [&>svg]:h-3.5 [&>svg]:w-3.5">{icon}</span>
+      <span className="flex h-4 w-4 shrink-0 items-center justify-center [&>svg]:h-4 [&>svg]:w-4">{icon}</span>
       <span className="flex-1 whitespace-nowrap text-left">{children}</span>
     </button>
   )

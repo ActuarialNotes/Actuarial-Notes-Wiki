@@ -4,6 +4,8 @@ import { backdropOpacity, closesOnRelease, DRAG_SLOP, dragOffset, startsDrag } f
 /** Below `sm`, where a popup is a sheet from the foot of the screen with a handle. */
 const SHEET_QUERY = '(max-width: 639.98px)'
 const SETTLE_MS = 200
+/** How long after closing a sheet that is still mounted counts as kept open. */
+const KEPT_OPEN_MS = 1000
 
 /** Whether `target` and everything up to `panel` is scrolled to its top. */
 function atTop(target: Element | null, panel: HTMLElement): boolean {
@@ -122,8 +124,11 @@ export function useDragToClose(
         place(el.offsetHeight + 40, true)
         timer = window.setTimeout(() => {
           close.current()
-          // Still on screen (the caller kept it open): put it back.
-          requestAnimationFrame(() => { if (el.isConnected) reset() })
+          // The sheet stays off screen while the caller takes it away. React
+          // may not unmount it before the next frame (Safari paints first),
+          // so putting it back at once flashed the sheet and the dimmed page.
+          // Only a caller that kept it open, well after, gets it back.
+          timer = window.setTimeout(() => { if (el.isConnected) reset() }, KEPT_OPEN_MS)
         }, SETTLE_MS)
       } else {
         place(0, true)

@@ -820,6 +820,13 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
      Resources shelf's Vintage view.
   8. **L29, Anki export** (S–M). The reader's deck as a file Anki imports, formulas kept as
      LaTeX.
+  **L22 and L23 built 2026-11-28** as one card, **On past papers**, under a concept's article on
+  its page and in the reader (`lib/conceptPapers.ts`, `components/learn/PastPapersCard.tsx`). A
+  line and a row of squares per exam whose papers tested it ("On 10 of 14 Exam 5 papers from
+  2013 to 2019"), a moved question counted on the paper it was sat on, then **Where candidates
+  lost credit**: the reports' sentences on the parts about the concept, newest paper first.
+  Left out: the objective's card (an objective is on nearly every paper, so the line said
+  little) and ordering the study plan by the count.
   L22, L23 and L27 are drawn by the app from the bank and the pages as they are. None edits a
   vault file, so no page's fact check goes stale (P4).
   L22 goes first: it is the smallest, every count is checkable against the bank, and L23 lands
@@ -889,8 +896,8 @@ Shipped:
 | L16 | Completion problems (faded worked examples) | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L17 | Placement check when an exam is added | ⬜ | Proposed | `learning-review.md` §3.7. |
 | L18 | Ask how the exam went | ⬜ | Proposed | `learning-review.md` §3.8; D34. The outcome metric in §7. |
-| L22 | How often a concept is tested | ⬜ | Proposed | §3.4. Counted from the bank's tags and sittings; exams with released papers only. First of L22–L29. |
-| L23 | What the examiners said, on the concept page | ⬜ | Proposed | §3.4. `lossPassages`, verbatim, Exams 5 to 9. |
+| L22 | How often a concept is tested | ✅ 2026-11-28 | Built | §3.4. `lib/conceptPapers.ts`, `components/learn/PastPapersCard.tsx`: **On past papers**, on the concept's page and in the reader. Not on the objective's card. |
+| L23 | What the examiners said, on the concept page | ✅ 2026-11-28 | Built | §3.4. **Where candidates lost credit**, in the same card: `lossPassages`, verbatim, each linked to its question. |
 | L24 | Why I missed it | ⬜ | Proposed | §3.4. One tap after a miss; a column on `question_responses`. |
 | L25 | A solution one step at a time | ⬜ | Proposed | §3.4. Cut at the explanation's own breaks. Near L16. |
 | L26 | Command-word trainer | ⬜ | Proposed | §3.4. Written exams; `commandWord`. |

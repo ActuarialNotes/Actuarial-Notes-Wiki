@@ -5,6 +5,7 @@ import {
   lookupConceptRecord,
   resolveConceptState,
   normalizeMasteryToDisplayNames,
+  conceptExam,
 } from './conceptMatch'
 import { emptyRecord, type ConceptMasteryRecord } from './mastery'
 import type { WikiExamSyllabus } from './wikiParser'
@@ -94,5 +95,34 @@ describe('normalizeMasteryToDisplayNames', () => {
     expect(bySlug.get('Price')).toBe('level3')        // re-keyed from "Bond Price"
     expect(bySlug.get('Coupon Rate')).toBe('level1')  // unchanged
     expect(bySlug.has('Bond Price')).toBe(false)
+  })
+})
+
+describe('conceptExam', () => {
+  const syl = (fileName: string, examId: string, concepts: string[]): WikiExamSyllabus => ({
+    examId, examLabel: fileName, examTopic: '', resources: [], fileName,
+    topics: [{ name: 't', weight: '', concepts: concepts.map(c => ({ name: c, target: `Concepts/${c}` })) }],
+  } as unknown as WikiExamSyllabus)
+  // Raw order puts the ACIA module first, as the vault's file order did.
+  const syllabi = [
+    syl('Exam ACIA-CAPSTONE (CIA)', 'ACIA-CAPSTONE', ['Probability']),
+    syl('Exam P-1 (SOA)', 'P-1', ['Probability', 'Bayes Theorem']),
+    syl('Exam MAS-I (CAS)', 'MAS-I', ['Probability']),
+  ]
+
+  it('takes the exam the reader is on when it names the concept', () => {
+    expect(conceptExam(syllabi, 'Probability', ['Exam MAS-I (CAS).md'])?.examId).toBe('MAS-I')
+  })
+
+  it('skips a preferred exam that does not name the concept', () => {
+    expect(conceptExam(syllabi, 'Bayes Theorem', ['Exam MAS-I (CAS)', 'Exam P-1 (SOA)'])?.examId).toBe('P-1')
+  })
+
+  it('falls back to ladder order, not file order', () => {
+    expect(conceptExam(syllabi, 'Probability', [null, undefined])?.examId).toBe('P-1')
+  })
+
+  it('is null for a concept on no syllabus', () => {
+    expect(conceptExam(syllabi, 'Nothing')).toBeNull()
   })
 })

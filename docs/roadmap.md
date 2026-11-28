@@ -820,6 +820,8 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
      Resources shelf's Vintage view.
   8. **L29, Anki export** (S–M). The reader's deck as a file Anki imports, formulas kept as
      LaTeX.
+  L22, L23 and L27 are drawn by the app from the bank and the pages as they are. None edits a
+  vault file, so no page's fact check goes stale (P4).
   L22 goes first: it is the smallest, every count is checkable against the bank, and L23 lands
   on the same card of the concept page straight after it. *(Brainstorm, 2026-11-28.)*
 

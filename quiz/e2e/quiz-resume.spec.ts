@@ -119,7 +119,7 @@ test.describe('quiz in progress', () => {
       await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
       await page.waitForURL(url => url.pathname === '/')
       // A visitor with no exams lands on Add an exam.
-      await expect(page.getByTestId('add-exam')).toBeVisible()
+      await expect(page.getByTestId('practice-add-exam')).toBeVisible()
       await expect(pill(page)).toHaveCount(0)
     })
   })

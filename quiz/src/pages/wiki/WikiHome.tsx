@@ -2,9 +2,11 @@
 // stood here is the exam switcher's now: the page leads with the exam in focus
 // and the way to the reader's others, then the guides that belong to no exam,
 // the Resources shelf and the six credentials. The full ladder, with the
-// in-development exams folded, is Add an exam.
+// in-development exams folded, is Add an exam. A switch at the top shows All
+// exams instead: every exam's study guide, opened without adding it.
 
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Award, Compass, Microscope, Plus } from 'lucide-react'
 import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -25,6 +27,9 @@ import { computeExamReadiness } from '@/lib/readiness'
 import { examStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useExamSwitcher } from '@/stores/examSwitcher'
+import { AddExamPanel, ExamScopeSwitch, examScopeFrom, type ExamScope } from '@/components/switcher/ExamScope'
+
+const AllExamsList = lazy(() => import('@/components/switcher/AllExamsList'))
 
 /** The credentials, in the order the page lists them. */
 const CREDENTIALS = ['ASA', 'FSA', 'ACAS', 'FCAS', 'ACIA', 'FCIA']
@@ -47,7 +52,15 @@ export default function WikiHome() {
   const openAt = useConceptPopup(s => s.openAt)
   const { active, activeKey, exams, loading: examsLoading } = useExamInFocus()
   const openSwitcher = useExamSwitcher(s => s.open)
-  const openAddExam = useExamSwitcher(s => s.openAdd)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const scope = examScopeFrom(searchParams)
+  const changeScope = (next: ExamScope) => {
+    setSearchParams(params => {
+      if (next === 'all') params.set('exams', 'all')
+      else params.delete('exams')
+      return params
+    }, { replace: true })
+  }
   // Seeded from the bundle, so the Resources row's count is there on the first frame.
   const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
 
@@ -85,12 +98,22 @@ export default function WikiHome() {
     <div className="space-y-8">
       <header>
         <h1 className="truncate text-2xl font-bold tracking-tight">Study Guides</h1>
+        <ExamScopeSwitch value={scope} onChange={changeScope} className="mt-4 max-w-md" />
       </header>
 
-      {/* The exam in focus, and the way to the others. */}
+      {/* The exam in focus, and the way to the others; or every exam. */}
+      {scope === 'all' ? (
+        <section aria-label="All exams">
+          <Suspense fallback={<p className="text-sm text-muted-foreground">Loading exams…</p>}>
+            <AllExamsList target="guide" />
+          </Suspense>
+        </section>
+      ) : (
       <section aria-label="Your exam" data-testid="study-guides-exam">
         {loading || examsLoading ? (
           <p className="text-sm text-muted-foreground">Loading exams…</p>
+        ) : exams.length === 0 ? (
+          <AddExamPanel testId="study-guides-add-exam" />
         ) : (
           <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
             {focus && active && activeKey && (
@@ -114,27 +137,18 @@ export default function WikiHome() {
               </ListPanel>
             )}
             <ListPanel>
-              {exams.length > 0 ? (
-                <ListRow
-                  onClick={() => openSwitcher()}
-                  data-testid="study-guides-your-exams"
-                  leading={<LogoTile size="lg" className="border border-dashed border-foreground"><Plus className="h-6 w-6" /></LogoTile>}
-                  title="Your exams"
-                  meta={<span>{exams.length === 1 ? 'Switch, or add an exam' : `${exams.length} exams. Switch, or add one`}</span>}
-                />
-              ) : (
-                <ListRow
-                  onClick={() => openAddExam()}
-                  data-testid="study-guides-add-exam"
-                  leading={<LogoTile size="lg" className="border border-dashed border-foreground"><Plus className="h-6 w-6" /></LogoTile>}
-                  title="Add an exam"
-                  meta={<span>Every SOA, CAS and CIA exam</span>}
-                />
-              )}
+              <ListRow
+                onClick={() => openSwitcher()}
+                data-testid="study-guides-your-exams"
+                leading={<LogoTile size="lg" className="border border-dashed border-foreground"><Plus className="h-6 w-6" /></LogoTile>}
+                title="Your exams"
+                meta={<span>{exams.length === 1 ? 'Switch, or add an exam' : `${exams.length} exams. Switch, or add one`}</span>}
+              />
             </ListPanel>
           </div>
         )}
       </section>
+      )}
 
       {/* The guides that belong to no single exam, and the tab's other page. */}
       <section>

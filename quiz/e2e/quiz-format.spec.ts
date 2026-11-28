@@ -149,7 +149,7 @@ test.describe('practice home', () => {
   test('the page opens on the exam in focus, and an address that names another exam is a visit', async ({ page }) => {
     // A first visit has no exams: Add an exam.
     await page.goto('/')
-    await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible()
+    await expect(page.getByTestId('practice-add-exam')).toBeVisible()
     // An address that names an exam opens it without adding it.
     await page.goto('/?topic=Exam%205')
     await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
@@ -159,7 +159,23 @@ test.describe('practice home', () => {
     await page.keyboard.press('Escape')
     // The visit left nothing in focus.
     await page.goto('/')
-    await expect(page.getByTestId('add-exam')).toBeVisible()
+    await expect(page.getByTestId('practice-add-exam')).toBeVisible()
+  })
+
+  test('All exams lists every exam with questions, and opens one without adding it', async ({ page }) => {
+    await page.goto('/')
+    const scope = page.getByTestId('exam-scope')
+    await expect(scope.getByRole('button', { name: 'Your exams' })).toHaveAttribute('aria-pressed', 'true')
+    await scope.getByRole('button', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/exams=all/)
+    const all = page.getByTestId('all-exams')
+    await all.getByRole('button', { name: 'CAS' }).click()
+    await all.getByRole('link', { name: /^Exam 5\b/ }).click()
+    await expect(page.getByTestId('practice-exam')).toContainText('Exam 5')
+    // A visit keeps All exams lit; Your exams goes back to the reader's own.
+    await expect(page.getByTestId('exam-scope').getByRole('button', { name: 'All exams' })).toHaveAttribute('aria-pressed', 'true')
+    await page.getByTestId('exam-scope').getByRole('button', { name: 'Your exams' }).click()
+    await expect(page.getByTestId('practice-add-exam')).toBeVisible()
   })
 })
 

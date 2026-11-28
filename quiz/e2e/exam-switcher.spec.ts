@@ -12,16 +12,17 @@ test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-11-23T10:00:00'))
 })
 
-test('a visitor\'s first screen is Add an exam, and adding one lands on Today', async ({ page }) => {
+test('a visitor\'s Today is Add an exam, and adding one lands on Today', async ({ page }) => {
   await page.goto('/dashboard')
+  await page.getByTestId('today-add-exam').click({ timeout: 30_000 })
   const add = page.getByTestId('add-exam')
   await expect(add.getByRole('heading', { name: 'Add an exam' })).toBeVisible({ timeout: 30_000 })
   // SOA first: the ready and beta exams as rows, the rest folded.
   await expect(add.getByRole('button', { name: 'SOA' })).toHaveAttribute('aria-pressed', 'true')
   await expect(add.getByRole('button', { name: /^Exam FAM/ })).toBeVisible()
-  await expect(add.getByRole('link', { name: /Exam PA/ })).toHaveCount(0)
+  await expect(add.getByRole('link', { name: /PAF/ })).toHaveCount(0)
   await add.getByRole('button', { name: /^In development/ }).click()
-  await expect(add.getByRole('link', { name: /Exam PA/ })).toBeVisible()
+  await expect(add.getByRole('link', { name: /PAF/ })).toBeVisible()
 
   await add.getByRole('button', { name: /^Exam P\b/ }).click()
   const date = page.getByTestId('exam-date')
@@ -46,8 +47,9 @@ test('a visitor\'s first screen is Add an exam, and adding one lands on Today', 
 
 test('an exam with no sitting on file offers only Another date and Not sure yet', async ({ page }) => {
   await page.goto('/dashboard')
+  await page.getByTestId('today-add-exam').click({ timeout: 30_000 })
   const add = page.getByTestId('add-exam')
-  await add.getByRole('button', { name: 'CAS' }).click({ timeout: 30_000 })
+  await add.getByRole('button', { name: 'CAS' }).click()
   await add.getByRole('button', { name: /^DISC-DA/ }).click()
   const date = page.getByTestId('exam-date')
   await expect(date.getByRole('radio')).toHaveCount(2)
@@ -106,7 +108,7 @@ test('the sheet switches the exam in focus, and Edit changes, passes and removes
   await sheet.getByRole('button', { name: 'Edit' }).click()
   await sheet.getByRole('button', { name: 'Remove' }).click()
   await page.keyboard.press('Escape')
-  await expect(page.getByTestId('add-exam')).toBeVisible()
+  await expect(page.getByTestId('today-add-exam')).toBeVisible()
 })
 
 test('a second device opens on the exam the account last used', async ({ page }) => {
@@ -197,7 +199,8 @@ test('the switcher moves a page whose address names an exam', async ({ page }) =
 
 test('the Quiz tab with no exams is Add an exam, and an exam with no questions says so', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible({ timeout: 30_000 })
+  await page.getByTestId('practice-add-exam').click({ timeout: 30_000 })
+  await expect(page.getByTestId('add-exam').getByRole('heading', { name: 'Add an exam' })).toBeVisible()
 
   // An exam added here opens its quiz setup, on the Quiz tab.
   await page.getByTestId('add-exam').getByRole('button', { name: /^Exam P\b/ }).click()

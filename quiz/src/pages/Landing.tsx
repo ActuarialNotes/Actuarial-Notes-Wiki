@@ -55,6 +55,7 @@ import {
 import { sessionQuizSteps, storeQuizSteps } from '@/lib/sessionSteps'
 import { useQuizBuilderSettings } from '@/hooks/useQuizBuilderSettings'
 import { useQuizExamScreen } from '@/hooks/useQuizExamScreen'
+import { AddExamPanel, ExamScopeSwitch, examScopeFrom, type ExamScope } from '@/components/switcher/ExamScope'
 import { useBuilderPool } from '@/hooks/useBuilderPool'
 import { useTodaysPlanQuiz } from '@/hooks/useTodaysPlanQuiz'
 import { QuizGamesPanel } from '@/components/landing/QuizGamesPanel'
@@ -87,7 +88,7 @@ import type { Question } from '@/lib/parser'
 // switcher at the top (§6) is the way to another exam.
 
 // Lazy: it reads the Store's registration tables, which stay out of first paint.
-const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
+const AllExamsList = lazy(() => import('@/components/switcher/AllExamsList'))
 const RegistrationNudge = lazy(() => import('@/components/RegistrationNudge'))
 
 /** Which popup is open. */
@@ -133,6 +134,14 @@ export default function Landing() {
 
   // The exam the page is on: the address's, else the exam in focus.
   const { topic, visiting, focusWithoutBank, hasExams, focusLoading } = useQuizExamScreen()
+  // Your exams or All exams (`?exams=all`). An exam opened from All exams that
+  // isn't one of the reader's is a visit, and keeps All exams lit.
+  const scope: ExamScope = examScopeFrom(searchParams) === 'all' || visiting ? 'all' : 'yours'
+  const changeScope = (next: ExamScope) => {
+    if (next === scope && !(next === 'all' && visiting)) return
+    navigate(next === 'all' ? '/?exams=all' : '/')
+  }
+  const scopeSwitch = <ExamScopeSwitch value={scope} onChange={changeScope} className="mt-4" />
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
@@ -470,14 +479,31 @@ export default function Landing() {
     )
   }
 
+  // All exams: every exam with a bank, each opened without adding it.
+  if (examScopeFrom(searchParams) === 'all') {
+    return (
+      <div className={cn(GROUND, 'min-h-full')} data-testid="practice-all-exams">
+        <div className="mx-auto flex w-full max-w-xl flex-col px-5 pb-10 pt-3 lg:pt-8">
+          <PlaceTopRow examKey={null} testId="practice-exam" />
+          {scopeSwitch}
+          <div className="mt-6">
+            <Suspense fallback={null}>
+              <AllExamsList target="practice" />
+            </Suspense>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // The reader's exams are still loading and nothing names an exam yet: wait
-  // rather than flash the exam list.
+  // rather than flash Add an exam.
   if (!hasTopic && focusLoading) {
     return <div className={cn(GROUND, 'min-h-[60vh]')} aria-busy="true" />
   }
 
-  // ── Nothing to open: a reader with no exams adds one here (R11), and an
-  // exam in focus with no question bank says so ──
+  // ── Nothing to open: a reader with no exams adds one (R11), and an exam in
+  // focus with no question bank says so ──
   if (!hasTopic) {
     return (
       <div className={cn(GROUND, 'min-h-full')} data-testid="practice-empty">
@@ -488,6 +514,7 @@ export default function Landing() {
             testId="practice-exam"
             desk={!!focusWithoutBank}
           />
+          {scopeSwitch}
           {focusWithoutBank ? (
             <div className="mt-6 flex flex-col items-start gap-4" data-testid="quiz-no-bank">
               <p className="text-[17px] leading-normal">{focusWithoutBank.examLabel} has no practice questions yet.</p>
@@ -501,10 +528,8 @@ export default function Landing() {
               )}
             </div>
           ) : !hasExams ? (
-            <div className="mt-2">
-              <Suspense fallback={null}>
-                <AddExamFlow to="/" />
-              </Suspense>
+            <div className="mt-6">
+              <AddExamPanel testId="practice-add-exam" />
             </div>
           ) : null}
           {GAMES_ENABLED && <div className="mt-8"><QuizGamesPanel /></div>}
@@ -541,6 +566,7 @@ export default function Landing() {
               />
             )}
           </PlaceTopRow>
+          {scopeSwitch}
 
           {status !== 'ready' && (
             <div className="mt-3 overflow-hidden rounded-xl"><ExamStatusBanner status={status} /></div>

@@ -63,6 +63,7 @@ import { dayNote, dayPractice, dayTitle, planDayView, planTickPct, sessionConcep
 import { cn } from '@/lib/utils'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { AddExamPanel } from '@/components/switcher/ExamScope'
 import { useExamSwitcher } from '@/stores/examSwitcher'
 import { usePodcast } from '@/stores/podcastStore'
 
@@ -71,7 +72,6 @@ const AnalyticsTilePeek = lazy(() => import('@/components/today/AnalyticsPeek').
 const AnalyticsSummaryPeek = lazy(() => import('@/components/today/AnalyticsPeek').then(m => ({ default: m.AnalyticsSummaryPeek })))
 const AnalyticsOverlay = lazy(() => import('@/components/today/AnalyticsScreen').then(m => ({ default: m.AnalyticsOverlay })))
 const PodcastButton = lazy(() => import('@/components/podcast/PodcastButton').then(m => ({ default: m.PodcastButton })))
-const AddExamFlow = lazy(() => import('@/components/switcher/AddExamFlow').then(m => ({ default: m.AddExamFlow })))
 const DailyEmailSheet = lazy(() => import('@/components/you/DailyEmailSheet').then(m => ({ default: m.DailyEmailSheet })))
 
 /** The span the Analytics tile's figure covers, in days. */
@@ -455,11 +455,9 @@ export default function Dashboard() {
                 loadError={exam.syllabi.length === 0 ? exam.syllabusError : null}
               />
             ) : (
-              // No exams yet: the first screen is Add an exam (R11).
+              // No exams yet: the one way on is Add an exam (R11), as on Study Guides.
               <div className="mx-auto w-full max-w-[460px] px-2 pt-2 lg:px-0">
-                <Suspense fallback={<ActiveExamCardLoading />}>
-                  <AddExamFlow />
-                </Suspense>
+                <AddExamPanel testId="today-add-exam" />
               </div>
             )
           ) : wide ? (

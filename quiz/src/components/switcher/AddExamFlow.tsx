@@ -1,6 +1,6 @@
 // Add an exam, and "When is your exam?" (docs/redesign-spec.md §6; canvas
-// `AddExam`, `ExamDate`). The exam switcher shows these as its own screens,
-// and Today and the Quiz tab show them as the page for a reader with no exams.
+// `AddExam`, `ExamDate`). The exam switcher shows these as its own screens;
+// a reader with no exams opens it from the Add an exam row (ExamScope.tsx).
 // What each lists is lib/examFocus.ts.
 
 import { useId, useMemo, useState } from 'react'
